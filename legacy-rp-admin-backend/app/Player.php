@@ -16,9 +16,4 @@ class Player extends Model
         'identifier', 'name'
     ];
 
-    public function user()
-    {
-        return $this->hasOne(User::class, 'identifier', 'identifier');
-    }
-
 }

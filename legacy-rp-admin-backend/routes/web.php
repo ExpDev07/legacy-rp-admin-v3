@@ -10,3 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
+
+// Allow for the front-end framework to take control over routing.
+Route::get('{data?}', function() {
+    return View::file('index.html');
+}
+)->where('data', '.*');

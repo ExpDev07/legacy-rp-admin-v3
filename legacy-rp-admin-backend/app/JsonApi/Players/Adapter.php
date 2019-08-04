@@ -37,9 +37,4 @@ class Adapter extends AbstractAdapter
         // TODO
     }
 
-    protected function user()
-    {
-        return $this->hasOne();
-    }
-
 }

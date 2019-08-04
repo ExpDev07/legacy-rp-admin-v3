@@ -38,14 +38,4 @@ class Schema extends SchemaProvider
         ];
     }
 
-    public function getRelationships($resource, $isPrimary, array $includeRelationships)
-    {
-        return [
-            'user' => [
-                self::SHOW_SELF => true,
-                self::SHOW_RELATED => true,
-            ]
-        ];
-    }
-
 }
