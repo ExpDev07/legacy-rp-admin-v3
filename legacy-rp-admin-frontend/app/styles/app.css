@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+
+    /* Reset margin and padding on everything */
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.15;
+    font-size: 18px;
+
+    background-color: rgb(12, 12, 12);
+    color: rgb(253, 253, 253);
+}
+
+button, .button {
+    cursor: pointer;
+}
+
+h1, h2, h3, h4 {
+    font-weight: 700;
+}
+
+p {
+    margin-top: 1em;
+}
+
+header {
+    background-color: #D9361A;
+    color: white;
+}
+
+main {
+    margin-top: 2.5em;
+}
+
+.container {
+    max-width: 65em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.8em 1em;
+}
