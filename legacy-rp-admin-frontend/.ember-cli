@@ -1,4 +1,4 @@
 {
   "disableAnalytics": false,
-  "output-path": "../legacy-rp-admin-backend/public"
+  "output-path": "../legacy-rp-admin-backend/public/app"
 }

@@ -16,6 +16,6 @@ use Illuminate\Support\Facades\View;
 
 // Allow for the front-end framework to take control over routing.
 Route::get('{data?}', function() {
-    return View::file('index.html');
+    return View::file('app/index.html');
 }
 )->where('data', '.*');

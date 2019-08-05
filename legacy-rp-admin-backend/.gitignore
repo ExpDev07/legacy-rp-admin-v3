@@ -13,3 +13,6 @@ yarn-error.log
 
 # IDE specific
 .idea/
+
+# Exclude front end build from being included in repo.
+/public/app
