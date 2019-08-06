@@ -15,8 +15,8 @@ body {
     line-height: 1.15;
     font-size: 18px;
 
-    background-color: rgb(12, 12, 12);
-    color: rgb(253, 253, 253);
+    background-color: #17191A;
+    color: rgb(187, 184, 184);
 }
 
 button, .button {
@@ -25,6 +25,7 @@ button, .button {
 
 h1, h2, h3, h4 {
     font-weight: 700;
+    color: rgb(221, 221, 221);
 }
 
 p {
@@ -32,8 +33,7 @@ p {
 }
 
 header {
-    background-color: #D9361A;
-    color: white;
+    background-color: #3C2C80;
 }
 
 main {
