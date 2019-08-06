@@ -16,7 +16,7 @@ html, body, body > div {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.15;
+    line-height: 1.35;
     font-size: 18px;
 
     background-color: #17191A;
@@ -50,6 +50,10 @@ a {
 
 a:hover {
     color: rgb(241, 69, 50);
+}
+
+input {
+    display: block;
 }
 
 p {

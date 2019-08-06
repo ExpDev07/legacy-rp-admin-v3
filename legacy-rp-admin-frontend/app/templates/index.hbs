@@ -1,7 +1,8 @@
+<h1>Woho! You are currently logged in with <strong>Steam</strong>.</h1>
 <p>
-  This is index.
-
   {{#if currentUser.user}}
-    <h1>Hello there, your steam profile is <a href="{{currentUser.user.steamProfile}}">{{currentUser.user.steamProfile}}</a>!</h1>
+    <p>Hello there, <strong>{{currentUser.user.name}}</strong>, your steam profile is <a href={{currentUser.user.steamProfile}}>{{currentUser.user.steamProfile}}</a>!</p>
+  {{else}}
+    <h2>No user.</h2>
   {{/if}}
 </p>

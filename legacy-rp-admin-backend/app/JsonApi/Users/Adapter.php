@@ -2,10 +2,12 @@
 
 namespace App\JsonApi\Users;
 
+use App\User;
 use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 
 class Adapter extends AbstractAdapter
 {
@@ -26,7 +28,20 @@ class Adapter extends AbstractAdapter
      */
     public function __construct(StandardStrategy $paging)
     {
-        parent::__construct(new \App\User(), $paging);
+        parent::__construct(new User(), $paging);
+    }
+
+    /**
+     * @param EncodingParametersInterface $parameters
+     * @return mixed
+     */
+    public function query(EncodingParametersInterface $parameters)
+    {
+        // Check for if the user is requesting to see themselves.
+        if (request()->get('me')) {
+            return request()->user();
+        }
+        return parent::query($parameters);
     }
 
     /**

@@ -7,19 +7,19 @@ import { inject as service } from '@ember/service';
  */
 export default Service.extend({
 
-    session: service('session'),
-    store: service(),
+    session: service(),
+    store:   service(),
 
     load() {
         // Check if the session is authenticated.
         if (this.session.isAuthenticated) {
             // Query the store for myself and set it when found.
-            return this.get('store').queryRecord('user', { me: true }).then((user) => {
+            return this.store.queryRecord('user', { me: true }).then((user) => {
                 this.set('user', user);
             });
         } else {
             // Just resolve.........
-            return RSVP.reject('Session not authenticated.');
+            return RSVP.resolve();
         }
     }
 

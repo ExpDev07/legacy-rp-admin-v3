@@ -5,17 +5,19 @@
 
     {{!-- Show some stuff if the user currently is logged in. --}}
     {{#if session.isAuthenticated}}
-      <h1>yeye</h1>
       <a href="#" {{action "invalidateSession"}}>Logout</a>
     {{/if}}
   </div>
 </header>
 
 {{!-- Main content container. --}}
-<main class="container">
-  {{outlet}}
+<main>
+  <div class="container">
+    {{outlet}}
+  </div>
 </main>
 
+{{!-- Footer --}}
 <footer>
   <div class="container footer">
     <h5>
