@@ -1,3 +1,7 @@
 <p>
   This is index.
+
+  {{#if currentUser.user}}
+    <h1>Hello there, your steam profile is <a href="{{currentUser.user.steamProfile}}">{{currentUser.user.steamProfile}}</a>!</h1>
+  {{/if}}
 </p>

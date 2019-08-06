@@ -2,7 +2,6 @@
 
 use CloudCreativity\LaravelJsonApi\Facades\JsonApi;
 use CloudCreativity\LaravelJsonApi\Routing\RouteRegistrar;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,9 +14,11 @@ use CloudCreativity\LaravelJsonApi\Routing\RouteRegistrar;
 */
 
 // https://laravel-json-api.readthedocs.io/en/latest/basics/routing/
+// https://laravel.com/docs/5.8/api-authentication#protecting-routes
 
-// Register the default API routes.
-JsonApi::register('default')->routes(function (RouteRegistrar $api) {
+// Register the default API routes. Make sure to protect them as well. The "auth:api" middleware will check for a valid
+// access_token (referred to as "api_token" in Laravel).
+JsonApi::register('default')->middleware('auth:api')->routes(function (RouteRegistrar $api, $router) {
     // Users resource.
     $api->resource('users')->relationships(function ($relations) {
         $relations->hasOne('player');

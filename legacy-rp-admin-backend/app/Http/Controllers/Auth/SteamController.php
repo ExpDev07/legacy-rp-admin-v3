@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\Http\Controllers\AbstractSteamLoginController;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
 
@@ -17,7 +18,7 @@ class SteamController extends AbstractSteamLoginController
     {
         // Get or create the authenticating user from their steam details.
         $user = $this->get_or_create_user($steam);
-        return response()->json($user);
+        return response()->redirectTo('/login#access_token=' . $user->api_token);
     }
 
     /**
@@ -47,7 +48,8 @@ class SteamController extends AbstractSteamLoginController
         return User::create([
             'account_id' => $steam->steamId,
             'name' => $steam->name,
-            'avatar' => $steam->avatar
+            'avatar' => $steam->avatar,
+            'api_token' => Str::random(60)
         ]);
     }
 

@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Define the default JSON-API to be used.
-        LaravelJsonApi::defaultApi('default');
+        // Define the default JSON-API to be used. Default is "default".
+        // LaravelJsonApi::defaultApi('default');
     }
 }

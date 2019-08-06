@@ -18,6 +18,11 @@ export default DS.Model.extend({
     avatar: DS.attr('string'),
 
     /**
+     * A link to the user's steam profile.
+     */
+    steamProfile: DS.attr('string'),
+
+    /**
      * Player associated with the user on the game-server.
      */
     player: DS.belongsTo('player'),
