@@ -33,8 +33,10 @@ class Schema extends SchemaProvider
             'created-at' => $resource->created_at->toAtomString(),
             'updated-at' => $resource->updated_at->toAtomString(),
             //
-            'identifier' => $resource->identifier,
+            'account_id' => $resource->account_id,
+            'identifier' => $resource->identifier(),
             'name' => $resource->name,
+            'steam-profile' => $resource->steam_profile()
         ];
     }
 
