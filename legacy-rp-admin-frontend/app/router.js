@@ -7,8 +7,9 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
-  this.route('login');
-  this.route('auth');
+  this.route('login', function() {
+    this.route('callback');
+  });
 });
 
 export default Router;

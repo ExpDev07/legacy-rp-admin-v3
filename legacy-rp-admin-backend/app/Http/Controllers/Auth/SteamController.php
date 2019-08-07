@@ -18,7 +18,7 @@ class SteamController extends AbstractSteamLoginController
     {
         // Get or create the authenticating user from their steam details.
         $user = $this->get_or_create_user($steam);
-        return response()->redirectTo('/login#access_token=' . $user->api_token);
+        return response()->redirectTo('/login/callback#access_token=' . $user->api_token);
     }
 
     /**
