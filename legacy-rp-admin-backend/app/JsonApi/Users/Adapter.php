@@ -7,7 +7,9 @@ use CloudCreativity\LaravelJsonApi\Eloquent\AbstractAdapter;
 use CloudCreativity\LaravelJsonApi\Pagination\StandardStrategy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\UnauthorizedException;
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Exceptions\JsonApiException;
 
 class Adapter extends AbstractAdapter
 {
@@ -15,11 +17,11 @@ class Adapter extends AbstractAdapter
     // https://laravel-json-api.readthedocs.io/en/latest/basics/adapters/
 
     /**
-     * Mapping of JSON API attribute field names to model keys.
+     * The default pagination to use.
      *
      * @var array
      */
-    protected $attributes = [];
+    protected $defaultPagination = [ 'number' => 1 ];
 
     /**
      * Adapter constructor.
@@ -37,8 +39,8 @@ class Adapter extends AbstractAdapter
      */
     public function query(EncodingParametersInterface $parameters)
     {
-        // Check for if the user is requesting to see themselves.
-        if (request()->get('me')) {
+        if (request()->get('me')){
+            // User requested to see themselves. Will be based of auth token.
             return request()->user();
         }
         return parent::query($parameters);

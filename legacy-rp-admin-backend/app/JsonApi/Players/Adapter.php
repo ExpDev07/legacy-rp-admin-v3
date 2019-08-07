@@ -12,11 +12,11 @@ class Adapter extends AbstractAdapter
 {
 
     /**
-     * Mapping of JSON API attribute field names to model keys.
+     * The default pagination to use.
      *
      * @var array
      */
-    protected $attributes = [];
+    protected $defaultPagination = [ 'number' => 1 ];
 
     /**
      * Adapter constructor.
