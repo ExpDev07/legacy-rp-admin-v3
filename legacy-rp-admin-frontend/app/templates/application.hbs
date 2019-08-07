@@ -3,10 +3,14 @@
   <div class="container navbar">
     <h2>Legacy Roleplay</h2>
 
-    {{!-- Show some stuff if the user currently is logged in. --}}
-    {{#if session.isAuthenticated}}
-      <a href="#" {{action "invalidateSession"}}>Logout</a>
-    {{/if}}
+    <div>
+      {{!-- Show some stuff if the user currently is logged in. --}}
+      {{#if session.isAuthenticated}}
+        <a href="#" {{action "invalidateSession"}}>{{fa-icon "sign-out-alt"}} Logout</a>
+      {{else}}
+        <a href="/auth/login/steam">{{fa-icon "steam-symbol" prefix="fab"}} Login with steam</a>
+      {{/if}}
+    </div>
   </div>
 </header>
 

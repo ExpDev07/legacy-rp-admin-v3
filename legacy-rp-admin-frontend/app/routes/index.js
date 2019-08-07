@@ -3,6 +3,13 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Route.extend(AuthenticatedRouteMixin, {
 
+    actions: {
+        // run this action every x seconds.
+        updateModel() {
+
+            this.store.query('log', {}).then((logs) => this.model = logs);
     
+        }
+    }
 
 });

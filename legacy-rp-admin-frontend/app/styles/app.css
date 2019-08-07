@@ -32,12 +32,6 @@ body > div {
     min-height: 100vh;
 }
 
-button, .button {
-    cursor: pointer;
-    padding: 10px;
-    border: none;
-}
-
 h1, h2, h3, h4, h5 {
     font-weight: 700;
     color: rgb(221, 221, 221);
@@ -62,6 +56,17 @@ p {
 
 header {
     background-color: rgb(41, 53, 104);
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: rgb(233, 233, 233);
 }
 
 footer {
@@ -102,4 +107,18 @@ main {
 .card-error {
     color: white;
     background-color: rgb(156, 33, 29);
+}
+
+/* Buttons */
+button, .button {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  padding: 0.3em 1.5em;
+}
+
+.button-primary {
+    color: white;
+    background-color: rgb(206, 41, 29);
 }
