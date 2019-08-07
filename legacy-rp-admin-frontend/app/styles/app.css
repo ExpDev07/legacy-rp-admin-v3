@@ -87,6 +87,19 @@ main {
     text-align: center;
 }
 
-span.red {
-    color: red;
+/* Some text coloring */
+.red { 
+    color: rgb(214, 52, 47); 
+}
+
+/* Cards */
+.card {
+    margin: 15px 0 15px 0;
+    padding: 10px 5px 10px 5px;
+    overflow: auto;
+}
+
+.card-error {
+    color: white;
+    background-color: rgb(156, 33, 29);
 }
