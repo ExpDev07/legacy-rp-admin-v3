@@ -8,9 +8,10 @@ export default Route.extend(OAuth2ImplicitGrantCallbackRouteMixin, {
      */
     authenticator: 'authenticator:oauth2',
 
-    redirect(model, transition) {
-        // Just transition to index when this route is hit.
+    activate() {
+        // Fix this shit, but it works for now. Honestly can't be bothered.
+        this._super(...arguments);
         this.transitionTo('/');
-    },
+    }
 
 });

@@ -28,4 +28,5 @@ Route::prefix('auth')->group(function () {
 Route::get('{data?}', function() {
     // Serve the "index.html" file that controls the whole frontend.
     return View::file('app/index.html');
-})->where('data', '.*');
+}
+)->where('data', '.*');
