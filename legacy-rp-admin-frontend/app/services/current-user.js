@@ -22,5 +22,5 @@ export default Service.extend({
             return RSVP.resolve();
         }
     }
-
+    
 });
