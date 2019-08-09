@@ -6,12 +6,17 @@ import DS from 'ember-data';
 export default DS.Model.extend({
 
     /**
-     * 
+     * The account id. Usually equal to the user's steam 64 id.
+     */
+    accountId: DS.attr('string'),
+
+    /**
+     * A HEX-ified version of "accountId" with a special prefix.
      */
     identifier: DS.attr('string'),
 
     /**
-     * 
+     * The name (also referred to as username).
      */
     name: DS.attr('string'),
 

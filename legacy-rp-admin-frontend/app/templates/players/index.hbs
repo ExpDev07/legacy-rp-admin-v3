@@ -1,1 +1,9 @@
-{{outlet}}
+<div class="outer-container container">
+  <h1>Players page.</h1>
+
+  <ul>
+    {{#each this.model as | player |}}
+      <li>{{player.name}}</li>
+    {{/each}}
+  </ul>
+</div>

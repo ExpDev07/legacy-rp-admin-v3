@@ -8,8 +8,10 @@ export default Route.extend({
     queryParams: { query: '' },
 
     model(params) {
-        // Create a record and set "recipient"
-        return this.store.createRecord('player', { query: params.query });
+        // Query for any records that matches the provided query.
+        return this.store.query('player', { filter: {
+            query: params.query
+        }});
     }
 
 });
