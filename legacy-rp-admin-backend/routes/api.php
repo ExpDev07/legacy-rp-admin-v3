@@ -28,8 +28,4 @@ JsonApi::register('default')->middleware('auth:api')->routes(function (RouteRegi
     $api->resource('players')->relationships(function ($relations) {
         $relations->hasOne('user');
     });
-
-    $router->get('testing', function () {
-       return response()->json('test');
-    });
 });
