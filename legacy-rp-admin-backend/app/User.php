@@ -45,6 +45,16 @@ class User extends Authenticatable
     ];
 
     /**
+     * @see User::identifier().
+     *
+     * @return string
+     */
+    protected function getIdentifierAttribute()
+    {
+        return $this->identifier();
+    }
+
+    /**
      * Gets the identifier, which is a HEX-ified version of the account id with a "steam:" prefix. Used as a way of
      * identifying users/players on the game-server.
      *

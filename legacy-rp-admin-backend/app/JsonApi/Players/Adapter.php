@@ -35,7 +35,12 @@ class Adapter extends AbstractAdapter
      */
     protected function filter($query, Collection $filters)
     {
-        // TODO
+        // Filtering of a a query search.
+        if ($title = strtolower($filters->get('query'))) {
+            $query
+                ->where('lower(identifier)', 'like', "%{$query}%")
+                ->orWhere('lower(name)', 'like', "%{$query}%");
+        }
     }
 
 }
