@@ -117,7 +117,7 @@ input {
 
     /* Coloring */
     background-color: #17191A;
-    color: rgb(250, 250, 250);
+    color: rgb(233, 233, 233);
 }
 
 /* Just a center helper */
@@ -146,13 +146,19 @@ input {
 button, .button {
     cursor: pointer;
     display: inline-block;
+    border: 0;
     text-align: center;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 3px;
     padding: 0.3em 1.5em;
 }
 
-.button-primary {
+.button-red {
     color: white;
     background-color: rgb(206, 41, 29);
+}
+
+.button-green {
+    color: white;
+    background-color: #1F8737;
 }
