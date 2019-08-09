@@ -7,10 +7,12 @@ const Router = EmberRouter.extend({
 });
 
 Router.map(function() {
+  this.route('test');
+
   this.route('login', function() {
     this.route('callback');
   });
-  this.route('test');
+  this.route('players', function() {});
 });
 
 export default Router;

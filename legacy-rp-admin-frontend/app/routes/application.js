@@ -20,9 +20,10 @@ export default Route.extend(ApplicationRouteMixin, {
     /**
      * Called when the session gets authenticated.
      */
-    sessionAuthenticated() {
-        this._loadCurrentUser();
-        this._super(...arguments);
+    async sessionAuthenticated() {
+        let _super = this._super;
+        await this._loadCurrentUser();
+        _super.call(this, ...arguments);
     },
   
     /**
