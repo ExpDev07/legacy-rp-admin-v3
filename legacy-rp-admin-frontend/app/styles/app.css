@@ -77,17 +77,37 @@ footer {
 
 main {
     flex: 1 0 auto;
-    margin-top: 2.5em;
-    margin-bottom: 2.5em;
 }
 
-.container {
+.outer-container {
     max-width: 65em;
     margin-left: auto;
     margin-right: auto;
     padding: 0.8em 1em;
 }
 
+.container {
+    padding: 0.5em 0.8em;
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+/* Hero covers */
+.hero {
+    overflow: hidden;
+    height: calc(0px + 25vw);
+    min-height: 10rem;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hero-bg {
+    background-image: url('/app/images/bg.png');
+}
+
+/* Just a center helper */
 .center {
     text-align: center;
 }

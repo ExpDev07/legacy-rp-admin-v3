@@ -1,29 +1,31 @@
 {{!-- The head and site navigation. --}}
 <header>
-  <div class="container navbar">
+  <div class="outer-container navbar">
     <h2>Legacy Roleplay</h2>
 
     <div>
       {{!-- Show some stuff if the user currently is logged in. --}}
       {{#if session.isAuthenticated}}
-        <a href="#" {{action "invalidateSession"}}>{{fa-icon "sign-out-alt"}} Logout</a>
+        <a href="#" {{action "invalidateSession"}}>
+          {{fa-icon "sign-out-alt"}} Logout
+        </a>
       {{else}}
-        <a href="/auth/login/steam">{{fa-icon "steam-symbol" prefix="fab"}} Login with steam</a>
+        <a href="/auth/login/steam">
+          {{fa-icon "steam-symbol" prefix="fab"}} Login with steam
+        </a>
       {{/if}}
     </div>
   </div>
 </header>
 
-{{!-- Main content container. --}}
+{{!-- Main content. --}}
 <main>
-  <div class="container">
-    {{outlet}}
-  </div>
+  {{outlet}}
 </main>
 
 {{!-- Footer --}}
 <footer>
-  <div class="container footer">
+  <div class="outer-container footer">
     <h5>
       Made with <span class="red">{{fa-icon "heart"}}</span> by ExpDev (Marius) - <a href="https://github.com/ExpDev07/legacy-rp-admin-v3">https://github.com/ExpDev07/legacy-rp-admin-v3</a>
     </h5>
