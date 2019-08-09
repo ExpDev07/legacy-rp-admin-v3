@@ -1,5 +1,8 @@
 import DS from 'ember-data';
 
+/**
+ * A user model.
+ */
 export default DS.Model.extend({
 
     /**
