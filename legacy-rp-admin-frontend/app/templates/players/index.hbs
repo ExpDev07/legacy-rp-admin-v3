@@ -1,25 +1,6 @@
-<div class="hero hero-bg">
-  <div class="outer-container container">
-    <form {{ action "search" on="submit" }}>
-      {{input value=search placeholder="Marius Truckster | steam:abc"}}
-      <button type="submit">Search</button>
-    </form>
-  </div>
-</div>
-
 <div class="outer-container container">
-  <ul>
-    {{#each model as |player|}}
-      <li>{{player.name}} ({{player.identifier}})</li>
-    {{else}}
-      <h1>No players found.</h1>
-      <p>
-        There were no players matching your search. <b>Hint:</b> use HEX-identifiers when searching-- they're more accurate compared to names.
-      </p>
-    {{/each}}
-  </ul>
-
+  <h1>Page still in progress.</h1>
   <p>
-    {{#link-to "index"}}Go to index{{/link-to}}.
+    This page is still being worked on. Please use the search bar above to find players.
   </p>
 </div>

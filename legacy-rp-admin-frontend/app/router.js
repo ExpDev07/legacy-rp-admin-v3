@@ -12,7 +12,11 @@ Router.map(function() {
   this.route('login', function() {
     this.route('callback');
   });
-  this.route('players', function() {});
+
+  this.route('players', function() {
+    this.route('view', { path: '/:player_id' });
+    this.route('search');
+  });
 });
 
 export default Router;

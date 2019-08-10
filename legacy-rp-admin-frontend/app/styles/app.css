@@ -9,7 +9,7 @@
     transition-duration: 0.125s;
 }
 
-html, body, body > div {
+html, body, #app {
     height: 100%;
     height: 100vh;
 }
@@ -23,7 +23,7 @@ body {
     color: rgb(187, 184, 184);
 }
 
-body > div {
+#app {
     /* Flex for allowing a nice setup of header and footer */
     display: flex;
     flex-direction: column;
