@@ -8,12 +8,21 @@ export default Controller.extend({
          * 
          * @param {string} query The query 
          */
-        search(query) {
+        async search(query) {
             // Query for any records that matches the provided query.
-            return this.store.query('player', { filter: {
+            return await this.store.query('player', { filter: {
                 query
-            }})
-            .then((players) => players);
+            }});
+        },
+
+        /**
+         * Called when the user selects a player.
+         * 
+         * @param {*} selected The selected.
+         */
+        select(selected) {
+            // Transition to the route where we can view the selected player.
+            this.transitionToRoute('players.view', selected);
         }
     }
 

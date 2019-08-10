@@ -1,11 +1,11 @@
 <div class="hero hero-bg">
   <div class="outer-container container">
-    {{!-- Searching for users with a nice power-select dropdown menu --}}
+    {{!-- Searching for players with a nice power-select dropdown menu --}}
     {{#power-select
+        placeholder   = "Marius Truckster | steam:11000010df22c8b"
         selected      = selected
-        searchEnabled = true
         search        = (action "search")
-        onchange      = (action (mut selected)) as |player|}}
+        onchange      = (action "select") as |player|}}
 
       {{player.name}} ({{player.identifier}})
     {{/power-select}}
