@@ -15,6 +15,7 @@ class Log extends Model
      * Column name for when the model was created.
      */
     const CREATED_AT = 'timestamp';
+
     /**
      * Column name for when the model was last updated.
      */
