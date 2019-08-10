@@ -1,9 +1,25 @@
-<div class="outer-container container">
-  <h1>Players page.</h1>
+<div class="hero hero-bg">
+  <div class="outer-container container">
+    <form {{ action "search" on="submit" }}>
+      {{input value=search placeholder="Marius Truckster | steam:abc"}}
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</div>
 
+<div class="outer-container container">
   <ul>
-    {{#each this.model as | player |}}
-      <li>{{player.name}}</li>
+    {{#each model as |player|}}
+      <li>{{player.name}} ({{player.identifier}})</li>
+    {{else}}
+      <h1>No players found.</h1>
+      <p>
+        There were no players matching your search. <b>Hint:</b> use HEX-identifiers when searching-- they're more accurate compared to names.
+      </p>
     {{/each}}
   </ul>
+
+  <p>
+    {{#link-to "index"}}Go to index{{/link-to}}.
+  </p>
 </div>

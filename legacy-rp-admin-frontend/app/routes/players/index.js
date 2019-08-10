@@ -5,7 +5,9 @@ export default Route.extend({
     /**
      * Required query parameters.
      */
-    queryParams: { query: '' },
+    queryParams: { 
+        query: { refreshModel: true }
+    },
 
     model(params) {
         // Query for any records that matches the provided query.

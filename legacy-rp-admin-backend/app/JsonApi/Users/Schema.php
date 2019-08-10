@@ -33,7 +33,7 @@ class Schema extends SchemaProvider
             'created-at' => $resource->created_at->toAtomString(),
             'updated-at' => $resource->updated_at->toAtomString(),
             //
-            'account_id' => $resource->account_id,
+            'account-id' => $resource->account_id,
             'identifier' => $resource->identifier(),
             'name' => $resource->name,
             'avatar' => $resource->avatar,

@@ -2,7 +2,6 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
-use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 
 /*
@@ -18,10 +17,9 @@ use Faker\Generator as Faker;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
+        'account_id' => $faker->numberBetween(10000000000, 100000000000),
+        'name' => $faker->firstName . ' ' . $faker->lastName,
+        'avatar' => 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/e1/e139eec729031ced290d1130f164622de73c3f7a_full.jpg',
+        'api_token' => $faker->uuid
     ];
 });
