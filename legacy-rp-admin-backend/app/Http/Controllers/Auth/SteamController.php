@@ -8,6 +8,11 @@ use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\Http\Controllers\AbstractSteamLoginController;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
 
+/**
+ * A controller to authenticate with steam.
+ *
+ * @package App\Http\Controllers\Auth
+ */
 class SteamController extends AbstractSteamLoginController
 {
 
