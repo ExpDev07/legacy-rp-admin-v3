@@ -52,7 +52,7 @@ input {
 
 p {
     margin-top: 0.9em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.85em;
 }
 
 header {
@@ -128,7 +128,7 @@ input {
 
 /* Some text coloring */
 .red { 
-    color: rgb(214, 52, 47); 
+    color: rgb(211, 60, 55); 
 }
 
 /* Cards */
@@ -140,7 +140,7 @@ input {
 
 .card-error {
     color: white;
-    background-color: rgb(156, 33, 29);
+    background-color: rgb(160, 35, 32);
 }
 
 /* Buttons */
@@ -170,5 +170,6 @@ section, .section {
 }
 
 .section-blue {
+    color: rgb(197, 197, 197);
     background-color: rgb(24, 53, 116);
 }
