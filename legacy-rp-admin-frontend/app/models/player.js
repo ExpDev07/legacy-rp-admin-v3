@@ -15,4 +15,9 @@ export default DS.Model.extend({
      */
     name: DS.attr('string'),
 
+    /**
+     * A link to the players's steam profile.
+     */
+    steamProfile: DS.attr('string'),
+
 });

@@ -42,7 +42,7 @@ a {
     text-decoration: none;
 }
 
-a:hover {
+a:not(button, .button):hover {
     color: rgb(241, 69, 50);
 }
 
@@ -80,17 +80,23 @@ main {
     flex: 1 0 auto;
 }
 
-.outer-container {
+/* Containers */
+.container {
+    padding: 0.6em 0.9em;
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+.container-outer {
     max-width: 66em;
     margin-left: auto;
     margin-right: auto;
     padding: 0.8em 1em;
 }
 
-.container {
-    padding: 0.5em 0.8em;
-    margin-top: 2.5em;
-    margin-bottom: 2.5em;
+.container-flex {
+    display: flex;
+    align-items: center;
 }
 
 /* Hero covers */
@@ -134,13 +140,13 @@ input {
 /* Cards */
 .card {
     padding: 10px 15px 10px 15px;
-    margin-bottom: 0.6em;
+    margin-bottom: 0.75em;
     overflow: auto;
 }
 
 .card-error {
     color: white;
-    background-color: rgb(160, 35, 32);
+    background-color: rgb(191, 44, 40);
 }
 
 /* Buttons */
@@ -152,16 +158,17 @@ button, .button {
     text-decoration: none;
     border-radius: 3px;
     padding: 0.3em 1.5em;
+    width: 100%;
 }
 
 .button-red {
     color: white;
-    background-color: rgb(206, 41, 29);
+    background-color: rgb(181, 49, 39);
 }
 
 .button-green {
     color: white;
-    background-color: #1F8737;
+    background-color: rgb(39, 139, 108);
 }
 
 /* Sections */
@@ -172,4 +179,8 @@ section, .section {
 .section-blue {
     color: rgb(197, 197, 197);
     background-color: rgb(24, 53, 116);
+}
+
+.section-dark {
+    background-color: rgb(21, 23, 24);
 }

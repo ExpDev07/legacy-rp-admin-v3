@@ -37,7 +37,7 @@ class Schema extends SchemaProvider
             'identifier' => $resource->identifier(),
             'name' => $resource->name,
             'avatar' => $resource->avatar,
-            'steam-profile' => $resource->steam_profile()
+            'steam-profile' => $resource->steam_profile(),
         ];
     }
 

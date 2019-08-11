@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use CloudCreativity\LaravelJsonApi\LaravelJsonApi;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

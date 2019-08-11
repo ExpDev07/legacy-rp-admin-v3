@@ -2,20 +2,13 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use SteamID;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-
-    /**
-     * The link used for Steam's new invite code.
-     *
-     * @var string
-     */
-    protected static $STEAM_INVITE_LINK = 'http://s.team/p/';
+    use Notifiable, HasSteam;
 
     /**
      * The attributes that are mass assignable.
@@ -66,25 +59,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Gets a link to the user's steam profile.
-     *
-     * @return string The link.
-     */
-    public function steam_profile()
-    {
-        // Per https://github.com/xPaw/SteamID.php, we should use the "RenderSteamInvite" method to get the code which
-        // can be used with the steam invite/profile link.
-        return self::$STEAM_INVITE_LINK . $this->steam_id()->RenderSteamInvite();
-    }
-
-    /**
-     * Gets the whole steam id instance. Can be used to get multiple different types of steam IDs.
-     *
-     * @return SteamID The steam id.
+     * {@inheritdoc}
      */
     public function steam_id()
     {
-        // Just wrap the account id with an instance of SteamID by xPaw.
         return new SteamID($this->account_id);
     }
 
