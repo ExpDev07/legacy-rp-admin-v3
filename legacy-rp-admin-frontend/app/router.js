@@ -14,7 +14,10 @@ Router.map(function() {
   });
 
   this.route('players', function() {
-    this.route('view', { path: '/:player_id' });
+    this.route('view', { path: '/:player_id' }, function() {
+      this.route('warnings');
+      this.route('logs');
+    });
     this.route('search');
   });
 });

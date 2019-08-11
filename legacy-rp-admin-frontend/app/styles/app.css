@@ -52,7 +52,7 @@ input {
 
 p {
     margin-top: 0.9em;
-    margin-bottom: 0.85em;
+    margin-bottom: 0.9em;
 }
 
 header {
@@ -156,19 +156,28 @@ button, .button {
     border: 0;
     text-align: center;
     text-decoration: none;
-    border-radius: 3px;
     padding: 0.3em 1.5em;
     width: 100%;
 }
 
-.button-red {
+.button-error {
     color: white;
     background-color: rgb(181, 49, 39);
 }
 
-.button-green {
+.button-success {
     color: white;
     background-color: rgb(39, 139, 108);
+}
+
+.button-warning {
+    color: black;
+    background-color: rgb(248, 223, 79);
+}
+
+.button-info {
+    color: white;
+    background-color: rgb(12, 142, 194);
 }
 
 /* Sections */
