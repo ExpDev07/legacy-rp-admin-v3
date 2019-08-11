@@ -1,7 +1,7 @@
 # legacy-rp-admin-v3
 A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. The backend is written in PHP using [Laravel Framework](https://laravel.com/), while the frontend consists of [EmberJS](https://emberjs.com/).
 
-See [#contributing](#Contributing) for more details on how you can help.
+See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin**. We're always down to improve and recieve feedback.
 
 ## Improvements from v1
 1. Application is now a SOP (Single Page Application), meaning that navigating and interacting with the site will feel much more pleasant and natural. 
