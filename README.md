@@ -7,3 +7,6 @@ Please refer to [LICENSE.md](https://github.com/ExpDev07/legacy-rp-admin-v3/blob
 ## Contributors
 This list only contains some of the most notable contributors. For the full list, refer to [GitHub's contributors graph](https://github.com/ExpDev07/legacy-rp-admin-v3/graphs/contributors).
 * ExpDev07 (Marius) - creator and maintainer of both frontend and backend.
+
+## Pictures
+(will be posted soon once some design decisions are finalized).
