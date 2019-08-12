@@ -38,8 +38,8 @@ h1, h2, h3, h4, h5 {
 }
 
 a {
-    color: #E74843;
     text-decoration: none;
+    color: #E74843;
 }
 
 a:not(button, .button):hover {
