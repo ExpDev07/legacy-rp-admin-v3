@@ -11,7 +11,7 @@ export default Controller.extend({
 
     actions: {
         /**
-         * Invalidates the session.
+         * Invalidates the current session.
          */
         invalidateSession() {
             this.session.invalidate();
