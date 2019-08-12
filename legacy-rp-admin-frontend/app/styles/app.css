@@ -16,7 +16,7 @@ html, body, #app {
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.35;
+    line-height: 1.60;
     font-size: 17.5px;
 
     background-color: #17191A;
@@ -51,8 +51,8 @@ input {
 }
 
 p {
-    margin-top: 0.9em;
-    margin-bottom: 0.9em;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
 }
 
 header {
