@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Log extends Model
 {
+
     /**
      * Column name for when the model was created.
      */
