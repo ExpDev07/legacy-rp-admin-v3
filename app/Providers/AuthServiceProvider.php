@@ -24,8 +24,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        //
-        // https://laravel.com/docs/master/passport
-        // Passport::routes();
     }
 }

@@ -3,11 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * A warning which can be given to players.
  *
  * @package App
+ *
+ * @property int issuer_id
+ * @property string type
+ * @property string message
  */
 class Warning extends Model
 {
@@ -22,20 +27,21 @@ class Warning extends Model
     ];
 
     /**
-     * Gets the player that received this warning.
+     * Gets the player relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function player()
+    public function player() : BelongsTo
     {
         return $this->belongsTo(Player::class);
     }
+
     /**
-     * Gets the player that issued this warning.
+     * Gets the issuer relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function issuer()
+    public function issuer() : BelongsTo
     {
         return $this->belongsTo(Player::class);
     }

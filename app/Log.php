@@ -3,11 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * An action that has been logged.
  *
  * @package App
+ *
+ * @property string identifier
+ * @property string action
+ * @property string details
+ * @property array metadata
  */
 class Log extends Model
 {
@@ -46,5 +52,15 @@ class Log extends Model
     protected $casts = [
         'metadata' => 'array'
     ];
+
+    /**
+     * Gets the player relationship.
+     *
+     * @return BelongsTo
+     */
+    public function player()
+    {
+        return $this->belongsTo(Player::class, 'identifier', 'identifier');
+    }
 
 }

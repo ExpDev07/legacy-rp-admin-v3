@@ -2,13 +2,21 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use SteamID;
 
+/**
+ * @package App
+ *
+ * @property string account_id
+ * @property string name
+ * @property string avatar
+ */
 class User extends Authenticatable
 {
-    use Notifiable, HasSteam;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +24,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'account_id', 'name', 'avatar', 'api_token'
+        'account_id', 'name', 'avatar',
     ];
 
     /**
@@ -29,49 +37,21 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        //'email_verified_at' => 'datetime',
-    ];
-
-    /**
-     * @see User::identifier().
+     * Gets the game-server identifier.
      *
      * @return string
      */
-    protected function getIdentifierAttribute()
-    {
-        return $this->identifier();
-    }
-
-    /**
-     * Gets the identifier, which is a HEX-ified version of the account id with a "steam:" prefix. Used as a way of
-     * identifying users/players on the game-server.
-     *
-     * @return string
-     */
-    public function identifier()
+    protected function getIdentifierAttribute() : string
     {
         return 'steam:' . dechex($this->account_id);
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function steam_id()
-    {
-        return new SteamID($this->account_id);
-    }
-
-    /**
      * Gets the player on the game-server associated with this user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function player()
+    public function player() : HasOne
     {
         return $this->hasOne(Player::class, 'identifier', 'identifier');
     }

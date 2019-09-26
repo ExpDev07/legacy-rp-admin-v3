@@ -3,11 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use SteamID;
 
+/**
+ * The link used for Steam's new invite code.
+ */
+const STEAM_INVITE_URL = 'http://s.team/p/';
+
+/**
+ * @package App
+ *
+ * @property string identifier
+ * @property string name
+ * @property bool staff
+ * @property array identifiers
+ */
 class Player extends Model
 {
-    use HasSteam;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +28,7 @@ class Player extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'name', 'identifiers'
+        'identifier', 'name', 'identifiers', 'staff'
     ];
 
     /**
@@ -25,36 +38,17 @@ class Player extends Model
      */
     protected $casts = [
         'identifiers' => 'array',
+        'staff'       => 'boolean',
     ];
 
     /**
-     * {@inheritdoc}
-     */
-    public function steam_id()
-    {
-        return new SteamID(self::get_account_id($this->identifier));
-    }
-
-    /**
-     * Gets the player's ban (if banned).
+     * Gets the ban relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return HasOne
      */
-    public function ban()
+    public function ban() : HasOne
     {
         return $this->hasOne('identifier', 'identifier');
-    }
-
-    /**
-     * Gets the steam account id from the provided identifier.
-     *
-     * @param string $identifier The identifier.
-     * @return string The account id.
-     */
-    private static function get_account_id(string $identifier)
-    {
-        str_replace('steam:', '', $identifier); // clean the identifier.
-        return hexdec($identifier);
     }
 
 }

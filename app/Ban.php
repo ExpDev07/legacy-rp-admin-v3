@@ -3,11 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * A ban that can be issued by a player and received by a players.
  *
  * @package App
+ *
+ * @property string identifier
+ * @property string reason
+ * @property string ban-id
  */
 class Ban extends Model
 {
@@ -39,21 +44,21 @@ class Ban extends Model
     ];
 
     /**
-     * Gets the player that received this ban.
+     * Gets the player relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function player()
+    public function player() : BelongsTo
     {
         return $this->belongsTo(Player::class, 'identifier', 'identifier');
     }
 
     /**
-     * Gets the player that issued this ban.
+     * Gets the issuer relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function issuer()
+    public function issuer() : BelongsTo
     {
         return $this->belongsTo(Player::class, 'banner-id', 'staff');
     }
