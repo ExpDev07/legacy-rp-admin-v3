@@ -17,7 +17,10 @@ class CreatePlayersTable extends Migration
             $table->bigIncrements('id');
             $table->string('identifier');
             $table->string('name');
-            $table->timestamps();
+            $table->string('staff');
+
+            // Json values.
+            $table->json('identifiers');
         });
     }
 

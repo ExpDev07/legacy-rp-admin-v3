@@ -15,14 +15,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            //$table->string('identifier');
             $table->string('account_id');
             $table->string('name');
             $table->string('avatar');
             $table->timestamps();
-
-            // Token to use for making API requests on this user's behalf.
-            $table->string('api_token', 80)->unique()->nullable();
         });
     }
 

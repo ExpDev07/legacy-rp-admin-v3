@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use SteamID;
 
 /**
  * @package App
