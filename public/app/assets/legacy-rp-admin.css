@@ -1,0 +1,196 @@
+* {
+    box-sizing: border-box;
+
+    /* Reset margin and padding on everything */
+    padding: 0;
+    margin: 0;
+
+    /* Transitioning on everything */
+    transition-duration: 0.125s;
+}
+
+html, body, #app {
+    height: 100%;
+    height: 100vh;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.60;
+    font-size: 17.5px;
+
+    background-color: #17191A;
+    color: rgb(187, 184, 184);
+}
+
+#app {
+    /* Flex for allowing a nice setup of header and footer */
+    display: flex;
+    flex-direction: column;
+
+    /* Fix a bug with IE not stretching completely out */
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 700;
+    line-height: 1.35;
+    color: rgb(221, 221, 221);
+}
+
+a {
+    text-decoration: none;
+    color: #E74843;
+}
+
+a:not(button, .button):hover {
+    color: rgb(241, 69, 50);
+}
+
+input {
+    display: block;
+}
+
+p {
+    margin-top: 0.70em;
+    margin-bottom: 0.75em;
+}
+
+header {
+    background-color: rgb(28, 37, 82);
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: rgb(233, 233, 233);
+}
+
+footer {
+    flex-shrink: 0;
+    background-color: rgb(19, 27, 63);
+    padding: 0.5em 0 0.5em 0;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* Containers */
+.container {
+    padding: 0.6em 0.9em;
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+}
+
+.container-outer {
+    max-width: 66em;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.8em 1em;
+}
+
+.container-flex {
+    display: flex;
+    align-items: center;
+}
+
+/* Hero covers */
+.hero {
+    overflow: hidden;
+    /* padding: 2em 2em; */
+    /*height: calc(0px + 25vw);
+    min-height: 10rem;*/
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.hero-bg {
+    background-image: url('/app/images/bg-01.jpg');
+}
+
+/* Input styling */
+input {
+    font-size: 16.5px;
+    border: none;
+    padding: 12px 18px;
+    width: 100%;
+
+    /* Coloring */
+    background-color: #17191A;
+    color: rgb(233, 233, 233);
+}
+
+/* Just a center helper */
+.center {
+    text-align: center;
+}
+
+/* Some text coloring */
+.red { 
+    color: rgb(214, 64, 58); 
+}
+
+/* Cards */
+.card {
+    padding: 10px 15px 10px 15px;
+    margin-bottom: 0.80em;
+    overflow: auto;
+}
+
+.card-error {
+    color: white;
+    background-color: #982917;
+}
+
+/* Buttons */
+button, .button {
+    cursor: pointer;
+    display: inline-block;
+    border: 0;
+    text-align: center;
+    text-decoration: none;
+    padding: 0.3em 1.5em;
+    width: 100%;
+}
+
+.button-error {
+    color: white;
+    background-color: rgb(181, 49, 39);
+}
+
+.button-success {
+    color: white;
+    background-color: rgb(39, 139, 108);
+}
+
+.button-warning {
+    color: black;
+    background-color: rgb(248, 223, 79);
+}
+
+.button-info {
+    color: white;
+    background-color: rgb(12, 142, 194);
+}
+
+/* Sections */
+section, .section {
+    overflow: hidden;
+}
+
+.section-blue {
+    color: rgb(197, 197, 197);
+    background-color: rgb(24, 53, 116);
+}
+
+.section-dark {
+    background-color: rgb(21, 23, 24);
+}

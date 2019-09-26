@@ -1,10 +1,9 @@
 # legacy-rp-admin-v3
-A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. The backend is written in PHP using [Laravel Framework](https://laravel.com/), while the frontend consists of [EmberJS](https://emberjs.com/).
+A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/).
 
-See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin**. We're always down to improve and receive feedback.
+See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
 ## Improvements from v1
-1. Application is now a SOP (Single Page Application), meaning that navigating and interacting with the site will feel much more pleasant and natural. 
 2. Re-done to give a more minimalistic and "simple" look.
 3. Backend improvements that encourage scaling and maintainability. 
 4. More.
@@ -20,4 +19,47 @@ This list only contains some of the most notable contributors. For the full list
 (will be posted soon once some design decisions are finalized).
 
 ## Contributing
-(W.I.P).
+This section describes how you can help contribute.
+
+### Prerequisites
+* PHP 7+.
+* Composer.
+* Node (and npm).
+* SQL (database).
+
+### Setting up project
+Grab yourself a copy of this repository:
+```bash
+$ git clone https://github.com/ExpDev07/giggled.git
+```
+
+Install all the required dependencies (we use both npm and composer):
+```bash
+$ composer install
+$ npm install
+```
+
+Create a new file called ``.env`` and copy the contents from ``.env.example`` over to it, then apply your configurations.
+```bash
+$ 
+```
+
+Create a private and unique application key:
+```bash
+$ php artisan key:generate
+```
+
+Run database migrations so that we can store things:
+```bash
+$ php artisan migrate
+```
+
+Create a symbolic link at **public/storage** so that it points to **storage/app/public**:
+```bash
+$ php artisan storage:link
+```
+
+Finally, boot the server up:
+```bash
+$ php artisan serve
+```
