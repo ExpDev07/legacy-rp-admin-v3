@@ -1,5 +1,20 @@
+<p align="center">
+  <a href="https://legacy-roleplay.com" target="blank">
+    <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/logo.png" height="150px" width="150px" alt="Legacy RP Logo" />
+  </a>
+</p>
+
 # legacy-rp-admin-v3
-A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/).
+
+<p>
+    <a href='https://ko-fi.com/C1C510DUQ' target='_blank'>
+	<img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' />
+    </a>
+</p>
+
+<strong>100% FREE + OPEN SOURCE.</strong>
+
+> A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/).
 
 See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
@@ -30,7 +45,7 @@ This section describes how you can help contribute.
 ### Setting up project
 Grab yourself a copy of this repository:
 ```bash
-$ git clone https://github.com/ExpDev07/giggled.git
+$ git clone https://github.com/ExpDev07/legacy-rp-admin-v3.git
 ```
 
 Install all the required dependencies (we use both npm and composer):
