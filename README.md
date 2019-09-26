@@ -3,7 +3,7 @@
         <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/logo.png" height="150px" width="150px" alt="Legacy RP Logo" />
     </a>
     <a href="https://laravel.com/" target="blank">
-        <img src="https://laravel.com/img/logotype.min.svg" width="370px" alt="Laravel Logo" />
+        <img src="https://laravel.com/img/logotype.min.svg" height="150px" width="370px" alt="Laravel Logo" />
     </a>
 </p>
 
