@@ -9,18 +9,8 @@ use Illuminate\Http\Response;
 /**
  * @package App\Http\Controllers\Auth
  */
-class LoginController extends Controller
+class LogoutController extends Controller
 {
-
-    /**
-     * Instantiate a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
 
     /**
      * Handle the incoming request.
@@ -30,7 +20,11 @@ class LoginController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('login');
+        // Logout the user.
+        auth()->logout();
+
+        // Redirect them to base path.
+        return redirect('/');
     }
 
 }

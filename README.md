@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://legacy-roleplay.com" target="blank">
-        <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/logo.png" height="150px" width="150px" alt="Legacy RP Logo" />
+        <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/logo.png" height="150px" width="150px" alt="Legacy RP Logo" />
     </a>
 </p>
 
@@ -31,7 +31,9 @@ This list only contains some of the most notable contributors. For the full list
 * ExpDev07 (Marius) - creator and maintainer of both frontend and backend.
 
 ## Pictures
-(will be posted soon once some design decisions are finalized).
+(more will be posted soon once some design decisions are finalized).
+
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/logging_in.png" alt="Logging in" />
 
 ## Contributing
 This section describes how you can help contribute.

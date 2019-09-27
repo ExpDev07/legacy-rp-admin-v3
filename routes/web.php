@@ -26,12 +26,15 @@ Route::prefix('auth')->group(function () {
 });
 
 // Logging in.
-Route::get('/login', 'Auth\LoginController');
+Route::get('/login', 'Auth\LoginController')->name('login');
 
-// Group routes that require authentication together.
+// Logging out.
+Route::post('/logout', 'Auth\LogoutController')->name('logout');
+
+// Group all of the routes that require authentication together.
 Route::middleware('auth')->group(function () {
 
-
+    Route::get('/', 'DashboardController');
 
 });
 

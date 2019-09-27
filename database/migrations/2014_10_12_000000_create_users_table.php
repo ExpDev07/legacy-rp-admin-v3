@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('account_id');
             $table->string('name');
             $table->string('avatar');
+            $table->rememberToken();
             $table->timestamps();
         });
     }
