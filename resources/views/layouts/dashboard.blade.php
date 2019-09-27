@@ -26,8 +26,10 @@
         </nav>
     </header>
 
-    <!-- Main content section -->
-    <main class="container-fluid">
+    <div class="container-fluid">
+
+        
+
         @yield('main')
-    </main>
+    </div>
 @endsection
