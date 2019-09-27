@@ -10,7 +10,7 @@
             <div class="col d-none d-md-block bg" style="background-image: url('{{ asset('images/bg-city-dark.png') }}')"></div>
 
             <!-- The content half -->
-            <div class="col bg-light d-flex align-items-center">
+            <div class="col d-flex align-items-center">
                 <div class="p-3">
                     <div>
                         <h1>Login with steam.</h1>
