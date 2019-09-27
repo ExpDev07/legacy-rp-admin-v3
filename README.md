@@ -74,6 +74,11 @@ Create a symbolic link at **public/storage** so that it points to **storage/app/
 $ php artisan storage:link
 ```
 
+Compile frontend assets (use "dev" for development and "prod" for production):
+```bash
+$ npm run dev/prod
+```
+
 Finally, boot the server up:
 ```bash
 $ php artisan serve
