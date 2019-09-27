@@ -15,9 +15,6 @@ use App\Http\Controllers\Auth\SteamController;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
-// Logging in.
-Route::get('/login', 'Auth\LoginController')->name('login');
-
 // Grouping of all the authentication routes together under /auth.
 Route::prefix('auth')->group(function () {
 
@@ -28,7 +25,8 @@ Route::prefix('auth')->group(function () {
 
 });
 
-
+// Logging in.
+Route::get('/login', 'Auth\LoginController');
 
 // Group routes that require authentication together.
 Route::middleware('auth')->group(function () {

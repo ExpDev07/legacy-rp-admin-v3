@@ -1,0 +1,22 @@
+// Import bootstrap framework!
+@import 'node_modules/bootstrap/scss/bootstrap';
+
+// Importing font awesome
+@import "node_modules/font-awesome/scss/font-awesome.scss";
+
+* {
+    /* global transition */
+    transition-duration: 0.145s;
+}
+
+body {
+    line-height: 1.7;
+}
+
+/* backgrounds */
+.bg {
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

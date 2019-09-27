@@ -6,15 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- Page title -->
-    <title>Legacy RP - Admin</title>
+    <title>Legacy RP - Admin - @yield('title')</title>
 
-    <!-- Pull library css -->
-
+    <!-- Styling -->
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 
 <body>
+    <!-- Page content -->
+    @yield('content')
 
-    <!-- Pull in library scripts -->
+    <!-- Scripts -->
+    <script src="{{ asset('/js/app.js') }}"></script>
 </body>
 
 

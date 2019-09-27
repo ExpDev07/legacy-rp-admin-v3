@@ -20,8 +20,7 @@ class LoginController extends Controller
      */
     public function __invoke(Request $request)
     {
-        // redirect to steam login.
-        return redirect(route('login.steam'));
+        return view('login');
     }
 
 }
