@@ -14,7 +14,8 @@
 
 <strong>100% FREE + OPEN SOURCE.</strong>
 
-> A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/).
+> A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/) and
+> [Bootstrap 4](https://getbootstrap.com/?) for the frontend.
 
 See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
