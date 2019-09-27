@@ -9,8 +9,19 @@
     transition-duration: 0.145s;
 }
 
+html, body, #app {
+    /* ensure 100% height for document */
+    height: 100%;
+    min-height: 100vh;
+}
+
 body {
     line-height: 1.7;
+}
+
+/* content */
+.content {
+    width: 100%;
 }
 
 /* backgrounds */

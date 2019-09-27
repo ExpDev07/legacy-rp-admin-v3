@@ -26,10 +26,16 @@
         </nav>
     </header>
 
-    <div class="container-fluid">
+    <!-- Page layout -->
+    <div class="d-flex">
+        <!-- The sidebar -->
+        <nav class="sidebar">
 
-        
+        </nav>
 
-        @yield('main')
+        <!-- Main content -->
+        <main class="container-fluid">
+            @yield('main')
+        </main>
     </div>
 @endsection
