@@ -32,20 +32,22 @@
             <!-- Heading -->
             <li>
                 <div class="sidebar-heading">
-                    Players
+                    Server
                 </div>
             </li>
 
             <!-- Nav Item - Players -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <!-- Searching players -->
+                <a class="nav-link" href="{{ route('players.index') }}">
                     <i class="fas fa-users"></i>
                     <span>Players</span>
                 </a>
             </li>
 
+            <!-- Viewing logs -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="logs.html">
                     <i class="fas fa-toilet-paper"></i>
                     <span>Logs</span>
                 </a>
@@ -71,9 +73,12 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block navbar-search">
+                    <form class="d-none d-sm-inline-block navbar-search" action="{{ route('players.index') }}">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0" placeholder="Search players..." aria-label="Search">
+                            <!-- Query input -->
+                            <input class="form-control bg-light border-0" name="q" placeholder="Search players..." aria-label="Search">
+
+                            <!-- Search -->
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -146,10 +151,8 @@
                         </p>
                     </div>
 
-                    <!-- Content Row -->
-                    <div class="row">
-                        @yield('main')
-                    </div>
+                    <!-- Main content -->
+                    @yield('main')
 
                 </main>
 

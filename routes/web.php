@@ -32,7 +32,11 @@ Route::group([ 'namespace' => 'Auth' ], function() {
 // Group all of the routes that require authentication together.
 Route::group([ 'middleware' => [ 'auth' ] ], function () {
 
+    // Dashboard.
     Route::name('dashboard')->get('/', 'DashboardController');
+
+    // Player resource.
+    Route::resource('players', 'PlayerController');
 
 });
 

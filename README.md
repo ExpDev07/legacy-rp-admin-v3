@@ -38,7 +38,10 @@ This list only contains some of the most notable contributors. For the full list
 <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/logging_in.PNG" alt="Logging in" />
 
 ### Dashboard
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/dashboard.PNG" alt="Logging in" />
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/dashboard.PNG" alt="Dashboard" />
+
+### Players
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/players.PNG" alt="Players" />
 
 ## Contributing
 This section describes how you can help contribute.
