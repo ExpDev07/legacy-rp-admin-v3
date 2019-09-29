@@ -59,7 +59,7 @@ $ npm install
 
 Create a new file called ``.env`` and copy the contents from ``.env.example`` over to it, then apply your configurations.
 ```bash
-$ 
+$ cp .env.example .env
 ```
 
 Create a private and unique application key:
