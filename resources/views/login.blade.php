@@ -18,8 +18,15 @@
                     process the authentication.
                 </p>
 
-                <a href="{{ route('login.steam') }}" class="btn btn-primary">
-                    Login with steam now
+                <!-- Logging in with steam button -->
+                <a class="btn btn-primary btn-icon-split" href="{{ route('login.steam') }}">
+                    <!-- Icon -->
+                    <span class="icon"><i class="fab fa-steam"></i></span>
+
+                    <!-- Text -->
+                    <span class="text">
+                        Login with steam now
+                    </span>
                 </a>
             </div>
         </div>

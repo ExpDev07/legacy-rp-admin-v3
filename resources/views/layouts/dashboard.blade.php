@@ -134,26 +134,32 @@
 
                 <!-- Page main content -->
                 <main class="container-fluid">
+
                     <!-- Page Heading -->
                     <div class="mb-4">
+                        <!-- Title -->
                         <h3 class="text-dark">@yield('title')</h3>
+
+                        <!-- Description -->
+                        <p>
+                            @yield('description')
+                        </p>
                     </div>
 
                     <!-- Content Row -->
                     <div class="row">
                         @yield('main')
                     </div>
+
                 </main>
 
             </div>
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>ExpDev07 - <a href="https://github.com/ExpDev07/legacy-rp-admin-v3">https://github.com/ExpDev07/legacy-rp-admin-v3</a></span>
-                    </div>
+            <footer class="sticky-footer bg-light">
+                <div class="container my-auto text-center">
+                    <span>ExpDev07 - <a href="https://github.com/ExpDev07/legacy-rp-admin-v3">https://github.com/ExpDev07/legacy-rp-admin-v3</a></span>
                 </div>
             </footer>
             <!-- End of Footer -->
