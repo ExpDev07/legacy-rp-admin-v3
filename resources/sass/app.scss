@@ -1,8 +1,5 @@
 // Import bootstrap framework!
-@import 'node_modules/bootstrap/scss/bootstrap';
-
-// Importing font awesome
-@import 'node_modules/font-awesome/scss/font-awesome';
+@import '~bootstrap/scss/bootstrap';
 
 * {
     /* global transition */
@@ -17,11 +14,6 @@ html, body, #app {
 
 body {
     line-height: 1.7;
-}
-
-/* content */
-.content {
-    width: 100%;
 }
 
 /* backgrounds */

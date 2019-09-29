@@ -12,20 +12,17 @@
             <!-- The content half -->
             <div class="col d-flex align-items-center">
                 <div class="p-3">
-                    <div>
-                        <h1>Login with steam.</h1>
+                    <h1>Login with steam.</h1>
 
-                        <p>
-                            Please login using the steam account which you've got staff permissions on. The database is
-                            hooked up with the game-server, so we'll seamlessly be able to grab your information there and
-                            process the authentication.
-                        </p>
+                    <p>
+                        Please login using the steam account which you've got staff permissions on. The database is
+                        hooked up with the game-server, so we'll seamlessly be able to grab your information there and
+                        process the authentication.
+                    </p>
 
-                        <a href="{{ route('login.steam') }}" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Login with steam now
-                        </a>
-                    </div>
+                    <a href="{{ route('login.steam') }}" class="btn btn-primary">
+                        Login with steam now
+                    </a>
                 </div>
             </div>
 

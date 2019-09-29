@@ -46,7 +46,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Gets the player on the game-server associated with this user.
+     * Gets the player relationship.
      *
      * @return HasOne
      */

@@ -1,3 +1,14 @@
+# Generated content using mix
+/public/js
+/public/css
+/public/fonts
+/public/build
+/public/mix-manifest.json
+
+# IDE specific
+/.idea
+
+# Other stuff
 /node_modules
 /public/hot
 /public/storage
@@ -10,6 +21,3 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-
-# IDE specific
-.idea/
