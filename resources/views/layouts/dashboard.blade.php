@@ -39,14 +39,14 @@
             <!-- Nav Item - Players -->
             <li class="nav-item">
                 <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-users"></i>
                     <span>Players</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
+                    <i class="fas fa-toilet-paper"></i>
                     <span>Logs</span>
                 </a>
             </li>
