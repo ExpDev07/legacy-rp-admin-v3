@@ -16,25 +16,24 @@ use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
 // Grouping of all the authentication routes together under /auth.
-Route::prefix('auth')->group(function () {
-
+Route::group([ 'prefix' => 'auth' ], function () {
     // Allow users to login using their steam account.
     // - {host}:{port}/auth/login/steam
     // - {host}:{port}/auth/auth/steam
     SteamLogin::routes(['controller' => SteamController::class]);
-
 });
 
-// Logging in.
-Route::get('/login', 'Auth\LoginController')->name('login');
-
-// Logging out.
-Route::post('/logout', 'Auth\LogoutController')->name('logout');
+// Authentication controllers.
+Route::group([ 'namespace' => 'Auth' ], function() {
+    Route::name('login')->get('/login', 'LoginController');
+    Route::name('logout')->post('/logout', 'LogoutController');
+});
 
 // Group all of the routes that require authentication together.
-Route::middleware('auth')->group(function () {
+Route::group([ 'middleware' => [ 'auth' ] ], function () {
 
     Route::get('/', 'DashboardController');
 
 });
+
 
