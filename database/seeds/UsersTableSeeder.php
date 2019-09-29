@@ -15,7 +15,6 @@ class UsersTableSeeder extends Seeder
     {
         factory(User::class, 10)->create()->each(function (User $user) {
             $user->player()->save(factory(Player::class)->make([
-                'identifier' => $user->identifier,
                 'name' => $user->name
             ]));
         });

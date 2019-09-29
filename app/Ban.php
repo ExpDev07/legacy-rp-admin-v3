@@ -44,6 +44,16 @@ class Ban extends Model
     ];
 
     /**
+     * Gets the reference id.
+     *
+     * @return mixed
+     */
+    protected function getRefIdAttribute()
+    {
+        return $this['ban-id'];
+    }
+
+    /**
      * Gets the player relationship.
      *
      * @return BelongsTo

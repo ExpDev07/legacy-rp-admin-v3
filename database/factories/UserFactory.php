@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'account_id' => $faker->numberBetween(1000000, 1000000),
+        'account_id' => $faker->unixTime,
         'name' => $faker->firstName . ' ' . $faker->lastName,
         'avatar' => 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/e1/e139eec729031ced290d1130f164622de73c3f7a_full.jpg',
     ];

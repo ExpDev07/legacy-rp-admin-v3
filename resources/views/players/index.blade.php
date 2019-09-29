@@ -35,23 +35,32 @@
                     <div class="row">
                         <div class="col">
                             <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered" id="dataTable">
                                     <thead>
                                     <tr>
                                         <th>Identifier</th>
                                         <th>Name</th>
                                         <th>Staff</th>
+                                        <th>Banned</th>
                                         <th>Administer User</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @forelse ($players as $player)
                                         <tr>
+                                            <!-- General information -->
                                             <td>{{ $player->name }}</td>
                                             <td>{{ $player->identifier }}</td>
-                                            <td>{{ $player->staff ? 'yes' : 'no' }}</td>
+
+                                            <!-- Boolean values -->
+                                            <td>{{ $player->isStaff() ? 'yes' : 'no' }}</td>
+                                            <td>{{ $player->isBanned() ? 'yes' : 'no' }}</td>
+
+                                            <!-- Linking to visit their profile -->
                                             <td>
-                                                <a class="font-weight-bold" href="#">Visit Profile</a>
+                                                <a class="font-weight-bold" href="{{ route('players.show', compact('player')) }}">
+                                                    Visit Profile
+                                                </a>
                                             </td>
                                         </tr>
                                     @empty
