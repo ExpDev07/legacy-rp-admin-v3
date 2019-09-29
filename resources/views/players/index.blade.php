@@ -28,7 +28,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="text-primary font-weight-bold">Results matching your search ({{ $players->count() }})</h5>
+                    <h5 class="text-primary font-weight-bold">Results matching your search ({{ $players->total() }})</h5>
                 </div>
                 <div class="card-body">
                     <!-- The table row -->
@@ -51,7 +51,7 @@
                                             <td>{{ $player->identifier }}</td>
                                             <td>{{ $player->staff ? 'yes' : 'no' }}</td>
                                             <td>
-                                                <a href="#">Visit Profile</a>
+                                                <a class="font-weight-bold" href="#">Visit Profile</a>
                                             </td>
                                         </tr>
                                     @empty
