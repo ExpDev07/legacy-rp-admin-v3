@@ -121,40 +121,31 @@
         </div>
     </div>
 
-    <!-- Warning Modal-->
-    <div class="modal fade" id="warningModal" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <!-- Header -->
-                <div class="modal-header">
-                    <h5 class="modal-title">Add a warning to {{ $player->name }}</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <!-- Form for submitting a new warning -->
-                <form class="was-validated" method="POST" action="{{ route('players.warnings.store', compact('player')) }}">
-                    @csrf
+    <!-- Warning Modal -->
+    <form class="was-validated" method="POST" action="{{ route('players.warnings.store', compact('player')) }}">
+        @csrf
 
-                    <div class="modal-body">
-                        <p>
-                            Please enter the reason for this warning. Include any links/evidence as well. If you are unsure
-                            about something, don't hesitate contacting another staff member.
-                        </p>
+        @component('modal', [ 'target' => 'warningModal' ])
+            @slot('title')
+                Add a warning to {{ $player->name }}!
+            @endslot
 
-                       <!-- Reason input -->
-                        <label class="font-weight-bold" for="message">Reason</label>
-                        <textarea class="form-control is-invalid" id="message" name="message" placeholder="InzidiuZ did an oopsie." required></textarea>
-                        <div class="invalid-feedback">
-                            Please enter a reason in the text area.
-                        </div>
-                    </div>
-                    <!-- Actions to perform -->
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" type="submit">Add warning</button>
-                    </div>
-                </form>
+            @slot('actions')
+                <button class="btn btn-primary" type="submit">Add warning</button>
+            @endslot
+
+            <p>
+                Please enter the reason for this warning. Include any links/evidence as well. If you are unsure
+                about something, don't hesitate contacting another staff member.
+            </p>
+
+            <!-- Reason input -->
+            <label class="font-weight-bold" for="message">Reason</label>
+            <textarea class="form-control is-invalid" id="message" name="message" placeholder="InzidiuZ did an oopsie." required></textarea>
+            <div class="invalid-feedback">
+                Please enter a reason in the text area.
             </div>
-        </div>
-    </div>
+        @endcomponent
+    </form>
+
 @endsection
