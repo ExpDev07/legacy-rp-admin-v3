@@ -14,7 +14,7 @@
             <div class="col mb-4">
                 <div class="card bg-danger text-white shadow">
                     <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-md-flex align-items-center justify-content-between">
                             <!-- Ban information -->
                             <div>
                                 This player is currently banned by
@@ -28,7 +28,10 @@
                                 for: {{ $ban->reason }}
                             </div>
                             <!-- Unbanning -->
-                            <form>
+                            <form method="POST" action="{{ route('players.bans.destroy', compact('player', 'ban')) }}">
+                                @csrf @method('DELETE')
+
+                                <!-- Button for unbanning -->
                                 <button class="btn btn-sm btn-dark btn-icon-split">
                                     <!-- Icon -->
                                     <span class="icon"><i class="fas fa-trash"></i></span>
@@ -81,7 +84,7 @@
         <div class="col mb-4">
             <div class="card border-left-danger">
                 <div class="card-header">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-md-flex align-items-center justify-content-between">
                         <!-- Title -->
                         <h5 class="text-primary">Warnings</h5>
 
@@ -152,6 +155,33 @@
             <!-- Reason input -->
             <label class="font-weight-bold" for="message">Reason</label>
             <textarea class="form-control is-invalid" id="message" name="message" placeholder="InzidiuZ did an oopsie." required></textarea>
+            <div class="invalid-feedback">
+                Please enter a reason in the text area.
+            </div>
+        @endcomponent
+    </form>
+
+    <!-- Ban Modal -->
+    <form class="was-validated" method="POST" action="{{ route('players.bans.store', compact('player')) }}">
+        @csrf
+
+        @component('modal', [ 'target' => 'banModal' ])
+            @slot('title')
+                Ban {{ $player->name }}!
+            @endslot
+
+            @slot('actions')
+                <button class="btn btn-danger" type="submit">Ban player!</button>
+            @endslot
+
+            <p>
+                You are now banning this player from our game-servers. Before proceeding any further, make sure you're well
+                within reason to go through with this. Checking with a secondary staff member is always a good idea.
+            </p>
+
+            <!-- Reason input -->
+            <label class="font-weight-bold" for="reason">Reason</label>
+            <textarea class="form-control is-invalid" id="reason" name="reason" placeholder="InzidiuZ did a really big oopsie." required></textarea>
             <div class="invalid-feedback">
                 Please enter a reason in the text area.
             </div>

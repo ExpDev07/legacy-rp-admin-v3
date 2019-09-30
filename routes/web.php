@@ -39,6 +39,7 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
     Route::group([ 'namespace' => 'Player' ], function () {
         Route::resource('players', 'PlayerController');
         Route::resource('players.warnings', 'WarningController');
+        Route::resource('players.bans', 'BanController');
     });
 
 });
