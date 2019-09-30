@@ -30,7 +30,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="text-primary font-weight-bold">Players Found ({{ $players->total() }})</h5>
+                    <h5 class="text-primary font-weight-bold">Players Found ({{ number_format($players->total()) }})</h5>
                 </div>
                 <div class="card-body">
                     <!-- The table row -->
