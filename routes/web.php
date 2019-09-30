@@ -30,7 +30,7 @@ Route::group([ 'namespace' => 'Auth' ], function() {
 });
 
 // Group all of the routes that require authentication together.
-Route::group([ 'middleware' => [ 'auth' ] ], function () {
+Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
 
     // Dashboard.
     Route::name('dashboard')->get('/', 'DashboardController');

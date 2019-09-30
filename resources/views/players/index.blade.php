@@ -42,7 +42,7 @@
                                     <tr>
                                         <th>Identifier</th>
                                         <th>Name</th>
-                                        <th>Staff</th>
+                                        <th>Warnings</th>
                                         <th>Banned</th>
                                         <th>Administer User</th>
                                     </tr>
@@ -54,8 +54,10 @@
                                             <td>{{ $player->name }}</td>
                                             <td>{{ $player->identifier }}</td>
 
+                                            <!-- Counting warnings -->
+                                            <td>{{ $player->warnings()->count() }}</td>
+
                                             <!-- Boolean values -->
-                                            <td>{{ $player->isStaff() ? 'yes' : 'no' }}</td>
                                             <td>{{ $player->isBanned() ? 'yes' : 'no' }}</td>
 
                                             <!-- Linking to visit their profile -->

@@ -10,6 +10,13 @@
         <!-- The content half -->
         <div class="col d-flex align-items-center">
             <div class="p-3">
+                <!-- Render any errors -->
+                @if ($error = session()->get('error'))
+                    <div class="alert alert-danger" role="alert">
+                        {{ $error }}
+                    </div>
+                @endif
+
                 <h1 class="text-dark">Login with steam.</h1>
 
                 <p>

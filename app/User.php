@@ -46,6 +46,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Checks whether this user is a staff member.
+     *
+     * @return bool
+     */
+    public function isStaff() : bool
+    {
+        return !is_null($this->player) && $this->player->isStaff();
+    }
+
+    /**
      * Gets the player relationship.
      *
      * @return HasOne
