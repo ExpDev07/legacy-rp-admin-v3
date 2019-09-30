@@ -9,27 +9,37 @@
 
 @section('main')
 
-    <!-- Checking for ban -->
     @if ($ban = $player->bans()->first())
         <div class="row">
-            <div class="col">
-                <div class="card bg-danger">
-                    <div class="card-body text-white">
-                        <span class="font-weight-bold">
-                            This player is currently banned by
+            <div class="col mb-4">
+                <div class="card bg-danger text-white shadow">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!-- Ban information -->
+                            <div>
+                                This player is currently banned by
 
-                            <!-- Determine whether we're going to use the issuer or banner-id -->
-                            @if ($issuer = $ban->issuer)
-                                {{ $issuer->name }}
-                            @else
-                                {{ $ban['banner-id'] }}
-                            @endif
-                            for:
-                        </span>
-                        {{ $ban->reason }}
-                    </div>
-                    <div class="card-footer">
-                        <span class="font-weight-bold">Ref ID #:</span> {{ $ban->ref_id }}
+                                <!-- Determine whether we're going to use the issuer or banner-id -->
+                                @if ($issuer = $ban->issuer)
+                                    {{ $issuer->name }}
+                                @else
+                                    {{ $ban['banner-id'] }}
+                                @endif
+                                for: {{ $ban->reason }}
+                            </div>
+                            <!-- Unbanning -->
+                            <form>
+                                <button class="btn btn-sm btn-dark btn-icon-split">
+                                    <!-- Icon -->
+                                    <span class="icon"><i class="fas fa-trash"></i></span>
+
+                                    <!-- Text -->
+                                    <span class="text">
+                                        Unban
+                                    </span>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,8 +48,8 @@
 
     <!-- Player information -->
     <div class="row">
-        <div class="col">
-            <div class="card border-left-primary mb-4">
+        <div class="col mb-4">
+            <div class="card border-left-primary">
                 <div class="card-header">
                     <h5 class="text-primary">Player Information</h5>
                 </div>
@@ -66,8 +76,8 @@
 
     <!-- Warnings -->
     <div class="row">
-        <div class="col">
-            <div class="card border-left-danger mb-4">
+        <div class="col mb-4">
+            <div class="card border-left-danger">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
                         <!-- Title -->
