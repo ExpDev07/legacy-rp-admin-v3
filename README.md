@@ -43,6 +43,9 @@ This list only contains some of the most notable contributors. For the full list
 ### Players
 <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/players.PNG" alt="Players" />
 
+### Viewing Player
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/view_player.PNG" alt="View Player" />
+
 ## Contributing
 This section describes how you can help contribute.
 

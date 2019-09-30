@@ -15,6 +15,9 @@
                     <p>
                         This page is still a work in progress. Navigate to other pages using the sidebar on the left.
                     </p>
+                    <div class="text-center">
+                        <img class="img-fluid mt-5 mb-4" style="width: 40rem" src="{{ asset('images/under_construction.svg') }}" alt="">
+                    </div>
                 </div>
             </div>
         </div>

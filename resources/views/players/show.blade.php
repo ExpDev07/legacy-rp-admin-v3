@@ -39,7 +39,7 @@
     <!-- Player information -->
     <div class="row">
         <div class="col">
-            <div class="card mb-4">
+            <div class="card border-left-primary mb-4">
                 <div class="card-header">
                     <h5 class="text-primary">Player Information</h5>
                 </div>
@@ -47,6 +47,18 @@
                     <p>
                         This player has a total playtime of <span class="font-weight-bold">{{ $player->getPlayTime() }}</span>.
                     </p>
+                </div>
+                <div class="card-footer">
+                    <!-- Visiting steam profile -->
+                    <a class="btn btn-sm btn-dark btn-icon-split" href="#">
+                        <!-- Icon -->
+                        <span class="icon"><i class="fab fa-steam"></i></span>
+
+                        <!-- Text -->
+                        <span class="text">
+                            Steam Profile
+                        </span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -73,18 +85,18 @@
                         </a>
                     </div>
                 </div>
-                <div class="card-body bg-gradient-light">
+                <div class="card-body">
                     @forelse ($player->warnings()->latest()->get() as $warning)
                         <div class="card mb-4">
                             <div class="card-body">
                                 {{ $warning->message }}
                             </div>
                             <div class="card-footer">
-                                By {{ $warning->issuer->name }} - {{ $warning->created_at }}
+                                By <span class="font-weight-bold">{{ $warning->issuer->name }}</span> - {{ $warning->created_at }}
                             </div>
                         </div>
                     @empty
-                        <p class="text-success">This player has no warnings! Excellent.</p>
+                        <p class="text-success font-weight-bold m-0">This player has no warnings on their record! Excellent.</p>
                     @endforelse
                 </div>
                 <div class="card-footer">
@@ -129,9 +141,7 @@
                     </div>
                     <!-- Actions to perform -->
                     <div class="modal-footer">
-                        <form action="">
-                            <button class="btn btn-primary" >Add warning</button>
-                        </form>
+                        <button class="btn btn-primary" type="submit">Add warning</button>
                     </div>
                 </form>
             </div>
