@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use InvalidArgumentException;
+use SteamID;
 
 /**
  * The link used for Steam's new invite code.
@@ -52,7 +54,7 @@ class Player extends Model
      *
      * @return bool
      */
-    function isStaff() : bool
+    public function isStaff() : bool
     {
         return !is_null($this->staff);
     }
@@ -62,9 +64,29 @@ class Player extends Model
      *
      * @return bool
      */
-    function isBanned() : bool
+    public function isBanned() : bool
     {
         return !is_null($this->bans()->first());
+    }
+
+    /**
+     * Gets the steam id.
+     *
+     * @return SteamID
+     */
+    public function getSteamID()
+    {
+        return get_steam_id($this->identifier);
+    }
+
+    /**
+     * Gets a link to the steam profile.
+     *
+     * @return string
+     */
+    public function getSteamProfile() : string
+    {
+        return STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
     }
 
     /**
@@ -72,9 +94,9 @@ class Player extends Model
      *
      * @return string
      */
-    function getPlayTime() : string
+    public function getPlayTime() : string
     {
-        return self::seconds_to_human($this->playtime);
+        return seconds_to_human($this->playtime);
     }
 
     /***
@@ -107,23 +129,37 @@ class Player extends Model
         return $this->hasMany(Warning::class);
     }
 
-    /**
-     * Converts the given seconds to a human readable string.
-     *
-     * https://snippetsofcode.wordpress.com/2012/08/25/php-function-to-convert-seconds-into-human-readable-format-months-days-hours-minutes/
-     *
-     * @param $ss number
-     * @return string
-     */
-    protected static function seconds_to_human($ss)
-    {
-        $m = floor(($ss % 3600) / 60);
-        $h = floor(($ss % 86400) / 3600);
-        $d = floor(($ss % 2592000) / 86400);
-        $M = floor($ss / 2592000);
+}
 
-        // Return a friendly string that humans can easily read.
-        return "$M months, $d days, $h hours, and $m minutes";
-    }
+/**
+ * Converts the given seconds to a human readable string.
+ *
+ * https://snippetsofcode.wordpress.com/2012/08/25/php-function-to-convert-seconds-into-human-readable-format-months-days-hours-minutes/
+ *
+ * @param $ss number
+ * @return string
+ */
+function seconds_to_human($ss)
+{
+    $m = floor(($ss % 3600) / 60);
+    $h = floor(($ss % 86400) / 3600);
+    $d = floor(($ss % 2592000) / 86400);
+    $M = floor($ss / 2592000);
 
+    // Return a friendly string that humans can easily read.
+    return "$M months, $d days, $h hours, and $m minutes";
+}
+
+/**
+ * Takes the given identifier and tries to resolve a SteamID from it.
+ *
+ * @param string $identifier
+ * @return SteamID
+ * @throws InvalidArgumentException
+ */
+function get_steam_id(string $identifier) : SteamID
+{
+    // Get rid of any prefix.
+    $parts = explode('steam:', $identifier);
+    return new SteamID(hexdec($parts[1]));
 }

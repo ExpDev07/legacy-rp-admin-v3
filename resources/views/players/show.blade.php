@@ -60,15 +60,17 @@
                 </div>
                 <div class="card-footer">
                     <!-- Visiting steam profile -->
-                    <a class="btn btn-sm btn-dark btn-icon-split" href="#">
-                        <!-- Icon -->
-                        <span class="icon"><i class="fab fa-steam"></i></span>
+                    @if ($steam = $player->getSteamProfile())
+                        <a class="btn btn-sm btn-dark btn-icon-split" href="{{ $steam }}">
+                            <!-- Icon -->
+                            <span class="icon"><i class="fab fa-steam"></i></span>
 
-                        <!-- Text -->
-                        <span class="text">
-                            Steam Profile
-                        </span>
-                    </a>
+                            <!-- Text -->
+                            <span class="text">
+                                Steam Profile
+                            </span>
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -95,28 +97,36 @@
                         </a>
                     </div>
                 </div>
-                <div class="card-body">
-                    @forelse ($player->warnings()->latest()->get() as $warning)
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                {{ $warning->message }}
+                @if ($warnings = $player->warnings())
+                    <!-- Displaying -->
+                    <div class="card-body p-0">
+                        @forelse ($warnings->latest()->get() as $warning)
+                            <div class="card">
+                                <div class="card-body">
+                                    {{ $warning->message }}
+                                </div>
+                                <div class="card-footer">
+                                    By <span class="font-weight-bold">{{ $warning->issuer->name }}</span> - {{ $warning->created_at }}
+                                </div>
                             </div>
-                            <div class="card-footer">
-                                By <span class="font-weight-bold">{{ $warning->issuer->name }}</span> - {{ $warning->created_at }}
+                        @empty
+                            <p class="text-success font-weight-bold m-4">
+                                This player has no warnings on their record! Excellent.
+                            </p>
+                        @endforelse
+                    </div>
+                    <!-- Counting -->
+                    @if ($count = $warnings->count())
+                        <div class="card-footer">
+                            <p>
+                                {{ $count }} / 3 warnings
+                            </p>
+                            <div class="progress">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $count / 3 * 100 }}%"></div>
                             </div>
                         </div>
-                    @empty
-                        <p class="text-success font-weight-bold m-0">This player has no warnings on their record! Excellent.</p>
-                    @endforelse
-                </div>
-                <div class="card-footer">
-                    <p>
-                        2 / 3 warnings
-                    </p>
-                    <div class="progress">
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: 66%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
+                    @endif
+                @endif
             </div>
         </div>
     </div>
