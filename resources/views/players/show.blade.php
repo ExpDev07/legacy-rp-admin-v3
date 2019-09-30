@@ -54,7 +54,22 @@
         <div class="col mb-4">
             <div class="card border-left-primary">
                 <div class="card-header">
-                    <h5 class="text-primary">Player Information</h5>
+                    <div class="d-md-flex align-items-center justify-content-between">
+                        <h5 class="text-primary">Player Information</h5>
+
+                        <!-- Ban player button -->
+                        @if (!$player->isBanned())
+                            <a class="btn btn-danger btn-sm btn-icon-split" href="#" data-toggle="modal" data-target="#banModal">
+                                <!-- Icon -->
+                                <span class="icon"><i class="fas fa-gavel"></i></span>
+
+                                <!-- Text -->
+                                <span class="text">
+                                    Ban Player
+                                </span>
+                            </a>
+                        @endif
+                    </div>
                 </div>
                 <div class="card-body">
                     <p>
