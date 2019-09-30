@@ -160,7 +160,7 @@
             <!-- Footer -->
             <footer class="sticky-footer bg-light">
                 <div class="container my-auto text-center">
-                    <span>ExpDev07 - <a href="https://github.com/ExpDev07/legacy-rp-admin-v3">https://github.com/ExpDev07/legacy-rp-admin-v3</a></span>
+                    Made with <i class="fas fa-heart text-danger"></i> by ExpDev (Marius) - <a href="https://github.com/ExpDev07/legacy-rp-admin-v3">https://github.com/ExpDev07/legacy-rp-admin-v3</a>
                 </div>
             </footer>
 
