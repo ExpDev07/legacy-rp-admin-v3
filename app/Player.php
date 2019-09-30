@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -72,21 +73,11 @@ class Player extends Model
     /**
      * Gets the steam id.
      *
-     * @return SteamID
+     * @return SteamID|null
      */
     public function getSteamID()
     {
         return get_steam_id($this->identifier);
-    }
-
-    /**
-     * Gets a link to the steam profile.
-     *
-     * @return string
-     */
-    public function getSteamProfile() : string
-    {
-        return STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
     }
 
     /**
@@ -154,12 +145,16 @@ function seconds_to_human($ss)
  * Takes the given identifier and tries to resolve a SteamID from it.
  *
  * @param string $identifier
- * @return SteamID
- * @throws InvalidArgumentException
+ * @return SteamID|null
  */
 function get_steam_id(string $identifier) : SteamID
 {
-    // Get rid of any prefix.
-    $parts = explode('steam:', $identifier);
-    return new SteamID(hexdec($parts[1]));
+    try {
+        // Get rid of any prefix.
+        $parts = explode('steam:', $identifier);
+        return new SteamID(hexdec($parts[1]));
+    }
+    catch (Exception $ex) {
+        return null;
+    }
 }

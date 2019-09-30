@@ -60,8 +60,8 @@
                 </div>
                 <div class="card-footer">
                     <!-- Visiting steam profile -->
-                    @if ($steam = $player->getSteamProfile())
-                        <a class="btn btn-sm btn-dark btn-icon-split" href="{{ $steam }}">
+                    @if ($steam = $player->getSteamID())
+                        <a class="btn btn-sm btn-dark btn-icon-split" href="http://s.team/p/{{ $steam->RenderSteamInvite() }}">
                             <!-- Icon -->
                             <span class="icon"><i class="fab fa-steam"></i></span>
 
