@@ -42,6 +42,9 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
         Route::resource('players.bans', 'BanController');
     });
 
+    // logs resource.
+    Route::resource('logs', 'LogController');
+
 });
 
 

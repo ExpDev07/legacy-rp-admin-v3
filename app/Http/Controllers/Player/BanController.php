@@ -6,8 +6,6 @@ use App\Ban;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBanRequest;
 use App\Player;
-use foo\bar;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
@@ -23,11 +21,25 @@ class BanController extends Controller
      */
     public function store(Player $player, StoreBanRequest $request)
     {
-        // Create the warning and persist it to the database.
-        $player->bans()->create(array_merge($request->validated(), [
-            'ban-id'    => Str::uuid()->toString(),
-            'banner-id' => $request->user()->player->staff,
-        ]));
+        // Go through the player's identifiers and create a ban record for each of them.
+        /*foreach ($player->identifiers as $identifier) {
+
+            Ban::query()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
+                'ban-id'     => Str::uuid()->toString(),
+                'banner-id'  => auth()->user()->player->staff,
+                'identifier' => $identifier,
+            ]));
+
+        }*/
+
+        foreach ($player->getIdentifiers() as $identifier) {
+
+            $player->bans()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
+                'ban-id'     => Str::uuid()->toString(),
+                'banner-id'  => auth()->user()->player->staff,
+            ]));
+
+        }
 
         return back();
     }
@@ -41,7 +53,8 @@ class BanController extends Controller
      */
     public function destroy(Player $player, Ban $ban)
     {
-        $ban->forceDelete();
+        // Remove all of the player's bans.
+        $player->bans()->forceDelete();
         return back();
     }
 }

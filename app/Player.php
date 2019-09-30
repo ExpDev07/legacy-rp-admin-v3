@@ -5,6 +5,7 @@ namespace App;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 use SteamID;
 
 /**
@@ -47,6 +48,19 @@ class Player extends Model
     protected $casts = [
         'identifiers' => 'array',
     ];
+
+    /**
+     * Gets all the identifiers.
+     *
+     * @return array
+     */
+    public function getIdentifiers() : array
+    {
+        // Include main identifier if it's not already inside identifiers attribute.
+        return in_array($this->identifier, $this->identifiers)
+            ? $this->identifiers
+            : array_merge([ $this->identifier ], $this->identifiers);
+    }
 
     /**
      * Checks whether this player is a staff member.
@@ -99,13 +113,15 @@ class Player extends Model
     }
 
     /**
-     * Gets the bans relationship.
+     * Gets the bans.
      *
-     * @return HasMany
+     * @return Builder
      */
-    public function bans() : HasMany
+    public function bans() : Builder
     {
-        return $this->hasMany(Ban::class, 'identifier', 'identifier');
+        // Due to how banning works, there might exist a ban record for each of the player's identifier (steam, ip address
+        // rockstar license, etc), and it's important to get all.
+        return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
     /**

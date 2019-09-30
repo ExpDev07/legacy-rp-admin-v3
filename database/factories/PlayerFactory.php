@@ -8,14 +8,19 @@ use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Player::class, function (Faker $faker) {
 
+    // The identifier to assign player.
+    $identifier = $faker->uuid;
+
     // Create the player's staff status.
     $staff = $faker->boolean(35) ? 'M-' . $faker->uuid : null;
 
     return [
         'name'        => $faker->name,
-        'identifier'  => $faker->uuid,
         'playtime'    => $faker->numberBetween(0, 10000),
+        'identifier'  => $identifier,
         'staff'       => $staff,
-        'identifiers' => [],
+        'identifiers' => [
+            $faker->ipv4, $identifier
+        ],
     ];
 });

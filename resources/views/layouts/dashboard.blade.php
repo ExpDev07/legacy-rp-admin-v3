@@ -47,7 +47,7 @@
 
             <!-- Viewing logs -->
             <li class="nav-item">
-                <a class="nav-link" href="logs.html">
+                <a class="nav-link" href="{{ route('logs.index') }}">
                     <i class="fas fa-toilet-paper"></i>
                     <span>Logs</span>
                 </a>
