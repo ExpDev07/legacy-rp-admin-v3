@@ -33,58 +33,63 @@
                     <h5 class="text-primary font-weight-bold">Players Found ({{ number_format($players->total()) }})</h5>
                 </div>
                 <div class="card-body">
-                    <!-- The table row -->
-                    <div class="row">
-                        <div class="col">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable">
-                                    <thead>
-                                    <tr>
-                                        <th>Identifier</th>
-                                        <th>Name</th>
-                                        <th>Warnings</th>
-                                        <th>Banned</th>
-                                        <th>Administer User</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @forelse ($players as $player)
+
+                    @if ($players->isEmpty())
+                        <p>
+                            We couldn't find any players matching your search. Please  try a different one. An example would
+                            be <span class="font-weight-bold">John Doe</span> or <span class="font-weight-bold">steam:1100001003d06ec</span>.
+                        </p>
+                        <div class="text-center">
+                            <img class="img-fluid mt-5" style="width: 30rem" src="{{ asset('images/signal_searching.svg') }}" alt="">
+                        </div>
+                    @else
+                        <!-- The table row -->
+                        <div class="row">
+                            <div class="col">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable">
+                                        <thead>
                                         <tr>
-                                            <!-- General information -->
-                                            <td>{{ $player->name }}</td>
-                                            <td>{{ $player->identifier }}</td>
-
-                                            <!-- Counting warnings -->
-                                            <td>{{ $player->warnings()->count() }}</td>
-
-                                            <!-- Boolean values -->
-                                            <td>{{ $player->isBanned() ? 'yes' : 'no' }}</td>
-
-                                            <!-- Linking to visit their profile -->
-                                            <td>
-                                                <a class="font-weight-bold" href="{{ route('players.show', compact('player')) }}">
-                                                    Visit Profile
-                                                </a>
-                                            </td>
+                                            <th>Identifier</th>
+                                            <th>Name</th>
+                                            <th>Warnings</th>
+                                            <th>Banned</th>
+                                            <th>Administer User</th>
                                         </tr>
-                                    @empty
-                                        <p>
-                                            We <span class="text-danger">couldn't find any players</span> matching your  search. Please
-                                            try a different one. An example would be <span class="font-weight-bold">John Doe</span> or
-                                            <span class="font-weight-bold">steam:1100001003d06ec</span>.
-                                        </p>
-                                    @endforelse
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($players as $player)
+                                                <tr>
+                                                    <!-- General information -->
+                                                    <td>{{ $player->name }}</td>
+                                                    <td>{{ $player->identifier }}</td>
+
+                                                    <!-- Counting warnings -->
+                                                    <td>{{ $player->warnings()->count() }}</td>
+
+                                                    <!-- Boolean values -->
+                                                    <td>{{ $player->isBanned() ? 'yes' : 'no' }}</td>
+
+                                                    <!-- Linking to visit their profile -->
+                                                    <td>
+                                                        <a class="font-weight-bold" href="{{ route('players.show', compact('player')) }}">
+                                                            Visit Profile
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        @endforeach
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Pagination row -->
-                    <div class="row mt-2">
-                        <div class="col">
-                            {{ $players->appends(request()->query())->links() }}
+                        <!-- Pagination row -->
+                        <div class="row mt-2">
+                            <div class="col">
+                                {{ $players->appends(request()->query())->links() }}
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>
