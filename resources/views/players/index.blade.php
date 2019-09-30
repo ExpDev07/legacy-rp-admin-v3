@@ -33,7 +33,6 @@
                     <h5 class="text-primary font-weight-bold">Players Found ({{ number_format($players->total()) }})</h5>
                 </div>
                 <div class="card-body">
-
                     @if ($players->isEmpty())
                         <p>
                             We couldn't find any players matching your search. Please  try a different one. An example would
