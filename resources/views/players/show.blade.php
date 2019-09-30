@@ -54,7 +54,7 @@
         <div class="col mb-4">
             <div class="card border-left-primary">
                 <div class="card-header">
-                    <div class="d-md-flex align-items-center justify-content-between">
+                    <div class="d-sm-flex align-items-center justify-content-between">
                         <h5 class="text-primary">Player Information</h5>
 
                         <!-- Ban player button -->
@@ -99,7 +99,7 @@
         <div class="col mb-4">
             <div class="card border-left-danger">
                 <div class="card-header">
-                    <div class="d-md-flex align-items-center justify-content-between">
+                    <div class="d-sm-flex align-items-center justify-content-between">
                         <!-- Title -->
                         <h5 class="text-primary">Warnings</h5>
 
