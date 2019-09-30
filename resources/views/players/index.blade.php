@@ -8,6 +8,7 @@
 @endsection
 
 @section('main')
+    <!-- Searching row -->
     <div class="row">
         <div class="col">
             <form>
@@ -24,11 +25,12 @@
         </div>
     </div>
 
+    <!-- Results row -->
     <div class="row mt-4">
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="text-primary font-weight-bold">Results matching your search ({{ $players->total() }})</h5>
+                    <h5 class="text-primary font-weight-bold">Players Found ({{ $players->total() }})</h5>
                 </div>
                 <div class="card-body">
                     <!-- The table row -->

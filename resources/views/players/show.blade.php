@@ -35,4 +35,23 @@
             </div>
         </div>
     @endif
+
+    <div class="row">
+        <div class="col">
+            <!-- Player information -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="text-primary">Player Information</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <!-- Warnings -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="text-primary">Warnings</h5>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

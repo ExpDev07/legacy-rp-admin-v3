@@ -107,14 +107,13 @@ class Player extends Model
      */
     protected static function seconds_to_human($ss)
     {
-        $s = $ss % 60;
         $m = floor(($ss % 3600) / 60);
         $h = floor(($ss % 86400) / 3600);
         $d = floor(($ss % 2592000) / 86400);
         $M = floor($ss / 2592000);
 
         // Return a friendly string that humans can easily read.
-        return "$M months, $d days, $h hours, $m minutes, $s seconds";
+        return "$M months, $d days, $h hours, and $m minutes";
     }
 
 }
