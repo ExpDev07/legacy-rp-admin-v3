@@ -119,7 +119,7 @@
                     <!-- Displaying -->
                     <div class="card-body p-0">
                         @forelse ($warnings->latest()->get() as $warning)
-                            <div class="card">
+                            <div class="card m-2">
                                 <div class="card-body">
                                     {{ $warning->message }}
                                 </div>
