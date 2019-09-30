@@ -25,7 +25,9 @@ class StaffMiddleware
         // Check for staff status.
         if (!($this->isStaff($request))) {
             auth()->logout(); // log them out also.
-            return redirect()->route('login')->with('error', 'You must be a staff member to use this webpanel!');
+            return redirect()->route('login')->with('error',
+                'You must be a staff member to use this webpanel! If you believe this is a mistake, contact a developer.'
+            );
         }
         return $next($request);
     }
