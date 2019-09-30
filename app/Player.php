@@ -98,6 +98,16 @@ class Player extends Model
     }
 
     /**
+     * Gets the warnings relationship.
+     *
+     * @return HasMany
+     */
+    public function warnings() : HasMany
+    {
+        return $this->hasMany(Warning::class);
+    }
+
+    /**
      * Converts the given seconds to a human readable string.
      *
      * https://snippetsofcode.wordpress.com/2012/08/25/php-function-to-convert-seconds-into-human-readable-format-months-days-hours-minutes/

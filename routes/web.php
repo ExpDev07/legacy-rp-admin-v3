@@ -36,7 +36,10 @@ Route::group([ 'middleware' => [ 'auth' ] ], function () {
     Route::name('dashboard')->get('/', 'DashboardController');
 
     // Player resource.
-    Route::resource('players', 'PlayerController');
+    Route::group([ 'namespace' => 'Player' ], function () {
+        Route::resource('players', 'PlayerController');
+        Route::resource('players.warnings', 'WarningController');
+    });
 
 });
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Player;
 
+use App\Http\Controllers\Controller;
 use App\Player;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;

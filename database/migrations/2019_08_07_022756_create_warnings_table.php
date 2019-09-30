@@ -17,7 +17,7 @@ class CreateWarningsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('issuer_id');
             $table->unsignedBigInteger('player_id');
-            $table->string("type");
+            $table->string("type")->nullable();
             $table->text('message');
             $table->timestamps();
         });

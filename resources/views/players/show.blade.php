@@ -36,21 +36,104 @@
         </div>
     @endif
 
+    <!-- Player information -->
     <div class="row">
         <div class="col">
-            <!-- Player information -->
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="text-primary">Player Information</h5>
                 </div>
+                <div class="card-body">
+                    <p>
+                        This player has a total playtime of <span class="font-weight-bold">{{ $player->getPlayTime() }}</span>.
+                    </p>
+                </div>
             </div>
         </div>
+    </div>
+
+    <!-- Warnings -->
+    <div class="row">
         <div class="col">
-            <!-- Warnings -->
-            <div class="card">
+            <div class="card border-left-danger mb-4">
                 <div class="card-header">
-                    <h5 class="text-primary">Warnings</h5>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <!-- Title -->
+                        <h5 class="text-primary">Warnings</h5>
+
+                        <!-- Add warning button -->
+                        <a class="btn btn-danger btn-sm btn-icon-split" href="#" data-toggle="modal" data-target="#warningModal">
+                            <!-- Icon -->
+                            <span class="icon"><i class="fas fa-exclamation-circle"></i></span>
+
+                            <!-- Text -->
+                            <span class="text">
+                                New Warning
+                            </span>
+                        </a>
+                    </div>
                 </div>
+                <div class="card-body bg-gradient-light">
+                    @forelse ($player->warnings()->latest()->get() as $warning)
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                {{ $warning->message }}
+                            </div>
+                            <div class="card-footer">
+                                By {{ $warning->issuer->name }} - {{ $warning->created_at }}
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-success">This player has no warnings! Excellent.</p>
+                    @endforelse
+                </div>
+                <div class="card-footer">
+                    <p>
+                        2 / 3 warnings
+                    </p>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 66%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Modal-->
+    <div class="modal fade" id="warningModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Add a warning to {{ $player->name }}</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <!-- Form for submitting a new warning -->
+                <form class="was-validated" method="POST" action="{{ route('players.warnings.store', compact('player')) }}">
+                    @csrf
+
+                    <div class="modal-body">
+                        <p>
+                            Please enter the reason for this warning. Include any links/evidence as well. If you are unsure
+                            about something, don't hesitate contacting another staff member.
+                        </p>
+
+                       <!-- Reason input -->
+                        <label class="font-weight-bold" for="message">Reason</label>
+                        <textarea class="form-control is-invalid" id="message" name="message" placeholder="InzidiuZ did an oopsie." required></textarea>
+                        <div class="invalid-feedback">
+                            Please enter a reason in the text area.
+                        </div>
+                    </div>
+                    <!-- Actions to perform -->
+                    <div class="modal-footer">
+                        <form action="">
+                            <button class="btn btn-primary" >Add warning</button>
+                        </form>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
