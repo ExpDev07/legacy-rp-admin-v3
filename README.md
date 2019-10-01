@@ -4,7 +4,8 @@
     </a>
 </p>
 
-# legacy-rp-admin-v3
+# legacy-rp-admin-v3 [![Build Status](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3.svg?branch=master)](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3)
+
 
 <p>
     <a href='https://ko-fi.com/C1C510DUQ' target='_blank'>
