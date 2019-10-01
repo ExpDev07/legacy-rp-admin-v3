@@ -128,11 +128,13 @@
                                 </div>
                             </div>
                         @empty
-                            <p class="text-success font-weight-bold m-4">
-                                This player has no warnings on their record! Excellent.
-                            </p>
-                            <div class="text-center">
-                                <img class="img-fluid mt-5 mb-4" style="width: 30rem" src="{{ asset('images/empty.svg') }}" alt="">
+                            <div class="m-4">
+                                <p class="text-success font-weight-bold">
+                                    This player has no warnings on their record! Excellent. Let them know they're doing a great job.
+                                </p>
+                                <div class="text-center">
+                                    <img class="img-fluid mt-5 mb-4" style="width: 30rem" src="{{ asset('images/empty.svg') }}" alt="">
+                                </div>
                             </div>
                         @endforelse
                     </div>
