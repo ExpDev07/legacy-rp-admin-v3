@@ -6,10 +6,3 @@ php:
     not-name:
       - index.php
       - server.php
-
-# multiple languages require paid plan :(
-#js:
-#  finder:
-#    not-name:
-#      - webpack.mix.js
-#css: true
