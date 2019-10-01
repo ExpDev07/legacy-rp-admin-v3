@@ -22,16 +22,6 @@ class BanController extends Controller
     public function store(Player $player, StoreBanRequest $request)
     {
         // Go through the player's identifiers and create a ban record for each of them.
-        /*foreach ($player->identifiers as $identifier) {
-
-            Ban::query()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
-                'ban-id'     => Str::uuid()->toString(),
-                'banner-id'  => auth()->user()->player->staff,
-                'identifier' => $identifier,
-            ]));
-
-        }*/
-
         foreach ($player->getIdentifiers() as $identifier) {
 
             $player->bans()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
