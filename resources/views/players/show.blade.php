@@ -133,7 +133,7 @@
                                     This player has no warnings on their record! Excellent. Let them know they're doing a great job.
                                 </p>
                                 <div class="text-center">
-                                    <img class="img-fluid mt-5 mb-4" style="width: 30rem" src="{{ asset('images/empty.svg') }}" alt="">
+                                    <img class="img-fluid mt-5 mb-4" style="width: 20rem" src="{{ asset('images/empty.svg') }}" alt="">
                                 </div>
                             </div>
                         @endforelse
