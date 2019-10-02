@@ -28,6 +28,9 @@
     <div class="row">
         <div class="col">
             <div class="card">
+                <div class="card-header">
+                    <h6 class="text-primary font-weight-bold">Logged actions found: {{ number_format($logs->total()) }}</h6>
+                </div>
                 <div class="card-body">
                     @if ($logs->isEmpty())
                         <p>
