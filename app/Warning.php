@@ -23,7 +23,7 @@ class Warning extends Model
      * @var array
      */
     protected $fillable = [
-        'issuer_id', 'type', 'message'
+        'issuer_id', 'message',
     ];
 
     /**

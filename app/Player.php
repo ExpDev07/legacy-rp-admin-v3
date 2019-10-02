@@ -113,15 +113,13 @@ class Player extends Model
     }
 
     /**
-     * Gets the bans.
+     * Gets the logs relationship.
      *
-     * @return Builder
+     * @return HasMany
      */
-    public function bans() : Builder
+    public function logs() : HasMany
     {
-        // Due to how banning works, there might exist a ban record for each of the player's identifier (steam, ip address
-        // rockstar license, etc), and it's important to get all.
-        return Ban::query()->whereIn('identifier', $this->getIdentifiers());
+        return $this->hasMany(Log::class, 'identifier', 'identifier');
     }
 
     /**
@@ -132,6 +130,18 @@ class Player extends Model
     public function warnings() : HasMany
     {
         return $this->hasMany(Warning::class);
+    }
+
+    /**
+     * Gets the query for bans.
+     *
+     * @return Builder
+     */
+    public function bans() : Builder
+    {
+        // Due to how banning works, there might exist a ban record for each of the player's identifier (steam, ip address
+        // rockstar license, etc), and it's important to get all.
+        return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
 }
@@ -165,8 +175,7 @@ function get_steam_id(string $identifier) : SteamID
 {
     try {
         // Get rid of any prefix.
-        $parts = explode('steam:', $identifier);
-        return new SteamID(hexdec($parts[1]));
+        return new SteamID(hexdec(explode('steam:', $identifier)[1]));
     }
     catch (Exception $ex) {
         return null;

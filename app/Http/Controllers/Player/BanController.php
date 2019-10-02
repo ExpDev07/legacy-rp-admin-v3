@@ -30,7 +30,6 @@ class BanController extends Controller
             ]));
 
         }
-
         return back();
     }
 

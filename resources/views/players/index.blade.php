@@ -3,8 +3,10 @@
 @section('title', 'Search players')
 
 @section('description')
-    Search players by their <span class="text-primary font-weight-bold">name or identifier</span>. Don't know somebody's
-    identifier? Use <a href="http://www.vacbanned.com/">VAC Banned</a> to help you specify your search.
+    <p>
+        Search players by their <span class="text-primary font-weight-bold">name or identifier</span>. Don't know somebody's
+        identifier? Use <a href="http://www.vacbanned.com/">VAC Banned</a> to help you specify your search.
+    </p>
 @endsection
 
 @section('main')
@@ -30,7 +32,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="text-primary font-weight-bold">Players Found ({{ number_format($players->total()) }})</h5>
+                    <h6 class="text-primary font-weight-bold">Players Found ({{ number_format($players->total()) }})</h6>
                 </div>
                 <div class="card-body">
                     @if ($players->isEmpty())

@@ -24,7 +24,6 @@ class WarningController extends Controller
         $player->warnings()->create(array_merge($request->validated(), [
             'issuer_id' => $request->user()->player->id,
         ]));
-
         return back();
     }
 

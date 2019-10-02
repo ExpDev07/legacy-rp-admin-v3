@@ -12,11 +12,20 @@ class LogController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('logs.index', [ 'logs' => Log::query()->latest()->simplePaginate(20) ]);
+        // Begin querying the logs.
+        $builder = Log::query()->latest();
+
+        // Filtering by player.
+        if ($player = $request->get('player')) {
+            $builder->where('identifier', $player);
+        }
+
+        return view('logs.index', [ 'logs' => $builder->simplePaginate(20) ]);
     }
 
 }

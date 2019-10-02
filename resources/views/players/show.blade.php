@@ -3,8 +3,10 @@
 @section('title', $player->name)
 
 @section('description')
-    Viewing the profile of {{ $player->name }} ({{ $player->identifier }}). Here you can perform various administrative
-    actions related to this player.
+    <p>
+        Viewing the profile of {{ $player->name }} ({{ $player->identifier }}). Here you can perform various administrative
+        actions related to this player.
+    </p>
 @endsection
 
 @section('main')
@@ -55,7 +57,8 @@
             <div class="card border-left-primary">
                 <div class="card-header">
                     <div class="d-sm-flex align-items-center justify-content-between">
-                        <h5 class="text-primary">Player Information</h5>
+                        <!-- Title -->
+                        <h6 class="text-primary font-weight-bold">Player Information</h6>
 
                         <!-- Ban player button -->
                         @if (!$player->isBanned())
@@ -89,6 +92,17 @@
                             </span>
                         </a>
                     @endif
+
+                    <!-- Viewing logs -->
+                    <a class="btn btn-sm btn-primary btn-icon-split" href="{{ route('logs.index', [ 'player' => $player->identifier ]) }}">
+                        <!-- Icon -->
+                        <span class="icon"><i class="fas fa-toilet-paper"></i></span>
+
+                        <!-- Text -->
+                        <span class="text">
+                            View Logs
+                        </span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -101,7 +115,7 @@
                 <div class="card-header">
                     <div class="d-sm-flex align-items-center justify-content-between">
                         <!-- Title -->
-                        <h5 class="text-primary">Warnings</h5>
+                        <h6 class="text-primary font-weight-bold">Warnings</h6>
 
                         <!-- Add warning button -->
                         <a class="btn btn-danger btn-sm btn-icon-split" href="#" data-toggle="modal" data-target="#warningModal">
