@@ -32,7 +32,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h6 class="text-primary font-weight-bold">Players found: {{ number_format($players->total()) }}</h6>
+                    <h6 class="text-primary font-weight-bold">Players found</h6>
                 </div>
                 <div class="card-body">
                     @if ($players->isEmpty())
