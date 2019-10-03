@@ -25,7 +25,7 @@ class LogController extends Controller
             $builder->where('identifier', $player);
         }
 
-        return view('logs.index', [ 'logs' => $builder->paginate(20) ]);
+        return view('logs.index', [ 'logs' => $builder->simplePaginate(20) ]);
     }
 
 }
