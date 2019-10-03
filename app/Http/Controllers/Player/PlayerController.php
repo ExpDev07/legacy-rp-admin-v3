@@ -27,7 +27,7 @@ class PlayerController extends Controller
             $builder->orWhereRaw('lower(name) like (?)', ["%{$query}%"]);
         });
 
-        return view('players.index', [ 'players' => $players->paginate(10) ]);
+        return view('players.index', [ 'players' => $players->simplePaginate(15) ]);
     }
 
     /**
