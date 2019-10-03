@@ -41,7 +41,7 @@ class Log extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'action', 'details', 'metadata'
+        'identifier', 'action', 'details', 'metadata',
     ];
 
     /**
