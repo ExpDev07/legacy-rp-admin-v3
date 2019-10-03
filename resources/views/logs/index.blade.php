@@ -47,6 +47,7 @@
                                     <table class="table table-bordered" id="dataTable">
                                         <thead>
                                         <tr>
+                                            <th>@</th>
                                             <th>Action</th>
                                             <th>Player</th>
                                             <th>Details</th>
@@ -55,6 +56,9 @@
                                         <tbody>
                                         @foreach ($logs as $log)
                                             <tr>
+                                                <!-- Timestamp -->
+                                                <td>{{ $log->timestamp }}</td>
+
                                                 <!-- Action -->
                                                 <td>{{ $log->action }}</td>
 
