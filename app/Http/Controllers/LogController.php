@@ -18,7 +18,7 @@ class LogController extends Controller
     public function index(Request $request)
     {
         // Begin querying the logs.
-        $builder = Log::query()->latest()->take(1000);
+        $builder = Log::query()->latest()->limit(1000);
 
         // Filtering by player.
         if ($player = $request->get('player')) {
