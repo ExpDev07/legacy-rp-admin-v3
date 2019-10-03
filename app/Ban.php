@@ -40,7 +40,7 @@ class Ban extends Model
      * @var array
      */
     protected $fillable = [
-        'ban-id', 'banner-id', 'identifier', 'reason'
+        'ban-id', 'banner-id', 'identifier', 'reason',
     ];
 
     /**

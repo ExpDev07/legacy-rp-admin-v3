@@ -7,6 +7,8 @@ use App\Player;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 
 class PlayerController extends Controller
 {
@@ -27,7 +29,7 @@ class PlayerController extends Controller
             $builder->orWhereRaw('lower(name) like (?)', ["%{$query}%"]);
         });
 
-        return view('players.index', [ 'players' => $players->paginate(10) ]);
+        return view('players.index', [ 'players' => $players->simplePaginate(15) ]);
     }
 
     /**

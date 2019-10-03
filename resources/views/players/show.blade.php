@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <div class="d-md-flex align-items-center justify-content-between">
                             <!-- Ban information -->
-                            <div>
+                            <h6 class="font-weight-bold">
                                 This player is currently banned by
 
                                 <!-- Determine whether we're going to use the issuer or banner-id -->
@@ -27,8 +27,8 @@
                                 @else
                                     {{ $ban['banner-id'] }}
                                 @endif
-                                for: {{ $ban->reason }}
-                            </div>
+                                ({{ $ban->timestamp }}):
+                            </h6>
                             <!-- Unbanning -->
                             <form method="POST" action="{{ route('players.bans.destroy', compact('player', 'ban')) }}">
                                 @csrf @method('DELETE')
@@ -45,6 +45,9 @@
                                 </button>
                             </form>
                         </div>
+                        <p class="m-0">
+                            {{ $ban->reason }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -182,8 +185,8 @@
             @endslot
 
             <p>
-                Please enter the reason for this warning. Include any links/evidence as well. If you are unsure
-                about something, don't hesitate contacting another staff member.
+                Please enter the reason for this warning. Include any links/evidence as well. If you are unsure  about something, don't
+                hesitate contacting another staff member.
             </p>
 
             <!-- Reason input -->
@@ -209,8 +212,8 @@
             @endslot
 
             <p>
-                You are now banning this player from our game-servers. Before proceeding any further, make sure you're well
-                within reason to go through with this. Checking with a secondary staff member is always a good idea.
+                You are now banning this player from our game-servers. Before proceeding any further, make sure you're well within reason to go
+                through with this. Checking with a secondary staff member is always a good idea.
             </p>
 
             <!-- Reason input -->

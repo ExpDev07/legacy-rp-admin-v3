@@ -29,7 +29,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h6 class="text-primary font-weight-bold">Logged actions found: {{ number_format($logs->total()) }}</h6>
+                    <h6 class="text-primary font-weight-bold">Logged actions found</h6>
                 </div>
                 <div class="card-body">
                     @if ($logs->isEmpty())
@@ -47,6 +47,7 @@
                                     <table class="table table-bordered" id="dataTable">
                                         <thead>
                                         <tr>
+                                            <th>@</th>
                                             <th>Action</th>
                                             <th>Player</th>
                                             <th>Details</th>
@@ -55,6 +56,9 @@
                                         <tbody>
                                         @foreach ($logs as $log)
                                             <tr>
+                                                <!-- Timestamp -->
+                                                <td>{{ $log->timestamp }}</td>
+
                                                 <!-- Action -->
                                                 <td>{{ $log->action }}</td>
 
