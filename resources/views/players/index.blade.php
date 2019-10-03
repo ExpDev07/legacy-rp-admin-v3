@@ -62,8 +62,8 @@
                                             @foreach ($players as $player)
                                                 <tr>
                                                     <!-- General information -->
-                                                    <td>{{ $player->name }}</td>
                                                     <td>{{ $player->identifier }}</td>
+                                                    <td>{{ $player->name }}</td>
 
                                                     <!-- Counting warnings -->
                                                     <td>{{ $player->warnings()->count() }}</td>
