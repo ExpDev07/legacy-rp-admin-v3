@@ -18,14 +18,14 @@ class LogController extends Controller
     public function index(Request $request)
     {
         // Begin querying the logs.
-        $builder = Log::query()->latest()->take(10000);
+        $builder = Log::query()->latest()->take(1000);
 
         // Filtering by player.
         if ($player = $request->get('player')) {
             $builder->where('identifier', $player);
         }
 
-        return view('logs.index', [ 'logs' => $builder->simplePaginate(20) ]);
+        return view('logs.index', [ 'logs' => $builder->paginate(20) ]);
     }
 
 }
