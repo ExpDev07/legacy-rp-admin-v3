@@ -51,7 +51,6 @@ class Log extends Model
      */
     protected $casts = [
         'metadata'  => 'array',
-        'timestamp' => 'date',
     ];
 
     /**

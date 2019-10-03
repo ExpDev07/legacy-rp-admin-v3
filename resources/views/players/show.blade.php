@@ -18,7 +18,7 @@
                     <div class="card-body">
                         <div class="d-md-flex align-items-center justify-content-between">
                             <!-- Ban information -->
-                            <div>
+                            <h6 class="font-weight-bold">
                                 This player is currently banned by
 
                                 <!-- Determine whether we're going to use the issuer or banner-id -->
@@ -27,8 +27,8 @@
                                 @else
                                     {{ $ban['banner-id'] }}
                                 @endif
-                                for: {{ $ban->reason }}
-                            </div>
+                                ({{ $ban->timestamp }}):
+                            </h6>
                             <!-- Unbanning -->
                             <form method="POST" action="{{ route('players.bans.destroy', compact('player', 'ban')) }}">
                                 @csrf @method('DELETE')
@@ -45,6 +45,9 @@
                                 </button>
                             </form>
                         </div>
+                        <p class="m-0">
+                            {{ $ban->reason }}
+                        </p>
                     </div>
                 </div>
             </div>
