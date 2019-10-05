@@ -20,6 +20,8 @@
 
 See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
+**Urgent? Write to me on Discord: Marius Big Ounce#2997.**
+
 ## Improvements from v1
 2. Re-done to give a more minimalistic and "simple" look.
 3. Backend improvements that encourage scaling and maintainability. 
