@@ -19,3 +19,9 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+/* fixes the "shake" when you open bootstrap modal */
+.modal-open {
+    padding-right: 0 !important;
+    overflow-y: auto;
+}

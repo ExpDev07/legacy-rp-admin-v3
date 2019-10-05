@@ -21,11 +21,8 @@
 </head>
 
 <body>
-    <!-- Application wrapper -->
-    <div id="app">
-        <!-- Page content -->
-        @yield('content')
-    </div>
+    <!-- Page content -->
+    @yield('content')
 
     <!-- Scripts -->
     <script src="{{ asset('/js/app.js') }}"></script>

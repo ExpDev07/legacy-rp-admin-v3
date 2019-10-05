@@ -10,7 +10,7 @@
 @endsection
 
 @section('main')
-
+    <!-- Displaying of ban -->
     @if ($ban = $player->bans()->first())
         <div class="row">
             <div class="col mb-4">
@@ -111,6 +111,41 @@
         </div>
     </div>
 
+    <!-- Characters -->
+    <div class="row">
+        @foreach ($player->characters as $character)
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card h-100">
+                    <!-- Header -->
+                    <div class="card-header text-center">
+                        <h6 class="text-primary font-weight-bold m-0">{{ $character->name }} (CID #: {{ $character->cid }})</h6>
+                    </div>
+                    <!-- Body -->
+                    <div class="card-body">
+                        <!-- Other info -->
+                        <h6 class="font-weight-bold">
+                            Money: ${{ number_format($character->money) }}
+                        </h6>
+                        <hr>
+                        <!-- Story -->
+                        <div>
+                            <h6 class="font-weight-bold">Story</h6>
+                            <p>
+                                {{ Str::limit($character->story, 100) }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="card-footer">
+                        <a class="btn btn-block btn-primary" href="#">
+                            View Character
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
     <!-- Warnings -->
     <div class="row">
         <div class="col mb-4">
@@ -177,7 +212,7 @@
 
         @component('modal', [ 'target' => 'warningModal' ])
             @slot('title')
-                Add a warning to {{ $player->name }}!
+                Add a warning to {{ $player->name }}
             @endslot
 
             @slot('actions')
