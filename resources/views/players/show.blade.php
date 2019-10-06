@@ -34,7 +34,7 @@
                                 @csrf @method('DELETE')
 
                                 <!-- Button for unbanning -->
-                                <button class="btn btn-sm btn-dark btn-icon-split">
+                                <button class="btn btn-dark btn-icon-split btn-sm" type="submit">
                                     <!-- Icon -->
                                     <span class="icon"><i class="fas fa-trash"></i></span>
 
@@ -137,7 +137,7 @@
                     </div>
                     <!-- Footer -->
                     <div class="card-footer">
-                        <a class="btn btn-block btn-primary" href="#">
+                        <a class="btn btn-block btn-primary" href="{{ route('characters.show', compact('character')) }}">
                             View Character
                         </a>
                     </div>
@@ -171,12 +171,27 @@
                     <!-- Displaying -->
                     <div class="card-body p-0">
                         @forelse ($warnings->latest()->get() as $warning)
-                            <div class="card">
+                            <div class="card m-1">
+                                <!-- Warning message -->
                                 <div class="card-body">
                                     {{ $warning->message }}
                                 </div>
+                                <!-- Other information -->
                                 <div class="card-footer">
-                                    By <span class="font-weight-bold">{{ $warning->issuer->name }}</span> - {{ $warning->created_at }}
+                                    <div class="d-sm-flex align-items-center justify-content-between">
+                                        <!-- From and date -->
+                                        <div>
+                                            By <span class="font-weight-bold">{{ $warning->issuer->name }}</span> - {{ $warning->created_at }}
+                                        </div>
+                                        <!-- Removing of warning -->
+                                        <form method="POST" action="{{ route('players.warnings.destroy', compact('player', 'warning')) }}">
+                                            @csrf @method('DELETE')
+
+                                            <button class="btn btn-danger btn-circle btn-sm" type="submit">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         @empty
