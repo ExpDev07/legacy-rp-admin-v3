@@ -187,6 +187,7 @@
                                         <form method="POST" action="{{ route('players.warnings.destroy', compact('player', 'warning')) }}">
                                             @csrf @method('DELETE')
 
+                                            <!-- Button for removing -->
                                             <button class="btn btn-danger btn-circle btn-sm" type="submit">
                                                 <i class="fas fa-trash"></i>
                                             </button>
