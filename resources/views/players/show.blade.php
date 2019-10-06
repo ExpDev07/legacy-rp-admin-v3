@@ -82,10 +82,11 @@
                         This player has a total playtime of <span class="font-weight-bold">{{ $player->getPlayTime() }}</span>.
                     </p>
                 </div>
+                <!-- General buttons/navigation related to this player -->
                 <div class="card-footer">
                     <!-- Visiting steam profile -->
                     @if ($steam = $player->getSteamID())
-                        <a class="btn btn-sm btn-dark btn-icon-split" href="http://s.team/p/{{ $steam->RenderSteamInvite() }}">
+                        <a class="btn btn-dark btn-icon-split btn-sm" href="http://s.team/p/{{ $steam->RenderSteamInvite() }}">
                             <!-- Icon -->
                             <span class="icon"><i class="fab fa-steam"></i></span>
 
@@ -96,8 +97,19 @@
                         </a>
                     @endif
 
+                    <!-- Requesting user wipe -->
+                    <a class="btn btn-danger btn-icon-split btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSdl8uYjUTazHpcDW4A90HBwdrQtrCagCfiv6mfWNwCHMW5D3A/viewform">
+                        <!-- Icon -->
+                        <span class="icon"><i class="fas fa-broom"></i></span>
+
+                        <!-- Text -->
+                        <span class="text">
+                            Request Wipe
+                        </span>
+                    </a>
+
                     <!-- Viewing logs -->
-                    <a class="btn btn-sm btn-primary btn-icon-split" href="{{ route('logs.index', [ 'player' => $player->identifier ]) }}">
+                    <a class="btn btn-primary btn-icon-split btn-sm" href="{{ route('logs.index', [ 'player' => $player->identifier ]) }}">
                         <!-- Icon -->
                         <span class="icon"><i class="fas fa-toilet-paper"></i></span>
 
