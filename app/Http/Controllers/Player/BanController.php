@@ -21,7 +21,7 @@ class BanController extends Controller
      */
     public function store(Player $player, StoreBanRequest $request)
     {
-        // Create an unique ban-id to go with this player's ban.
+        // Create a unique ban-id to go with this player's ban.
         $ban_id = Str::uuid()->toString();
 
         // Go through the player's identifiers and create a ban record for each of them.
