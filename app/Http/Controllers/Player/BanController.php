@@ -29,7 +29,7 @@ class BanController extends Controller
 
             $player->bans()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
                 'ban-id'     => $ban_id,
-                'banner-id'  => auth()->user()->player->staff,
+                'banner-id'  => $request->user()->player->staff,
             ]));
 
         }
