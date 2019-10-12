@@ -61,13 +61,7 @@
                                                 <td>{{ $log->timestamp }}</td>
 
                                                 <!-- Server ID -->
-                                                <td>
-                                                    @if ($server = $log->serverId)
-                                                        {{ $server }}
-                                                    @else
-                                                        0
-                                                    @endif
-                                                </td>
+                                                <td>{{ $log->serverId ?? 0 }}</td>
 
                                                 <!-- Action -->
                                                 <td>{{ $log->action }}</td>
