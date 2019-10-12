@@ -64,9 +64,7 @@ class Player extends Model
     public function getIdentifiers() : array
     {
         // Include main identifier if it's not already inside identifiers attribute.
-        return in_array($this->identifier, $this->identifiers)
-            ? $this->identifiers
-            : array_merge([ $this->identifier ], $this->identifiers);
+        return in_array($this->identifier, $this->identifiers) ? $this->identifiers : array_merge([ $this->identifier ], $this->identifiers);
     }
 
     /**
