@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @package App
  *
+ * @property mixed serverId
  * @property string identifier
  * @property string action
  * @property string details
@@ -52,6 +53,16 @@ class Log extends Model
     protected $casts = [
         'metadata'  => 'array',
     ];
+
+    /**
+     * Gets the server id.
+     *
+     * @return mixed|null
+     */
+    protected function getServerIdAttribute()
+    {
+        return $this->metadata['serverId'] ?? null;
+    }
 
     /**
      * Gets the player relationship.

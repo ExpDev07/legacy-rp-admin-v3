@@ -10,6 +10,8 @@ $factory->define(Log::class, function (Faker $faker) {
     return [
         'action'   => 'example-action',
         'details'  => $faker->sentence,
-        'metadata' => []
+        'metadata' => [
+            'serverId' => $faker->numberBetween(1, 3),
+        ]
     ];
 });

@@ -48,6 +48,7 @@
                                         <thead>
                                         <tr>
                                             <th>@</th>
+                                            <th>Server</th>
                                             <th>Action</th>
                                             <th>Player</th>
                                             <th>Details</th>
@@ -58,6 +59,15 @@
                                             <tr>
                                                 <!-- Timestamp -->
                                                 <td>{{ $log->timestamp }}</td>
+
+                                                <!-- Server ID -->
+                                                <td>
+                                                    @if ($server = $log->serverId)
+                                                        {{ $server }}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </td>
 
                                                 <!-- Action -->
                                                 <td>{{ $log->action }}</td>
