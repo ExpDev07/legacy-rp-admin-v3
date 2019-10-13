@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Player;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Player;

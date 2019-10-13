@@ -33,13 +33,13 @@ Route::group([ 'namespace' => 'Auth' ], function() {
 Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
 
     // Dashboard.
-    Route::name('dashboard')->get('/', 'DashboardController');
+    Route::name('dashboard')->get('/', 'HomeController');
 
     // Player resource.
-    Route::group([ 'namespace' => 'Player' ], function () {
-        Route::resource('players', 'PlayerController');
-        Route::resource('players.warnings', 'WarningController');
-        Route::resource('players.bans', 'BanController');
+    Route::resource('players', 'PlayerController');
+    Route::group([ 'namespace' => 'Player', 'as' => 'players.' ], function () {
+        Route::resource('warnings', 'WarningController');
+        Route::resource('bans', 'BanController');
     });
 
     // Character resource.
