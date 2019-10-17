@@ -24,7 +24,7 @@ class SteamController extends AbstractSteamLoginController
         $steam->getUserInfo();
 
         // Create the user or update them if already exists.
-        $user = User::updateOrCreate([
+        $user = User::query()->updateOrCreate([
             'account_id' => $steam->steamId,
             'name' => $steam->name,
             'avatar' => $steam->avatar,

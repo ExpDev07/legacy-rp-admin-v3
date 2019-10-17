@@ -10,6 +10,23 @@ class LogController extends Controller
 {
 
     /**
+     * The logs.
+     *
+     * @var Log
+     */
+    private $logs;
+
+    /**
+     * Constructs a new LogController.
+     *
+     * @param Log $logs
+     */
+    public function __construct(Log $logs)
+    {
+        $this->logs = $logs;
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param Request $request
@@ -18,7 +35,7 @@ class LogController extends Controller
     public function index(Request $request)
     {
         // Begin querying the logs.
-        $builder = Log::query()->latest();
+        $builder = $this->logs->newQuery();
 
         // Filtering by player.
         if ($player = $request->get('player')) {

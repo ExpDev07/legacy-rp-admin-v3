@@ -36,10 +36,10 @@ Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
     Route::name('dashboard')->get('/', 'HomeController');
 
     // Player resource.
-    Route::resource('players', 'PlayerController');
-    Route::group([ 'namespace' => 'Player', 'as' => 'players.' ], function () {
-        Route::resource('warnings', 'WarningController');
-        Route::resource('bans', 'BanController');
+    Route::group([ 'namespace' => 'Player' ], function () {
+        Route::resource('players', 'PlayerController');
+        Route::resource('players.warnings', 'WarningController');
+        Route::resource('players.bans', 'BanController');
     });
 
     // Character resource.
