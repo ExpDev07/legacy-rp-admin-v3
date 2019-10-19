@@ -12,11 +12,11 @@
 @section('main')
     <!-- Searching row -->
     <div class="row">
-        <div class="col">
+        <div class="col mb-4">
             <form>
                 <div class="input-group">
                     <!-- Query input -->
-                    <input class="form-control" name="q" placeholder="Marius Truckster">
+                    <input class="form-control" name="q" placeholder="Marius Truckster" value="{{ request('q') }}">
 
                     <!-- Search -->
                     <div class="input-group-append">
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Results row -->
-    <div class="row mt-4">
+    <div class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">

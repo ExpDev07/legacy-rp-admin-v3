@@ -24,8 +24,56 @@
 @endsection
 
 @section('main')
-    <!-- Results row -->
+    <!-- Filtering -->
     <div class="row">
+        <div class="col mb-4">
+            <form class="card">
+                <div class="card-header">
+                    <h6 class="text-primary font-weight-bold">Filter logs</h6>
+                </div>
+                <div class="card-body">
+                    <!-- Server and action -->
+                    <div class="form-row">
+                        <!-- Selecting server -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Server</label>
+                                <input class="form-control" name="serverId" placeholder="1" value="{{ request('serverId') }}">
+                            </div>
+                        </div>
+                        <!-- Action -->
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Action</label>
+                                <input class="form-control" name="action" placeholder="Player Dropped" value="{{ request('action') }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Player -->
+                    <div class="form-group">
+                        <label>Player</label>
+                        <input class="form-control" name="player" placeholder="steam:11000011299aec0" value="{{ request('player') }}">
+                    </div>
+
+                    <!-- Details -->
+                    <div class="form-group">
+                        <label>Details</label>
+                        <input class="form-control" name="details" placeholder="Dropped out 11857" value="{{ request('details') }}">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <!-- Submitting -->
+                    <button class="btn btn-block btn-primary">
+                        Filter Results
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results row -->
+    <div id="logs" class="row">
         <div class="col">
             <div class="card">
                 <div class="card-header">

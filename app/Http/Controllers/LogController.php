@@ -42,7 +42,22 @@ class LogController extends Controller
             $builder->where('identifier', $player);
         }
 
-        return view('logs.index', [ 'logs' => $builder->simplePaginate(25) ]);
+        // Filtering by server.
+        if ($server = $request->get('serverId')) {
+            $builder->where('metadata->serverId', $server);
+        }
+
+        // Filtering by action.
+        if ($action = $request->get('action')) {
+            $builder->where('action', $action);
+        }
+
+        // Filtering by details.
+        if ($details = $request->get('details')) {
+            $builder->where('details', 'like', "%{$details}%");
+        }
+
+        return view('logs.index', [ 'logs' => $builder->latest()->simplePaginate(25) ]);
     }
 
 }
