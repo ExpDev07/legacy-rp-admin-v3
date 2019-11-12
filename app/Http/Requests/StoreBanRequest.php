@@ -18,4 +18,5 @@ class StoreBanRequest extends FormRequest
             'reason' => 'required',
         ];
     }
+
 }
