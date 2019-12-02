@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', $character->name . ' (#' . $character->cid . ') (character)')
+@section('title', $character->name . ' (#' . $character->cid . ') (' . $character->gender . ') (character)')
 
 @section('description')
     <p>
