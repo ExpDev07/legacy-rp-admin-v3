@@ -97,17 +97,6 @@
                         </a>
                     @endif
 
-                    <!-- Requesting user wipe -->
-                    <a class="btn btn-danger btn-icon-split btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSdl8uYjUTazHpcDW4A90HBwdrQtrCagCfiv6mfWNwCHMW5D3A/viewform">
-                        <!-- Icon -->
-                        <span class="icon"><i class="fas fa-broom"></i></span>
-
-                        <!-- Text -->
-                        <span class="text">
-                            Request Wipe
-                        </span>
-                    </a>
-
                     <!-- Viewing logs -->
                     <a class="btn btn-primary btn-icon-split btn-sm" href="{{ route('logs.index', [ 'player' => $player->identifier ]) }}">
                         <!-- Icon -->
@@ -149,7 +138,7 @@
                     </div>
                     <!-- Footer -->
                     <div class="card-footer">
-                        <a class="btn btn-block btn-primary" href="{{ route('characters.show', compact('character')) }}">
+                        <a class="btn btn-block btn-primary" href="{{ route('characters.show', $character) }}">
                             View Character
                         </a>
                     </div>

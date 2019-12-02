@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Character;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateCharacterRequest;
 use Illuminate\Http\Response;
 
 class CharacterController extends Controller
@@ -23,13 +23,14 @@ class CharacterController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param UpdateCharacterRequest $request
      * @param Character $character
      * @return Response
      */
-    public function update(Request $request, Character $character)
+    public function update(UpdateCharacterRequest $request, Character $character)
     {
-        //
+        $character->update($request->validated());
+        return back();
     }
 
 }

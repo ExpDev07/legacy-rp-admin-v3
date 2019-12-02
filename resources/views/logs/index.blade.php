@@ -63,7 +63,6 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <!-- Submitting -->
                     <button class="btn btn-block btn-primary">
                         Filter Results
                     </button>
