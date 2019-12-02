@@ -44,7 +44,7 @@ class Character extends Model
      */
     protected $fillable = [
         'identifier', 'slot', 'firstname', 'lastname', 'gender', 'height', 'dob', 'story', 'cash', 'bank', 'job',
-        'basicneeds', 'licenses', 'model', 'tattoos', 'ammo', 'animations'
+        'basicneeds', 'licenses', 'model', 'tattoos', 'ammo', 'animations',
     ];
 
     /**
