@@ -1,27 +1,38 @@
 @extends('layouts.dashboard')
 
 @section('description')
-    <p>
-        You are now at the dashboard. This is the best place to get a full overview over server activities.
-    </p>
+    You are now at the dashboard. This is the best place to get a full overview over server activities.
+@endsection
+
+@section('header')
+    <div class="header header-cover bg bg-city">
+        <div class="container">
+
+            <!-- Searching for players -->
+            <form method="GET" action="{{ route('players.index') }}">
+
+                <!-- Name or identifier -->
+                <div class="input-group input-group-lg">
+                    <input class="form-control" name="q" placeholder="Search for player..." value="{{ request('q') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">
+                            Search
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
 @endsection
 
 @section('main')
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <h6 class="text-primary font-weight-bold">WHOOPS! We're still working here</h6>
-                </div>
-                <div class="card-body">
-                    <p>
-                        This page is still a work in progress. Navigate to other pages using the sidebar on the left.
-                    </p>
-                    <div class="text-center">
-                        <img class="img-fluid mt-5 mb-4" style="width: 40rem" src="{{ asset('images/under_construction.svg') }}" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
+    <p class="text-warning font-weight-bold">
+        Oops! This page is still in progress... You can either search for players by using the form above or navigate
+        elsewhere.
+    </p>
+    <div class="text-center">
+        <img class="img-fluid mt-5" style="width: 30rem" src="{{ asset('images/signal_searching.svg') }}" alt="">
     </div>
 @endsection

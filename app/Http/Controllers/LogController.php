@@ -43,7 +43,7 @@ class LogController extends Controller
         }
 
         // Filtering by server.
-        if ($server = $request->get('serverId')) {
+        if ($server = $request->get('server')) {
             $builder->where('metadata->serverId', $server);
         }
 

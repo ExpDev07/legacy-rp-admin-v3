@@ -3,9 +3,7 @@
 @section('title', $character->name . ' (#' . $character->cid . ') (' . $character->gender . ') (character)')
 
 @section('description')
-    <p>
-        Viewing a character. <a href="{{ route('players.show', $character->player) }}">Return to player</a>.
-    </p>
+    Viewing a character. <a href="{{ route('players.show', $character->player) }}">Return to player</a>.
 @endsection
 
 @section('main')
@@ -86,7 +84,7 @@
         @csrf @method('PUT')
 
         <div class="card-header">
-            <h6 class="text-primary font-weight-bold">Edit Character</h6>
+            <h5 class="text-warning font-weight-bold">Edit Character</h5>
         </div>
         <div class="card-body">
             <!-- Updating the full name -->
