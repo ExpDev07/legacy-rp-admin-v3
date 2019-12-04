@@ -79,8 +79,18 @@
         </div>
     </div>
 
+    <!-- Story -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="text-warning font-weight-bold">Story</h5>
+        </div>
+        <div class="card-body">
+            {{ $character->story }}
+        </div>
+    </div>
+
     <!-- Changing of stuff -->
-    <form class="card" method="POST">
+    <form class="card mb-4" method="POST">
         @csrf @method('PUT')
 
         <div class="card-header">
@@ -101,6 +111,11 @@
                         <input class="form-control" name="lastname" value="{{ $character->lastname }}">
                     </div>
                 </div>
+            </div>
+            <!-- Story -->
+            <div class="form-group">
+                <label>Story</label>
+                <textarea class="form-control" name="story">{{ $character->story }}</textarea>
             </div>
         </div>
         <div class="card-footer">
