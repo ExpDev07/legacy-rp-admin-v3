@@ -25,7 +25,6 @@
                 </li>
 
                 @if ($user = auth()->user())
-
                     <li class="nav-item dropdown">
                         <!-- User part -->
                         <a class="nav-link" href="#" id="userDropdown" role="button" data-toggle="dropdown">
