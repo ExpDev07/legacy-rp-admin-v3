@@ -47,10 +47,10 @@ This list only contains some of the most notable contributors. For the full list
 <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/players.PNG" alt="Players" />
 
 ### Viewing player
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/character.PNG" alt="View Player" />
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/player.PNG" alt="View Player" />
 
 ### Viewing character
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/player.PNG" alt="View Player" />
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/character.PNG" alt="View Character" />
 
 ### Server Logs
 <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/logs.PNG" alt="Logs" />
