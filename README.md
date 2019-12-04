@@ -23,9 +23,9 @@ See [#contributing](#Contributing) for more details on how you can help shape **
 **Urgent? Write to me on Discord: Marius Big Ounce#2997.**
 
 ## Improvements from v1
-2. Re-done to give a more minimalistic and "simple" look.
-3. Backend improvements that encourage scaling and maintainability. 
-4. More.
+1. Re-done to give a more minimalistic and "simple" look.
+2. Backend improvements that encourage scaling and maintainability. 
+3. More.
 
 ## License
 Please refer to [LICENSE.md](https://github.com/ExpDev07/legacy-rp-admin-v3/blob/master/LICENSE.md) for this project's license.
