@@ -3,172 +3,185 @@
 @section('title', $player->name)
 
 @section('description')
-    <p>
-        Viewing the profile of {{ $player->name }} ({{ $player->identifier }}). Here you can perform various administrative
-        actions related to this player.
-    </p>
+    Viewing the profile of <span class="font-weight-bold">{{ $player->name }} ({{ $player->identifier }})</span>. Here
+    you can perform various administrative actions related to this player.
 @endsection
 
 @section('main')
-
+    <!-- Displaying of ban -->
     @if ($ban = $player->bans()->first())
-        <div class="row">
-            <div class="col mb-4">
-                <div class="card bg-danger text-white shadow">
-                    <div class="card-body">
-                        <div class="d-md-flex align-items-center justify-content-between">
-                            <!-- Ban information -->
-                            <h6 class="font-weight-bold">
-                                This player is currently banned by
+        <div class="card bg-danger mb-4">
+            <div class="card-body">
+                <div class="d-md-flex align-items-center justify-content-between">
+                    <!-- Ban information -->
+                    <h6 class="font-weight-bold">
+                        This player is currently banned by
 
-                                <!-- Determine whether we're going to use the issuer or banner-id -->
-                                @if ($issuer = $ban->issuer)
-                                    {{ $issuer->name }}
-                                @else
-                                    {{ $ban['banner-id'] }}
-                                @endif
-                                ({{ $ban->timestamp }}):
-                            </h6>
-                            <!-- Unbanning -->
-                            <form method="POST" action="{{ route('players.bans.destroy', compact('player', 'ban')) }}">
-                                @csrf @method('DELETE')
+                        <!-- Determine whether we're going to use the issuer or banner-id -->
+                        @if ($issuer = $ban->issuer)
+                            {{ $issuer->name }}
+                        @else
+                            {{ $ban['banner-id'] }}
+                        @endif
+                        ({{ $ban->timestamp }}):
+                    </h6>
+                    <!-- Unbanning -->
+                    <form method="POST" action="{{ route('players.bans.destroy', compact('player', 'ban')) }}">
+                        @csrf @method('DELETE')
 
-                                <!-- Button for unbanning -->
-                                <button class="btn btn-sm btn-dark btn-icon-split">
-                                    <!-- Icon -->
-                                    <span class="icon"><i class="fas fa-trash"></i></span>
-
-                                    <!-- Text -->
-                                    <span class="text">
-                                        Unban
-                                    </span>
-                                </button>
-                            </form>
-                        </div>
-                        <p class="m-0">
-                            {{ $ban->reason }}
-                        </p>
-                    </div>
+                        <!-- Button for unbanning -->
+                        <button class="btn btn-secondary btn-sm" >
+                            <i class="fas fa-trash"></i>
+                            Unban
+                        </button>
+                    </form>
                 </div>
+                <p class="m-0">
+                    {{ $ban->reason }}
+                </p>
             </div>
         </div>
     @endif
 
     <!-- Player information -->
-    <div class="row">
-        <div class="col mb-4">
-            <div class="card border-left-primary">
-                <div class="card-header">
-                    <div class="d-sm-flex align-items-center justify-content-between">
-                        <!-- Title -->
-                        <h6 class="text-primary font-weight-bold">Player Information</h6>
+    <div class="card border-left-primary mb-4">
+        <div class="card-header">
+            <div class="d-sm-flex align-items-center justify-content-between">
+                <!-- Title -->
+                <h5 class="text-warning font-weight-bold">Player Information</h5>
 
-                        <!-- Ban player button -->
-                        @if (!$player->isBanned())
-                            <a class="btn btn-danger btn-sm btn-icon-split" href="#" data-toggle="modal" data-target="#banModal">
-                                <!-- Icon -->
-                                <span class="icon"><i class="fas fa-gavel"></i></span>
-
-                                <!-- Text -->
-                                <span class="text">
-                                    Ban Player
-                                </span>
-                            </a>
-                        @endif
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p>
-                        This player has a total playtime of <span class="font-weight-bold">{{ $player->getPlayTime() }}</span>.
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <!-- Visiting steam profile -->
-                    @if ($steam = $player->getSteamID())
-                        <a class="btn btn-sm btn-dark btn-icon-split" href="http://s.team/p/{{ $steam->RenderSteamInvite() }}">
-                            <!-- Icon -->
-                            <span class="icon"><i class="fab fa-steam"></i></span>
-
-                            <!-- Text -->
-                            <span class="text">
-                                Steam Profile
-                            </span>
-                        </a>
-                    @endif
-
-                    <!-- Viewing logs -->
-                    <a class="btn btn-sm btn-primary btn-icon-split" href="{{ route('logs.index', [ 'player' => $player->identifier ]) }}">
-                        <!-- Icon -->
-                        <span class="icon"><i class="fas fa-toilet-paper"></i></span>
-
-                        <!-- Text -->
-                        <span class="text">
-                            View Logs
-                        </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Warnings -->
-    <div class="row">
-        <div class="col mb-4">
-            <div class="card border-left-danger">
-                <div class="card-header">
-                    <div class="d-sm-flex align-items-center justify-content-between">
-                        <!-- Title -->
-                        <h6 class="text-primary font-weight-bold">Warnings</h6>
-
-                        <!-- Add warning button -->
-                        <a class="btn btn-danger btn-sm btn-icon-split" href="#" data-toggle="modal" data-target="#warningModal">
-                            <!-- Icon -->
-                            <span class="icon"><i class="fas fa-exclamation-circle"></i></span>
-
-                            <!-- Text -->
-                            <span class="text">
-                                New Warning
-                            </span>
-                        </a>
-                    </div>
-                </div>
-                @if ($warnings = $player->warnings())
-                    <!-- Displaying -->
-                    <div class="card-body p-0">
-                        @forelse ($warnings->latest()->get() as $warning)
-                            <div class="card">
-                                <div class="card-body">
-                                    {{ $warning->message }}
-                                </div>
-                                <div class="card-footer">
-                                    By <span class="font-weight-bold">{{ $warning->issuer->name }}</span> - {{ $warning->created_at }}
-                                </div>
-                            </div>
-                        @empty
-                            <div class="m-4">
-                                <p class="text-success font-weight-bold">
-                                    This player has no warnings on their record! Excellent. Let them know they're doing a great job.
-                                </p>
-                                <div class="text-center">
-                                    <img class="img-fluid mt-5 mb-4" style="width: 20rem" src="{{ asset('images/empty.svg') }}" alt="">
-                                </div>
-                            </div>
-                        @endforelse
-                    </div>
-                    <!-- Counting -->
-                    @if ($count = $warnings->count())
-                        <div class="card-footer">
-                            <p>
-                                {{ $count }} / 3 warnings
-                            </p>
-                            <div class="progress">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $count / 3 * 100 }}%"></div>
-                            </div>
-                        </div>
-                    @endif
+                <!-- Ban player button -->
+                @if (!$player->isBanned())
+                    <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#banModal">
+                        <span class="fas fa-gavel"></span>
+                        Ban Player
+                    </button>
                 @endif
             </div>
         </div>
+        <div class="card-body">
+            <p>
+                This player has a total playtime of <span class="font-weight-bold">{{ $player->getPlayTime() }}</span>.
+            </p>
+        </div>
+        <!-- General buttons/navigation related to this player -->
+        <div class="card-footer">
+            <!-- Visiting steam profile -->
+            @if ($steam = $player->getSteamID())
+                <a class="btn btn-dark btn-sm" href="http://s.team/p/{{ $steam->RenderSteamInvite() }}">
+                    <span class="fab fa-steam"></span>
+                    Steam Profile
+                </a>
+            @endif
+
+            <!-- Viewing logs -->
+            <a class="btn btn-primary btn-sm" href="{{ route('logs.index', [ 'player' => $player->identifier ]) }}">
+                <span class="fas fa-toilet-paper"></span>
+                View Logs
+            </a>
+        </div>
+    </div>
+
+    <!-- Characters -->
+    <div class="row">
+        @foreach ($player->characters as $character)
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card h-100">
+                    <!-- Header -->
+                    <div class="card-header text-center">
+                        <h6 class="text-success font-weight-bold m-0">{{ $character->name }} (CID #: {{ $character->cid }})</h6>
+                    </div>
+                    <!-- Body -->
+                    <div class="card-body">
+                        <!-- Other info -->
+                        <h6 class="font-weight-bold">
+                            Money: ${{ number_format($character->money) }}
+                        </h6>
+                        <hr>
+                        <!-- Story -->
+                        <div>
+                            <h6 class="font-weight-bold">Story</h6>
+                            <p>
+                                {{ Str::limit($character->story, 100) }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="card-footer">
+                        <a class="btn btn-block btn-primary" href="{{ route('characters.show', $character) }}">
+                            View Character
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <!-- Warnings -->
+    <div class="card border-left-danger">
+        <div class="card-header">
+            <div class="d-sm-flex align-items-center justify-content-between">
+                <!-- Title -->
+                <h5 class="text-warning font-weight-bold">Warnings</h5>
+
+                <!-- Add warning button -->
+                <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#warningModal">
+                    <span class="fas fa-exclamation-circle"></span>
+                    New Warning
+                </button>
+            </div>
+        </div>
+        @if ($warnings = $player->warnings())
+            <!-- Displaying -->
+            <div class="card-body p-0">
+                @forelse ($warnings->latest()->get() as $warning)
+                    <div class="card mx-1 my-3">
+                        <!-- Warning message -->
+                        <div class="card-body">
+                            {{ $warning->message }}
+                        </div>
+                        <!-- Other information -->
+                        <div class="card-footer">
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <!-- From and date -->
+                                <div>
+                                    By <span class="font-weight-bold">{{ $warning->issuer->name }}</span> - {{ $warning->created_at }}
+                                </div>
+                                <!-- Removing of warning -->
+                                <form method="POST" action="{{ route('players.warnings.destroy', compact('player', 'warning')) }}">
+                                    @csrf @method('DELETE')
+
+                                    <!-- Button for removing -->
+                                    <button class="btn btn-danger btn-circle btn-sm" type="submit">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="m-4">
+                        <p class="text-success font-weight-bold">
+                            This player has no warnings on their record! Excellent. Let them know they're doing a great job.
+                        </p>
+                        <div class="text-center">
+                            <img class="img-fluid mt-5 mb-4" style="width: 20rem" src="{{ asset('images/empty.svg') }}" alt="">
+                        </div>
+                    </div>
+                @endforelse
+            </div>
+            <!-- Counting -->
+            @if ($count = $warnings->count())
+                <div class="card-footer">
+                    <p>
+                        {{ $count }} / 3 warnings
+                    </p>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $count / 3 * 100 }}%"></div>
+                    </div>
+                </div>
+            @endif
+        @endif
     </div>
 
     <!-- Warning Modal -->
@@ -177,7 +190,7 @@
 
         @component('modal', [ 'target' => 'warningModal' ])
             @slot('title')
-                Add a warning to {{ $player->name }}!
+                Add a warning to {{ $player->name }}
             @endslot
 
             @slot('actions')

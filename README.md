@@ -20,10 +20,12 @@
 
 See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
+**Urgent? Write to me on Discord: Marius Big Ounce#2997.**
+
 ## Improvements from v1
-2. Re-done to give a more minimalistic and "simple" look.
-3. Backend improvements that encourage scaling and maintainability. 
-4. More.
+1. Re-done to give a more minimalistic and "simple" look.
+2. Backend improvements that encourage scaling and maintainability. 
+3. More.
 
 ## License
 Please refer to [LICENSE.md](https://github.com/ExpDev07/legacy-rp-admin-v3/blob/master/LICENSE.md) for this project's license.
@@ -45,7 +47,10 @@ This list only contains some of the most notable contributors. For the full list
 <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/players.PNG" alt="Players" />
 
 ### Viewing player
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/view_player.PNG" alt="View Player" />
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/player.PNG" alt="View Player" />
+
+### Viewing character
+<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/character.PNG" alt="View Character" />
 
 ### Server Logs
 <img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/logs.PNG" alt="Logs" />

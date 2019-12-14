@@ -1,21 +1,62 @@
 // Setting of custom variables.
 @import 'variables';
 
-// Font awesome
-// @import '~@fortawesome/fontawesome-free/scss/fontawesome';
+// Bring in the "theme".
+@import 'darkly';
 
-// Include our sb-admin-2 theme (comes with bootstrap).
-@import '~startbootstrap-sb-admin-2/scss/sb-admin-2';
+// Import bootstrap.
+@import '~bootstrap/scss/bootstrap';
 
+// Some global modifications.
 * {
-    /* global transition */
     transition-duration: 0.145s;
 }
 
-/* backgrounds */
+// Ensuring that layout takes whole page.
+html, body, #app {
+    min-height: 100%;
+    min-height: 100vh;
+}
+
+// Application layout.
+#app {
+    display: flex;
+    flex-direction: column;
+
+    > #content {
+        flex: 1 0 auto;
+    }
+
+    > #footer {
+        flex-shrink: 0;
+    }
+}
+
+// Header.
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &-cover {
+        min-height: 55vh;
+    }
+}
+
+// Backgrounds.
 .bg {
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+
+    &-city {
+        background-image: url('/images/bg-city-dark.png');
+    }
+}
+
+// Fixes the annoying "shake" when you open bootstrap modal.
+.modal-open {
+    padding-right: 0 !important;
+    overflow-y: auto;
 }

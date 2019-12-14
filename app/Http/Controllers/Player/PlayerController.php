@@ -7,11 +7,26 @@ use App\Player;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 
 class PlayerController extends Controller
 {
+
+    /**
+     * The players.
+     *
+     * @var Player
+     */
+    private $players;
+
+    /**
+     * Constructs a new PlayerController.
+     *
+     * @param Player $players
+     */
+    public function __construct(Player $players)
+    {
+        $this->players = $players;
+    }
 
     /**
      * Display a listing of the resource.
@@ -24,12 +39,12 @@ class PlayerController extends Controller
         $query = strtolower($request->get('q'));
 
         // Search for the players by their identifier or name.
-        $players = Player::query()->where(function (Builder $builder) use ($query) {
+        $result = $this->players->newQuery()->where(function (Builder $builder) use ($query) {
             $builder->whereRaw('lower(identifier) like (?)', ["%{$query}%"]);
             $builder->orWhereRaw('lower(name) like (?)', ["%{$query}%"]);
         });
 
-        return view('players.index', [ 'players' => $players->simplePaginate(15) ]);
+        return view('players.index', [ 'players' => $result->simplePaginate(15) ]);
     }
 
     /**

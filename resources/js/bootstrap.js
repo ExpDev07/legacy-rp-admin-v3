@@ -10,7 +10,9 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
+    // Require bootstrap and theme JavaScript.
     require('bootstrap');
+    // require('startbootstrap-sb-admin-2/js/sb-admin-2');
 } catch (e) {}
 
 /**
