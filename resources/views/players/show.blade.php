@@ -37,7 +37,7 @@
                     </form>
                 </div>
                 <p class="m-0">
-                    {{ $ban->reason }}
+                    {!! linkify($ban->reason) !!}
                 </p>
             </div>
         </div>
@@ -138,7 +138,7 @@
                     <div class="card mx-1 my-3">
                         <!-- Warning message -->
                         <div class="card-body">
-                            {{ $warning->message }}
+                            {!! linkify($warning->message) !!}
                         </div>
                         <!-- Other information -->
                         <div class="card-footer">
