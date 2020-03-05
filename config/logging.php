@@ -61,6 +61,13 @@ return [
             'level' => 'critical',
         ],
 
+        'discord' => [
+            'driver' => 'custom',
+            'url'    => env('LOG_DISCORD_WEBHOOK_URL'),
+            'level'  => 'debug',
+            'via'    => MarvinLabs\DiscordLogger\Logger::class,
+        ],
+
         'papertrail' => [
             'driver' => 'monolog',
             'level' => 'debug',

@@ -25,13 +25,11 @@ class BanController extends Controller
         $ban_id = Str::uuid()->toString();
 
         // Go through the player's identifiers and create a ban record for each of them.
-        foreach ($player->getIdentifiers() as $identifier) {
-
+        foreach ($player->identifiers() as $identifier) {
             $player->bans()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
                 'ban-id'     => $ban_id,
                 'banner-id'  => $request->user()->player->staff,
             ]));
-
         }
         return back();
     }

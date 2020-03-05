@@ -3,9 +3,10 @@
 namespace App;
 
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use SteamID;
 
 /**
@@ -57,11 +58,22 @@ class Player extends Model
     ];
 
     /**
+     * Gets the route key name.
+     *
+     * @return string|mixed
+     */
+    public function getRouteKeyName()
+    {
+        return 'identifier';
+    }
+
+
+    /**
      * Gets all the identifiers.
      *
      * @return array
      */
-    public function getIdentifiers() : array
+    public function identifiers() : array
     {
         // Include main identifier if it's not already inside identifiers attribute.
         return in_array($this->identifier, $this->identifiers) ? $this->identifiers : array_merge([ $this->identifier ], $this->identifiers);
@@ -146,7 +158,7 @@ class Player extends Model
     {
         // Due to how banning works, there might exist a ban record for each of the player's identifier (steam, ip address
         // rockstar license, etc), and it's important to get all.
-        return Ban::query()->whereIn('identifier', $this->getIdentifiers());
+        return Ban::query()->whereIn('identifier', $this->identifiers());
     }
 
 }

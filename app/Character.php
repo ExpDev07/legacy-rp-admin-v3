@@ -61,6 +61,8 @@ class Character extends Model
         'animations' => 'array',
     ];
 
+    
+
     /**
      * Gets the full name by concatenating firstname and lastname together.
      *

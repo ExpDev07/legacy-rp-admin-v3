@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWarningRequest;
 use App\Player;
 use App\Warning;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class WarningController extends Controller
@@ -32,9 +33,10 @@ class WarningController extends Controller
      *
      * @param Player $player
      * @param Warning $warning
+     * @param Request $request
      * @return Response
      */
-    public function destroy(Player $player, Warning $warning)
+    public function destroy(Player $player, Warning $warning, Request $request)
     {
         $warning->forceDelete();
         return back();
