@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
-use SteamID;
+use SteamID:steam_0:0:423187637
+
+
 
 /**
  * The link used for Steam's new invite code.
