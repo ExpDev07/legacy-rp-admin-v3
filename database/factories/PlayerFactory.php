@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Date;
 $factory->define(Player::class, function (Faker $faker) {
 
     // The identifier to assign player.
-    $identifier = $faker->uuid;
+    $identifier = 'steam:' . $faker->uuid;
 
     // 30% to get super admin and 60% to get staff in general.
     $is_super_admin = $faker->boolean(30);
     $is_staff       = $is_super_admin || $faker->boolean(60);
 
     return [
-        'steam_identifier' => 'steam:' . $identifier,
+        'steam_identifier' => $identifier,
         'player_name'      => $faker->name,
         'is_staff'         => $is_staff,
         'is_super_admin'   => $is_super_admin,
@@ -25,7 +25,7 @@ $factory->define(Player::class, function (Faker $faker) {
         'last_connection'  => Date::now(),
         'identifiers'      => [
             $identifier,
-            $faker->ipv4,
+            'ip:' . $faker->ipv4,
         ],
     ];
 });

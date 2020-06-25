@@ -23,8 +23,14 @@ class PlayerBanController extends Controller
         // Create a unique hash to go with this player's batch of bans.
         $hash = Str::uuid()->toString();
 
+        // Get identifiers to ban.
+        $identifiers = [
+            $player->getIdentifier('steam'),
+            $player->getIdentifier('license'),
+        ];
+
         // Go through the player's identifiers and create a ban record for each of them.
-        foreach ($player->getIdentifiers() as $identifier) {
+        foreach ($identifiers as $identifier) {
             $player->bans()->updateOrCreate(['identifier' => $identifier], array_merge($request->validated(), [
                 'ban_hash' => $hash,
                 'creator_name' => $request->user()->player->player_name,

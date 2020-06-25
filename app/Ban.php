@@ -31,6 +31,13 @@ class Ban extends Model
     protected $table = 'user_bans';
 
     /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    protected $dateFormat = 'U';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
