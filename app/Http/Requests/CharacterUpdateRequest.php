@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCharacterRequest extends FormRequest
+class CharacterUpdateRequest extends FormRequest
 {
 
     /**
@@ -15,8 +15,10 @@ class UpdateCharacterRequest extends FormRequest
     public function rules()
     {
         return [
-            'firstname' => 'required',
-            'lastname'  => 'required',
+            'first_name' => [ 'string' ],
+            'last_name' => [ 'string' ],
+            'backstory' => [ 'string' ],
         ];
     }
+
 }

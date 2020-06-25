@@ -13,12 +13,11 @@ class LogoutController extends Controller
 {
 
     /**
-     * Handle the incoming request.
+     * Logs the user out.
      *
-     * @param Request $request
      * @return Response
      */
-    public function __invoke(Request $request)
+    public function logout()
     {
         // Logout the user.
         auth()->logout();

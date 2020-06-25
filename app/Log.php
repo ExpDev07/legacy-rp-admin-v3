@@ -9,12 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * An action that has been logged.
  *
  * @package App
- *
- * @property mixed serverId
- * @property string identifier
- * @property string action
- * @property string details
- * @property array metadata
  */
 class Log extends Model
 {
@@ -42,7 +36,11 @@ class Log extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'action', 'details', 'metadata',
+        'identifier',
+        'action',
+        'details',
+        'metadata',
+        'timestamp',
     ];
 
     /**
@@ -52,6 +50,7 @@ class Log extends Model
      */
     protected $casts = [
         'metadata'  => 'array',
+        'timestamp' => 'datetime',
     ];
 
     /**
@@ -71,7 +70,7 @@ class Log extends Model
      */
     public function player()
     {
-        return $this->belongsTo(Player::class, 'identifier', 'identifier');
+        return $this->belongsTo(Player::class, 'identifier', 'steam_identifier');
     }
 
 }

@@ -9,10 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * A ban that can be issued by a player and received by a players.
  *
  * @package App
- *
- * @property string identifier
- * @property string reason
- * @property string ban-id
  */
 class Ban extends Model
 {
@@ -40,18 +36,24 @@ class Ban extends Model
      * @var array
      */
     protected $fillable = [
-        'ban-id', 'banner-id', 'identifier', 'reason',
+        'ban_hash',
+        'identifier',
+        'smurf_account',
+        'creator_name',
+        'reason',
+        'timestamp',
+        'expire',
     ];
 
     /**
-     * Gets the reference id.
+     * The attributes that should be cast to native types.
      *
-     * @return mixed
+     * @var array
      */
-    protected function getRefIdAttribute()
-    {
-        return $this['ban-id'];
-    }
+    protected $casts = [
+        'timestamp' => 'datetime',
+        'expire'    => 'datetime',
+    ];
 
     /**
      * Gets the player relationship.
@@ -60,7 +62,7 @@ class Ban extends Model
      */
     public function player() : BelongsTo
     {
-        return $this->belongsTo(Player::class, 'identifier', 'identifier');
+        return $this->belongsTo(Player::class, 'steam_identifier', 'identifier');
     }
 
     /**
@@ -70,7 +72,7 @@ class Ban extends Model
      */
     public function issuer() : BelongsTo
     {
-        return $this->belongsTo(Player::class, 'banner-id', 'staff');
+        return $this->belongsTo(Player::class, 'creator_name', 'player_name');
     }
 
 }

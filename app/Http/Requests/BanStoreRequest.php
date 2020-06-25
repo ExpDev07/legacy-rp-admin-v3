@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreWarningRequest extends FormRequest
+class BanStoreRequest extends FormRequest
 {
 
     /**
@@ -15,7 +15,7 @@ class StoreWarningRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => 'required',
+            'reason' => [ 'required' ],
         ];
     }
 

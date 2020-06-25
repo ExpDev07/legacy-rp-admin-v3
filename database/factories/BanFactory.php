@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\Date;
 
 $factory->define(Ban::class, function (Faker $faker) {
     return [
-        'ban-id'    => $faker->uuid,
+        'ban_hash'  => $faker->uuid,
         'reason'    => $faker->sentence,
         'timestamp' => Date::now(),
+        'expire'    => Date::now()->addMonth(),
     ];
 });

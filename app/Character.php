@@ -6,19 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property Player player
- * @property string identifier
- * @property string firstname
- * @property string lastname
- * @property string name
- * @property string gender
- * @property string dob
- * @property string story
- * @property string job
- * @property int height
- * @property int cash
- * @property int bank
- * @property int money
+ * A character made by a player.
+ *
+ * @package App
  */
 class Character extends Model
 {
@@ -35,7 +25,7 @@ class Character extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'cid';
+    protected $primaryKey = 'character_id';
 
     /**
      * The attributes that are mass assignable.
@@ -43,8 +33,16 @@ class Character extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'slot', 'firstname', 'lastname', 'gender', 'height', 'dob', 'story', 'cash', 'bank', 'job',
-        'basicneeds', 'licenses', 'model', 'tattoos', 'ammo', 'animations',
+        'steam_identifier',
+        'character_slot',
+        'gender',
+        'first_name',
+        'last_name',
+        'date_of_birth',
+        'cash',
+        'bank',
+        'job_name',
+        'backstory',
     ];
 
     /**
@@ -53,24 +51,20 @@ class Character extends Model
      * @var array
      */
     protected $casts = [
-        'basicneeds' => 'array',
-        'licenses'   => 'array',
-        'model'      => 'array',
-        'tattoos'    => 'array',
-        'ammo'       => 'array',
-        'animations' => 'array',
+        'date_of_birth'  => 'date',
+        'character_slot' => 'integer',
+        'cash'           => 'integer',
+        'bank'           => 'integer'
     ];
 
-    
-
     /**
-     * Gets the full name by concatenating firstname and lastname together.
+     * Gets the full name by concatenating first name and last name together.
      *
      * @return string
      */
     protected function getNameAttribute()
     {
-        return $this->firstname . ' ' . $this->lastname;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -90,7 +84,7 @@ class Character extends Model
      */
     public function player() : BelongsTo
     {
-        return $this->belongsTo(Player::class, 'identifier', 'identifier');
+        return $this->belongsTo(Player::class, 'steam_identifier', 'steam_identifier');
     }
 
 }

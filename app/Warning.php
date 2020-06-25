@@ -9,10 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * A warning which can be given to players.
  *
  * @package App
- *
- * @property int issuer_id
- * @property string type
- * @property string message
  */
 class Warning extends Model
 {
@@ -23,7 +19,8 @@ class Warning extends Model
      * @var array
      */
     protected $fillable = [
-        'issuer_id', 'message',
+        'issuer_id',
+        'message',
     ];
 
     /**
@@ -33,7 +30,7 @@ class Warning extends Model
      */
     public function player() : BelongsTo
     {
-        return $this->belongsTo(Player::class);
+        return $this->belongsTo(Player::class, 'player_id', 'user_id');
     }
 
     /**
@@ -43,7 +40,7 @@ class Warning extends Model
      */
     public function issuer() : BelongsTo
     {
-        return $this->belongsTo(Player::class);
+        return $this->belongsTo(Player::class, 'issuer_id', 'user_id');
     }
 
 }

@@ -1,5 +1,5 @@
 {
-    "name": "expdev07/legacy-rp-admin",
+    "name": "expdev07/legacy-rp-admin-v3",
     "type": "project",
     "description": "A web interface to help with administrative duties at the FiveM server: Legacy Roleplay.",
     "keywords": [
@@ -12,6 +12,7 @@
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
+        "inertiajs/inertia-laravel": "^0.2.5",
         "kanalumaddela/laravel-steam-login": "^2.4",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCharactersTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -14,27 +15,19 @@ class CreateCharactersTable extends Migration
     public function up()
     {
         Schema::create('characters', function (Blueprint $table) {
-            $table->bigIncrements('cid');
-            $table->string('identifier');
-            $table->integer('slot');
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->id('character_id');
+            $table->string('steam_identifier');
+            $table->integer('character_slot');
             $table->string('gender');
-            $table->integer('height');
-            $table->string('dob');
-            $table->text('story');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('date_of_birth');
             $table->integer('cash');
             $table->integer('bank');
-            $table->string('job')->nullable();
-
-            // Json data values.
-            $table->json('basicneeds');
-            $table->json('licenses');
-            $table->json('model');
-            $table->json('tattoos');
-            $table->json('ammo');
-            $table->json('animations');
+            $table->string('job_name');
+            $table->mediumText('backstory');
         });
+
     }
 
     /**

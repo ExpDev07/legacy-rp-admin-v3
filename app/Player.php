@@ -6,24 +6,20 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use SteamID;
 
 /**
- * The link used for Steam's new invite code.
- */
-const STEAM_INVITE_URL = 'http://s.team/p/';
-
-/**
  * @package App
- *
- * @property string identifier
- * @property string name
- * @property string staff
- * @property array identifiers
  */
 class Player extends Model
 {
+
+    /**
+     * The link used for Steam's new invite code.
+     */
+    const STEAM_INVITE_URL = 'http://s.team/p/';
 
     /**
      * The table associated with the model.
@@ -40,12 +36,25 @@ class Player extends Model
     public $timestamps = false;
 
     /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'identifier', 'name', 'identifiers', 'staff', 'playtime'
+        'steam_identifier',
+        'player_name',
+        'identifiers',
+        'is_staff',
+        'is_super_admin',
+        'playtime',
+        'last_connection',
     ];
 
     /**
@@ -54,7 +63,11 @@ class Player extends Model
      * @var array
      */
     protected $casts = [
-        'identifiers' => 'array',
+        'identifiers'     => 'array',
+        'last_connection' => 'datetime',
+        'is_staff'        => 'boolean',
+        'is_super_admin'  => 'boolean',
+        'playtime'        => 'integer',
     ];
 
     /**
@@ -64,7 +77,17 @@ class Player extends Model
      */
     public function getRouteKeyName()
     {
-        return 'identifier';
+        return 'steam_identifier';
+    }
+
+    /**
+     * Gets a URL to the player's steam profile.
+     *
+     * @return string
+     */
+    public function getSteamProfileUrl() : string
+    {
+        return Player::STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
     }
 
 
@@ -73,10 +96,29 @@ class Player extends Model
      *
      * @return array
      */
-    public function identifiers() : array
+    public function getIdentifiers() : array
     {
         // Include main identifier if it's not already inside identifiers attribute.
-        return in_array($this->identifier, $this->identifiers) ? $this->identifiers : array_merge([ $this->identifier ], $this->identifiers);
+        return in_array($this->steam_identifier, $this->identifiers) ? $this->identifiers
+            : array_merge(
+                [ $this->steam_identifier ],
+                $this->identifiers
+            );
+    }
+
+    /**
+     * Gets the identifier for the provided key.
+     *
+     * @param $key
+     * @return mixed|null
+     */
+    public function getIdentifier($key)
+    {
+        foreach ($this->getIdentifiers() as $identifier) {
+            if (strpos($identifier, $key) === 0) return $identifier;
+            continue;
+        }
+        return null;
     }
 
     /**
@@ -86,7 +128,7 @@ class Player extends Model
      */
     public function isStaff() : bool
     {
-        return !is_null($this->staff);
+        return $this->is_staff || $this->is_super_admin;
     }
 
     /**
@@ -106,7 +148,7 @@ class Player extends Model
      */
     public function getSteamID()
     {
-        return get_steam_id($this->identifier);
+        return get_steam_id($this->steam_identifier);
     }
 
     /**
@@ -126,7 +168,7 @@ class Player extends Model
      */
     public function characters() : HasMany
     {
-        return $this->hasMany(Character::class, 'identifier', 'identifier');
+        return $this->hasMany(Character::class, 'steam_identifier', 'steam_identifier');
     }
 
     /**
@@ -136,7 +178,7 @@ class Player extends Model
      */
     public function logs() : HasMany
     {
-        return $this->hasMany(Log::class, 'identifier', 'identifier');
+        return $this->hasMany(Log::class, 'identifier', 'steam_identifier');
     }
 
     /**
@@ -146,7 +188,7 @@ class Player extends Model
      */
     public function warnings() : HasMany
     {
-        return $this->hasMany(Warning::class);
+        return $this->hasMany(Warning::class, 'player_id', 'user_id');
     }
 
     /**
@@ -158,7 +200,7 @@ class Player extends Model
     {
         // Due to how banning works, there might exist a ban record for each of the player's identifier (steam, ip address
         // rockstar license, etc), and it's important to get all.
-        return Ban::query()->whereIn('identifier', $this->identifiers());
+        return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
 }

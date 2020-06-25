@@ -15,39 +15,29 @@ use App\Http\Controllers\Auth\SteamController;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
-// Grouping of all the authentication methods together.
+// Authentication methods.
 Route::group([ 'prefix' => 'auth' ], function () {
-    // Allow users to login using their steam account.
-    // - {host}:{port}/auth/login/steam
-    // - {host}:{port}/auth/auth/steam
-    SteamLogin::routes(['controller' => SteamController::class]);
+    SteamLogin::routes([ 'controller' => SteamController::class ]);
 });
 
-// Authentication controllers.
+// Logging in and out.
 Route::group([ 'namespace' => 'Auth' ], function() {
-    Route::name('login')->get('/login', 'LoginController');
-    Route::name('logout')->post('/logout', 'LogoutController');
+    Route::name('login')->get('/login', 'LoginController@render');
+    Route::name('logout')->post('/logout', 'LogoutController@logout');
 });
 
-// Group all of the routes that require authentication and staff permission together.
+// Routes requiring being logged in.
 Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
+    Route::get('/', 'HomeController@render');
 
-    // Dashboard.
-    Route::name('dashboard')->get('/', 'HomeController');
+    // Players.
+    Route::resource('players', 'PlayerController');
+    Route::resource('players.characters', 'PlayerCharacterController');
+    Route::resource('players.bans', 'PlayerBanController');
+    Route::resource('players.warnings', 'PlayerWarningController');
 
-    // Player resource.
-    Route::group([ 'namespace' => 'Player' ], function () {
-        Route::resource('players', 'PlayerController');
-        Route::resource('players.warnings', 'WarningController');
-        Route::resource('players.bans', 'BanController');
-    });
-
-    // Character resource.
-    Route::resource('characters', 'CharacterController');
-
-    // Log resource.
+    // Logs.
     Route::resource('logs', 'LogController');
-
 });
 
 

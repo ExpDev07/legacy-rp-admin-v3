@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateLogsTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -14,7 +15,7 @@ class CreateLogsTable extends Migration
     public function up()
     {
         Schema::create('user_logs', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->string('identifier');
             $table->string('action');
             $table->longText('details');
@@ -32,4 +33,5 @@ class CreateLogsTable extends Migration
     {
         Schema::dropIfExists('user_logs');
     }
+
 }

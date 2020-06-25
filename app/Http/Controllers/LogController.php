@@ -2,29 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\LogResource;
 use App\Log;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class LogController extends Controller
 {
-
-    /**
-     * The logs.
-     *
-     * @var Log
-     */
-    private $logs;
-
-    /**
-     * Constructs a new LogController.
-     *
-     * @param Log $logs
-     */
-    public function __construct(Log $logs)
-    {
-        $this->logs = $logs;
-    }
 
     /**
      * Display a listing of the resource.
@@ -34,30 +19,32 @@ class LogController extends Controller
      */
     public function index(Request $request)
     {
-        // Begin querying the logs.
-        $builder = $this->logs->newQuery();
+        $query = Log::query()->orderByDesc('timestamp');
 
-        // Filtering by player.
-        if ($player = $request->get('player')) {
-            $builder->where('identifier', $player);
+        // Filtering by identifier.
+        if ($identifier = $request->input('identifier')) {
+            $query->where('identifier', $identifier);
         }
 
         // Filtering by server.
-        if ($server = $request->get('server')) {
-            $builder->where('metadata->serverId', $server);
+        if ($server = $request->input('server')) {
+            $query->where('metadata->serverId', $server);
         }
 
         // Filtering by action.
-        if ($action = $request->get('action')) {
-            $builder->where('action', $action);
+        if ($action = $request->input('action')) {
+            $query->where('action','like', "%{$action}%");
         }
 
         // Filtering by details.
-        if ($details = $request->get('details')) {
-            $builder->where('details', 'like', "%{$details}%");
+        if ($details = $request->input('details')) {
+            $query->where('details', 'like', "%{$details}%");
         }
 
-        return view('logs.index', [ 'logs' => $builder->latest()->simplePaginate(25) ]);
+
+        return Inertia::render('Logs/Index', [
+            'logs' => LogResource::collection($query->simplePaginate(15)),
+        ]);
     }
 
 }

@@ -8,10 +8,6 @@ use Illuminate\Notifications\Notifiable;
 
 /**
  * @package App
- *
- * @property string account_id
- * @property string name
- * @property string avatar
  */
 class User extends Authenticatable
 {
@@ -30,7 +26,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'account_id', 'name', 'avatar', 'remember_token',
+        'account_id',
+        'name',
+        'avatar',
+        'remember_token',
     ];
 
     /**
@@ -47,7 +46,7 @@ class User extends Authenticatable
      *
      * @return string
      */
-    protected function getIdentifierAttribute() : string
+    protected function getSteamIdentifierAttribute() : string
     {
         return 'steam:' . dechex($this->account_id);
     }
@@ -69,7 +68,7 @@ class User extends Authenticatable
      */
     public function player() : HasOne
     {
-        return $this->hasOne(Player::class, 'identifier', 'identifier');
+        return $this->hasOne(Player::class, 'steam_identifier', 'steam_identifier');
     }
 
 }

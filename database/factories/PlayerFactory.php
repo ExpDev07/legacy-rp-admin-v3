@@ -5,22 +5,27 @@
 use App\Player;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\Date;
 
 $factory->define(Player::class, function (Faker $faker) {
 
     // The identifier to assign player.
     $identifier = $faker->uuid;
 
-    // Create the player's staff status.
-    $staff = $faker->boolean(35) ? 'M-' . $faker->uuid : null;
+    // 30% to get super admin and 60% to get staff in general.
+    $is_super_admin = $faker->boolean(30);
+    $is_staff       = $is_super_admin || $faker->boolean(60);
 
     return [
-        'name'        => $faker->name,
-        'playtime'    => $faker->numberBetween(0, 10000),
-        'identifier'  => $identifier,
-        'staff'       => $staff,
-        'identifiers' => [
-            $faker->ipv4, $identifier
+        'steam_identifier' => 'steam:' . $identifier,
+        'player_name'      => $faker->name,
+        'is_staff'         => $is_staff,
+        'is_super_admin'   => $is_super_admin,
+        'playtime'         => $faker->numberBetween(0, 10000),
+        'last_connection'  => Date::now(),
+        'identifiers'      => [
+            $identifier,
+            $faker->ipv4,
         ],
     ];
 });

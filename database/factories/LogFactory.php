@@ -12,6 +12,6 @@ $factory->define(Log::class, function (Faker $faker) {
         'details'  => $faker->sentence,
         'metadata' => [
             'serverId' => $faker->numberBetween(1, 3),
-        ]
+        ],
     ];
 });

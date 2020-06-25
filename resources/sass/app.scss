@@ -1,62 +1,28 @@
-// Setting of custom variables.
-@import 'variables';
+/**
+* The tailwind base style.
+*/
+@import "~tailwindcss/base";
 
-// Bring in the "theme".
-@import 'darkly';
+/**
+ * The tailwind components.
+ */
+@import "~tailwindcss/components";
 
-// Import bootstrap.
-@import '~bootstrap/scss/bootstrap';
+/**
+ * The custom. components.
+ */
 
-// Some global modifications.
+/**
+ * The tailwind utilities.
+ */
+@import "~tailwindcss/utilities";
+
+/**
+ * NProgress for Inertia loading.
+ */
+@import "~nprogress/nprogress.css";
+
 * {
-    transition-duration: 0.145s;
+  transition-duration: 0.3s;
 }
 
-// Ensuring that layout takes whole page.
-html, body, #app {
-    min-height: 100%;
-    min-height: 100vh;
-}
-
-// Application layout.
-#app {
-    display: flex;
-    flex-direction: column;
-
-    > #content {
-        flex: 1 0 auto;
-    }
-
-    > #footer {
-        flex-shrink: 0;
-    }
-}
-
-// Header.
-.header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    &-cover {
-        min-height: 55vh;
-    }
-}
-
-// Backgrounds.
-.bg {
-    /* Center and scale the image nicely */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-
-    &-city {
-        background-image: url('/images/bg-city-dark.png');
-    }
-}
-
-// Fixes the annoying "shake" when you open bootstrap modal.
-.modal-open {
-    padding-right: 0 !important;
-    overflow-y: auto;
-}

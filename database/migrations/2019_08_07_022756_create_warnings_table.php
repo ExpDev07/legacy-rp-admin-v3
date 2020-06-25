@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateWarningsTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -14,7 +15,7 @@ class CreateWarningsTable extends Migration
     public function up()
     {
         Schema::create('warnings', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id('id');
             $table->unsignedBigInteger('issuer_id');
             $table->unsignedBigInteger('player_id');
             $table->text('message');
@@ -31,4 +32,5 @@ class CreateWarningsTable extends Migration
     {
         Schema::dropIfExists('warnings');
     }
+
 }
