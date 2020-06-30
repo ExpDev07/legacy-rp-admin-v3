@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import FlashMessage from './../../Components/FlashMessage';
+import FlashMessage from './../Components/FlashMessage';
 
 export default {
     components: {
