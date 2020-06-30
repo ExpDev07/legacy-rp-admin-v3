@@ -19,10 +19,10 @@ mix
         processCssUrls: false,
         postCss: [
             tailwindcss('tailwind.config.js'),
-        ]
+        ],
     })
     .webpackConfig({
-        output: {chunkFilename: 'js/[name].js?id=[chunkhash]'},
+        output: { chunkFilename: 'js/[name].js?id=[chunkhash]' },
     })
     .version()
     .sourceMaps();

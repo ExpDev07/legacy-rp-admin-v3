@@ -23,13 +23,13 @@
             <!-- Name -->
             <div class="flex flex-wrap mb-4">
                 <div class="w-1/2 px-3 mb-6">
-                    <label class="block mb-2" for="firstname">
+                    <label class="block mb-2" for="first_name">
                         First Name
                     </label>
                     <input class="block w-full border rounded bg-gray-200 py-3 px-4 mb-3" id="first_name" v-model="form.first_name">
                 </div>
                 <div class="w-1/2 px-3 mb-0">
-                    <label class="block mb-2" for="lastname">
+                    <label class="block mb-2" for="last_name">
                         Last Name
                     </label>
                     <input class="block w-full border rounded bg-gray-200 py-3 px-4 mb-3" id="last_name" v-model="form.last_name">

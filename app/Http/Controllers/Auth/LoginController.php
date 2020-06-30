@@ -30,7 +30,7 @@ class LoginController extends Controller
      */
     public function render()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Login');
     }
 
 }

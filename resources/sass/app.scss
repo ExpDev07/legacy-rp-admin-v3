@@ -9,10 +9,6 @@
 @import "~tailwindcss/components";
 
 /**
- * The custom. components.
- */
-
-/**
  * The tailwind utilities.
  */
 @import "~tailwindcss/utilities";
@@ -21,6 +17,11 @@
  * NProgress for Inertia loading.
  */
 @import "~nprogress/nprogress.css";
+
+/**
+ * The custom css.
+ */
+// @import "button";
 
 * {
   transition-duration: 0.3s;
