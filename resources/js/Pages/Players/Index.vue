@@ -9,7 +9,7 @@
         <label class="block text-gray-800 mb-4" for="name">
             Search by name
         </label>
-        <input class="w-full shadow px-4 py-2" id="name" name="name" placeholder="Marius Truckster" v-model="query.name">
+        <input class="w-full shadow px-4 py-2" id="name" name="name" placeholder="Marius Truckster" v-model="filters.query">
     </form>
 
     <div class="bg-white rounded shadow overflow-x-auto">
@@ -64,20 +64,16 @@ export default {
         players: {
             type: Object,
             required: true,
-        }
-    },
-    data() {
-        return {
-            query: {
-                name: null,
-            },
-        }
+        },
+        filters: {
+            query: String,
+        },
     },
     watch: {
-        query: {
+        filters: {
             handler: throttle(function () {
                 this.$inertia.replace('/players', {
-                    data: this.query,
+                    data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
                     only: [ 'players' ],

@@ -44,7 +44,7 @@
             </p>
             <form @submit.prevent="submitBan">
                 <label for="reason"></label>
-                <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
+                <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
 
                 <button class="rounded bg-red-500 hover:bg-red-600 text-white py-2 px-5 mr-1" type="submit">
                     <i class="fas fa-gavel mr-1"></i>
@@ -132,7 +132,7 @@
         </div>
         <form @submit.prevent="submitWarning">
             <label for="message"></label>
-            <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="message" name="message" rows="5" v-bind:placeholder="player.playerName + ' did an oopsie.'" v-model="form.warning.message"></textarea>
+            <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="message" name="message" rows="5" v-bind:placeholder="player.playerName + ' did an oopsie.'" v-model="form.warning.message" required></textarea>
 
             <button class="rounded bg-orange-500 hover:bg-orange-600 text-white py-2 px-5" type="submit">
                 <i class="fas fa-exclamation mr-1"></i>

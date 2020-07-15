@@ -31,6 +31,7 @@ class PlayerBanController extends Controller
 
         // Go through the player's identifiers and create a ban record for each of them.
         foreach ($identifiers as $identifier) {
+            if ($identifier == null) continue;
             $player->bans()->updateOrCreate(['identifier' => $identifier], array_merge($request->validated(), [
                 'ban_hash' => $hash,
                 'creator_name' => $request->user()->player->player_name,
