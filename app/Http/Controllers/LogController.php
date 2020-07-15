@@ -41,9 +41,11 @@ class LogController extends Controller
             $query->where('details', 'like', "%{$details}%");
         }
 
-
         return Inertia::render('Logs/Index', [
-            'logs' => LogResource::collection($query->simplePaginate(15)),
+            'logs' => LogResource::collection($query->simplePaginate(15)->appends($request->query())),
+            'filters' => $request->all(
+                'identifier', 'server', 'action', 'details'
+            ),
         ]);
     }
 

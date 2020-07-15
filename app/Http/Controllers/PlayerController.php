@@ -24,12 +24,13 @@ class PlayerController extends Controller
         $query = Player::query()->orderBy('player_name');
 
         // Querying.
-        if ($name = $request->input('name')) {
+        if ($name = $request->input('query')) {
             $query->where('player_name', 'like', "%{$name}%");
         }
 
         return Inertia::render('Players/Index', [
-            'players' => PlayerResource::collection($query->simplePaginate(10)),
+            'players' => PlayerResource::collection($query->simplePaginate(10)->appends($request->query())),
+            'filters' => $request->all('query'),
         ]);
     }
 
