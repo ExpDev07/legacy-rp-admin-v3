@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class="flex flex-grow justify-between mb-10">
+    <div class="md:flex flex-grow justify-between mb-10">
         <h1 class="text-3xl font-bold">
             {{ player.playerName }}
         </h1>
@@ -59,7 +59,7 @@
 
     <!-- Useful links -->
     <div class="rounded bg-gray-300 p-5 mb-8">
-        <div class="flex items-center">
+        <div class="md:flex items-center">
             <inertia-link class="m-2 w-full bg-indigo-600 hover:bg-orange-500 text-white text-center rounded block px-5 py-2" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                 <i class="fas fa-toilet-paper mr-1"></i>
                 Logs
@@ -76,14 +76,14 @@
         <h2 class="text-2xl mx-3 mb-3">
             Characters
         </h2>
-        <div class="flex">
-            <div class="flex flex-col bg-white shadow rounded w-1/3 p-5 m-3" v-for="character in characters" v-bind:key="character.id">
+        <div class="grid grid-cols-1 lg:grid-cols-3">
+            <div class="flex flex-col bg-white shadow rounded p-5 m-3" v-for="character in characters" v-bind:key="character.id">
                 <div class="flex-grow">
                     <div class="text-center border-b mb-5 pb-4">
                         <h1 class="text-xl font-semibold mb-2">
                             {{ character.name }} (#{{ character.id }})
                         </h1>
-                        <h3 class="text-xs text-indigo-500">
+                        <h3 class="text-sm text-indigo-500">
                             DOB: {{ new Date(character.dateOfBirth).toLocaleString() }}
                         </h3>
                     </div>

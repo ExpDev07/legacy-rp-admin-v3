@@ -7,8 +7,8 @@ use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class PlayerController extends Controller
 {
@@ -17,9 +17,9 @@ class PlayerController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Player::query()->orderBy('player_name');
 
@@ -38,9 +38,9 @@ class PlayerController extends Controller
      * Display the specified resource.
      *
      * @param Player $player
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function show(Player $player)
+    public function show(Player $player): Response
     {
         return Inertia::render('Players/Show', [
             'player' => new PlayerResource($player),

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Ban;
 use App\Http\Requests\BanStoreRequest;
 use App\Player;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class PlayerBanController extends Controller
@@ -16,9 +18,9 @@ class PlayerBanController extends Controller
      *
      * @param Player $player
      * @param BanStoreRequest $request
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(Player $player, BanStoreRequest $request)
+    public function store(Player $player, BanStoreRequest $request): RedirectResponse
     {
         // Create a unique hash to go with this player's batch of bans.
         $hash = Str::uuid()->toString();
@@ -27,12 +29,19 @@ class PlayerBanController extends Controller
         $identifiers = [
             $player->getIdentifier('steam'),
             $player->getIdentifier('license'),
+            $player->getIdentifier('discord'),
+            $player->getIdentifier('xbl'),
+            $player->getIdentifier('live'),
+            $player->getIdentifier('ip'),
         ];
 
         // Go through the player's identifiers and create a ban record for each of them.
         foreach ($identifiers as $identifier) {
-            if ($identifier == null) continue;
-            $player->bans()->updateOrCreate(['identifier' => $identifier], array_merge($request->validated(), [
+            if ($identifier === null) {
+                continue;
+            }
+
+            $player->bans()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
                 'ban_hash' => $hash,
                 'creator_name' => $request->user()->player->player_name,
             ]));
@@ -46,9 +55,9 @@ class PlayerBanController extends Controller
      *
      * @param Player $player
      * @param Ban $ban
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy(Player $player, Ban $ban)
+    public function destroy(Player $player, Ban $ban): RedirectResponse
     {
         $player->bans()->forceDelete();
         return back()->with('success', 'The player has successfully been unbanned.');

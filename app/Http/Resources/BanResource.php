@@ -14,14 +14,14 @@ class BanResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'id'        => $this->id,
-            'banHash'   => $this->ban_hash,
-            'reason'    => $this->reason,
+            'id' => $this->id,
+            'banHash' => $this->ban_hash,
+            'reason' => $this->reason,
             'timestamp' => $this->timestamp,
-            'issuer'    => $this->issuer->player_name ?? null,
+            'issuer' => $this->issuer->player_name ?? null,
         ];
     }
 

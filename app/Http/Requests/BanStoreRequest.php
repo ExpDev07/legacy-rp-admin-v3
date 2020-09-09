@@ -15,7 +15,7 @@ class BanStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'reason' => [ 'required' ],
+            'reason' => ['required'],
         ];
     }
 

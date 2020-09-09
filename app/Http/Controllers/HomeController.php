@@ -13,7 +13,7 @@ class HomeController extends Controller
      *
      * @return Response
      */
-    public function render()
+    public function render(): Response
     {
         return Inertia::render('Home');
     }

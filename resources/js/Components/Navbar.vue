@@ -11,9 +11,7 @@
     <!-- Nav -->
     <div class="flex justify-between items-center bg-gray-300 w-full shadow px-12 py-4">
         <!-- Left side -->
-        <p class="italic">
-            {{ $page.inspiration }}
-        </p>
+        <div></div>
 
         <!-- Right side -->
         <div class="flex items-center">

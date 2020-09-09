@@ -11,16 +11,16 @@ class UserResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'id'        => $this->id,
+            'id' => $this->id,
             'accountId' => $this->accountId,
-            'name'      => $this->name,
-            'avatar'    => $this->avatar,
+            'name' => $this->name,
+            'avatar' => $this->avatar,
         ];
     }
 
