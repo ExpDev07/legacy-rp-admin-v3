@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * A character made by a player.
@@ -62,7 +63,7 @@ class Character extends Model
      *
      * @return string
      */
-    protected function getNameAttribute()
+    protected function getNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
     }
@@ -72,7 +73,7 @@ class Character extends Model
      *
      * @return int
      */
-    protected function getMoneyAttribute()
+    protected function getMoneyAttribute(): int
     {
         return $this->cash + $this->bank;
     }
@@ -82,9 +83,19 @@ class Character extends Model
      *
      * @return BelongsTo
      */
-    public function player() : BelongsTo
+    public function player(): BelongsTo
     {
         return $this->belongsTo(Player::class, 'steam_identifier', 'steam_identifier');
+    }
+
+    /**
+     * Gets the vehicles owned by this character.
+     *
+     * @return HasMany
+     */
+    public function vehicles(): HasMany
+    {
+        return $this->hasMany(Vehicle::class, 'owner_cid');
     }
 
 }

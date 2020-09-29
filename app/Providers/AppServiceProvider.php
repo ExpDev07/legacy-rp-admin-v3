@@ -48,9 +48,6 @@ class AppServiceProvider extends ServiceProvider
             'url' => Str::start(str_replace(url('/'), '', URL::current()), '/'),
             'back' => Str::start(str_replace(url('/'), '', URL::previous('/')), '/'),
 
-            // Inspiring quote.
-            'inspiration' => Inspiring::quote(),
-
             // Flash messages.
             'flash' => function () {
                 return [
