@@ -3,6 +3,7 @@
 use App\Character;
 use App\Player;
 use App\User;
+use App\Vehicle;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -23,9 +24,12 @@ class UsersTableSeeder extends Seeder
 
             // Create three characters.
             for ($i = 1; $i <= 3; $i++) {
-                $player->characters()->save(factory(Character::class)->make([
+                $characters = $player->characters()->save(factory(Character::class)->make([
                     'character_slot' => $i,
                 ]));
+
+                // For each character, create some vehicles.
+                $characters->vehicles()->saveMany(factory(Vehicle::class)->times(5)->make());
             }
         });
     }

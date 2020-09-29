@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Ban;
 use App\Http\Requests\BanStoreRequest;
 use App\Player;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
@@ -16,7 +17,7 @@ class PlayerBanController extends Controller
      *
      * @param Player $player
      * @param BanStoreRequest $request
-     * @return Response
+     * @return RedirectResponse
      */
     public function store(Player $player, BanStoreRequest $request)
     {
@@ -46,7 +47,7 @@ class PlayerBanController extends Controller
      *
      * @param Player $player
      * @param Ban $ban
-     * @return Response
+     * @return RedirectResponse
      */
     public function destroy(Player $player, Ban $ban)
     {

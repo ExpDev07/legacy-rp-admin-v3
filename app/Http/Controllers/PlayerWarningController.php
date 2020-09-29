@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\WarningStoreRequest;
 use App\Player;
 use App\Warning;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
 class PlayerWarningController extends Controller
@@ -15,7 +16,7 @@ class PlayerWarningController extends Controller
      *
      * @param Player $player
      * @param WarningStoreRequest $request
-     * @return Response
+     * @return RedirectResponse
      */
     public function store(Player $player, WarningStoreRequest $request)
     {
@@ -30,7 +31,7 @@ class PlayerWarningController extends Controller
      *
      * @param Player $player
      * @param Warning $warning
-     * @return Response
+     * @return RedirectResponse
      */
     public function destroy(Player $player, Warning $warning)
     {

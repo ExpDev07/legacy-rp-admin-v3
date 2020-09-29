@@ -7,6 +7,7 @@ use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Illuminate\Http\Response;
 
@@ -33,7 +34,8 @@ class PlayerCharacterController extends Controller
      *
      * @param Player $player
      * @param Character $character
-     * @return Response
+     * @param CharacterUpdateRequest $request
+     * @return RedirectResponse
      */
     public function update(Player $player, Character $character, CharacterUpdateRequest $request)
     {

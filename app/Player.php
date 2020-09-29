@@ -230,7 +230,7 @@ function seconds_to_human($ss)
  * @param string $identifier
  * @return SteamID|null
  */
-function get_steam_id(string $identifier) : SteamID
+function get_steam_id(string $identifier) : ?SteamID
 {
     try {
         // Get rid of any prefix.
