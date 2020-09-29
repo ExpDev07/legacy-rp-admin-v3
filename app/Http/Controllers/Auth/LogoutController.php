@@ -20,7 +20,7 @@ class LogoutController extends Controller
      *
      * @return RedirectResponse
      */
-    public function logout()
+    public function logout(): RedirectResponse
     {
         // Logout the user.
         auth()->logout();

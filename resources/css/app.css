@@ -1,27 +1,26 @@
 /**
 * The tailwind base style.
 */
-@import "~tailwindcss/base";
+@import "tailwindcss/base";
 
 /**
  * The tailwind components.
  */
-@import "~tailwindcss/components";
+@import "tailwindcss/components";
 
 /**
  * The tailwind utilities.
  */
-@import "~tailwindcss/utilities";
+@import "tailwindcss/utilities";
 
 /**
  * NProgress for Inertia loading.
  */
-@import "~nprogress/nprogress.css";
+@import "nprogress/nprogress.css";
 
 /**
  * The custom css.
  */
-// @import "button";
 
 * {
   transition-duration: 0.3s;

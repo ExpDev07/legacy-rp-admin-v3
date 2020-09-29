@@ -19,7 +19,7 @@ class PlayerController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Player::query()->orderBy('player_name');
 
@@ -40,7 +40,7 @@ class PlayerController extends Controller
      * @param Player $player
      * @return Response
      */
-    public function show(Player $player)
+    public function show(Player $player): Response
     {
         return Inertia::render('Players/Show', [
             'player' => new PlayerResource($player),

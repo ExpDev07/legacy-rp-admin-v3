@@ -14,17 +14,17 @@ class LogResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'id'        => $this->id,
-            'action'    => $this->action,
-            'details'   => $this->details,
-            'metadata'  => $this->metadata,
+            'id' => $this->id,
+            'action' => $this->action,
+            'details' => $this->details,
+            'metadata' => $this->metadata,
             'timestamp' => $this->timestamp,
-            'server'    => $this->metadata['serverId'],
-            'player'    => new PlayerResource($this->player),
-            'issuer'    => new PlayerResource($this->issuer),
+            'server' => $this->metadata['serverId'],
+            'player' => new PlayerResource($this->player),
+            'issuer' => new PlayerResource($this->issuer),
         ];
     }
 

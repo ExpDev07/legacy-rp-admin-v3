@@ -6,7 +6,6 @@ use App\Http\Requests\WarningStoreRequest;
 use App\Player;
 use App\Warning;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
 
 class PlayerWarningController extends Controller
 {
@@ -18,7 +17,7 @@ class PlayerWarningController extends Controller
      * @param WarningStoreRequest $request
      * @return RedirectResponse
      */
-    public function store(Player $player, WarningStoreRequest $request)
+    public function store(Player $player, WarningStoreRequest $request): RedirectResponse
     {
         $player->warnings()->create(array_merge($request->validated(), [
             'issuer_id' => $request->user()->player->user_id,

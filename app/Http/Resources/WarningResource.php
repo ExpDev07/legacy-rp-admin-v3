@@ -14,15 +14,15 @@ class WarningResource extends JsonResource
      * @param Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
-            'id'        => $this->id,
-            'message'   => $this->message,
+            'id' => $this->id,
+            'message' => $this->message,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-            'player'    => new PlayerResource($this->player),
-            'issuer'    => new PlayerResource($this->issuer),
+            'player' => new PlayerResource($this->player),
+            'issuer' => new PlayerResource($this->issuer),
         ];
     }
 

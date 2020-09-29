@@ -9,7 +9,7 @@ use App\Http\Resources\PlayerResource;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
-use Illuminate\Http\Response;
+use Inertia\Response;
 
 class PlayerCharacterController extends Controller
 {
@@ -19,9 +19,9 @@ class PlayerCharacterController extends Controller
      *
      * @param Player $player
      * @param Character $character
-     * @return \Inertia\Response
+     * @return Response
      */
-    public function edit(Player $player, Character $character)
+    public function edit(Player $player, Character $character): Response
     {
         return Inertia::render('Players/Characters/Edit', [
             'player' => new PlayerResource($player),

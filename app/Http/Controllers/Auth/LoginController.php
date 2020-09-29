@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @return Response
      */
-    public function render()
+    public function render(): Response
     {
         return Inertia::render('Login');
     }

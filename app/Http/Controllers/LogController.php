@@ -17,7 +17,7 @@ class LogController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = Log::query()->orderByDesc('timestamp');
 
@@ -44,7 +44,10 @@ class LogController extends Controller
         return Inertia::render('Logs/Index', [
             'logs' => LogResource::collection($query->simplePaginate(15)->appends($request->query())),
             'filters' => $request->all(
-                'identifier', 'server', 'action', 'details'
+                'identifier',
+                'server',
+                'action',
+                'details'
             ),
         ]);
     }

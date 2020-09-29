@@ -70,7 +70,7 @@
                 </a>
             </div>
         </div>
-
+        
         <!-- Characters -->
         <div class="rounded bg-gray-300 p-5 mb-8">
             <h2 class="text-2xl mx-3 mb-3">

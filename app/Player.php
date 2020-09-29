@@ -87,7 +87,7 @@ class Player extends Model
      */
     public function getSteamProfileUrl() : string
     {
-        return Player::STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
+        return self::STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
     }
 
 
@@ -98,12 +98,14 @@ class Player extends Model
      */
     public function getIdentifiers() : array
     {
-        // Include main identifier if it's not already inside identifiers attribute.
-        return in_array($this->steam_identifier, $this->identifiers) ? $this->identifiers
-            : array_merge(
-                [ $this->steam_identifier ],
-                $this->identifiers
-            );
+        $identifier = $this->identifier;
+        $identifiers = $this->identifiers;
+
+        if (in_array($identifier, $identifiers, true)) {
+            return $identifiers;
+        }
+
+        return array_merge([ $identifier ], $identifiers);
     }
 
     /**
@@ -146,19 +148,9 @@ class Player extends Model
      *
      * @return SteamID|null
      */
-    public function getSteamID()
+    public function getSteamID() : ?SteamID
     {
         return get_steam_id($this->steam_identifier);
-    }
-
-    /**
-     * Gets the amount of time this player has spent on the server in a nice readable string.
-     *
-     * @return string
-     */
-    public function getPlayTime() : string
-    {
-        return seconds_to_human($this->playtime);
     }
 
     /***
@@ -198,30 +190,9 @@ class Player extends Model
      */
     public function bans() : Builder
     {
-        // Due to how banning works, there might exist a ban record for each of the player's identifier (steam, ip address
-        // rockstar license, etc), and it's important to get all.
         return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
-}
-
-/**
- * Converts the given seconds to a human readable string.
- *
- * https://snippetsofcode.wordpress.com/2012/08/25/php-function-to-convert-seconds-into-human-readable-format-months-days-hours-minutes/
- *
- * @param $ss number
- * @return string
- */
-function seconds_to_human($ss)
-{
-    $m = floor(($ss % 3600) / 60);
-    $h = floor(($ss % 86400) / 3600);
-    $d = floor(($ss % 2592000) / 86400);
-    $M = floor($ss / 2592000);
-
-    // Return a friendly string that humans can easily read.
-    return "$M months, $d days, $h hours, and $m minutes";
 }
 
 /**

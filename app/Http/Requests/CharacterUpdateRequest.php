@@ -15,9 +15,9 @@ class CharacterUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => [ 'string' ],
-            'last_name' => [ 'string' ],
-            'backstory' => [ 'string' ],
+            'first_name' => ['string'],
+            'last_name' => ['string'],
+            'backstory' => ['string'],
         ];
     }
 
