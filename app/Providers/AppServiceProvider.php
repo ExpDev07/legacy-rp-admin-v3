@@ -6,8 +6,6 @@ use App\Http\Resources\PlayerResource;
 use App\Http\Resources\UserResource;
 use App\Util\Inspiring;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;

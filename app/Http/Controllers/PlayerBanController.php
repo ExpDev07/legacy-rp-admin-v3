@@ -6,8 +6,6 @@ use App\Ban;
 use App\Http\Requests\BanStoreRequest;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class PlayerBanController extends Controller
