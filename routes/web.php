@@ -11,7 +11,15 @@
 |
 */
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogController;
+use App\Http\Controllers\PlayerBanController;
+use App\Http\Controllers\PlayerCharacterController;
+use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\PlayerWarningController;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
@@ -22,22 +30,22 @@ Route::group([ 'prefix' => 'auth' ], function () {
 
 // Logging in and out.
 Route::group([ 'namespace' => 'Auth' ], function() {
-    Route::name('login')->get('/login', 'LoginController@render');
-    Route::name('logout')->post('/logout', 'LogoutController@logout');
+    Route::name('login')->get('/login', [ LoginController::class, 'render' ]);
+    Route::name('logout')->post('/logout', [ LogoutController::class, 'logout' ]);
 });
 
 // Routes requiring being logged in.
 Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
-    Route::get('/', 'HomeController@render');
+    Route::get('/', [ HomeController::class, 'render' ]);
 
     // Players.
-    Route::resource('players', 'PlayerController');
-    Route::resource('players.characters', 'PlayerCharacterController');
-    Route::resource('players.bans', 'PlayerBanController');
-    Route::resource('players.warnings', 'PlayerWarningController');
+    Route::resource('players', PlayerController::class);
+    Route::resource('players.characters', PlayerCharacterController::class);
+    Route::resource('players.bans', PlayerBanController::class);
+    Route::resource('players.warnings', PlayerWarningController::class);
 
     // Logs.
-    Route::resource('logs', 'LogController');
+    Route::resource('logs', LogController::class);
 });
 
 
