@@ -1,17 +1,34 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Log;
-use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 
-$factory->define(Log::class, function (Faker $faker) {
-    return [
-        'action'   => 'example-action',
-        'details'  => $faker->sentence,
-        'metadata' => [
-            'serverId' => $faker->numberBetween(1, 3),
-        ],
-    ];
-});
+class LogFactory extends Factory
+{
+
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Log::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+        return [
+            'action'   => 'example-action',
+            'details'  => $this->faker->sentence,
+            'metadata' => [
+                'serverId' => $this->faker->numberBetween(1, 3),
+            ],
+        ];
+    }
+
+}

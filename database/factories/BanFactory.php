@@ -1,17 +1,34 @@
 <?php
 
-/** @var Factory $factory */
+namespace Database\Factories;
 
 use App\Ban;
-use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Date;
 
-$factory->define(Ban::class, function (Faker $faker) {
-    return [
-        'ban_hash'  => $faker->uuid,
-        'reason'    => $faker->sentence,
-        'timestamp' => Date::now(),
-        'expire'    => Date::now()->addMonth(),
-    ];
-});
+class BanFactory extends Factory
+{
+
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Ban::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+        return [
+            'ban_hash' => $this->faker->uuid,
+            'reason' => $this->faker->sentence,
+            'timestamp' => Date::now(),
+            'expire' => Date::now()->addMonth(),
+        ];
+    }
+
+}

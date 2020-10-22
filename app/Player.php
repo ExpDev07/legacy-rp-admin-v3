@@ -4,6 +4,7 @@ namespace App;
 
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
@@ -14,6 +15,7 @@ use SteamID;
  */
 class Player extends Model
 {
+    use HasFactory;
 
     /**
      * The link used for Steam's new invite code.

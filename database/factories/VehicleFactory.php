@@ -1,36 +1,53 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Vehicle;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 
-$factory->define(Vehicle::class, function (Faker $faker) {
-    return [
-        'garage_name' => $faker->streetAddress,
-        'model_name' => $faker->firstName . ' ' . $faker->year,
-        'plate' => generatePlateNumber($faker),
-    ];
-});
-
-/**
- * Generates a random plate number.
- *
- * @param Faker $faker
- * @return string
- */
-function generatePlateNumber(Faker $faker): string
+class VehicleFactory extends Factory
 {
-    // For example: 28ULD493.
-    return Str::upper(
-        $faker->numberBetween(0, 9) .
-        $faker->numberBetween(0, 9) .
-        $faker->randomLetter .
-        $faker->randomLetter .
-        $faker->randomLetter .
-        $faker->numberBetween(0, 9) .
-        $faker->numberBetween(0, 9) .
-        $faker->numberBetween(0, 9)
-    );
+
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Vehicle::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+        return [
+            'garage_name' => $this->faker->streetAddress,
+            'model_name' => $this->faker->firstName . ' ' . $this->faker->year,
+            'plate' => $this->generatePlateNumber(),
+        ];
+    }
+
+    /**
+     * Generates a random plate number.
+     *
+     * @return string
+     */
+    protected function generatePlateNumber(): string
+    {
+        // For example: 28ULD493.
+        return Str::upper(
+            $this->faker->numberBetween(0, 9) .
+            $this->faker->numberBetween(0, 9) .
+            $this->faker->randomLetter .
+            $this->faker->randomLetter .
+            $this->faker->randomLetter .
+            $this->faker->numberBetween(0, 9) .
+            $this->faker->numberBetween(0, 9) .
+            $this->faker->numberBetween(0, 9)
+        );
+    }
+
 }
