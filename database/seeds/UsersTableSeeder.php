@@ -16,20 +16,20 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 10)->create()->each(function (User $user) {
+        User::factory()->count(10)->create()->each(function (User $user) {
             // Create player.
-            $player = $user->player()->save(factory(Player::class)->make([
-                'player_name' => $user->name
+            $player = $user->player()->save(Player::factory()->make([
+                'player_name' => $user->name,
             ]));
 
             // Create three characters.
             for ($i = 1; $i <= 3; $i++) {
-                $characters = $player->characters()->save(factory(Character::class)->make([
+                $characters = $player->characters()->save(Character::factory()->make([
                     'character_slot' => $i,
                 ]));
 
                 // For each character, create some vehicles.
-                $characters->vehicles()->saveMany(factory(Vehicle::class)->times(5)->make());
+                $characters->vehicles()->saveMany(Vehicle::factory()->count(5)->make());
             }
         });
     }
