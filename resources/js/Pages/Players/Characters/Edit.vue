@@ -7,13 +7,28 @@
         <!-- Statistics -->
         <div class="flex text-center mb-8">
             <div class="w-full rounded shadow bg-gray-800 text-white px-5 py-6 m-3">
-                <span class="font-semibold">DOB:</span> {{ new Date(character.dateOfBirth).toLocaleString() }}
+                <h1 class="font-semibold text-xl mb-3">
+                    Date of Birth
+                </h1>
+                <p>
+                    {{ new Date(character.dateOfBirth).toLocaleString() }}
+                </p>
             </div>
             <div class="w-full rounded shadow bg-gray-800 text-white px-5 py-6 m-3">
-                <span class="font-semibold">Money:</span> {{ character.money }}
+                <h1 class="font-semibold text-xl mb-3">
+                    Money
+                </h1>
+                <p>
+                    ${{ character.money }}
+                </p>
             </div>
             <div class="w-full rounded shadow bg-gray-800 text-white px-5 py-6 m-3">
-                <span class="font-semibold">Job Title:</span> {{ character.jobName }}
+                <h1 class="font-semibold text-xl mb-3">
+                    Job Title
+                </h1>
+                <p>
+                    {{ character.jobName }}
+                </p>
             </div>
         </div>
 
