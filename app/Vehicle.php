@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Vehicle extends Model
 {
+    use HasFactory;
 
     /**
      * The table associated with the model.
