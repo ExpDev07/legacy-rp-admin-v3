@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col items-center justify-center h-screen p-5" v-bind:style="{ background: 'url(https://fivem.net/17c4e5d0b35262c228dcf66c98365982.jpg)'  }">
-        <div class="bg-gray-300 p-16 max-w-3xl">
+        <div class="bg-gray-100 p-16 max-w-3xl">
             <!-- Flash message -->
             <div>
                 <flash-message />

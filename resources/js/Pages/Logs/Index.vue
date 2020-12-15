@@ -1,9 +1,14 @@
 <template>
     <div>
-        <div class="flex items-center justify-between mb-8">
-            <h1 class="text-3xl font-bold">
-                Logs
-            </h1>
+        <div class="flex items-start justify-between mb-8">
+            <div class="prose">
+                <h1>
+                    Logs
+                </h1>
+                <p>
+                    On this page you can view and filter the server logs.
+                </p>
+            </div>
             <button class="bg-indigo-600 hover:bg-orange-500 text-white text-sm rounded px-4 py-2" type="button" @click="refresh">
                 <i class="fa fa-refresh mr-1"></i>
                 Refresh
@@ -11,7 +16,7 @@
         </div>
 
         <!-- Querying -->
-        <div class="rounded bg-gray-300 px-5 py-6 mb-8">
+        <div class="rounded bg-gray-100 px-5 py-6 mb-8">
             <form class="w-full" @submit.prevent>
                 <div class="flex flex-wrap mb-4">
                     <!-- Identifier -->
@@ -47,7 +52,7 @@
         </div>
 
         <!-- Table -->
-        <div class="bg-white rounded shadow overflow-x-auto">
+        <div class="bg-gray-100 rounded shadow overflow-x-auto">
             <table class="w-full whitespace-no-wrap">
                 <tr class="text-left font-bold">
                     <th class="px-6 py-4">Player</th>

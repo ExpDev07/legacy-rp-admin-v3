@@ -1,9 +1,14 @@
 <template>
     <div>
-        <div class="flex flex-grow justify-between mb-10">
-            <h1 class="text-3xl font-bold">
-                {{ player.playerName }}
-            </h1>
+        <div class="flex flex-grow items-start justify-between mb-10">
+            <div class="prose">
+                <h1>
+                    {{ player.playerName }}
+                </h1>
+                <p>
+                    Viewing player profile.
+                </p>
+            </div>
             <div>
                 <!-- Unbanning -->
                 <inertia-link class="rounded bg-green-500 hover:bg-green-600 text-white py-2 px-5" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
@@ -35,12 +40,12 @@
                 </p>
             </div>
             <!-- Issuing -->
-            <div class="rounded bg-gray-300 p-5 mb-10" v-if="creatingBan">
+            <div class="rounded bg-gray-100 p-5 mb-10" v-if="creatingBan">
                 <h2 class="text-2xl font-semibold mb-4">
                     Issuing ban
                 </h2>
                 <p class="mb-6">
-                    You are now issuing a ban for this player. Make sure you are <span class="font-semibold text-indigo-500">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
+                    You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
                 </p>
                 <form @submit.prevent="submitBan">
                     <label for="reason"></label>
@@ -50,7 +55,7 @@
                         <i class="fas fa-gavel mr-1"></i>
                         Ban player
                     </button>
-                    <button class="rounded hover:bg-gray-400 py-2 px-5" type="button" @click="creatingBan = false">
+                    <button class="rounded hover:bg-gray-200 py-2 px-5" type="button" @click="creatingBan = false">
                         Cancel
                     </button>
                 </form>
@@ -58,7 +63,7 @@
         </div>
 
         <!-- Useful links -->
-        <div class="rounded bg-gray-300 p-5 mb-8">
+        <div class="rounded bg-gray-100 p-5 mb-8">
             <div class="flex items-center">
                 <inertia-link class="m-2 w-full bg-indigo-600 hover:bg-orange-500 text-white text-center rounded block px-5 py-2" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                     <i class="fas fa-toilet-paper mr-1"></i>
@@ -72,22 +77,22 @@
         </div>
         
         <!-- Characters -->
-        <div class="rounded bg-gray-300 p-5 mb-8">
+        <div class="rounded bg-gray-100 p-5 mb-8">
             <h2 class="text-2xl mx-3 mb-3">
                 Characters
             </h2>
             <div class="grid grid-cols-3">
-                <div class="flex flex-col bg-white shadow rounded p-5 m-3" v-for="character in characters" v-bind:key="character.id">
+                <div class="flex flex-col bg-gray-200 shadow rounded p-5 m-3" v-for="character in characters" v-bind:key="character.id">
                     <div class="flex-grow">
-                        <div class="text-center border-b mb-5 pb-4">
+                        <div class="text-center border-b border-gray-900 mb-5 pb-4">
                             <h1 class="text-xl font-semibold mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h1>
-                            <h3 class="text-xs text-indigo-500">
+                            <h3 class="text-indigo-500">
                                 DOB: {{ new Date(character.dateOfBirth).toLocaleString() }}
                             </h3>
                         </div>
-                        <p class="mb-8">
+                        <p class="text-gray-800 mb-8">
                             {{ character.backstory }}
                         </p>
                     </div>
@@ -102,13 +107,13 @@
         </div>
 
         <!-- Warnings -->
-        <div class="rounded bg-gray-300 p-5">
+        <div class="rounded bg-gray-100 p-5">
             <h2 class="text-2xl mb-5">
                 Warnings ({{ player.warnings }})
             </h2>
             <div class="mb-8">
-                <div class="flex-grow bg-white shadow rounded p-5 mb-5" v-for="warning in warnings" v-bind:key="warning.id">
-                    <div class="flex items-center justify-between border-b mb-5 pb-5">
+                <div class="flex-grow bg-gray-200 rounded p-5 mb-5" v-for="warning in warnings" v-bind:key="warning.id">
+                    <div class="flex items-center justify-between border-b-2 border-gray-900 mb-5 pb-5">
                         <h1 class="text-lg font-semibold">
                             {{ warning.issuer.playerName }}
                         </h1>
@@ -134,7 +139,7 @@
                 <label for="message"></label>
                 <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="message" name="message" rows="5" v-bind:placeholder="player.playerName + ' did an oopsie.'" v-model="form.warning.message" required></textarea>
 
-                <button class="rounded bg-orange-500 hover:bg-orange-600 text-white py-2 px-5" type="submit">
+                <button class="rounded bg-indigo-600 hover:bg-indigo-600 text-white py-2 px-5" type="submit">
                     <i class="fas fa-exclamation mr-1"></i>
                     Warn player
                 </button>

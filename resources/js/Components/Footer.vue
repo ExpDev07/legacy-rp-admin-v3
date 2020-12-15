@@ -1,5 +1,5 @@
 <template>
-    <footer class="lg:flex items-center justify-between text-center bg-gray-300 px-12 py-6">
+    <footer class="lg:flex items-center justify-between text-center bg-gray-200 px-12 py-6">
         <div></div>
         <p>
             Made with <span id="heart" class="fas fa-heart text-red-500 hover:text-red-600"></span> by Marius (ExpDev07) with <a class="font-semibold text-indigo-500 hover:text-indigo-600" target="_blank" href="https://laravel.com/">Laravel</a> + <a class="font-semibold text-green-500 hover:text-green-600" target="_blank" href="https://vuejs.org/">Vue</a>.

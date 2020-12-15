@@ -1,18 +1,23 @@
 <template>
     <div>
-        <h1 class="text-3xl font-bold mb-8">
-            Players
-        </h1>
+        <div class="prose mb-12">
+            <h1>
+                Players
+            </h1>
+            <p>
+                Search players by their identifier or name.
+            </p>
+        </div>
 
         <!-- Search -->
-        <form class="w-full mb-6" @submit.prevent>
-            <label class="block text-gray-800 mb-4" for="name">
+        <form class="w-full bg-gray-100 p-5 mb-6" @submit.prevent>
+            <label class="block font-semibold mb-4" for="name">
                 Search by name
             </label>
-            <input class="w-full shadow px-4 py-2" id="name" name="name" placeholder="Marius Truckster" v-model="filters.query">
+            <input class="w-full bg-gray-200 px-4 py-2" id="name" name="name" placeholder="Marius Truckster" v-model="filters.query">
         </form>
 
-        <div class="bg-white rounded shadow overflow-x-auto">
+        <div class="bg-gray-100 rounded shadow overflow-x-auto">
             <table class="w-full whitespace-no-wrap">
                 <tr class="text-left font-bold">
                     <th class="px-6 py-4">Identifier</th>

@@ -27,7 +27,7 @@
     <script defer type="application/javascript" src="https://kit.fontawesome.com/0074643143.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="h-full font-sans bg-gray-200 text-gray-700 antialiased">
+<body class="h-full font-sans bg-white text-black antialiased">
     @inertia
 </body>
 

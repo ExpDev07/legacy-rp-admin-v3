@@ -1,10 +1,10 @@
 <template>
-    <div class="bg-indigo-900 text-gray-200 font-semibold w-56 overflow-y-auto px-3 py-10">
+    <div class="bg-indigo-600 text-white font-semibold w-56 overflow-y-auto px-3 py-10">
         <!-- General stuff -->
         <nav>
             <ul>
                 <li v-for="link in links" v-bind:key="link.label">
-                    <inertia-link class="flex items-center rounded hover:bg-orange-500 hover:text-white px-5 py-2 mb-3" v-bind:class="isUrl(link.url) ? [ 'bg-orange-500', 'text-white' ] : ''" v-bind:href="link.url">
+                    <inertia-link class="flex items-center rounded hover:bg-gray-900 hover:text-white px-5 py-2 mb-3" v-bind:class="isUrl(link.url) ? [ 'bg-gray-900', 'text-white' ] : ''" v-bind:href="link.url">
                         <icon class="w-4 h-4 mr-3 fill-current" v-bind:name="link.icon"></icon>
                         {{ link.label }}
                     </inertia-link>

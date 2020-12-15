@@ -33,7 +33,7 @@
         </div>
 
         <!-- Editing -->
-        <div class="rounded bg-gray-300 px-5 py-6 mb-8">
+        <div class="rounded bg-gray-100 px-5 py-6 mb-8">
             <form class="w-full" @submit.prevent="submit">
                 <!-- Name -->
                 <div class="flex flex-wrap mb-4">
@@ -68,22 +68,22 @@
         </div>
 
         <!-- Vehicles -->
-        <div class="rounded bg-gray-300 p-5 mb-8">
+        <div class="rounded bg-gray-100 p-5 mb-8">
             <h2 class="text-2xl mx-3 mb-3">
                 Owned vehicles
             </h2>
             <div class="grid grid-cols-3 xl:grid-cols-4">
-                <div class="flex flex-col bg-white shadow rounded p-5 m-3" v-for="vehicle in character.vehicles" v-bind:key="vehicle.id">
+                <div class="flex flex-col bg-gray-200 shadow rounded p-5 m-3" v-for="vehicle in character.vehicles" v-bind:key="vehicle.id">
                     <div class="flex-grow">
-                        <div class="text-center border-b mb-5 pb-4">
+                        <div class="text-center border-b border-gray-900 mb-5 pb-4">
                             <h1 class="text-xl font-bold mb-2">
                                 {{ vehicle.model_name }}
                             </h1>
-                            <h3 class="text-lg text-indigo-500">
+                            <h3 class="text-indigo-500">
                                 <span class="font-semibold">Plate Number:</span> {{ vehicle.plate }}
                             </h3>
                         </div>
-                        <p class="mb-8">
+                        <p class="text-gray-800 mb-8">
                             This vehicle is currently parked at <span class="font-semibold">{{ vehicle.garage_name }}</span>.
                         </p>
                     </div>
