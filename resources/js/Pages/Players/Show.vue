@@ -65,31 +65,31 @@
         <!-- Useful links -->
         <div class="rounded bg-gray-100 p-5 mb-8">
             <div class="flex items-center">
-                <inertia-link class="m-2 w-full bg-indigo-600 hover:bg-orange-500 text-white text-center rounded block px-5 py-2" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
+                <inertia-link class="m-2 w-full bg-indigo-600 hover:bg-orange-500 text-white text-center rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                     <i class="fas fa-toilet-paper mr-1"></i>
-                    Logs
+                    Check player's logs
                 </inertia-link>
-                <a class="m-2 w-full bg-gray-800 hover:bg-gray-900 text-white text-center rounded block px-5 py-2" target="_blank" v-bind:href="player.steamProfileUrl">
+                <a class="m-2 w-full bg-gray-800 hover:bg-gray-900 text-white text-center rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
                     <i class="fab fa-steam mr-1"></i>
-                    Steam Profile
+                    Open Steam profile
                 </a>
             </div>
         </div>
 
         <!-- Characters -->
         <div class="rounded bg-gray-100 p-5 mb-8">
-            <h2 class="text-2xl mx-3 mb-3">
+            <h2 class="text-2xl font-semibold mx-3 mb-3">
                 Characters
             </h2>
             <div class="grid grid-cols-3">
                 <div class="flex flex-col bg-gray-200 shadow rounded p-5 m-3" v-for="character in characters" v-bind:key="character.id">
                     <div class="flex-grow">
-                        <div class="text-center border-b border-gray-900 mb-5 pb-4">
+                        <div class="text-center border-b-2 border-gray-400 mb-5 pb-4">
                             <h1 class="text-xl font-semibold mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h1>
                             <h3 class="text-indigo-500">
-                                DOB: {{ new Date(character.dateOfBirth).toLocaleString() }}
+                                <span class="font-semibold">Date of birth:</span> {{ new Date(character.dateOfBirth).toLocaleString() }}
                             </h3>
                         </div>
                         <p class="text-gray-800 mb-8">
@@ -108,7 +108,7 @@
 
         <!-- Warnings -->
         <div class="rounded bg-gray-100 p-5">
-            <h2 class="text-2xl mb-5">
+            <h2 class="text-2xl font-semibold mb-5">
                 Warnings ({{ player.warnings }})
             </h2>
             <div class="mb-8">

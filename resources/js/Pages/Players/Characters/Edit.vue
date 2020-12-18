@@ -4,37 +4,12 @@
             {{ character.name }}
         </h1>
 
-        <!-- Statistics -->
-        <div class="flex text-center mb-8">
-            <div class="w-full rounded shadow bg-gray-800 text-white px-5 py-6 m-3">
-                <h1 class="font-semibold text-xl mb-3">
-                    Date of Birth
-                </h1>
-                <p>
-                    {{ new Date(character.dateOfBirth).toLocaleString() }}
-                </p>
-            </div>
-            <div class="w-full rounded shadow bg-gray-800 text-white px-5 py-6 m-3">
-                <h1 class="font-semibold text-xl mb-3">
-                    Money
-                </h1>
-                <p>
-                    ${{ character.money }}
-                </p>
-            </div>
-            <div class="w-full rounded shadow bg-gray-800 text-white px-5 py-6 m-3">
-                <h1 class="font-semibold text-xl mb-3">
-                    Job Title
-                </h1>
-                <p>
-                    {{ character.jobName }}
-                </p>
-            </div>
-        </div>
-
         <!-- Editing -->
         <div class="rounded bg-gray-100 px-5 py-6 mb-8">
-            <form class="w-full" @submit.prevent="submit">
+            <h2 class="text-2xl font-semibold mx-3 mb-8">
+                Update
+            </h2>
+            <form @submit.prevent="submit">
                 <!-- Name -->
                 <div class="flex flex-wrap mb-4">
                     <div class="w-1/2 px-3 mb-6">
@@ -51,7 +26,7 @@
                     </div>
                 </div>
                 <!-- Backstory -->
-                <div class="w-full px-3 mb-6">
+                <div class="px-3 mb-6">
                     <label class="block mb-3" for="backstory">
                         Backstory
                     </label>
@@ -67,26 +42,26 @@
             </form>
         </div>
 
+        <!-- Editing -->
+        <div class="rounded bg-gray-100 px-5 py-6 mb-8">
+            <h2 class="text-2xl font-semibold mx-3 mb-8">
+                Job
+            </h2>
+        </div>
+
         <!-- Vehicles -->
         <div class="rounded bg-gray-100 p-5 mb-8">
-            <h2 class="text-2xl mx-3 mb-3">
-                Owned vehicles
+            <h2 class="text-2xl font-semibold mx-3 mb-8">
+                Vehicles
             </h2>
-            <div class="grid grid-cols-3 xl:grid-cols-4">
-                <div class="flex flex-col bg-gray-200 shadow rounded p-5 m-3" v-for="vehicle in character.vehicles" v-bind:key="vehicle.id">
-                    <div class="flex-grow">
-                        <div class="text-center border-b border-gray-900 mb-5 pb-4">
-                            <h1 class="text-xl font-bold mb-2">
-                                {{ vehicle.model_name }}
-                            </h1>
-                            <h3 class="text-indigo-500">
-                                <span class="font-semibold">Plate Number:</span> {{ vehicle.plate }}
-                            </h3>
-                        </div>
-                        <p class="text-gray-800 mb-8">
-                            This vehicle is currently parked at <span class="font-semibold">{{ vehicle.garage_name }}</span>.
-                        </p>
-                    </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                <div class="p-5 bg-gray-200" :key="vehicle.id" v-for="vehicle in character.vehicles">
+                    <h1 class="text-lg font-semibold mb-2">
+                        {{ vehicle.model_name }} ({{ vehicle.plate }})
+                    </h1>
+                    <h2>
+                        Parked at {{ vehicle.garage_name }}.
+                    </h2>
                 </div>
             </div>
             <p class="px-4 py-6" v-if="character.vehicles.length === 0">

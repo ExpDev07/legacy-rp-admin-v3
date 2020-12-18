@@ -45,6 +45,8 @@ class Character extends Model
         'cash',
         'bank',
         'job_name',
+        'job_department',
+        'job_position',
         'backstory',
     ];
 

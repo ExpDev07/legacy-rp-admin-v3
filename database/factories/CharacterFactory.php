@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Character;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CharacterFactory extends Factory
 {
@@ -31,6 +31,8 @@ class CharacterFactory extends Factory
             'cash'           => $this->faker->randomFloat(2, 100, 5000000),
             'bank'           => $this->faker->randomFloat(2, 100, 10000000),
             'job_name'       => $this->faker->jobTitle,
+            'job_department' => $this->faker->randomElement([ 'office', 'field', 'relations' ]),
+            'job_position'   => $this->faker->randomElement([ 'manager', 'assistant', 'employee' ]),
             'backstory'      => $this->faker->text,
         ];
     }
