@@ -11,12 +11,12 @@
             </div>
             <div>
                 <!-- Unbanning -->
-                <inertia-link class="rounded bg-green-500 hover:bg-green-600 text-white py-2 px-5" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
+                <inertia-link class="rounded bg-green-500 hover:bg-green-600 font-semibold text-white py-2 px-5" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
                     <i class="fas fa-lock-open mr-1"></i>
                     Unban
                 </inertia-link>
                 <!-- Banning -->
-                <button class="rounded bg-red-500 hover:bg-red-600 text-white py-2 px-5" @click="creatingBan = true" v-else>
+                <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" @click="creatingBan = true" v-else>
                     <i class="fas fa-gavel mr-1"></i>
                     Issue ban
                 </button>
@@ -40,7 +40,7 @@
                 </p>
             </div>
             <!-- Issuing -->
-            <div class="rounded bg-gray-100 p-5 mb-10" v-if="creatingBan">
+            <div class="rounded bg-gray-100 p-8 mb-10" v-if="creatingBan">
                 <h2 class="text-2xl font-semibold mb-4">
                     Issuing ban
                 </h2>
@@ -51,7 +51,7 @@
                     <label for="reason"></label>
                     <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
 
-                    <button class="rounded bg-red-500 hover:bg-red-600 text-white py-2 px-5 mr-1" type="submit">
+                    <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5 mr-1" type="submit">
                         <i class="fas fa-gavel mr-1"></i>
                         Ban player
                     </button>
@@ -63,36 +63,36 @@
         </div>
 
         <!-- Useful links -->
-        <div class="rounded bg-gray-100 p-5 mb-8">
-            <div class="flex items-center">
-                <inertia-link class="m-2 w-full bg-indigo-600 hover:bg-orange-500 text-white text-center rounded block px-5 py-2" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
+        <div class="rounded bg-gray-100 p-8 mb-8">
+            <div class="flex flex-wrap items-center">
+                <inertia-link class="flex-1 m-2 bg-indigo-600 text-white text-center rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                     <i class="fas fa-toilet-paper mr-1"></i>
-                    Logs
+                    Check player's logs
                 </inertia-link>
-                <a class="m-2 w-full bg-gray-800 hover:bg-gray-900 text-white text-center rounded block px-5 py-2" target="_blank" v-bind:href="player.steamProfileUrl">
+                <a class="flex-1 m-2 bg-gray-800 text-white text-center rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
                     <i class="fab fa-steam mr-1"></i>
-                    Steam Profile
+                    Open Steam profile
                 </a>
             </div>
         </div>
 
         <!-- Characters -->
-        <div class="rounded bg-gray-100 p-5 mb-8">
-            <h2 class="text-2xl mx-3 mb-3">
+        <div class="rounded bg-gray-100 p-8 mb-8">
+            <h2 class="text-2xl font-semibold mx-3 mb-3">
                 Characters
             </h2>
-            <div class="grid grid-cols-3">
-                <div class="flex flex-col bg-gray-200 shadow rounded p-5 m-3" v-for="character in characters" v-bind:key="character.id">
-                    <div class="flex-grow">
-                        <div class="text-center border-b border-gray-900 mb-5 pb-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+                <div class="flex flex-col bg-gray-200 shadow rounded p-8 m-3" v-for="character in characters" v-bind:key="character.id">
+                    <div class="flex-grow mb-10">
+                        <div class="text-center border-b-2 border-gray-400 mb-8 pb-8">
                             <h1 class="text-xl font-semibold mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h1>
                             <h3 class="text-indigo-500">
-                                DOB: {{ new Date(character.dateOfBirth).toLocaleString() }}
+                                <span class="font-semibold">Date of birth:</span> {{ new Date(character.dateOfBirth).toLocaleString() }}
                             </h3>
                         </div>
-                        <p class="text-gray-800 mb-8">
+                        <p class="text-gray-800">
                             {{ character.backstory }}
                         </p>
                     </div>
@@ -107,8 +107,8 @@
         </div>
 
         <!-- Warnings -->
-        <div class="rounded bg-gray-100 p-5">
-            <h2 class="text-2xl mb-5">
+        <div class="rounded bg-gray-100 p-8">
+            <h2 class="text-2xl font-semibold mb-5">
                 Warnings ({{ player.warnings }})
             </h2>
             <div class="mb-8">
@@ -121,7 +121,7 @@
                             <p>
                                 <span class="font-semibold">added @</span> {{ new Date(warning.createdAt).toLocaleString() }}
                             </p>
-                            <inertia-link class="bg-red-500 hover:bg-red-600 text-white text-sm rounded py-1 px-4 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
+                            <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-4 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                 <i class="fas fa-trash mr-1"></i>
                                 Remove
                             </inertia-link>
@@ -139,7 +139,7 @@
                 <label for="message"></label>
                 <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="message" name="message" rows="5" v-bind:placeholder="player.playerName + ' did an oopsie.'" v-model="form.warning.message" required></textarea>
 
-                <button class="rounded bg-indigo-600 hover:bg-indigo-600 text-white py-2 px-5" type="submit">
+                <button class="rounded bg-indigo-600 font-semibold text-white py-2 px-5" type="submit">
                     <i class="fas fa-exclamation mr-1"></i>
                     Warn player
                 </button>
@@ -181,12 +181,12 @@ export default {
         };
     },
     methods: {
-        async submitBan() {
+        async submitBan () {
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', this.form.ban);
             this.creatingBan = false;
             this.form.ban.message = null;
         },
-        async submitWarning() {
+        async submitWarning () {
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/warnings', this.form.warning);
             this.form.warning.message = null;
         },

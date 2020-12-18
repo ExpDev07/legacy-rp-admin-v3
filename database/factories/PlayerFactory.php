@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Player;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Date;
 
 class PlayerFactory extends Factory

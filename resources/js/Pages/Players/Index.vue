@@ -10,7 +10,7 @@
         </div>
 
         <!-- Search -->
-        <form class="w-full bg-gray-100 p-5 mb-6" @submit.prevent>
+        <form class="w-full bg-gray-100 p-8 mb-6" @submit.prevent>
             <label class="block font-semibold mb-4" for="name">
                 Search by name
             </label>
@@ -39,7 +39,7 @@
                         </span>
                     </td>
                     <td class="px-6 py-3 border-t">
-                        <inertia-link class="block bg-indigo-600 hover:bg-orange-500 text-white text-center rounded px-4 py-2" v-bind:href="'/players/' + player.steamIdentifier">
+                        <inertia-link class="block bg-indigo-600 font-semibold text-white text-center rounded px-4 py-2" v-bind:href="'/players/' + player.steamIdentifier">
                             <i class="fas fa-chevron-right"></i>
                         </inertia-link>
                     </td>

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Vehicle;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 class VehicleFactory extends Factory

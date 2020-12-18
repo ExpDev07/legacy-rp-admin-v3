@@ -18,6 +18,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
+use App\Http\Controllers\PlayerCharacterJobController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerWarningController;
 use Illuminate\Support\Facades\Route;

@@ -42,10 +42,12 @@ class Character extends Model
         'first_name',
         'last_name',
         'date_of_birth',
+        'backstory',
         'cash',
         'bank',
         'job_name',
-        'backstory',
+        'job_department',
+        'job_position',
     ];
 
     /**

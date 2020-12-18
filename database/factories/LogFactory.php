@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Log;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LogFactory extends Factory
 {
