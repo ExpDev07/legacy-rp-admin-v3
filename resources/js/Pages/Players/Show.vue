@@ -64,12 +64,12 @@
 
         <!-- Useful links -->
         <div class="rounded bg-gray-100 p-5 mb-8">
-            <div class="flex items-center">
-                <inertia-link class="m-2 w-full bg-indigo-600 hover:bg-orange-500 text-white text-center rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
+            <div class="flex flex-wrap items-center">
+                <inertia-link class="flex-1 m-2 bg-indigo-600 text-white text-center rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                     <i class="fas fa-toilet-paper mr-1"></i>
                     Check player's logs
                 </inertia-link>
-                <a class="m-2 w-full bg-gray-800 hover:bg-gray-900 text-white text-center rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
+                <a class="flex-1 m-2 bg-gray-800 text-white text-center rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
                     <i class="fab fa-steam mr-1"></i>
                     Open Steam profile
                 </a>
