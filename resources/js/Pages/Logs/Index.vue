@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex items-start justify-between mb-8">
+        <div class="flex items-start justify-between mb-12">
             <div class="prose">
                 <h1>
                     Logs
@@ -54,7 +54,7 @@
         <!-- Table -->
         <div class="bg-gray-100 rounded shadow overflow-x-auto">
             <table class="w-full whitespace-no-wrap">
-                <tr class="text-left font-bold">
+                <tr class="text-left font-semibold">
                     <th class="px-6 py-4">Player</th>
                     <th class="px-6 py-4">Action</th>
                     <th class="px-6 py-4">Details</th>

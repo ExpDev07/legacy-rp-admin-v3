@@ -19,7 +19,7 @@
 
         <div class="bg-gray-100 rounded shadow overflow-x-auto">
             <table class="w-full whitespace-no-wrap">
-                <tr class="text-left font-bold">
+                <tr class="text-left font-semibold">
                     <th class="px-6 py-4">Identifier</th>
                     <th class="px-6 py-4">Name</th>
                     <th class="px-6 py-4">Warnings</th>

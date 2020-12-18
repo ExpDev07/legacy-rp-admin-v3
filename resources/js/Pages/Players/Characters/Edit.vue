@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="text-3xl font-bold mb-8">
+        <h1 class="text-3xl font-bold mb-12">
             {{ character.name }}
         </h1>
 

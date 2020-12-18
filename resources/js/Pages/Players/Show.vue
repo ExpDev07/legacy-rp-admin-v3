@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="flex flex-grow items-start justify-between mb-10">
+        <div class="flex flex-grow items-start justify-between mb-12">
             <div class="prose">
                 <h1>
                     {{ player.playerName }}
@@ -75,7 +75,7 @@
                 </a>
             </div>
         </div>
-        
+
         <!-- Characters -->
         <div class="rounded bg-gray-100 p-5 mb-8">
             <h2 class="text-2xl mx-3 mb-3">
