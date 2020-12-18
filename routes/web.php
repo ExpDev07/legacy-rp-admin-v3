@@ -42,7 +42,6 @@ Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
     // Players.
     Route::resource('players', PlayerController::class);
     Route::resource('players.characters', PlayerCharacterController::class);
-    Route::resource('players.characters.jobs', PlayerCharacterJobController::class);
     Route::resource('players.bans', PlayerBanController::class);
     Route::resource('players.warnings', PlayerWarningController::class);
 
