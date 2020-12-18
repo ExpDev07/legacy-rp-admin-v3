@@ -9,7 +9,7 @@
                     On this page you can view and filter the server logs.
                 </p>
             </div>
-            <button class="bg-indigo-600 hover:bg-orange-500 text-white text-sm rounded px-4 py-2" type="button" @click="refresh">
+            <button class="bg-indigo-600 font-semibold text-white text-sm rounded px-4 py-2" type="button" @click="refresh">
                 <i class="fa fa-refresh mr-1"></i>
                 Refresh
             </button>
@@ -63,7 +63,7 @@
                 </tr>
                 <tr class="hover:bg-gray-100" v-for="log in logs.data" v-bind:key="log.id">
                     <td class="px-6 py-3 border-t">
-                        <inertia-link class="block bg-indigo-600 hover:bg-orange-500 text-white text-center rounded px-4 py-2" v-bind:href="'/players/' + log.player.steamIdentifier">
+                        <inertia-link class="block bg-indigo-600 font-semibold text-white text-center rounded px-4 py-2" v-bind:href="'/players/' + log.player.steamIdentifier">
                             {{ log.player.playerName }}
                         </inertia-link>
                     </td>

@@ -37,7 +37,7 @@
 
                 <!-- Submit -->
                 <div class="px-3">
-                    <button class="bg-indigo-600 hover:bg-orange-500 text-white text-center rounded px-4 py-2" type="submit">
+                    <button class="bg-indigo-600 font-semibold text-white text-center rounded px-4 py-2" type="submit">
                         Update Character
                     </button>
                 </div>
@@ -46,19 +46,34 @@
 
         <!-- Job -->
         <div class="rounded bg-gray-100 p-8 mb-8">
-            <div class="flex items-center justify-between text-center mx-3">
+            <div class="flex items-center justify-between mx-3">
                 <h2 class="text-2xl font-semibold mr-12">
                     Job
                 </h2>
-                <h3 class="flex-1 text-xl">
-                    <span>Name:</span> {{ character.jobName }}
-                </h3>
-                <h3 class="flex-1 text-xl">
-                    <span>Department:</span> {{ character.jobDepartment }}
-                </h3>
-                <h3 class="flex-1 text-xl">
-                    <span>Position:</span> {{ character.jobPosition }}
-                </h3>
+                <div class="flex-1 flex items-center justify-center space-x-6">
+                    <h3 class="text-xl">
+                        <span>Name:</span> {{ character.jobName }}
+                    </h3>
+                    <button class="bg-indigo-600 inline-block font-semibold text-white text-center rounded px-4 py-1" type="button">
+                        Reset
+                    </button>
+                </div>
+                <div class="flex-1 flex items-center justify-center space-x-6">
+                    <h3 class="text-xl">
+                        <span>Department:</span> {{ character.jobDepartment }}
+                    </h3>
+                    <button class="bg-indigo-600 inline-block font-semibold text-white text-center rounded px-4 py-1" type="button">
+                        Reset
+                    </button>
+                </div>
+                <div class="flex-1 flex items-center justify-center space-x-6">
+                    <h3 class="text-xl">
+                        <span>Position:</span> {{ character.jobPosition }}
+                    </h3>
+                    <button class="bg-indigo-600 inline-block font-semibold text-white text-center rounded px-4 py-1" type="button">
+                        Reset
+                    </button>
+                </div>
             </div>
         </div>
 

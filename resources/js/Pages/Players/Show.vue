@@ -11,12 +11,12 @@
             </div>
             <div>
                 <!-- Unbanning -->
-                <inertia-link class="rounded bg-green-500 hover:bg-green-600 text-white py-2 px-5" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
+                <inertia-link class="rounded bg-green-500 hover:bg-green-600 font-semibold text-white py-2 px-5" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
                     <i class="fas fa-lock-open mr-1"></i>
                     Unban
                 </inertia-link>
                 <!-- Banning -->
-                <button class="rounded bg-red-500 hover:bg-red-600 text-white py-2 px-5" @click="creatingBan = true" v-else>
+                <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" @click="creatingBan = true" v-else>
                     <i class="fas fa-gavel mr-1"></i>
                     Issue ban
                 </button>
@@ -51,7 +51,7 @@
                     <label for="reason"></label>
                     <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
 
-                    <button class="rounded bg-red-500 hover:bg-red-600 text-white py-2 px-5 mr-1" type="submit">
+                    <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5 mr-1" type="submit">
                         <i class="fas fa-gavel mr-1"></i>
                         Ban player
                     </button>
@@ -121,7 +121,7 @@
                             <p>
                                 <span class="font-semibold">added @</span> {{ new Date(warning.createdAt).toLocaleString() }}
                             </p>
-                            <inertia-link class="bg-red-500 hover:bg-red-600 text-white text-sm rounded py-1 px-4 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
+                            <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-4 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                 <i class="fas fa-trash mr-1"></i>
                                 Remove
                             </inertia-link>
@@ -139,7 +139,7 @@
                 <label for="message"></label>
                 <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="message" name="message" rows="5" v-bind:placeholder="player.playerName + ' did an oopsie.'" v-model="form.warning.message" required></textarea>
 
-                <button class="rounded bg-indigo-600 hover:bg-indigo-600 text-white py-2 px-5" type="submit">
+                <button class="rounded bg-indigo-600 font-semibold text-white py-2 px-5" type="submit">
                     <i class="fas fa-exclamation mr-1"></i>
                     Warn player
                 </button>
