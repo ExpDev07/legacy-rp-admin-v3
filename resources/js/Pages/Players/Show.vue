@@ -40,7 +40,7 @@
                 </p>
             </div>
             <!-- Issuing -->
-            <div class="rounded bg-gray-100 p-5 mb-10" v-if="creatingBan">
+            <div class="rounded bg-gray-100 p-8 mb-10" v-if="creatingBan">
                 <h2 class="text-2xl font-semibold mb-4">
                     Issuing ban
                 </h2>
@@ -63,7 +63,7 @@
         </div>
 
         <!-- Useful links -->
-        <div class="rounded bg-gray-100 p-5 mb-8">
+        <div class="rounded bg-gray-100 p-8 mb-8">
             <div class="flex flex-wrap items-center">
                 <inertia-link class="flex-1 m-2 bg-indigo-600 text-white text-center rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                     <i class="fas fa-toilet-paper mr-1"></i>
@@ -77,13 +77,13 @@
         </div>
 
         <!-- Characters -->
-        <div class="rounded bg-gray-100 p-5 mb-8">
+        <div class="rounded bg-gray-100 p-8 mb-8">
             <h2 class="text-2xl font-semibold mx-3 mb-3">
                 Characters
             </h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
                 <div class="flex flex-col bg-gray-200 shadow rounded p-8 m-3" v-for="character in characters" v-bind:key="character.id">
-                    <div class="flex-grow">
+                    <div class="flex-grow mb-10">
                         <div class="text-center border-b-2 border-gray-400 mb-8 pb-8">
                             <h1 class="text-xl font-semibold mb-2">
                                 {{ character.name }} (#{{ character.id }})
@@ -92,7 +92,7 @@
                                 <span class="font-semibold">Date of birth:</span> {{ new Date(character.dateOfBirth).toLocaleString() }}
                             </h3>
                         </div>
-                        <p class="text-gray-800 mb-8">
+                        <p class="text-gray-800">
                             {{ character.backstory }}
                         </p>
                     </div>
@@ -107,7 +107,7 @@
         </div>
 
         <!-- Warnings -->
-        <div class="rounded bg-gray-100 p-5">
+        <div class="rounded bg-gray-100 p-8">
             <h2 class="text-2xl font-semibold mb-5">
                 Warnings ({{ player.warnings }})
             </h2>

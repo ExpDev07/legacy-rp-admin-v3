@@ -1,11 +1,13 @@
 <template>
     <div>
-        <h1 class="text-3xl font-bold mb-12">
-            {{ character.name }}
-        </h1>
+        <div class="prose mb-12">
+            <h1>
+                {{ character.name }}
+            </h1>
+        </div>
 
         <!-- Editing -->
-        <div class="rounded bg-gray-100 px-5 py-6 mb-8">
+        <div class="rounded bg-gray-100 p-8 mb-8">
             <h2 class="text-2xl font-semibold mx-3 mb-8">
                 Update
             </h2>
@@ -42,20 +44,31 @@
             </form>
         </div>
 
-        <!-- Editing -->
-        <div class="rounded bg-gray-100 px-5 py-6 mb-8">
-            <h2 class="text-2xl font-semibold mx-3 mb-8">
-                Job
-            </h2>
+        <!-- Job -->
+        <div class="rounded bg-gray-100 p-8 mb-8">
+            <div class="flex items-center justify-between mx-3">
+                <h2 class="flex-1 text-2xl font-semibold">
+                    Job
+                </h2>
+                <h3 class="flex-1 text-xl">
+                    <span>Name:</span> {{ character.jobName }}
+                </h3>
+                <h3 class="flex-1 text-xl">
+                    <span>Department:</span> {{ character.jobDepartment }}
+                </h3>
+                <h3 class="flex-1 text-xl">
+                    <span>Position:</span> {{ character.jobPosition }}
+                </h3>
+            </div>
         </div>
 
         <!-- Vehicles -->
-        <div class="rounded bg-gray-100 p-5 mb-8">
+        <div class="rounded bg-gray-100 p-8 mb-8">
             <h2 class="text-2xl font-semibold mx-3 mb-8">
                 Vehicles
             </h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                <div class="p-5 bg-gray-200" :key="vehicle.id" v-for="vehicle in character.vehicles">
+                <div class="p-8 bg-gray-200" :key="vehicle.id" v-for="vehicle in character.vehicles">
                     <h1 class="text-lg font-semibold mb-2">
                         {{ vehicle.model_name }} ({{ vehicle.plate }})
                     </h1>

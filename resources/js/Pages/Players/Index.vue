@@ -10,7 +10,7 @@
         </div>
 
         <!-- Search -->
-        <form class="w-full bg-gray-100 p-5 mb-6" @submit.prevent>
+        <form class="w-full bg-gray-100 p-8 mb-6" @submit.prevent>
             <label class="block font-semibold mb-4" for="name">
                 Search by name
             </label>

@@ -16,7 +16,7 @@
         </div>
 
         <!-- Querying -->
-        <div class="rounded bg-gray-100 px-5 py-6 mb-8">
+        <div class="rounded bg-gray-100 p-8 mb-8">
             <form class="w-full" @submit.prevent>
                 <div class="flex flex-wrap mb-4">
                     <!-- Identifier -->

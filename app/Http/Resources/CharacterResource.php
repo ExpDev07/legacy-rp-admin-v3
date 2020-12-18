@@ -17,19 +17,21 @@ class CharacterResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'          => $this->character_id,
-            'slot'        => $this->character_slot,
-            'gender'      => $this->gender,
-            'firstName'   => $this->first_name,
-            'lastName'    => $this->last_name,
-            'name'        => $this->name,
-            'dateOfBirth' => $this->date_of_birth,
-            'cash'        => $this->cash,
-            'bank'        => $this->bank,
-            'money'       => $this->money,
-            'jobName'     => $this->job_name,
-            'backstory'   => $this->backstory,
-            'vehicles'    => VehicleResource::collection($this->vehicles),
+            'id'            => $this->character_id,
+            'slot'          => $this->character_slot,
+            'gender'        => $this->gender,
+            'firstName'     => $this->first_name,
+            'lastName'      => $this->last_name,
+            'name'          => $this->name,
+            'dateOfBirth'   => $this->date_of_birth,
+            'cash'          => $this->cash,
+            'bank'          => $this->bank,
+            'money'         => $this->money,
+            'jobName'       => $this->job_name,
+            'jobDepartment' => $this->job_department,
+            'jobPosition'   => $this->job_position,
+            'backstory'     => $this->backstory,
+            'vehicles'      => VehicleResource::collection($this->vehicles),
         ];
     }
 
