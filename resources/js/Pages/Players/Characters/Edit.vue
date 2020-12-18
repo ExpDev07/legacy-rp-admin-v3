@@ -46,8 +46,8 @@
 
         <!-- Job -->
         <div class="rounded bg-gray-100 p-8 mb-8">
-            <div class="flex items-center justify-between mx-3">
-                <h2 class="flex-1 text-2xl font-semibold">
+            <div class="flex items-center justify-between text-center mx-3">
+                <h2 class="text-2xl font-semibold mr-12">
                     Job
                 </h2>
                 <h3 class="flex-1 text-xl">
@@ -69,11 +69,11 @@
             </h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 <div class="p-8 bg-gray-200" :key="vehicle.id" v-for="vehicle in character.vehicles">
-                    <h1 class="text-lg font-semibold mb-2">
+                    <h1 class="text-lg font-semibold mb-3">
                         {{ vehicle.model_name }} ({{ vehicle.plate }})
                     </h1>
                     <h2>
-                        Parked at {{ vehicle.garage_name }}.
+                        Parked at <span class="italic">{{ vehicle.garage_name }}</span>.
                     </h2>
                 </div>
             </div>
