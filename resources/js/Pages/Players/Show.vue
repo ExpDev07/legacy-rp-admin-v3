@@ -181,12 +181,12 @@ export default {
         };
     },
     methods: {
-        async submitBan() {
+        async submitBan () {
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', this.form.ban);
             this.creatingBan = false;
             this.form.ban.message = null;
         },
-        async submitWarning() {
+        async submitWarning () {
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/warnings', this.form.warning);
             this.form.warning.message = null;
         },

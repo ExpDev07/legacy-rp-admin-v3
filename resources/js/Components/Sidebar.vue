@@ -48,7 +48,7 @@ export default {
         }
     },
     methods: {
-        isUrl: function (url) {
+        isUrl (url) {
             if (this.url === url) return true;
             if (this.url.substring(1) === '' || url.substring(1) === '') return false;
             return this.url.startsWith(url);

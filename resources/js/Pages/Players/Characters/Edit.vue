@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="prose mb-12">
+        <div class="prose max-w-5xl mb-12">
             <h1>
-                {{ character.name }}
+                {{ character.name }} ({{ character.gender }}) ({{ new Date(character.dateOfBirth).toLocaleDateString() }}) ({{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(character.money) }})
             </h1>
         </div>
 
@@ -46,31 +46,31 @@
 
         <!-- Job -->
         <div class="rounded bg-gray-100 p-8 mb-8">
-            <div class="flex items-center justify-between mx-3">
+            <div class="flex items-center justify-between space-x-6 mx-3">
                 <h2 class="text-2xl font-semibold mr-12">
                     Job
                 </h2>
-                <div class="flex-1 flex items-center justify-center space-x-6">
+                <div class="flex-1 flex items-center justify-center space-x-4">
                     <h3 class="text-xl">
-                        <span>Name:</span> {{ character.jobName }}
+                        <span class="font-semibold">Name:</span> {{ character.jobName || 'none' }}
                     </h3>
-                    <button class="bg-indigo-600 inline-block font-semibold text-white text-center rounded px-4 py-1" type="button">
+                    <button @click.prevent="resetJobName" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
                         Reset
                     </button>
                 </div>
                 <div class="flex-1 flex items-center justify-center space-x-6">
                     <h3 class="text-xl">
-                        <span>Department:</span> {{ character.jobDepartment }}
+                        <span class="font-semibold">Department:</span> {{ character.jobDepartment || 'none' }}
                     </h3>
-                    <button class="bg-indigo-600 inline-block font-semibold text-white text-center rounded px-4 py-1" type="button">
+                    <button @click.prevent="resetJobDepartment" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
                         Reset
                     </button>
                 </div>
                 <div class="flex-1 flex items-center justify-center space-x-6">
                     <h3 class="text-xl">
-                        <span>Position:</span> {{ character.jobPosition }}
+                        <span class="font-semibold">Position:</span> {{ character.jobPosition || 'none' }}
                     </h3>
-                    <button class="bg-indigo-600 inline-block font-semibold text-white text-center rounded px-4 py-1" type="button">
+                    <button @click.prevent="resetJobPosition" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
                         Reset
                     </button>
                 </div>
@@ -121,13 +121,31 @@ export default {
                 first_name: this.character.firstName,
                 last_name: this.character.lastName,
                 backstory: this.character.backstory,
+                job_name: this.character.jobName,
+                job_department: this.character.jobDepartment,
+                job_position: this.character.jobPosition,
             },
         };
     },
     methods: {
-        submit: function () {
+        submit() {
             this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id, this.form)
         },
+        resetJobName() {
+            this.form.job_name = null;
+            this.form.job_department = null;
+            this.form.job_position = null;
+            this.submit();
+        },
+        resetJobDepartment() {
+            this.form.job_department = null;
+            this.form.job_position = null;
+            this.submit();
+        },
+        resetJobPosition() {
+            this.form.job_position = null;
+            this.submit();
+        }
     },
 };
 </script>

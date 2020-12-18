@@ -18,9 +18,9 @@ class CharacterUpdateRequest extends FormRequest
             'first_name' => ['string'],
             'last_name' => ['string'],
             'backstory' => ['string'],
-            'job_name' => ['string'],
-            'job_department' => ['string'],
-            'job_position' => ['string'],
+            'job_name' => ['nullable', 'string'],
+            'job_department' => ['nullable', 'string'],
+            'job_position' => ['nullable', 'string'],
         ];
     }
 
