@@ -81,10 +81,10 @@
             <h2 class="text-2xl font-semibold mx-3 mb-3">
                 Characters
             </h2>
-            <div class="grid grid-cols-3">
-                <div class="flex flex-col bg-gray-200 shadow rounded p-5 m-3" v-for="character in characters" v-bind:key="character.id">
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+                <div class="flex flex-col bg-gray-200 shadow rounded p-8 m-3" v-for="character in characters" v-bind:key="character.id">
                     <div class="flex-grow">
-                        <div class="text-center border-b-2 border-gray-400 mb-5 pb-4">
+                        <div class="text-center border-b-2 border-gray-400 mb-8 pb-8">
                             <h1 class="text-xl font-semibold mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h1>
