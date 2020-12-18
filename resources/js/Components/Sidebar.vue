@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-indigo-600 text-white font-semibold w-56 overflow-y-auto px-3 py-10">
+    <div class="bg-indigo-900 text-white font-semibold w-56 overflow-y-auto px-3 py-10">
         <!-- General stuff -->
         <nav>
             <ul>
