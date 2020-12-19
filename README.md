@@ -16,11 +16,18 @@
 <strong>100% FREE + OPEN SOURCE.</strong>
 
 > A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/) and
-> [Bootstrap 4](https://getbootstrap.com/?) for the frontend.
+> [Tailwindcss](https://tailwindcss.com) for the frontend.
 
 See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
 **Urgent? Write to me on Discord: Marius Big Ounce#2997.**
+
+## Features
+* See and search server logs.
+* See and search players.
+* Warn and ban players.
+* See and edit characters.
+* *... open issue to request a feature.*
 
 ## Improvements from v1
 1. Re-done to give a more minimalistic and "simple" look.
