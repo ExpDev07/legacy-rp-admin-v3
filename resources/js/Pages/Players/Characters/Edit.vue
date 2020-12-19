@@ -1,9 +1,22 @@
 <template>
     <div>
-        <div class="prose max-w-5xl mb-12">
-            <h1>
-                {{ character.name }} ({{ character.gender }}) ({{ new Date(character.dateOfBirth).toLocaleDateString() }}) ({{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(character.money) }})
-            </h1>
+        <div class="prose max-w-full mb-12">
+            <div class="flex items-start space-x-10">
+                <h1>
+                    {{ character.name }}
+                </h1>
+                <div class="flex items-center space-x-5">
+                    <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
+                        <span class="font-semibold">{{ character.gender }}</span>
+                    </div>
+                    <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
+                        Born on <span class="font-semibold">{{ new Date(character.dateOfBirth).toLocaleDateString() }}</span>
+                    </div>
+                    <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
+                        <span class="font-semibold">{{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(character.money) }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Editing -->

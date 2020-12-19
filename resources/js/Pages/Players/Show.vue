@@ -1,13 +1,15 @@
 <template>
     <div>
         <div class="flex flex-grow items-start justify-between mb-12">
-            <div class="prose">
+            <div class="prose max-w-full">
                 <div class="flex items-start space-x-10">
                     <h1>
                         {{ player.playerName }}
                     </h1>
-                    <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
-                        <span class="font-semibold">{{ player.playTime }}</span> minutes played
+                    <div class="flex items-center space-x-5">
+                        <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
+                            <span class="font-semibold">{{ player.playTime }}</span> minutes played
+                        </div>
                     </div>
                 </div>
                 <p>
