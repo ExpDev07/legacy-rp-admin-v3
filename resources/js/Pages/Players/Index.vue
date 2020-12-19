@@ -22,6 +22,7 @@
                 <tr class="text-left font-semibold">
                     <th class="px-6 py-4">Identifier</th>
                     <th class="px-6 py-4">Name</th>
+                    <th class="px-6 py-4">Playtime</th>
                     <th class="px-6 py-4">Warnings</th>
                     <th class="px-6 py-4 w-64">Banned?</th>
                     <th class="px-6 py-4 w-24"></th>
@@ -29,6 +30,7 @@
                 <tr class="hover:bg-gray-100" v-for="player in players.data" v-bind:key="player.id">
                     <td class="px-6 py-3 border-t">{{ player.steamIdentifier }}</td>
                     <td class="px-6 py-3 border-t">{{ player.playerName }}</td>
+                    <td class="px-6 py-3 border-t">{{ player.playTime }} minutes</td>
                     <td class="px-6 py-3 border-t">{{ player.warnings }}</td>
                     <td class="px-6 py-3 border-t text-center">
                         <span class="block bg-red-500 text-white rounded px-4 py-2" v-if="player.isBanned">
