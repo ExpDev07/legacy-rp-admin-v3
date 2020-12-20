@@ -47,8 +47,8 @@ class Character extends Model
         'bank',
         'stocks_balance',
         'job_name',
-        'job_department',
-        'job_position',
+        'department_name',
+        'position_name',
     ];
 
     /**
