@@ -22,8 +22,9 @@ class CreateCharactersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('date_of_birth');
-            $table->integer('cash');
-            $table->integer('bank');
+            $table->integer('cash')->default(0);
+            $table->integer('bank')->default(0);
+            $table->double('stocks_balance')->default(0);
             $table->string('job_name')->nullable();
             $table->string('job_department')->nullable();
             $table->string('job_position')->nullable();
