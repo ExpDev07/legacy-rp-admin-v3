@@ -29,8 +29,8 @@ class CharacterResource extends JsonResource
             'money'          => $this->money,
             'stocksBalance'  => $this->stocks_balance,
             'jobName'        => $this->job_name,
-            'jobDepartment'  => $this->job_department,
-            'jobPosition'    => $this->job_position,
+            'departmentName' => $this->department_name,
+            'positionName'   => $this->position_name,
             'backstory'      => $this->backstory,
             'vehicles'       => VehicleResource::collection($this->vehicles),
         ];

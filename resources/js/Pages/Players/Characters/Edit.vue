@@ -68,7 +68,7 @@
                 </h2>
                 <div class="flex-1 flex items-center justify-center space-x-4">
                     <h3 class="text-xl">
-                        <span class="font-semibold">Name:</span> {{ character.jobName || 'none' }}
+                        <span class="font-semibold">Name:</span> {{ character.jobName || 'None' }}
                     </h3>
                     <button @click.prevent="resetJobName" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
                         Reset
@@ -76,17 +76,17 @@
                 </div>
                 <div class="flex-1 flex items-center justify-center space-x-6">
                     <h3 class="text-xl">
-                        <span class="font-semibold">Department:</span> {{ character.jobDepartment || 'none' }}
+                        <span class="font-semibold">Department:</span> {{ character.departmentName || 'None' }}
                     </h3>
-                    <button @click.prevent="resetJobDepartment" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
+                    <button @click.prevent="resetDepartmentName" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
                         Reset
                     </button>
                 </div>
                 <div class="flex-1 flex items-center justify-center space-x-6">
                     <h3 class="text-xl">
-                        <span class="font-semibold">Position:</span> {{ character.jobPosition || 'none' }}
+                        <span class="font-semibold">Position:</span> {{ character.positionName || 'None' }}
                     </h3>
-                    <button @click.prevent="resetJobPosition" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
+                    <button @click.prevent="resetPositionName" class="bg-indigo-600 font-semibold text-white text-center rounded px-6 py-1" type="button">
                         Reset
                     </button>
                 </div>
@@ -138,8 +138,8 @@ export default {
                 last_name: this.character.lastName,
                 backstory: this.character.backstory,
                 job_name: this.character.jobName,
-                job_department: this.character.jobDepartment,
-                job_position: this.character.jobPosition,
+                department_name: this.character.departmentName,
+                position_name: this.character.positionName,
             },
         };
     },
@@ -149,17 +149,17 @@ export default {
         },
         resetJobName() {
             this.form.job_name = null;
-            this.form.job_department = null;
-            this.form.job_position = null;
+            this.form.department_name = null;
+            this.form.position_name = null;
             this.submit();
         },
-        resetJobDepartment() {
-            this.form.job_department = null;
-            this.form.job_position = null;
+        resetDepartmentName() {
+            this.form.department_name = null;
+            this.form.position_name = null;
             this.submit();
         },
-        resetJobPosition() {
-            this.form.job_position = null;
+        resetPositionName() {
+            this.form.position_name = null;
             this.submit();
         }
     },
