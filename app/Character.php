@@ -45,6 +45,7 @@ class Character extends Model
         'backstory',
         'cash',
         'bank',
+        'stocks_balance',
         'job_name',
         'job_department',
         'job_position',
@@ -59,7 +60,8 @@ class Character extends Model
         'date_of_birth'  => 'date',
         'character_slot' => 'integer',
         'cash'           => 'integer',
-        'bank'           => 'integer'
+        'bank'           => 'integer',
+        'stocks_balance' => 'double',
     ];
 
     /**
