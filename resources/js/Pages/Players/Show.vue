@@ -7,6 +7,9 @@
                         {{ player.playerName }}
                     </h1>
                     <div class="flex items-center space-x-5">
+                        <div class="px-5 py-1 rounded bg-green-100 border-2 border-green-200" v-if="player.isStaff">
+                            <span class="font-semibold">Staff Member</span>
+                        </div>
                         <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
                             <span class="font-semibold">{{ player.playTime }}</span> minutes played
                         </div>
