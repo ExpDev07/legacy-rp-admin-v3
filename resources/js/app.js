@@ -1,8 +1,10 @@
 import { InertiaApp } from '@inertiajs/inertia-vue'
 import Vue from 'vue'
+import VMdDateRangePicker from 'v-md-date-range-picker';
 
 // Use inertia plugin.
 Vue.use(InertiaApp);
+Vue.use(VMdDateRangePicker);
 
 // App element.
 const app = document.getElementById('app');

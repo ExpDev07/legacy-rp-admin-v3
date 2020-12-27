@@ -51,23 +51,38 @@
             </div>
             <!-- Issuing -->
             <div class="rounded bg-gray-100 p-8 mb-10" v-if="creatingBan">
-                <h2 class="text-2xl font-semibold mb-4">
-                    Issuing ban
-                </h2>
-                <p class="mb-6">
-                    You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
-                </p>
-                <form @submit.prevent="submitBan">
-                    <label for="reason"></label>
-                    <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
+                <div class="space-y-5 mb-8">
+                    <h2 class="text-2xl font-semibold">
+                        Issuing ban
+                    </h2>
+                    <p>
+                        You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
+                    </p>
+                </div>
+                <form class="space-y-6" @submit.prevent="submitBan">
+                    <div>
+                        <label class="font-semibold italic" for="duration">
+                           Duration
+                        </label>
+                        <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="duration" name="duration" v-model="form.ban.duration">
+                    </div>
 
-                    <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5 mr-1" type="submit">
-                        <i class="fas fa-gavel mr-1"></i>
-                        Ban player
-                    </button>
-                    <button class="rounded hover:bg-gray-200 py-2 px-5" type="button" @click="creatingBan = false">
-                        Cancel
-                    </button>
+                    <div>
+                        <label class="font-semibold italic" for="reason">
+                            Reason
+                        </label>
+                        <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" type="submit">
+                            <i class="fas fa-gavel mr-1"></i>
+                            Ban player
+                        </button>
+                        <button class="rounded hover:bg-gray-200 py-2 px-5" type="button" @click="creatingBan = false">
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -183,10 +198,11 @@ export default {
             form: {
                 ban: {
                     reason: null,
+                    duration: null,
                 },
                 warning: {
                     message: null,
-                }
+                },
             },
         };
     },

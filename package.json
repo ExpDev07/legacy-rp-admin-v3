@@ -31,6 +31,7 @@
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+        "v-md-date-range-picker": "^2.6.0",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
     }
