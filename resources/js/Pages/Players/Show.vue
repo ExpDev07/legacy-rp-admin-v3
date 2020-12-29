@@ -55,23 +55,23 @@
                     <h2 class="text-2xl font-semibold">
                         Issuing ban
                     </h2>
-                    <p>
+                    <p class="text-gray-900">
                         You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
                     </p>
                 </div>
                 <form class="space-y-6" @submit.prevent="submitBan">
                     <div>
-                        <label class="font-semibold italic" for="duration">
-                           Duration
+                        <label class="font-semibold italic" for="expiration">
+                            Expiration
                         </label>
-                        <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="duration" name="duration" v-model="form.ban.duration">
+                        <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="expiration" name="expiration" v-model="form.ban.expiration">
                     </div>
 
                     <div>
                         <label class="font-semibold italic" for="reason">
                             Reason
                         </label>
-                        <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
+                        <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
                     </div>
 
                     <div class="flex items-center space-x-3">
@@ -89,12 +89,12 @@
 
         <!-- Useful links -->
         <div class="rounded bg-gray-100 p-8 mb-8">
-            <div class="flex flex-wrap items-center">
-                <inertia-link class="flex-1 m-2 bg-indigo-600 text-white text-center rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
+            <div class="flex flex-wrap items-center text-center">
+                <inertia-link class="flex-1 m-2 bg-indigo-600 font-semibold text-white rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                     <i class="fas fa-toilet-paper mr-1"></i>
                     Check player's logs
                 </inertia-link>
-                <a class="flex-1 m-2 bg-gray-800 text-white text-center rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
+                <a class="flex-1 m-2 bg-gray-800 font-semibold text-white rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
                     <i class="fab fa-steam mr-1"></i>
                     Open Steam profile
                 </a>
@@ -198,7 +198,7 @@ export default {
             form: {
                 ban: {
                     reason: null,
-                    duration: null,
+                    expiration: new Date().toISOString().split('.')[0],
                 },
                 warning: {
                     message: null,
