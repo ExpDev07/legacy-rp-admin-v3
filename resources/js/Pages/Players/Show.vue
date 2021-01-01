@@ -26,7 +26,7 @@
                     Unban
                 </inertia-link>
                 <!-- Banning -->
-                <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" @click="creatingBan = true" v-else>
+                <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" @click="isBanning = true" v-else>
                     <i class="fas fa-gavel mr-1"></i>
                     Issue ban
                 </button>
@@ -50,7 +50,7 @@
                 </p>
             </div>
             <!-- Issuing -->
-            <div class="rounded bg-gray-100 p-8 mb-10" v-if="creatingBan">
+            <div class="rounded bg-gray-100 p-8 mb-10" v-if="isBanning">
                 <div class="space-y-5 mb-8">
                     <h2 class="text-2xl font-semibold">
                         Issuing ban
@@ -60,13 +60,26 @@
                     </p>
                 </div>
                 <form class="space-y-6" @submit.prevent="submitBan">
-                    <div>
-                        <label class="font-semibold italic" for="expiration">
-                            Expiration
-                        </label>
-                        <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="expiration" name="expiration" v-model="form.ban.expiration">
+                    <!-- Temporarily banning (only available on Chrome) -->
+                    <div class="space-y-6" v-if="$isChrome">
+                        <!-- Deciding if ban is temporary -->
+                        <div class="flex items-center space-x-3">
+                            <input class="block shadow rounded bg-gray-200 p-3" type="checkbox" id="tempban" name="tempban" v-model="isTempBanning">
+                            <label class="font-semibold italic" for="tempban">
+                                This is a temporary ban
+                            </label>
+                        </div>
+
+                        <!-- Expiration -->
+                        <div v-if="isTempBanning">
+                            <label class="font-semibold italic" for="expiration">
+                                Expiration
+                            </label>
+                            <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="expiration" name="expiration" step="any" :min="now" v-model="form.ban.expiration" required>
+                        </div>
                     </div>
 
+                    <!-- Reason -->
                     <div>
                         <label class="font-semibold italic" for="reason">
                             Reason
@@ -74,6 +87,7 @@
                         <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
                     </div>
 
+                    <!-- Buttons -->
                     <div class="flex items-center space-x-3">
                         <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" type="submit">
                             <i class="fas fa-gavel mr-1"></i>
@@ -194,11 +208,13 @@ export default {
     },
     data() {
         return {
-            creatingBan: false,
+            now: new Date().toISOString().split('.')[0],
+            isBanning: false,
+            isTempBanning: false,
             form: {
                 ban: {
                     reason: null,
-                    expiration: new Date().toISOString().split('.')[0],
+                    expiration: null,
                 },
                 warning: {
                     message: null,
@@ -209,7 +225,7 @@ export default {
     methods: {
         async submitBan () {
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', this.form.ban);
-            this.creatingBan = false;
+            this.isBanning = false;
             this.form.ban.message = null;
         },
         async submitWarning () {

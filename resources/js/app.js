@@ -4,6 +4,9 @@ import Vue from 'vue'
 // Use inertia plugin.
 Vue.use(InertiaApp);
 
+// Global properties.
+Vue.prototype.$isChrome = navigator.userAgent.indexOf('Chrome') > -1;
+
 // App element.
 const app = document.getElementById('app');
 
