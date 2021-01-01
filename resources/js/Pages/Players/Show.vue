@@ -60,7 +60,7 @@
                     </p>
                 </div>
                 <form class="space-y-6" @submit.prevent="submitBan">
-                    <!-- Temporarily banning (only available on Chrome) -->
+                    <!-- Temporarily banning (only available on Chromium) -->
                     <div class="space-y-6" v-if="$isChrome">
                         <!-- Deciding if ban is temporary -->
                         <div class="flex items-center space-x-3">
@@ -72,10 +72,10 @@
 
                         <!-- Expiration -->
                         <div v-if="isTempBanning">
-                            <label class="font-semibold italic" for="expiration">
+                            <label class="font-semibold italic" for="expire">
                                 Expiration
                             </label>
-                            <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="expiration" name="expiration" step="any" :min="now" v-model="form.ban.expiration" required>
+                            <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="expire" name="expire" step="any" :min="now" v-model="form.ban.expire" required>
                         </div>
                     </div>
 
@@ -214,7 +214,7 @@ export default {
             form: {
                 ban: {
                     reason: null,
-                    expiration: null,
+                    expire: null,
                 },
                 warning: {
                     message: null,

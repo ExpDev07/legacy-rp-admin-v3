@@ -20,7 +20,8 @@ class PlayerBanController extends Controller
      */
     public function store(Player $player, BanStoreRequest $request): RedirectResponse
     {
-        // Create a unique hash to go with this player's batch of bans.
+        // Create a unique hash to go with this player's batch of bans
+        $user = $request->user();
         $hash = Str::uuid()->toString();
 
         // Get identifiers to ban.
@@ -39,10 +40,14 @@ class PlayerBanController extends Controller
                 continue;
             }
 
-            $player->bans()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
+            // Create ban.
+            $ban = array_merge([
                 'ban_hash' => $hash,
-                'creator_name' => $request->user()->player->player_name,
-            ]));
+                'creator_name' => $user->player->player_name,
+            ], $request->validated());
+
+            // Save ban.
+            $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban);
         }
 
         return back()->with('success', 'The player has successfully been banned.');

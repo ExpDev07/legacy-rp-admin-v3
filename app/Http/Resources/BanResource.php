@@ -20,6 +20,7 @@ class BanResource extends JsonResource
             'id' => $this->id,
             'banHash' => $this->ban_hash,
             'reason' => $this->reason,
+            'expire' => $this->expire,
             'timestamp' => $this->timestamp,
             'issuer' => $this->issuer->player_name ?? null,
         ];

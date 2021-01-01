@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Ban;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Date;
 
 class BanFactory extends Factory
@@ -24,10 +25,10 @@ class BanFactory extends Factory
     public function definition(): array
     {
         return [
-            'ban_hash' => $this->faker->uuid,
-            'reason' => $this->faker->sentence,
+            'ban_hash'  => $this->faker->uuid,
+            'reason'    => $this->faker->sentence,
+            'expire'    => Arr::random([null, Date::createFromTimestampMs(0)->addWeek() ]),
             'timestamp' => Date::now(),
-            'expire' => Date::now()->addMonth(),
         ];
     }
 
