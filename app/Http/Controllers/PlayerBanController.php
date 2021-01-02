@@ -60,7 +60,7 @@ class PlayerBanController extends Controller
         // Automatically log the ban as a warning.
         $player->warnings()->create([
             'issuer_id' => $user->player->user_id,
-            'message'   => 'I banned this person with the reason: ' . $request->input('reason') . '. This warning was created automatically as a result of banning someone.',
+            'message'   => 'I banned this person with the reason: ' . $request->input('reason') . '. This warning was generated automatically as a result of banning someone.',
         ]);
 
         return back()->with('success', 'The player has successfully been banned.');

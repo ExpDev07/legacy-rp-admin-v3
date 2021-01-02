@@ -155,21 +155,19 @@
             </h2>
             <div class="mb-8">
                 <div class="flex-grow bg-gray-200 rounded p-5 mb-5" v-for="warning in warnings" v-bind:key="warning.id">
-                    <div class="flex items-center justify-between border-b-2 border-gray-900 mb-5 pb-5">
+                    <div class="flex items-center justify-between border-b-2 border-gray-400 mb-5 pb-5">
                         <h1 class="text-lg font-semibold">
                             {{ warning.issuer.playerName }}
                         </h1>
                         <div class="flex items-center">
-                            <p>
-                                <span class="font-semibold">added @</span> {{ new Date(warning.createdAt).toLocaleString() }}
-                            </p>
+                            <span class="font-semibold">added @</span> {{ new Date(warning.createdAt).toLocaleString() }}
                             <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-4 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                 <i class="fas fa-trash mr-1"></i>
                                 Remove
                             </inertia-link>
                         </div>
                     </div>
-                    <p>
+                    <p class="text-gray-900">
                         {{ warning.message }}
                     </p>
                 </div>
