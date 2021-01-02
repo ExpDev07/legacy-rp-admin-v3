@@ -44,7 +44,9 @@ class PlayerBanController extends Controller
         // Go through the player's identifiers and create a ban record for each of them.
         Collection::make($identifiers)
             ->filter()
-            ->each(fn ($identifier) => $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban));
+            ->each(function ($identifier) use ($player, $ban) {
+                $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban);
+            });
 
         // Automatically log the ban as a warning.
         $player->warnings()->create([
