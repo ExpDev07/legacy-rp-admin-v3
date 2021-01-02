@@ -141,7 +141,12 @@ class Player extends Model
      */
     public function isBanned(): bool
     {
-        return !is_null($this->bans()->first());
+        $active = $this
+            ->bans()
+            ->get()
+            ->map(fn (Ban $ban) => !$ban->hasExpired());
+
+        return $active->isNotEmpty();
     }
 
     /**
