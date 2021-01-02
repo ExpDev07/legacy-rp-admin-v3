@@ -17,12 +17,6 @@ class PlayerResource extends JsonResource
      */
     public function toArray($request): array
     {
-        // Get active ban.
-        $activeBan = $this
-            ->bans()
-            ->get()
-            ->filter(fn (Ban $ban) => !$ban->hasExpired())->first();
-
         return [
             'id'              => $this->user_id,
             'steamIdentifier' => $this->steam_identifier,
