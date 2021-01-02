@@ -79,6 +79,18 @@ class Ban extends Model
     }
 
     /**
+     * Checks if the ban has expired.
+     *
+     * @return bool
+     */
+    public function hasExpired(): bool
+    {
+        return is_null($this->expireAt)
+            ? false
+            : $this->expireAt->isPast();
+    }
+
+    /**
      * Gets the player relationship.
      *
      * @return BelongsTo
