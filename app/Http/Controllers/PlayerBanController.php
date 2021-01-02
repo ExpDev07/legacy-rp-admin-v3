@@ -6,6 +6,7 @@ use App\Ban;
 use App\Http\Requests\BanStoreRequest;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 
 class PlayerBanController extends Controller
@@ -18,11 +19,14 @@ class PlayerBanController extends Controller
      * @param BanStoreRequest $request
      * @return RedirectResponse
      */
-    public function store(Player $player, BanStoreRequest $request): RedirectResponse
+    public function store(Player $player, BanStoreRequest $request)
     {
         // Create a unique hash to go with this player's batch of bans
         $user = $request->user();
         $hash = Str::uuid()->toString();
+
+        // Validate request.
+        $validated = $request->validated();
 
         // Get identifiers to ban.
         $identifiers = [
@@ -40,11 +44,14 @@ class PlayerBanController extends Controller
                 continue;
             }
 
+            // Calculate expiration.
+            $expire = null;
+
             // Create ban.
             $ban = array_merge([
-                'ban_hash' => $hash,
+                'ban_hash'     => $hash,
                 'creator_name' => $user->player->player_name,
-            ], $request->validated());
+            ], $validated);
 
             // Save ban.
             $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban);

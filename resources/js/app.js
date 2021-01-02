@@ -1,11 +1,12 @@
-import { InertiaApp } from '@inertiajs/inertia-vue'
-import Vue from 'vue'
+import { InertiaApp } from '@inertiajs/inertia-vue';
+import Vue from 'vue';
+import moment from 'moment';
 
 // Use inertia plugin.
 Vue.use(InertiaApp);
 
-// Global properties.
-Vue.prototype.$isChrome = navigator.userAgent.indexOf('Chrome') > -1;
+// Global properties / methods.
+Vue.prototype.$moment = moment;
 
 // App element.
 const app = document.getElementById('app');

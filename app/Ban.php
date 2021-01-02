@@ -61,7 +61,6 @@ class Ban extends Model
      */
     protected $casts = [
         'timestamp' => 'datetime',
-        'expire'    => 'datetime',
     ];
 
     /**

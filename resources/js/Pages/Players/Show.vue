@@ -60,22 +60,22 @@
                     </p>
                 </div>
                 <form class="space-y-6" @submit.prevent="submitBan">
-                    <!-- Temporarily banning (only available on Chromium) -->
-                    <div class="space-y-6" v-if="$isChrome">
-                        <!-- Deciding if ban is temporary -->
-                        <div class="flex items-center space-x-3">
-                            <input class="block shadow rounded bg-gray-200 p-3" type="checkbox" id="tempban" name="tempban" v-model="isTempBanning">
-                            <label class="font-semibold italic" for="tempban">
-                                This is a temporary ban
-                            </label>
-                        </div>
+                    <!-- Deciding if ban is temporary -->
+                    <div class="flex items-center space-x-3">
+                        <input class="block shadow rounded bg-gray-200 p-3" type="checkbox" id="tempban" name="tempban" v-model="isTempBanning">
+                        <label class="font-semibold italic" for="tempban">
+                            This is a temporary ban
+                        </label>
+                    </div>
 
-                        <!-- Expiration -->
-                        <div v-if="isTempBanning">
-                            <label class="font-semibold italic" for="expire">
-                                Expiration
-                            </label>
-                            <input class="block shadow rounded bg-gray-200 p-3" type="datetime-local" id="expire" name="expire" step="any" :min="now" v-model="form.ban.expire" required>
+                    <!-- Expiration -->
+                    <div v-if="isTempBanning">
+                        <label class="font-semibold italic">
+                            Expiration
+                        </label>
+                        <div class="flex items-center">
+                            <input class="block shadow rounded bg-gray-200 p-3" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
+                            <input class="block shadow rounded bg-gray-200 p-3" type="time" id="expireTime" name="expireTime" step="any" :min="$moment().format('HH:mm')" v-model="form.ban.expireTime" required>
                         </div>
                     </div>
 
@@ -208,13 +208,14 @@ export default {
     },
     data() {
         return {
-            now: new Date().toISOString().split('.')[0],
             isBanning: false,
             isTempBanning: false,
             form: {
                 ban: {
                     reason: null,
                     expire: null,
+                    expireDate: null,
+                    expireTime: null,
                 },
                 warning: {
                     message: null,
@@ -224,12 +225,26 @@ export default {
     },
     methods: {
         async submitBan () {
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', this.form.ban);
+            // Calculate expire relative to now in seconds.
+            const nowUnix    = this.$moment().unix();
+            const expireUnix = this.$moment(this.form.ban.expireDate + ' ' + this.form.ban.expireTime).unix();
+            const expire     = expireUnix - nowUnix;
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', { ...this.form.ban, expire });
+
+            // Reset.
             this.isBanning = false;
-            this.form.ban.message = null;
+            this.form.ban.reason = null;
+            this.form.ban.expire = null;
+            this.form.ban.expireDate = null;
+            this.form.ban.expireTime = null;
         },
         async submitWarning () {
+            // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/warnings', this.form.warning);
+
+            // Reset.
             this.form.warning.message = null;
         },
     },
