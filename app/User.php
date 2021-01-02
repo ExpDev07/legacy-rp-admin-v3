@@ -48,7 +48,7 @@ class User extends Authenticatable
      *
      * @return string
      */
-    protected function getSteamIdentifierAttribute() : string
+    protected function getSteamIdentifierAttribute(): string
     {
         return 'steam:' . dechex($this->account_id);
     }
@@ -58,7 +58,7 @@ class User extends Authenticatable
      *
      * @return bool
      */
-    public function isStaff() : bool
+    public function isStaff(): bool
     {
         return !is_null($this->player) && $this->player->isStaff();
     }
@@ -68,7 +68,7 @@ class User extends Authenticatable
      *
      * @return HasOne
      */
-    public function player() : HasOne
+    public function player(): HasOne
     {
         return $this->hasOne(Player::class, 'steam_identifier', 'steam_identifier');
     }

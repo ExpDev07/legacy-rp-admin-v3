@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Date;
 
 class BanResource extends JsonResource
 {
@@ -17,12 +18,13 @@ class BanResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->id,
-            'banHash' => $this->ban_hash,
-            'reason' => $this->reason,
-            'expire' => $this->expire,
+            'id'        => $this->id,
+            'banHash'   => $this->ban_hash,
+            'reason'    => $this->reason,
+            'expire'    => $this->expire,
+            'expireAt'  => $this->expireAt,
             'timestamp' => $this->timestamp,
-            'issuer' => $this->issuer->player_name ?? null,
+            'issuer'    => $this->issuer->player_name ?? null,
         ];
     }
 

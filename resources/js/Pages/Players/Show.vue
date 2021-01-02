@@ -39,7 +39,7 @@
             <div class="rounded bg-red-500 text-white p-4 mb-10" v-if="player.isBanned">
                 <div class="flex items-center justify-between mb-2">
                     <h2 class="text-lg font-semibold">
-                        Banned by {{ player.ban.issuer }}
+                        Banned by {{ player.ban.issuer }} <span v-if="player.ban.expire">until {{ player.ban.expireAt }}</span>
                     </h2>
                     <p>
                         {{ new Date(player.ban.timestamp).toLocaleString() }}

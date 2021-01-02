@@ -86,7 +86,7 @@ class Player extends Model
      *
      * @return string
      */
-    public function getSteamProfileUrl() : string
+    public function getSteamProfileUrl(): string
     {
         return self::STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
     }
@@ -97,7 +97,7 @@ class Player extends Model
      *
      * @return array
      */
-    public function getIdentifiers() : array
+    public function getIdentifiers(): array
     {
         $identifier = $this->identifier;
         $identifiers = $this->identifiers;
@@ -129,7 +129,7 @@ class Player extends Model
      *
      * @return bool
      */
-    public function isStaff() : bool
+    public function isStaff(): bool
     {
         return $this->is_staff || $this->is_super_admin;
     }
@@ -139,7 +139,7 @@ class Player extends Model
      *
      * @return bool
      */
-    public function isBanned() : bool
+    public function isBanned(): bool
     {
         return !is_null($this->bans()->first());
     }
@@ -149,7 +149,7 @@ class Player extends Model
      *
      * @return SteamID|null
      */
-    public function getSteamID() : ?SteamID
+    public function getSteamID(): ?SteamID
     {
         return get_steam_id($this->steam_identifier);
     }
@@ -159,7 +159,7 @@ class Player extends Model
      *
      * @return HasMany
      */
-    public function characters() : HasMany
+    public function characters(): HasMany
     {
         return $this->hasMany(Character::class, 'steam_identifier', 'steam_identifier');
     }
@@ -169,7 +169,7 @@ class Player extends Model
      *
      * @return HasMany
      */
-    public function logs() : HasMany
+    public function logs(): HasMany
     {
         return $this->hasMany(Log::class, 'identifier', 'steam_identifier');
     }
@@ -179,7 +179,7 @@ class Player extends Model
      *
      * @return HasMany
      */
-    public function warnings() : HasMany
+    public function warnings(): HasMany
     {
         return $this->hasMany(Warning::class, 'player_id', 'user_id');
     }
@@ -189,7 +189,7 @@ class Player extends Model
      *
      * @return Builder
      */
-    public function bans() : Builder
+    public function bans(): Builder
     {
         return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
@@ -202,7 +202,7 @@ class Player extends Model
  * @param string $identifier
  * @return SteamID|null
  */
-function get_steam_id(string $identifier) : ?SteamID
+function get_steam_id(string $identifier): ?SteamID
 {
     try {
         // Get rid of any prefix.
