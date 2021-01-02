@@ -27,7 +27,7 @@ class BanFactory extends Factory
         return [
             'ban_hash'  => $this->faker->uuid,
             'reason'    => $this->faker->sentence,
-            'expire'    => Arr::random([null, Date::createFromTimestampMs(0)->addWeek() ]),
+            'expire'    => Arr::random([null, Date::createFromTimestampMs(0)->addWeek()->getTimestamp() ]),
             'timestamp' => Date::now(),
         ];
     }
