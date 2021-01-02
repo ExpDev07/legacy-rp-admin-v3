@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Ban;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +17,12 @@ class PlayerResource extends JsonResource
      */
     public function toArray($request): array
     {
+        // Get active ban.
+        $activeBan = $this
+            ->bans()
+            ->get()
+            ->filter(fn (Ban $ban) => !$ban->hasExpired())->first();
+
         return [
             'id'              => $this->user_id,
             'steamIdentifier' => $this->steam_identifier,
@@ -26,7 +33,7 @@ class PlayerResource extends JsonResource
             'isStaff'         => $this->isStaff(),
             'isBanned'        => $this->isBanned(),
             'warnings'        => $this->warnings()->count(),
-            'ban'             => new BanResource($this->bans()->first()),
+            'ban'             => new BanResource($this->getActiveBan()),
         ];
     }
 
