@@ -144,7 +144,7 @@ class Player extends Model
         $active = $this
             ->bans()
             ->get()
-            ->map(fn (Ban $ban) => !$ban->hasExpired());
+            ->filter(fn (Ban $ban) => !$ban->hasExpired());
 
         return $active->isNotEmpty();
     }
