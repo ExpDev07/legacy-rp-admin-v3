@@ -154,7 +154,7 @@ class Player extends Model
         return $this
             ->bans()
             ->get()
-            ->filter(function (Ban $ban) { return !$ban->hasExpired(); })
+            ->filter(fn (Ban $ban) => !$ban->hasExpired())
             ->first();
     }
 
