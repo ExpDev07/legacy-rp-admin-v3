@@ -6,7 +6,7 @@ use App\Ban;
 use App\Http\Requests\BanStoreRequest;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PlayerBanController extends Controller
@@ -25,8 +25,11 @@ class PlayerBanController extends Controller
         $user = $request->user();
         $hash = Str::uuid()->toString();
 
-        // Validate request.
-        $validated = $request->validated();
+        // Create ban.
+        $ban = array_merge([
+            'ban_hash'     => $hash,
+            'creator_name' => $user->player->player_name,
+        ], $request->validated());
 
         // Get identifiers to ban.
         $identifiers = [
@@ -39,23 +42,9 @@ class PlayerBanController extends Controller
         ];
 
         // Go through the player's identifiers and create a ban record for each of them.
-        foreach ($identifiers as $identifier) {
-            if ($identifier === null) {
-                continue;
-            }
-
-            // Calculate expiration.
-            $expire = null;
-
-            // Create ban.
-            $ban = array_merge([
-                'ban_hash'     => $hash,
-                'creator_name' => $user->player->player_name,
-            ], $validated);
-
-            // Save ban.
-            $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban);
-        }
+        Collection::make($identifiers)
+            ->filter()
+            ->each(fn ($identifier) => $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban));
 
         // Automatically log the ban as a warning.
         $player->warnings()->create([
