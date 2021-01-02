@@ -72,7 +72,7 @@ class Ban extends Model
      */
     public function getExpireAtAttribute(): ?Carbon
     {
-        if (! is_null($this->expire)) {
+        if (is_null($this->expire)) {
             return null;
         }
         return Date::createFromTimestamp($this->timestamp->getTimestamp() + $this->expire);

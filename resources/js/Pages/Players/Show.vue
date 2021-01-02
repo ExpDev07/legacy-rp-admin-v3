@@ -7,6 +7,9 @@
                         {{ player.playerName }}
                     </h1>
                     <div class="flex items-center space-x-5">
+                        <div class="px-5 py-1 rounded bg-red-100 border-2 border-red-200" v-if="player.isBanned">
+                            <span class="font-semibold">Banned</span>
+                        </div>
                         <div class="px-5 py-1 rounded bg-green-100 border-2 border-green-200" v-if="player.isStaff">
                             <span class="font-semibold">Staff Member</span>
                         </div>
@@ -39,13 +42,13 @@
             <div class="rounded bg-red-500 text-white p-4 mb-10" v-if="player.isBanned">
                 <div class="flex items-center justify-between mb-2">
                     <h2 class="text-lg font-semibold">
-                        Banned by {{ player.ban.issuer }} <span v-if="player.ban.expire">until {{ player.ban.expireAt }}</span>
+                        Banned by <span class="italic">{{ player.ban.issuer }}</span> <span class="italic" v-if="player.ban.expire">until {{ new Date(player.ban.expireAt).toLocaleString() }}</span>
                     </h2>
-                    <p>
+                    <div class="font-semibold">
                         {{ new Date(player.ban.timestamp).toLocaleString() }}
-                    </p>
+                    </div>
                 </div>
-                <p>
+                <p class="text-gray-100">
                     {{ player.ban.reason }}
                 </p>
             </div>
