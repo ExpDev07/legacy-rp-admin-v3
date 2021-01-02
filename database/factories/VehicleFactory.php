@@ -25,8 +25,8 @@ class VehicleFactory extends Factory
     {
         return [
             'garage_name' => $this->faker->streetAddress,
-            'model_name' => $this->faker->firstName . ' ' . $this->faker->year,
-            'plate' => $this->generatePlateNumber(),
+            'model_name'  => $this->faker->firstName . ' ' . $this->faker->year,
+            'plate'       => $this->generatePlateNumber(),
         ];
     }
 

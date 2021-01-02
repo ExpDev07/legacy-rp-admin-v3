@@ -7,6 +7,9 @@
                         {{ player.playerName }}
                     </h1>
                     <div class="flex items-center space-x-5">
+                        <div class="px-5 py-1 rounded bg-red-100 border-2 border-red-200" v-if="player.isBanned">
+                            <span class="font-semibold">Banned</span>
+                        </div>
                         <div class="px-5 py-1 rounded bg-green-100 border-2 border-green-200" v-if="player.isStaff">
                             <span class="font-semibold">Staff Member</span>
                         </div>
@@ -26,7 +29,7 @@
                     Unban
                 </inertia-link>
                 <!-- Banning -->
-                <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" @click="creatingBan = true" v-else>
+                <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" @click="isBanning = true" v-else>
                     <i class="fas fa-gavel mr-1"></i>
                     Issue ban
                 </button>
@@ -39,47 +42,76 @@
             <div class="rounded bg-red-500 text-white p-4 mb-10" v-if="player.isBanned">
                 <div class="flex items-center justify-between mb-2">
                     <h2 class="text-lg font-semibold">
-                        Banned by {{ player.ban.issuer }}
+                        Banned by <span class="italic">{{ player.ban.issuer }}</span> <span class="italic" v-if="player.ban.expire">until {{ new Date(player.ban.expireAt).toLocaleString() }}</span>
                     </h2>
-                    <p>
+                    <div class="font-semibold">
                         {{ new Date(player.ban.timestamp).toLocaleString() }}
-                    </p>
+                    </div>
                 </div>
-                <p>
+                <p class="text-gray-100">
                     {{ player.ban.reason }}
                 </p>
             </div>
             <!-- Issuing -->
-            <div class="rounded bg-gray-100 p-8 mb-10" v-if="creatingBan">
-                <h2 class="text-2xl font-semibold mb-4">
-                    Issuing ban
-                </h2>
-                <p class="mb-6">
-                    You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
-                </p>
-                <form @submit.prevent="submitBan">
-                    <label for="reason"></label>
-                    <textarea class="w-full shadow rounded bg-gray-200 p-5 mb-5" id="reason" name="reason" rows="5" v-bind:placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
+            <div class="rounded bg-gray-100 p-8 mb-10" v-if="isBanning">
+                <div class="space-y-5 mb-8">
+                    <h2 class="text-2xl font-semibold">
+                        Issuing ban
+                    </h2>
+                    <p class="text-gray-900">
+                        You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
+                    </p>
+                </div>
+                <form class="space-y-6" @submit.prevent="submitBan">
+                    <!-- Deciding if ban is temporary -->
+                    <div class="flex items-center space-x-3">
+                        <input class="block shadow rounded bg-gray-200 p-3" type="checkbox" id="tempban" name="tempban" v-model="isTempBanning">
+                        <label class="font-semibold italic" for="tempban">
+                            This is a temporary ban
+                        </label>
+                    </div>
 
-                    <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5 mr-1" type="submit">
-                        <i class="fas fa-gavel mr-1"></i>
-                        Ban player
-                    </button>
-                    <button class="rounded hover:bg-gray-200 py-2 px-5" type="button" @click="creatingBan = false">
-                        Cancel
-                    </button>
+                    <!-- Expiration -->
+                    <div v-if="isTempBanning">
+                        <label class="font-semibold italic">
+                            Expiration
+                        </label>
+                        <div class="flex items-center">
+                            <input class="block shadow rounded bg-gray-200 p-3" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
+                            <input class="block shadow rounded bg-gray-200 p-3" type="time" id="expireTime" name="expireTime" step="any" :min="$moment().format('HH:mm')" v-model="form.ban.expireTime" required>
+                        </div>
+                    </div>
+
+                    <!-- Reason -->
+                    <div>
+                        <label class="font-semibold italic" for="reason">
+                            Reason
+                        </label>
+                        <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-3">
+                        <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" type="submit">
+                            <i class="fas fa-gavel mr-1"></i>
+                            Ban player
+                        </button>
+                        <button class="rounded hover:bg-gray-200 py-2 px-5" type="button" @click="creatingBan = false">
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
 
         <!-- Useful links -->
         <div class="rounded bg-gray-100 p-8 mb-8">
-            <div class="flex flex-wrap items-center">
-                <inertia-link class="flex-1 m-2 bg-indigo-600 text-white text-center rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
+            <div class="flex flex-wrap items-center text-center">
+                <inertia-link class="flex-1 m-2 bg-indigo-600 font-semibold text-white rounded block p-5" v-bind:href="'/logs?identifier=' + player.steamIdentifier">
                     <i class="fas fa-toilet-paper mr-1"></i>
                     Check player's logs
                 </inertia-link>
-                <a class="flex-1 m-2 bg-gray-800 text-white text-center rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
+                <a class="flex-1 m-2 bg-gray-800 font-semibold text-white rounded block p-5" target="_blank" v-bind:href="player.steamProfileUrl">
                     <i class="fab fa-steam mr-1"></i>
                     Open Steam profile
                 </a>
@@ -123,21 +155,19 @@
             </h2>
             <div class="mb-8">
                 <div class="flex-grow bg-gray-200 rounded p-5 mb-5" v-for="warning in warnings" v-bind:key="warning.id">
-                    <div class="flex items-center justify-between border-b-2 border-gray-900 mb-5 pb-5">
+                    <div class="flex items-center justify-between border-b-2 border-gray-400 mb-5 pb-5">
                         <h1 class="text-lg font-semibold">
                             {{ warning.issuer.playerName }}
                         </h1>
                         <div class="flex items-center">
-                            <p>
-                                <span class="font-semibold">added @</span> {{ new Date(warning.createdAt).toLocaleString() }}
-                            </p>
+                            <span class="font-semibold">added @</span> {{ new Date(warning.createdAt).toLocaleString() }}
                             <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-4 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                 <i class="fas fa-trash mr-1"></i>
                                 Remove
                             </inertia-link>
                         </div>
                     </div>
-                    <p>
+                    <p class="text-gray-900">
                         {{ warning.message }}
                     </p>
                 </div>
@@ -179,25 +209,43 @@ export default {
     },
     data() {
         return {
-            creatingBan: false,
+            isBanning: false,
+            isTempBanning: false,
             form: {
                 ban: {
                     reason: null,
+                    expire: null,
+                    expireDate: null,
+                    expireTime: null,
                 },
                 warning: {
                     message: null,
-                }
+                },
             },
         };
     },
     methods: {
         async submitBan () {
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', this.form.ban);
-            this.creatingBan = false;
-            this.form.ban.message = null;
+            // Calculate expire relative to now in seconds.
+            const nowUnix    = this.$moment().unix();
+            const expireUnix = this.$moment(this.form.ban.expireDate + ' ' + this.form.ban.expireTime).unix();
+            const expire     = expireUnix - nowUnix;
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', { ...this.form.ban, expire });
+
+            // Reset.
+            this.isBanning = false;
+            this.form.ban.reason = null;
+            this.form.ban.expire = null;
+            this.form.ban.expireDate = null;
+            this.form.ban.expireTime = null;
         },
         async submitWarning () {
+            // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/warnings', this.form.warning);
+
+            // Reset.
             this.form.warning.message = null;
         },
     },

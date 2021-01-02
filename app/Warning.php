@@ -28,7 +28,7 @@ class Warning extends Model
      *
      * @return BelongsTo
      */
-    public function player() : BelongsTo
+    public function player(): BelongsTo
     {
         return $this->belongsTo(Player::class, 'player_id', 'user_id');
     }
@@ -38,7 +38,7 @@ class Warning extends Model
      *
      * @return BelongsTo
      */
-    public function issuer() : BelongsTo
+    public function issuer(): BelongsTo
     {
         return $this->belongsTo(Player::class, 'issuer_id', 'user_id');
     }

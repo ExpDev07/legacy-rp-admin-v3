@@ -6,6 +6,7 @@ use App\Ban;
 use App\Http\Requests\BanStoreRequest;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PlayerBanController extends Controller
@@ -18,10 +19,17 @@ class PlayerBanController extends Controller
      * @param BanStoreRequest $request
      * @return RedirectResponse
      */
-    public function store(Player $player, BanStoreRequest $request): RedirectResponse
+    public function store(Player $player, BanStoreRequest $request)
     {
-        // Create a unique hash to go with this player's batch of bans.
+        // Create a unique hash to go with this player's batch of bans
+        $user = $request->user();
         $hash = Str::uuid()->toString();
+
+        // Create ban.
+        $ban = array_merge([
+            'ban_hash'     => $hash,
+            'creator_name' => $user->player->player_name,
+        ], $request->validated());
 
         // Get identifiers to ban.
         $identifiers = [
@@ -34,16 +42,15 @@ class PlayerBanController extends Controller
         ];
 
         // Go through the player's identifiers and create a ban record for each of them.
-        foreach ($identifiers as $identifier) {
-            if ($identifier === null) {
-                continue;
-            }
+        Collection::make($identifiers)
+            ->filter()
+            ->each(fn ($identifier) => $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban));
 
-            $player->bans()->updateOrCreate([ 'identifier' => $identifier ], array_merge($request->validated(), [
-                'ban_hash' => $hash,
-                'creator_name' => $request->user()->player->player_name,
-            ]));
-        }
+        // Automatically log the ban as a warning.
+        $player->warnings()->create([
+            'issuer_id' => $user->player->user_id,
+            'message'   => 'I banned this person with the reason: ' . $request->input('reason') . '. This warning was generated automatically as a result of banning someone.',
+        ]);
 
         return back()->with('success', 'The player has successfully been banned.');
     }

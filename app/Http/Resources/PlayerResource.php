@@ -17,16 +17,16 @@ class PlayerResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id' => $this->user_id,
+            'id'              => $this->user_id,
             'steamIdentifier' => $this->steam_identifier,
-            'playerName' => $this->player_name,
-            'playTime' => $this->playtime,
-            'lastConnection' => $this->last_connection,
+            'playerName'      => $this->player_name,
+            'playTime'        => $this->playtime,
+            'lastConnection'  => $this->last_connection,
             'steamProfileUrl' => $this->getSteamProfileUrl(),
-            'isStaff' => $this->isStaff(),
-            'isBanned' => $this->isBanned(),
-            'warnings' => $this->warnings()->count(),
-            'ban' => new BanResource($this->bans()->first()),
+            'isStaff'         => $this->isStaff(),
+            'isBanned'        => $this->isBanned(),
+            'warnings'        => $this->warnings()->count(),
+            'ban'             => new BanResource($this->bans()->first()),
         ];
     }
 

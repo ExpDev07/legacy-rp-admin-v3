@@ -22,10 +22,14 @@ See [#contributing](#Contributing) for more details on how you can help shape **
 
 **Urgent? Write to me on Discord: Marius Big Ounce#2997.**
 
+## Note
+
+It is recommended that you use Chrome or Edge as your web browser for the best experience.
+
 ## Features
 * See and search server logs.
 * See and search players.
-* Warn and ban players.
+* Warn and ban players, also temporarily.
 * See and edit characters.
 * *... open issue to request a feature.*
 

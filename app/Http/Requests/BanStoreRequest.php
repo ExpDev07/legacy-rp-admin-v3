@@ -16,6 +16,7 @@ class BanStoreRequest extends FormRequest
     {
         return [
             'reason' => ['required'],
+            'expire' => ['nullable', 'integer']
         ];
     }
 
