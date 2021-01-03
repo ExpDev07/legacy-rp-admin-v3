@@ -70,7 +70,7 @@ This list only contains some of the most notable contributors. For the full list
 This section describes how you can help contribute.
 
 ### Prerequisites
-* PHP 7+.
+* PHP 7.4+.
 * Composer.
 * Node (and npm).
 * SQL (database).
