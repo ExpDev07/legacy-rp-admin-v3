@@ -42,10 +42,10 @@
             <div class="rounded bg-red-500 text-white p-4 mb-10" v-if="player.isBanned">
                 <div class="flex items-center justify-between mb-2">
                     <h2 class="text-lg font-semibold">
-                        Banned by <span class="italic">{{ player.ban.issuer }}</span> <span class="italic" v-if="player.ban.expire">until {{ new Date(player.ban.expireAt).toLocaleString() }}</span>
+                        Banned by <span class="italic">{{ player.ban.issuer }}</span> <span class="italic" v-if="player.ban.expire">until {{ $moment(player.ban.expireAt).format('lll') }}</span>
                     </h2>
                     <div class="font-semibold">
-                        {{ new Date(player.ban.timestamp).toLocaleString() }}
+                        {{ $moment(player.ban.timestamp).format('lll') }}
                     </div>
                 </div>
                 <p class="text-gray-100">
@@ -131,7 +131,7 @@
                                 {{ character.name }} (#{{ character.id }})
                             </h1>
                             <h3 class="text-indigo-500">
-                                <span class="font-semibold">Date of birth:</span> {{ new Date(character.dateOfBirth).toLocaleString() }}
+                                <span class="font-semibold">Date of birth:</span> {{ $moment(character.dateOfBirth).format('l') }}
                             </h3>
                         </div>
                         <p class="text-gray-800">
@@ -160,14 +160,14 @@
                             {{ warning.issuer.playerName }}
                         </h1>
                         <div class="flex items-center">
-                            <span class="font-semibold">added @</span> {{ new Date(warning.createdAt).toLocaleString() }}
+                            <span>{{ $moment(warning.createdAt).format('lll') }}</span>
                             <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-4 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                 <i class="fas fa-trash mr-1"></i>
                                 Remove
                             </inertia-link>
                         </div>
                     </div>
-                    <p class="text-gray-900">
+                    <p class="text-gray-800">
                         {{ warning.message }}
                     </p>
                 </div>
@@ -226,10 +226,15 @@ export default {
     },
     methods: {
         async submitBan () {
-            // Calculate expire relative to now in seconds.
-            const nowUnix    = this.$moment().unix();
-            const expireUnix = this.$moment(this.form.ban.expireDate + ' ' + this.form.ban.expireTime).unix();
-            const expire     = expireUnix - nowUnix;
+            // Default expiration.
+            let expire = null;
+
+            // Calculate expire relative to now in seconds if temp ban.
+            if (this.isTempBanning) {
+                const nowUnix    = this.$moment().unix();
+                const expireUnix = this.$moment(this.form.ban.expireDate + ' ' + this.form.ban.expireTime).unix();
+                expire           = expireUnix - nowUnix;
+            }
 
             // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', { ...this.form.ban, expire });

@@ -10,7 +10,7 @@
                         <span class="font-semibold">{{ character.gender }}</span>
                     </div>
                     <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
-                        Born on <span class="font-semibold">{{ new Date(character.dateOfBirth).toLocaleDateString() }}</span>
+                        Born on <span class="font-semibold">{{ $moment(character.dateOfBirth).format('l') }}</span>
                     </div>
                     <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
                         <span class="font-semibold">{{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(character.money) }}</span> in cash/bank
