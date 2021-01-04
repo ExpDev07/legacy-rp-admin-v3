@@ -4,8 +4,7 @@
     </a>
 </p>
 
-# legacy-rp-admin-v3 [![Build Status](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3.svg?branch=master)](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3)
-
+# legacy-rp-admin-v3 [![Build Status](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3.svg?branch=master)](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3) [![GitHub](https://img.shields.io/github/license/ExpDev07/legacy-rp-admin-v3)](https://github.com/ExpDev07/legacy-rp-admin-v3/blob/master/LICENSE.md) [![GitHub pull requests](https://img.shields.io/github/issues-pr/ExpDev07/legacy-rp-admin-v3)](https://github.com/ExpDev07/legacy-rp-admin-v3/pulls) [![GitHub issues](https://img.shields.io/github/issues/ExpDev07/legacy-rp-admin-v3)](https://github.com/ExpDev07/legacy-rp-admin-v3/issues)
 
 <p>
     <a href='https://ko-fi.com/C1C510DUQ' target='_blank'>
