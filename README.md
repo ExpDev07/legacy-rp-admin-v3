@@ -49,7 +49,7 @@ It is recommended that you use Chrome or Edge as your web browser for the best e
 * See and search players.
 * Warn and ban players, also temporarily.
 * See and edit characters.
-* *... open issue to request a feature.*
+* [*... open issue to request a feature.*](https://github.com/ExpDev07/legacy-rp-admin-v3/issues/new/choose)
 
 ## Improvements from v1
 1. Re-done to give a more minimalistic and "simple" look.
