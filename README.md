@@ -4,15 +4,32 @@
     </a>
 </p>
 
-# legacy-rp-admin-v3 
+<h1 align="center">
+    legacy-rp-admin-v3
+</h1>
 
-[![Build Status](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3.svg?branch=master)](https://travis-ci.com/ExpDev07/legacy-rp-admin-v3) [![GitHub](https://img.shields.io/github/license/ExpDev07/legacy-rp-admin-v3)](https://github.com/ExpDev07/legacy-rp-admin-v3/blob/master/LICENSE.md) [![GitHub pull requests](https://img.shields.io/github/issues-pr/ExpDev07/legacy-rp-admin-v3)](https://github.com/ExpDev07/legacy-rp-admin-v3/pulls) [![GitHub issues](https://img.shields.io/github/issues/ExpDev07/legacy-rp-admin-v3)](https://github.com/ExpDev07/legacy-rp-admin-v3/issues)
+<p align="center">
+    <a href="https://travis-ci.com/ExpDev07/legacy-rp-admin-v3" target="blank">
+        <img src="https://travis-ci.com/ExpDev07/legacy-rp-admin-v3.svg?branch=master" alt="Build Status">
+    </a
+    <a href="https://github.com/ExpDev07/legacy-rp-admin-v3/blob/master/LICENSE.md" target="blank">
+        <img src="https://img.shields.io/github/license/ExpDev07/legacy-rp-admin-v3" alt="GitHub">
+    </a>
+    <a href="https://github.com/ExpDev07/legacy-rp-admin-v3/pulls" target="blank">
+        <img src="https://img.shields.io/github/issues-pr/ExpDev07/legacy-rp-admin-v3" alt="GitHub pull requests">
+    </a>
+    <a href="https://github.com/ExpDev07/legacy-rp-admin-v3/issues" target="blank">
+        <img src="https://img.shields.io/github/issues/ExpDev07/legacy-rp-admin-v3" alt="GitHub issues">
+    </a>
+</p>
 
 <p>
     <a href='https://ko-fi.com/C1C510DUQ' target='_blank'>
 	<img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' />
     </a>
 </p>
+
+<hr>
 
 <strong>100% FREE + OPEN SOURCE.</strong>
 
