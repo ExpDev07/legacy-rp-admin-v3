@@ -1,10 +1,12 @@
 import './bootstrap';
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import Vue from 'vue';
+import PortalVue from 'portal-vue';
 import moment from 'moment';
 
 // Plugins.
 Vue.use(InertiaApp);
+Vue.use(PortalVue);
 
 // Properties / methods.
 Vue.prototype.$moment = moment;

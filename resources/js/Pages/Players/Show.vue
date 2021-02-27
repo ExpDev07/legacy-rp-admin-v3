@@ -1,30 +1,32 @@
 <template>
     <div>
-        <div class="flex flex-grow items-start justify-between mb-12">
-            <div class="prose max-w-full">
-                <div class="flex items-start space-x-10">
-                    <h1>
-                        {{ player.playerName }}
-                    </h1>
-                    <div class="flex items-center space-x-5">
-                        <badge class="bg-danger-pale border-red-200" v-if="player.isBanned">
-                            <span class="font-semibold">Banned</span>
-                        </badge>
-                        <badge class="bg-success-pale border-green-200" v-if="player.isStaff">
-                            <span class="font-semibold">Staff Member</span>
-                        </badge>
-                        <badge class="bg-success-pale border-green-200" v-if="player.isSuperAdmin">
-                            <span class="font-semibold">Super Admin</span>
-                        </badge>
-                        <badge class="bg-secondary border-gray-200">
-                            <span class="font-semibold">{{ player.playTime }}</span> minutes played
-                        </badge>
-                    </div>
+
+        <portal to="title">
+            <div class="flex items-start space-x-10">
+                <h1>
+                    {{ player.playerName }}
+                </h1>
+                <div class="flex items-center space-x-5">
+                    <badge class="bg-danger-pale border-red-200" v-if="player.isBanned">
+                        <span class="font-semibold">Banned</span>
+                    </badge>
+                    <badge class="bg-success-pale border-green-200" v-if="player.isStaff">
+                        <span class="font-semibold">Staff Member</span>
+                    </badge>
+                    <badge class="bg-success-pale border-green-200" v-if="player.isSuperAdmin">
+                        <span class="font-semibold">Super Admin</span>
+                    </badge>
+                    <badge class="bg-secondary border-gray-200">
+                        <span class="font-semibold">{{ player.playTime }}</span> minutes played
+                    </badge>
                 </div>
-                <p>
-                    Viewing player profile.
-                </p>
             </div>
+            <p>
+                Viewing player profile.
+            </p>
+        </portal>
+
+        <portal to="actions">
             <div>
                 <!-- Unbanning -->
                 <inertia-link class="rounded bg-success font-semibold text-white py-2 px-5" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
@@ -37,7 +39,7 @@
                     Issue ban
                 </button>
             </div>
-        </div>
+        </portal>
 
         <!-- Ban -->
         <div>
@@ -224,6 +226,9 @@
             </template>
 
             <template #footer>
+                <h3 class="mb-2">
+                   Give warning
+                </h3>
                 <form @submit.prevent="submitWarning">
                     <label for="message"></label>
                     <textarea
@@ -243,6 +248,7 @@
                 </form>
             </template>
         </v-section>
+
     </div>
 </template>
 
