@@ -17,6 +17,7 @@
         "@tailwindcss/postcss7-compat": "^2.0.2",
         "@tailwindcss/typography": "^0.3.1",
         "@tailwindcss/ui": "^0.6.0",
+        "aos": "^2.3.4",
         "autoprefixer": "^9.8.6",
         "axios": "^0.19",
         "cross-env": "^5.1",

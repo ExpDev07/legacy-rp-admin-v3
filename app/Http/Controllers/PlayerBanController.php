@@ -21,7 +21,7 @@ class PlayerBanController extends Controller
      */
     public function store(Player $player, BanStoreRequest $request)
     {
-        // Create a unique hash to go with this player's batch of bans
+        // Create a unique hash to go with this player's batch of bans.
         $user = $request->user();
         $hash = Str::uuid()->toString();
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Ban;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,11 +19,13 @@ class PlayerResource extends JsonResource
         return [
             'id'              => $this->user_id,
             'steamIdentifier' => $this->steam_identifier,
+            'avatar'          => $this->avatar,
             'playerName'      => $this->player_name,
             'playTime'        => $this->playtime,
             'lastConnection'  => $this->last_connection,
             'steamProfileUrl' => $this->getSteamProfileUrl(),
             'isStaff'         => $this->isStaff(),
+            'isSuperAdmin'    => $this->isSuperAdmin(),
             'isBanned'        => $this->isBanned(),
             'warnings'        => $this->warnings()->count(),
             'ban'             => new BanResource($this->getActiveBan()),

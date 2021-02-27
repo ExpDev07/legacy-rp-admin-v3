@@ -49,4 +49,11 @@ Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
     Route::resource('logs', LogController::class);
 });
 
+// Used for testing purposes.
+Route::get('/test', function () {
+
+    \App\Player::query()->wherePlayerName('Marius Truckster')->first()->avatar;
+
+});
+
 

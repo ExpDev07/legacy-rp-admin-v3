@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Registers inertia.
      */
-    public function registerInertia()
+    protected function registerInertia()
     {
         // Shared inertia data.
         Inertia::share([

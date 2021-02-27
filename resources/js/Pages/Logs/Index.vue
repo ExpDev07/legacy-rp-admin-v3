@@ -61,9 +61,9 @@
                     <th class="px-6 py-4">Timestamp</th>
                     <th class="px-6 py-4">Server ID</th>
                 </tr>
-                <tr class="hover:bg-gray-100" v-for="log in logs.data" v-bind:key="log.id">
+                <tr class="hover:bg-gray-100" v-for="log in logs.data" :key="log.id">
                     <td class="px-6 py-3 border-t">
-                        <inertia-link class="block bg-indigo-600 font-semibold text-white text-center rounded px-4 py-2" v-bind:href="'/players/' + log.player.steamIdentifier">
+                        <inertia-link class="block bg-indigo-600 font-semibold text-white text-center rounded px-4 py-2" :href="'/players/' + log.player.steamIdentifier">
                             {{ log.player.playerName }}
                         </inertia-link>
                     </td>
