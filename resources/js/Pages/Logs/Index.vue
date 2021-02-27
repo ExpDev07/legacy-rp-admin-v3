@@ -1,19 +1,21 @@
 <template>
     <div>
-        <div class="flex items-start justify-between mb-12">
-            <div class="prose">
-                <h1>
-                    Logs
-                </h1>
-                <p>
-                    On this page you can view and filter the server logs.
-                </p>
-            </div>
+
+        <portal to="title">
+            <h1>
+                Logs
+            </h1>
+            <p>
+                On this page you can view and filter the server logs.
+            </p>
+        </portal>
+
+        <portal to="actions">
             <button class="bg-indigo-600 font-semibold text-white text-sm rounded px-4 py-2" type="button" @click="refresh">
                 <i class="fa fa-refresh mr-1"></i>
                 Refresh
             </button>
-        </div>
+        </portal>
 
         <!-- Querying -->
         <div class="rounded bg-gray-100 p-8 mb-8">
