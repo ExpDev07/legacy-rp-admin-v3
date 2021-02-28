@@ -56,7 +56,10 @@ class Player extends Model
         'identifiers',
         'is_staff',
         'is_super_admin',
+        'is_soft_banned',
         'playtime',
+        'total_joins',
+        'priority_level',
         'last_connection',
     ];
 
@@ -70,7 +73,10 @@ class Player extends Model
         'last_connection' => 'datetime',
         'is_staff'        => 'boolean',
         'is_super_admin'  => 'boolean',
+        'is_soft_banned'  => 'boolean',
         'playtime'        => 'integer',
+        'total_joins'     => 'integer',
+        'priority_level'  => 'integer',
     ];
 
     /**

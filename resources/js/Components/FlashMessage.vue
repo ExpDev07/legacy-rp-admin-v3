@@ -1,22 +1,27 @@
 <template>
     <div v-if="show">
         <!-- Success -->
-        <div v-if="$page.flash.success" class="flex items-center justify-between rounded bg-green-500 text-white p-4 mb-14">
+        <alert v-if="$page.flash.success" class="bg-green-500 mb-14">
             <p>
                 {{ $page.flash.success }}
             </p>
-        </div>
+        </alert>
         <!-- Error -->
-        <div v-if="$page.flash.error" class="flex items-center justify-between rounded bg-red-500 text-white p-4 mb-14">
+        <alert v-if="$page.flash.error" class="bg-red-500 mb-14">
             <p>
                 {{ $page.flash.error }}
             </p>
-        </div>
+        </alert>
     </div>
 </template>
 
 <script>
+import Alert from './Alert';
+
 export default {
+    components: {
+        Alert,
+    },
     data() {
         return {
             show: true,

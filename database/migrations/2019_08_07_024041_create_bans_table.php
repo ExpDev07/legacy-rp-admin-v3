@@ -21,7 +21,6 @@ class CreateBansTable extends Migration
             $table->string('smurf_account')->nullable();
             $table->string('creator_name')->nullable();
             $table->string('reason');
-            $table->integer('expire')->nullable();
             $table->integer('timestamp')->nullable();
             $table->integer('expire')->nullable();
         });

@@ -21,6 +21,7 @@ use App\Http\Controllers\PlayerCharacterController;
 use App\Http\Controllers\PlayerCharacterJobController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerWarningController;
+use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
@@ -47,6 +48,9 @@ Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function () {
 
     // Logs.
     Route::resource('logs', LogController::class);
+
+    // Servers.
+    Route::resource('servers', ServerController::class);
 });
 
 // Used for testing purposes.
