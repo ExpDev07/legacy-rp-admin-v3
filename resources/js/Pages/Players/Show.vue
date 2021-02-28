@@ -144,7 +144,6 @@
 
             <template>
                 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
-
                     <card
                         v-for="(character, index) in characters"
                         :key="character.id"
@@ -161,18 +160,19 @@
                                 </h4>
                             </div>
                         </template>
+
                         <template>
                             <p>
                                 {{ character.backstory }}
                             </p>
                         </template>
+
                         <template #footer>
                             <inertia-link class="bg-indigo-600 text-white text-center rounded block px-4 py-3" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
                                 View
                             </inertia-link>
                         </template>
                     </card>
-
                 </div>
                 <p class="text-muted" v-if="characters.length === 0">
                     This player has not created any characters yet.
