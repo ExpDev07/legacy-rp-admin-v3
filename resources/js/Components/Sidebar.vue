@@ -28,7 +28,8 @@ export default {
     data() {
         return {
             url: this.$page.url,
-            links: [{
+            links: [
+                {
                     label: 'Dashboard',
                     icon: 'dashboard',
                     url: '/',
