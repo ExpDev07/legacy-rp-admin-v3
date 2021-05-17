@@ -3,7 +3,7 @@ import { InertiaApp } from '@inertiajs/inertia-vue';
 import Vue from 'vue';
 import PortalVue from 'portal-vue';
 import moment from 'moment';
-import formatSeconds from './Filters/formatSeconds.js';
+import humanizeSeconds from './Filters/humanizeSeconds.js';
 
 // Plugins.
 Vue.use(InertiaApp);
@@ -13,7 +13,7 @@ Vue.use(PortalVue);
 Vue.prototype.$moment = moment;
 
 // Adding the formatSeconds filter
-Vue.filter('formatSeconds', formatSeconds);
+Vue.filter('humanizeSeconds', humanizeSeconds);
 
 // Create Vue.
 const app = document.getElementById('app');

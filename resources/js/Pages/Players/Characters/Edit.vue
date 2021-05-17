@@ -48,12 +48,20 @@
                             <input class="block w-full border rounded bg-gray-200 py-3 px-4 mb-3" id="last_name" v-model="form.last_name">
                         </div>
                     </div>
-                    <!-- Backstory -->
                     <div class="px-3 mb-6">
                         <label class="block mb-3" for="backstory">
                             Backstory
                         </label>
                         <textarea class="block w-full border rounded bg-gray-200 py-3 px-4 mb-3" id="backstory" v-model="form.backstory"></textarea>
+                    </div>
+                    <div class="px-3 mb-6">
+                        <label class="block mb-3" for="gender">
+                            Gender
+                        </label>
+                        <select class="block w-56 border rounded bg-gray-200 py-3 px-4 mb-3" id="gender" v-model="form.gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
                     </div>
 
                     <!-- Submit -->
@@ -168,6 +176,7 @@ export default {
             form: {
                 first_name: this.character.firstName,
                 last_name: this.character.lastName,
+                gender: this.character.gender,
                 backstory: this.character.backstory,
                 job_name: this.character.jobName,
                 department_name: this.character.departmentName,
