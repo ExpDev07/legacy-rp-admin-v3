@@ -6,8 +6,10 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
+use kanalumaddela\LaravelSteamLogin\SteamUser;
 use SteamID;
 
 /**
@@ -54,7 +56,10 @@ class Player extends Model
         'identifiers',
         'is_staff',
         'is_super_admin',
+        'is_soft_banned',
         'playtime',
+        'total_joins',
+        'priority_level',
         'last_connection',
     ];
 
@@ -68,7 +73,10 @@ class Player extends Model
         'last_connection' => 'datetime',
         'is_staff'        => 'boolean',
         'is_super_admin'  => 'boolean',
+        'is_soft_banned'  => 'boolean',
         'playtime'        => 'integer',
+        'total_joins'     => 'integer',
+        'priority_level'  => 'integer',
     ];
 
     /**
@@ -82,6 +90,16 @@ class Player extends Model
     }
 
     /**
+     * Gets the avatar attribute.
+     *
+     * @return string
+     */
+    public function getAvatarAttribute(): string
+    {
+        return $this->getSteamUser()->avatar ?? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+    }
+
+    /**
      * Gets a URL to the player's steam profile.
      *
      * @return string
@@ -90,7 +108,6 @@ class Player extends Model
     {
         return self::STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
     }
-
 
     /**
      * Gets all the identifiers.
@@ -119,7 +136,6 @@ class Player extends Model
     {
         foreach ($this->getIdentifiers() as $identifier) {
             if (strpos($identifier, $key) === 0) return $identifier;
-            continue;
         }
         return null;
     }
@@ -131,7 +147,16 @@ class Player extends Model
      */
     public function isStaff(): bool
     {
-        return $this->is_staff || $this->is_super_admin;
+        return $this->is_staff || $this->isSuperAdmin();
+    }
+
+    /**
+     * Checks whether this player is a super admin.
+     *
+     * @return bool
+     */
+    public function isSuperAdmin(): bool {
+        return $this->is_super_admin;
     }
 
     /**
@@ -166,6 +191,19 @@ class Player extends Model
     public function getSteamID(): ?SteamID
     {
         return get_steam_id($this->steam_identifier);
+    }
+
+    /**
+     * Gets the steam user.
+     *
+     * @return SteamUser
+     */
+    public function getSteamUser(): SteamUser
+    {
+        $steam = new SteamUser($this->getSteamID()->ConvertToUInt64());
+        $steam->getUserInfo();
+
+        return $steam;
     }
 
     /***

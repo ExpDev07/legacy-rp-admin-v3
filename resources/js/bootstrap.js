@@ -22,6 +22,21 @@ window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**
+ * We'll load the AOS library which allows us to easily animate elements.
+ */
+
+window.AOS = require('aos/dist/aos');
+
+window.AOS.init({
+    offset: 120,
+    delay: 0,
+    duration: 1000,
+    easing: 'ease',
+    once: false,
+    mirror: false,
+});
+
+/**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.

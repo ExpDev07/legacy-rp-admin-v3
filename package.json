@@ -17,6 +17,7 @@
         "@tailwindcss/postcss7-compat": "^2.0.2",
         "@tailwindcss/typography": "^0.3.1",
         "@tailwindcss/ui": "^0.6.0",
+        "aos": "^2.3.4",
         "autoprefixer": "^9.8.6",
         "axios": "^0.19",
         "cross-env": "^5.1",
@@ -26,6 +27,7 @@
         "moment": "^2.29.1",
         "nprogress": "^0.2.0",
         "popper.js": "^1.12",
+        "portal-vue": "^2.1.7",
         "postcss": "^7.0.35",
         "postcss-import": "^12.0.1",
         "resolve-url-loader": "^2.3.1",
@@ -33,6 +35,7 @@
         "sass-loader": "^7.1.0",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
         "vue": "^2.5.17",
+        "vue-lottie": "^0.2.1",
         "vue-template-compiler": "^2.6.10"
     }
 }

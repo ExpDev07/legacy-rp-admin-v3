@@ -18,5 +18,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     #RewriteRule ^ index.php [L]
-    RewriteRule (.*) index.html [L]
+	RewriteCond %{REQUEST_FILENAME} -f [OR]
+	RewriteCond %{REQUEST_FILENAME} -l [OR]
+	RewriteCond %{REQUEST_FILENAME} -d
+	RewriteRule ^.*$ - [NC,L]
+	RewriteRule ^(data/|js/|css/|install/|favicon\.jpg|crossdomain\.xml|robots\.txt) - [NC,L]
+	RewriteRule ^.*$ index.php [NC,L]
 </IfModule>

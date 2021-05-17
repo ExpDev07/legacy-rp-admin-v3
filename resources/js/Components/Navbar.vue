@@ -1,5 +1,6 @@
 <template>
     <div class="flex">
+
         <!-- Branding / Logo -->
         <div class="flex-shrink-0 bg-gray-900 text-white text-center w-56 px-12 py-4">
             <h1 class="text-lg">
@@ -8,8 +9,9 @@
                 </inertia-link>
             </h1>
         </div>
+
         <!-- Nav -->
-        <div class="flex justify-between items-center bg-gray-900 text-white w-full shadow px-12 py-4">
+        <nav class="flex justify-between items-center bg-gray-900 text-white w-full shadow px-12 py-4">
             <!-- Left side -->
             <p class="italic"></p>
 
@@ -22,7 +24,8 @@
                     Logout
                 </inertia-link>
             </div>
-        </div>
+        </nav>
+
     </div>
 </template>
 
