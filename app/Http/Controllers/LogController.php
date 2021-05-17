@@ -41,6 +41,9 @@ class LogController extends Controller
             $query->where('details', 'like', "%{$details}%");
         }
 
+        // Converting timestamp to UTC
+        $query->selectRaw('*, CONVERT_TZ(`timestamp`, @@session.time_zone, \'+00:00\') as timestamp');
+
         return Inertia::render('Logs/Index', [
             'logs' => LogResource::collection($query->simplePaginate(15)->appends($request->query())),
             'filters' => $request->all(
