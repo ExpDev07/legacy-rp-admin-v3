@@ -3,9 +3,13 @@
         <!-- General stuff -->
         <nav>
             <ul>
-                <li v-for="link in links" v-bind:key="link.label">
-                    <inertia-link class="flex items-center rounded hover:bg-gray-900 hover:text-white px-5 py-2 mb-3" v-bind:class="isUrl(link.url) ? [ 'bg-gray-900', 'text-white' ] : ''" v-bind:href="link.url">
-                        <icon class="w-4 h-4 mr-3 fill-current" v-bind:name="link.icon"></icon>
+                <li v-for="link in links" :key="link.label">
+                    <inertia-link
+                        class="flex items-center rounded hover:bg-gray-900 hover:text-white px-5 py-2 mb-3"
+                        :class="isUrl(link.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
+                        :href="link.url"
+                    >
+                        <icon class="w-4 h-4 mr-3 fill-current" :name="link.icon"></icon>
                         {{ link.label }}
                     </inertia-link>
                 </li>
@@ -24,7 +28,8 @@ export default {
     data() {
         return {
             url: this.$page.url,
-            links: [{
+            links: [
+                {
                     label: 'Dashboard',
                     icon: 'dashboard',
                     url: '/',
@@ -38,6 +43,11 @@ export default {
                     label: 'Server Logs',
                     icon: 'printer',
                     url: '/logs',
+                },
+                {
+                    label: 'Servers',
+                    icon: 'office',
+                    url: '/servers',
                 },
             ],
         };

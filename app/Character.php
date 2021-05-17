@@ -42,13 +42,21 @@ class Character extends Model
         'first_name',
         'last_name',
         'date_of_birth',
+        'blood_type',
         'backstory',
+
         'cash',
         'bank',
         'stocks_balance',
+
         'job_name',
         'department_name',
         'position_name',
+
+        'character_created',
+        'character_creation_timestamp',
+        'character_deleted',
+        'character_deletion_timestamp',
     ];
 
     /**
@@ -57,11 +65,16 @@ class Character extends Model
      * @var array
      */
     protected $casts = [
-        'date_of_birth'  => 'date',
-        'character_slot' => 'integer',
-        'cash'           => 'integer',
-        'bank'           => 'integer',
-        'stocks_balance' => 'double',
+        'date_of_birth'                => 'date',
+        'character_slot'               => 'integer',
+        'cash'                         => 'integer',
+        'bank'                         => 'integer',
+        'stocks_balance'               => 'double',
+        'character_created'            => 'boolean',
+        'character_creation_timestamp' => 'datetime',
+        'character_deleted'            => 'boolean',
+        'character_deletion_timestamp' => 'datetime',
+
     ];
 
     /**

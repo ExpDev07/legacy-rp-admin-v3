@@ -35,8 +35,11 @@ class PlayerFactory extends Factory
             'player_name'      => $this->faker->name,
             'is_staff'         => $is_staff,
             'is_super_admin'   => $is_super_admin,
+            'is_soft_banned'   => false,
             'playtime'         => $this->faker->numberBetween(0, 10000),
-            'last_connection'  => Date::now(),
+            'total_joins'      => $this->faker->numberBetween(0, 1000),
+            'priority_level'   => $this->faker->numberBetween(0, 10),
+            'last_connection'  => now(),
             'identifiers'      => [
                 $identifier,
                 'ip:' . $this->faker->ipv4,

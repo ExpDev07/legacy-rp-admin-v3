@@ -22,13 +22,29 @@ class CreateCharactersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('date_of_birth');
+            $table->integer('blood_type');
+            $table->longText('backstory');
+
+            // Balance.
             $table->integer('cash')->default(0);
             $table->integer('bank')->default(0);
             $table->double('stocks_balance')->default(0);
+
+            // Job.
             $table->string('job_name')->nullable();
             $table->string('department_name')->nullable();
             $table->string('position_name')->nullable();
-            $table->mediumText('backstory')->nullable();
+
+            // Timestamps.
+            $table->boolean('character_created')->nullable();
+            $table->timestamp('character_creation_timestamp')->nullable();
+            $table->boolean('character_deleted')->nullable();
+            $table->timestamp('character_deletion_timestamp')->nullable();
+
+            // Json.
+            $table->json('coords')->nullable();
+            $table->json('status_data')->nullable();
+            $table->json('character_data')->nullable();
         });
 
     }

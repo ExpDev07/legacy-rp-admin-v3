@@ -14,6 +14,26 @@ module.exports = {
             fontFamily: {
                 sans: [ 'Nunito', ...defaultTheme.fontFamily.sans ],
             },
+            colors: {
+                // Light & dark.
+                'light': defaultTheme.colors.white,
+                'dark':  defaultTheme.colors.gray['900'],
+
+                // Theme colors.
+                'primary':   defaultTheme.colors.indigo['600'],
+                'secondary': defaultTheme.colors.gray['100'],
+                'danger':    defaultTheme.colors.red['500'],
+                'warning':   defaultTheme.colors.yellow['500'],
+                'success':   defaultTheme.colors.green['500'],
+                'muted':     defaultTheme.colors.gray['700'],
+
+                // Theme pale colors.
+                'primary-pale':   defaultTheme.colors.indigo['100'],
+                'secondary-pale': defaultTheme.colors.gray['50'],
+                'danger-pale':    defaultTheme.colors.red['100'],
+                'warning-pale':   defaultTheme.colors.yellow['100'],
+                'success-pale':   defaultTheme.colors.green['100'],
+            }
         },
     },
     plugins: [
