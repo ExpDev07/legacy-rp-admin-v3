@@ -14,7 +14,7 @@
                             <span class="font-semibold">Staff Member</span>
                         </div>
                         <div class="px-5 py-1 rounded bg-gray-100 border-2 border-gray-200">
-                            <span class="font-semibold">{{ player.playTime }}</span> minutes played
+                            <span class="font-semibold">{{ player.playTime | fmtSeconds }}</span> played
                         </div>
                     </div>
                 </div>
