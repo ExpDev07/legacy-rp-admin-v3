@@ -46,10 +46,15 @@ class PlayerBanController extends Controller
             ->filter()
             ->each(fn ($identifier) => $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban));
 
+        // Create reason.
+        $reason = $request->input('reason')
+            ? 'I banned this person with the reason: ' . $request->input('reason') . '.'
+            : 'I banned this person without a reason.';
+
         // Automatically log the ban as a warning.
         $player->warnings()->create([
             'issuer_id' => $user->player->user_id,
-            'message'   => 'I banned this person with the reason: ' . $request->input('reason') . '. This warning was generated automatically as a result of banning someone.',
+            'message'   => $reason . ' This warning was generated automatically as a result of banning someone.',
         ]);
 
         return back()->with('success', 'The player has successfully been banned.');

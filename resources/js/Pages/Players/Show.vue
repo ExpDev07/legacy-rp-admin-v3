@@ -54,8 +54,9 @@
                         {{ $moment(player.ban.timestamp).format('lll') }}
                     </div>
                 </div>
+
                 <p class="text-gray-100">
-                    {{ player.ban.reason }}
+                    {{ player.ban.reason || 'No reason.' }}
                 </p>
 
             </alert>
@@ -94,7 +95,7 @@
                         <label class="font-semibold italic" for="reason">
                             Reason
                         </label>
-                        <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason" required></textarea>
+                        <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
                     </div>
 
                     <!-- Buttons -->
