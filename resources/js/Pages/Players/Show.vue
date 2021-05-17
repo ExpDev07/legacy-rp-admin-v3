@@ -86,7 +86,7 @@
                         </label>
                         <div class="flex items-center">
                             <input class="block shadow rounded bg-gray-200 p-3" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
-                            <input class="block shadow rounded bg-gray-200 p-3" type="time" id="expireTime" name="expireTime" step="any" :min="$moment().format('HH:mm')" v-model="form.ban.expireTime" required>
+                            <input class="block shadow rounded bg-gray-200 p-3" type="time" id="expireTime" name="expireTime" step="any" v-model="form.ban.expireTime" required>
                         </div>
                     </div>
 
