@@ -1,13 +1,16 @@
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import Vue from 'vue';
 import moment from 'moment';
-import './Filters/formatSeconds.js';
+import formatSeconds from './Filters/formatSeconds.js';
 
 // Use inertia plugin.
 Vue.use(InertiaApp);
 
 // Global properties / methods.
 Vue.prototype.$moment = moment;
+
+// Adding the formatSeconds filter
+Vue.filter('formatSeconds', formatSeconds);
 
 // App element.
 const app = document.getElementById('app');
