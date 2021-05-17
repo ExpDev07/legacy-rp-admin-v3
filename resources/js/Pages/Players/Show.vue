@@ -16,7 +16,7 @@
                         <span class="font-semibold">Super Admin</span>
                     </badge>
                     <badge class="bg-secondary border-gray-200">
-                        <span class="font-semibold">{{ player.playTime | formatSeconds }} seconds</span> played
+                        <span class="font-semibold">{{ player.playTime | humanizeSeconds }}</span> played
                     </badge>
                 </div>
             </div>
