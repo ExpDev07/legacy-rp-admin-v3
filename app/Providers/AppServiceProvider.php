@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\UserResource;
 use App\Util\Inspiring;
+use Carbon\Traits\Date;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Register inertia.
         $this->registerInertia();
     }
 
@@ -38,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Registers inertia.
      */
-    public function registerInertia()
+    protected function registerInertia()
     {
         // Shared inertia data.
         Inertia::share([

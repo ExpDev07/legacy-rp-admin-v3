@@ -1,18 +1,19 @@
+import './bootstrap';
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import Vue from 'vue';
+import PortalVue from 'portal-vue';
 import moment from 'moment';
 
-// Use inertia plugin.
+// Plugins.
 Vue.use(InertiaApp);
+Vue.use(PortalVue);
 
-// Global properties / methods.
+// Properties / methods.
 Vue.prototype.$moment = moment;
 
-// App element.
+// Create Vue.
 const app = document.getElementById('app');
-
-// Mount app to Vue instance.
-new Vue({
+const vue = new Vue({
     el: app,
     render: h => h(InertiaApp, {
         props: {
