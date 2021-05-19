@@ -147,8 +147,6 @@
                     <card
                         v-for="(character, index) in characters"
                         :key="character.id"
-                        data-aos="fade-up"
-                        :data-aos-delay="index * 100"
                     >
                         <template #header>
                             <div class="text-center">
