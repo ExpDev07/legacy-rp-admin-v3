@@ -47,10 +47,10 @@
 
                 <div class="flex items-center justify-between mb-2">
                     <h2 class="text-lg font-semibold">
-                        Banned by <span class="italic">{{ player.ban.issuer }}</span> <span class="italic" v-if="player.ban.expire">until {{ $moment(player.ban.expireAt).format('lll') }}</span>
+                        Banned by <span class="italic">{{ player.ban.issuer }}</span> <span class="italic" v-if="player.ban.expire">until {{ player.ban.expireAt | formatTime }}</span>
                     </h2>
                     <div class="font-semibold">
-                        {{ $moment(player.ban.timestamp).format('lll') }}
+                        {{ player.ban.timestamp | formatTime }}
                     </div>
                 </div>
 
@@ -204,7 +204,7 @@
                                 </h4>
                             </div>
                             <div class="flex items-center">
-                                <span class="text-muted">{{ $moment(warning.createdAt).format('lll') }}</span>
+                                <span class="text-muted">{{ warning.createdAt | formatTime }}</span>
                                 <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-3 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                     <i class="fas fa-trash"></i>
                                 </inertia-link>
