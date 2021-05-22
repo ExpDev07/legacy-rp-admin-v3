@@ -21,7 +21,7 @@ class PlayerController extends Controller
      */
     public function index(Request $request): Response
     {
-        $query = Player::query()->orderBy('player_name');
+        $query = Player::query()->orderByDesc('playtime');
 
         // Querying.
         if ($name = $request->input('query')) {
