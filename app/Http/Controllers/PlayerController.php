@@ -24,8 +24,11 @@ class PlayerController extends Controller
         $query = Player::query()->orderByDesc('playtime');
 
         // Querying.
-        if ($name = $request->input('query')) {
-            $query->where('player_name', 'like', "%{$name}%");
+        if ($q = $request->input('query')) {
+            $query
+                ->where('player_name', 'like', "%{$q}%")
+                ->orWhere('steam_identifier', 'like', "%{$q}%")
+                ->orWhere('identifiers', 'like', "%{$q}%");
         }
 
         return Inertia::render('Players/Index', [
