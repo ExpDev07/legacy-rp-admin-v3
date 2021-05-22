@@ -35,13 +35,13 @@
                 <form @submit.prevent="submit">
                     <!-- Name -->
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-1/2 px-3 mb-6">
+                        <div class="w-1/2 px-3">
                             <label class="block mb-2" for="first_name">
                                 First Name
                             </label>
                             <input class="block w-full border rounded bg-gray-200 py-3 px-4 mb-3" id="first_name" v-model="form.first_name">
                         </div>
-                        <div class="w-1/2 px-3 mb-0">
+                        <div class="w-1/2 px-3">
                             <label class="block mb-2" for="last_name">
                                 Last Name
                             </label>
@@ -53,6 +53,12 @@
                             Backstory
                         </label>
                         <textarea class="block w-full border rounded bg-gray-200 py-3 px-4 mb-3" id="backstory" v-model="form.backstory"></textarea>
+                    </div>
+                    <div class="px-3 mb-6">
+                        <label class="block mb-3" for="dob">
+                            Date of Birth
+                        </label>
+                        <input class="block w-56 border rounded bg-gray-200 py-3 px-4 mb-3" id="dob" v-model="form.date_of_birth">
                     </div>
                     <div class="px-3 mb-6">
                         <label class="block mb-3" for="gender">
@@ -176,6 +182,7 @@ export default {
             form: {
                 first_name: this.character.firstName,
                 last_name: this.character.lastName,
+                date_of_birth: this.character.dateOfBirth,
                 gender: this.character.gender,
                 backstory: this.character.backstory,
                 job_name: this.character.jobName,

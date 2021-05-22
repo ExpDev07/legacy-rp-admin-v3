@@ -18,6 +18,7 @@ class CharacterUpdateRequest extends FormRequest
         return [
             'first_name' => ['string'],
             'last_name' => ['string'],
+            'date_of_birth' => ['string'],
             'gender' => [Rule::in(['male', 'female'])],
             'backstory' => ['string'],
             'job_name' => ['nullable', 'string'],

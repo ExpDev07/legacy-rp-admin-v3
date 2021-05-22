@@ -86,7 +86,7 @@
                         </td>
                         <td class="px-6 py-3 border-t">{{ log.action }}</td>
                         <td class="px-6 py-3 border-t">{{ log.details }}</td>
-                        <td class="px-6 py-3 border-t">{{ $moment(log.timestamp).format('lll') }}</td>
+                        <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t">{{ log.server }}</td>
                     </tr>
                     <tr v-if="logs.data.length === 0">
