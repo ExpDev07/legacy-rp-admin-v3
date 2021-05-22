@@ -21,9 +21,9 @@
             <template>
                 <form @submit.prevent>
                     <label class="block font-semibold mb-4" for="name">
-                        Search by name, steam identifier, or any other identifier such as Discord.
+                        Search by name, steam identifier, or any other identifier such as Discord id.
                     </label>
-                    <input class="w-full bg-gray-200 px-4 py-2" id="name" name="name" placeholder="Marius Truckster | Marius Mannen#2997 | steam:11000010df22c8b" v-model="filters.query">
+                    <input class="w-full bg-gray-200 px-4 py-2" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
                 </form>
             </template>
         </v-section>
