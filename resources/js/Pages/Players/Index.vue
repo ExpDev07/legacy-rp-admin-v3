@@ -6,7 +6,7 @@
                 Players
             </h1>
             <p>
-                Search players by their identifier or name.
+                Search players!
             </p>
         </portal>
 
@@ -21,9 +21,9 @@
             <template>
                 <form @submit.prevent>
                     <label class="block font-semibold mb-4" for="name">
-                        Search by name
+                        Search by name, steam identifier, or any other identifier such as Discord.
                     </label>
-                    <input class="w-full bg-gray-200 px-4 py-2" id="name" name="name" placeholder="Marius Truckster" v-model="filters.query">
+                    <input class="w-full bg-gray-200 px-4 py-2" id="name" name="name" placeholder="Marius Truckster | Marius Mannen#2997 | steam:11000010df22c8b" v-model="filters.query">
                 </form>
             </template>
         </v-section>
