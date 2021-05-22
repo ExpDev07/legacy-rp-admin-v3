@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CharacterUpdateRequest extends FormRequest
 {
@@ -17,6 +18,7 @@ class CharacterUpdateRequest extends FormRequest
         return [
             'first_name' => ['string'],
             'last_name' => ['string'],
+            'gender' => [Rule::in(['male', 'female'])],
             'backstory' => ['string'],
             'job_name' => ['nullable', 'string'],
             'department_name' => ['nullable', 'string'],
