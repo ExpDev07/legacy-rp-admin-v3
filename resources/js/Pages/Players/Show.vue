@@ -204,7 +204,9 @@
                                 </h4>
                             </div>
                             <div class="flex items-center">
-                                <span class="text-muted">{{ warning.createdAt | formatTime }}</span>
+                                <span class="text-muted">
+                                    {{ warning.createdAt | formatTime }}
+                                </span>
                                 <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-3 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                     <i class="fas fa-trash"></i>
                                 </inertia-link>
