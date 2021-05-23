@@ -4,22 +4,22 @@
         <!-- Navigation -->
         <div class="flex flex-wrap">
             <inertia-link
-                class="bg-indigo-600 font-semibold text-white rounded px-4 py-2 mr-3"
+                class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded"
                 :href="links.prev"
                 v-if="links.prev"
                 preserve-scroll
             >
-                <i class="fas fa-arrow-left mr-1"></i>
+                <i class="mr-1 fas fa-arrow-left"></i>
                 Previous
             </inertia-link>
             <inertia-link
-                class="bg-indigo-600 font-semibold text-white rounded px-4 py-2 mr-3"
+                class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded"
                 :href="links.next"
                 v-if="links.next"
                 preserve-scroll
             >
                 Next
-                <i class="fas fa-arrow-right ml-1"></i>
+                <i class="ml-1 fas fa-arrow-right"></i>
             </inertia-link>
         </div>
 

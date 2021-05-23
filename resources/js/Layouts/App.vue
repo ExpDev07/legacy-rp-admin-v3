@@ -22,10 +22,10 @@
                         </div>
 
                         <!-- Header -->
-                        <header class="flex flex-grow items-start justify-between mb-12">
+                        <header class="flex items-start justify-between flex-grow mb-12">
 
                             <!-- Title -->
-                            <div class="prose max-w-full">
+                            <div class="max-w-full prose">
                                 <portal-target name="title" />
                             </div>
 

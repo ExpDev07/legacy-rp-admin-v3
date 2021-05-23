@@ -2,7 +2,7 @@
     <div class="flex">
 
         <!-- Branding / Logo -->
-        <div class="flex-shrink-0 bg-gray-900 text-white text-center w-56 px-12 py-4">
+        <div class="flex-shrink-0 w-56 px-12 py-4 text-center text-white bg-gray-900">
             <h1 class="text-lg">
                 <inertia-link href="/">
                     Legacy<span class="font-bold">RP</span>
@@ -11,7 +11,7 @@
         </div>
 
         <!-- Nav -->
-        <nav class="flex justify-between items-center bg-gray-900 text-white w-full shadow px-12 py-4">
+        <nav class="flex items-center justify-between w-full px-12 py-4 text-white bg-gray-900 shadow">
             <!-- Left side -->
             <p class="italic"></p>
 
@@ -20,7 +20,7 @@
                 <inertia-link class="hover:text-gray-100" v-bind:href="'/players/' + $page.auth.player.steamIdentifier">
                     {{ $page.auth.user.name }}
                 </inertia-link>
-                <inertia-link class="bg-red-500 hover:bg-red-600 text-white rounded py-1 px-4" method="POST" href="/logout">
+                <inertia-link class="px-4 py-1 text-white bg-red-500 rounded hover:bg-red-600" method="POST" href="/logout">
                     Logout
                 </inertia-link>
             </div>

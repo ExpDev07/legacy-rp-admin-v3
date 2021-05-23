@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-lg shadow bg-secondary p-8 mb-10">
+    <div class="p-8 mb-10 rounded-lg shadow bg-secondary">
 
         <!-- Header -->
         <header class="mb-8">

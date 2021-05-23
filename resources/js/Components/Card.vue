@@ -1,13 +1,13 @@
 <template>
-    <div class="flex flex-col rounded-lg shadow-sm bg-white p-8 mb-5">
+    <div class="flex flex-col p-8 mb-5 bg-white rounded-lg shadow-sm">
 
         <!-- Header -->
-        <header class="text-center border-b border-gray-200 pb-6 mb-6">
+        <header class="pb-6 mb-6 text-center border-b border-gray-200">
             <slot name="header" />
         </header>
 
         <!-- Body -->
-        <div class="flex-grow text-muted mb-8">
+        <div class="flex-grow mb-8 text-muted">
             <slot />
         </div>
 
