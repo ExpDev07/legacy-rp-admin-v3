@@ -1,16 +1,17 @@
 <?php
 
+
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 
 /**
- * Middleware to check if user is a staff member on our game-servers.
+ * Middleware to check if user is a super admin on our game-servers.
  *
  * @package App\Http\Middleware
  */
-class StaffMiddleware
+class SuperAdminMiddleware
 {
 
     /**
@@ -22,12 +23,10 @@ class StaffMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        // Check for staff status.
-        if (! $this->isStaff($request)) {
-            auth()->logout();
-
-            return redirect('/login')->with('error',
-                'You must be a staff member to access the dashboard! If you believe this is a mistake, contact a developer.'
+        // Check for super admin status.
+        if (! $this->isSuperAdmin($request)) {
+            return back()->with('error',
+                'You must be a Super Admin to do that! Contact a higher-up if you were shown this error by mistake.'
             );
         }
 
@@ -40,9 +39,9 @@ class StaffMiddleware
      * @param Request $request
      * @return bool
      */
-    protected function isStaff(Request $request) : bool
+    protected function isSuperAdmin(Request $request) : bool
     {
-        return ! is_null($request->user()) && $request->user()->isStaff();
+        return ! is_null($request->user()) && $request->user()->isSuperAdmin();
     }
 
 }

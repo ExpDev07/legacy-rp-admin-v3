@@ -1,5 +1,6 @@
 <template>
     <div class="flex items-center justify-between mt-6 mb-1">
+
         <!-- Navigation -->
         <div class="flex flex-wrap">
             <inertia-link
@@ -21,10 +22,12 @@
                 <i class="fas fa-arrow-right ml-1"></i>
             </inertia-link>
         </div>
+
         <!-- Meta -->
         <div class="font-semibold">
             Page {{ meta.current_page }}
         </div>
+
     </div>
 </template>
 

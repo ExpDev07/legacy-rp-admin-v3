@@ -13,10 +13,8 @@ Vue.use(PortalVue);
 // Properties / methods.
 Vue.prototype.$moment = moment;
 
-// Adding the humanizeSeconds filter
+// Custom filters.
 Vue.filter('humanizeSeconds', humanizeSeconds);
-
-// Adding the formatTime filter
 Vue.filter('formatTime', formatTime);
 
 // Create Vue.

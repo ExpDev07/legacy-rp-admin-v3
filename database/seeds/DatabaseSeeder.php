@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\ServerSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UsersTableSeeder::class);
         $this->call(LogsTableSeeder::class);
+        $this->call(ServerSeeder::class);
     }
 
 }

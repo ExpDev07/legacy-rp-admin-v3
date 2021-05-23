@@ -1,47 +1,54 @@
 <template>
-    <div class="flex flex-col h-screen">
-        <!-- Navbar -->
-        <navbar />
+    <div>
 
-        <div class="flex flex-grow overflow-hidden">
-            <!-- Sidebar -->
-            <sidebar class="flex-shrink-0" />
+        <!-- Modals -->
+        <portal-target name="modals" />
 
-            <!-- Content -->
-            <div class="flex flex-col flex-grow overflow-y-auto" scroll-region>
-                <div class="flex-grow p-12">
+        <div class="flex flex-col h-screen">
+            <!-- Navbar -->
+            <navbar />
 
-                    <!-- Flash message -->
-                    <div>
-                        <flash-message />
+            <div class="flex flex-grow overflow-hidden">
+                <!-- Sidebar -->
+                <sidebar class="flex-shrink-0" />
+
+                <!-- Content -->
+                <div class="flex flex-col flex-grow overflow-y-auto" scroll-region>
+                    <div class="flex-grow p-12">
+
+                        <!-- Flash message -->
+                        <div>
+                            <flash-message />
+                        </div>
+
+                        <!-- Header -->
+                        <header class="flex flex-grow items-start justify-between mb-12">
+
+                            <!-- Title -->
+                            <div class="prose max-w-full">
+                                <portal-target name="title" />
+                            </div>
+
+                            <!-- Actions -->
+                            <div>
+                                <portal-target name="actions" />
+                            </div>
+
+                        </header>
+
+                        <!-- Main -->
+                        <main>
+                            <slot />
+                        </main>
+
                     </div>
 
-                    <!-- Header -->
-                    <header class="flex flex-grow items-start justify-between mb-12">
-
-                        <!-- Title -->
-                        <div class="prose max-w-full">
-                            <portal-target name="title" />
-                        </div>
-
-                        <!-- Actions -->
-                        <div>
-                            <portal-target name="actions" />
-                        </div>
-
-                    </header>
-
-                    <!-- Main -->
-                    <main>
-                        <slot />
-                    </main>
-
+                    <!-- Footer -->
+                    <foot />
                 </div>
-
-                <!-- Footer -->
-                <foot />
             </div>
         </div>
+
     </div>
 </template>
 
