@@ -128,14 +128,12 @@
                         v-for="(vehicle, index) in character.vehicles"
                     >
                         <template #header>
-                            <div class="text-center">
-                                <h3 class="mb-2">
-                                    {{ vehicle.model_name }}
-                                </h3>
-                                <h4 class="text-primary">
-                                    <span>Plate number:</span> {{ vehicle.plate }}
-                                </h4>
-                            </div>
+                            <h3 class="mb-2">
+                                {{ vehicle.model_name }}
+                            </h3>
+                            <h4 class="text-primary">
+                                <span>Plate number:</span> {{ vehicle.plate }}
+                            </h4>
                         </template>
 
                         <template>

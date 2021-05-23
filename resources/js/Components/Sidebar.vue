@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-indigo-900 text-white font-semibold w-56 overflow-y-auto px-3 py-10">
+    <div class="flex flex-col bg-indigo-900 text-white font-semibold w-56 overflow-y-auto px-3 py-10">
         <!-- General stuff -->
         <nav>
             <ul>
@@ -15,6 +15,15 @@
                 </li>
             </ul>
         </nav>
+
+        <!-- Suggest a feature -->
+        <a 
+            class="mt-auto rounded text-center bg-yellow-400 text-black px-5 py-3" 
+            target="_blank" 
+            href="https://github.com/ExpDev07/legacy-rp-admin-v3/issues/new/choose"
+        >
+            <i class="fas fa-bug mr-2"></i> Report a bug!
+        </a>
     </div>
 </template>
 

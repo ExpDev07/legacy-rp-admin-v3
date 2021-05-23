@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
@@ -147,7 +146,7 @@ class Player extends Model
      */
     public function isStaff(): bool
     {
-        return $this->is_staff || $this->isSuperAdmin();
+        return ($this->is_staff ?? false) || $this->isSuperAdmin();
     }
 
     /**
@@ -156,7 +155,7 @@ class Player extends Model
      * @return bool
      */
     public function isSuperAdmin(): bool {
-        return $this->is_super_admin;
+        return $this->is_super_admin ?? false;
     }
 
     /**

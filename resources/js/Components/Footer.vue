@@ -2,7 +2,7 @@
     <footer class="lg:flex items-center justify-between text-center bg-gray-900 text-white px-12 py-6">
         <div></div>
         <p>
-            Made with <span id="heart" class="fas fa-heart text-red-500 hover:text-red-600"></span> by Marius (ExpDev07) with <a class="font-semibold text-indigo-400 hover:text-indigo-500" target="_blank" href="https://laravel.com/">Laravel</a> + <a class="font-semibold text-green-400 hover:text-green-500" target="_blank" href="https://vuejs.org/">Vue</a>.
+            Made with <span id="heart" class="fas fa-heart text-red-500"></span> by Marius (ExpDev07) with <a class="font-semibold" target="_blank" href="https://laravel.com/">Laravel</a> + <a class="font-semibold text-green-400 hover:text-green-500" target="_blank" href="https://vuejs.org/">Vue</a>.
         </p>
         <p class="text-gray-100">
             <a target="_blank" href="https://github.com/ExpDev07/legacy-rp-admin-v3">

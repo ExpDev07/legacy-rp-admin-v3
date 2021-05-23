@@ -60,7 +60,17 @@ class User extends Authenticatable
      */
     public function isStaff(): bool
     {
-        return !is_null($this->player) && $this->player->isStaff();
+        return ! is_null($this->player) && $this->player->isStaff();
+    }
+
+    /**
+     * Checks whether this user is a super admin.
+     *
+     * @return bool
+     */
+    public function isSuperAdmin(): bool
+    {
+        return ! is_null($this->player) && $this->player->isSuperAdmin();
     }
 
     /**

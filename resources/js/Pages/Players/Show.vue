@@ -145,18 +145,16 @@
             <template>
                 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
                     <card
-                        v-for="(character, index) in characters"
+                        v-for="(character) in characters"
                         :key="character.id"
                     >
                         <template #header>
-                            <div class="text-center">
-                                <h3 class="mb-2">
-                                    {{ character.name }} (#{{ character.id }})
-                                </h3>
-                                <h4 class="text-primary">
-                                    <span>Date of birth:</span> {{ $moment(character.dateOfBirth).format('l') }}
-                                </h4>
-                            </div>
+                            <h3 class="mb-2">
+                                {{ character.name }} (#{{ character.id }})
+                            </h3>
+                            <h4 class="text-primary">
+                                <span>Date of birth:</span> {{ $moment(character.dateOfBirth).format('l') }}
+                            </h4>
                         </template>
 
                         <template>
@@ -188,7 +186,7 @@
 
             <template>
                 <card
-                    v-for="(warning, index) in warnings"
+                    v-for="(warning) in warnings"
                     :key="warning.id"
                 >
                     <template #header>
@@ -239,7 +237,8 @@
                         :placeholder="player.playerName + ' did an oopsie.'"
                         v-model="form.warning.message"
                         required
-                    ></textarea>
+                    >
+                    </textarea>
 
                     <button class="rounded bg-indigo-600 font-semibold text-white py-2 px-5" type="submit">
                         <i class="fas fa-exclamation mr-1"></i>
@@ -298,10 +297,10 @@ export default {
                     message: null,
                 },
             },
-        };
+        }
     },
     methods: {
-        async submitBan () {
+        async submitBan() {
             // Default expiration.
             let expire = null;
 
@@ -322,7 +321,7 @@ export default {
             this.form.ban.expireDate = null;
             this.form.ban.expireTime = null;
         },
-        async submitWarning () {
+        async submitWarning() {
             // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/warnings', this.form.warning);
 
