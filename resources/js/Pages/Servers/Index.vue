@@ -17,16 +17,16 @@
                     <label class="block mb-3" for="url">
                         URL
                     </label>
-                    <input class="block w-full border rounded bg-gray-200 py-3 px-4 mb-3" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
+                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
                 </div>
             </template>
 
             <template #actions>
-                <button type="button" class="rounded hover:bg-gray-200 px-5 py-2" @click="isAdding = false">
+                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200" @click="isAdding = false">
                     Cancel
                 </button>
-                <button type="submit"  class="bg-indigo-600 text-white rounded px-5 py-2" @click="handleAdd">
-                    <i class="fa fa-plus mr-1"></i>
+                <button type="submit"  class="px-5 py-2 text-white bg-indigo-600 rounded" @click="handleAdd">
+                    <i class="mr-1 fa fa-plus"></i>
                     Add
                 </button>
             </template>
@@ -43,12 +43,12 @@
 
         <portal to="actions">
             <button 
-                class="bg-indigo-600 font-semibold text-white text-sm rounded px-4 py-2" 
+                class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded" 
                 type="button"
                 @click="isAdding = true" 
                 v-if="$page.auth.player.isSuperAdmin"
             >
-                <i class="fa fa-plus mr-1"></i>
+                <i class="mr-1 fa fa-plus"></i>
                 Add server
             </button>
         </portal>
@@ -63,7 +63,7 @@
                         <h3 class="mb-2">
                             Server #{{ server.id }}
                         </h3>
-                        <h4 class="text-primary italic">
+                        <h4 class="italic text-primary">
                             Running {{ server.information.serverVersion }}
                         </h4>
                     </template>
@@ -83,13 +83,13 @@
                                 Loading: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
                             </li>
                         </ul>
-                        <p class="mt-6 text-muted italic">
+                        <p class="mt-6 italic text-muted">
                             Retrieved from {{ server.url }}
                         </p>
                     </template>
 
                     <template #footer>
-                        <inertia-link class="bg-indigo-600 text-white text-center rounded block px-4 py-3" :href="'/'">
+                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 rounded" :href="'/'">
                             View
                         </inertia-link>
                     </template>

@@ -3,7 +3,7 @@
 
         <!-- Backdrop -->
         <div
-            class="absolute inset-0 overflow-hidden flex items-start justify-center"
+            class="absolute inset-0 flex items-start justify-center overflow-hidden"
             style="z-index: 9999; background-color: rgba(0, 0, 0, .85);"
             tabindex="-1"
             role="dialog"
@@ -11,13 +11,13 @@
         >
 
             <!-- Container -->
-            <div class="my-20 max-w-3xl w-full shadow rounded-md bg-white" role="document" v-bind="$attrs">
+            <div class="w-full max-w-3xl my-20 bg-white rounded-md shadow" role="document" v-bind="$attrs">
 
                 <!-- Content part -->
-                <div class="py-8 px-10 space-y-10">
+                <div class="px-10 py-8 space-y-10">
 
                     <!-- Header -->
-                    <header class="prose max-w-full text-center">
+                    <header class="max-w-full prose text-center">
                         <slot name="header" />
                     </header>
 
@@ -29,7 +29,7 @@
                 </div>
 
                 <!-- Actions -->
-                <footer class="py-4 px-10 space-x-3 flex items-center justify-end">
+                <footer class="flex items-center justify-end px-10 py-4 space-x-3">
                     <slot name="actions" />
                 </footer>
 

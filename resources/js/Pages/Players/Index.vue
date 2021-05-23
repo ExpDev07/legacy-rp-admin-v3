@@ -20,10 +20,10 @@
 
             <template>
                 <form @submit.prevent>
-                    <label class="block font-semibold mb-4" for="name">
+                    <label class="block mb-4 font-semibold" for="name">
                         Search by name, steam identifier, or any other identifier such as Discord id.
                     </label>
-                    <input class="w-full bg-gray-200 px-4 py-2" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
+                    <input class="w-full px-4 py-2 bg-gray-200" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
                 </form>
             </template>
         </v-section>
@@ -37,35 +37,35 @@
 
             <template>
                 <table class="w-full whitespace-no-wrap">
-                    <tr class="text-left font-semibold">
+                    <tr class="font-semibold text-left">
                         <th class="px-6 py-4">Identifier</th>
                         <th class="px-6 py-4">Name</th>
                         <th class="px-6 py-4">Playtime</th>
                         <th class="px-6 py-4">Warnings</th>
-                        <th class="px-6 py-4 w-64">Banned?</th>
-                        <th class="px-6 py-4 w-24"></th>
+                        <th class="w-64 px-6 py-4">Banned?</th>
+                        <th class="w-24 px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100" v-for="player in players.data" v-bind:key="player.id">
                         <td class="px-6 py-3 border-t">{{ player.steamIdentifier }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playTime | humanizeSeconds }}</td>
                         <td class="px-6 py-3 border-t">{{ player.warnings }}</td>
-                        <td class="px-6 py-3 border-t text-center">
-                            <span class="block bg-red-500 text-white rounded px-4 py-2" v-if="player.isBanned">
+                        <td class="px-6 py-3 text-center border-t">
+                            <span class="block px-4 py-2 text-white bg-red-500 rounded" v-if="player.isBanned">
                                 Banned
                             </span>
-                            <span class="block bg-green-500 text-white rounded px-4 py-2" v-else>
+                            <span class="block px-4 py-2 text-white bg-green-500 rounded" v-else>
                                 Not banned
                             </span>
                         </td>
                         <td class="px-6 py-3 border-t">
-                            <inertia-link class="block bg-indigo-600 font-semibold text-white text-center rounded px-4 py-2" v-bind:href="'/players/' + player.steamIdentifier">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded" v-bind:href="'/players/' + player.steamIdentifier">
                                 <i class="fas fa-chevron-right"></i>
                             </inertia-link>
                         </td>
                     </tr>
                     <tr v-if="players.data.length === 0">
-                        <td class="px-6 py-6 border-t text-center" colspan="100%">
+                        <td class="px-6 py-6 text-center border-t" colspan="100%">
                             No players was found.
                         </td>
                     </tr>

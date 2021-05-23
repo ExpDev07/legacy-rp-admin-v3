@@ -6,16 +6,16 @@
                     {{ player.playerName }}
                 </h1>
                 <div class="flex items-center space-x-5">
-                    <badge class="bg-danger-pale border-red-200" v-if="player.isBanned">
+                    <badge class="border-red-200 bg-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">Banned</span>
                     </badge>
-                    <badge class="bg-success-pale border-green-200" v-if="player.isStaff">
+                    <badge class="border-green-200 bg-success-pale" v-if="player.isStaff">
                         <span class="font-semibold">Staff Member</span>
                     </badge>
-                    <badge class="bg-success-pale border-green-200" v-if="player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale" v-if="player.isSuperAdmin">
                         <span class="font-semibold">Super Admin</span>
                     </badge>
-                    <badge class="bg-secondary border-gray-200">
+                    <badge class="border-gray-200 bg-secondary">
                         <span class="font-semibold">{{ player.playTime | humanizeSeconds }}</span> played
                     </badge>
                 </div>
@@ -28,13 +28,13 @@
         <portal to="actions">
             <div>
                 <!-- Unbanning -->
-                <inertia-link class="rounded bg-success font-semibold text-white py-2 px-5" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
-                    <i class="fas fa-lock-open mr-1"></i>
+                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
+                    <i class="mr-1 fas fa-lock-open"></i>
                     Unban
                 </inertia-link>
                 <!-- Banning -->
-                <button class="rounded bg-danger font-semibold text-white py-2 px-5" @click="isBanning = true" v-else>
-                    <i class="fas fa-gavel mr-1"></i>
+                <button class="px-5 py-2 font-semibold text-white rounded bg-danger" @click="isBanning = true" v-else>
+                    <i class="mr-1 fas fa-gavel"></i>
                     Issue ban
                 </button>
             </div>
@@ -60,8 +60,8 @@
 
             </alert>
             <!-- Issuing -->
-            <div class="rounded bg-gray-100 p-8 mb-10" v-if="isBanning">
-                <div class="space-y-5 mb-8">
+            <div class="p-8 mb-10 bg-gray-100 rounded" v-if="isBanning">
+                <div class="mb-8 space-y-5">
                     <h2 class="text-2xl font-semibold">
                         Issuing ban
                     </h2>
@@ -72,38 +72,38 @@
                 <form class="space-y-6" @submit.prevent="submitBan">
                     <!-- Deciding if ban is temporary -->
                     <div class="flex items-center space-x-3">
-                        <input class="block shadow rounded bg-gray-200 p-3" type="checkbox" id="tempban" name="tempban" v-model="isTempBanning">
-                        <label class="font-semibold italic" for="tempban">
+                        <input class="block p-3 bg-gray-200 rounded shadow" type="checkbox" id="tempban" name="tempban" v-model="isTempBanning">
+                        <label class="italic font-semibold" for="tempban">
                             This is a temporary ban
                         </label>
                     </div>
 
                     <!-- Expiration -->
                     <div v-if="isTempBanning">
-                        <label class="font-semibold italic">
+                        <label class="italic font-semibold">
                             Expiration
                         </label>
                         <div class="flex items-center">
-                            <input class="block shadow rounded bg-gray-200 p-3" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
-                            <input class="block shadow rounded bg-gray-200 p-3" type="time" id="expireTime" name="expireTime" step="any" v-model="form.ban.expireTime" required>
+                            <input class="block p-3 bg-gray-200 rounded shadow" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
+                            <input class="block p-3 bg-gray-200 rounded shadow" type="time" id="expireTime" name="expireTime" step="any" v-model="form.ban.expireTime" required>
                         </div>
                     </div>
 
                     <!-- Reason -->
                     <div>
-                        <label class="font-semibold italic" for="reason">
+                        <label class="italic font-semibold" for="reason">
                             Reason
                         </label>
-                        <textarea class="block w-full shadow rounded bg-gray-200 p-5" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
+                        <textarea class="block w-full p-5 bg-gray-200 rounded shadow" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
                     </div>
 
                     <!-- Buttons -->
                     <div class="flex items-center space-x-3">
-                        <button class="rounded bg-red-500 hover:bg-red-600 font-semibold text-white py-2 px-5" type="submit">
-                            <i class="fas fa-gavel mr-1"></i>
+                        <button class="px-5 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600" type="submit">
+                            <i class="mr-1 fas fa-gavel"></i>
                             Ban player
                         </button>
-                        <button class="rounded hover:bg-gray-200 py-2 px-5" type="button" @click="isBanning = false">
+                        <button class="px-5 py-2 rounded hover:bg-gray-200" type="button" @click="isBanning = false">
                             Cancel
                         </button>
                     </div>
@@ -116,18 +116,18 @@
             <div class="flex flex-wrap items-center text-center">
 
                 <inertia-link
-                    class="flex-1 m-2 bg-indigo-600 font-semibold text-white rounded block p-5"
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded"
                     :href="'/logs?identifier=' + player.steamIdentifier"
                 >
-                    <i class="fas fa-toilet-paper mr-1"></i>
+                    <i class="mr-1 fas fa-toilet-paper"></i>
                     Check player's logs
                 </inertia-link>
                 <a
-                    class="flex-1 m-2 bg-gray-800 font-semibold text-white rounded block p-5"
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-gray-800 rounded"
                     target="_blank"
                     :href="player.steamProfileUrl"
                 >
-                    <i class="fab fa-steam mr-1"></i>
+                    <i class="mr-1 fab fa-steam"></i>
                     Open Steam profile
                 </a>
 
@@ -164,7 +164,7 @@
                         </template>
 
                         <template #footer>
-                            <inertia-link class="bg-indigo-600 text-white text-center rounded block px-4 py-3" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
+                            <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 rounded" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
                                 View
                             </inertia-link>
                         </template>
@@ -205,7 +205,7 @@
                                 <span class="text-muted">
                                     {{ warning.createdAt | formatTime }}
                                 </span>
-                                <inertia-link class="bg-red-500 hover:bg-red-600 font-semibold text-white text-sm rounded py-1 px-3 ml-4" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
+                                <inertia-link class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
                                     <i class="fas fa-trash"></i>
                                 </inertia-link>
                             </div>
@@ -230,7 +230,7 @@
                 <form @submit.prevent="submitWarning">
                     <label for="message"></label>
                     <textarea
-                        class="w-full shadow rounded bg-gray-200 p-5 mb-5"
+                        class="w-full p-5 mb-5 bg-gray-200 rounded shadow"
                         id="message"
                         name="message"
                         rows="5"
@@ -240,8 +240,8 @@
                     >
                     </textarea>
 
-                    <button class="rounded bg-indigo-600 font-semibold text-white py-2 px-5" type="submit">
-                        <i class="fas fa-exclamation mr-1"></i>
+                    <button class="px-5 py-2 font-semibold text-white bg-indigo-600 rounded" type="submit">
+                        <i class="mr-1 fas fa-exclamation"></i>
                         Warn player
                     </button>
                 </form>
