@@ -2,25 +2,25 @@
     <div>
         <portal to="title">
             <div class="flex items-start space-x-10">
-                <h1>
+                <h1 class="dark:text-white">
                     {{ player.playerName }}
                 </h1>
                 <div class="flex items-center space-x-5">
-                    <badge class="border-red-200 bg-danger-pale" v-if="player.isBanned">
+                    <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">Banned</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale" v-if="player.isStaff">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff">
                         <span class="font-semibold">Staff Member</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale" v-if="player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
                         <span class="font-semibold">Super Admin</span>
                     </badge>
-                    <badge class="border-gray-200 bg-secondary">
+                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary">
                         <span class="font-semibold">{{ player.playTime | humanizeSeconds }}</span> played
                     </badge>
                 </div>
             </div>
-            <p>
+            <p class="dark:text-dark-muted">
                 Viewing player profile.
             </p>
         </portal>
@@ -28,12 +28,12 @@
         <portal to="actions">
             <div>
                 <!-- Unbanning -->
-                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
+                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
                     <i class="mr-1 fas fa-lock-open"></i>
                     Unban
                 </inertia-link>
                 <!-- Banning -->
-                <button class="px-5 py-2 font-semibold text-white rounded bg-danger" @click="isBanning = true" v-else>
+                <button class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger" @click="isBanning = true" v-else>
                     <i class="mr-1 fas fa-gavel"></i>
                     Issue ban
                 </button>
@@ -43,7 +43,7 @@
         <!-- Ban -->
         <div>
             <!-- Viewing -->
-            <alert class="bg-danger" v-if="player.isBanned">
+            <alert class="bg-danger dark:bg-dark-danger" v-if="player.isBanned">
 
                 <div class="flex items-center justify-between mb-2">
                     <h2 class="text-lg font-semibold">
@@ -60,12 +60,12 @@
 
             </alert>
             <!-- Issuing -->
-            <div class="p-8 mb-10 bg-gray-100 rounded" v-if="isBanning">
+            <div class="p-8 mb-10 bg-gray-100 rounded dark:bg-dark-secondary" v-if="isBanning">
                 <div class="mb-8 space-y-5">
                     <h2 class="text-2xl font-semibold">
                         Issuing ban
                     </h2>
-                    <p class="text-gray-900">
+                    <p class="text-gray-900 dark:text-gray-100">
                         You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
                     </p>
                 </div>
@@ -84,8 +84,8 @@
                             Expiration
                         </label>
                         <div class="flex items-center">
-                            <input class="block p-3 bg-gray-200 rounded shadow" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
-                            <input class="block p-3 bg-gray-200 rounded shadow" type="time" id="expireTime" name="expireTime" step="any" v-model="form.ban.expireTime" required>
+                            <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
+                            <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow" type="time" id="expireTime" name="expireTime" step="any" v-model="form.ban.expireTime" required>
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@
                         <label class="italic font-semibold" for="reason">
                             Reason
                         </label>
-                        <textarea class="block w-full p-5 bg-gray-200 rounded shadow" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
+                        <textarea class="block w-full p-5 bg-gray-200 dark:bg-gray-600 rounded shadow" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
                     </div>
 
                     <!-- Buttons -->
@@ -103,7 +103,7 @@
                             <i class="mr-1 fas fa-gavel"></i>
                             Ban player
                         </button>
-                        <button class="px-5 py-2 rounded hover:bg-gray-200" type="button" @click="isBanning = false">
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" type="button" @click="isBanning = false">
                             Cancel
                         </button>
                     </div>
@@ -112,7 +112,7 @@
         </div>
 
         <!-- Useful links -->
-        <v-section class="py-1">
+        <v-section class="py-1 dark:bg-dark-secondary">
             <div class="flex flex-wrap items-center text-center">
 
                 <inertia-link
@@ -165,10 +165,10 @@
                             <h3 class="mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h3>
-                            <h4 class="text-primary">
+                            <h4 class="text-primary dark:text-dark-primary">
                                 <span>Date of birth:</span> {{ $moment(character.dateOfBirth).format('l') }}
                             </h4>
-                            <h4 class="text-red-700" v-if="character.characterDeleted">
+                            <h4 class="text-red-700 dark:text-red-300" v-if="character.characterDeleted">
                                 <span>Deleted at:</span> {{ $moment(character.characterDeletionTimestamp).format('l') }}
                             </h4>
                         </template>
@@ -180,13 +180,13 @@
                         </template>
 
                         <template #footer>
-                            <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 rounded" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
+                            <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
                                 View
                             </inertia-link>
                         </template>
                     </card>
                 </div>
-                <p class="text-muted" v-if="characters.length === 0">
+                <p class="text-muted dark:text-dark-muted" v-if="characters.length === 0">
                     This player has not created any characters yet.
                 </p>
             </template>
@@ -218,7 +218,7 @@
                                 </h4>
                             </div>
                             <div class="flex items-center">
-                                <span class="text-muted">
+                                <span class="text-muted dark:text-dark-muted">
                                     {{ warning.createdAt | formatTime }}
                                 </span>
                                 <inertia-link class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600" method="DELETE" v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
@@ -229,12 +229,12 @@
                     </template>
 
                     <template>
-                        <p class="text-muted">
+                        <p class="text-muted dark:text-dark-muted">
                             {{ warning.message }}
                         </p>
                     </template>
                 </card>
-                <p class="text-muted" v-if="warnings.length === 0">
+                <p class="text-muted dark:text-dark-muted" v-if="warnings.length === 0">
                     This player has not received any warnings.
                 </p>
             </template>
@@ -246,7 +246,7 @@
                 <form @submit.prevent="submitWarning">
                     <label for="message"></label>
                     <textarea
-                        class="w-full p-5 mb-5 bg-gray-200 rounded shadow"
+                        class="w-full p-5 mb-5 bg-gray-200 rounded shadow dark:bg-gray-600"
                         id="message"
                         name="message"
                         rows="5"
@@ -256,7 +256,7 @@
                     >
                     </textarea>
 
-                    <button class="px-5 py-2 font-semibold text-white bg-indigo-600 rounded" type="submit">
+                    <button class="px-5 py-2 font-semibold text-white bg-indigo-600 dark:bg-indigo-400 rounded" type="submit">
                         <i class="mr-1 fas fa-exclamation"></i>
                         Warn player
                     </button>
