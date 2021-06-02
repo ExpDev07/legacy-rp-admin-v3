@@ -2,7 +2,7 @@
     <div>
 
         <portal to="title">
-            <h1>
+            <h1 class="dark:text-white">
                 Dashboard
             </h1>
             <p>

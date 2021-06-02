@@ -3,12 +3,12 @@
 
         <modal :show.sync="isAdding">
             <template #header>
-                <h1>
+                <h1 class="dark:text-white">
                    Add server
                 </h1>
-                <p>
+                <p class="dark:text-dark-muted">
                     Provide the server URL where the data should be fetched from. The URL should expose two
-                    endpoints: <code class="inline">/api.json</code> and <code class="inline">/connections.json</code>.
+                    endpoints: <code class="inline dark:text-dark-muted">/api.json</code> and <code class="inline dark:text-dark-muted">/connections.json</code>.
                 </p>
             </template>
 
@@ -17,15 +17,15 @@
                     <label class="block mb-3" for="url">
                         URL
                     </label>
-                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
+                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
                 </div>
             </template>
 
             <template #actions>
-                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200" @click="isAdding = false">
+                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="isAdding = false">
                     Cancel
                 </button>
-                <button type="submit"  class="px-5 py-2 text-white bg-indigo-600 rounded" @click="handleAdd">
+                <button type="submit" class="px-5 py-2 text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="handleAdd">
                     <i class="mr-1 fa fa-plus"></i>
                     Add
                 </button>
@@ -33,7 +33,7 @@
         </modal>
 
         <portal to="title">
-            <h1>
+            <h1 class="dark:text-white">
                 Servers
             </h1>
             <p>
@@ -42,10 +42,10 @@
         </portal>
 
         <portal to="actions">
-            <button 
-                class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded" 
+            <button
+                class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
                 type="button"
-                @click="isAdding = true" 
+                @click="isAdding = true"
                 v-if="$page.auth.player.isSuperAdmin"
             >
                 <i class="mr-1 fa fa-plus"></i>
@@ -63,7 +63,7 @@
                         <h3 class="mb-2">
                             Server #{{ server.id }}
                         </h3>
-                        <h4 class="italic text-primary">
+                        <h4 class="italic text-primary dark:text-dark-primary">
                             Running {{ server.information.serverVersion }}
                         </h4>
                     </template>
@@ -83,13 +83,13 @@
                                 Loading: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
                             </li>
                         </ul>
-                        <p class="mt-6 italic text-muted">
+                        <p class="mt-6 italic text-muted dark:text-dark-muted">
                             Retrieved from {{ server.url }}
                         </p>
                     </template>
 
                     <template #footer>
-                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 rounded" :href="'/'">
+                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/'">
                             View
                         </inertia-link>
                     </template>
