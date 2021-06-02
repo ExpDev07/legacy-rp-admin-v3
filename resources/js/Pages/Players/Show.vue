@@ -139,6 +139,18 @@
             <template #header>
                 <h2>
                     Characters
+
+                    <!-- Hiding deleted characters on click -->
+                    <button class="px-3 py-2 font-semibold text-white rounded bg-gray-400 text-base float-right" @click="hideDeleted">
+                        <span v-if="isShowingDeletedCharacters">
+                            <i class="fas fa-eye-slash"></i>
+                            Hide Deleted
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-eye"></i>
+                            Show Deleted
+                        </span>
+                    </button>
                 </h2>
             </template>
 
@@ -147,6 +159,7 @@
                     <card
                         v-for="(character) in characters"
                         :key="character.id"
+                        v-bind:deleted="character.characterDeleted"
                     >
                         <template #header>
                             <h3 class="mb-2">
@@ -154,6 +167,9 @@
                             </h3>
                             <h4 class="text-primary">
                                 <span>Date of birth:</span> {{ $moment(character.dateOfBirth).format('l') }}
+                            </h4>
+                            <h4 class="text-red-700" v-if="character.characterDeleted">
+                                <span>Deleted at:</span> {{ $moment(character.characterDeletionTimestamp).format('l') }}
                             </h4>
                         </template>
 
@@ -297,6 +313,7 @@ export default {
                     message: null,
                 },
             },
+            isShowingDeletedCharacters: true,
         }
     },
     methods: {
@@ -328,6 +345,16 @@ export default {
             // Reset.
             this.form.warning.message = null;
         },
+        hideDeleted(e) {
+            e.preventDefault();
+
+            this.isShowingDeletedCharacters = !this.isShowingDeletedCharacters;
+            if (this.isShowingDeletedCharacters) {
+                $('.card-deleted').removeClass('hidden');
+            } else {
+                $('.card-deleted').addClass('hidden');
+            }
+        }
     },
 };
 </script>
