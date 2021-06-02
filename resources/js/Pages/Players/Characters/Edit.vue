@@ -65,8 +65,8 @@
                             Gender
                         </label>
                         <select class="block w-56 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="gender" v-model="form.gender">
-                            <option value="male">{{ t('global.male') }}</option>
-                            <option value="female">{{ t('global.female') }}</option>
+                            <option value="0">{{ t('global.male') }}</option>
+                            <option value="1">{{ t('global.female') }}</option>
                         </select>
                     </div>
 

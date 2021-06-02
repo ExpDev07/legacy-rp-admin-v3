@@ -21,8 +21,10 @@
 
 <script>
 export default {
-    props: ['deleted'],
     name: 'Card',
+    props: {
+        deleted: Boolean,
+    },
 }
 </script>
 
