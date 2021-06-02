@@ -65,8 +65,8 @@
                             Gender
                         </label>
                         <select class="block w-56 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="gender" v-model="form.gender">
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                            <option value="0">Male</option>
+                            <option value="1">Female</option>
                         </select>
                     </div>
 

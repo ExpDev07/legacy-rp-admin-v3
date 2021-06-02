@@ -67,6 +67,7 @@ class Character extends Model
     protected $casts = [
         'date_of_birth'                => 'date',
         'character_slot'               => 'integer',
+        'gender'                       => 'integer',
         'cash'                         => 'integer',
         'bank'                         => 'integer',
         'stocks_balance'               => 'double',
@@ -74,7 +75,6 @@ class Character extends Model
         'character_creation_timestamp' => 'datetime',
         'character_deleted'            => 'boolean',
         'character_deletion_timestamp' => 'datetime',
-
     ];
 
     /**
