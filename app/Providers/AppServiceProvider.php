@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
 
-            'lang' => env('VUE_APP_LOCALE', 'en'),
+            'lang' => env('VUE_APP_LOCALE', 'en-us'),
         ]);
     }
 
