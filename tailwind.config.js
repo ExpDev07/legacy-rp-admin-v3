@@ -2,6 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     mode: 'jit',
+    darkMode: 'class',
     purge: [
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue'
@@ -56,5 +57,4 @@ module.exports = {
         require('@tailwindcss/typography'),
         require('@tailwindcss/forms'),
     ],
-    darkMode: 'class',
 }
