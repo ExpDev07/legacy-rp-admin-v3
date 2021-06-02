@@ -64,7 +64,9 @@ class AppServiceProvider extends ServiceProvider
                     'user' => $user ? new UserResource($user) : null,
                     'player' => $player ? new PlayerResource($player) : null,
                 ];
-            }
+            },
+
+            'lang' => env('VUE_APP_LOCALE', 'en'),
         ]);
     }
 

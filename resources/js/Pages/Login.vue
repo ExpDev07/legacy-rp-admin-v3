@@ -14,16 +14,15 @@
             <div class="mb-8 text-center">
                 <span class="mb-6 text-6xl text-gray-800 fab fa-steam"></span>
                 <h1 class="mb-6 text-3xl font-semibold">
-                    Login with your Steam account.
+                    {{ t('login.title') }}
                 </h1>
                 <p class="text-gray-700">
-                    Please login with the same Steam account that you have your staff permissions on. Using a different
-                    one will result in you not being able to access the server panel.
+                    {{ t('login.description') }}
                 </p>
             </div>
 
             <a class="block p-5 text-center text-white bg-indigo-600 hover:bg-orange-500" href="/auth/login/steam">
-                Login with Steam
+                {{ t('login.login') }}
             </a>
 
         </div>

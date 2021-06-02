@@ -17,11 +17,11 @@
                 <!-- Toggle Dark mode -->
                 <button class="px-4 py-1 focus:outline-none font-semibold text-white text-sm rounded bg-gray-700 hover:bg-gray-600 text-base float-right" @click="toggleTheme" v-if="theme === 'light'">
                     <i class="fas fa-moon"></i>
-                    Dark Mode
+                    {{ t("nav.dark") }}
                 </button>
                 <button class="px-4 py-1 focus:outline-none font-semibold text-black text-sm rounded bg-gray-400 hover:bg-gray-300 text-base float-right" @click="toggleTheme" v-else>
                     <i class="fas fa-sun"></i>
-                    Light Mode
+                    {{ t("nav.light") }}
                 </button>
             </p>
 
@@ -31,7 +31,7 @@
                     {{ $page.auth.user.name }}
                 </inertia-link>
                 <inertia-link class="px-4 py-1 text-white bg-red-500 rounded hover:bg-red-600" method="POST" href="/logout">
-                    Logout
+                    {{ t("nav.logout") }}
                 </inertia-link>
             </div>
         </nav>
