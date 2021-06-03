@@ -32,6 +32,27 @@
             </template>
         </modal>
 
+        <modal :show.sync="isViewing" v-if="selectedServer">
+            <template #header>
+                <h1>
+                   Connections
+                </h1>
+                <p>
+                    This is an overview of all the connections for Server #{{ selectedServer.id }}.
+                </p>
+            </template>
+
+            <template #default>
+                Connections
+            </template>
+
+            <template #actions>
+                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200" @click="isViewing = false">
+                    Close
+                </button>
+            </template>
+        </modal>
+
         <portal to="title">
             <h1>
                 Servers
@@ -89,9 +110,9 @@
                     </template>
 
                     <template #footer>
-                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 rounded" :href="'/'">
+                        <button class="block w-full px-4 py-3 text-center text-white bg-indigo-600 rounded" type="button" @click="selectedServer = server">
                             View
-                        </inertia-link>
+                        </button>
                     </template>
                 </card>
             </div>
@@ -114,6 +135,7 @@ export default {
         Card,
     },
     props: {
+        selectedServer: null,
         servers: {
             type: Object,
             required: true,
@@ -125,6 +147,16 @@ export default {
             form: {
                 url: '',
             },
+        }
+    },
+    computed: {
+        isViewing: {
+            get() {
+                return this.selectedServer !== null;
+            },
+            set(value) {
+                if (! value) this.selectedServer = null;
+            }
         }
     },
     methods: {
