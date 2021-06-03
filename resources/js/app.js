@@ -3,12 +3,14 @@ import { InertiaApp } from '@inertiajs/inertia-vue';
 import Vue from 'vue';
 import PortalVue from 'portal-vue';
 import moment from 'moment';
+import Localization from './Plugins/localization.js';
 import humanizeSeconds from './Filters/humanizeSeconds.js';
 import formatTime from './Filters/formatTime.js';
 
 // Plugins.
 Vue.use(InertiaApp);
 Vue.use(PortalVue);
+Vue.use(Localization);
 
 // Properties / methods.
 Vue.prototype.$moment = moment;

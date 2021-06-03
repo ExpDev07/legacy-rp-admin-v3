@@ -17,12 +17,12 @@
         </nav>
 
         <!-- Suggest a feature -->
-        <a 
-            class="px-5 py-3 mt-auto text-center text-black bg-yellow-400 rounded" 
-            target="_blank" 
+        <a
+            class="px-5 py-3 mt-auto text-center text-black bg-yellow-400 rounded"
+            target="_blank"
             href="https://github.com/ExpDev07/legacy-rp-admin-v3/issues/new/choose"
         >
-            <i class="mr-2 fas fa-bug"></i> Report a bug!
+            <i class="mr-2 fas fa-bug"></i> {{ t("nav.report") }}
         </a>
     </div>
 </template>
@@ -39,22 +39,22 @@ export default {
             url: this.$page.url,
             links: [
                 {
-                    label: 'Dashboard',
+                    label: this.t('home.title'),
                     icon: 'dashboard',
                     url: '/',
                 },
                 {
-                    label: 'Players',
+                    label: this.t('players.title'),
                     icon: 'user',
                     url: '/players',
                 },
                 {
-                    label: 'Server Logs',
+                    label: this.t('logs.title'),
                     icon: 'printer',
                     url: '/logs',
                 },
                 {
-                    label: 'Servers',
+                    label: this.t('servers.title'),
                     icon: 'office',
                     url: '/servers',
                 },

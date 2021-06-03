@@ -1,0 +1,137 @@
+{
+    "global": {
+        "male": "Male",
+        "female": "Female",
+        "none": "None",
+        "banned": "Banned",
+        "not_banned": "Not banned",
+        "staff": "Staff Member",
+        "super": "Super Admin",
+        "cancel": "Cancel",
+        "view": "View"
+    },
+    "home": {
+        "title": "Dashboard",
+        "welcome": "Hello, {0}. Welcome to the dashboard!"
+    },
+    "nav": {
+        "dark": "Dark Mode",
+        "light": "Light Mode",
+        "logout": "Logout",
+        "report": "Report a bug!"
+    },
+    "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {0}"
+    },
+    "players": {
+        "title": "Players",
+        "description": "Search Players!",
+        "search": "Search",
+        "search_label": "Search by name, steam identifier, or any other identifier such as Discord id.",
+        "none": "No players was found.",
+        "ban": {
+            "issuing": "Issuing ban",
+            "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",
+            "temporary": "This is a temporary ban",
+            "expiration": "Expiration",
+            "reason": "Reason",
+            "do_ban": "Ban player"
+        },
+        "show": {
+            "played": "<b>{0}</b> played",
+            "description": "Viewing player profile.",
+            "unban": "Unban",
+            "issue": "Issue Ban",
+            "ban": "Banned by <i>{0}</i> until <i>{1}</i>",
+            "no_reason": "No reason.",
+            "logs": "Check player's logs",
+            "steam": "Open Steam profile",
+            "no_warnings": "This player has not received any warnings."
+        },
+        "form": {
+            "identifier": "Identifier",
+            "name": "Name",
+            "playtime": "Playtime",
+            "warnings": "Warnings",
+            "banned": "Banned"
+        },
+        "warning": {
+            "give": "Give warning",
+            "placeholder": "{0} did an oopsie.",
+            "do": "Warn player"
+        },
+        "job": {
+            "job": "Job",
+            "name": "Name",
+            "department": "Department",
+            "position": "Position",
+            "reset": "Reset"
+        },
+        "vehicles": {
+            "vehicles": "Vehicles",
+            "plate": "Plate Number",
+            "parked": "Parked at <i>{0}</i>",
+            "none": "This character does not own any vehicles."
+        },
+        "characters": {
+            "characters": "Characters",
+            "hide": "Hide deleted",
+            "show": "Show deleted",
+            "none": "This player has not created any characters yet."
+        },
+        "edit": {
+            "born": "Born on <b>{0}</b>",
+            "cash": "<b>{0}</b> in cash/bank",
+            "stocks": "<b>{0}</b> in stocks",
+            "prename": "First Name",
+            "surname": "First Name",
+            "backstory": "Backstory",
+            "dob": "Date of Birth",
+            "deleted": "Deleted at",
+            "update": "Update Character",
+            "job": "Job"
+        }
+    },
+    "logs": {
+        "title": "Server Logs",
+        "description": "On this page you can view and filter the server logs.",
+        "logs": "Logs",
+        "refresh": "Refresh",
+        "filter": "Filter Logs",
+        "identifier": "Player Identifier",
+        "action": "Action",
+        "server_id": "Server ID",
+        "details": "Details",
+        "player": "Player",
+        "timestamp": "Timestamp",
+        "no_logs": "No logged actions were found.",
+        "placeholder_action": "Death",
+        "placeholder_details": "Marius killed jax with an AK-47"
+    },
+    "servers": {
+        "title": "Servers",
+        "description": "An overview of the game servers.",
+        "list": {
+            "server": "Server",
+            "running": "Running",
+            "uptime": "Uptime",
+            "joined": "Joined",
+            "queued": "Queued",
+            "loading": "Loading",
+            "retrieved": "Retrieved from {0}"
+        },
+        "add": {
+            "add": "Add server",
+            "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
+            "url": "URL",
+            "do": "Add"
+        }
+    },
+    "login": {
+        "title": "Login with your Steam account.",
+        "description": "Please login with the same Steam account that you have your staff permissions on. Using a different one will result in you not being able to access the server panel.",
+        "login": "Login with Steam"
+    }
+}

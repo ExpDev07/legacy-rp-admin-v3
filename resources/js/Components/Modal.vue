@@ -11,7 +11,7 @@
         >
 
             <!-- Container -->
-            <div class="w-full max-w-3xl my-20 bg-white rounded-md shadow" role="document" v-bind="$attrs">
+            <div class="w-full max-w-3xl my-20 bg-white rounded-md shadow dark:bg-dark-secondary dark:text-white" role="document" v-bind="$attrs">
 
                 <!-- Content part -->
                 <div class="px-10 py-8 space-y-10">

@@ -3,31 +3,30 @@
 
         <modal :show.sync="isAdding">
             <template #header>
-                <h1>
-                   Add server
+                <h1 class="dark:text-white">
+                    {{ t('servers.add.add') }}
                 </h1>
-                <p>
-                    Provide the server URL where the data should be fetched from. The URL should expose two
-                    endpoints: <code class="inline">/api.json</code> and <code class="inline">/connections.json</code>.
+                <p class="dark:text-dark-muted">
+                    {{ t('servers.add.description') }}: <code class="inline dark:text-dark-muted">/api.json</code> & <code class="inline dark:text-dark-muted">/connections.json</code>.
                 </p>
             </template>
 
             <template #default>
                 <div>
                     <label class="block mb-3" for="url">
-                        URL
+                        {{ t('servers.add.url') }}
                     </label>
-                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
+                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
                 </div>
             </template>
 
             <template #actions>
-                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200" @click="isAdding = false">
-                    Cancel
+                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="isAdding = false">
+                    {{ t('global.cancel') }}
                 </button>
-                <button type="submit"  class="px-5 py-2 text-white bg-indigo-600 rounded" @click="handleAdd">
+                <button type="submit" class="px-5 py-2 text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="handleAdd">
                     <i class="mr-1 fa fa-plus"></i>
-                    Add
+                    {{ t('servers.add.do') }}
                 </button>
             </template>
         </modal>
@@ -54,23 +53,23 @@
         </modal>
 
         <portal to="title">
-            <h1>
-                Servers
+            <h1 class="dark:text-white">
+                {{ t('servers.title') }}
             </h1>
             <p>
-                An overview of the game servers.
+                {{ t('servers.description') }}
             </p>
         </portal>
 
         <portal to="actions">
-            <button 
-                class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded" 
+            <button
+                class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
                 type="button"
-                @click="isAdding = true" 
+                @click="isAdding = true"
                 v-if="$page.auth.player.isSuperAdmin"
             >
                 <i class="mr-1 fa fa-plus"></i>
-                Add server
+                {{ t('servers.add.add') }}
             </button>
         </portal>
 
@@ -82,37 +81,37 @@
                 >
                     <template #header>
                         <h3 class="mb-2">
-                            Server #{{ server.id }}
+                            {{ t('servers.list.server') }} #{{ server.id }}
                         </h3>
-                        <h4 class="italic text-primary">
-                            Running {{ server.information.serverVersion }}
+                        <h4 class="italic text-primary dark:text-dark-primary">
+                            {{ t('servers.list.running') }} {{ server.information.serverVersion }}
                         </h4>
                     </template>
 
                     <template #default>
                         <ul class="list-disc list-inside">
                             <li>
-                                Uptime: <span class="font-semibold">{{ server.information.serverUptime }}</span>
+                                {{ t('servers.list.uptime') }}: <span class="font-semibold">{{ server.information.serverUptime }}</span>
                             </li>
                             <li>
-                                Joined: <span class="font-semibold">{{ server.information.joinedAmount }} / {{ server.information.maxClients }}</span>
+                                {{ t('servers.list.joined') }}: <span class="font-semibold">{{ server.information.joinedAmount }} / {{ server.information.maxClients }}</span>
                             </li>
                             <li>
-                                Queued: <span class="font-semibold">{{ server.information.queueAmount }}</span>
+                                {{ t('servers.list.queued') }}: <span class="font-semibold">{{ server.information.queueAmount }}</span>
                             </li>
                             <li>
-                                Loading: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
+                                {{ t('servers.list.loading') }}: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
                             </li>
                         </ul>
-                        <p class="mt-6 italic text-muted">
-                            Retrieved from {{ server.url }}
+                        <p class="mt-6 italic text-muted dark:text-dark-muted">
+                            {{ t('servers.list.retrieved', server.url) }}
                         </p>
                     </template>
 
                     <template #footer>
-                        <button class="block w-full px-4 py-3 text-center text-white bg-indigo-600 rounded" type="button" @click="selectedServer = server">
-                            View
-                        </button>
+                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/'">
+                            {{ t('global.view') }}
+                        </inertia-link>
                     </template>
                 </card>
             </div>

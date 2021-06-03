@@ -2,18 +2,18 @@
     <div>
 
         <portal to="title">
-            <h1>
-                Logs
+            <h1 class="dark:text-white">
+                {{ t('logs.logs') }}
             </h1>
             <p>
-                On this page you can view and filter the server logs.
+                {{ t('logs.description') }}
             </p>
         </portal>
 
         <portal to="actions">
-            <button class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded" type="button" @click="refresh">
+            <button class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400" type="button" @click="refresh">
                 <i class="mr-1 fa fa-refresh"></i>
-                Refresh
+                {{ t('logs.refresh') }}
             </button>
         </portal>
 
@@ -21,7 +21,7 @@
         <v-section>
             <template #header>
                 <h2>
-                    Filter logs
+                    {{ t('logs.filter') }}
                 </h2>
             </template>
 
@@ -31,31 +31,31 @@
                         <!-- Identifier -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="identifier">
-                                Player Identifier
+                                {{ t('logs.identifier') }}
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded" id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
                         </div>
                         <!-- Action -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="action">
-                                Action
+                                {{ t('logs.action') }}
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded" id="action" placeholder="Death" v-model="filters.action">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action">
                         </div>
                         <!-- Server -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="server">
-                                Server ID
+                                {{ t('logs.server_id') }}
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded" id="server" placeholder="3" type="number" v-model="filters.server">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="server" placeholder="3" type="number" v-model="filters.server">
                         </div>
                     </div>
                     <!-- Details -->
                     <div class="w-full px-3">
                         <label class="block mb-3" for="details">
-                            Details
+                            {{ t('logs.details') }}
                         </label>
-                        <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded" id="details" placeholder="Marius killed jax with an AK-47" v-model="filters.details">
+                        <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="details" :placeholder="t('logs.placeholder_details')" v-model="filters.details">
                     </div>
                 </form>
             </template>
@@ -65,22 +65,22 @@
         <v-section class="overflow-x-auto">
             <template #header>
                 <h2>
-                    Logs
+                    {{ t('logs.logs') }}
                 </h2>
             </template>
 
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left">
-                        <th class="px-6 py-4">Player</th>
-                        <th class="px-6 py-4">Action</th>
-                        <th class="px-6 py-4">Details</th>
-                        <th class="px-6 py-4">Timestamp</th>
-                        <th class="px-6 py-4">Server ID</th>
+                        <th class="px-6 py-4">{{ t('logs.player') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.action') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.details') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.server_id') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100" v-for="log in logs.data" :key="log.id">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs.data" :key="log.id">
                         <td class="px-6 py-3 border-t">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded" :href="'/players/' + log.player.steamIdentifier">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.player.steamIdentifier">
                                 {{ log.player.playerName }}
                             </inertia-link>
                         </td>
@@ -91,7 +91,7 @@
                     </tr>
                     <tr v-if="logs.data.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
-                            No logged actions were found.
+                            {{ t('logs.no_logs') }}
                         </td>
                     </tr>
                 </table>
