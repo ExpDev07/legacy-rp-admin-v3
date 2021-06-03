@@ -4,18 +4,17 @@
         <modal :show.sync="isAdding">
             <template #header>
                 <h1 class="dark:text-white">
-                   Add server
+                    {{ t('servers.add.add') }}
                 </h1>
                 <p class="dark:text-dark-muted">
-                    Provide the server URL where the data should be fetched from. The URL should expose two
-                    endpoints: <code class="inline dark:text-dark-muted">/api.json</code> and <code class="inline dark:text-dark-muted">/connections.json</code>.
+                    {{ t('servers.add.description') }}: <code class="inline dark:text-dark-muted">/api.json</code> & <code class="inline dark:text-dark-muted">/connections.json</code>.
                 </p>
             </template>
 
             <template #default>
                 <div>
                     <label class="block mb-3" for="url">
-                        URL
+                        {{ t('servers.add.url') }}
                     </label>
                     <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
                 </div>
@@ -23,21 +22,21 @@
 
             <template #actions>
                 <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="isAdding = false">
-                    Cancel
+                    {{ t('global.cancel') }}
                 </button>
                 <button type="submit" class="px-5 py-2 text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="handleAdd">
                     <i class="mr-1 fa fa-plus"></i>
-                    Add
+                    {{ t('servers.add.do') }}
                 </button>
             </template>
         </modal>
 
         <portal to="title">
             <h1 class="dark:text-white">
-                Servers
+                {{ t('servers.title') }}
             </h1>
             <p>
-                An overview of the game servers.
+                {{ t('servers.description') }}
             </p>
         </portal>
 
@@ -49,7 +48,7 @@
                 v-if="$page.auth.player.isSuperAdmin"
             >
                 <i class="mr-1 fa fa-plus"></i>
-                Add server
+                {{ t('servers.add.add') }}
             </button>
         </portal>
 
@@ -61,36 +60,36 @@
                 >
                     <template #header>
                         <h3 class="mb-2">
-                            Server #{{ server.id }}
+                            {{ t('servers.list.server') }} #{{ server.id }}
                         </h3>
                         <h4 class="italic text-primary dark:text-dark-primary">
-                            Running {{ server.information.serverVersion }}
+                            {{ t('servers.list.running') }} {{ server.information.serverVersion }}
                         </h4>
                     </template>
 
                     <template #default>
                         <ul class="list-disc list-inside">
                             <li>
-                                Uptime: <span class="font-semibold">{{ server.information.serverUptime }}</span>
+                                {{ t('servers.list.uptime') }}: <span class="font-semibold">{{ server.information.serverUptime }}</span>
                             </li>
                             <li>
-                                Joined: <span class="font-semibold">{{ server.information.joinedAmount }} / {{ server.information.maxClients }}</span>
+                                {{ t('servers.list.joined') }}: <span class="font-semibold">{{ server.information.joinedAmount }} / {{ server.information.maxClients }}</span>
                             </li>
                             <li>
-                                Queued: <span class="font-semibold">{{ server.information.queueAmount }}</span>
+                                {{ t('servers.list.queued') }}: <span class="font-semibold">{{ server.information.queueAmount }}</span>
                             </li>
                             <li>
-                                Loading: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
+                                {{ t('servers.list.loading') }}: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
                             </li>
                         </ul>
                         <p class="mt-6 italic text-muted dark:text-dark-muted">
-                            Retrieved from {{ server.url }}
+                            {{ t('servers.list.retrieved', server.url) }}
                         </p>
                     </template>
 
                     <template #footer>
                         <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/'">
-                            View
+                            {{ t('global.view') }}
                         </inertia-link>
                     </template>
                 </card>

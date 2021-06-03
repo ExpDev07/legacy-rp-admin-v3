@@ -65,5 +65,8 @@ export default {
         Sidebar,
         Navbar,
     },
+    beforeCreate() {
+        this.loadLocale(this.$page.lang);
+    }
 };
 </script>
