@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="author" content="ExpDev07">
-    <meta name="description" content="Legacy Roleplay - Admin Web Panel">
+    <meta name="description" content="Op-Framework - Admin Web Panel">
 
     <!-- Open Graph Protocol -->
-    <meta property="og:title" content="Legacy RP - Web Panel">
+    <meta property="og:title" content="OP-FW - Web Panel">
     <meta property="og:type" content="admin.fivem">
     <meta property="og:image" content="{{ asset('favicon.jpg') }}">
 
     <!-- Page title -->
-    <title>Legacy RP - Admin @yield('title')</title>
+    <title>OP-FW - Admin @yield('title')</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('favicon.jpg') }}">
