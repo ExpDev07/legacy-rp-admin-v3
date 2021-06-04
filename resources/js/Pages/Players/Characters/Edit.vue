@@ -10,14 +10,14 @@
                     <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary">
                         <span class="font-semibold">{{ character.gender }}</span>
                     </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary">
-                        Born on <span class="font-semibold">{{ $moment(character.dateOfBirth).format('l') }}</span>
+                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.birth">
+                        {{ local.birth }}
                     </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary">
-                        <span class="font-semibold">{{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(character.money) }}</span> in cash/bank
+                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.cash">
+                        {{ local.cash }}
                     </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary">
-                        <span class="font-semibold">{{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(character.stocksBalance) }}</span> in stocks
+                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.stocks">
+                        {{ local.stocks }}
                     </badge>
                 </div>
             </div>
@@ -37,26 +37,26 @@
                     <div class="flex flex-wrap mb-4">
                         <div class="w-1/2 px-3">
                             <label class="block mb-2" for="first_name">
-                                First Name
+                                {{ t('players.edit.prename') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="first_name" v-model="form.first_name">
                         </div>
                         <div class="w-1/2 px-3">
                             <label class="block mb-2" for="last_name">
-                                Last Name
+                                {{ t('players.edit.surname') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="last_name" v-model="form.last_name">
                         </div>
                     </div>
                     <div class="px-3 mb-6">
                         <label class="block mb-3" for="backstory">
-                            Backstory
+                            {{ t('players.edit.backstory') }}
                         </label>
                         <textarea class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="backstory" v-model="form.backstory"></textarea>
                     </div>
                     <div class="px-3 mb-6">
                         <label class="block mb-3" for="dob">
-                            Date of Birth
+                            {{ t('players.edit.dob') }}
                         </label>
                         <input class="block w-56 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="dob" v-model="form.date_of_birth">
                     </div>
@@ -65,15 +65,15 @@
                             Gender
                         </label>
                         <select class="block w-56 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="gender" v-model="form.gender">
-                            <option value="0">Male</option>
-                            <option value="1">Female</option>
+                            <option value="0">{{ t('global.male') }}</option>
+                            <option value="1">{{ t('global.female') }}</option>
                         </select>
                     </div>
 
                     <!-- Submit -->
                     <div class="px-3">
                         <button class="px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="submit">
-                            Update Character
+                            {{ t('players.edit.update') }}
                         </button>
                     </div>
                 </form>
@@ -84,30 +84,30 @@
         <v-section>
             <div class="flex items-center justify-between mx-3 space-x-6">
                 <h2 class="mr-12 text-2xl font-semibold">
-                    Job
+                    {{ t('players.job.job') }}
                 </h2>
                 <div class="flex items-center justify-center flex-1 space-x-4">
                     <p class="text-xl">
-                        <span class="font-semibold">Name:</span> {{ character.jobName || 'None' }}
+                        <span class="font-semibold">{{ t('players.job.name') }}:</span> {{ character.jobName || t('global.none') }}
                     </p>
                     <button @click.prevent="resetJobName" class="px-6 py-1 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="button">
-                        Reset
+                        {{ t('players.job.reset') }}
                     </button>
                 </div>
                 <div class="flex items-center justify-center flex-1 space-x-6">
                     <p class="text-xl">
-                        <span class="font-semibold">Department:</span> {{ character.departmentName || 'None' }}
+                        <span class="font-semibold">{{ t('players.job.department') }}:</span> {{ character.departmentName || t('global.none') }}
                     </p>
                     <button @click.prevent="resetDepartmentName" class="px-6 py-1 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="button">
-                        Reset
+                        {{ t('players.job.reset') }}
                     </button>
                 </div>
                 <div class="flex items-center justify-center flex-1 space-x-6">
                     <p class="text-xl">
-                        <span class="font-semibold">Position:</span> {{ character.positionName || 'None' }}
+                        <span class="font-semibold">{{ t('players.job.position') }}:</span> {{ character.positionName || t('global.none') }}
                     </p>
                     <button @click.prevent="resetPositionName" class="px-6 py-1 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="button">
-                        Reset
+                        {{ t('players.job.reset') }}
                     </button>
                 </div>
             </div>
@@ -117,7 +117,7 @@
         <v-section>
             <template #header>
                 <h2>
-                    Vehicles
+                    {{ t('players.vehicles.vehicles') }}
                 </h2>
             </template>
 
@@ -132,19 +132,19 @@
                                 {{ vehicle.model_name }}
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>Plate number:</span> {{ vehicle.plate }}
+                                <span>{{ t('players.vehicles.plate') }}:</span> {{ vehicle.plate }}
                             </h4>
                         </template>
 
                         <template>
-                            <p>
-                                Parked at <span class="italic">{{ vehicle.garage_name }}</span>.
+                            <p v-html="t('players.vehicles.parked', vehicle.garage_name)">
+                                {{ t('players.vehicles.parked', vehicle.garage_name) }}
                             </p>
                         </template>
                     </card>
                 </div>
-                <p class="text-muted" v-if="character.vehicles.length === 0">
-                    This character does not own any vehicles.
+                <p class="text-muted dark:text-dark-muted" v-if="character.vehicles.length === 0">
+                    {{ t('players.vehicles.none') }}
                 </p>
             </template>
         </v-section>
@@ -177,6 +177,11 @@ export default {
     },
     data() {
         return {
+            local: {
+                birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
+                cash: this.t("players.edit.cash", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.money)),
+                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance)),
+            },
             form: {
                 first_name: this.character.firstName,
                 last_name: this.character.lastName,

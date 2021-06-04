@@ -3,10 +3,10 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                Dashboard
+                {{ t("home.title") }}
             </h1>
             <p>
-                Hello, {{ $page.auth.user.name }}. Welcome to the dashboard!
+                {{ t("home.welcome", $page.auth.user.name) }}
             </p>
         </portal>
 

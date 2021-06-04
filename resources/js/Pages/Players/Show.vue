@@ -7,21 +7,21 @@
                 </h1>
                 <div class="flex items-center space-x-5">
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
-                        <span class="font-semibold">Banned</span>
+                        <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff">
-                        <span class="font-semibold">Staff Member</span>
+                        <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
-                        <span class="font-semibold">Super Admin</span>
+                        <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
-                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary">
-                        <span class="font-semibold">{{ player.playTime | humanizeSeconds }}</span> played
+                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" v-html="local.played">
+                        {{ local.played }}
                     </badge>
                 </div>
             </div>
             <p class="dark:text-dark-muted">
-                Viewing player profile.
+                {{ t('players.show.description') }}
             </p>
         </portal>
 
@@ -30,12 +30,12 @@
                 <!-- Unbanning -->
                 <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
                     <i class="mr-1 fas fa-lock-open"></i>
-                    Unban
+                    {{ t('players.show.unban') }}
                 </inertia-link>
                 <!-- Banning -->
                 <button class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger" @click="isBanning = true" v-else>
                     <i class="mr-1 fas fa-gavel"></i>
-                    Issue ban
+                    {{ t('players.show.issue') }}
                 </button>
             </div>
         </portal>
@@ -46,8 +46,8 @@
             <alert class="bg-danger dark:bg-dark-danger" v-if="player.isBanned">
 
                 <div class="flex items-center justify-between mb-2">
-                    <h2 class="text-lg font-semibold">
-                        Banned by <span class="italic">{{ player.ban.issuer }}</span> <span class="italic" v-if="player.ban.expire">until {{ player.ban.expireAt | formatTime }}</span>
+                    <h2 class="text-lg font-semibold" v-html="local.ban">
+                        {{ local.ban }}
                     </h2>
                     <div class="font-semibold">
                         {{ player.ban.timestamp | formatTime }}
@@ -55,7 +55,7 @@
                 </div>
 
                 <p class="text-gray-100">
-                    {{ player.ban.reason || 'No reason.' }}
+                    {{ player.ban.reason || t('players.show.no_reason') }}
                 </p>
 
             </alert>
@@ -63,10 +63,10 @@
             <div class="p-8 mb-10 bg-gray-100 rounded dark:bg-dark-secondary" v-if="isBanning">
                 <div class="mb-8 space-y-5">
                     <h2 class="text-2xl font-semibold">
-                        Issuing ban
+                        {{ t('players.ban.issuing') }}
                     </h2>
-                    <p class="text-gray-900 dark:text-gray-100">
-                        You are now issuing a ban for this player. Make sure you are <span class="font-semibold">well within reason</span> to do this. It's never a bad idea to double check with an additional staff member!
+                    <p class="text-gray-900 dark:text-gray-100" v-html="local.ban_warning">
+                        {{ local.ban_warning }}
                     </p>
                 </div>
                 <form class="space-y-6" @submit.prevent="submitBan">
@@ -74,14 +74,14 @@
                     <div class="flex items-center space-x-3">
                         <input class="block p-3 bg-gray-200 rounded shadow" type="checkbox" id="tempban" name="tempban" v-model="isTempBanning">
                         <label class="italic font-semibold" for="tempban">
-                            This is a temporary ban
+                            {{ t('players.ban.temporary') }}
                         </label>
                     </div>
 
                     <!-- Expiration -->
                     <div v-if="isTempBanning">
                         <label class="italic font-semibold">
-                            Expiration
+                            {{ t('players.ban.expiration') }}
                         </label>
                         <div class="flex items-center">
                             <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
@@ -92,7 +92,7 @@
                     <!-- Reason -->
                     <div>
                         <label class="italic font-semibold" for="reason">
-                            Reason
+                            {{ t('players.ban.reason') }}
                         </label>
                         <textarea class="block w-full p-5 bg-gray-200 dark:bg-gray-600 rounded shadow" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
                     </div>
@@ -101,10 +101,10 @@
                     <div class="flex items-center space-x-3">
                         <button class="px-5 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600" type="submit">
                             <i class="mr-1 fas fa-gavel"></i>
-                            Ban player
+                            {{ t('players.ban.do_ban') }}
                         </button>
                         <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" type="button" @click="isBanning = false">
-                            Cancel
+                            {{ t('global.cancel') }}
                         </button>
                     </div>
                 </form>
@@ -120,7 +120,7 @@
                     :href="'/logs?identifier=' + player.steamIdentifier"
                 >
                     <i class="mr-1 fas fa-toilet-paper"></i>
-                    Check player's logs
+                    {{ t('players.show.logs') }}
                 </inertia-link>
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-gray-800 rounded"
@@ -128,7 +128,7 @@
                     :href="player.steamProfileUrl"
                 >
                     <i class="mr-1 fab fa-steam"></i>
-                    Open Steam profile
+                    {{ t('players.show.steam') }}
                 </a>
 
             </div>
@@ -138,17 +138,17 @@
         <v-section>
             <template #header>
                 <h2>
-                    Characters
+                    {{ t('players.characters.characters') }}
 
                     <!-- Hiding deleted characters on click -->
                     <button class="px-3 py-2 font-semibold text-white rounded bg-gray-400 text-base float-right" @click="hideDeleted">
                         <span v-if="isShowingDeletedCharacters">
                             <i class="fas fa-eye-slash"></i>
-                            Hide Deleted
+                            {{ t('players.characters.hide') }}
                         </span>
                         <span v-else>
                             <i class="fas fa-eye"></i>
-                            Show Deleted
+                            {{ t('players.characters.show') }}
                         </span>
                     </button>
                 </h2>
@@ -166,10 +166,10 @@
                                 {{ character.name }} (#{{ character.id }})
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>Date of birth:</span> {{ $moment(character.dateOfBirth).format('l') }}
+                                <span>{{ t('players.edit.dob') }}:</span> {{ $moment(character.dateOfBirth).format('l') }}
                             </h4>
                             <h4 class="text-red-700 dark:text-red-300" v-if="character.characterDeleted">
-                                <span>Deleted at:</span> {{ $moment(character.characterDeletionTimestamp).format('l') }}
+                                <span>{{ t('players.edit.deleted') }}:</span> {{ $moment(character.characterDeletionTimestamp).format('l') }}
                             </h4>
                         </template>
 
@@ -181,13 +181,13 @@
 
                         <template #footer>
                             <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
-                                View
+                                {{ t('global.view') }}
                             </inertia-link>
                         </template>
                     </card>
                 </div>
                 <p class="text-muted dark:text-dark-muted" v-if="characters.length === 0">
-                    This player has not created any characters yet.
+                    {{ t('players.characters.none') }}
                 </p>
             </template>
         </v-section>
@@ -196,7 +196,7 @@
         <v-section>
             <template #header>
                 <h2>
-                    Warnings ({{ player.warnings }})
+                    {{ t('players.form.warnings') }} ({{ player.warnings }})
                 </h2>
             </template>
 
@@ -235,13 +235,13 @@
                     </template>
                 </card>
                 <p class="text-muted dark:text-dark-muted" v-if="warnings.length === 0">
-                    This player has not received any warnings.
+                    {{ t('players.show.no_warnings') }}
                 </p>
             </template>
 
             <template #footer>
                 <h3 class="mb-2">
-                   Give warning
+                    {{ t('players.warning.give') }}
                 </h3>
                 <form @submit.prevent="submitWarning">
                     <label for="message"></label>
@@ -250,7 +250,7 @@
                         id="message"
                         name="message"
                         rows="5"
-                        :placeholder="player.playerName + ' did an oopsie.'"
+                        :placeholder="t('players.warning.placeholder', player.playerName)"
                         v-model="form.warning.message"
                         required
                     >
@@ -258,7 +258,7 @@
 
                     <button class="px-5 py-2 font-semibold text-white bg-indigo-600 dark:bg-indigo-400 rounded" type="submit">
                         <i class="mr-1 fas fa-exclamation"></i>
-                        Warn player
+                        {{ t('players.warning.do') }}
                     </button>
                 </form>
             </template>
@@ -300,6 +300,11 @@ export default {
     },
     data() {
         return {
+            local: {
+                played: this.t('players.show.played', this.$options.filters.humanizeSeconds(this.player.playTime)),
+                ban: this.localizeBan(),
+                ban_warning: this.t('players.ban.ban_warning')
+            },
             isBanning: false,
             isTempBanning: false,
             form: {
@@ -317,6 +322,9 @@ export default {
         }
     },
     methods: {
+        localizeBan() {
+            return this.player.ban ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt)) : '';
+        },
         async submitBan() {
             // Default expiration.
             let expire = null;
@@ -330,6 +338,8 @@ export default {
 
             // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', { ...this.form.ban, expire });
+
+            this.local.ban = this.localizeBan();
 
             // Reset.
             this.isBanning = false;

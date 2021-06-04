@@ -3,10 +3,10 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                Players
+                {{ t('players.title') }}
             </h1>
             <p>
-                Search players!
+                {{ t('players.description') }}
             </p>
         </portal>
 
@@ -14,14 +14,14 @@
         <v-section>
             <template #header>
                 <h2>
-                    Search
+                    {{ t('players.search') }}
                 </h2>
             </template>
 
             <template>
                 <form @submit.prevent>
                     <label class="block mb-4 font-semibold" for="name">
-                        Search by name, steam identifier, or any other identifier such as Discord id.
+                        {{ t('players.search_label') }}
                     </label>
                     <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
                 </form>
@@ -31,18 +31,18 @@
         <v-section class="overflow-x-auto">
             <template #header>
                 <h2>
-                    Players
+                    {{ t('players.title') }}
                 </h2>
             </template>
 
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left">
-                        <th class="px-6 py-4">Identifier</th>
-                        <th class="px-6 py-4">Name</th>
-                        <th class="px-6 py-4">Playtime</th>
-                        <th class="px-6 py-4">Warnings</th>
-                        <th class="w-64 px-6 py-4">Banned?</th>
+                        <th class="px-6 py-4">{{ t('players.form.identifier') }}</th>
+                        <th class="px-6 py-4">{{ t('players.form.name') }}</th>
+                        <th class="px-6 py-4">{{ t('players.form.playtime') }}</th>
+                        <th class="px-6 py-4">{{ t('players.form.warnings') }}</th>
+                        <th class="w-64 px-6 py-4">{{ t('players.form.banned') }}?</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="player in players.data" v-bind:key="player.id">
@@ -52,10 +52,10 @@
                         <td class="px-6 py-3 border-t">{{ player.warnings }}</td>
                         <td class="px-6 py-3 text-center border-t">
                             <span class="block px-4 py-2 text-white bg-red-500 rounded dark:bg-red-600" v-if="player.isBanned">
-                                Banned
+                                {{ t('global.banned') }}
                             </span>
                             <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
-                                Not banned
+                                {{ t('global.not_banned') }}
                             </span>
                         </td>
                         <td class="px-6 py-3 border-t">
@@ -66,7 +66,7 @@
                     </tr>
                     <tr v-if="players.data.length === 0">
                         <td class="px-6 py-6 text-center border-t" colspan="100%">
-                            No players was found.
+                            {{ t('players.none') }}
                         </td>
                     </tr>
                 </table>
