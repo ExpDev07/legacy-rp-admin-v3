@@ -52,6 +52,9 @@ Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function ()
     // Logs.
     Route::resource('logs', LogController::class);
 
+    // Characters.
+    Route::resource('characters', PlayerCharacterController::class);
+
     // Servers.
     Route::resource('servers', ServerController::class);
 
