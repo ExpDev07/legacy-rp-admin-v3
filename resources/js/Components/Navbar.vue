@@ -2,12 +2,13 @@
     <div class="flex">
 
         <!-- Branding / Logo -->
-        <div class="flex-shrink-0 w-56 px-12 py-4 text-center text-white bg-gray-900">
-            <h1 class="text-lg">
-                <inertia-link href="/">
-                    Legacy<span class="font-bold">RP</span>
-                </inertia-link>
-            </h1>
+        <div class="flex-shrink-0 px-8 py-3 text-center text-white bg-gray-900">
+            <inertia-link href="/" class="flex justify-between">
+                <img src="/images/op-logo.png" class="block" />
+                <h1 class="text-lg px-4">
+                    <span class="block py-4">OP-FW</span>
+                </h1>
+            </inertia-link>
         </div>
 
         <!-- Nav -->

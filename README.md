@@ -67,22 +67,25 @@ This list only contains some of the most notable contributors. For the full list
 (more will be posted soon once some design decisions are finalized).
 
 ### Logging in
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/logging_in.PNG" alt="Logging in" />
+![Logging in](.github/screenshots/logging_in.PNG)
 
 ### Dashboard
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/dashboard.PNG" alt="Dashboard" />
+![Dashboard](.github/screenshots/dashboard.PNG)
 
 ### Players
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/players.PNG" alt="Players" />
+![Players](.github/screenshots/players.PNG)
 
 ### Viewing player
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/player.PNG" alt="View Player" />
+![View Player](.github/screenshots/player.PNG)
 
 ### Viewing character
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/character.PNG" alt="View Character" />
+![View Character](.github/screenshots/character.PNG)
 
 ### Server Logs
-<img src="https://github.com/ExpDev07/legacy-rp-admin-v3/raw/master/.github/screenshots/logs.PNG" alt="Logs" />
+![Logs](.github/screenshots/logs.PNG)
+
+### Server List
+![Server List](.github/screenshots/servers.PNG)
 
 ## Contributing
 This section describes how you can help contribute.
