@@ -52,7 +52,10 @@
             "temporary": "This is a temporary ban",
             "expiration": "Expiration",
             "reason": "Reason",
-            "do_ban": "Ban player"
+            "do_ban": "Ban player",
+            "update_ban": "Update Ban",
+            "banned_for": "Banned for about {0}",
+            "banned_by": "<i>{0}</i> was banned by <i>{1}</i>"
         },
         "show": {
             "played": "<b>{0}</b> played",
@@ -63,7 +66,8 @@
             "no_reason": "No reason.",
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
-            "no_warnings": "This player has not received any warnings."
+            "no_warnings": "This player has not received any warnings.",
+            "edit_ban": "Edit Ban"
         },
         "form": {
             "identifier": "Identifier",
