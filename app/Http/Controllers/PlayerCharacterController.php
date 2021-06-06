@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Character;
 use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\CharacterResource;
-use App\Http\Resources\ExtendedCharacterResource;
+use App\Http\Resources\CharacterIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
@@ -50,7 +50,7 @@ class PlayerCharacterController extends Controller
         ]);
 
         return Inertia::render('Characters/Index', [
-            'characters' => ExtendedCharacterResource::collection($query->paginate(15, [
+            'characters' => CharacterIndexResource::collection($query->paginate(15, [
                 'id'
             ])->appends($request->query())),
             'filters' => $request->all(
