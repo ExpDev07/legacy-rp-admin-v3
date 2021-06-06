@@ -68,7 +68,7 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="character in characters.data" :key="character.id">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + character.steamIdentifier">
-                                {{ character.player.playerName }}
+                                {{ character.playerName }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">{{ character.id }}</td>

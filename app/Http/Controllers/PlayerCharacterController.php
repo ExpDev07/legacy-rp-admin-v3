@@ -24,7 +24,6 @@ class PlayerCharacterController extends Controller
      */
     public function index(Request $request): Response
     {
-
         $query = Character::query()->orderBy('first_name');
 
         // Filtering by cid.
@@ -44,8 +43,16 @@ class PlayerCharacterController extends Controller
             });
         }
 
+        $query->leftJoin('users', 'characters.steam_identifier', '=', 'users.steam_identifier');
+        $query->select([
+            'character_id', 'characters.steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',
+            'department_name', 'position_name', 'player_name'
+        ]);
+
         return Inertia::render('Characters/Index', [
-            'characters' => ExtendedCharacterResource::collection($query->simplePaginate(15)->appends($request->query())),
+            'characters' => ExtendedCharacterResource::collection($query->paginate(15, [
+                'id'
+            ])->appends($request->query())),
             'filters' => $request->all(
                 'cid',
                 'name'
