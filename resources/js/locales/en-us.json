@@ -25,6 +25,21 @@
         "next": "Next",
         "page": "Page {0}"
     },
+    "characters": {
+        "title": "Characters",
+        "description": "Search for Characters.",
+        "filter": "Filter Characters",
+        "form": {
+            "character_id": "Character ID",
+            "name": "Full Name",
+            "plate": "Vehicle Plate"
+        },
+        "result": {
+            "player": "Player",
+            "gender": "Gender",
+            "job": "Job"
+        }
+    },
     "players": {
         "title": "Players",
         "description": "Search Players!",

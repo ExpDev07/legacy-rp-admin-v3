@@ -49,6 +49,11 @@ export default {
                     url: '/players',
                 },
                 {
+                    label: this.t('characters.title'),
+                    icon: 'book',
+                    url: '/characters',
+                },
+                {
                     label: this.t('logs.title'),
                     icon: 'printer',
                     url: '/logs',
