@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\LogResource;
 use App\Log;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -41,8 +42,13 @@ class LogController extends Controller
             $query->where('details', 'like', "%{$details}%");
         }
 
+        $query->leftJoin('users', 'identifier', '=', 'steam_identifier');
+        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp', 'player_name']);
+
         return Inertia::render('Logs/Index', [
-            'logs' => LogResource::collection($query->simplePaginate(15)->appends($request->query())),
+            'logs' => LogResource::collection($query->paginate(15, [
+                'id'
+            ])->appends($request->query())),
             'filters' => $request->all(
                 'identifier',
                 'server',
