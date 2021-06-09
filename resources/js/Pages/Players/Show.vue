@@ -323,7 +323,7 @@ export default {
                     message: null,
                 },
             },
-            isShowingDeletedCharacters: true,
+            isShowingDeletedCharacters: false,
         }
     },
     methods: {
