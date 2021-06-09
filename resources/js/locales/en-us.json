@@ -52,7 +52,8 @@
             "temporary": "This is a temporary ban",
             "expiration": "Expiration",
             "reason": "Reason",
-            "do_ban": "Ban player"
+            "do_ban": "Ban player",
+            "forever": "<i>{0}</i> permanently banned this player"
         },
         "show": {
             "played": "<b>{0}</b> played",

@@ -323,7 +323,12 @@ export default {
     },
     methods: {
         localizeBan() {
-            return this.player.ban ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt)) : '';
+            if (!this.player.ban) {
+                return '';
+            }
+            return this.player.ban.expireAt
+                ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt))
+                : this.t('players.ban.forever', this.player.ban.issuer);
         },
         async submitBan() {
             // Default expiration.
