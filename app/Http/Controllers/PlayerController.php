@@ -56,6 +56,7 @@ class PlayerController extends Controller
     {
         return Inertia::render('Players/Show', [
             'player' => new PlayerResource($player),
+            'online' => $player->getOnlineStatus(),
             'characters' => CharacterResource::collection($player->characters),
             'warnings' => WarningResource::collection($player->warnings()->oldest()->get()),
         ]);
