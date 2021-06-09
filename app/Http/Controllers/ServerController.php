@@ -7,7 +7,6 @@ use App\Http\Resources\PlayerResource;
 use App\Http\Resources\ServerResource;
 use App\Player;
 use App\Server;
-use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -61,32 +60,15 @@ class ServerController extends Controller
      */
     public function show(Server $server): Response
     {
-        $players = [null];
-        $url = env('OP_FW_SERVER');
+        $players = [];
+        try {
+            $steamIdentifiers = array_keys(Server::fetchSteamIdentifiers($server->url));
 
-        if ($url) {
-            try {
-                $client = new Client();
-                $res = $client->request('GET', 'https://' . $url . '/op-framework/connections.json');
+            $query = Player::query()->orderBy('last_connection');
+            $query->whereIn('steam_identifier', $steamIdentifiers);
 
-                $response = json_decode($res->getBody()->getContents(), true);
-                if (!empty($response) && !empty($response['joining']) && !empty($response['joined'])) {
-                    $steamIdentifiers = array_values(array_merge(
-                        array_map(function($player) {
-                            return $player['steamIdentifier'];
-                        }, $response['joining']['players']),
-                        array_map(function($player) {
-                            return $player['steamIdentifier'];
-                        }, $response['joined']['players'])
-                    ));
-
-                    $query = Player::query()->orderBy('last_connection');
-                    $query->whereIn('steam_identifier', $steamIdentifiers);
-
-                    $players = PlayerResource::collection($query->get());
-                }
-            } catch (\Throwable $e) {}
-        }
+            $players = PlayerResource::collection($query->get());
+        } catch (\Throwable $e) {}
 
         return Inertia::render('Servers/Show', [
             'server' => new ServerResource($server),
