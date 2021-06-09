@@ -4,16 +4,21 @@
         <portal to="title">
             <div class="flex items-start space-x-10">
                 <h1 class="dark:text-white">
-                    {{ character.name }}
+                    {{ character.name }} #{{ character.id }}
                 </h1>
                 <div class="flex items-center space-x-5">
                     <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary">
-                        <span class="font-semibold">{{ character.gender }}</span>
+                        <span class="font-semibold">
+                            {{ character.gender | formatGender(t) }}
+                        </span>
                     </badge>
                     <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.birth">
                         {{ local.birth }}
                     </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.cash">
+                    <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="character.characterDeleted">
+                        <span class="font-semibold">{{ t('players.edit.deleted') }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
+                    </badge>
+                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" :title="local.cashTitle" v-html="local.cash">
                         {{ local.cash }}
                     </badge>
                     <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.stocks">
@@ -180,6 +185,11 @@ export default {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
                 cash: this.t("players.edit.cash", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.money)),
+                cashTitle: this.t(
+                    "players.edit.cash_title",
+                    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.cash),
+                    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.bank)
+                ),
                 stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance)),
             },
             form: {

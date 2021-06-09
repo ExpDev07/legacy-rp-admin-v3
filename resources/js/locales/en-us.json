@@ -8,7 +8,13 @@
         "staff": "Staff Member",
         "super": "Super Admin",
         "cancel": "Cancel",
-        "view": "View"
+        "view": "View",
+        "status": {
+            "online": "Online",
+            "offline": "Offline",
+            "unavailable": "Unavailable",
+            "joining": "Joining"
+        }
     },
     "home": {
         "title": "Dashboard",
@@ -63,7 +69,10 @@
             "no_reason": "No reason.",
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
-            "no_warnings": "This player has not received any warnings."
+            "no_warnings": "This player has not received any warnings.",
+            "kick": "Kick Player",
+            "kick_confirm": "Are you sure you want to kick this player from the server?",
+            "kick_reason": "Reason"
         },
         "form": {
             "identifier": "Identifier",
@@ -99,6 +108,7 @@
         "edit": {
             "born": "Born on <b>{0}</b>",
             "cash": "<b>{0}</b> in cash/bank",
+            "cash_title": "{0} in cash and {1} bank",
             "stocks": "<b>{0}</b> in stocks",
             "prename": "First Name",
             "surname": "First Name",

@@ -3,6 +3,7 @@
 namespace App;
 
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,11 @@ use SteamID;
 class Player extends Model
 {
     use HasFactory;
+
+    const STATUS_UNAVAILABLE = 'unavailable';
+    const STATUS_OFFLINE     = 'offline';
+    const STATUS_JOINING     = 'joining';
+    const STATUS_ONLINE      = 'online';
 
     /**
      * The link used for Steam's new invite code.
@@ -122,7 +128,7 @@ class Player extends Model
             return $identifiers;
         }
 
-        return array_merge([ $identifier ], $identifiers);
+        return array_merge([$identifier], $identifiers);
     }
 
     /**
@@ -154,7 +160,8 @@ class Player extends Model
      *
      * @return bool
      */
-    public function isSuperAdmin(): bool {
+    public function isSuperAdmin(): bool
+    {
         return $this->is_super_admin ?? false;
     }
 
@@ -165,7 +172,7 @@ class Player extends Model
      */
     public function isBanned(): bool
     {
-        return ! is_null($this->getActiveBan());
+        return !is_null($this->getActiveBan());
     }
 
     /**
@@ -178,7 +185,7 @@ class Player extends Model
         return $this
             ->bans()
             ->get()
-            ->filter(fn (Ban $ban) => !$ban->hasExpired())
+            ->filter(fn(Ban $ban) => !$ban->hasExpired())
             ->first();
     }
 
@@ -245,6 +252,39 @@ class Player extends Model
         return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
+    public function getOnlineStatus(): string
+    {
+        $url = env('OP_FW_SERVER');
+        $steamIdentifier = $this->getSteamID();
+
+        if (!$url) {
+            return self::STATUS_UNAVAILABLE;
+        }
+
+        try {
+            $client = new Client();
+            $res = $client->request('GET', 'https://' . $url . '/op-framework/connections.json');
+
+            $response = json_decode($res->getBody()->getContents(), true);
+            if (!empty($response) && !empty($response['joining']) && !empty($response['joined'])) {
+                foreach($response['joining']['players'] as $player) {
+                    if ($player['steamIdentifier'] === $steamIdentifier) {
+                        return self::STATUS_JOINING;
+                    }
+                }
+
+                foreach($response['joined']['players'] as $player) {
+                    if ($player['steamIdentifier'] === $steamIdentifier) {
+                        return self::STATUS_ONLINE;
+                    }
+                }
+
+                return self::STATUS_OFFLINE;
+            }
+        } catch(\Throwable $e) {}
+
+        return self::STATUS_UNAVAILABLE;
+    }
 }
 
 /**
@@ -258,8 +298,7 @@ function get_steam_id(string $identifier): ?SteamID
     try {
         // Get rid of any prefix.
         return new SteamID(hexdec(explode('steam:', $identifier)[1]));
-    }
-    catch (Exception $ex) {
+    } catch (Exception $ex) {
         return null;
     }
 }

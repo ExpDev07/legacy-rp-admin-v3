@@ -76,12 +76,7 @@
                             {{ character.firstName }} {{ character.lastName }}
                         </td>
                         <td class="px-6 py-3 border-t">
-                            <span v-if="character.gender === 1">
-                                {{ t('global.female') }}
-                            </span>
-                            <span v-else-if="character.gender === 0">
-                                {{ t('global.male') }}
-                            </span>
+                            {{ character.gender | formatGender(t) }}
                         </td>
                         <td class="px-6 py-3 border-t">
                             {{ character.jobName || t('global.none') }} /
