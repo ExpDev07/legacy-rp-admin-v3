@@ -27,6 +27,11 @@
 
         <portal to="actions">
             <div>
+                <!-- Kicking -->
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true">
+                    <i class="fas fa-user-minus"></i>
+                    {{ t('players.show.kick') }}
+                </button>
                 <!-- Unbanning -->
                 <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
                     <i class="mr-1 fas fa-lock-open"></i>
@@ -39,6 +44,38 @@
                 </button>
             </div>
         </portal>
+
+        <!-- Kick -->
+        <div>
+            <!-- Issuing -->
+            <div class="p-8 mb-10 bg-gray-100 rounded dark:bg-dark-secondary" v-if="isKicking">
+                <div class="mb-8 space-y-5">
+                    <h2 class="text-2xl font-semibold">
+                        {{ t('players.show.kick') }}
+                    </h2>
+                </div>
+                <form class="space-y-6" @submit.prevent="kickPlayer">
+                    <!-- Reason -->
+                    <div>
+                        <label class="italic font-semibold" for="kick_reason">
+                            {{ t('players.show.kick_reason') }}
+                        </label>
+                        <textarea class="block w-full p-5 bg-gray-200 dark:bg-gray-600 rounded shadow" id="kick_reason" name="reason" rows="5" placeholder="You were kicked from the server." v-model="form.kick.reason"></textarea>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-3">
+                        <button class="px-5 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600" type="submit">
+                            <i class="mr-1 fas fa-gavel"></i>
+                            {{ t('players.show.kick') }}
+                        </button>
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" type="button" @click="isKicking = false">
+                            {{ t('global.cancel') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- Ban -->
         <div>
@@ -306,6 +343,7 @@ export default {
                 ban_warning: this.t('players.ban.ban_warning')
             },
             isBanning: false,
+            isKicking: false,
             isTempBanning: false,
             form: {
                 ban: {
@@ -313,6 +351,9 @@ export default {
                     expire: null,
                     expireDate: null,
                     expireTime: null,
+                },
+                kick: {
+                    reason: null,
                 },
                 warning: {
                     message: null,
@@ -324,6 +365,19 @@ export default {
     methods: {
         localizeBan() {
             return this.player.ban ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt)) : '';
+        },
+        async kickPlayer() {
+            if (!confirm(this.t('players.show.kick_confirm'))) {
+                this.isKicking = false;
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/kick', this.form.kick);
+
+            // Reset.
+            this.isKicking = false;
+            this.form.kick.reason = null;
         },
         async submitBan() {
             // Default expiration.
