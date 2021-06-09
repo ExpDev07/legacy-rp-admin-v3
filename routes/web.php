@@ -19,6 +19,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
 use App\Http\Controllers\PlayerController;
+use App\Http\Controllers\PlayerKickController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\ServerController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,7 @@ Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function ()
     Route::resource('players.characters', PlayerCharacterController::class);
     Route::resource('players.bans', PlayerBanController::class);
     Route::resource('players.warnings', PlayerWarningController::class);
+    Route::resource('players.kick', PlayerKickController::class);
 
     // Logs.
     Route::resource('logs', LogController::class);
