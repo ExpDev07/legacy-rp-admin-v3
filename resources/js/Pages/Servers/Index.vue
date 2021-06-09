@@ -88,7 +88,7 @@
                     </template>
 
                     <template #footer>
-                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/'">
+                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/servers/' + server.id">
                             {{ t('global.view') }}
                         </inertia-link>
                     </template>

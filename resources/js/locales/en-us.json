@@ -100,6 +100,7 @@
         "edit": {
             "born": "Born on <b>{0}</b>",
             "cash": "<b>{0}</b> in cash/bank",
+            "cash_title": "{0} in cash and {1} bank",
             "stocks": "<b>{0}</b> in stocks",
             "prename": "First Name",
             "surname": "First Name",
@@ -143,6 +144,11 @@
             "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
             "url": "URL",
             "do": "Add"
+        },
+        "show": {
+            "table": "Online Players",
+            "players": "Players: {0}",
+            "joined": "Joined at"
         }
     },
     "login": {
