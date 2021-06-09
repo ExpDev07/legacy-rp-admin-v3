@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CharacterResource;
+use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
@@ -31,8 +32,16 @@ class PlayerController extends Controller
                 ->orWhere('identifiers', 'like', "%{$q}%");
         }
 
+        $query->leftJoin('user_bans', 'steam_identifier', '=', 'identifier');
+        $query->select([
+            'steam_identifier', 'player_name', 'playtime', 'ban_hash'
+        ]);
+        $query->selectSub('SELECT COUNT(id) FROM warnings WHERE player_id=user_id', 'warning_count');
+
         return Inertia::render('Players/Index', [
-            'players' => PlayerResource::collection($query->simplePaginate(10)->appends($request->query())),
+            'players' => PlayerIndexResource::collection($query->paginate(10, [
+                'user_id'
+            ])->appends($request->query())),
             'filters' => $request->all('query'),
         ]);
     }

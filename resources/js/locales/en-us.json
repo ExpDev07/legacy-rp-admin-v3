@@ -12,8 +12,7 @@
         "status": {
             "online": "Online",
             "offline": "Offline",
-            "unavailable": "Unavailable",
-            "joining": "Joining"
+            "unavailable": "Unavailable"
         }
     },
     "home": {
@@ -58,7 +57,8 @@
             "temporary": "This is a temporary ban",
             "expiration": "Expiration",
             "reason": "Reason",
-            "do_ban": "Ban player"
+            "do_ban": "Ban player",
+            "forever": "<i>{0}</i> permanently banned this player"
         },
         "show": {
             "played": "<b>{0}</b> played",
@@ -152,6 +152,11 @@
             "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
             "url": "URL",
             "do": "Add"
+        },
+        "show": {
+            "table": "Online Players",
+            "players": "Players: {0}",
+            "joined": "Joined at"
         }
     },
     "login": {

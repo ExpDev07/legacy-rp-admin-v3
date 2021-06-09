@@ -80,8 +80,8 @@
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs.data" :key="log.id">
                         <td class="px-6 py-3 border-t">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.player.steamIdentifier">
-                                {{ log.player.playerName }}
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steamIdentifier">
+                                {{ log.playerName }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">{{ log.action }}</td>

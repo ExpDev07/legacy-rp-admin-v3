@@ -16,14 +16,11 @@
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="online === 'online'">
-                        <span class="font-semibold">{{ t('global.status.online') }}</span>
-                    </badge>
-                    <badge class="border-yellow-200 bg-warning-pale dark:bg-dark-warning-pale" v-else-if="online === 'joining'">
-                        <span class="font-semibold">{{ t('global.status.joining') }}</span>
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="online.status === 'online'">
+                        <span class="font-semibold">{{ t('global.status.online') }} <sup>[{{ online.serverId }}]</sup></span>
                     </badge>
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-else>
-                        <span class="font-semibold">{{ t('global.status.' + online) }}</span>
+                        <span class="font-semibold">{{ t('global.status.' + online.status) }}</span>
                     </badge>
 
                     <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" v-html="local.played">
@@ -39,7 +36,7 @@
         <portal to="actions">
             <div>
                 <!-- Kicking -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true" v-if="online === 'online' || online === 'joining'">
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true" v-if="online.status === 'online'">
                     <i class="fas fa-user-minus"></i>
                     {{ t('players.show.kick') }}
                 </button>
@@ -379,7 +376,12 @@ export default {
     },
     methods: {
         localizeBan() {
-            return this.player.ban ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt)) : '';
+            if (!this.player.ban) {
+                return '';
+            }
+            return this.player.ban.expireAt
+                ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt))
+                : this.t('players.ban.forever', this.player.ban.issuer);
         },
         async kickPlayer() {
             if (!confirm(this.t('players.show.kick_confirm'))) {

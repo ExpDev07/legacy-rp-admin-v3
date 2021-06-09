@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ServerStoreRequest;
+use App\Http\Resources\PlayerResource;
 use App\Http\Resources\ServerResource;
+use App\Player;
 use App\Server;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,6 +50,30 @@ class ServerController extends Controller
     {
         $server->forceDelete();
         return back()->with('success', 'The server was successfully removed from tracking.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Server $server
+     * @return Response
+     */
+    public function show(Server $server): Response
+    {
+        $players = [];
+        try {
+            $steamIdentifiers = array_keys(Server::fetchSteamIdentifiers($server->url));
+
+            $query = Player::query()->orderBy('last_connection');
+            $query->whereIn('steam_identifier', $steamIdentifiers);
+
+            $players = PlayerResource::collection($query->get());
+        } catch (\Throwable $e) {}
+
+        return Inertia::render('Servers/Show', [
+            'server' => new ServerResource($server),
+            'players' => $players
+        ]);
     }
 
 }

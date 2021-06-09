@@ -19,24 +19,24 @@ class PlayerKickController extends Controller
      */
     public function store(Player $player, KickStoreRequest $request): RedirectResponse
     {
-        $url = env('OP_FW_SERVER');
         $token = env('OP_FW_TOKEN');
 
-        if (!$url || !$token) {
-            return back()->with('error', 'Missing OP-FW configuration.');
+        if (!$token) {
+            return back()->with('error', 'Invalid OP-FW configuration.');
         }
 
-        if (!in_array($player->getOnlineStatus(), [Player::STATUS_ONLINE, Player::STATUS_JOINING])) {
+        $status = $player->getOnlineStatus();
+        if (!$status->isOnline()) {
             return back()->with('error', 'Player is offline.');
         }
 
         $user = $request->user();
-        $steam = $player->getSteamID();
+        $steam = $player->steam_identifier;
         $reason = $request->input('reason') ?: 'You were kicked by ' . $user->player->player_name;
 
         try {
             $client = new Client();
-            $res = $client->request('GET', 'https://' . $url . '/op-framework/execute/kickPlayer', [
+            $res = $client->request('GET', $status->serverIp . 'execute/kickPlayer', [
                 'query' => [
                     'steamIdentifier'         => $steam,
                     'reason'                  => $reason,
@@ -58,7 +58,7 @@ class PlayerKickController extends Controller
 
                         return back()->with('success', 'Kicked player from the server.');
                     case 401:
-                        return back()->with('error', 'Invalid OP-FW configuration.');
+                        return back()->with('error', 'Invalid OP-FW configuration. Wrong token?');
                     case 400:
                     case 404:
                         return back()->with('error', 'Failed to kick player from server: "' . (!empty($response['message']) ? $response['message'] : 'Unknown error') . '"');
