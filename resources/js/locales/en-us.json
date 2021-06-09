@@ -8,7 +8,13 @@
         "staff": "Staff Member",
         "super": "Super Admin",
         "cancel": "Cancel",
-        "view": "View"
+        "view": "View",
+        "status": {
+            "online": "Online",
+            "offline": "Offline",
+            "unavailable": "Unavailable",
+            "joining": "Joining"
+        }
     },
     "home": {
         "title": "Dashboard",

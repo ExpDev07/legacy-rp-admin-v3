@@ -15,6 +15,17 @@
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
+
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="online === 'online'">
+                        <span class="font-semibold">{{ t('global.status.online') }}</span>
+                    </badge>
+                    <badge class="border-yellow-200 bg-warning-pale dark:bg-dark-warning-pale" v-else-if="online === 'joining'">
+                        <span class="font-semibold">{{ t('global.status.joining') }}</span>
+                    </badge>
+                    <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-else>
+                        <span class="font-semibold">{{ t('global.status.' + online) }}</span>
+                    </badge>
+
                     <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" v-html="local.played">
                         {{ local.played }}
                     </badge>
@@ -28,7 +39,7 @@
         <portal to="actions">
             <div>
                 <!-- Kicking -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true">
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true" v-if="online === 'online' || online === 'joining'">
                     <i class="fas fa-user-minus"></i>
                     {{ t('players.show.kick') }}
                 </button>
@@ -324,6 +335,10 @@ export default {
     props: {
         player: {
             type: Object,
+            required: true,
+        },
+        online: {
+            type: String,
             required: true,
         },
         characters: {

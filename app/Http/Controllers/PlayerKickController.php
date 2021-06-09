@@ -26,6 +26,10 @@ class PlayerKickController extends Controller
             return back()->with('error', 'Missing OP-FW configuration.');
         }
 
+        if (!in_array($player->getOnlineStatus(), [Player::STATUS_ONLINE, Player::STATUS_JOINING])) {
+            return back()->with('error', 'Player is offline.');
+        }
+
         $user = $request->user();
         $steam = $player->getSteamID();
         $reason = $request->input('reason') ?: 'You were kicked by ' . $user->player->player_name;
