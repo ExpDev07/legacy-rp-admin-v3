@@ -143,6 +143,11 @@
             "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
             "url": "URL",
             "do": "Add"
+        },
+        "show": {
+            "table": "Online Players",
+            "players": "Players: {0}",
+            "joined": "Joined at"
         }
     },
     "login": {
