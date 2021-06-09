@@ -45,8 +45,23 @@ class PlayerKickController extends Controller
 
             $response = json_decode($res->getBody()->getContents(), true);
             if ($response) {
-                return back()->with('success', 'Kicked player from the server.');
+                switch (intval($response['statusCode'])) {
+                    case 200:
+                        $player->warnings()->create([
+                            'issuer_id' => $user->player->user_id,
+                            'message'   => 'I kicked this player with the reason: ' . $reason . ' This warning was generated automatically as a result of banning someone.',
+                        ]);
+
+                        return back()->with('success', 'Kicked player from the server.');
+                    case 401:
+                        return back()->with('error', 'Invalid OP-FW configuration.');
+                    case 400:
+                    case 404:
+                        return back()->with('error', 'Failed to kick player from server: "' . (!empty($response['message']) ? $response['message'] : 'Unknown error') . '"');
+                }
             }
+
+            return back()->with('error', 'Failed to kick player from server: "Invalid server response"');
         } catch(\Throwable $e) {}
 
         return back()->with('error', 'Failed to kick player from server.');
