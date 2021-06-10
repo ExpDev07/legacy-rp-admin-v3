@@ -335,7 +335,7 @@ export default {
             required: true,
         },
         online: {
-            type: String,
+            type: Object,
             required: true,
         },
         characters: {

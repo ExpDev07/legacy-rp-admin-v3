@@ -36,7 +36,7 @@ class PlayerKickController extends Controller
 
         try {
             $client = new Client();
-            $res = $client->request('GET', $status->serverIp . 'execute/kickPlayer', [
+            $res = $client->request('POST', $status->serverIp . 'execute/kickPlayer', [
                 'query' => [
                     'steamIdentifier'         => $steam,
                     'reason'                  => $reason,
