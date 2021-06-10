@@ -94,6 +94,7 @@
             "ban": "Banned by <i>{0}</i> until <i>{1}</i>",
             "no_reason": "No reason.",
             "logs": "Check player's logs",
+            "inventory": "View related inventory logs",
             "steam": "Open Steam profile",
             "no_warnings": "This player has not received any warnings.",
             "kick": "Kick Player",
