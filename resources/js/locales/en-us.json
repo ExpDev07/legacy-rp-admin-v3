@@ -13,7 +13,8 @@
             "online": "Online",
             "offline": "Offline",
             "unavailable": "Unavailable"
-        }
+        },
+        "info": "Info"
     },
     "home": {
         "title": "Dashboard",
@@ -43,6 +44,31 @@
             "player": "Player",
             "gender": "Gender",
             "job": "Job"
+        }
+    },
+    "inventories": {
+        "show": {
+            "error": "Invalid Inventory",
+            "title": "Inventory",
+            "type": {
+                "ground": "This is a ground inventory.",
+                "character": "This is a character inventory.",
+                "trunk": "This inventory is the trunk of a vehicle.",
+                "glovebox": "This inventory is the glovebox of a vehicle."
+            },
+            "vehicle": "Vehicle",
+            "owner": "Vehicle Owner",
+            "character": "Character",
+            "view_character": "View Character",
+            "view_player": "View Player"
+        },
+        "player": {
+            "title": "Inventory Logs",
+            "from": "From",
+            "to": "To",
+            "type": {
+                "inventory": "Inventory logs related to a player"
+            }
         }
     },
     "players": {

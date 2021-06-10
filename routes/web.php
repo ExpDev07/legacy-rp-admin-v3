@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
@@ -50,6 +51,10 @@ Route::group([ 'middleware' => [ 'auth', 'staff' ] ], function ()
     Route::resource('players.bans', PlayerBanController::class);
     Route::resource('players.warnings', PlayerWarningController::class);
     Route::resource('players.kick', PlayerKickController::class);
+
+    // Inventories.
+    Route::get('/inventories/{player}', '\App\Http\Controllers\InventoryController@player');
+    Route::get('/inventory/{inventory}', '\App\Http\Controllers\InventoryController@show');
 
     // Logs.
     Route::resource('logs', LogController::class);
