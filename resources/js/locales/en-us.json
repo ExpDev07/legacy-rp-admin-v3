@@ -38,7 +38,8 @@
             "character_id": "Character ID",
             "name": "Full Name",
             "plate": "Vehicle Plate",
-            "job": "Job"
+            "job": "Job",
+            "phone": "Phone Number"
         },
         "result": {
             "player": "Player",
@@ -117,7 +118,8 @@
             "dob": "Date of Birth",
             "deleted": "Deleted at",
             "update": "Update Character",
-            "job": "Job"
+            "job": "Job",
+            "phone": "Phone Number"
         }
     },
     "logs": {

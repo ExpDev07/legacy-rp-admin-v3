@@ -26,6 +26,7 @@ class CharacterIndexResource extends JsonResource
             'departmentName'  => $this->department_name,
             'positionName'    => $this->position_name,
             'playerName'      => $this->player_name,
+            'phoneNumber'     => $this->phone_number,
         ];
     }
 
