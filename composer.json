@@ -14,7 +14,7 @@
         "doctrine/dbal": "^3.1",
         "fideloper/proxy": "^4.0",
         "inertiajs/inertia-laravel": "^0.2.5",
-        "kanalumaddela/laravel-steam-login": "^2.4",
+        "kanalumaddela/laravel-steam-login": "^2.5.2",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
