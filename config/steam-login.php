@@ -33,7 +33,7 @@ return [
      *
      * @var int
      */
-    'timeout' => env('STEAM_LOGIN_TIMEOUT', 5),
+    'timeout' => env('STEAM_LOGIN_TIMEOUT', 10),
 
     /*
      * Login/Auth route names/paths

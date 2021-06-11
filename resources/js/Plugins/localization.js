@@ -17,6 +17,7 @@ const Localization = {
 
         Vue.prototype.loadLocale = function(locale) {
             try {
+                console.info('Loading locale ' + locale);
                 lang = require('../locales/' + locale + '.json');
             } catch(e) {
                 console.error('Failed to load locale "' + locale + '", falling back to "en-us"');
@@ -45,6 +46,7 @@ const Localization = {
 
             return val ? val : (() => {
                 console.error('Locale "' + key + '" not found');
+                console.debug('Loaded locale:', lang);
                 return 'MISSING_LOCALE';
             })();
         };

@@ -1,0 +1,187 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Validation\Rules\In;
+
+/**
+ * @package App
+ */
+class Inventory
+{
+    const InventoryTypes = [
+        'character',
+        'trunk',
+        'glovebox',
+        'ground',
+        'property',
+        'locker-mechanic',
+        'locker-police',
+        'locker-ems',
+        'motel-\w+?'
+    ];
+
+    /**
+     * The Inventory title (e.g. "trunk-15214")
+     *
+     * @var string
+     */
+    public string $title;
+
+    /**
+     * The Inventory descriptor (e.g. "trunk-4-15214:31")
+     *
+     * @var string
+     */
+    public string $descriptor;
+
+    /**
+     * The type of inventory. Can be ("ground", "character", "glovebox", "trunk", etc.)
+     *
+     * @var string
+     */
+    public string $type;
+
+    /**
+     * The id of the inventory
+     *
+     * @var string
+     */
+    public string $id;
+
+    /**
+     * The Character associated with this inventory
+     *
+     * @var ?Character
+     */
+    public ?Character $character;
+
+    /**
+     * The Vehicle associated with this inventory
+     *
+     * @var ?Vehicle
+     */
+    public ?Vehicle $vehicle;
+
+    /**
+     * Inventory constructor.
+     *
+     * @param string $descriptor
+     */
+    public function __construct(string $descriptor)
+    {
+        $this->descriptor = $descriptor;
+    }
+
+    /**
+     * Parses log details
+     *
+     * @param string $details
+     * @param string $movement
+     * @return Inventory
+     */
+    public static function parseLogDetails(string $details, string $movement): Inventory
+    {
+        $rgx = '/' . preg_quote($movement) . ' (inventory )?((' . implode('|', self::InventoryTypes) . ')-(\d+-)?([0-9A-Z]+):(\d+))/mi';
+        preg_match($rgx, $details, $matches);
+
+        if (sizeof($matches) !== 7) {
+            return new Inventory('unknown');
+        }
+
+        $type = $matches[3];
+        $server = $matches[4];
+        $id = $matches[5];
+        $slot = $matches[6];
+
+        $descriptor = $type . '-' . $server . $id . ':' . $slot;
+
+        if (!is_numeric($slot)) {
+            return new Inventory('unknown');
+        }
+
+        switch ($type) {
+            case 'ground':
+            case 'character':
+                if (!is_numeric($id)) {
+                    return new Inventory($descriptor);
+                }
+                break;
+            case 'trunk':
+            case 'glovebox':
+                if (!is_numeric($id) && !preg_match('/^\d{2}[a-z]{3}\d{3}$/mi', $id)) {
+                    return new Inventory($descriptor);
+                }
+                break;
+            default:
+                return new Inventory($descriptor);
+        }
+
+        $inventory = new Inventory($descriptor);
+        $inventory->type = $type;
+        $inventory->title = $type . '-' . $server . $id;
+        $inventory->id = $id;
+
+        return $inventory;
+    }
+
+    /**
+     * Parses an inventory descriptor
+     *
+     * @param string $descriptor
+     * @return Inventory
+     */
+    public static function parseDescriptor(string $descriptor): Inventory
+    {
+        return self::parseLogDetails('from inventory ' . $descriptor, 'from');
+    }
+
+    /**
+     * Parses the moved item from log details
+     *
+     * @param string $details
+     * @return string
+     */
+    public static function parseItem(string $details): string
+    {
+        preg_match('/moved (\d+x .+?) to/mi', $details, $matches);
+
+        return sizeof($matches) === 2 ? $matches[1] : 'N/A';
+    }
+
+    /**
+     * Loads
+     *
+     * @return Inventory|null
+     */
+    public function get(): ?Inventory
+    {
+        switch ($this->type) {
+            case 'ground':
+                return $this;
+            case 'character':
+                $query = Character::query()->where('character_id', $this->id);
+                $this->character = $query->first();
+                return $this;
+            case 'trunk':
+            case 'glovebox':
+                $query = Vehicle::query();
+                if (is_numeric($this->id)) {
+                    $query->where('vehicle_id', $this->id);
+                } else {
+                    $query->where('plate', $this->id);
+                }
+                $this->vehicle = $query->first();
+
+                if ($this->vehicle) {
+                    $this->character = $this->vehicle->character()->first();
+                }
+                return $this;
+            default:
+                return null;
+        }
+    }
+}

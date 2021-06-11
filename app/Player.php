@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
 use SteamID;
 
@@ -18,11 +19,6 @@ use SteamID;
 class Player extends Model
 {
     use HasFactory;
-
-    const STATUS_UNAVAILABLE = 'unavailable';
-    const STATUS_OFFLINE     = 'offline';
-    const STATUS_JOINING     = 'joining';
-    const STATUS_ONLINE      = 'online';
 
     /**
      * The link used for Steam's new invite code.
@@ -252,38 +248,32 @@ class Player extends Model
         return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
-    public function getOnlineStatus(): string
+    public function getOnlineStatus(): PlayerStatus
     {
-        $url = env('OP_FW_SERVER');
-        $steamIdentifier = $this->getSteamID();
+        $serverIps = explode(',', env('OP_FW_SERVERS', ''));
+        $steamIdentifier = $this->steam_identifier;
 
-        if (!$url) {
-            return self::STATUS_UNAVAILABLE;
+        if (!$serverIps) {
+            return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
         }
 
-        try {
-            $client = new Client();
-            $res = $client->request('GET', 'https://' . $url . '/op-framework/connections.json');
+        $validServer = false;
+        foreach ($serverIps as $serverIp) {
+            if ($serverIp) {
+                $validServer = true;
+                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp);
 
-            $response = json_decode($res->getBody()->getContents(), true);
-            if (!empty($response) && !empty($response['joining']) && !empty($response['joined'])) {
-                foreach($response['joining']['players'] as $player) {
-                    if ($player['steamIdentifier'] === $steamIdentifier) {
-                        return self::STATUS_JOINING;
-                    }
+                if (isset($steamIdentifiers[$steamIdentifier])) {
+                    return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $serverIp, intval($steamIdentifiers[$steamIdentifier]));
                 }
-
-                foreach($response['joined']['players'] as $player) {
-                    if ($player['steamIdentifier'] === $steamIdentifier) {
-                        return self::STATUS_ONLINE;
-                    }
-                }
-
-                return self::STATUS_OFFLINE;
             }
-        } catch(\Throwable $e) {}
+        }
 
-        return self::STATUS_UNAVAILABLE;
+        if (!$validServer) {
+            return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
+        }
+
+        return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
     }
 }
 

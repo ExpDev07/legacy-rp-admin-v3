@@ -42,6 +42,20 @@
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="vehicle_plate" placeholder="95MBH817" v-model="filters.vehicle_plate">
                         </div>
+                        <!-- Phone Number -->
+                        <div class="w-1/4 px-3">
+                            <label class="block mb-2" for="phone">
+                                {{ t('characters.form.phone') }}
+                            </label>
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="phone" placeholder="606-0992" v-model="filters.phone">
+                        </div>
+                        <!-- Job -->
+                        <div class="w-3/4 px-3">
+                            <label class="block mb-2" for="job">
+                                {{ t('characters.form.job') }}
+                            </label>
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" placeholder="Government Waste Collector Employee" v-model="filters.job">
+                        </div>
                     </div>
                 </form>
             </template>
@@ -60,6 +74,7 @@
                     <tr class="font-semibold text-left">
                         <th class="px-6 py-4">{{ t('characters.result.player') }}</th>
                         <th class="px-6 py-4">{{ t('characters.form.character_id') }}</th>
+                        <th class="px-6 py-4">{{ t('characters.form.phone') }}</th>
                         <th class="px-6 py-4">{{ t('characters.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('characters.result.gender') }}</th>
                         <th class="px-6 py-4">{{ t('characters.result.job') }}</th>
@@ -68,10 +83,11 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="character in characters.data" :key="character.id">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + character.steamIdentifier">
-                                {{ character.player.playerName }}
+                                {{ character.playerName }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">{{ character.id }}</td>
+                        <td class="px-6 py-3 border-t">{{ character.phoneNumber }}</td>
                         <td class="px-6 py-3 border-t">
                             {{ character.firstName }} {{ character.lastName }}
                         </td>
@@ -121,6 +137,8 @@ export default {
             character_id: Number,
             name: String,
             vehicle_plate: String,
+            phone: String,
+            job: String,
         }
     },
     methods: {

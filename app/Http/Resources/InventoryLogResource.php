@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use App\Inventory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LogResource extends JsonResource
+class InventoryLogResource extends JsonResource
 {
 
     /**
@@ -18,13 +19,11 @@ class LogResource extends JsonResource
     {
         return [
             'id'              => $this->id,
-            'action'          => $this->action,
-            'details'         => $this->details,
-            'metadata'        => $this->metadata,
             'timestamp'       => $this->timestamp,
-            'server'          => $this->metadata['serverId'],
             'steamIdentifier' => $this->identifier,
-            'playerName'      => $this->player_name,
+            'inventoryFrom'   => Inventory::parseLogDetails($this->details, 'from'),
+            'inventoryTo'     => Inventory::parseLogDetails($this->details, 'to'),
+            'itemMoved'       => Inventory::parseItem($this->details),
         ];
     }
 

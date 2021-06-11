@@ -36,7 +36,7 @@ class Server extends Model
     public function fetchApi(): array
     {
         // example: https://c3s1.op-framework.com/op-framework/api.json
-        return Http::get(Str::finish($this->url, '/') . 'api.json')->json() ?? [];
+        return Http::get(self::fixApiUrl($this->url) . 'api.json')->json() ?? [];
     }
 
     /**
@@ -47,7 +47,61 @@ class Server extends Model
     public function fetchConnections(): array
     {
         // example: https://c3s1.op-framework.com/op-framework/connections.json
-        return Http::get(Str::finish($this->url, '/') . 'connections.json')->json() ?? [];
+        return Http::get(self::fixApiUrl($this->url) . 'connections.json')->json() ?? [];
+    }
+
+    /**
+     * Gets the api url
+     *
+     * @param string $serverIp
+     * @return string
+     */
+    public static function fixApiUrl(string $serverIp): string
+    {
+        $serverIp = Str::finish(trim($serverIp), '/');
+
+        if (!Str::endsWith($serverIp, '/op-framework/')) {
+            $serverIp .= 'op-framework/';
+        }
+
+        if (!Str::startsWith($serverIp, 'https://')) {
+            $serverIp = 'https://' . $serverIp;
+        }
+
+        return $serverIp;
+    }
+
+    /**
+     * Returns an associative array (steamIdentifier -> serverId)
+     *
+     * @param string $serverIp
+     * @return array
+     */
+    public static function fetchSteamIdentifiers(string $serverIp): array
+    {
+        if (!$serverIp) {
+            return [];
+        }
+
+        $serverIp = self::fixApiUrl($serverIp);
+
+        $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
+
+        if ($json) {
+            $assoc = [];
+
+            foreach($json['joining']['players'] as $player) {
+                $assoc[$player['steamIdentifier']] = $player['source'];
+            }
+
+            foreach($json['joined']['players'] as $player) {
+                $assoc[$player['steamIdentifier']] = $player['source'];
+            }
+
+            return $assoc;
+        }
+
+        return [];
     }
 
 }
