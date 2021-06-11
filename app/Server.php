@@ -85,7 +85,7 @@ class Server extends Model
 
         $serverIp = self::fixApiUrl($serverIp);
 
-        $json = Http::get($serverIp . 'connections.json')->json() ?? [];
+        $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
 
         if ($json) {
             $assoc = [];

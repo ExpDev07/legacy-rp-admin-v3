@@ -40,17 +40,23 @@
                 <form @submit.prevent="submit">
                     <!-- Name -->
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-1/2 px-3">
+                        <div class="w-1/3 px-3">
                             <label class="block mb-2" for="first_name">
                                 {{ t('players.edit.prename') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="first_name" v-model="form.first_name">
                         </div>
-                        <div class="w-1/2 px-3">
+                        <div class="w-1/3 px-3">
                             <label class="block mb-2" for="last_name">
                                 {{ t('players.edit.surname') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="last_name" v-model="form.last_name">
+                        </div>
+                        <div class="w-1/3 px-3">
+                            <label class="block mb-2">
+                                {{ t('players.edit.phone') }}
+                            </label>
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600 text-gray-400" :value="character.phoneNumber" disabled readonly />
                         </div>
                     </div>
                     <div class="px-3 mb-6">
@@ -150,6 +156,40 @@
                 </div>
                 <p class="text-muted dark:text-dark-muted" v-if="character.vehicles.length === 0">
                     {{ t('players.vehicles.none') }}
+                </p>
+            </template>
+        </v-section>
+
+        <!-- Properties -->
+        <v-section>
+            <template #header>
+                <h2>
+                    {{ t('players.properties.properties') }}
+                </h2>
+            </template>
+
+            <template>
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
+                    <card
+                        :key="property.id"
+                        v-for="(property) in character.properties"
+                        :no_body="true"
+                    >
+                        <template #header>
+                            <h3 class="mb-2">
+                                {{ property.property_address }}
+                            </h3>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.properties.cost') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(property.property_cost) }}
+                            </h4>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.properties.rent') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(property.property_income) }}
+                            </h4>
+                        </template>
+                    </card>
+                </div>
+                <p class="text-muted dark:text-dark-muted" v-if="character.properties.length === 0">
+                    {{ t('players.properties.none') }}
                 </p>
             </template>
         </v-section>

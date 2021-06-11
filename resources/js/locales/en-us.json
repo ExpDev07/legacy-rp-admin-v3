@@ -37,7 +37,9 @@
         "form": {
             "character_id": "Character ID",
             "name": "Full Name",
-            "plate": "Vehicle Plate"
+            "plate": "Vehicle Plate",
+            "job": "Job",
+            "phone": "Phone Number"
         },
         "result": {
             "player": "Player",
@@ -99,6 +101,12 @@
             "parked": "Parked at <i>{0}</i>",
             "none": "This character does not own any vehicles."
         },
+        "properties": {
+            "properties": "Properties",
+            "none": "This character does not have access to any properties.",
+            "cost": "Maintenance Cost",
+            "rent": "Rent"
+        },
         "characters": {
             "characters": "Characters",
             "hide": "Hide deleted",
@@ -116,7 +124,8 @@
             "dob": "Date of Birth",
             "deleted": "Deleted at",
             "update": "Update Character",
-            "job": "Job"
+            "job": "Job",
+            "phone": "Phone Number"
         }
     },
     "logs": {
@@ -156,7 +165,8 @@
         "show": {
             "table": "Online Players",
             "players": "Players: {0}",
-            "joined": "Joined at"
+            "joined": "Joined at",
+            "delete": "Delete Server"
         }
     },
     "login": {

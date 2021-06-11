@@ -46,10 +46,10 @@ class ServerController extends Controller
      * @param Server $server
      * @return RedirectResponse
      */
-    public function destroy(Server $server)
+    public function destroy(Server $server): RedirectResponse
     {
         $server->forceDelete();
-        return back()->with('success', 'The server was successfully removed from tracking.');
+        return redirect('/servers')->with('success', 'The server was successfully removed from tracking.');
     }
 
     /**
