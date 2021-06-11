@@ -101,6 +101,12 @@
             "parked": "Parked at <i>{0}</i>",
             "none": "This character does not own any vehicles."
         },
+        "properties": {
+            "properties": "Properties",
+            "none": "This character does not have access to any properties.",
+            "cost": "Maintenance Cost",
+            "rent": "Rent"
+        },
         "characters": {
             "characters": "Characters",
             "hide": "Hide deleted",

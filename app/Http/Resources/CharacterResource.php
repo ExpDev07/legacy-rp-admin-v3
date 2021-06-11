@@ -34,6 +34,7 @@ class CharacterResource extends JsonResource
             'positionName'               => $this->position_name,
             'backstory'                  => $this->backstory,
             'vehicles'                   => VehicleResource::collection($this->vehicles),
+            'properties'                 => PropertyResource::collection($this->properties),
             'characterDeleted'           => $this->character_deleted,
             'characterDeletionTimestamp' => $this->character_deletion_timestamp,
         ];

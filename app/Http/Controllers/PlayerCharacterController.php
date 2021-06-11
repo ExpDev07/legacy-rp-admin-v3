@@ -8,6 +8,7 @@ use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
+use App\Property;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -82,6 +83,7 @@ class PlayerCharacterController extends Controller
      */
     public function edit(Player $player, Character $character): Response
     {
+
         return Inertia::render('Players/Characters/Edit', [
             'player' => new PlayerResource($player),
             'character' => new CharacterResource($character),

@@ -160,6 +160,40 @@
             </template>
         </v-section>
 
+        <!-- Properties -->
+        <v-section>
+            <template #header>
+                <h2>
+                    {{ t('players.properties.properties') }}
+                </h2>
+            </template>
+
+            <template>
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
+                    <card
+                        :key="property.id"
+                        v-for="(property) in character.properties"
+                        :no_body="true"
+                    >
+                        <template #header>
+                            <h3 class="mb-2">
+                                {{ property.property_address }}
+                            </h3>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.properties.cost') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(property.property_cost) }}
+                            </h4>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.properties.rent') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(property.property_income) }}
+                            </h4>
+                        </template>
+                    </card>
+                </div>
+                <p class="text-muted dark:text-dark-muted" v-if="character.properties.length === 0">
+                    {{ t('players.properties.none') }}
+                </p>
+            </template>
+        </v-section>
+
     </div>
 </template>
 

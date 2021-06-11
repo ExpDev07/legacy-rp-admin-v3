@@ -117,4 +117,14 @@ class Character extends Model
         return $this->hasMany(Vehicle::class, 'owner_cid');
     }
 
+    /**
+     * Gets the vehicles owned by this character.
+     *
+     * @return HasMany
+     */
+    public function properties(): HasMany
+    {
+        return $this->hasMany(Property::class, 'property_renter_cid');
+    }
+
 }
