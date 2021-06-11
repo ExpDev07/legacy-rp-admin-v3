@@ -37,7 +37,8 @@
         "form": {
             "character_id": "Character ID",
             "name": "Full Name",
-            "plate": "Vehicle Plate"
+            "plate": "Vehicle Plate",
+            "job": "Job"
         },
         "result": {
             "player": "Player",

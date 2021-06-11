@@ -43,6 +43,11 @@ class PlayerCharacterController extends Controller
             });
         }
 
+        // Filtering by Job.
+        if ($job = $request->input('job')) {
+            $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), 'like', "%{$job}%");
+        }
+
         $query->leftJoin('users', 'characters.steam_identifier', '=', 'users.steam_identifier');
         $query->select([
             'character_id', 'characters.steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',

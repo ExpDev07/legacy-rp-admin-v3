@@ -22,25 +22,32 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
                         <!-- Character ID -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/4 px-3">
                             <label class="block mb-2" for="character_id">
                                 {{ t('characters.form.character_id') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="number" id="character_id" placeholder="16802" v-model="filters.character_id">
                         </div>
                         <!-- Name -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/4 px-3">
                             <label class="block mb-2" for="name">
                                 {{ t('characters.form.name') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="name" placeholder="Charlie Ives" v-model="filters.name">
                         </div>
                         <!-- Vehicle Plate -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/4 px-3">
                             <label class="block mb-2" for="vehicle_plate">
                                 {{ t('characters.form.plate') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="vehicle_plate" placeholder="95MBH817" v-model="filters.vehicle_plate">
+                        </div>
+                        <!-- Job -->
+                        <div class="w-1/4 px-3">
+                            <label class="block mb-2" for="job">
+                                {{ t('characters.form.job') }}
+                            </label>
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" placeholder="Government Waste Collector Employee" v-model="filters.job">
                         </div>
                     </div>
                 </form>
@@ -121,6 +128,7 @@ export default {
             character_id: Number,
             name: String,
             vehicle_plate: String,
+            job: String,
         }
     },
     methods: {
