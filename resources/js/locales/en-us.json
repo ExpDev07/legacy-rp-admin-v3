@@ -13,7 +13,8 @@
             "online": "Online",
             "offline": "Offline",
             "unavailable": "Unavailable"
-        }
+        },
+        "info": "Info"
     },
     "home": {
         "title": "Dashboard",
@@ -47,6 +48,30 @@
             "job": "Job"
         }
     },
+    "inventories": {
+        "show": {
+            "error": "Invalid Inventory",
+            "title": "Inventory",
+            "type": {
+                "ground": "This is a ground inventory.",
+                "character": "This is a character inventory.",
+                "trunk": "This inventory is the trunk of a vehicle.",
+                "glovebox": "This inventory is the glovebox of a vehicle."
+            },
+            "vehicle": "Vehicle",
+            "owner": "Vehicle Owner",
+            "character": "Character",
+            "view_character": "View Character",
+            "view_player": "View Player"
+        },
+        "player": {
+            "title": "Inventory Logs",
+            "movement": "Movement",
+            "item": "Moved Item",
+            "unknown": "Unknown",
+            "description":  "Inventory logs related to a player"
+        }
+    },
     "players": {
         "title": "Players",
         "description": "Search Players!",
@@ -70,6 +95,7 @@
             "ban": "Banned by <i>{0}</i> until <i>{1}</i>",
             "no_reason": "No reason.",
             "logs": "Check player's logs",
+            "inventory": "View related inventory logs",
             "steam": "Open Steam profile",
             "no_warnings": "This player has not received any warnings.",
             "kick": "Kick Player",

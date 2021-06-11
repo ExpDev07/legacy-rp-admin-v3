@@ -32,7 +32,7 @@
         <v-section>
             <template #header>
                 <h2>
-                    Info
+                    {{ t('global.info') }}
                 </h2>
             </template>
 

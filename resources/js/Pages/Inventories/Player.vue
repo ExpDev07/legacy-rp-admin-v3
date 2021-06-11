@@ -1,0 +1,113 @@
+<template>
+    <div>
+
+        <portal to="title">
+            <h1 class="dark:text-white">
+                {{ t('inventories.player.title') }}
+            </h1>
+            <p>
+                {{ t('inventories.player.description') }}
+            </p>
+        </portal>
+
+        <!-- Table -->
+        <v-section class="overflow-x-auto">
+            <template #header>
+                <h2>
+                    {{ t('logs.logs') }}
+                </h2>
+            </template>
+
+            <template>
+                <table class="w-full whitespace-no-wrap">
+                    <tr class="font-semibold text-left">
+                        <th class="px-6 py-4">{{ t('logs.player') }}</th>
+                        <th class="px-6 py-4">{{ t('inventories.player.item') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
+                        <th class="px-6 py-4">{{ t('inventories.player.movement') }}</th>
+                    </tr>
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs.data" :key="log.id">
+                        <td class="px-6 py-3 border-t">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steamIdentifier">
+                                {{ log.playerName }}
+                            </inertia-link>
+                        </td>
+                        <td class="px-6 py-3 border-t">{{ log.itemMoved }}</td>
+                        <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t">
+                            <div class="flex">
+                                <inertia-link v-if="log.inventoryFrom" :class="'w-inventory block px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryFrom.type)" v-bind:href="'/inventory/' + log.inventoryFrom.descriptor">
+                                    {{ log.inventoryFrom.title }}
+                                </inertia-link>
+                                <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
+                                    {{ t('inventories.player.unknown') }}
+                                </span>
+
+                                <span class="font-semibold block px-2 py-2 bg-gray-500 text-center text-white">
+                                    &#11166;
+                                </span>
+
+                                <inertia-link v-if="log.inventoryTo" :class="'block w-inventory px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryTo.type)" v-bind:href="'/inventory/' + log.inventoryTo.descriptor">
+                                    {{ log.inventoryTo.title }}
+                                </inertia-link>
+                                <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
+                                    {{ t('inventories.player.unknown') }}
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-if="logs.data.length === 0">
+                        <td class="px-4 py-6 text-center border-t" colspan="100%">
+                            {{ t('logs.no_logs') }}
+                        </td>
+                    </tr>
+                </table>
+            </template>
+
+            <template #footer>
+                <pagination v-bind:links="logs.links" v-bind:meta="logs.meta" />
+            </template>
+        </v-section>
+
+    </div>
+</template>
+
+<script>
+import Layout from '../../Layouts/App';
+import VSection from '../../Components/Section';
+import Pagination from '../../Components/Pagination';
+
+export default {
+    layout: Layout,
+    components: {
+        Pagination,
+        VSection,
+    },
+    methods: {
+        inventoryColor(type) {
+            switch(type) {
+                case 'ground':
+                    return 'bg-gray-800 hover:bg-gray-700';
+                case 'character':
+                    return 'bg-green-600 hover:bg-green-500';
+                case 'trunk':
+                    return 'bg-blue-700 hover:bg-blue-600';
+                case 'glovebox':
+                    return 'bg-indigo-700 hover:bg-indigo-600';
+                default:
+                    return '';
+            }
+        }
+    },
+    props: {
+        logs: {
+            type: Object,
+            required: true,
+        },
+        type: {
+            type: String,
+            required: true,
+        }
+    },
+};
+</script>
