@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use kanalumaddela\LaravelSteamLogin\Http\Controllers\AbstractSteamLoginController;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
 
@@ -31,7 +32,7 @@ class SteamController extends AbstractSteamLoginController
         ]);
 
         // Log them in!
-        auth()->login($user, true);
+        Auth::login($user, true);
     }
 
 }

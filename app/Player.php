@@ -3,11 +3,13 @@
 namespace App;
 
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
 use SteamID;
 
@@ -122,7 +124,7 @@ class Player extends Model
             return $identifiers;
         }
 
-        return array_merge([ $identifier ], $identifiers);
+        return array_merge([$identifier], $identifiers);
     }
 
     /**
@@ -154,7 +156,8 @@ class Player extends Model
      *
      * @return bool
      */
-    public function isSuperAdmin(): bool {
+    public function isSuperAdmin(): bool
+    {
         return $this->is_super_admin ?? false;
     }
 
@@ -165,7 +168,7 @@ class Player extends Model
      */
     public function isBanned(): bool
     {
-        return ! is_null($this->getActiveBan());
+        return !is_null($this->getActiveBan());
     }
 
     /**
@@ -178,7 +181,7 @@ class Player extends Model
         return $this
             ->bans()
             ->get()
-            ->filter(fn (Ban $ban) => !$ban->hasExpired())
+            ->filter(fn(Ban $ban) => !$ban->hasExpired())
             ->first();
     }
 
@@ -245,6 +248,33 @@ class Player extends Model
         return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
+    public function getOnlineStatus(): PlayerStatus
+    {
+        $serverIps = explode(',', env('OP_FW_SERVERS', ''));
+        $steamIdentifier = $this->steam_identifier;
+
+        if (!$serverIps) {
+            return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
+        }
+
+        $validServer = false;
+        foreach ($serverIps as $serverIp) {
+            if ($serverIp) {
+                $validServer = true;
+                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp);
+
+                if (isset($steamIdentifiers[$steamIdentifier])) {
+                    return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $serverIp, intval($steamIdentifiers[$steamIdentifier]));
+                }
+            }
+        }
+
+        if (!$validServer) {
+            return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
+        }
+
+        return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
+    }
 }
 
 /**
@@ -258,8 +288,7 @@ function get_steam_id(string $identifier): ?SteamID
     try {
         // Get rid of any prefix.
         return new SteamID(hexdec(explode('steam:', $identifier)[1]));
-    }
-    catch (Exception $ex) {
+    } catch (Exception $ex) {
         return null;
     }
 }

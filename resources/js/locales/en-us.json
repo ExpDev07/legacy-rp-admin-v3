@@ -8,7 +8,13 @@
         "staff": "Staff Member",
         "super": "Super Admin",
         "cancel": "Cancel",
-        "view": "View"
+        "view": "View",
+        "status": {
+            "online": "Online",
+            "offline": "Offline",
+            "unavailable": "Unavailable"
+        },
+        "info": "Info"
     },
     "home": {
         "title": "Dashboard",
@@ -32,12 +38,38 @@
         "form": {
             "character_id": "Character ID",
             "name": "Full Name",
-            "plate": "Vehicle Plate"
+            "plate": "Vehicle Plate",
+            "job": "Job",
+            "phone": "Phone Number"
         },
         "result": {
             "player": "Player",
             "gender": "Gender",
             "job": "Job"
+        }
+    },
+    "inventories": {
+        "show": {
+            "error": "Invalid Inventory",
+            "title": "Inventory",
+            "type": {
+                "ground": "This is a ground inventory.",
+                "character": "This is a character inventory.",
+                "trunk": "This inventory is the trunk of a vehicle.",
+                "glovebox": "This inventory is the glovebox of a vehicle."
+            },
+            "vehicle": "Vehicle",
+            "owner": "Vehicle Owner",
+            "character": "Character",
+            "view_character": "View Character",
+            "view_player": "View Player"
+        },
+        "player": {
+            "title": "Inventory Logs",
+            "movement": "Movement",
+            "item": "Moved Item",
+            "unknown": "Unknown",
+            "description":  "Inventory logs related to a player"
         }
     },
     "players": {
@@ -63,8 +95,12 @@
             "ban": "Banned by <i>{0}</i> until <i>{1}</i>",
             "no_reason": "No reason.",
             "logs": "Check player's logs",
+            "inventory": "View related inventory logs",
             "steam": "Open Steam profile",
-            "no_warnings": "This player has not received any warnings."
+            "no_warnings": "This player has not received any warnings.",
+            "kick": "Kick Player",
+            "kick_confirm": "Are you sure you want to kick this player from the server?",
+            "kick_reason": "Reason"
         },
         "form": {
             "identifier": "Identifier",
@@ -91,6 +127,12 @@
             "parked": "Parked at <i>{0}</i>",
             "none": "This character does not own any vehicles."
         },
+        "properties": {
+            "properties": "Properties",
+            "none": "This character does not have access to any properties.",
+            "cost": "Maintenance Cost",
+            "rent": "Rent"
+        },
         "characters": {
             "characters": "Characters",
             "hide": "Hide deleted",
@@ -108,7 +150,8 @@
             "dob": "Date of Birth",
             "deleted": "Deleted at",
             "update": "Update Character",
-            "job": "Job"
+            "job": "Job",
+            "phone": "Phone Number"
         }
     },
     "logs": {
@@ -148,7 +191,8 @@
         "show": {
             "table": "Online Players",
             "players": "Players: {0}",
-            "joined": "Joined at"
+            "joined": "Joined at",
+            "delete": "Delete Server"
         }
     },
     "login": {
