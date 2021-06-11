@@ -159,7 +159,8 @@
         "show": {
             "table": "Online Players",
             "players": "Players: {0}",
-            "joined": "Joined at"
+            "joined": "Joined at",
+            "delete": "Delete Server"
         }
     },
     "login": {
