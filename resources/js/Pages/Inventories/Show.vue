@@ -3,7 +3,7 @@
 
         <portal to="title">
             <h1 class="dark:text-white" v-if="inventory">
-                {{ t('inventories.show.title') }} {{ inventory.descriptor }}
+                {{ t('inventories.show.title') }} {{ inventory.title }}
             </h1>
             <h1 class="dark:text-white" v-else>
                 {{ t('inventories.show.error') }}
@@ -125,12 +125,6 @@ export default {
         Pagination,
         VSection,
         Card,
-    },
-    methods: {
-        inventoryDescriptor(details, type) {
-            const match = (new RegExp(type + ' (inventory )?((character|trunk|glovebox|ground)-(\\d+-)?[^- ]+)', 'gmi')).exec(details);
-            return match && match.length >= 3 ? match[2] : 'unknown';
-        }
     },
     props: {
         inventory: {

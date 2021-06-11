@@ -29,15 +29,15 @@ class InventoryController extends Controller
 
         $characters = $player->characters()->get();
         foreach ($characters as $character) {
-            $inventories[] = 'character-' . $character->character_id;
+            $inventories[] = 'character-' . $character->character_id . ':[0-9]{1,3}';
 
             $vehicles = $character->vehicles()->get();
             foreach ($vehicles as $vehicle) {
-                $inventories[] = 'trunk-([0-9]+-)?' . $vehicle->vehicle_id;
-                $inventories[] = 'glovebox-([0-9]+-)?' . $vehicle->vehicle_id;
+                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':[0-9]{1,3}';
+                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':[0-9]{1,3}';
 
-                $inventories[] = 'trunk-([0-9]+-)?' . $vehicle->plate;
-                $inventories[] = 'glovebox-([0-9]+-)?' . $vehicle->plate;;
+                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->plate . ':[0-9]{1,3}';
+                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->plate . ':[0-9]{1,3}';
             }
         }
 
@@ -52,12 +52,11 @@ class InventoryController extends Controller
             'logs' => InventoryLogResource::collection($query->paginate(15, [
                 'id',
             ])->appends($request->query())),
-            'type' => 'inventory',
         ]);
     }
 
     /**
-     * Display Informations related to an inventory.
+     * Display informations related to an inventory.
      *
      * @param string $inventory
      * @param Request $request
@@ -65,45 +64,8 @@ class InventoryController extends Controller
      */
     public function show(string $inventory, Request $request): Response
     {
-        $split = explode('-', $inventory);
-
-        if (sizeof($split) < 2) {
-            return Inertia::render('Inventories/Show', [
-                'inventory' => null,
-            ]);
-        }
-
-        $inventory = new Inventory($inventory);
-
-        $id = explode(':', $split[sizeof($split) - 1])[0];
-
-        $type = $split[0];
-        $inventory->type = $type;
-        switch ($type) {
-            case 'ground':
-                break;
-            case 'character':
-                $query = Character::query()->where('character_id', $id);
-                $inventory->character = $query->first();
-                break;
-            case 'trunk':
-            case 'glovebox':
-                $query = Vehicle::query();
-                if (is_numeric($id)) {
-                    $query->where('vehicle_id', $id);
-                } else {
-                    $query->where('plate', $id);
-                }
-                $inventory->vehicle = $query->first();
-
-                if ($inventory->vehicle) {
-                    $inventory->character = $inventory->vehicle->character()->first();
-                }
-                break;
-        }
-
         return Inertia::render('Inventories/Show', [
-            'inventory' => $inventory,
+            'inventory' => Inventory::parseDescriptor($inventory)->get(),
         ]);
     }
 

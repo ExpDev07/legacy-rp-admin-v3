@@ -64,11 +64,10 @@
         },
         "player": {
             "title": "Inventory Logs",
-            "from": "From",
-            "to": "To",
-            "type": {
-                "inventory": "Inventory logs related to a player"
-            }
+            "movement": "Movement",
+            "item": "Moved Item",
+            "unknown": "Unknown",
+            "description":  "Inventory logs related to a player"
         }
     },
     "players": {

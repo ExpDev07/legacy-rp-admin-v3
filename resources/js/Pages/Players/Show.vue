@@ -168,7 +168,7 @@
                     {{ t('players.show.logs') }}
                 </inertia-link>
                 <inertia-link
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded"
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-600 rounded"
                     :href="'/inventories/' + player.steamIdentifier"
                 >
                     <i class="fas fa-briefcase mr-1"></i>
