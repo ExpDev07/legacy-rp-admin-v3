@@ -38,10 +38,13 @@ class SteamController extends AbstractSteamLoginController
             ->toArray();
 
         $user = $user->toArray();
-        $user['player'] = $player;
-        $user['player']['avatar'] = $user['avatar'];
 
-        session()->put('user', $user);
+        if ($player && !empty($player['avatar'])) {
+            $user['player'] = $player;
+            $user['player']['avatar'] = $user['avatar'];
+
+            session()->put('user', $user);
+        }
 
         return redirect('/');
     }
