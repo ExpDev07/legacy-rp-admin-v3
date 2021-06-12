@@ -39,6 +39,10 @@ class SteamController extends AbstractSteamLoginController
 
         $user = $user->toArray();
 
+        if (array_key_exists('avatar', $user) && empty($user['avatar'])) {
+            $user['avatar'] = '/images/op-logo.png';
+        }
+
         if ($player && !empty($user['avatar'])) {
             $user['player'] = $player;
             $user['player']['avatar'] = $user['avatar'];
