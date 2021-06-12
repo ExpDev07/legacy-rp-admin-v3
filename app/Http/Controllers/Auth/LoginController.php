@@ -29,6 +29,11 @@ class LoginController extends Controller
      */
     public function render(): Response
     {
+        if (session()->get('isLogout')) {
+            session()->forget('isLogout');
+            session()->forget('error');
+        }
+
         return Inertia::render('Login');
     }
 

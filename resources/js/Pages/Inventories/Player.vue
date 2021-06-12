@@ -29,27 +29,33 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs.data" :key="log.id">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steamIdentifier">
-                                {{ log.playerName }}
+                                {{ playerName(log.steamIdentifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">{{ log.itemMoved }}</td>
                         <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t">
                             <div class="flex">
-                                <inertia-link v-if="log.inventoryFrom" :class="'w-inventory block px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryFrom.type)" v-bind:href="'/inventory/' + log.inventoryFrom.descriptor">
+                                <inertia-link v-if="log.inventoryFrom && log.inventoryFrom.type" :class="'w-inventory block px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryFrom.type)" v-bind:href="'/inventory/' + log.inventoryFrom.descriptor">
                                     {{ log.inventoryFrom.title }}
                                 </inertia-link>
+                                <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else-if="log.inventoryFrom && log.inventoryFrom.descriptor !== 'unknown'">
+                                    {{ log.inventoryFrom.descriptor }}
+                                </span>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
                                     {{ t('inventories.player.unknown') }}
                                 </span>
 
-                                <span class="font-semibold block px-2 py-2 bg-gray-500 text-center text-white">
+                                <span class="font-semibold block px-2 py-2 bg-gray-600 text-center text-white">
                                     &#11166;
                                 </span>
 
-                                <inertia-link v-if="log.inventoryTo" :class="'block w-inventory px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryTo.type)" v-bind:href="'/inventory/' + log.inventoryTo.descriptor">
+                                <inertia-link v-if="log.inventoryTo && log.inventoryTo.type" :class="'block w-inventory px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryTo.type)" v-bind:href="'/inventory/' + log.inventoryTo.descriptor">
                                     {{ log.inventoryTo.title }}
                                 </inertia-link>
+                                <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else-if="log.inventoryTo && log.inventoryTo.descriptor !== 'unknown'">
+                                    {{ log.inventoryTo.descriptor }}
+                                </span>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
                                     {{ t('inventories.player.unknown') }}
                                 </span>
@@ -97,6 +103,9 @@ export default {
                 default:
                     return '';
             }
+        },
+        playerName(steamIdentifier) {
+            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
         }
     },
     props: {
@@ -104,8 +113,8 @@ export default {
             type: Object,
             required: true,
         },
-        type: {
-            type: String,
+        playerMap: {
+            type: Object,
             required: true,
         }
     },

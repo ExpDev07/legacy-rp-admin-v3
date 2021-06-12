@@ -29,29 +29,43 @@ class InventoryController extends Controller
 
         $characters = $player->characters()->get();
         foreach ($characters as $character) {
-            $inventories[] = 'character-' . $character->character_id . ':[0-9]{1,3}';
+            $query->orWhere('details', 'like', '%character-' . $character->character_id . ':%');
 
             $vehicles = $character->vehicles()->get();
             foreach ($vehicles as $vehicle) {
-                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':[0-9]{1,3}';
-                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':[0-9]{1,3}';
+                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':';
+                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':';
 
-                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->plate . ':[0-9]{1,3}';
-                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->plate . ':[0-9]{1,3}';
+                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->plate . ':';
+                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->plate . ':';
             }
         }
 
-        foreach ($inventories as $inventory) {
-            $query->orWhereRaw('details REGEXP \'' . $inventory . '\'');
+        $query->orWhereRaw('details REGEXP \'' . implode('|', $inventories) . '\'');
+
+        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
+
+        $logs = InventoryLogResource::collection($query->paginate(15, [
+            'id',
+        ])->appends($request->query()));
+
+        // This is a small hack but it speeds everything up by a lot
+        $identifiers = [];
+        foreach($logs->toArray($request) as $log) {
+            if (!in_array($log['steamIdentifier'], $identifiers)) {
+                $identifiers[] = $log['steamIdentifier'];
+            }
         }
 
-        $query->leftJoin('users', 'identifier', '=', 'steam_identifier');
-        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp', 'player_name']);
+        $players = Player::query()->whereIn('steam_identifier', $identifiers)->get();
+        $playerMap = [];
+        foreach($players as $player) {
+            $playerMap[$player->steam_identifier] = $player->player_name;
+        }
 
         return Inertia::render('Inventories/Player', [
-            'logs' => InventoryLogResource::collection($query->paginate(15, [
-                'id',
-            ])->appends($request->query())),
+            'logs' => $logs,
+            'playerMap' => $playerMap
         ]);
     }
 

@@ -24,7 +24,7 @@ class SuperAdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Check for super admin status.
-        if (! $this->isSuperAdmin($request)) {
+        if (!$this->isSuperAdmin($request)) {
             return back()->with('error',
                 'You must be a Super Admin to do that! Contact a higher-up if you were shown this error by mistake.'
             );
@@ -41,7 +41,7 @@ class SuperAdminMiddleware
      */
     protected function isSuperAdmin(Request $request) : bool
     {
-        return ! is_null($request->user()) && $request->user()->isSuperAdmin();
+        return !is_null($request->user()) && $request->user()->player->is_super_admin;
     }
 
 }

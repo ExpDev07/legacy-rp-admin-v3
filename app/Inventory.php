@@ -12,6 +12,18 @@ use Illuminate\Validation\Rules\In;
  */
 class Inventory
 {
+    const InventoryTypes = [
+        'character',
+        'trunk',
+        'glovebox',
+        'ground',
+        'property',
+        'locker-mechanic',
+        'locker-police',
+        'locker-ems',
+        'motel-\w+?'
+    ];
+
     /**
      * The Inventory title (e.g. "trunk-15214")
      *
@@ -27,7 +39,7 @@ class Inventory
     public string $descriptor;
 
     /**
-     * The type of inventory. Can be ("ground", "character", "glovebox", "trunk")
+     * The type of inventory. Can be ("ground", "character", "glovebox", "trunk", etc.)
      *
      * @var string
      */
@@ -73,7 +85,7 @@ class Inventory
      */
     public static function parseLogDetails(string $details, string $movement): Inventory
     {
-        $rgx = '/' . preg_quote($movement) . ' (inventory )?((character|trunk|glovebox|ground)-(\d+-)?([0-9A-Z]+):(\d+))/mi';
+        $rgx = '/' . preg_quote($movement) . ' (inventory )?((' . implode('|', self::InventoryTypes) . ')-(\d+-)?([0-9A-Z]+):(\d+))/mi';
         preg_match($rgx, $details, $matches);
 
         if (sizeof($matches) !== 7) {
@@ -85,6 +97,8 @@ class Inventory
         $id = $matches[5];
         $slot = $matches[6];
 
+        $descriptor = $type . '-' . $server . $id . ':' . $slot;
+
         if (!is_numeric($slot)) {
             return new Inventory('unknown');
         }
@@ -93,20 +107,20 @@ class Inventory
             case 'ground':
             case 'character':
                 if (!is_numeric($id)) {
-                    return new Inventory('unknown');
+                    return new Inventory($descriptor);
                 }
                 break;
             case 'trunk':
             case 'glovebox':
-                if (!preg_match('/^\d{2}[a-z]{3}\d{3}$/mi', $id)) {
-                    return new Inventory('unknown');
+                if (!is_numeric($id) && !preg_match('/^\d{2}[a-z]{3}\d{3}$/mi', $id)) {
+                    return new Inventory($descriptor);
                 }
                 break;
             default:
-                return new Inventory('unknown');
+                return new Inventory($descriptor);
         }
 
-        $inventory = new Inventory($type . '-' . $server . $id . ':' . $slot);
+        $inventory = new Inventory($descriptor);
         $inventory->type = $type;
         $inventory->title = $type . '-' . $server . $id;
         $inventory->id = $id;

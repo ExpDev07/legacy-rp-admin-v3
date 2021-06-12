@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\UserResource;
+use App\Player;
+use App\User;
 use App\Util\Inspiring;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
@@ -57,12 +59,12 @@ class AppServiceProvider extends ServiceProvider
 
             // Authentication.
             'auth' => function () {
-                $user = auth()->user();
-                $player = $user->player ?? null;
+                $user = session()->exists('user') ? session()->get('user') : null;
+                $player = isset($user['player']) ? $user['player'] : null;
 
                 return [
-                    'user' => $user ? new UserResource($user) : null,
-                    'player' => $player ? new PlayerResource($player) : null,
+                    'user' => $user ? new UserResource(new User($user)) : null,
+                    'player' => $player ? new PlayerResource(new Player($player)) : null,
                 ];
             },
 
