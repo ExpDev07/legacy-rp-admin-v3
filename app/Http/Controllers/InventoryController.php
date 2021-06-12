@@ -45,6 +45,7 @@ class InventoryController extends Controller
         }
 
         $query->orWhereRaw('details REGEXP \'' . implode('|', $inventories) . '\'');
+        $query->orWhere('identifier', '=', $player->steam_identifier);
 
         $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
 
