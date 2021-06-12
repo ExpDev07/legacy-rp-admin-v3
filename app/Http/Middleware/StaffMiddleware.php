@@ -23,7 +23,7 @@ class StaffMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Check for staff status.
-        if (! $this->isStaff($request)) {
+        if (!$this->isStaff($request)) {
             auth()->logout();
 
             return redirect('/login')->with('error',
@@ -42,7 +42,16 @@ class StaffMiddleware
      */
     protected function isStaff(Request $request) : bool
     {
-        return ! is_null($request->user()) && $request->user()->isStaff();
+        if (session()->exists('user')) {
+            $user = session()->get('user');
+
+            $request->setUserResolver(function() use ($user) {
+                return json_decode(json_encode($user), FALSE);
+            });
+
+            return !empty($user['player']) && $user['player']['is_staff'];
+        }
+        return false;
     }
 
 }

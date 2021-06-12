@@ -116,10 +116,6 @@ export default {
         playerMap: {
             type: Object,
             required: true,
-        },
-        type: {
-            type: String,
-            required: true,
         }
     },
 };

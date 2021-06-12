@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Player;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,8 +32,18 @@ class SteamController extends AbstractSteamLoginController
             'avatar' => $steam->avatar,
         ]);
 
-        // Log them in!
-        Auth::login($user, true);
+        $player = Player::query()
+            ->where('steam_identifier', '=', 'steam:' . dechex(intval($steam->steamId)))
+            ->first()
+            ->toArray();
+
+        $user = $user->toArray();
+        $user['player'] = $player;
+        $user['player']['avatar'] = $user['avatar'];
+
+        session()->put('user', $user);
+
+        return redirect('/');
     }
 
 }

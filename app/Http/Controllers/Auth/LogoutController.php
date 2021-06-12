@@ -19,7 +19,8 @@ class LogoutController extends Controller
     public function logout(): RedirectResponse
     {
         // Logout the user.
-        auth()->logout();
+        session()->forget('user');
+        session()->put('isLogout', true);
 
         // Redirect them to base path.
         return redirect('/');
