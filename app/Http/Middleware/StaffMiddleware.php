@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\SessionHelper;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class StaffMiddleware
     {
         // Check for staff status.
         if (!$this->isStaff($request)) {
-            auth()->logout();
+            SessionHelper::drop();
 
             return redirect('/login')->with('error',
                 'You must be a staff member to access the dashboard! If you believe this is a mistake, contact a developer.'
@@ -42,8 +43,10 @@ class StaffMiddleware
      */
     protected function isStaff(Request $request) : bool
     {
-        if (session()->exists('user')) {
-            $user = session()->get('user');
+        $session = SessionHelper::getInstance();
+
+        if ($session->exists('user')) {
+            $user = $session->get('user');
 
             $request->setUserResolver(function() use ($user) {
                 return json_decode(json_encode($user), FALSE);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\SessionHelper;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,8 +30,10 @@ class LoginController extends Controller
      */
     public function render(): Response
     {
-        if (session()->get('isLogout')) {
-            session()->forget('isLogout');
+        $session = SessionHelper::getInstance();
+
+        if ($session->get('isLogout')) {
+            $session->forget('isLogout');
             session()->forget('error');
         }
 

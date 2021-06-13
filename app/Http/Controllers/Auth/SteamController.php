@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\SessionHelper;
 use App\Player;
 use App\User;
 use Illuminate\Http\Request;
@@ -47,7 +48,8 @@ class SteamController extends AbstractSteamLoginController
             $user['player'] = $player;
             $user['player']['avatar'] = $user['avatar'];
 
-            session()->put('user', $user);
+            $session = SessionHelper::getInstance();
+            $session->put('user', $user);
         }
 
         return redirect('/');

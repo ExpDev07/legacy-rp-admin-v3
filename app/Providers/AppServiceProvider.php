@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
+use App\Helpers\SessionHelper;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\UserResource;
 use App\Player;
 use App\User;
-use App\Util\Inspiring;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -59,7 +59,9 @@ class AppServiceProvider extends ServiceProvider
 
             // Authentication.
             'auth' => function () {
-                $user = session()->exists('user') ? session()->get('user') : null;
+                $session = SessionHelper::getInstance();
+
+                $user = $session->get('user') ?: null;
                 $player = isset($user['player']) ? $user['player'] : null;
 
                 return [
