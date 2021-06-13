@@ -23,27 +23,25 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerKickController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\ServerController;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
 // Authentication methods.
-Route::group([ 'prefix' => 'auth' ], function ()
-{
-    SteamLogin::routes([ 'controller' => SteamController::class ]);
+Route::group(['prefix' => 'auth'], function () {
+    SteamLogin::routes(['controller' => SteamController::class]);
 });
 
 // Logging in and out.
-Route::group([ 'namespace' => 'Auth' ], function()
-{
-    Route::name('login')->get('/login', [ LoginController::class, 'render' ]);
-    Route::name('logout')->post('/logout', [ LogoutController::class, 'logout' ]);
+Route::group(['namespace' => 'Auth'], function () {
+    Route::name('login')->get('/login', [LoginController::class, 'render']);
+    Route::name('logout')->post('/logout', [LogoutController::class, 'logout']);
 });
 
 // Routes requiring being logged in as a staff member.
-Route::group([ 'middleware' => [ 'staff' ] ], function ()
-{
+Route::group(['middleware' => ['staff']], function () {
     // Home.
-    Route::get('/', [ HomeController::class, 'render' ]);
+    Route::get('/', [HomeController::class, 'render']);
 
     // Players.
     Route::resource('players', PlayerController::class);
@@ -64,8 +62,10 @@ Route::group([ 'middleware' => [ 'staff' ] ], function ()
 
     // Servers.
     Route::resource('servers', ServerController::class);
-
 });
 
 // Used for testing purposes.
-Route::get('/test', function () {});
+Route::get('/test', function () {
+    return (new Response('Hash: ' . md5($_SERVER['REMOTE_ADDR']), 200))
+        ->header('Content-Type', 'text/plain');
+});

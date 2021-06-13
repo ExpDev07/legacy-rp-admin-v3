@@ -41,6 +41,16 @@ class SessionHelper
     }
 
     /**
+     * Returns the current sessions key
+     *
+     * @return string
+     */
+    public function getSessionKey(): string
+    {
+        return $this->sessionKey;
+    }
+
+    /**
      * Checks if a given key is set in the session
      *
      * @param string $key
@@ -96,8 +106,11 @@ class SessionHelper
     public static function drop()
     {
         $helper = self::getInstance();
+        LoggingHelper::log($helper->sessionKey, 'Dropping session');
 
-        unlink($helper->getSessionFile());
+        if (!unlink($helper->getSessionFile())) {
+            LoggingHelper::log($helper->sessionKey, 'Failed to unlink session file for drop');
+        }
         self::$instance = null;
     }
 
@@ -120,6 +133,7 @@ class SessionHelper
             $json = json_decode(file_get_contents($this->getSessionFile()), true) ?: [];
             $this->value = $json;
         } else {
+            LoggingHelper::log($this->sessionKey, 'Session file did not exist while loading data');
             $this->value = [];
         }
     }
@@ -129,7 +143,9 @@ class SessionHelper
      */
     private function store()
     {
-        file_put_contents($this->getSessionFile(), json_encode($this->value));
+        if (!file_put_contents($this->getSessionFile(), json_encode($this->value))) {
+            LoggingHelper::log($this->sessionKey, 'Failed to write session file while storing data');
+        }
     }
 
     /**
@@ -147,7 +163,16 @@ class SessionHelper
             $helper->sessionKey = !empty($_COOKIE[$key]) && is_string($_COOKIE[$key]) ? $_COOKIE[$key] : null;
 
             if ($helper->sessionKey === null || !file_exists($helper->getSessionFile())) {
+                $log = 'Creating new session key';
+                if ($helper->sessionKey === null) {
+                    $log = 'Session key is null, creating new session key';
+                } else if (!file_exists($helper->getSessionFile())) {
+                    $log = 'Session file (' . $helper->sessionKey . ') was not found, creating new session key';
+                }
+
                 $helper->sessionKey = self::uniqueId();
+
+                LoggingHelper::log($helper->sessionKey, $log);
             }
 
             setcookie($key, $helper->sessionKey, [
@@ -181,6 +206,7 @@ class SessionHelper
 
             if (is_file($path) && Str::endsWith($file, '.session') && time() - filemtime($path) > self::Lifetime) {
                 unlink($path);
+                LoggingHelper::log(str_replace('.session', '', $file), 'Deleting session file as its out of date');
             }
         }
     }

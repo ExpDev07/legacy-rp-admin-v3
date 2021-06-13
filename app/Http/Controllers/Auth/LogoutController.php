@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\LoggingHelper;
 use App\Helpers\SessionHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -19,9 +20,12 @@ class LogoutController extends Controller
      */
     public function logout(): RedirectResponse
     {
+        $session = SessionHelper::getInstance();
+        LoggingHelper::log($session->getSessionKey(), 'Logout triggered, dropping session');
+
         // Logout the user.
         SessionHelper::drop();
-        SessionHelper::getInstance()->put('isLogout', true);
+        session()->put('isLogout', true);
 
         // Redirect them to base path.
         return redirect('/');
