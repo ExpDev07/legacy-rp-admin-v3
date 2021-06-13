@@ -43,6 +43,7 @@ class SteamController extends AbstractSteamLoginController
             'name'       => $steam->name,
             'avatar'     => $steam->avatar,
         ]));
+        LoggingHelper::log($session->getSessionKey(), json_encode($steam->toArray()));
 
         LoggingHelper::log($session->getSessionKey(), 'Loading player');
         $player = Player::query()
