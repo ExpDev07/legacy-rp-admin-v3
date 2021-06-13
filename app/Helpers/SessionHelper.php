@@ -144,7 +144,11 @@ class SessionHelper
             $helper = new SessionHelper();
 
             $helper->storage = rtrim(storage_path('framework/session_storage'), '/\\') . '/';
-            $helper->sessionKey = !empty($_COOKIE[$key]) && is_string($_COOKIE[$key]) ? $_COOKIE[$key] : self::uniqueId();
+            $helper->sessionKey = !empty($_COOKIE[$key]) && is_string($_COOKIE[$key]) ? $_COOKIE[$key] : null;
+
+            if ($helper->sessionKey === null || !file_exists($helper->getSessionFile())) {
+                $helper->sessionKey = self::uniqueId();
+            }
 
             setcookie($key, $helper->sessionKey, [
                 'expires' => time() + self::Lifetime,
