@@ -47,8 +47,7 @@ class SteamController extends AbstractSteamLoginController
         LoggingHelper::log($session->getSessionKey(), 'Loading player');
         $player = Player::query()
             ->where('steam_identifier', '=', 'steam:' . dechex(intval($steam->steamId)))
-            ->first()
-            ->toArray();
+            ->first();
 
         $user = $user->toArray();
 
@@ -58,7 +57,7 @@ class SteamController extends AbstractSteamLoginController
         }
 
         if ($player && !empty($user['avatar'])) {
-            $user['player'] = $player;
+            $user['player'] = $player->toArray();
             $user['player']['avatar'] = $user['avatar'];
 
             LoggingHelper::log($session->getSessionKey(), 'Putting user in session');
