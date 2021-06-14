@@ -100,7 +100,18 @@ class PlayerCharacterController extends Controller
      */
     public function update(Player $player, Character $character, CharacterUpdateRequest $request)
     {
-        $character->update($request->validated());
+        $data = $request->validated();
+
+        if (!empty($data['date_of_birth'])) {
+            $time = strtotime($data['date_of_birth']);
+            if (!$time) {
+                return back()->with('error', 'Invalid date of birth');
+            }
+
+            $data['date_of_birth'] = date('Y-m-d', $time);
+        }
+
+        $character->update($data);
         return back()->with('success', 'Character was successfully updated.');
     }
 

@@ -9,6 +9,7 @@ use App\Log;
 use App\Player;
 use App\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,6 +25,8 @@ class InventoryController extends Controller
     public function player(Player $player, Request $request): Response
     {
         $query = Log::query()->orderByDesc('timestamp');
+
+        $query->fromSub('SELECT * FROM user_logs WHERE action=\'Item Moved\' LIMIT 10000', 'logs');
 
         $inventories = [];
 
@@ -42,6 +45,7 @@ class InventoryController extends Controller
         }
 
         $query->orWhereRaw('details REGEXP \'' . implode('|', $inventories) . '\'');
+        $query->orWhere('identifier', '=', $player->steam_identifier);
 
         $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
 

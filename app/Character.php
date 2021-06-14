@@ -65,7 +65,6 @@ class Character extends Model
      * @var array
      */
     protected $casts = [
-        'date_of_birth'                => 'date',
         'character_slot'               => 'integer',
         'gender'                       => 'integer',
         'cash'                         => 'integer',

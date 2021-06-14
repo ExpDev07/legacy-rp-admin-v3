@@ -53,4 +53,36 @@ class Vehicle extends Model
         return $this->belongsTo(Character::class, 'owner_cid');
     }
 
+    public function garage(): string
+    {
+        if (is_numeric($this->garage_identifier)) {
+            switch (intval($this->garage_identifier)) {
+                case 1:
+                case 2:
+                case 3:
+                    return 'Impound Lot';
+                case 4:
+                    return 'Garage A (near court house)';
+                case 5:
+                    return 'Garage B (near exclusive dealership)';
+                case 6:
+                    return 'Garage C (the big red building)';
+                case 7:
+                    return 'Garage D (southside garage)';
+                case 8:
+                    return 'Garage E (mirror park garage)';
+                case 9:
+                    return 'Garage F (vinewood garage)';
+                case 10:
+                    return 'Garage G (near great ocean highway)';
+                case 11:
+                    return 'Garage H (sandy shores garage)';
+                case 12:
+                    return 'Garage I (paleto garage)';
+            }
+        }
+
+        return $this->garage_identifier;
+    }
+
 }

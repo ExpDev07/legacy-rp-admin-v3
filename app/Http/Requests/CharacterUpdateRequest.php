@@ -16,11 +16,11 @@ class CharacterUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => ['string'],
-            'last_name' => ['string'],
-            'date_of_birth' => ['string'],
-            'gender' => [Rule::in([0, 1])],
-            'backstory' => ['string'],
+            'first_name' => ['string', 'required'],
+            'last_name' => ['string', 'required'],
+            'date_of_birth' => ['string', 'required'],
+            'gender' => [Rule::in([0, 1]), 'required'],
+            'backstory' => ['string', 'required'],
             'job_name' => ['nullable', 'string'],
             'department_name' => ['nullable', 'string'],
             'position_name' => ['nullable', 'string'],
