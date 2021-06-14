@@ -24,7 +24,7 @@ class CharacterResource extends JsonResource
             'lastName'                   => $this->last_name,
             'name'                       => $this->name,
             'phoneNumber'                => $this->phone_number,
-            'dateOfBirth'                => $this->date_of_birth->format('Y-m-d'),
+            'dateOfBirth'                => $this->date_of_birth,
             'cash'                       => $this->cash,
             'bank'                       => $this->bank,
             'money'                      => $this->money,

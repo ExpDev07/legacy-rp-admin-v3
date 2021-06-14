@@ -100,6 +100,8 @@ class PlayerCharacterController extends Controller
      */
     public function update(Player $player, Character $character, CharacterUpdateRequest $request)
     {
+        var_dump($request->validated());
+
         $character->update($request->validated());
         return back()->with('success', 'Character was successfully updated.');
     }
