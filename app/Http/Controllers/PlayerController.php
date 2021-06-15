@@ -23,6 +23,8 @@ class PlayerController extends Controller
      */
     public function index(Request $request): Response
     {
+        $start = round(microtime(true) * 1000);
+
         $query = Player::query()->orderByDesc('playtime');
 
         // Querying.
@@ -42,15 +44,20 @@ class PlayerController extends Controller
         }
 
         $query->select([
-            'steam_identifier', 'player_name', 'playtime', 'identifiers'
+            'steam_identifier', 'player_name', 'playtime', 'identifiers',
         ]);
         $query->selectSub('SELECT COUNT(id) FROM warnings WHERE player_id=user_id', 'warning_count');
 
+        $players = $query->paginate(10, [
+            'user_id',
+        ])->appends($request->query());
+
+        $end = round(microtime(true) * 1000);
+
         return Inertia::render('Players/Index', [
-            'players' => PlayerIndexResource::collection($query->paginate(10, [
-                'user_id'
-            ])->appends($request->query())),
+            'players' => PlayerIndexResource::collection($players),
             'filters' => $request->all('query'),
+            'time'    => $end - $start,
         ]);
     }
 
@@ -63,10 +70,10 @@ class PlayerController extends Controller
     public function show(Player $player): Response
     {
         return Inertia::render('Players/Show', [
-            'player' => new PlayerResource($player),
-            'online' => $player->getOnlineStatus(),
+            'player'     => new PlayerResource($player),
+            'online'     => $player->getOnlineStatus(),
             'characters' => CharacterResource::collection($player->characters),
-            'warnings' => WarningResource::collection($player->warnings()->oldest()->get()),
+            'warnings'   => WarningResource::collection($player->warnings()->oldest()->get()),
         ]);
     }
 

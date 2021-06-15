@@ -26,6 +26,8 @@ class PlayerCharacterController extends Controller
      */
     public function index(Request $request): Response
     {
+        $start = round(microtime(true) * 1000);
+
         $query = Character::query()->orderBy('first_name');
 
         // Filtering by cid.
@@ -84,6 +86,8 @@ class PlayerCharacterController extends Controller
             'id',
         ])->appends($request->query()));
 
+        $end = round(microtime(true) * 1000);
+
         return Inertia::render('Characters/Index', [
             'characters' => $characters,
             'filters'    => $request->all(
@@ -93,6 +97,7 @@ class PlayerCharacterController extends Controller
                 'phone',
                 'job'
             ),
+            'time'      => $end - $start,
             'playerMap' => Player::fetchSteamPlayerNameMap($characters->toArray($request), 'steamIdentifier'),
         ]);
     }

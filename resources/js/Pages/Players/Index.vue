@@ -29,6 +29,19 @@
                 <div class="w-full mt-3">
                     <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">{{ t('global.search.players') }}</small>
                 </div>
+                <!-- Search button -->
+                <div class="w-full mt-3">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
+                        <span v-if="!isLoading">
+                            <i class="fas fa-search"></i>
+                            {{ t('players.search_btn') }}
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </span>
+                    </button>
+                </div>
             </template>
         </v-section>
 
@@ -37,6 +50,9 @@
                 <h2>
                     {{ t('players.title') }}
                 </h2>
+                <p class="text-muted dark:text-dark-muted text-xs">
+                    {{ t('global.results', time) }}
+                </p>
             </template>
 
             <template>
@@ -84,7 +100,6 @@
 </template>
 
 <script>
-import throttle from 'lodash/throttle';
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Pagination from './../../Components/Pagination';
@@ -103,19 +118,34 @@ export default {
         filters: {
             query: String,
         },
+        time: {
+            type: Number,
+            required: true,
+        }
     },
-    watch: {
-        filters: {
-            handler: throttle(function () {
-                this.$inertia.replace('/players', {
+    data() {
+        return {
+            isLoading: false
+        };
+    },
+    methods: {
+        refresh: async function () {
+            if (this.isLoading) {
+                return;
+            }
+
+            this.isLoading = true;
+            try {
+                await this.$inertia.replace('/players', {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'players' ],
+                    only: [ 'players', 'time' ],
                 });
-            }, 150),
-            deep: true,
+            } catch(e) {}
+
+            this.isLoading = false;
         },
-    },
+    }
 }
 </script>

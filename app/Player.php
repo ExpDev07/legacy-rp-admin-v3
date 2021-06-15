@@ -301,6 +301,10 @@ class Player extends Model
             $playerMap[$player->steam_identifier] = $player->player_name;
         }
 
+        if (empty($playerMap)) {
+            $playerMap['empty'] = 'empty';
+        }
+
         return $playerMap;
     }
 }

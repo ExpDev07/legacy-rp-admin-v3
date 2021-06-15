@@ -71,7 +71,7 @@
                             </span>
                             <span v-else>
                                 <i class="fas fa-cog animate-spin"></i>
-                                {{ t('logs.loading') }}
+                                {{ t('global.loading') }}
                             </span>
                         </button>
                     </div>
@@ -86,7 +86,7 @@
                     {{ t('logs.logs') }}
                 </h2>
                 <p class="text-muted dark:text-dark-muted text-xs">
-                    {{ t('logs.results', time) }}
+                    {{ t('global.results', time) }}
                 </p>
             </template>
 
@@ -133,6 +133,7 @@
                         </inertia-link>
                         <inertia-link
                             class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            v-if="logs.length !== 0"
                             :href="links.next"
                         >
                             {{ t("pagination.next") }}
@@ -165,7 +166,7 @@ export default {
     },
     props: {
         logs: {
-            type: Object,
+            type: Array,
             required: true,
         },
         filters: {
@@ -193,7 +194,6 @@ export default {
     },
     data() {
         return {
-            searchTimeout: null,
             isLoading: false
         };
     },
@@ -209,7 +209,7 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: ['logs'],
+                    only: [ 'logs', 'playerMap', 'time' ],
                 });
             } catch(e) {}
 

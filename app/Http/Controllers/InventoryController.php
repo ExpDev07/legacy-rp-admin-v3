@@ -9,7 +9,9 @@ use App\Log;
 use App\Player;
 use App\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,9 +26,11 @@ class InventoryController extends Controller
      */
     public function player(Player $player, Request $request): Response
     {
+        $start = round(microtime(true) * 1000);
+
         $query = Log::query()->orderByDesc('timestamp');
 
-        $query->fromSub('SELECT * FROM user_logs WHERE action=\'Item Moved\' LIMIT 10000', 'logs');
+        $query->fromSub('SELECT * FROM user_logs WHERE action=\'Item Moved\'', 'logs');
 
         $inventories = [];
 
@@ -44,18 +48,39 @@ class InventoryController extends Controller
             }
         }
 
-        $query->orWhereRaw('details REGEXP \'' . implode('|', $inventories) . '\'');
-        $query->orWhere('identifier', '=', $player->steam_identifier);
+        $page = Paginator::resolveCurrentPage('page');
+        $logs = InventoryLogResource::collection([]);
+        if (!empty($inventories)) {
+            $query->orWhere('identifier', $player->steam_identifier);
+            $query->orWhereRaw('details REGEXP \'' . implode('|', $inventories) . '\'');
 
-        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
+            $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
 
-        $logs = InventoryLogResource::collection($query->paginate(15, [
-            'id',
-        ])->appends($request->query()));
+            $query->limit(15)->offset(($page - 1) * 15);
+
+            $logs = InventoryLogResource::collection($query->get());
+        }
+
+        $url = $_SERVER['REQUEST_URI'];
+        if (Str::contains($url, '?')) {
+            $url .= '&';
+        } else {
+            $url .= '?';
+        }
+        $next = $url . 'page=' . ($page + 1);
+        $prev = $url . 'page=' . ($page - 1);
+
+        $end = round(microtime(true) * 1000);
 
         return Inertia::render('Inventories/Player', [
             'logs'      => $logs,
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
+            'links'     => [
+                'next' => $next,
+                'prev' => $prev,
+            ],
+            'time'      => $end - $start,
+            'page'      => $page,
         ]);
     }
 
