@@ -275,6 +275,34 @@ class Player extends Model
 
         return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
     }
+
+    /**
+     * Returns a map of steamIdentifier->player_name
+     * This is used instead of a left join as it appears to be a lot faster
+     *
+     * @param array $source
+     * @param string $sourceKey
+     * @return array
+     */
+    public static function fetchSteamPlayerNameMap(array $source, string $sourceKey): array
+    {
+        $identifiers = [];
+        foreach ($source as $entry) {
+            if (!in_array($entry[$sourceKey], $identifiers)) {
+                $identifiers[] = $entry[$sourceKey];
+            }
+        }
+
+        $players = self::query()->whereIn('steam_identifier', $identifiers)->select([
+            'steam_identifier', 'player_name',
+        ])->get();
+        $playerMap = [];
+        foreach ($players as $player) {
+            $playerMap[$player->steam_identifier] = $player->player_name;
+        }
+
+        return $playerMap;
+    }
 }
 
 /**

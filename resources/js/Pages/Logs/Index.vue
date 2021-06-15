@@ -31,31 +31,49 @@
                         <!-- Identifier -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="identifier">
-                                {{ t('logs.identifier') }}
+                                {{ t('logs.identifier') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
                         </div>
                         <!-- Action -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="action">
-                                {{ t('logs.action') }}
+                                {{ t('logs.action') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action">
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action">
                         </div>
                         <!-- Server -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="server">
-                                {{ t('logs.server_id') }}
+                                {{ t('logs.server_id') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="server" placeholder="3" type="number" v-model="filters.server">
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="server" placeholder="3" type="number" v-model="filters.server">
                         </div>
                     </div>
                     <!-- Details -->
                     <div class="w-full px-3">
                         <label class="block mb-3" for="details">
-                            {{ t('logs.details') }}
+                            {{ t('logs.details') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                         </label>
-                        <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="details" :placeholder="t('logs.placeholder_details')" v-model="filters.details">
+                        <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="details" :placeholder="t('logs.placeholder_details')" v-model="filters.details">
+                    </div>
+                    <!-- Description -->
+                    <div class="w-full px-3 mt-3">
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">* {{ t('global.search.exact') }}</small>
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">** {{ t('global.search.like') }} {{ t('global.search.like_prepend') }}</small>
+                    </div>
+                    <!-- Search button -->
+                    <div class="w-full px-3 mt-3">
+                        <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
+                            <span v-if="!isLoading">
+                                <i class="fas fa-search"></i>
+                                {{ t('logs.search') }}
+                            </span>
+                            <span v-else>
+                                <i class="fas fa-cog animate-spin"></i>
+                                {{ t('logs.loading') }}
+                            </span>
+                        </button>
                     </div>
                 </form>
             </template>
@@ -67,6 +85,9 @@
                 <h2>
                     {{ t('logs.logs') }}
                 </h2>
+                <p class="text-muted dark:text-dark-muted text-xs">
+                    {{ t('logs.results', time) }}
+                </p>
             </template>
 
             <template>
@@ -78,10 +99,10 @@
                         <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
                         <th class="px-6 py-4">{{ t('logs.server_id') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs.data" :key="log.id">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" :key="log.id">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steamIdentifier">
-                                {{ log.playerName }}
+                                {{ playerName(log.steamIdentifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">{{ log.action }}</td>
@@ -89,7 +110,7 @@
                         <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t">{{ log.server }}</td>
                     </tr>
-                    <tr v-if="logs.data.length === 0">
+                    <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
                             {{ t('logs.no_logs') }}
                         </td>
@@ -98,7 +119,33 @@
             </template>
 
             <template #footer>
-                <pagination v-bind:links="logs.links" v-bind:meta="logs.meta" />
+                <div class="flex items-center justify-between mt-6 mb-1">
+
+                    <!-- Navigation -->
+                    <div class="flex flex-wrap">
+                        <inertia-link
+                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            :href="links.prev"
+                            v-if="page > 1"
+                        >
+                            <i class="mr-1 fas fa-arrow-left"></i>
+                            {{ t("pagination.previous") }}
+                        </inertia-link>
+                        <inertia-link
+                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            :href="links.next"
+                        >
+                            {{ t("pagination.next") }}
+                            <i class="ml-1 fas fa-arrow-right"></i>
+                        </inertia-link>
+                    </div>
+
+                    <!-- Meta -->
+                    <div class="font-semibold">
+                        {{ t("pagination.page", page) }}
+                    </div>
+
+                </div>
             </template>
         </v-section>
 
@@ -106,7 +153,6 @@
 </template>
 
 <script>
-import throttle from 'lodash/throttle';
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Pagination from './../../Components/Pagination';
@@ -127,24 +173,50 @@ export default {
             action: String,
             server: Number,
             details: String,
+        },
+        playerMap: {
+            type: Object,
+            required: true,
+        },
+        links: {
+            type: Object,
+            required: true,
+        },
+        page: {
+            type: Number,
+            required: true,
+        },
+        time: {
+            type: Number,
+            required: true,
         }
     },
-    methods: {
-        refresh: function () {
-            this.$inertia.replace('/logs', {
-                data: this.filters,
-                preserveState: true,
-                preserveScroll: true,
-                only: [ 'logs' ],
-            });
-        },
+    data() {
+        return {
+            searchTimeout: null,
+            isLoading: false
+        };
     },
-    watch: {
-        filters: {
-            deep: true,
-            handler: throttle(function () {
-                this.refresh();
-            }, 150),
+    methods: {
+        refresh: async function () {
+            if (this.isLoading) {
+                return;
+            }
+
+            this.isLoading = true;
+            try {
+                await this.$inertia.replace('/logs', {
+                    data: this.filters,
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: ['logs'],
+                });
+            } catch(e) {}
+
+            this.isLoading = false;
+        },
+        playerName(steamIdentifier) {
+            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
         }
     }
 };

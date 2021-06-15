@@ -45,7 +45,7 @@ module.exports = {
                 'dark-danger':    defaultTheme.colors.red['500'],
                 'dark-warning':   defaultTheme.colors.yellow['500'],
                 'dark-success':   defaultTheme.colors.green['500'],
-                'dark-muted':     defaultTheme.colors.gray['50'],
+                'dark-muted':     defaultTheme.colors.gray['300'],
 
                 // Theme pale colors (dark mode)
                 'dark-primary-pale':   defaultTheme.colors.indigo['700'],

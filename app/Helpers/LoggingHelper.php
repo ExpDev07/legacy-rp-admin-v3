@@ -33,6 +33,13 @@ class LoggingHelper
     public static array $entries = [];
 
     /**
+     * microtime() of the last log entry
+     *
+     * @var int|null
+     */
+    private static ?int $lastTime = null;
+
+    /**
      * Creates a log entry
      *
      * @param string $sessionKey
@@ -51,7 +58,15 @@ class LoggingHelper
             $classInfo = basename($trace[0]['file']) . ':' . $trace[0]['line'];
         }
 
-        $msg = [$classInfo, $sessionKey . ' -> ' . $msg . PHP_EOL];
+        $time = '';
+        if (self::$lastTime) {
+            $now = round(microtime(true) * 1000);
+
+            $time = '(' . ($now - self::$lastTime) . 'ms) ';
+        }
+        self::$lastTime = round(microtime(true) * 1000);
+
+        $msg = [$classInfo, $time . $sessionKey . ' -> ' . $msg . PHP_EOL];
 
         self::$entries[] = $msg;
     }
@@ -76,12 +91,25 @@ class LoggingHelper
         $timestamp = date(\DateTimeInterface::RFC3339);
         $method = str_pad($_SERVER['REQUEST_METHOD'], 7, ' ');
         $ipHash = md5($_SERVER['REMOTE_ADDR']);
-        $path = explode('?', $_SERVER['REQUEST_URI'])[0];
+        $path = explode('?', $_SERVER['REQUEST_URI']);
+        $get = isset($path[1]) ? $path[1] : null;
+        $path = $path[0];
 
         $msg = '[' . $timestamp . '] ' .
             '[' . $ipHash . '] ' .
             '[' . $method . '] ' .
-            $path . PHP_EOL;
+            $path;
+
+        if (in_array($path, [
+            '/logs'
+        ])) {
+            if (empty($get)) {
+                $msg .= '?';
+            } else {
+                $msg .= PHP_EOL . '    ?' . $get;
+            }
+        }
+        $msg .= PHP_EOL;
 
         self::$entries[] = $msg;
     }
@@ -104,7 +132,15 @@ class LoggingHelper
             }
             return $entry;
         }, self::$entries);
-        $logs[] = '---';
+
+        $time = '';
+        if (self::$lastTime) {
+            $now = round(microtime(true) * 1000);
+
+            $time = '(' . ($now - self::$lastTime) . 'ms)';
+        }
+
+        $logs[] = '--- CLOSED ' . $time;
 
         file_put_contents(self::$logFile, implode('', $logs) . PHP_EOL, FILE_APPEND);
     }

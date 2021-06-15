@@ -14,7 +14,13 @@
             "offline": "Offline",
             "unavailable": "Unavailable"
         },
-        "info": "Info"
+        "info": "Info",
+        "search": {
+            "like": "Returns all rows where this field contains your query.",
+            "exact": "Returns all rows where this field exactly matches your query.",
+            "like_prepend": "If you put \"=\" in front of your query, it will search for an exact match which is faster in some occasions.",
+            "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field."
+        }
     },
     "home": {
         "title": "Dashboard",
@@ -85,7 +91,11 @@
             "expiration": "Expiration",
             "reason": "Reason",
             "do_ban": "Ban player",
-            "forever": "<i>{0}</i> permanently banned this player"
+            "update_ban": "Update Ban",
+            "banned_for": "Banned for about {0}",
+            "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
+            "forever": "<i>{0}</i> permanently banned this player",
+            "forever_edit": "forever"
         },
         "show": {
             "played": "<b>{0}</b> played",
@@ -98,6 +108,7 @@
             "inventory": "View related inventory logs",
             "steam": "Open Steam profile",
             "no_warnings": "This player has not received any warnings.",
+            "edit_ban": "Edit Ban",
             "kick": "Kick Player",
             "kick_confirm": "Are you sure you want to kick this player from the server?",
             "kick_reason": "Reason"
@@ -168,7 +179,10 @@
         "timestamp": "Timestamp",
         "no_logs": "No logged actions were found.",
         "placeholder_action": "Death",
-        "placeholder_details": "Marius killed jax with an AK-47"
+        "placeholder_details": "Marius killed jax with an AK-47",
+        "search": "Search in logs",
+        "loading": "Loading...",
+        "results": "Search took {0} milliseconds."
     },
     "servers": {
         "title": "Servers",

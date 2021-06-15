@@ -3,11 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Ban;
+use App\Character;
 use App\Http\Requests\BanStoreRequest;
+use App\Http\Requests\BanUpdateRequest;
+use App\Http\Requests\CharacterUpdateRequest;
+use App\Http\Resources\BanResource;
+use App\Http\Resources\CharacterResource;
+use App\Http\Resources\PlayerResource;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PlayerBanController extends Controller
 {
@@ -38,13 +46,12 @@ class PlayerBanController extends Controller
             $player->getIdentifier('discord'),
             $player->getIdentifier('xbl'),
             $player->getIdentifier('live'),
-            // $player->getIdentifier('ip'),
         ];
 
         // Go through the player's identifiers and create a ban record for each of them.
         Collection::make($identifiers)
             ->filter()
-            ->each(fn ($identifier) => $player->bans()->updateOrCreate([ 'identifier' => $identifier ], $ban));
+            ->each(fn($identifier) => $player->bans()->updateOrCreate(['identifier' => $identifier], $ban));
 
         // Create reason.
         $reason = $request->input('reason')
@@ -71,6 +78,80 @@ class PlayerBanController extends Controller
     {
         $player->bans()->forceDelete();
         return back()->with('success', 'The player has successfully been unbanned.');
+    }
+
+    /**
+     * Display the specified resource for editing.
+     *
+     * @param Player $player
+     * @param Ban $ban
+     * @return Response
+     */
+    public function edit(Player $player, Ban $ban): Response
+    {
+        return Inertia::render('Players/Ban/Edit', [
+            'player' => new PlayerResource($player),
+            'ban'    => new BanResource($ban),
+        ]);
+    }
+
+    /**
+     * Creates a rough output like "6 days" or "1 week and 2 days"
+     *
+     * @param int $seconds
+     * @return string
+     */
+    private function formatSeconds(int $seconds): string
+    {
+        $formatted = [];
+
+        $months = floor($seconds / 18144000); // 30 days
+        $seconds -= $months * 18144000;
+        if ($months > 0) {
+            $formatted[] = $months . ' month' . ($months > 1 ? 's' : '');
+        }
+
+        $weeks = floor($seconds / 604800);
+        $seconds -= $weeks * 604800;
+        if ($weeks > 0) {
+            $formatted[] = $weeks . ' week' . ($weeks > 1 ? 's' : '');
+        }
+
+        $days = round($seconds / 86400);
+        if ($days > 0 || empty($formatted)) {
+            $formatted[] = $days . ' day' . ($days > 1 ? 's' : '');
+        }
+
+        $last = array_pop($formatted);
+        return (empty($formatted) ? '' : implode(', ', $formatted) . ' and ') . $last;
+    }
+
+    /**
+     * Updates the specified resource.
+     *
+     * @param Player $player
+     * @param Ban $ban
+     * @param BanUpdateRequest $request
+     * @return RedirectResponse
+     */
+    public function update(Player $player, Ban $ban, BanUpdateRequest $request): RedirectResponse
+    {
+        $expireBefore = $ban->getExpireTimeInSeconds() ? $this->formatSeconds($ban->getExpireTimeInSeconds()) : 'permanent';
+        $expireAfter = $request->input('expire') ? $this->formatSeconds(intval($request->input('expire'))) : 'permanent';
+
+        $ban->update($request->validated());
+
+        $user = $request->user();
+        $reason = $request->input('reason') ?: 'No reason.';
+
+        // Automatically log the ban update as a warning.
+        $player->warnings()->create([
+            'issuer_id' => $user->player->user_id,
+            'message'   => 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '" and changed the reason to "' . $reason . '". ' .
+                'This warning was generated automatically as a result of updating a ban.',
+        ]);
+
+        return back()->with('success', 'Ban was successfully updated, redirecting back to player page...');
     }
 
 }

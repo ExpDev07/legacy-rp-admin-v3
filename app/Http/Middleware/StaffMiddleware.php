@@ -26,7 +26,9 @@ class StaffMiddleware
     {
         // Check for staff status.
         if (!$this->isStaff($request)) {
-            LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'StaffMiddleware user is not staff, dropping session');
+            $session = SessionHelper::getInstance();
+            LoggingHelper::log($session->getSessionKey(), 'StaffMiddleware user is not staff, dropping session');
+            LoggingHelper::log($session->getSessionKey(), 'session.user->' . json_encode($session->get('user')));
 
             SessionHelper::drop();
 

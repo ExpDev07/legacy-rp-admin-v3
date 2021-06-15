@@ -39,7 +39,7 @@ Route::group(['namespace' => 'Auth'], function () {
 });
 
 // Routes requiring being logged in as a staff member.
-Route::group(['middleware' => ['staff']], function () {
+Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
     Route::get('/', [HomeController::class, 'render']);
 

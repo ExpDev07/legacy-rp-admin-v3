@@ -12,6 +12,7 @@ use App\Property;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,43 +35,65 @@ class PlayerCharacterController extends Controller
 
         // Filtering by name.
         if ($name = $request->input('name')) {
-            $query->where(DB::raw('CONCAT(first_name, \' \', last_name)'), 'like', "%{$name}%");
+            if (Str::startsWith($name, '=')) {
+                $name = Str::substr($name, 1);
+                $query->where(DB::raw('CONCAT(first_name, \' \', last_name)'), $name);
+            } else {
+                $query->where(DB::raw('CONCAT(first_name, \' \', last_name)'), 'like', "%{$name}%");
+            }
         }
 
         // Filtering by Vehicle Plate.
         if ($plate = $request->input('vehicle_plate')) {
-            $query->whereHas('vehicles', function($subQuery) use ($plate) {
-                $subQuery->where('plate', $plate);
+            $query->whereHas('vehicles', function ($subQuery) use ($plate) {
+                if (Str::startsWith($plate, '=')) {
+                    $plate = Str::substr($plate, 1);
+                    $subQuery->where('plate', $plate);
+                } else {
+                    $subQuery->where('plate', 'like', "%{$plate}%");
+                }
             });
         }
 
         // Filtering by Phone Number.
         if ($phone = $request->input('phone')) {
-            $query->where('phone_number', 'like', "%{$phone}%");
+            if (Str::startsWith($phone, '=')) {
+                $phone = Str::substr($phone, 1);
+                $query->where('phone_number', $phone);
+            } else {
+                $query->where('phone_number', 'like', "%{$phone}%");
+            }
         }
 
         // Filtering by Job.
         if ($job = $request->input('job')) {
-            $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), 'like', "%{$job}%");
+            if (Str::startsWith($phone, '=')) {
+                $job = Str::substr($job, 1);
+                $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), $job);
+            } else {
+                $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), 'like', "%{$job}%");
+            }
         }
 
-        $query->leftJoin('users', 'characters.steam_identifier', '=', 'users.steam_identifier');
         $query->select([
-            'character_id', 'characters.steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',
-            'department_name', 'position_name', 'player_name', 'phone_number'
+            'character_id', 'steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',
+            'department_name', 'position_name', 'phone_number',
         ]);
 
+        $characters = CharacterIndexResource::collection($query->paginate(15, [
+            'id',
+        ])->appends($request->query()));
+
         return Inertia::render('Characters/Index', [
-            'characters' => CharacterIndexResource::collection($query->paginate(15, [
-                'id'
-            ])->appends($request->query())),
-            'filters' => $request->all(
+            'characters' => $characters,
+            'filters'    => $request->all(
                 'cid',
                 'name',
                 'vehicle_plate',
                 'phone',
                 'job'
             ),
+            'playerMap' => Player::fetchSteamPlayerNameMap($characters->toArray($request), 'steamIdentifier'),
         ]);
     }
 
@@ -83,9 +106,8 @@ class PlayerCharacterController extends Controller
      */
     public function edit(Player $player, Character $character): Response
     {
-
         return Inertia::render('Players/Characters/Edit', [
-            'player' => new PlayerResource($player),
+            'player'    => new PlayerResource($player),
             'character' => new CharacterResource($character),
         ]);
     }

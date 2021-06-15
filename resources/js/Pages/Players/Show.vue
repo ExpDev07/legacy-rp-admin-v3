@@ -40,6 +40,11 @@
                     <i class="fas fa-user-minus"></i>
                     {{ t('players.show.kick') }}
                 </button>
+                <!-- Edit Ban -->
+                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'" v-if="player.isBanned">
+                    <i class="mr-1 fas fa-edit"></i>
+                    {{ t('players.show.edit_ban') }}
+                </inertia-link>
                 <!-- Unbanning -->
                 <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
                     <i class="mr-1 fas fa-lock-open"></i>

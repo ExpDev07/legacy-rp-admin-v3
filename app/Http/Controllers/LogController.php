@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LogResource;
 use App\Log;
+use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,6 +22,8 @@ class LogController extends Controller
      */
     public function index(Request $request): Response
     {
+        $start = round(microtime(true) * 1000);
+
         $query = Log::query()->orderByDesc('timestamp');
 
         // Filtering by identifier.
@@ -34,27 +38,57 @@ class LogController extends Controller
 
         // Filtering by action.
         if ($action = $request->input('action')) {
-            $query->where('action','like', "%{$action}%");
+            if (Str::startsWith($action, '=')) {
+                $action = Str::substr($action, 1);
+                $query->where('action', $action);
+            } else {
+                $query->where('action', 'like', "%{$action}%");
+            }
         }
 
         // Filtering by details.
         if ($details = $request->input('details')) {
-            $query->where('details', 'like', "%{$details}%");
+            if (Str::startsWith($details, '=')) {
+                $details = Str::substr($details, 1);
+                $query->where('details', $details);
+            } else {
+                $query->where('details', 'like', "%{$details}%");
+            }
         }
 
-        $query->leftJoin('users', 'identifier', '=', 'steam_identifier');
-        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp', 'player_name']);
+        $page = Paginator::resolveCurrentPage('page');
+
+        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
+        $query->limit(15)->offset(($page - 1) * 15);
+
+        $logs = LogResource::collection($query->get());
+
+        $url = $_SERVER['REQUEST_URI'];
+        if (Str::contains($url, '?')) {
+            $url .= '&';
+        } else {
+            $url .= '?';
+        }
+        $next = $url . 'page=' . ($page + 1);
+        $prev = $url . 'page=' . ($page - 1);
+
+        $end = round(microtime(true) * 1000);
 
         return Inertia::render('Logs/Index', [
-            'logs' => LogResource::collection($query->paginate(15, [
-                'id'
-            ])->appends($request->query())),
-            'filters' => $request->all(
+            'logs'      => $logs,
+            'filters'   => $request->all(
                 'identifier',
                 'server',
                 'action',
                 'details'
             ),
+            'links'     => [
+                'next' => $next,
+                'prev' => $prev,
+            ],
+            'time'      => $end - $start,
+            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
+            'page'      => $page,
         ]);
     }
 

@@ -25,6 +25,10 @@
                     </label>
                     <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
                 </form>
+                <!-- Description -->
+                <div class="w-full mt-3">
+                    <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">{{ t('global.search.players') }}</small>
+                </div>
             </template>
         </v-section>
 
