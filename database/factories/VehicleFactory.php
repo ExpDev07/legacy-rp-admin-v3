@@ -24,7 +24,7 @@ class VehicleFactory extends Factory
     public function definition(): array
     {
         return [
-            'garage_name' => $this->faker->streetAddress,
+            'garage_identifier' => $this->faker->streetAddress,
             'model_name'  => $this->faker->firstName . ' ' . $this->faker->year,
             'plate'       => $this->generatePlateNumber(),
         ];

@@ -179,7 +179,10 @@
         "timestamp": "Timestamp",
         "no_logs": "No logged actions were found.",
         "placeholder_action": "Death",
-        "placeholder_details": "Marius killed jax with an AK-47"
+        "placeholder_details": "Marius killed jax with an AK-47",
+        "search": "Search in logs",
+        "loading": "Loading...",
+        "results": "Search took {0} milliseconds."
     },
     "servers": {
         "title": "Servers",
