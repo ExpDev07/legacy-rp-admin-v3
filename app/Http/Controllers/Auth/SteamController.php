@@ -38,9 +38,14 @@ class SteamController extends AbstractSteamLoginController
         ]);
 
         LoggingHelper::log($session->getSessionKey(), 'Loading player');
+        $start = round(microtime(true) * 1000);
+
         $player = Player::query()
             ->where('steam_identifier', '=', 'steam:' . dechex(intval($steam->steamId)))
             ->first();
+
+        $end = round(microtime(true) * 1000);
+        LoggingHelper::log($session->getSessionKey(), 'Player loaded in ' . ($end - $start) . 'ms');
 
         $user = $user->toArray();
 
