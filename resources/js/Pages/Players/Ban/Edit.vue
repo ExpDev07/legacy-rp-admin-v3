@@ -90,7 +90,7 @@ export default {
                 expireTime: this.ban.expireAt ? this.$moment(this.ban.expireAt).local().format('HH:mm') : null,
             },
             isTempBanning: !!this.ban.expireAt,
-            banTime: this.$options.filters.humanizeSeconds(this.$moment(this.ban.expireAt).unix() - this.$moment(this.ban.timestamp).unix())
+            banTime: this.ban.expireAt ? this.$options.filters.humanizeSeconds(this.$moment(this.ban.expireAt).unix() - this.$moment(this.ban.timestamp).unix()) : this.t('players.ban.forever_edit')
         };
     },
     methods: {

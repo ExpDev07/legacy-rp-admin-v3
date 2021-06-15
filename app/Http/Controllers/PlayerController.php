@@ -41,9 +41,8 @@ class PlayerController extends Controller
             }
         }
 
-        $query->leftJoin('user_bans', 'steam_identifier', '=', 'identifier');
         $query->select([
-            'steam_identifier', 'player_name', 'playtime', 'ban_hash'
+            'steam_identifier', 'player_name', 'playtime', 'identifiers'
         ]);
         $query->selectSub('SELECT COUNT(id) FROM warnings WHERE player_id=user_id', 'warning_count');
 

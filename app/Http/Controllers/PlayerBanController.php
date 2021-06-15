@@ -46,7 +46,6 @@ class PlayerBanController extends Controller
             $player->getIdentifier('discord'),
             $player->getIdentifier('xbl'),
             $player->getIdentifier('live'),
-            // $player->getIdentifier('ip'),
         ];
 
         // Go through the player's identifiers and create a ban record for each of them.

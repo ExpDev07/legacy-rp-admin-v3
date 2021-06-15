@@ -78,7 +78,7 @@ class Ban extends Model
         return Date::createFromTimestamp($this->timestamp->getTimestamp() + $this->expire);
     }
 
-    public function getExpireTimeInSeconds(): int
+    public function getExpireTimeInSeconds(): ?int
     {
         return $this->expire;
     }

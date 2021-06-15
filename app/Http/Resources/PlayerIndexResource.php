@@ -21,7 +21,7 @@ class PlayerIndexResource extends JsonResource
             'playerName'      => $this->player_name,
             'playTime'        => $this->playtime,
             'warnings'        => $this->warning_count,
-            'isBanned'        => !!$this->ban_hash,
+            'isBanned'        => !!$this->bans()->first(),
         ];
     }
 
