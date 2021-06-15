@@ -16,6 +16,9 @@
                 <h2>
                     {{ t('logs.logs') }}
                 </h2>
+                <p class="text-muted dark:text-dark-muted text-xs">
+                    {{ t('global.results', time) }}
+                </p>
             </template>
 
             <template>
@@ -26,7 +29,7 @@
                         <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
                         <th class="px-6 py-4">{{ t('inventories.player.movement') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs.data" :key="log.id">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" :key="log.id">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steamIdentifier">
                                 {{ playerName(log.steamIdentifier) }}
@@ -62,7 +65,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr v-if="logs.data.length === 0">
+                    <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
                             {{ t('logs.no_logs') }}
                         </td>
@@ -71,7 +74,34 @@
             </template>
 
             <template #footer>
-                <pagination v-bind:links="logs.links" v-bind:meta="logs.meta" />
+                <div class="flex items-center justify-between mt-6 mb-1">
+
+                    <!-- Navigation -->
+                    <div class="flex flex-wrap">
+                        <inertia-link
+                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            :href="links.prev"
+                            v-if="page > 1"
+                        >
+                            <i class="mr-1 fas fa-arrow-left"></i>
+                            {{ t("pagination.previous") }}
+                        </inertia-link>
+                        <inertia-link
+                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            v-if="logs.length !== 0"
+                            :href="links.next"
+                        >
+                            {{ t("pagination.next") }}
+                            <i class="ml-1 fas fa-arrow-right"></i>
+                        </inertia-link>
+                    </div>
+
+                    <!-- Meta -->
+                    <div class="font-semibold">
+                        {{ t("pagination.page", page) }}
+                    </div>
+
+                </div>
             </template>
         </v-section>
 
@@ -110,11 +140,23 @@ export default {
     },
     props: {
         logs: {
-            type: Object,
+            type: Array,
             required: true,
         },
         playerMap: {
             type: Object,
+            required: true,
+        },
+        links: {
+            type: Object,
+            required: true,
+        },
+        page: {
+            type: Number,
+            required: true,
+        },
+        time: {
+            type: Number,
             required: true,
         }
     },

@@ -20,7 +20,9 @@
             "exact": "Returns all rows where this field exactly matches your query.",
             "like_prepend": "If you put \"=\" in front of your query, it will search for an exact match which is faster in some occasions.",
             "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field."
-        }
+        },
+        "results": "Search took {0} milliseconds.",
+        "loading": "Loading..."
     },
     "home": {
         "title": "Dashboard",
@@ -41,6 +43,7 @@
         "title": "Characters",
         "description": "Search for Characters.",
         "filter": "Filter Characters",
+        "search": "Search characters",
         "form": {
             "character_id": "Character ID",
             "name": "Full Name",
@@ -84,6 +87,7 @@
         "search": "Search",
         "search_label": "Search by name, steam identifier, or any other identifier such as Discord id.",
         "none": "No players was found.",
+        "search_btn": "Search players",
         "ban": {
             "issuing": "Issuing ban",
             "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",
@@ -180,9 +184,7 @@
         "no_logs": "No logged actions were found.",
         "placeholder_action": "Death",
         "placeholder_details": "Marius killed jax with an AK-47",
-        "search": "Search in logs",
-        "loading": "Loading...",
-        "results": "Search took {0} milliseconds."
+        "search": "Search in logs"
     },
     "servers": {
         "title": "Servers",
