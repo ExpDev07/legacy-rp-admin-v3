@@ -91,6 +91,9 @@
             "expiration": "Expiration",
             "reason": "Reason",
             "do_ban": "Ban player",
+            "update_ban": "Update Ban",
+            "banned_for": "Banned for about {0}",
+            "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
             "forever": "<i>{0}</i> permanently banned this player"
         },
         "show": {
@@ -104,6 +107,7 @@
             "inventory": "View related inventory logs",
             "steam": "Open Steam profile",
             "no_warnings": "This player has not received any warnings.",
+            "edit_ban": "Edit Ban"
             "kick": "Kick Player",
             "kick_confirm": "Are you sure you want to kick this player from the server?",
             "kick_reason": "Reason"
