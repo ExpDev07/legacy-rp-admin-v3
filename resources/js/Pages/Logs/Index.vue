@@ -31,31 +31,36 @@
                         <!-- Identifier -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="identifier">
-                                {{ t('logs.identifier') }}
+                                {{ t('logs.identifier') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
                         </div>
                         <!-- Action -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="action">
-                                {{ t('logs.action') }}
+                                {{ t('logs.action') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action">
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action">
                         </div>
                         <!-- Server -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2" for="server">
-                                {{ t('logs.server_id') }}
+                                {{ t('logs.server_id') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="server" placeholder="3" type="number" v-model="filters.server">
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="server" placeholder="3" type="number" v-model="filters.server">
                         </div>
                     </div>
                     <!-- Details -->
                     <div class="w-full px-3">
                         <label class="block mb-3" for="details">
-                            {{ t('logs.details') }}
+                            {{ t('logs.details') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                         </label>
-                        <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="details" :placeholder="t('logs.placeholder_details')" v-model="filters.details">
+                        <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="details" :placeholder="t('logs.placeholder_details')" v-model="filters.details">
+                    </div>
+                    <!-- Description -->
+                    <div class="w-full px-3 mt-3">
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">* {{ t('global.search.exact') }}</small>
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">** {{ t('global.search.like') }} {{ t('global.search.like_prepend') }}</small>
                     </div>
                 </form>
             </template>
@@ -81,7 +86,7 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs.data" :key="log.id">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steamIdentifier">
-                                {{ log.playerName }}
+                                {{ playerName(log.steamIdentifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">{{ log.action }}</td>
@@ -127,6 +132,10 @@ export default {
             action: String,
             server: Number,
             details: String,
+        },
+        playerMap: {
+            type: Object,
+            required: true,
         }
     },
     methods: {
@@ -138,6 +147,9 @@ export default {
                 only: [ 'logs' ],
             });
         },
+        playerName(steamIdentifier) {
+            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        }
     },
     watch: {
         filters: {

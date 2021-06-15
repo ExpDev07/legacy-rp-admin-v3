@@ -53,23 +53,9 @@ class InventoryController extends Controller
             'id',
         ])->appends($request->query()));
 
-        // This is a small hack but it speeds everything up by a lot
-        $identifiers = [];
-        foreach($logs->toArray($request) as $log) {
-            if (!in_array($log['steamIdentifier'], $identifiers)) {
-                $identifiers[] = $log['steamIdentifier'];
-            }
-        }
-
-        $players = Player::query()->whereIn('steam_identifier', $identifiers)->get();
-        $playerMap = [];
-        foreach($players as $player) {
-            $playerMap[$player->steam_identifier] = $player->player_name;
-        }
-
         return Inertia::render('Inventories/Player', [
-            'logs' => $logs,
-            'playerMap' => $playerMap
+            'logs'      => $logs,
+            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
         ]);
     }
 

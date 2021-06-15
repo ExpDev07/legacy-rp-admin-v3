@@ -8,6 +8,7 @@ use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,10 +27,18 @@ class PlayerController extends Controller
 
         // Querying.
         if ($q = $request->input('query')) {
-            $query
-                ->where('player_name', 'like', "%{$q}%")
-                ->orWhere('steam_identifier', 'like', "%{$q}%")
-                ->orWhere('identifiers', 'like', "%{$q}%");
+            if (Str::startsWith($q, 'identifier=')) {
+                $q = str_replace('identifier=', '', $q);
+                $query->where('steam_identifier', $q);
+            } else if (Str::startsWith($q, 'name=')) {
+                $q = str_replace('name=', '', $q);
+                $query->where('player_name', $q);
+            } else {
+                $query
+                    ->where('player_name', 'like', "%{$q}%")
+                    ->orWhere('steam_identifier', 'like', "%{$q}%")
+                    ->orWhere('identifiers', 'like', "%{$q}%");
+            }
         }
 
         $query->leftJoin('user_bans', 'steam_identifier', '=', 'identifier');

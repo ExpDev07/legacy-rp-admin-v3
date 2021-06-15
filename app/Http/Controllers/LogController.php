@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LogResource;
 use App\Log;
+use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,27 +36,39 @@ class LogController extends Controller
 
         // Filtering by action.
         if ($action = $request->input('action')) {
-            $query->where('action','like', "%{$action}%");
+            if (Str::startsWith($action, '=')) {
+                $action = Str::substr($action, 1);
+                $query->where('action', $action);
+            } else {
+                $query->where('action', 'like', "%{$action}%");
+            }
         }
 
         // Filtering by details.
         if ($details = $request->input('details')) {
-            $query->where('details', 'like', "%{$details}%");
+            if (Str::startsWith($details, '=')) {
+                $details = Str::substr($details, 1);
+                $query->where('details', $details);
+            } else {
+                $query->where('details', 'like', "%{$details}%");
+            }
         }
 
-        $query->leftJoin('users', 'identifier', '=', 'steam_identifier');
-        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp', 'player_name']);
+        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
+
+        $logs = LogResource::collection($query->paginate(15, [
+            'id',
+        ])->appends($request->query()));
 
         return Inertia::render('Logs/Index', [
-            'logs' => LogResource::collection($query->paginate(15, [
-                'id'
-            ])->appends($request->query())),
-            'filters' => $request->all(
+            'logs'      => $logs,
+            'filters'   => $request->all(
                 'identifier',
                 'server',
                 'action',
                 'details'
             ),
+            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
         ]);
     }
 

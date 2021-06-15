@@ -14,7 +14,13 @@
             "offline": "Offline",
             "unavailable": "Unavailable"
         },
-        "info": "Info"
+        "info": "Info",
+        "search": {
+            "like": "Returns all rows where this field contains your query.",
+            "exact": "Returns all rows where this field exactly matches your query.",
+            "like_prepend": "If you put \"=\" in front of your query, it will search for an exact match which is faster in some occasions.",
+            "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field."
+        }
     },
     "home": {
         "title": "Dashboard",
