@@ -33,6 +33,13 @@ class LoggingHelper
     public static array $entries = [];
 
     /**
+     * microtime() of the last log entry
+     *
+     * @var int|null
+     */
+    private static ?int $lastTime = null;
+
+    /**
      * Creates a log entry
      *
      * @param string $sessionKey
@@ -51,7 +58,15 @@ class LoggingHelper
             $classInfo = basename($trace[0]['file']) . ':' . $trace[0]['line'];
         }
 
-        $msg = [$classInfo, $sessionKey . ' -> ' . $msg . PHP_EOL];
+        $time = '';
+        if (self::$lastTime) {
+            $now = round(microtime(true) * 1000);
+
+            $time = '(' . ($now - self::$lastTime) . ') ';
+        }
+        self::$lastTime = round(microtime(true) * 1000);
+
+        $msg = [$classInfo, $time . $sessionKey . ' -> ' . $msg . PHP_EOL];
 
         self::$entries[] = $msg;
     }
