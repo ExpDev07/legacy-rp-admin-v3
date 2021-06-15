@@ -119,7 +119,15 @@ class LoggingHelper
             }
             return $entry;
         }, self::$entries);
-        $logs[] = '---';
+
+        $time = '';
+        if (self::$lastTime) {
+            $now = round(microtime(true) * 1000);
+
+            $time = '(' . ($now - self::$lastTime) . ')';
+        }
+
+        $logs[] = '--- CLOSED ' . $time;
 
         file_put_contents(self::$logFile, implode('', $logs) . PHP_EOL, FILE_APPEND);
     }
