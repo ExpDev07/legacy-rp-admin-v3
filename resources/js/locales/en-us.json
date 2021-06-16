@@ -72,7 +72,9 @@
             "owner": "Vehicle Owner",
             "character": "Character",
             "view_character": "View Character",
-            "view_player": "View Player"
+            "view_player": "View Player",
+            "plate_id": "Plate / ID",
+            "unknown_vehicle": "Unknown vehicle, possibly npc/local."
         },
         "character": {
             "title": "Inventory Logs",

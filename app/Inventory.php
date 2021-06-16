@@ -22,7 +22,7 @@ class Inventory
         'locker-police',
         'locker-ems',
         'motel-\w+?',
-        'evidence'
+        'evidence',
     ];
 
     /**
@@ -54,6 +54,13 @@ class Inventory
     public string $id;
 
     /**
+     * Contains additional information
+     *
+     * @var array
+     */
+    public array $more_info = [];
+
+    /**
      * The Character associated with this inventory
      *
      * @var ?Character
@@ -66,6 +73,13 @@ class Inventory
      * @var ?Vehicle
      */
     public ?Vehicle $vehicle;
+
+    /**
+     * The JSON stored in helpers/op-fw_vehicles.json
+     *
+     * @var array
+     */
+    private static array $vehicleJSON = [];
 
     /**
      * Inventory constructor.
@@ -104,6 +118,11 @@ class Inventory
             return new Inventory('unknown');
         }
 
+        $inventory = new Inventory($descriptor);
+        $inventory->type = $type;
+        $inventory->title = $type . '-' . $server . $id;
+        $inventory->id = $id;
+
         switch ($type) {
             case 'ground':
             case 'character':
@@ -116,17 +135,42 @@ class Inventory
                 if (!is_numeric($id) && !preg_match('/^\d{2}[a-z]{3}\d{3}$/mi', $id)) {
                     return new Inventory($descriptor);
                 }
+
+                $inventory->more_info = [
+                    'type' => 'Unknown'
+                ];
+
+                $type = intval($server);
+
+                $json = self::getOPFWVehicleJSON();
+                if ($json && $type >= 0 && $type <= 22) {
+                    $inventory->more_info['type'] = $json['labels'][$type];
+                }
+
                 break;
             default:
                 return new Inventory($descriptor);
         }
 
-        $inventory = new Inventory($descriptor);
-        $inventory->type = $type;
-        $inventory->title = $type . '-' . $server . $id;
-        $inventory->id = $id;
-
         return $inventory;
+    }
+
+    /**
+     * Returns the json stored at /helpers/op-fw_vehicles.json
+     *
+     * @return array
+     */
+    public static function getOPFWVehicleJSON(): array
+    {
+        if (!self::$vehicleJSON) {
+            $json = json_decode(file_get_contents(__DIR__ . '/../helpers/op-fw_vehicles.json'), true);
+
+            if ($json && !empty($json['map']) && !empty($json['labels'])) {
+                self::$vehicleJSON = $json;
+            }
+        }
+
+        return self::$vehicleJSON;
     }
 
     /**

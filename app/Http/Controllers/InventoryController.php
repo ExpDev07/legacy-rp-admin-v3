@@ -26,10 +26,10 @@ class InventoryController extends Controller
     public function character(Character $character, Request $request): Response
     {
         $inventories = [
-            'details LIKE \'%character-' . $character->character_id . ':%\'',
-            'details LIKE \'%locker-police-' . $character->character_id . ':%\'',
-            'details LIKE \'%locker-mechanic-' . $character->character_id . ':%\'',
-            'details LIKE \'%locker-ems-' . $character->character_id . ':%\'',
+            'character-' . $character->character_id . ':',
+            'locker-police-' . $character->character_id . ':',
+            'locker-mechanic-' . $character->character_id . ':',
+            'locker-ems-' . $character->character_id . ':',
         ];
 
         return $this->searchInventories($request, $inventories);
@@ -44,11 +44,13 @@ class InventoryController extends Controller
      */
     public function vehicle(Vehicle $vehicle, Request $request): Response
     {
+        $type = $vehicle->vehicleType();
+
         $inventories = [
-            'details REGEXP \'trunk-([0-9]{1,3}-)?' . $vehicle->plate . ':\'',
-            'details REGEXP \'trunk-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':\'',
-            'details REGEXP \'glovebox-([0-9]{1,3}-)?' . $vehicle->plate . ':\'',
-            'details REGEXP \'glovebox-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':\'',
+            'trunk-' . $type . '-' . $vehicle->plate . ':',
+            'trunk-' . $type . '-' . $vehicle->vehicle_id . ':',
+            'glovebox-' . $type . '-' . $vehicle->plate . ':',
+            'glovebox-' . $type . '-' . $vehicle->vehicle_id . ':',
         ];
 
         return $this->searchInventories($request, $inventories);
@@ -72,7 +74,7 @@ class InventoryController extends Controller
         $logs = InventoryLogResource::collection([]);
         if (!empty($inventories)) {
             foreach ($inventories as $inventory) {
-                $query->orWhereRaw($inventory);
+                $query->orWhere('details','LIKE', '%' . $inventory . '%');
             }
 
             $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);

@@ -59,7 +59,7 @@
                     <card v-if="inventory.vehicle">
                         <template #header>
                             <h3 class="mb-2">
-                                {{ t('inventories.show.vehicle') }}
+                                {{ t('inventories.show.vehicle') }} ({{ inventory.more_info.type }})
                             </h3>
                             <h4>
                                 {{ inventory.vehicle.model_name }}
@@ -73,6 +73,51 @@
                             <p v-html="t('players.vehicles.parked', inventory.vehicle.garage_identifier)">
                                 {{ t('players.vehicles.parked', inventory.vehicle.garage_identifier) }}
                             </p>
+                        </template>
+
+                        <template #footer>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/vehicle/' + inventory.id"
+                                v-if="(parseInt(inventory.id)+'') === inventory.id"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/logs?action=%3DItem+Moved&details=' + inventory.title"
+                                v-else
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
+                        </template>
+                    </card>
+                    <card v-else>
+                        <template #header>
+                            <h3 class="mb-2">
+                                {{ t('inventories.show.vehicle') }} ({{ inventory.more_info.type }})
+                            </h3>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('inventories.show.plate_id') }}:</span> {{ inventory.id }}
+                            </h4>
+                        </template>
+
+                        <template>
+                            <p>
+                                {{ t('inventories.show.unknown_vehicle') }}
+                            </p>
+                        </template>
+
+                        <template #footer>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/logs?action=%3DItem+Moved&details=' + inventory.title"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
                         </template>
                     </card>
                     <card v-if="inventory.character">
@@ -103,6 +148,13 @@
                             </inertia-link>
                             <inertia-link class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + inventory.character.steam_identifier">
                                 {{ t('inventories.show.view_player') }}
+                            </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/character/' + inventory.character.character_id"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
                             </inertia-link>
                         </template>
                     </card>
