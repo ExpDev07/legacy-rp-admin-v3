@@ -152,6 +152,16 @@
                                 {{ t('players.vehicles.parked', vehicle.garage_name) }}
                             </p>
                         </template>
+
+                        <template #footer>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/vehicle/' + vehicle.id"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
+                        </template>
                     </card>
                 </div>
                 <p class="text-muted dark:text-dark-muted" v-if="character.vehicles.length === 0">

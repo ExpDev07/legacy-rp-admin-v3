@@ -70,8 +70,8 @@
                         </template>
 
                         <template>
-                            <p v-html="t('players.vehicles.parked', inventory.vehicle.garage_name)">
-                                {{ t('players.vehicles.parked', inventory.vehicle.garage_name) }}
+                            <p v-html="t('players.vehicles.parked', inventory.vehicle.garage_identifier)">
+                                {{ t('players.vehicles.parked', inventory.vehicle.garage_identifier) }}
                             </p>
                         </template>
                     </card>

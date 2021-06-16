@@ -21,7 +21,8 @@ class Inventory
         'locker-mechanic',
         'locker-police',
         'locker-ems',
-        'motel-\w+?'
+        'motel-\w+?',
+        'evidence'
     ];
 
     /**

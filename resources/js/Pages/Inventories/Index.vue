@@ -3,10 +3,10 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                {{ t('inventories.player.title') }}
+                {{ t('inventories.character.title') }}
             </h1>
             <p>
-                {{ t('inventories.player.description') }}
+                {{ t('inventories.character.description') }}
             </p>
         </portal>
 
@@ -25,9 +25,9 @@
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left">
                         <th class="px-6 py-4">{{ t('logs.player') }}</th>
-                        <th class="px-6 py-4">{{ t('inventories.player.item') }}</th>
+                        <th class="px-6 py-4">{{ t('inventories.character.item') }}</th>
                         <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
-                        <th class="px-6 py-4">{{ t('inventories.player.movement') }}</th>
+                        <th class="px-6 py-4">{{ t('inventories.character.movement') }}</th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" :key="log.id">
                         <td class="px-6 py-3 border-t">
@@ -46,7 +46,7 @@
                                     {{ log.inventoryFrom.descriptor }}
                                 </span>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
-                                    {{ t('inventories.player.unknown') }}
+                                    {{ t('inventories.character.unknown') }}
                                 </span>
 
                                 <span class="font-semibold block px-2 py-2 bg-gray-600 text-center text-white">
@@ -60,7 +60,7 @@
                                     {{ log.inventoryTo.descriptor }}
                                 </span>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
-                                    {{ t('inventories.player.unknown') }}
+                                    {{ t('inventories.character.unknown') }}
                                 </span>
                             </div>
                         </td>
@@ -81,14 +81,14 @@
                         <inertia-link
                             class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
                             :href="links.prev"
-                            v-if="page > 1"
+                            v-if="page >= 2"
                         >
                             <i class="mr-1 fas fa-arrow-left"></i>
                             {{ t("pagination.previous") }}
                         </inertia-link>
                         <inertia-link
                             class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                            v-if="logs.length !== 0"
+                            v-if="logs.length === 15"
                             :href="links.next"
                         >
                             {{ t("pagination.next") }}

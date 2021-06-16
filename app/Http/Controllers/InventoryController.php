@@ -10,7 +10,6 @@ use App\Player;
 use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,13 +17,49 @@ use Inertia\Response;
 class InventoryController extends Controller
 {
     /**
-     * Display a inventory logs related to a player.
+     * Display a inventory logs related to a character.
      *
-     * @param Player $player
+     * @param Character $character
      * @param Request $request
      * @return Response
      */
-    public function player(Player $player, Request $request): Response
+    public function character(Character $character, Request $request): Response
+    {
+        $inventories = [
+            'details LIKE \'%character-' . $character->character_id . ':%\'',
+            'details LIKE \'%locker-police-' . $character->character_id . ':%\'',
+            'details LIKE \'%locker-mechanic-' . $character->character_id . ':%\'',
+            'details LIKE \'%locker-ems-' . $character->character_id . ':%\'',
+        ];
+
+        return $this->searchInventories($request, $inventories);
+    }
+
+    /**
+     * Display a inventory logs related to a vehicle.
+     *
+     * @param Vehicle $vehicle
+     * @param Request $request
+     * @return Response
+     */
+    public function vehicle(Vehicle $vehicle, Request $request): Response
+    {
+        $inventories = [
+            'details REGEXP \'trunk-([0-9]{1,3}-)?' . $vehicle->plate . ':\'',
+            'details REGEXP \'trunk-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':\'',
+            'details REGEXP \'glovebox-([0-9]{1,3}-)?' . $vehicle->plate . ':\'',
+            'details REGEXP \'glovebox-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':\'',
+        ];
+
+        return $this->searchInventories($request, $inventories);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $inventories
+     * @return Response
+     */
+    private function searchInventories(Request $request, array $inventories): Response
     {
         $start = round(microtime(true) * 1000);
 
@@ -32,27 +67,13 @@ class InventoryController extends Controller
 
         $query->fromSub('SELECT * FROM user_logs WHERE action=\'Item Moved\'', 'logs');
 
-        $inventories = [];
-
-        $characters = $player->characters()->get();
-        foreach ($characters as $character) {
-            $query->orWhere('details', 'like', '%character-' . $character->character_id . ':%');
-
-            $vehicles = $character->vehicles()->get();
-            foreach ($vehicles as $vehicle) {
-                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':';
-                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->vehicle_id . ':';
-
-                $inventories[] = 'trunk-([0-9]{1,3}-)?' . $vehicle->plate . ':';
-                $inventories[] = 'glovebox-([0-9]{1,3}-)?' . $vehicle->plate . ':';
-            }
-        }
-
         $page = Paginator::resolveCurrentPage('page');
+
         $logs = InventoryLogResource::collection([]);
         if (!empty($inventories)) {
-            $query->orWhere('identifier', $player->steam_identifier);
-            $query->orWhereRaw('details REGEXP \'' . implode('|', $inventories) . '\'');
+            foreach ($inventories as $inventory) {
+                $query->orWhereRaw($inventory);
+            }
 
             $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
 
@@ -72,7 +93,7 @@ class InventoryController extends Controller
 
         $end = round(microtime(true) * 1000);
 
-        return Inertia::render('Inventories/Player', [
+        return Inertia::render('Inventories/Index', [
             'logs'      => $logs,
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
             'links'     => [
@@ -85,7 +106,7 @@ class InventoryController extends Controller
     }
 
     /**
-     * Display informations related to an inventory.
+     * Display information related to an inventory.
      *
      * @param string $inventory
      * @param Request $request

@@ -63,7 +63,7 @@ class LogController extends Controller
 
         $logs = LogResource::collection($query->get());
 
-        $url = $_SERVER['REQUEST_URI'];
+        $url = preg_replace('/[&?]page=\d+/m', '', $_SERVER['REQUEST_URI']);
         if (Str::contains($url, '?')) {
             $url .= '&';
         } else {

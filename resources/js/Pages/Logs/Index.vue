@@ -126,14 +126,14 @@
                         <inertia-link
                             class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
                             :href="links.prev"
-                            v-if="page > 1"
+                            v-if="page >= 2"
                         >
                             <i class="mr-1 fas fa-arrow-left"></i>
                             {{ t("pagination.previous") }}
                         </inertia-link>
                         <inertia-link
                             class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                            v-if="logs.length !== 0"
+                            v-if="logs.length === 15"
                             :href="links.next"
                         >
                             {{ t("pagination.next") }}
@@ -209,7 +209,7 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'logs', 'playerMap', 'time' ],
+                    only: [ 'logs', 'playerMap', 'time', 'links', 'page' ],
                 });
             } catch(e) {}
 
