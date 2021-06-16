@@ -53,6 +53,26 @@ class Vehicle extends Model
         return $this->belongsTo(Character::class, 'owner_cid');
     }
 
+    /**
+     * Returns the op-fw vehicle type (number from 0 to 22)
+     *
+     * @return int
+     */
+    public function vehicleType(): int
+    {
+        $json = Inventory::getOPFWVehicleJSON();
+        if ($json) {
+            return isset($json['map'][$this->model_name]) ? $json['map'][$this->model_name] : 22;
+        }
+
+        return 22;
+    }
+
+    /**
+     * Returns the garage name
+     *
+     * @return string
+     */
     public function garage(): string
     {
         if (is_numeric($this->garage_identifier)) {

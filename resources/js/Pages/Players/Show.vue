@@ -172,13 +172,6 @@
                     <i class="mr-1 fas fa-toilet-paper"></i>
                     {{ t('players.show.logs') }}
                 </inertia-link>
-                <inertia-link
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-600 rounded"
-                    :href="'/inventories/' + player.steamIdentifier"
-                >
-                    <i class="fas fa-briefcase mr-1"></i>
-                    {{ t('players.show.inventory') }}
-                </inertia-link>
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-gray-800 rounded"
                     target="_blank"
@@ -239,6 +232,14 @@
                         <template #footer>
                             <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
                                 {{ t('global.view') }}
+                            </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/character/' + character.id"
+                                v-if="!character.characterDeleted"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
                             </inertia-link>
                         </template>
                     </card>

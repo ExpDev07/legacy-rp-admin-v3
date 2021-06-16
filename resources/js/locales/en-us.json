@@ -58,6 +58,7 @@
         }
     },
     "inventories": {
+        "view": "View related inventory logs",
         "show": {
             "error": "Invalid Inventory",
             "title": "Inventory",
@@ -71,14 +72,16 @@
             "owner": "Vehicle Owner",
             "character": "Character",
             "view_character": "View Character",
-            "view_player": "View Player"
+            "view_player": "View Player",
+            "plate_id": "Plate / ID",
+            "unknown_vehicle": "Unknown vehicle, possibly npc/local."
         },
-        "player": {
+        "character": {
             "title": "Inventory Logs",
             "movement": "Movement",
             "item": "Moved Item",
             "unknown": "Unknown",
-            "description":  "Inventory logs related to a player"
+            "description":  "Inventory logs related to a character"
         }
     },
     "players": {
@@ -109,7 +112,6 @@
             "ban": "Banned by <i>{0}</i> until <i>{1}</i>",
             "no_reason": "No reason.",
             "logs": "Check player's logs",
-            "inventory": "View related inventory logs",
             "steam": "Open Steam profile",
             "no_warnings": "This player has not received any warnings.",
             "edit_ban": "Edit Ban",

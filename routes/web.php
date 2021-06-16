@@ -51,7 +51,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::resource('players.kick', PlayerKickController::class);
 
     // Inventories.
-    Route::get('/inventories/{player}', '\App\Http\Controllers\InventoryController@player');
+    Route::get('/inventories/character/{character}', '\App\Http\Controllers\InventoryController@character');
+    Route::get('/inventories/vehicle/{vehicle}', '\App\Http\Controllers\InventoryController@vehicle');
     Route::get('/inventory/{inventory}', '\App\Http\Controllers\InventoryController@show');
 
     // Logs.
