@@ -67,7 +67,7 @@
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="player in players.data" v-bind:key="player.id">
-                        <td class="px-6 py-3 border-t">
+                        <td class="px-6 py-3 border-t" :title="t('global.server_timeout')">
                             <span class="font-semibold" v-if="player.status.status === 'online'">
                                 {{ player.status.serverId }}
                             </span>

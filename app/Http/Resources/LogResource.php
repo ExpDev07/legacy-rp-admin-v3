@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -25,6 +26,7 @@ class LogResource extends JsonResource
             'server'          => $this->metadata['serverId'],
             'steamIdentifier' => $this->identifier,
             'playerName'      => $this->player_name,
+            'status'          => Player::getOnlineStatus($this->identifier, true),
         ];
     }
 

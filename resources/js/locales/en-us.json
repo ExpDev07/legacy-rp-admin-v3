@@ -15,6 +15,7 @@
             "unavailable": "Unavailable"
         },
         "server_id": "Server ID",
+        "server_timeout": "Server ID is cached for 5 minutes",
         "info": "Info",
         "search": {
             "like": "Returns all rows where this field contains your query.",

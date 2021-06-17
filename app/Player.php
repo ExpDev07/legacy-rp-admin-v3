@@ -251,13 +251,13 @@ class Player extends Model
     /**
      * Returns the online status of the player
      *
+     * @param string $steamIdentifier
      * @param bool $useCache
      * @return PlayerStatus
      */
-    public function getOnlineStatus(bool $useCache): PlayerStatus
+    public static function getOnlineStatus(string $steamIdentifier, bool $useCache): PlayerStatus
     {
         $serverIps = explode(',', env('OP_FW_SERVERS', ''));
-        $steamIdentifier = $this->steam_identifier;
 
         if (!$serverIps) {
             return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);

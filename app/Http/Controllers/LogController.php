@@ -33,7 +33,10 @@ class LogController extends Controller
 
         // Filtering by server.
         if ($server = $request->input('server')) {
-            $query->where('metadata->serverId', $server);
+            // This aint workin
+            // $query->where('metadata->serverId', $server);
+
+            $query->where('details', 'LIKE', '% [' . intval($server) . '] %');
         }
 
         // Filtering by action.
