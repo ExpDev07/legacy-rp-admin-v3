@@ -248,7 +248,13 @@ class Player extends Model
         return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
-    public function getOnlineStatus(): PlayerStatus
+    /**
+     * Returns the online status of the player
+     *
+     * @param bool $useCache
+     * @return PlayerStatus
+     */
+    public function getOnlineStatus(bool $useCache): PlayerStatus
     {
         $serverIps = explode(',', env('OP_FW_SERVERS', ''));
         $steamIdentifier = $this->steam_identifier;
@@ -261,7 +267,7 @@ class Player extends Model
         foreach ($serverIps as $serverIp) {
             if ($serverIp) {
                 $validServer = true;
-                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp);
+                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp, $useCache);
 
                 if (isset($steamIdentifiers[$steamIdentifier])) {
                     return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $serverIp, intval($steamIdentifiers[$steamIdentifier]));

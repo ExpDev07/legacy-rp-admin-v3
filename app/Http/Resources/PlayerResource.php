@@ -29,6 +29,7 @@ class PlayerResource extends JsonResource
             'isBanned'        => $this->isBanned(),
             'warnings'        => $this->warnings()->count(),
             'ban'             => new BanResource($this->getActiveBan()),
+            'status'          => $this->getOnlineStatus(false),
         ];
     }
 

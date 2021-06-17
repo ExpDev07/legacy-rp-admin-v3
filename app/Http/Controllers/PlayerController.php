@@ -25,7 +25,7 @@ class PlayerController extends Controller
     {
         $start = round(microtime(true) * 1000);
 
-        $query = Player::query()->orderByDesc('playtime');
+        $query = Player::query()->orderByDesc('last_connection');
 
         // Querying.
         if ($q = $request->input('query')) {
@@ -71,7 +71,6 @@ class PlayerController extends Controller
     {
         return Inertia::render('Players/Show', [
             'player'     => new PlayerResource($player),
-            'online'     => $player->getOnlineStatus(),
             'characters' => CharacterResource::collection($player->characters),
             'warnings'   => WarningResource::collection($player->warnings()->oldest()->get()),
         ]);
