@@ -223,6 +223,7 @@ class Inventory
 
                 if ($this->vehicle) {
                     $this->character = $this->vehicle->character()->first();
+                    $this->more_info['garage'] = $this->vehicle->garage();
                 }
                 return $this;
             default:

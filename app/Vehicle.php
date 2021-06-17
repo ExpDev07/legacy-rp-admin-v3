@@ -38,7 +38,7 @@ class Vehicle extends Model
      */
     protected $fillable = [
         'owner_cid',
-        'garage_name',
+        'garage_identifier',
         'model_name',
         'plate',
     ];

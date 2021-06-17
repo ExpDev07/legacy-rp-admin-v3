@@ -94,10 +94,10 @@
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left">
                         <th class="px-6 py-4">{{ t('logs.player') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('logs.action') }}</th>
                         <th class="px-6 py-4">{{ t('logs.details') }}</th>
                         <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
-                        <th class="px-6 py-4">{{ t('logs.server_id') }}</th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" :key="log.id">
                         <td class="px-6 py-3 border-t">
@@ -105,10 +105,17 @@
                                 {{ playerName(log.steamIdentifier) }}
                             </inertia-link>
                         </td>
+                        <td class="px-6 py-3 border-t" :title="t('global.server_timeout')">
+                            <span class="font-semibold" v-if="log.status.status === 'online'">
+                                {{ log.status.serverId }}
+                            </span>
+                            <span class="font-semibold" v-else>
+                                {{ t('global.status.' + log.status.status) }}
+                            </span>
+                        </td>
                         <td class="px-6 py-3 border-t">{{ log.action }}</td>
                         <td class="px-6 py-3 border-t">{{ log.details }}</td>
                         <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
-                        <td class="px-6 py-3 border-t">{{ log.server }}</td>
                     </tr>
                     <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">

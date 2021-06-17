@@ -71,7 +71,7 @@
 
                         <template>
                             <p v-html="t('players.vehicles.parked', inventory.vehicle.garage_identifier)">
-                                {{ t('players.vehicles.parked', inventory.vehicle.garage_identifier) }}
+                                {{ t('players.vehicles.parked', inventory.more_info.garage) }}
                             </p>
                         </template>
 

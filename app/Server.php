@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -27,6 +28,13 @@ class Server extends Model
     protected $fillable = [
         'url',
     ];
+
+    /**
+     * A steamidentifier->serverId map
+     *
+     * @var array
+     */
+    private static array $onlineMap = [];
 
     /**
      * Gets the API data.
@@ -75,33 +83,45 @@ class Server extends Model
      * Returns an associative array (steamIdentifier -> serverId)
      *
      * @param string $serverIp
+     * @param bool $useCache
      * @return array
      */
-    public static function fetchSteamIdentifiers(string $serverIp): array
+    public static function fetchSteamIdentifiers(string $serverIp, bool $useCache): array
     {
         if (!$serverIp) {
             return [];
         }
+        $cacheKey = 'identifiers_' . md5($serverIp);
 
-        $serverIp = self::fixApiUrl($serverIp);
-
-        $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
-
-        if ($json) {
-            $assoc = [];
-
-            foreach($json['joining']['players'] as $player) {
-                $assoc[$player['steamIdentifier']] = $player['source'];
+        if ($useCache) {
+            if (Cache::store('file')->has($cacheKey)) {
+                return Cache::store('file')->get($cacheKey);
             }
-
-            foreach($json['joined']['players'] as $player) {
-                $assoc[$player['steamIdentifier']] = $player['source'];
-            }
-
-            return $assoc;
         }
 
-        return [];
+        if (!self::$onlineMap) {
+            $serverIp = self::fixApiUrl($serverIp);
+
+            $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
+
+            if ($json) {
+                $assoc = [];
+
+                foreach ($json['joining']['players'] as $player) {
+                    $assoc[$player['steamIdentifier']] = $player['source'];
+                }
+
+                foreach ($json['joined']['players'] as $player) {
+                    $assoc[$player['steamIdentifier']] = $player['source'];
+                }
+
+                self::$onlineMap = $assoc;
+            }
+        }
+
+        Cache::store('file')->set($cacheKey, self::$onlineMap, 5 * 60);
+
+        return self::$onlineMap;
     }
 
 }

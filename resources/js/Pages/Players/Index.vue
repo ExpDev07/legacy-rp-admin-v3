@@ -58,6 +58,7 @@
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left">
+                        <th class="px-6 py-4">{{ t('global.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.identifier') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.playtime') }}</th>
@@ -66,6 +67,14 @@
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="player in players.data" v-bind:key="player.id">
+                        <td class="px-6 py-3 border-t" :title="t('global.server_timeout')">
+                            <span class="font-semibold" v-if="player.status.status === 'online'">
+                                {{ player.status.serverId }}
+                            </span>
+                            <span class="font-semibold" v-else>
+                                {{ t('global.status.' + player.status.status) }}
+                            </span>
+                        </td>
                         <td class="px-6 py-3 border-t">{{ player.steamIdentifier }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playTime | humanizeSeconds }}</td>
@@ -102,12 +111,14 @@
 <script>
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
+import Badge from './../../Components/Badge';
 import Pagination from './../../Components/Pagination';
 
 export default {
     layout: Layout,
     components: {
         VSection,
+        Badge,
         Pagination,
     },
     props: {

@@ -16,11 +16,11 @@
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="online.status === 'online'">
-                        <span class="font-semibold">{{ t('global.status.online') }} <sup>[{{ online.serverId }}]</sup></span>
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.status.status === 'online'">
+                        <span class="font-semibold">{{ t('global.status.online') }} <sup>[{{ player.status.serverId }}]</sup></span>
                     </badge>
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-else>
-                        <span class="font-semibold">{{ t('global.status.' + online.status) }}</span>
+                        <span class="font-semibold">{{ t('global.status.' + player.status.status) }}</span>
                     </badge>
 
                     <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" v-html="local.played">
@@ -36,7 +36,7 @@
         <portal to="actions">
             <div>
                 <!-- Kicking -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true" v-if="online.status === 'online'">
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true" v-if="player.status.status === 'online'">
                     <i class="fas fa-user-minus"></i>
                     {{ t('players.show.kick') }}
                 </button>
@@ -344,10 +344,6 @@ export default {
     },
     props: {
         player: {
-            type: Object,
-            required: true,
-        },
-        online: {
             type: Object,
             required: true,
         },
