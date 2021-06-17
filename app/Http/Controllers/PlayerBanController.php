@@ -29,6 +29,10 @@ class PlayerBanController extends Controller
      */
     public function store(Player $player, BanStoreRequest $request)
     {
+        if ($player->isBanned()) {
+            return back()->with('error', 'Player is already banned');
+        }
+
         // Create a unique hash to go with this player's batch of bans.
         $user = $request->user();
         $hash = Str::uuid()->toString();
