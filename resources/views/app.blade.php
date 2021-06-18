@@ -17,7 +17,7 @@
     <title>OP-FW - Admin @yield('title')</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('favicon.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.jpg') }}?v=1624011750066">
 
     <!-- Styling -->
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">

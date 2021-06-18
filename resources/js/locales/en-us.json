@@ -68,10 +68,15 @@
                 "ground": "This is a ground inventory.",
                 "character": "This is a character inventory.",
                 "trunk": "This inventory is the trunk of a vehicle.",
-                "glovebox": "This inventory is the glovebox of a vehicle."
+                "glovebox": "This inventory is the glovebox of a vehicle.",
+                "property": "This inventory is a storage container inside a property."
             },
             "vehicle": "Vehicle",
             "owner": "Vehicle Owner",
+            "property": "Property",
+            "prop_owner": "Property Owner",
+            "prop_description": "The property is owned by {0} (#{1})",
+            "unknown_prop": "Unknown Property",
             "character": "Character",
             "view_character": "View Character",
             "view_player": "View Player",

@@ -114,7 +114,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-3 border-t">{{ log.action }}</td>
-                        <td class="px-6 py-3 border-t">{{ log.details }}</td>
+                        <td class="px-6 py-3 border-t" v-html="parseLog(log.details)">{{ parseLog(log.details) }}</td>
                         <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="logs.length === 0">
@@ -221,6 +221,28 @@ export default {
             } catch(e) {}
 
             this.isLoading = false;
+        },
+        parseLog(details) {
+            const regex = /(to|from) (inventory )?((trunk|glovebox|character|property)-(\d+-)?\d+:\d+)/gmi;
+
+            let inventories = [];
+
+            let m;
+            while ((m = regex.exec(details)) !== null) {
+                if (m.index === regex.lastIndex) {
+                    regex.lastIndex++;
+                }
+
+                if (m.length > 3 && m[3] && !inventories.includes(m[3])) {
+                    inventories.push(m[3]);
+                }
+            }
+
+            for (let x = 0; x < inventories.length; x++) {
+                details = details.replaceAll(inventories[x], '<a title="' + this.t('inventories.view') + '" class="text-indigo-600 dark:text-indigo-400" href="/inventory/' + inventories[x] + '">' + inventories[x] + '</a>');
+            }
+
+            return details;
         },
         playerName(steamIdentifier) {
             return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;

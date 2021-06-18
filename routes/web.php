@@ -53,6 +53,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Inventories.
     Route::get('/inventories/character/{character}', '\App\Http\Controllers\InventoryController@character');
     Route::get('/inventories/vehicle/{vehicle}', '\App\Http\Controllers\InventoryController@vehicle');
+    Route::get('/inventories/property/{property}', '\App\Http\Controllers\InventoryController@property');
     Route::get('/inventory/{inventory}', '\App\Http\Controllers\InventoryController@show');
 
     // Logs.
@@ -63,6 +64,18 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Servers.
     Route::resource('servers', ServerController::class);
+});
+
+// Used to get logs.
+Route::get('/op-fw-logs/{api_key}', function (string $api_key) {
+    $file = rtrim(storage_path('logs'), '/\\') . '/op-fw.log';
+
+    if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
+        return response()->download($file, 'op-fw.log');
+    }
+
+    return (new Response('Unauthorized', 403))
+        ->header('Content-Type', 'text/plain');
 });
 
 // Used for testing purposes.

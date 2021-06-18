@@ -39,7 +39,7 @@ class Property extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'property_id';
 
     /**
      * The attributes that are mass assignable.

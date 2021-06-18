@@ -40,11 +40,20 @@ class PlayerStatus
      */
     public string $serverIp;
 
+    /**
+     * The subdomain of the server (c3s1)
+     *
+     * @var string
+     */
+    public string $serverName = '';
+
     public function __construct(string $status, string $serverIp, int $serverId)
     {
         $this->status = $status;
         $this->serverIp = Server::fixApiUrl($serverIp);
         $this->serverId = $serverId;
+
+        $this->serverName = explode('.', str_replace('https://', '', $this->serverIp))[0];
     }
 
     public function isOnline(): bool

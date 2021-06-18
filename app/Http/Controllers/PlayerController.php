@@ -8,6 +8,7 @@ use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,7 +26,16 @@ class PlayerController extends Controller
     {
         $start = round(microtime(true) * 1000);
 
-        $query = Player::query()->orderByDesc('last_connection');
+        $playerList = Player::getAllOnlinePlayers(true);
+        $players = array_keys($playerList);
+        usort($players, function($a, $b) use ($playerList) {
+            return $playerList[$a]['id'] <=> $playerList[$b]['id'];
+        });
+        $players = array_map(function($player) {
+            return DB::connection()->getPdo()->quote($player);
+        }, $players);
+
+        $query = Player::query()->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, last_connection DESC');
 
         // Querying.
         if ($q = $request->input('query')) {

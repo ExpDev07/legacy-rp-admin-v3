@@ -249,6 +249,39 @@ class Player extends Model
     }
 
     /**
+     * Returns a map of steamIdentifier->serverId,server for each online player
+     *
+     * @param bool $useCache
+     * @return array
+     */
+    public static function getAllOnlinePlayers(bool $useCache): array
+    {
+        $serverIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        if (!$serverIps) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($serverIps as $serverIp) {
+            if ($serverIp) {
+                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp, $useCache);
+
+                foreach($steamIdentifiers as $key => $val) {
+                    if (!isset($result[$key])) {
+                        $result[$key] = [
+                            'id'     => intval($val),
+                            'server' => $serverIp
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns the online status of the player
      *
      * @param string $steamIdentifier
@@ -263,20 +296,10 @@ class Player extends Model
             return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
         }
 
-        $validServer = false;
-        foreach ($serverIps as $serverIp) {
-            if ($serverIp) {
-                $validServer = true;
-                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp, $useCache);
-
-                if (isset($steamIdentifiers[$steamIdentifier])) {
-                    return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $serverIp, intval($steamIdentifiers[$steamIdentifier]));
-                }
-            }
-        }
-
-        if (!$validServer) {
-            return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
+        $players = self::getAllOnlinePlayers($useCache);
+        if (isset($players[$steamIdentifier])) {
+            $player = $players[$steamIdentifier];
+            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id']);
         }
 
         return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);

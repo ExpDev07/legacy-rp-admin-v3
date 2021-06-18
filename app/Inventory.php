@@ -75,6 +75,13 @@ class Inventory
     public ?Vehicle $vehicle;
 
     /**
+     * The Property associated with this inventory
+     *
+     * @var ?Property
+     */
+    public ?Property $property;
+
+    /**
      * The JSON stored in helpers/op-fw_vehicles.json
      *
      * @var array
@@ -130,6 +137,12 @@ class Inventory
                     return new Inventory($descriptor);
                 }
                 break;
+            case 'property':
+                $inventory->id = str_replace('-', '', $server);
+                if (!is_numeric($inventory->id)) {
+                    return new Inventory($descriptor);
+                }
+                break;
             case 'trunk':
             case 'glovebox':
                 if (!is_numeric($id) && !preg_match('/^\d{2}[a-z]{3}\d{3}$/mi', $id)) {
@@ -137,7 +150,7 @@ class Inventory
                 }
 
                 $inventory->more_info = [
-                    'type' => 'Unknown'
+                    'type' => 'Unknown',
                 ];
 
                 $type = intval($server);
@@ -210,6 +223,15 @@ class Inventory
             case 'character':
                 $query = Character::query()->where('character_id', $this->id);
                 $this->character = $query->first();
+                return $this;
+            case 'property':
+                $query = Property::query()->where('property_id', $this->id);
+                $this->property = $query->first();
+
+                if ($this->property) {
+                    $this->character = Character::query()->where('character_id', $this->property->property_renter_cid)->first();
+                }
+
                 return $this;
             case 'trunk':
             case 'glovebox':
