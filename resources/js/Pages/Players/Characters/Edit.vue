@@ -196,6 +196,16 @@
                                 <span>{{ t('players.properties.rent') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(property.property_income) }}
                             </h4>
                         </template>
+
+                        <template #footer>
+                            <inertia-link
+                                class="block px-4 py-3 mt-3 text-center text-white bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/property/' + property.property_id"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
+                        </template>
                     </card>
                 </div>
                 <p class="text-muted dark:text-dark-muted" v-if="character.properties.length === 0">

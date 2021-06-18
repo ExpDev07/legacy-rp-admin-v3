@@ -7,6 +7,7 @@ use App\Http\Resources\InventoryLogResource;
 use App\Inventory;
 use App\Log;
 use App\Player;
+use App\Property;
 use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -57,6 +58,22 @@ class InventoryController extends Controller
     }
 
     /**
+     * Display a inventory logs related to a property.
+     *
+     * @param Property $property
+     * @param Request $request
+     * @return Response
+     */
+    public function property(Property $property, Request $request): Response
+    {
+        $inventories = [
+            'property-' . $property->property_id . '-',
+        ];
+
+        return $this->searchInventories($request, $inventories);
+    }
+
+    /**
      * @param Request $request
      * @param array $inventories
      * @return Response
@@ -74,7 +91,7 @@ class InventoryController extends Controller
         $logs = InventoryLogResource::collection([]);
         if (!empty($inventories)) {
             foreach ($inventories as $inventory) {
-                $query->orWhere('details','LIKE', '%' . $inventory . '%');
+                $query->orWhere('details', 'LIKE', '%' . $inventory . '%');
             }
 
             $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);

@@ -39,7 +39,7 @@
                         <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t">
                             <div class="flex">
-                                <inertia-link v-if="log.inventoryFrom && log.inventoryFrom.type" :class="'w-inventory block px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryFrom.type)" v-bind:href="'/inventory/' + log.inventoryFrom.descriptor">
+                                <inertia-link v-if="log.inventoryFrom && log.inventoryFrom.type" :class="'w-inventory block px-2 py-2 font-semibold text-center ' + inventoryColor(log.inventoryFrom.type)" v-bind:href="'/inventory/' + log.inventoryFrom.descriptor">
                                     {{ log.inventoryFrom.title }}
                                 </inertia-link>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else-if="log.inventoryFrom && log.inventoryFrom.descriptor !== 'unknown'">
@@ -53,7 +53,7 @@
                                     &#11166;
                                 </span>
 
-                                <inertia-link v-if="log.inventoryTo && log.inventoryTo.type" :class="'block w-inventory px-2 py-2 font-semibold text-center text-white ' + inventoryColor(log.inventoryTo.type)" v-bind:href="'/inventory/' + log.inventoryTo.descriptor">
+                                <inertia-link v-if="log.inventoryTo && log.inventoryTo.type" :class="'block w-inventory px-2 py-2 font-semibold text-center ' + inventoryColor(log.inventoryTo.type)" v-bind:href="'/inventory/' + log.inventoryTo.descriptor">
                                     {{ log.inventoryTo.title }}
                                 </inertia-link>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else-if="log.inventoryTo && log.inventoryTo.descriptor !== 'unknown'">
@@ -122,16 +122,16 @@ export default {
     methods: {
         inventoryColor(type) {
             switch(type) {
-                case 'ground':
-                    return 'bg-gray-800 hover:bg-gray-700';
                 case 'character':
-                    return 'bg-green-600 hover:bg-green-500';
+                    return 'bg-green-600 hover:bg-green-500 text-white';
                 case 'trunk':
-                    return 'bg-blue-700 hover:bg-blue-600';
+                    return 'bg-blue-700 hover:bg-blue-600 text-white';
                 case 'glovebox':
-                    return 'bg-indigo-700 hover:bg-indigo-600';
+                    return 'bg-indigo-700 hover:bg-indigo-600 text-white';
+                case 'property':
+                    return 'bg-yellow-400 hover:bg-yellow-400 text-black';
                 default:
-                    return '';
+                    return 'bg-gray-800 hover:bg-gray-700 text-white';
             }
         },
         playerName(steamIdentifier) {

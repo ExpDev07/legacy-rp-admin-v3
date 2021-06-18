@@ -53,6 +53,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Inventories.
     Route::get('/inventories/character/{character}', '\App\Http\Controllers\InventoryController@character');
     Route::get('/inventories/vehicle/{vehicle}', '\App\Http\Controllers\InventoryController@vehicle');
+    Route::get('/inventories/property/{property}', '\App\Http\Controllers\InventoryController@property');
     Route::get('/inventory/{inventory}', '\App\Http\Controllers\InventoryController@show');
 
     // Logs.
