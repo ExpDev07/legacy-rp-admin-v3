@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Throwable;
 
 /**
  * @package App
@@ -102,7 +103,11 @@ class Server extends Model
         if (!self::$onlineMap) {
             $serverIp = self::fixApiUrl($serverIp);
 
-            $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
+            try {
+                $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
+            } catch(Throwable $t) {
+                return [];
+            }
 
             if ($json) {
                 $assoc = [];
