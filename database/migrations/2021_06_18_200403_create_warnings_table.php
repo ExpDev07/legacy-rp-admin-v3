@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 class CreateWarningsTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -15,10 +14,10 @@ class CreateWarningsTable extends Migration
     public function up()
     {
         Schema::create('warnings', function (Blueprint $table) {
-            $table->id('id');
-            $table->unsignedBigInteger('issuer_id');
+            $table->id();
             $table->unsignedBigInteger('player_id');
-            $table->text('message');
+            $table->unsignedBigInteger('issuer_id');
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }
@@ -32,5 +31,4 @@ class CreateWarningsTable extends Migration
     {
         Schema::dropIfExists('warnings');
     }
-
 }

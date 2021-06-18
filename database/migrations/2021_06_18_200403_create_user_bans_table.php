@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateBansTable extends Migration
+class CreateUserBansTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -15,12 +14,12 @@ class CreateBansTable extends Migration
     public function up()
     {
         Schema::create('user_bans', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('ban_hash');
-            $table->string('identifier');
-            $table->string('smurf_account')->nullable();
-            $table->string('creator_name')->nullable();
-            $table->string('reason')->nullable();
+            $table->integer('id')->primary();
+            $table->string('ban_hash', 50)->nullable();
+            $table->string('identifier', 50)->nullable();
+            $table->string('smurf_account', 50)->nullable();
+            $table->longText('creator_name')->nullable();
+            $table->longText('reason')->nullable();
             $table->integer('timestamp')->nullable();
             $table->integer('expire')->nullable();
         });
@@ -35,5 +34,4 @@ class CreateBansTable extends Migration
     {
         Schema::dropIfExists('user_bans');
     }
-
 }

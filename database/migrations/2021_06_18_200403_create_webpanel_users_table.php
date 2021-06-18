@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateWebpanelUsersTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -15,10 +14,10 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('webpanel_users', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('account_id');
-            $table->string('name');
-            $table->string('avatar');
+            $table->id();
+            $table->string('account_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -33,5 +32,4 @@ class CreateUsersTable extends Migration
     {
         Schema::dropIfExists('webpanel_users');
     }
-
 }
