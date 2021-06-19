@@ -25,7 +25,7 @@ class PlayerKickController extends Controller
             return back()->with('error', 'Invalid OP-FW configuration.');
         }
 
-        $status = $player->getOnlineStatus();
+        $status = Player::getOnlineStatus($player->steam_identifier, false);
         if (!$status->isOnline()) {
             return back()->with('error', 'Player is offline.');
         }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8b80bc731169d26d8f9228f8798be9c",
+    "content-hash": "349ba54dea28050bcc544faa2ef2746a",
     "packages": [
         {
             "name": "brick/math",
@@ -5359,6 +5359,71 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "bennett-treptow/laravel-migration-generator",
+            "version": "3.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bennett-treptow/laravel-migration-generator.git",
+                "reference": "8987a4f9f9eb347543ac5795d4888073b62106cb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bennett-treptow/laravel-migration-generator/zipball/8987a4f9f9eb347543ac5795d4888073b62106cb",
+                "reference": "8987a4f9f9eb347543ac5795d4888073b62106cb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "^6.0|^7.0|^8.0",
+                "illuminate/console": "^6.0|^7.0|^8.0",
+                "illuminate/database": "^6.0|^7.0|^8.0",
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "orchestra/testbench": "^6.17"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LaravelMigrationGenerator\\LaravelMigrationGeneratorProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelMigrationGenerator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bennett Treptow",
+                    "email": "me@btreptow.com"
+                }
+            ],
+            "description": "Generate migrations from existing database structures",
+            "support": {
+                "issues": "https://github.com/bennett-treptow/laravel-migration-generator/issues",
+                "source": "https://github.com/bennett-treptow/laravel-migration-generator/tree/3.2.3"
+            },
+            "funding": [
+                {
+                    "url": "https://buymeacoffee.com/btreptow",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/bennett-treptow",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-06-18T00:56:04+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.4.0",

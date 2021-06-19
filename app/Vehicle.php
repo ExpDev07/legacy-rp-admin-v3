@@ -75,6 +75,8 @@ class Vehicle extends Model
      */
     public function garage(): string
     {
+        $this->garage_identifier = trim($this->garage_identifier);
+
         if (is_numeric($this->garage_identifier)) {
             switch (intval($this->garage_identifier)) {
                 case 1:
