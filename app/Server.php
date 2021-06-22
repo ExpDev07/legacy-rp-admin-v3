@@ -100,7 +100,7 @@ class Server extends Model
             }
         }
 
-        if (!self::$onlineMap) {
+        if (empty(self::$onlineMap[$cacheKey])) {
             $serverIp = self::fixApiUrl($serverIp);
 
             try {
@@ -120,13 +120,13 @@ class Server extends Model
                     $assoc[$player['steamIdentifier']] = $player['source'];
                 }
 
-                self::$onlineMap = $assoc;
+                self::$onlineMap[$cacheKey] = $assoc;
             }
         }
 
-        Cache::store('file')->set($cacheKey, self::$onlineMap, 5 * 60);
+        Cache::store('file')->set($cacheKey, self::$onlineMap[$cacheKey], 5 * 60);
 
-        return self::$onlineMap;
+        return self::$onlineMap[$cacheKey];
     }
 
 }

@@ -120,6 +120,10 @@ class Player extends Model
         $identifier = $this->identifier;
         $identifiers = $this->identifiers;
 
+        if (!is_array($identifiers)) {
+            return [$identifier];
+        }
+
         if (in_array($identifier, $identifiers, true)) {
             return $identifiers;
         }
@@ -236,6 +240,16 @@ class Player extends Model
     public function warnings(): HasMany
     {
         return $this->hasMany(Warning::class, 'player_id', 'user_id');
+    }
+
+    /**
+     * Gets the panel_logs relationship.
+     *
+     * @return HasMany
+     */
+    public function panelLogs(): HasMany
+    {
+        return $this->hasMany(PanelLog::class, 'target_identifier', 'steam_identifier');
     }
 
     /**

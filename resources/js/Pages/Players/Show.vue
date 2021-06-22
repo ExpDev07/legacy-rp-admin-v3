@@ -35,6 +35,11 @@
 
         <portal to="actions">
             <div>
+                <!-- StaffPM -->
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500" @click="isStaffPM = true" v-if="player.status.status === 'online'">
+                    <i class="fas fa-envelope-open-text"></i>
+                    {{ t('players.show.staffpm') }}
+                </button>
                 <!-- Kicking -->
                 <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true" v-if="player.status.status === 'online'">
                     <i class="fas fa-user-minus"></i>
@@ -57,6 +62,38 @@
                 </button>
             </div>
         </portal>
+
+        <!-- StaffPM -->
+        <div>
+            <!-- Issuing -->
+            <div class="p-8 mb-10 bg-gray-100 rounded dark:bg-dark-secondary" v-if="isStaffPM">
+                <div class="mb-8 space-y-5">
+                    <h2 class="text-2xl font-semibold">
+                        {{ t('players.show.staffpm') }}
+                    </h2>
+                </div>
+                <form class="space-y-6" @submit.prevent="pmPlayer">
+                    <!-- Message -->
+                    <div>
+                        <label class="italic font-semibold" for="pm_message">
+                            {{ t('players.show.pm_message') }}
+                        </label>
+                        <textarea class="block w-full p-5 bg-gray-200 dark:bg-gray-600 rounded shadow" id="pm_message" name="message" rows="5" placeholder="Please join waiting for support" v-model="form.pm.message"></textarea>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-3">
+                        <button class="px-5 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600" type="submit">
+                            <i class="mr-1 fas fa-gavel"></i>
+                            {{ t('players.show.pm_confirm') }}
+                        </button>
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" type="button" @click="isKicking = false">
+                            {{ t('global.cancel') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <!-- Kick -->
         <div>
@@ -322,6 +359,34 @@
             </template>
         </v-section>
 
+        <!-- Panel Logs -->
+        <v-section>
+            <template #header>
+                <h2>
+                    {{ t('players.show.panel_logs') }}
+                </h2>
+            </template>
+
+            <template>
+                <table class="w-full whitespace-no-wrap">
+                    <tr class="font-semibold text-left">
+                        <th class="px-6 py-4">{{ t('logs.action') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
+                    </tr>
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in panelLogs" :key="log.id">
+                        <td class="px-6 py-3 border-t">{{ log.log }}</td>
+                        <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
+                    </tr>
+                    <tr v-if="panelLogs.length === 0">
+                        <td class="px-4 py-6 text-center border-t" colspan="100%">
+                            {{ t('players.show.no_panel_logs') }}
+                        </td>
+                    </tr>
+                </table>
+            </template>
+
+        </v-section>
+
     </div>
 </template>
 
@@ -351,6 +416,10 @@ export default {
             type: Array,
             required: true,
         },
+        panelLogs: {
+            type: Array,
+            required: true,
+        },
         warnings: {
             type: Array,
             required: true,
@@ -365,6 +434,7 @@ export default {
             },
             isBanning: false,
             isKicking: false,
+            isStaffPM: false,
             isTempBanning: false,
             form: {
                 ban: {
@@ -375,6 +445,9 @@ export default {
                 },
                 kick: {
                     reason: null,
+                },
+                pm: {
+                    message: null,
                 },
                 warning: {
                     message: null,
@@ -391,6 +464,14 @@ export default {
             return this.player.ban.expireAt
                 ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt))
                 : this.t('players.ban.forever', this.player.ban.issuer);
+        },
+        async pmPlayer() {
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/staffPM', this.form.pm);
+
+            // Reset.
+            this.isStaffPM = false;
+            this.form.pm.message = null;
         },
         async kickPlayer() {
             if (!confirm(this.t('players.show.kick_confirm'))) {
@@ -411,13 +492,13 @@ export default {
 
             // Calculate expire relative to now in seconds if temp ban.
             if (this.isTempBanning) {
-                const nowUnix    = this.$moment().unix();
+                const nowUnix = this.$moment().unix();
                 const expireUnix = this.$moment(this.form.ban.expireDate + ' ' + this.form.ban.expireTime).unix();
-                expire           = expireUnix - nowUnix;
+                expire = expireUnix - nowUnix;
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', { ...this.form.ban, expire });
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', {...this.form.ban, expire});
 
             this.local.ban = this.localizeBan();
 

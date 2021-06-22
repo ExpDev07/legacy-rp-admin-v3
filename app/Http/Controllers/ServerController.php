@@ -62,7 +62,7 @@ class ServerController extends Controller
     {
         $players = [];
         try {
-            $steamIdentifiers = array_keys(Server::fetchSteamIdentifiers($server->url));
+            $steamIdentifiers = array_keys(Server::fetchSteamIdentifiers($server->url, true));
 
             $query = Player::query()->orderBy('last_connection');
             $query->whereIn('steam_identifier', $steamIdentifiers);

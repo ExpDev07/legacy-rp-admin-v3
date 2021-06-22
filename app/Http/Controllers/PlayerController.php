@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\CharacterResource;
+use App\Http\Resources\PanelLogResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
@@ -28,10 +29,10 @@ class PlayerController extends Controller
 
         $playerList = Player::getAllOnlinePlayers(true);
         $players = array_keys($playerList);
-        usort($players, function($a, $b) use ($playerList) {
+        usort($players, function ($a, $b) use ($playerList) {
             return $playerList[$a]['id'] <=> $playerList[$b]['id'];
         });
-        $players = array_map(function($player) {
+        $players = array_map(function ($player) {
             return DB::connection()->getPdo()->quote($player);
         }, $players);
 
@@ -83,6 +84,7 @@ class PlayerController extends Controller
             'player'     => new PlayerResource($player),
             'characters' => CharacterResource::collection($player->characters),
             'warnings'   => WarningResource::collection($player->warnings()->oldest()->get()),
+            'panelLogs'  => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(25)->get()),
         ]);
     }
 
