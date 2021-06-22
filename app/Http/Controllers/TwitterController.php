@@ -30,7 +30,26 @@ class TwitterController extends Controller
 
         $query = TwitterPost::query()->orderByDesc('time');
 
-        // Filtering by action.
+        // Filtering by username.
+        if ($username = $request->input('username')) {
+            $subQuery = TwitterUser::query();
+
+            if (Str::startsWith($username, '=')) {
+                $username = Str::substr($username, 1);
+                $subQuery->where('username', $username);
+            } else {
+                $subQuery->where('username', 'like', "%{$username}%");
+            }
+
+            $users = $subQuery->select(['id'])->get()->toArray();
+            $ids = !empty($users) ? array_values(array_map(function ($user) {
+                return $user['id'];
+            }, $users)) : [];
+
+            $query->whereIn('authorId', $ids);
+        }
+
+        // Filtering by message.
         if ($message = $request->input('message')) {
             if (Str::startsWith($message, '=')) {
                 $message = Str::substr($message, 1);
@@ -61,7 +80,8 @@ class TwitterController extends Controller
         return Inertia::render('Twitter/Index', [
             'posts'        => $posts,
             'filters'      => $request->all(
-                'message'
+                'message',
+                'username'
             ),
             'links'        => [
                 'next' => $next,

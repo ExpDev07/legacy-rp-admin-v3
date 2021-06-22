@@ -27,12 +27,21 @@
 
             <template>
                 <form @submit.prevent>
-                    <!-- Details -->
-                    <div class="w-full px-3">
-                        <label class="block mb-3" for="message">
-                            {{ t('twitter.message') }} <sup class="text-muted dark:text-dark-muted">**</sup>
-                        </label>
-                        <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="message" :placeholder="t('twitter.placeholder_message')" v-model="filters.message">
+                    <div class="flex flex-wrap mb-4">
+                        <!-- Details -->
+                        <div class="w-1/3 px-3">
+                            <label class="block mb-3" for="username">
+                                {{ t('twitter.account') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                            </label>
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="username" :placeholder="t('twitter.placeholder_username')" v-model="filters.username">
+                        </div>
+                        <!-- Details -->
+                        <div class="w-2/3 px-3">
+                            <label class="block mb-3" for="message">
+                                {{ t('twitter.message') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                            </label>
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="message" :placeholder="t('twitter.placeholder_message')" v-model="filters.message">
+                        </div>
                     </div>
                     <!-- Description -->
                     <div class="w-full px-3 mt-3">
@@ -87,8 +96,8 @@
                         </td>
                         <td class="px-6 py-3 border-t" v-else></td>
                         <td class="px-6 py-3 border-t" v-if="user(post.authorId)">
-                            <span class="font-semibold" v-if="user(post.authorId).username.length <= 13">{{ user(post.authorId).username }}</span>
-                            <span class="font-semibold" v-else>{{ user(post.authorId).username.substring(0, 11) + '...' }}</span>
+                            <span class="font-semibold" v-if="user(post.authorId).username.length <= 18">{{ user(post.authorId).username }}</span>
+                            <span class="font-semibold" :title="user(post.authorId).username" v-else>{{ user(post.authorId).username.substring(0, 15) + '...' }}</span>
                         </td>
                         <td class="px-6 py-3 border-t" v-else></td>
                         <td class="px-6 py-3 border-t max-w-2xl" v-linkified:options="{ className: 'text-indigo-600 dark:text-indigo-400' }">{{ post.message }}</td>
