@@ -37,5 +37,8 @@
         "vue": "^2.5.17",
         "vue-lottie": "^0.2.1",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "vue-linkify": "^1.0.1"
     }
 }

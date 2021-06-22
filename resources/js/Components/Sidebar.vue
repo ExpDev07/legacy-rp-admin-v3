@@ -59,6 +59,11 @@ export default {
                     url: '/logs',
                 },
                 {
+                    label: this.t('twitter.title'),
+                    icon: 'twitter',
+                    url: '/twitter',
+                },
+                {
                     label: this.t('servers.title'),
                     icon: 'office',
                     url: '/servers',

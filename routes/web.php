@@ -22,6 +22,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\TwitterController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
@@ -55,6 +56,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/inventories/vehicle/{vehicle}', '\App\Http\Controllers\InventoryController@vehicle');
     Route::get('/inventories/property/{property}', '\App\Http\Controllers\InventoryController@property');
     Route::get('/inventory/{inventory}', '\App\Http\Controllers\InventoryController@show');
+
+    // Twitter.
+    Route::resource('twitter', TwitterController::class);
 
     // Logs.
     Route::resource('logs', LogController::class);

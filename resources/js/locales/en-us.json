@@ -9,6 +9,7 @@
         "super": "Super Admin",
         "cancel": "Cancel",
         "view": "View",
+        "refresh": "Refresh",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -90,6 +91,19 @@
             "unknown": "Unknown",
             "description": "Inventory logs related to a character"
         }
+    },
+    "twitter": {
+        "title": "Twitter Feed",
+        "description": "Latest twitter posts from inside the city",
+        "no_posts": "No Twitter posts",
+        "account": "Account",
+        "message": "Message",
+        "likes": "Likes",
+        "time": "Time",
+        "posts": "Posts",
+        "search": "Search",
+        "placeholder_message": "Aww shit here we go again",
+        "filter": "Filter posts"
     },
     "players": {
         "title": "Players",

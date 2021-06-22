@@ -126,4 +126,39 @@ class Character extends Model
         return $this->hasMany(Property::class, 'property_renter_cid');
     }
 
+    /**
+     * Returns a map of character_id->[character_name,steamIdentifier]
+     * This is used instead of a left join as it appears to be a lot faster
+     *
+     * @param array $source
+     * @param string $sourceKey
+     * @return array
+     */
+    public static function fetchIdNameMap(array $source, string $sourceKey): array
+    {
+        $ids = [];
+        foreach ($source as $entry) {
+            if (!in_array($entry[$sourceKey], $ids)) {
+                $ids[] = $entry[$sourceKey];
+            }
+        }
+
+        $characters = self::query()->whereIn('character_id', $ids)->select([
+            'character_id', 'steam_identifier', 'first_name', 'last_name',
+        ])->get();
+        $characterMap = [];
+        foreach ($characters as $character) {
+            $characterMap[$character->character_id] = [
+                'steam_identifier' => $character->steam_identifier,
+                'name'             => $character->first_name . ' ' . $character->last_name,
+            ];
+        }
+
+        if (empty($characterMap)) {
+            $characterMap['empty'] = 'empty';
+        }
+
+        return $characterMap;
+    }
+
 }
