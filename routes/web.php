@@ -15,14 +15,14 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
 use App\Http\Controllers\PlayerController;
-use App\Http\Controllers\PlayerKickController;
+use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\TwitterController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
@@ -48,13 +48,17 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::resource('players.characters', PlayerCharacterController::class);
     Route::resource('players.bans', PlayerBanController::class);
     Route::resource('players.warnings', PlayerWarningController::class);
-    Route::resource('players.kick', PlayerKickController::class);
+    Route::post('/players/{player}/kick', [PlayerRouteController::class, 'kick']);
+    Route::post('/players/{player}/staffPM', [PlayerRouteController::class, 'staffPM']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', '\App\Http\Controllers\InventoryController@character');
     Route::get('/inventories/vehicle/{vehicle}', '\App\Http\Controllers\InventoryController@vehicle');
     Route::get('/inventories/property/{property}', '\App\Http\Controllers\InventoryController@property');
     Route::get('/inventory/{inventory}', '\App\Http\Controllers\InventoryController@show');
+
+    // Twitter.
+    Route::resource('twitter', TwitterController::class);
 
     // Logs.
     Route::resource('logs', LogController::class);

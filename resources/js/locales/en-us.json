@@ -9,6 +9,7 @@
         "super": "Super Admin",
         "cancel": "Cancel",
         "view": "View",
+        "refresh": "Refresh",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -88,8 +89,22 @@
             "movement": "Movement",
             "item": "Moved Item",
             "unknown": "Unknown",
-            "description":  "Inventory logs related to a character"
+            "description": "Inventory logs related to a character"
         }
+    },
+    "twitter": {
+        "title": "Twitter Feed",
+        "description": "Latest twitter posts from inside the city",
+        "no_posts": "No Twitter posts",
+        "account": "Account",
+        "message": "Message",
+        "likes": "Likes",
+        "time": "Time",
+        "posts": "Posts",
+        "search": "Search",
+        "placeholder_message": "Selling keys hmu",
+        "placeholder_username": "iRobBanks",
+        "filter": "Filter posts"
     },
     "players": {
         "title": "Players",
@@ -121,10 +136,15 @@
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
             "no_warnings": "This player has not received any warnings.",
+            "no_panel_logs": "This player has no panel logs.",
             "edit_ban": "Edit Ban",
             "kick": "Kick Player",
+            "staffpm": "StaffPM Player",
             "kick_confirm": "Are you sure you want to kick this player from the server?",
-            "kick_reason": "Reason"
+            "kick_reason": "Reason",
+            "pm_message": "Message",
+            "pm_confirm": "Send StaffPM",
+            "panel_logs": "Latest 25 Panel Logs"
         },
         "form": {
             "identifier": "Identifier",
