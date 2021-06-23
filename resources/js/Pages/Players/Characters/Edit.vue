@@ -214,6 +214,37 @@
             </template>
         </v-section>
 
+        <!-- Motels -->
+        <v-section>
+            <template #header>
+                <h2>
+                    {{ t('players.motels.motels') }}
+                </h2>
+            </template>
+
+            <template>
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
+                    <card
+                        :key="motel.id"
+                        v-for="(motel) in motels"
+                        :no_body="true"
+                    >
+                        <template #header>
+                            <h3 class="mb-2">
+                                {{ motel.motel }} #{{ motel.room_id }}
+                            </h3>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.motels.expires') }}:</span> {{ motel.expire | formatTime(true) }}
+                            </h4>
+                        </template>
+                    </card>
+                </div>
+                <p class="text-muted dark:text-dark-muted" v-if="character.properties.length === 0">
+                    {{ t('players.motels.none') }}
+                </p>
+            </template>
+        </v-section>
+
     </div>
 </template>
 
@@ -236,6 +267,10 @@ export default {
             required: true,
         },
         character: {
+            type: Object,
+            required: true,
+        },
+        motels: {
             type: Object,
             required: true,
         },

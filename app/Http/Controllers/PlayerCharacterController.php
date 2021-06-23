@@ -7,6 +7,7 @@ use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterIndexResource;
 use App\Http\Resources\PlayerResource;
+use App\Motel;
 use App\Player;
 use App\Property;
 use Illuminate\Http\RedirectResponse;
@@ -97,8 +98,8 @@ class PlayerCharacterController extends Controller
                 'phone',
                 'job'
             ),
-            'time'      => $end - $start,
-            'playerMap' => Player::fetchSteamPlayerNameMap($characters->toArray($request), 'steamIdentifier'),
+            'time'       => $end - $start,
+            'playerMap'  => Player::fetchSteamPlayerNameMap($characters->toArray($request), 'steamIdentifier'),
         ]);
     }
 
@@ -111,9 +112,12 @@ class PlayerCharacterController extends Controller
      */
     public function edit(Player $player, Character $character): Response
     {
+        $motels = Motel::query()->where('cid', $character->character_id)->get()->sortBy(['motel', 'room_id']);
+
         return Inertia::render('Players/Characters/Edit', [
             'player'    => new PlayerResource($player),
             'character' => new CharacterResource($character),
+            'motels'    => $motels->toArray(),
         ]);
     }
 

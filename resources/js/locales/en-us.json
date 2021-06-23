@@ -178,6 +178,11 @@
             "cost": "Maintenance Cost",
             "rent": "Rent"
         },
+        "motels": {
+            "motels": "Motels",
+            "none": "This character does not have access to any motels.",
+            "expires": "Expires"
+        },
         "characters": {
             "characters": "Characters",
             "hide": "Hide deleted",
