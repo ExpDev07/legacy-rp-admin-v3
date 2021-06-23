@@ -29,7 +29,8 @@
     },
     "home": {
         "title": "Dashboard",
-        "welcome": "Hello, {0}. Welcome to the dashboard!"
+        "welcome": "Hello, {0}. Welcome to the dashboard!",
+        "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue."
     },
     "nav": {
         "dark": "Dark Mode",

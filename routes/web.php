@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
@@ -42,6 +43,7 @@ Route::group(['namespace' => 'Auth'], function () {
 Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
     Route::get('/', [HomeController::class, 'render']);
+    Route::get('/', [HomeController::class, 'render']);
 
     // Players.
     Route::resource('players', PlayerController::class);
@@ -52,10 +54,10 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/staffPM', [PlayerRouteController::class, 'staffPM']);
 
     // Inventories.
-    Route::get('/inventories/character/{character}', '\App\Http\Controllers\InventoryController@character');
-    Route::get('/inventories/vehicle/{vehicle}', '\App\Http\Controllers\InventoryController@vehicle');
-    Route::get('/inventories/property/{property}', '\App\Http\Controllers\InventoryController@property');
-    Route::get('/inventory/{inventory}', '\App\Http\Controllers\InventoryController@show');
+    Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
+    Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);
+    Route::get('/inventories/property/{property}', [InventoryController::class, 'property']);
+    Route::get('/inventory/{inventory}', [InventoryController::class, 'show']);
 
     // Twitter.
     Route::resource('twitter', TwitterController::class);
@@ -68,6 +70,11 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Servers.
     Route::resource('servers', ServerController::class);
+});
+
+Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
+    // Player count api
+    Route::get('players', [HomeController::class, 'playerCountApi']);
 });
 
 // Used to get logs.
