@@ -130,7 +130,7 @@ class PlayerCharacterController extends Controller
      * @param CharacterUpdateRequest $request
      * @return RedirectResponse
      */
-    public function update(Player $player, Character $character, CharacterUpdateRequest $request)
+    public function update(Player $player, Character $character, CharacterUpdateRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
@@ -143,12 +143,41 @@ class PlayerCharacterController extends Controller
             $data['date_of_birth'] = date('Y-m-d', $time);
         }
 
+        $changed = [];
+        $old = $character->toArray();
+        foreach ($data as $k => $v) {
+            $c = isset($old[$k]) ? $old[$k] : null;
+            if ($v !== $c) {
+                $changed[] = $k;
+            }
+        }
+
         $character->update($data);
 
         $user = $request->user();
-        PanelLog::logCharacterEdit($user->player->steam_identifier, $player->steam_identifier, $character->character_id);
+        PanelLog::logCharacterEdit($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $changed);
 
         return back()->with('success', 'Character was successfully updated.');
+    }
+
+    /**
+     * Removes a characters tattoos
+     *
+     * @param Player $player
+     * @param Character $character
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function removeTattoos(Player $player, Character $character, Request $request): RedirectResponse
+    {
+        $character->update([
+            'tattoos_data' => '[]',
+        ]);
+
+        $user = $request->user();
+        PanelLog::logTattooRemoval($user->player->steam_identifier, $player->steam_identifier, $character->character_id);
+
+        return back()->with('success', 'Tattoos were removed successfully.');
     }
 
 }

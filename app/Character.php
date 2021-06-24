@@ -57,6 +57,8 @@ class Character extends Model
         'character_creation_timestamp',
         'character_deleted',
         'character_deletion_timestamp',
+
+        'tattoos_data',
     ];
 
     /**

@@ -70,14 +70,35 @@ class PanelLog extends Model
      * @param string $fromIdentifier
      * @param string $toIdentifier
      * @param string $characterId
+     * @param array $changedFields
      */
-    public static function logCharacterEdit(string $fromIdentifier, string $toIdentifier, string $characterId)
+    public static function logCharacterEdit(string $fromIdentifier, string $toIdentifier, string $characterId, array $changedFields)
+    {
+        if (empty($changedFields)) {
+            return;
+        }
+
+        $from = self::resolvePlayerLogName($fromIdentifier);
+        $to = self::resolvePlayerLogName($toIdentifier);
+
+        $log = $from . ' edited character ' . $characterId . ' of ' . $to . '. Fields changed: `' . implode(', ', $changedFields) . '`';
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Character Edit');
+    }
+
+    /**
+     * Logs tattoo removals from the panel
+     *
+     * @param string $fromIdentifier
+     * @param string $toIdentifier
+     * @param string $characterId
+     */
+    public static function logTattooRemoval(string $fromIdentifier, string $toIdentifier, string $characterId)
     {
         $from = self::resolvePlayerLogName($fromIdentifier);
         $to = self::resolvePlayerLogName($toIdentifier);
 
-        $log = $from . ' edited character ' . $characterId . ' of ' . $to;
-        self::createLog($fromIdentifier, $toIdentifier, $log, 'Character Edit');
+        $log = $from . ' removed all tattoos character ' . $characterId . ' of ' . $to;
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Tattoo removal');
     }
 
     /**

@@ -190,7 +190,11 @@
             "characters": "Characters",
             "hide": "Hide deleted",
             "show": "Show deleted",
-            "none": "This player has not created any characters yet."
+            "none": "This player has not created any characters yet.",
+            "remove_tattoo": "Remove Characters Tattoos",
+            "sure_tattoos": "Are you sure you want to remove this characters tattoos?",
+            "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!",
+            "tattoo_do": "Remove tattoos"
         },
         "edit": {
             "born": "Born on <b>{0}</b>",
