@@ -38,7 +38,10 @@ class PlayerController extends Controller
             return DB::connection()->getPdo()->quote($player);
         }, $players);
 
-        $query = Player::query()->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, last_connection DESC');
+        $query = Player::query();
+        if (!empty($players)) {
+            $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, last_connection DESC');
+        }
 
         // Querying.
         if ($q = $request->input('query')) {
