@@ -18,7 +18,7 @@ class GeneralHelper
             $quote = Cache::store('file')->get('inspiring_quote');
         }
 
-        if ($quote === null || $quote['expires'] < time()) {
+        if (!$quote || $quote['expires'] < time()) {
             $json = json_decode(file_get_contents(__DIR__ . '/../../helpers/quotes.json'), true);
 
             if (!$quote) {
