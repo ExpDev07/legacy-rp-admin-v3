@@ -177,7 +177,7 @@ class PlayerCharacterController extends Controller
         $user = $request->user();
         PanelLog::logTattooRemoval($user->player->steam_identifier, $player->steam_identifier, $character->character_id);
 
-        return back()->with('success', 'Tattoos were removed successfully.');
+        return back()->with('success', 'Tattoos were removed successfully. The player has to log-out (softnap) and log back in to the game for the changes to take affect.');
     }
 
 }
