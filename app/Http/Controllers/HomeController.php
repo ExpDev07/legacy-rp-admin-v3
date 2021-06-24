@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GeneralHelper;
 use App\Server;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -17,24 +18,11 @@ class HomeController extends Controller
      */
     public function render(): Response
     {
-        if (Cache::store('file')->has('inspiring_quote')) {
-            $quote = Cache::store('file')->get('inspiring_quote');
-        } else {
-            $json = json_decode(file_get_contents(__DIR__ . '/../../../helpers/quotes.json'), true);
-
-            if ($json) {
-                $quote = $json[array_rand($json)];
-                Cache::store('file')->put('inspiring_quote', $quote, 12 * 60 * 60);
-            } else {
-                $quote = [
-                    'quote'  => 'Quote machine broke',
-                    'author' => 'Twoot',
-                ];
-            }
-        }
+        $quote = GeneralHelper::inspiring();
+        $quote['quote'] = nl2br($quote['quote']);
 
         return Inertia::render('Home', [
-            'quote' => $quote
+            'quote' => $quote,
         ]);
     }
 
