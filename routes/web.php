@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\PanelLogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
 use App\Http\Controllers\PlayerController;
@@ -64,6 +65,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Logs.
     Route::resource('logs', LogController::class);
+
+    // Panel Logs.
+    Route::resource('panel_logs', PanelLogController::class);
 
     // Characters.
     Route::resource('characters', PlayerCharacterController::class);

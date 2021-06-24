@@ -33,10 +33,9 @@ class HomeController extends Controller
             }
         }
 
-        $data = $this->playerCount();
-        $data['quote'] = $quote;
-
-        return Inertia::render('Home', $data);
+        return Inertia::render('Home', [
+            'quote' => $quote
+        ]);
     }
 
     /**

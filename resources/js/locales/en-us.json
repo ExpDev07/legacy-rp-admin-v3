@@ -221,6 +221,21 @@
         "placeholder_details": "Marius killed jax with an AK-47",
         "search": "Search in logs"
     },
+    "panel_logs": {
+        "title": "Panel Logs",
+        "description": "On this page you can view and filter the panel logs.",
+        "logs": "Logs",
+        "filter": "Filter Logs",
+        "source": "Source",
+        "target": "Target",
+        "action": "Action",
+        "log": "Message",
+        "timestamp": "Timestamp",
+        "no_logs": "No logs were found.",
+        "placeholder_action": "Kicked Player",
+        "placeholder_log": "Twoot kicked Twentz",
+        "search": "Search logs"
+    },
     "servers": {
         "title": "Servers",
         "description": "An overview of the game servers.",

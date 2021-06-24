@@ -42,6 +42,7 @@ class PanelLog extends Model
         'target_identifier',
         'timestamp',
         'log',
+        'action',
     ];
 
     /**
