@@ -100,7 +100,7 @@ class Server extends Model
             }
         }
 
-        if (empty(self::$onlineMap[$cacheKey])) {
+        if (!isset(self::$onlineMap[$cacheKey]) || empty(self::$onlineMap[$cacheKey])) {
             $serverIp = self::fixApiUrl($serverIp);
 
             try {
@@ -121,6 +121,8 @@ class Server extends Model
                 }
 
                 self::$onlineMap[$cacheKey] = $assoc;
+            } else {
+                return [];
             }
         }
 
