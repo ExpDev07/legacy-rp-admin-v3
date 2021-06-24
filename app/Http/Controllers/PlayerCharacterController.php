@@ -8,6 +8,7 @@ use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Motel;
+use App\PanelLog;
 use App\Player;
 use App\Property;
 use Illuminate\Http\RedirectResponse;
@@ -143,6 +144,10 @@ class PlayerCharacterController extends Controller
         }
 
         $character->update($data);
+
+        $user = $request->user();
+        PanelLog::logCharacterEdit($user->player->steam_identifier, $player->steam_identifier, $character->character_id);
+
         return back()->with('success', 'Character was successfully updated.');
     }
 
