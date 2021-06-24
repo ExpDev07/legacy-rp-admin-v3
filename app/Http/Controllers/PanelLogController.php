@@ -64,15 +64,6 @@ class PanelLogController extends Controller
 
         $logs = $query->get()->toArray();
 
-        $url = preg_replace('/[&?]page=\d+/m', '', $_SERVER['REQUEST_URI']);
-        if (Str::contains($url, '?')) {
-            $url .= '&';
-        } else {
-            $url .= '?';
-        }
-        $next = $url . 'page=' . ($page + 1);
-        $prev = $url . 'page=' . ($page - 1);
-
         $end = round(microtime(true) * 1000);
 
         return Inertia::render('PanelLogs/Index', [
@@ -83,10 +74,7 @@ class PanelLogController extends Controller
                 'action',
                 'log'
             ),
-            'links'     => [
-                'next' => $next,
-                'prev' => $prev,
-            ],
+            'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
             'playerMap' => Player::fetchSteamPlayerNameMap($logs, ['source_identifier', 'target_identifier']),
             'page'      => $page,

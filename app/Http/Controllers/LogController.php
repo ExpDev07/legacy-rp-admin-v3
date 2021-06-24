@@ -66,15 +66,6 @@ class LogController extends Controller
 
         $logs = LogResource::collection($query->get());
 
-        $url = preg_replace('/[&?]page=\d+/m', '', $_SERVER['REQUEST_URI']);
-        if (Str::contains($url, '?')) {
-            $url .= '&';
-        } else {
-            $url .= '?';
-        }
-        $next = $url . 'page=' . ($page + 1);
-        $prev = $url . 'page=' . ($page - 1);
-
         $end = round(microtime(true) * 1000);
 
         return Inertia::render('Logs/Index', [
@@ -85,10 +76,7 @@ class LogController extends Controller
                 'action',
                 'details'
             ),
-            'links'     => [
-                'next' => $next,
-                'prev' => $prev,
-            ],
+            'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
             'page'      => $page,

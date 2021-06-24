@@ -101,24 +101,12 @@ class InventoryController extends Controller
             $logs = InventoryLogResource::collection($query->get());
         }
 
-        $url = $_SERVER['REQUEST_URI'];
-        if (Str::contains($url, '?')) {
-            $url .= '&';
-        } else {
-            $url .= '?';
-        }
-        $next = $url . 'page=' . ($page + 1);
-        $prev = $url . 'page=' . ($page - 1);
-
         $end = round(microtime(true) * 1000);
 
         return Inertia::render('Inventories/Index', [
             'logs'      => $logs,
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
-            'links'     => [
-                'next' => $next,
-                'prev' => $prev,
-            ],
+            'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
             'page'      => $page,
         ]);

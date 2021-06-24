@@ -15,6 +15,7 @@
             "offline": "Offline",
             "unavailable": "Unavailable"
         },
+        "all": "All",
         "server_id": "Server ID",
         "server_timeout": "Server ID is cached for 5 minutes",
         "info": "Info",
@@ -114,6 +115,7 @@
         "search_label": "Search by name, steam identifier, or any other identifier such as Discord id.",
         "none": "No players was found.",
         "search_btn": "Search players",
+        "is_banned": "Is Banned",
         "ban": {
             "issuing": "Issuing ban",
             "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",

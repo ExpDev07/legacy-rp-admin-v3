@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Ban;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PanelLogResource;
 use App\Http\Resources\PlayerIndexResource;
@@ -9,6 +10,7 @@ use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -54,21 +56,42 @@ class PlayerController extends Controller
             }
         }
 
+        // Filtering isBanned.
+        if ($banned = $request->input('banned')) {
+            if ($banned === 'yes' || $banned === 'no') {
+                $ids = array_map(function($b) {
+                    return $b['identifier'];
+                }, Ban::query()->where('identifier', 'LIKE', 'steam:%')->select(['identifier'])->groupBy('identifier')->get()->toArray());
+
+                if ($banned === 'yes') {
+                    $query->whereIn('steam_identifier', $ids);
+                } else if ($banned === 'no') {
+                    $query->whereNotIn('steam_identifier', $ids);
+                }
+            }
+        }
+
         $query->select([
             'steam_identifier', 'player_name', 'playtime', 'identifiers',
         ]);
-        $query->selectSub('SELECT COUNT(id) FROM warnings WHERE player_id=user_id', 'warning_count');
+        $query->selectSub('SELECT COUNT(`id`) FROM `warnings` WHERE `player_id` = `user_id`', 'warning_count');
 
-        $players = $query->paginate(10, [
-            'user_id',
-        ])->appends($request->query());
+        $page = Paginator::resolveCurrentPage('page');
+        $query->limit(15)->offset(($page - 1) * 15);
+
+        $players = $query->get();
 
         $end = round(microtime(true) * 1000);
 
         return Inertia::render('Players/Index', [
             'players' => PlayerIndexResource::collection($players),
-            'filters' => $request->all('query'),
+            'filters' => [
+                'query'  => $request->input('query'),
+                'banned' => $request->input('banned') ?: 'all',
+            ],
+            'links'     => $this->getPageUrls($page),
             'time'    => $end - $start,
+            'page'      => $page,
         ]);
     }
 
