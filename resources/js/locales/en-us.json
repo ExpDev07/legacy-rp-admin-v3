@@ -16,6 +16,7 @@
             "unavailable": "Unavailable"
         },
         "all": "All",
+        "back": "Back",
         "server_id": "Server ID",
         "server_timeout": "Server ID is cached for 5 minutes",
         "info": "Info",

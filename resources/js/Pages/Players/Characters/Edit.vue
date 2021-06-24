@@ -28,6 +28,16 @@
             </div>
         </portal>
 
+        <portal to="actions">
+            <div>
+                <!-- Back -->
+                <a class="px-5 py-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500" :href="'/players/' + player.steamIdentifier">
+                    <i class="fas fa-backward"></i>
+                    {{ t('global.back') }}
+                </a>
+            </div>
+        </portal>
+
         <!-- Editing -->
         <v-section>
             <template #header>
@@ -271,7 +281,7 @@ export default {
             required: true,
         },
         motels: {
-            type: Object,
+            type: Array,
             required: true,
         },
     },
