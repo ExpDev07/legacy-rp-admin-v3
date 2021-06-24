@@ -15,6 +15,8 @@
             "offline": "Offline",
             "unavailable": "Unavailable"
         },
+        "all": "All",
+        "back": "Back",
         "server_id": "Server ID",
         "server_timeout": "Server ID is cached for 5 minutes",
         "info": "Info",
@@ -29,7 +31,8 @@
     },
     "home": {
         "title": "Dashboard",
-        "welcome": "Hello, {0}. Welcome to the dashboard!"
+        "welcome": "Hello, {0}. Welcome to the dashboard!",
+        "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue."
     },
     "nav": {
         "dark": "Dark Mode",
@@ -113,6 +116,7 @@
         "search_label": "Search by name, steam identifier, or any other identifier such as Discord id.",
         "none": "No players was found.",
         "search_btn": "Search players",
+        "is_banned": "Is Banned",
         "ban": {
             "issuing": "Issuing ban",
             "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",
@@ -177,11 +181,20 @@
             "cost": "Maintenance Cost",
             "rent": "Rent"
         },
+        "motels": {
+            "motels": "Motels",
+            "none": "This character does not have access to any motels.",
+            "expires": "Expires"
+        },
         "characters": {
             "characters": "Characters",
             "hide": "Hide deleted",
             "show": "Show deleted",
-            "none": "This player has not created any characters yet."
+            "none": "This player has not created any characters yet.",
+            "remove_tattoo": "Remove Characters Tattoos",
+            "sure_tattoos": "Are you sure you want to remove this characters tattoos?",
+            "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to log-out (soft-nap) and log back in to the game for the changes to take affect.</b>",
+            "tattoo_do": "Remove tattoos"
         },
         "edit": {
             "born": "Born on <b>{0}</b>",
@@ -214,6 +227,21 @@
         "placeholder_action": "Death",
         "placeholder_details": "Marius killed jax with an AK-47",
         "search": "Search in logs"
+    },
+    "panel_logs": {
+        "title": "Panel Logs",
+        "description": "On this page you can view and filter the panel logs.",
+        "logs": "Logs",
+        "filter": "Filter Logs",
+        "source": "Source",
+        "target": "Target",
+        "action": "Action",
+        "log": "Message",
+        "timestamp": "Timestamp",
+        "no_logs": "No logs were found.",
+        "placeholder_action": "Kicked Player",
+        "placeholder_log": "Twoot kicked Twentz",
+        "search": "Search logs"
     },
     "servers": {
         "title": "Servers",

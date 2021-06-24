@@ -105,7 +105,7 @@ class Server extends Model
 
             try {
                 $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
-            } catch(Throwable $t) {
+            } catch (Throwable $t) {
                 return [];
             }
 
@@ -127,6 +127,48 @@ class Server extends Model
         Cache::store('file')->set($cacheKey, self::$onlineMap[$cacheKey], 5 * 60);
 
         return self::$onlineMap[$cacheKey];
+    }
+
+    /**
+     * Collects all the /api.json data from all servers
+     *
+     * @return array
+     */
+    public static function collectAllApiData(): array
+    {
+        $serverIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        if (!$serverIps) {
+            return [];
+        }
+
+        if (Cache::store('file')->has('server_all_api')) {
+            return Cache::store('file')->get('server_all_api');
+        }
+
+        $result = [];
+        foreach ($serverIps as $serverIp) {
+            if ($serverIp) {
+                $serverIp = self::fixApiUrl($serverIp);
+
+                try {
+                    $json = Http::timeout(3)->get($serverIp . 'api.json')->json() ?? [];
+
+                    if ($json) {
+                        $result[] = [
+                            'joined' => isset($json['joinedAmount']) ? intval($json['joinedAmount']) : 0,
+                            'total'  => isset($json['maxClients']) ? intval($json['maxClients']) : 0,
+                            'queue'  => isset($json['queueAmount']) ? intval($json['queueAmount']) : 0,
+                        ];
+                    }
+                } catch (Throwable $t) {
+                }
+            }
+        }
+
+        Cache::store('file')->set('server_all_api', $result, 5 * 60);
+
+        return $result;
     }
 
 }

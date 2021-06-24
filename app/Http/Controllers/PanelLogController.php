@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\LogResource;
 use App\Log;
+use App\PanelLog;
 use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -11,7 +12,7 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class LogController extends Controller
+class PanelLogController extends Controller
 {
 
     /**
@@ -24,19 +25,16 @@ class LogController extends Controller
     {
         $start = round(microtime(true) * 1000);
 
-        $query = Log::query()->orderByDesc('timestamp');
+        $query = PanelLog::query()->orderByDesc('timestamp');
 
-        // Filtering by identifier.
-        if ($identifier = $request->input('identifier')) {
-            $query->where('identifier', $identifier);
+        // Filtering by source_identifier.
+        if ($source = $request->input('source')) {
+            $query->where('source_identifier', $source);
         }
 
-        // Filtering by server.
-        if ($server = $request->input('server')) {
-            // This aint workin
-            // $query->where('metadata->serverId', $server);
-
-            $query->where('details', 'LIKE', '% [' . intval($server) . '] %');
+        // Filtering by target_identifier.
+        if ($target = $request->input('target')) {
+            $query->where('target_identifier', $target);
         }
 
         // Filtering by action.
@@ -49,36 +47,36 @@ class LogController extends Controller
             }
         }
 
-        // Filtering by details.
-        if ($details = $request->input('details')) {
-            if (Str::startsWith($details, '=')) {
-                $details = Str::substr($details, 1);
-                $query->where('details', $details);
+        // Filtering by log.
+        if ($log = $request->input('log')) {
+            if (Str::startsWith($log, '=')) {
+                $log = Str::substr($log, 1);
+                $query->where('log', $log);
             } else {
-                $query->where('details', 'like', "%{$details}%");
+                $query->where('log', 'like', "%{$log}%");
             }
         }
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
+        $query->select(['id', 'source_identifier', 'target_identifier', 'timestamp', 'log', 'action']);
         $query->limit(15)->offset(($page - 1) * 15);
 
-        $logs = LogResource::collection($query->get());
+        $logs = $query->get()->toArray();
 
         $end = round(microtime(true) * 1000);
 
-        return Inertia::render('Logs/Index', [
+        return Inertia::render('PanelLogs/Index', [
             'logs'      => $logs,
             'filters'   => $request->all(
-                'identifier',
-                'server',
+                'source',
+                'target',
                 'action',
-                'details'
+                'log'
             ),
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
-            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
+            'playerMap' => Player::fetchSteamPlayerNameMap($logs, ['source_identifier', 'target_identifier']),
             'page'      => $page,
         ]);
     }

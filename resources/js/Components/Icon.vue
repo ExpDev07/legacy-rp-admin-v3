@@ -45,6 +45,7 @@
             </g>
         </g>
     </svg>
+    <i class="fas fa-clipboard-list text-lg" v-else-if="name === 'paperstack'"></i>
 </template>
 
 <script>

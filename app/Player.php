@@ -324,17 +324,25 @@ class Player extends Model
      * This is used instead of a left join as it appears to be a lot faster
      *
      * @param array $source
-     * @param string $sourceKey
+     * @param string|array $sourceKey
      * @return array
      */
-    public static function fetchSteamPlayerNameMap(array $source, string $sourceKey): array
+    public static function fetchSteamPlayerNameMap(array $source, $sourceKey): array
     {
+        if (!is_array($sourceKey)) {
+            $sourceKey = [$sourceKey];
+        }
+
         $identifiers = [];
         foreach ($source as $entry) {
-            if (!in_array($entry[$sourceKey], $identifiers)) {
-                $identifiers[] = $entry[$sourceKey];
+            foreach($sourceKey as $key) {
+                if (!in_array($entry[$key], $identifiers)) {
+                    $identifiers[] = $entry[$key];
+                }
             }
         }
+
+        $identifiers = array_values(array_unique($identifiers));
 
         $players = self::query()->whereIn('steam_identifier', $identifiers)->select([
             'steam_identifier', 'player_name',

@@ -28,6 +28,39 @@
             </div>
         </portal>
 
+        <portal to="actions">
+            <div>
+                <!-- Remove Tattoos -->
+                <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="function(e) {e.preventDefault(); isTattooRemoval = true}">
+                    <i class="fas fa-eraser"></i>
+                    {{ t('players.characters.remove_tattoo') }}
+                </a>
+                <!-- Back -->
+                <a class="px-5 py-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500" :href="'/players/' + player.steamIdentifier">
+                    <i class="fas fa-backward"></i>
+                    {{ t('global.back') }}
+                </a>
+            </div>
+        </portal>
+
+        <!-- Remove Tattoos -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isTattooRemoval">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.characters.sure_tattoos') }}</h3>
+                <p class="mb-8" v-html="t('players.characters.tattoo_no_undo')">
+                    {{ t('players.characters.tattoo_no_undo') }}
+                </p>
+                <div class="flex justify-end">
+                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isTattooRemoval = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="removeTattoos">
+                        {{ t('players.characters.tattoo_do') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Editing -->
         <v-section>
             <template #header>
@@ -214,6 +247,37 @@
             </template>
         </v-section>
 
+        <!-- Motels -->
+        <v-section>
+            <template #header>
+                <h2>
+                    {{ t('players.motels.motels') }}
+                </h2>
+            </template>
+
+            <template>
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
+                    <card
+                        :key="motel.id"
+                        v-for="(motel) in motels"
+                        :no_body="true"
+                    >
+                        <template #header>
+                            <h3 class="mb-2">
+                                {{ motel.motel }} #{{ motel.room_id }}
+                            </h3>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.motels.expires') }}:</span> {{ motel.expire | formatTime(true) }}
+                            </h4>
+                        </template>
+                    </card>
+                </div>
+                <p class="text-muted dark:text-dark-muted" v-if="character.properties.length === 0">
+                    {{ t('players.motels.none') }}
+                </p>
+            </template>
+        </v-section>
+
     </div>
 </template>
 
@@ -222,6 +286,7 @@ import Layout from './../../../Layouts/App';
 import VSection from './../../../Components/Section';
 import Card from './../../../Components/Card';
 import Badge from './../../../Components/Badge';
+import Modal from "../../../Components/Modal";
 
 export default {
     layout: Layout,
@@ -229,6 +294,7 @@ export default {
         VSection,
         Card,
         Badge,
+        Modal,
     },
     props: {
         player: {
@@ -237,6 +303,10 @@ export default {
         },
         character: {
             type: Object,
+            required: true,
+        },
+        motels: {
+            type: Array,
             required: true,
         },
     },
@@ -262,6 +332,7 @@ export default {
                 department_name: this.character.departmentName,
                 position_name: this.character.positionName,
             },
+            isTattooRemoval: false,
         };
     },
     methods: {
@@ -282,7 +353,14 @@ export default {
         resetPositionName() {
             this.form.position_name = null;
             this.submit();
-        }
+        },
+        async removeTattoos() {
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/removeTattoos');
+
+            // Reset.
+            this.isTattooRemoval = false;
+        },
     },
 }
 </script>

@@ -59,6 +59,11 @@ export default {
                     url: '/logs',
                 },
                 {
+                    label: this.t('panel_logs.title'),
+                    icon: 'paperstack',
+                    url: '/panel_logs',
+                },
+                {
                     label: this.t('twitter.title'),
                     icon: 'twitter',
                     url: '/twitter',
