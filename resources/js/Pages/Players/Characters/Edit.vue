@@ -47,7 +47,21 @@
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isTattooRemoval">
             <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.sure_tattoos') }}</h3>
-                <p class="mb-8" v-html="t('players.characters.tattoo_no_undo')">
+                <div class="w-full p-3 flex justify-between">
+                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="zone">
+                        {{ t('players.characters.tattoo_zone') }}
+                    </label>
+                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="zone">
+                        <option value="all">{{ t('players.characters.zone.all') }}</option>
+                        <option value="head" selected>{{ t('players.characters.zone.head') }}</option>
+                        <option value="left_arm">{{ t('players.characters.zone.left_arm') }}</option>
+                        <option value="right_arm">{{ t('players.characters.zone.right_arm') }}</option>
+                        <option value="torso">{{ t('players.characters.zone.torso') }}</option>
+                        <option value="left_leg">{{ t('players.characters.zone.left_leg') }}</option>
+                        <option value="right_leg">{{ t('players.characters.zone.right_leg') }}</option>
+                    </select>
+                </div>
+                <p v-html="t('players.characters.tattoo_no_undo')">
                     {{ t('players.characters.tattoo_no_undo') }}
                 </p>
                 <div class="flex justify-end">
@@ -356,7 +370,9 @@ export default {
         },
         async removeTattoos() {
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/removeTattoos');
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/removeTattoos', {
+                zone: $('#zone').val(),
+            });
 
             // Reset.
             this.isTattooRemoval = false;
