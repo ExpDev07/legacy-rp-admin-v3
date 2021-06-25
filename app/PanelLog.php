@@ -91,13 +91,14 @@ class PanelLog extends Model
      * @param string $fromIdentifier
      * @param string $toIdentifier
      * @param string $characterId
+     * @param string $zone
      */
-    public static function logTattooRemoval(string $fromIdentifier, string $toIdentifier, string $characterId)
+    public static function logTattooRemoval(string $fromIdentifier, string $toIdentifier, string $characterId, string $zone)
     {
         $from = self::resolvePlayerLogName($fromIdentifier);
         $to = self::resolvePlayerLogName($toIdentifier);
 
-        $log = $from . ' removed all tattoos character ' . $characterId . ' of ' . $to;
+        $log = $from . ' removed all tattoos (zone: ' . $zone . ') character ' . $characterId . ' of ' . $to;
         self::createLog($fromIdentifier, $toIdentifier, $log, 'Tattoo removal');
     }
 

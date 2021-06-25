@@ -170,12 +170,48 @@ class PlayerCharacterController extends Controller
      */
     public function removeTattoos(Player $player, Character $character, Request $request): RedirectResponse
     {
+        $zone = $request->get('zone');
+        $json = json_decode($character->tattoos_data, true);
+        $map = json_decode(file_get_contents(__DIR__ . '/../../../helpers/tattoo-map.json'), true);
+
+        if (!$map || !is_array($map)) {
+            return back()->with('success', 'Failed to load zone map');
+        }
+
+        if (!$zone || !in_array($zone, [
+                'all', 'head', 'left_arm', 'right_arm', 'torso', 'left_leg', 'right_leg'
+            ])) {
+            return back()->with('success', 'Invalid or no zone provided');
+        }
+
+        if ($zone === 'all') {
+            $json = [];
+        } else if (is_array($json)) {
+            $result = [];
+            foreach($json as $tattoo) {
+                if (!isset($tattoo['overlay'])) {
+                    continue;
+                }
+
+                $key = strtolower($tattoo['overlay']);
+                $z = isset($map[$key]) ? $map[$key] : null;
+
+                if (!$z || $z !== $zone) {
+                    $result[] = $tattoo;
+                }
+            }
+
+            $json = $result;
+        } else {
+            $json = [];
+        }
+
         $character->update([
-            'tattoos_data' => '[]',
+            'tattoos_data' => json_encode($json),
         ]);
 
         $user = $request->user();
-        PanelLog::logTattooRemoval($user->player->steam_identifier, $player->steam_identifier, $character->character_id);
+        PanelLog::logTattooRemoval($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $zone);
 
         return back()->with('success', 'Tattoos were removed successfully. The player has to log-out (softnap) and log back in to the game for the changes to take affect.');
     }
