@@ -22,7 +22,7 @@
                         </div>
 
                         <!-- Header -->
-                        <header class="flex items-start justify-between flex-grow mb-12">
+                        <header class="flex flex-wrap items-start justify-between flex-grow mb-12">
 
                             <!-- Title -->
                             <div class="max-w-full prose dark:text-white">

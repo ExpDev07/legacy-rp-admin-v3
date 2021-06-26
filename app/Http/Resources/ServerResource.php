@@ -20,7 +20,6 @@ class ServerResource extends JsonResource
             'id' => $this->id,
             'url' => $this->url,
             'information' => $this->resource->fetchApi(),
-            'connections' => $this->resource->fetchConnections(),
         ];
     }
 

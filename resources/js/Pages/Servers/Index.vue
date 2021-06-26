@@ -62,13 +62,13 @@
                         <h3 class="mb-2">
                             {{ t('servers.list.server') }} #{{ server.id }}
                         </h3>
-                        <h4 class="italic text-primary dark:text-dark-primary">
+                        <h4 class="italic text-primary dark:text-dark-primary" v-if="server.information !== null">
                             {{ t('servers.list.running') }} {{ server.information.serverVersion }}
                         </h4>
                     </template>
 
                     <template #default>
-                        <ul class="list-disc list-inside">
+                        <ul class="list-disc list-inside" v-if="server.information !== null">
                             <li>
                                 {{ t('servers.list.uptime') }}: <span class="font-semibold">{{ server.information.serverUptime }}</span>
                             </li>
@@ -82,6 +82,9 @@
                                 {{ t('servers.list.loading') }}: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
                             </li>
                         </ul>
+                        <p class="mt-2" v-else>
+                            {{ t('servers.no_data') }}
+                        </p>
                         <p class="mt-6 italic text-muted dark:text-dark-muted">
                             {{ t('servers.list.retrieved', server.url) }}
                         </p>

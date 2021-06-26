@@ -256,6 +256,7 @@
     "servers": {
         "title": "Servers",
         "description": "An overview of the game servers.",
+        "no_data": "No API data available",
         "list": {
             "server": "Server",
             "running": "Running",
