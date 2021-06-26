@@ -19,14 +19,22 @@ class OPFWResponse
     public string $message = '';
 
     /**
+     * The data
+     * @var mixed|null
+     */
+    public $data = null;
+
+    /**
      * OPFWResponse constructor.
      * @param bool $status
      * @param string $message
+     * @param mixed|null $data
      */
-    public function __construct(bool $status, string $message)
+    public function __construct(bool $status, string $message, $data = null)
     {
         $this->status = $status;
         $this->message = $message;
+        $this->data = $data;
     }
 
     /**

@@ -79,6 +79,34 @@ class OPFWHelper
     }
 
     /**
+     * Updates tattoo data for a player
+     *
+     * @param Player $player
+     * @param string $character_id
+     * @return OPFWResponse
+     */
+    public static function updateTattoos(Player $player, string $character_id): OPFWResponse
+    {
+        $steam = $player->steam_identifier;
+
+        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        if (!$status->isOnline()) {
+            return new OPFWResponse(true, 'Player is offline, no refresh needed.');
+        }
+
+        $response = self::executeRoute($status->serverIp . 'execute/refreshTattoos', [
+            'steamIdentifier' => $steam,
+            'characterId'     => $character_id,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Updated tattoo data for player.';
+        }
+
+        return $response;
+    }
+
+    /**
      * Executes an op-fw route
      *
      * @param string $route
@@ -101,24 +129,36 @@ class OPFWHelper
             ],
         ]);
 
-        $response = json_decode($res->getBody()->getContents(), true);
-        $code = 0;
-        if ($response) {
-            $code = intval($response['statusCode']);
-            $category = floor(intval($response['statusCode']) / 100);
+        $response = $res->getBody()->getContents();
 
-            switch (intval($response['statusCode'])) {
+        return self::parseResponse($response);
+    }
+
+    /**
+     * @param string $response
+     * @return OPFWResponse
+     */
+    public static function parseResponse(string $response): OPFWResponse
+    {
+        $json = json_decode($response, true);
+
+        $code = 0;
+        if ($json && isset($json['statusCode'])) {
+            $code = intval($json['statusCode']);
+            $category = floor(intval($json['statusCode']) / 100);
+
+            switch (intval($json['statusCode'])) {
                 case 401:
                     return new OPFWResponse(false, 'Invalid OP-FW configuration. Wrong token?');
                 case 400:
                 case 403:
                 case 404:
-                    return new OPFWResponse(false, !empty($response['message']) ? $response['message'] : 'Unknown error');
+                    return new OPFWResponse(false, !empty($json['message']) ? $json['message'] : 'Unknown error');
             }
 
             switch ($category) {
                 case 2: // All 200 status codes
-                    return new OPFWResponse(true, 'Successfully executed route');
+                    return new OPFWResponse(true, !empty($json['message']) ? 'Success: ' . $json['message'] : 'Successfully executed route', isset($json['data']) ? $json['data'] : null);
             }
         }
 

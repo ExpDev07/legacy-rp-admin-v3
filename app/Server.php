@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\OPFWHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -103,13 +104,17 @@ class Server extends Model
         if (!isset(self::$onlineMap[$cacheKey]) || empty(self::$onlineMap[$cacheKey])) {
             $serverIp = self::fixApiUrl($serverIp);
 
+            $json = null;
             try {
-                $json = Http::timeout(3)->get($serverIp . 'connections.json')->json() ?? [];
+                $json = Http::timeout(3)->get($serverIp . 'connections.json')->body() ?? null;
             } catch (Throwable $t) {
                 return [];
             }
 
-            if ($json) {
+            $response = OPFWHelper::parseResponse($json);
+
+            if ($response->status && $response->data) {
+                $json = $response->data;
                 $assoc = [];
 
                 foreach ($json['joining']['players'] as $player) {
@@ -154,9 +159,13 @@ class Server extends Model
                 $serverIp = self::fixApiUrl($serverIp);
 
                 try {
-                    $json = Http::timeout(3)->get($serverIp . 'api.json')->json() ?? [];
+                    $json = Http::timeout(3)->get($serverIp . 'api.json')->body() ?? [];
 
-                    if ($json) {
+                    $response = OPFWHelper::parseResponse($json);
+
+                    if ($response->status && $response->data) {
+                        $json = $response->data;
+
                         $result[] = [
                             'joined' => isset($json['joinedAmount']) ? intval($json['joinedAmount']) : 0,
                             'total'  => isset($json['maxClients']) ? intval($json['maxClients']) : 0,
