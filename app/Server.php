@@ -41,23 +41,15 @@ class Server extends Model
     /**
      * Gets the API data.
      *
-     * @return array|mixed
+     * @return array
      */
     public function fetchApi(): array
     {
-        // example: https://c3s1.op-framework.com/op-framework/api.json
-        return Http::get(self::fixApiUrl($this->url) . 'api.json')->json() ?? [];
-    }
+        $data = Http::get(self::fixApiUrl($this->url) . 'api.json')->body() ?? null;
 
-    /**
-     * Gets the connections data.
-     *
-     * @return array
-     */
-    public function fetchConnections(): array
-    {
-        // example: https://c3s1.op-framework.com/op-framework/connections.json
-        return Http::get(self::fixApiUrl($this->url) . 'connections.json')->json() ?? [];
+        $response = OPFWHelper::parseResponse($data);
+
+        return $response->status && $response->data ? $response->data : [];
     }
 
     /**
