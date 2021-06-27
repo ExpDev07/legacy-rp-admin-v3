@@ -8,8 +8,10 @@
             <p>
                 {{ t("home.welcome", $page.auth.user.name) }}
             </p>
+        </portal>
 
-            <div class="p-4 pl-6 italic border-l-4 border-gray-300 inline-block bg-gray-100 shadow-lg dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100">
+        <div class="flex mt-14 justify-between">
+            <div class="p-4 max-w-xl pl-6 italic border-l-4 border-gray-300 inline-block bg-gray-100 shadow-lg dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100">
                 <span class="mb-1 block" v-html="quote.quote">
                     {{ quote.quote }}
                 </span>
@@ -18,25 +20,57 @@
                 </span>
             </div>
 
-            <div class="flex mt-14">
+            <div class="ml-8">
                 <div class="p-4 bg-gray-100 shadow-lg dark:bg-gray-700 dark:text-gray-100 flex justify-between">
                     <vue-circle ref="serverCount"
-                        :progress="playerCountPercentage()"
-                        :size="70"
-                        line-cap="square"
-                        :fill="{ color: '#5a56c2' }"
-                        empty-fill="rgba(0, 0, 0, .1)"
-                        :animation-start-value="0.0"
-                        :start-angle="1.57079633"
-                        insert-mode="append"
-                        :thickness="7"
-                        :show-percent="false">
+                                :progress="playerCountPercentage()"
+                                :size="70"
+                                line-cap="square"
+                                :fill="{ color: '#5a56c2' }"
+                                empty-fill="rgba(0, 0, 0, .1)"
+                                :animation-start-value="0.0"
+                                :start-angle="1.57079633"
+                                insert-mode="append"
+                                :thickness="7"
+                                :show-percent="false">
                         <p class="text-sm font-semibold">{{ joinedPlayers }}</p>
                     </vue-circle>
-                    <p class="ml-3" v-html="playerCount">{{ playerCount }}</p>
+                    <p class="ml-3 pt-5" v-html="playerCount">{{ playerCount }}</p>
                 </div>
             </div>
-        </portal>
+        </div>
+
+        <div class="mt-14">
+            <h3 class="mb-2 dark:text-white">
+                {{ t('home.bans') }}
+            </h3>
+            <table class="w-full whitespace-no-wrap table-fixed max-w-screen-lg">
+                <tr class="font-semibold text-left">
+                    <th class="px-6 py-4 w-1/4">{{ t('home.ban.steam') }}</th>
+                    <th class="px-6 py-4 w-2/4">{{ t('home.ban.reason') }}</th>
+                    <th class="px-6 py-4 w-1/4">{{ t('home.ban.length') }}</th>
+                </tr>
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="ban in bans">
+                    <td class="px-6 py-3 border-t w-1/4">
+                        <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + ban.identifier">
+                            {{ ban.identifier }}
+                        </inertia-link>
+                    </td>
+                    <td class="px-6 py-3 border-t w-2/4" :title="ban.reason" v-if="ban.reason.length > 50">
+                        {{ ban.reason.substr(0, 50) + '...' }}
+                    </td>
+                    <td class="px-6 py-3 border-t w-2/4" v-else>
+                        {{ ban.reason }}
+                    </td>
+                    <td class="px-6 py-3 border-t w-1/4">{{ banTime(ban) }}</td>
+                </tr>
+                <tr v-if="bans.length === 0">
+                    <td class="px-6 py-6 text-center border-t" colspan="100%">
+                        {{ t('home.no_bans') }}
+                    </td>
+                </tr>
+            </table>
+        </div>
 
     </div>
 </template>
@@ -84,6 +118,9 @@ export default {
                 }
             } catch(e) {}
         },
+        banTime(ban) {
+            return ban.expireAt ? this.$options.filters.humanizeSeconds(this.$moment(ban.expireAt).unix() - this.$moment(ban.timestamp).unix()) : this.t('players.ban.forever_edit');
+        }
     },
     mounted() {
         const _this = this;
@@ -99,6 +136,10 @@ export default {
     props: {
         quote: {
             type: Object,
+            required: true,
+        },
+        bans: {
+            type: Array,
             required: true,
         },
     }

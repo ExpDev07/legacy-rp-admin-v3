@@ -32,7 +32,14 @@
     "home": {
         "title": "Dashboard",
         "welcome": "Hello, {0}. Welcome to the dashboard!",
-        "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue."
+        "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue.",
+        "bans": "Last 8 bans issued by you",
+        "ban": {
+            "steam": "Steam ID",
+            "reason": "Reason",
+            "length": "Length"
+        },
+        "no_bans": "No recent bans by you"
     },
     "nav": {
         "dark": "Dark Mode",
@@ -55,13 +62,37 @@
             "name": "Full Name",
             "plate": "Vehicle Plate",
             "job": "Job",
-            "phone": "Phone Number"
+            "phone": "Phone Number",
+            "field": "Field",
+            "value": "Value",
+            "type": "Type",
+            "fields": {
+                "character": "Character Table",
+                "vehicle": "Vehicle Table"
+            },
+            "types": {
+                "exact": "Exact Match",
+                "more": "More or equal (numbers only)",
+                "less": "Less or equal (numbers only)",
+                "like": "Like"
+            }
         },
         "result": {
             "player": "Player",
             "gender": "Gender",
-            "job": "Job"
-        }
+            "job": "Job",
+            "advanced": {
+                "title": "More Data",
+                "date_of_birth": "DoB",
+                "cash": "Cash",
+                "bank": "Bank",
+                "stocks_balance": "Stocks",
+                "jail": "Jail",
+                "phone": "Phone",
+                "vehicles": "Vehicles"
+            }
+        },
+        "none": "No Characters found"
     },
     "inventories": {
         "view": "View related inventory logs",
