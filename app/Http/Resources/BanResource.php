@@ -17,13 +17,14 @@ class BanResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'        => $this->id,
-            'banHash'   => $this->ban_hash,
-            'reason'    => $this->reason,
-            'expire'    => $this->expire,
-            'expireAt'  => $this->expireAt,
-            'timestamp' => $this->timestamp,
-            'issuer'    => $this->creator_name ?? null,
+            'id'         => $this->id,
+            'banHash'    => $this->ban_hash,
+            'reason'     => $this->reason,
+            'identifier' => $this->identifier,
+            'expire'     => $this->expire,
+            'expireAt'   => $this->expireAt,
+            'timestamp'  => $this->timestamp,
+            'issuer'     => $this->creator_name ?? null,
         ];
     }
 

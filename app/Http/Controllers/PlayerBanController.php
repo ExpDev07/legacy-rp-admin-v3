@@ -39,8 +39,9 @@ class PlayerBanController extends Controller
 
         // Create ban.
         $ban = array_merge([
-            'ban_hash'     => $hash,
-            'creator_name' => $user->player->player_name,
+            'ban_hash'           => $hash,
+            'creator_name'       => $user->player->player_name,
+            'creator_identifier' => $user->player->steam_identifier,
         ], $request->validated());
 
         // Get identifiers to ban.

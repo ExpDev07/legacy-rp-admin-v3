@@ -32,7 +32,14 @@
     "home": {
         "title": "Dashboard",
         "welcome": "Hello, {0}. Welcome to the dashboard!",
-        "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue."
+        "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue.",
+        "bans": "Last 8 bans issued by you",
+        "ban": {
+            "steam": "Steam ID",
+            "reason": "Reason",
+            "length": "Length"
+        },
+        "no_bans": "No recent bans by you"
     },
     "nav": {
         "dark": "Dark Mode",
