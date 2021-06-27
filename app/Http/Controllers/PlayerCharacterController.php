@@ -12,6 +12,7 @@ use App\Motel;
 use App\PanelLog;
 use App\Player;
 use App\Property;
+use App\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,41 @@ use Inertia\Response;
 
 class PlayerCharacterController extends Controller
 {
+    /**
+     * Fields that are allowed for the advanced search
+     */
+    const AllowedAdvancedFields = [
+        'characters.character_id',
+        'characters.backstory',
+        'characters.bank',
+        'characters.cash',
+        'characters.date_of_birth',
+        'characters.department_name',
+        'characters.first_name',
+        'characters.gender',
+        'characters.job_name',
+        'characters.last_name',
+        'characters.phone_number',
+        'characters.position_name',
+        'characters.steam_identifier',
+        'characters.stocks_balance',
+
+        'vehicles.vehicle_id',
+        'vehicles.model_name',
+        'vehicles.owner_cid',
+        'vehicles.plate',
+    ];
+
+    /**
+     * Allowed advance search types
+     */
+    const AllowedAdvancedTypes = [
+        'exact',
+        'more',
+        'less',
+        'like',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -32,76 +68,158 @@ class PlayerCharacterController extends Controller
         $start = round(microtime(true) * 1000);
 
         $query = Character::query()->orderBy('first_name');
+        $value = trim($request->get('value'));
+        $error = '';
 
-        // Filtering by cid.
-        if ($cid = $request->input('character_id')) {
-            $query->where('character_id', $cid);
-        }
+        if ($request->has('advanced') && $value) {
+            $field = $request->get('field');
+            $type = $request->get('type');
 
-        // Filtering by name.
-        if ($name = $request->input('name')) {
-            if (Str::startsWith($name, '=')) {
-                $name = Str::substr($name, 1);
-                $query->where(DB::raw('CONCAT(first_name, \' \', last_name)'), $name);
-            } else {
-                $query->where(DB::raw('CONCAT(first_name, \' \', last_name)'), 'like', "%{$name}%");
-            }
-        }
+            if (in_array($field, self::AllowedAdvancedFields) && $value && in_array($type, self::AllowedAdvancedTypes)) {
+                $table = explode('.', $field);
+                $field = $table[1];
+                $table = $table[0];
 
-        // Filtering by Vehicle Plate.
-        if ($plate = $request->input('vehicle_plate')) {
-            $query->whereHas('vehicles', function ($subQuery) use ($plate) {
-                if (Str::startsWith($plate, '=')) {
-                    $plate = Str::substr($plate, 1);
-                    $subQuery->where('plate', $plate);
+                if (in_array($type, ['more', 'less'])) {
+                    if (is_numeric($value)) {
+                        if (Str::contains($value, '.')) {
+                            $value = floatval($value);
+                        } else {
+                            $value = intval($value);
+                        }
+
+                        $type = $type === 'more' ? '>' : '<';
+                    } else {
+                        $error = 'Invalid value for more/less';
+                    }
+                } else if ($type === 'exact') {
+                    $type = '=';
+                } else if ($type === 'like') {
+                    $type = 'LIKE';
+                    $value = '%' . $value . '%';
                 } else {
-                    $subQuery->where('plate', 'like', "%{$plate}%");
+                    $error = 'Unknown type "' . $type . '"';
                 }
-            });
-        }
 
-        // Filtering by Phone Number.
-        if ($phone = $request->input('phone')) {
-            if (Str::startsWith($phone, '=')) {
-                $phone = Str::substr($phone, 1);
-                $query->where('phone_number', $phone);
+                if (!$error) {
+                    if ($table === 'vehicles') {
+                        $query->whereHas('vehicles', function ($subQuery) use ($value, $field, $type) {
+                            $subQuery->where($field, $type, $value);
+                        });
+                    } else {
+                        $query->where($field, $type, $value);
+                    }
+                }
             } else {
-                $query->where('phone_number', 'like', "%{$phone}%");
+                $error = 'Invalid form data';
+            }
+        } else {
+            // Filtering by cid.
+            if ($cid = $request->input('character_id')) {
+                $query->where('character_id', $cid);
+            }
+
+            // Filtering by name.
+            if ($name = $request->input('name')) {
+                if (Str::startsWith($name, '=')) {
+                    $name = Str::substr($name, 1);
+                    $query->where(DB::raw('CONCAT(first_name, \' \', last_name)'), $name);
+                } else {
+                    $query->where(DB::raw('CONCAT(first_name, \' \', last_name)'), 'like', "%{$name}%");
+                }
+            }
+
+            // Filtering by Vehicle Plate.
+            if ($plate = $request->input('vehicle_plate')) {
+                $query->whereHas('vehicles', function ($subQuery) use ($plate) {
+                    if (Str::startsWith($plate, '=')) {
+                        $plate = Str::substr($plate, 1);
+                        $subQuery->where('plate', $plate);
+                    } else {
+                        $subQuery->where('plate', 'like', "%{$plate}%");
+                    }
+                });
+            }
+
+            // Filtering by Phone Number.
+            if ($phone = $request->input('phone')) {
+                if (Str::startsWith($phone, '=')) {
+                    $phone = Str::substr($phone, 1);
+                    $query->where('phone_number', $phone);
+                } else {
+                    $query->where('phone_number', 'like', "%{$phone}%");
+                }
+            }
+
+            // Filtering by Job.
+            if ($job = $request->input('job')) {
+                if (Str::startsWith($phone, '=')) {
+                    $job = Str::substr($job, 1);
+                    $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), $job);
+                } else {
+                    $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), 'like', "%{$job}%");
+                }
             }
         }
 
-        // Filtering by Job.
-        if ($job = $request->input('job')) {
-            if (Str::startsWith($phone, '=')) {
-                $job = Str::substr($job, 1);
-                $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), $job);
-            } else {
-                $query->where(DB::raw('CONCAT(job_name, \' \', department_name, \' \', position_name)'), 'like', "%{$job}%");
-            }
+        if ($error) {
+            $query->where('character_id', '=', '-1');
         }
 
         $query->select([
             'character_id', 'steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',
-            'department_name', 'position_name', 'phone_number',
+            'department_name', 'position_name', 'phone_number', 'date_of_birth', 'cash', 'bank',
+            'stocks_balance', 'jail',
         ]);
 
         $characters = CharacterIndexResource::collection($query->paginate(15, [
             'id',
         ])->appends($request->query()));
 
+        $vehicleMap = [];
+        if ($request->has('advanced')) {
+            $list = $characters->toArray($request);
+
+            $ids = array_values(array_unique(array_map(function($character) {
+                return $character['id'];
+            }, $list)));
+
+            $vehicles = Vehicle::query()->whereIn('owner_cid', $ids)->select([
+                'owner_cid', 'model_name', 'vehicle_id'
+            ])->get()->toArray();
+            foreach($vehicles as $vehicle) {
+                $cid = $vehicle['owner_cid'];
+
+                if (!isset($vehicleMap[$cid])) {
+                    $vehicleMap[$cid] = [];
+                }
+
+                $vehicleMap[$cid][] = $vehicle['model_name'] . ' (' . $vehicle['vehicle_id'] . ')';
+            }
+        }
+        if (empty($vehicleMap)) {
+            $vehicleMap['none'] = 'none';
+        }
+
         $end = round(microtime(true) * 1000);
 
         return Inertia::render('Characters/Index', [
             'characters' => $characters,
-            'filters'    => $request->all(
-                'cid',
-                'name',
-                'vehicle_plate',
-                'phone',
-                'job'
-            ),
+            'filters'    => [
+                'cid'           => $request->get('cid'),
+                'name'          => $request->get('name'),
+                'vehicle_plate' => $request->get('vehicle_plate'),
+                'phone'         => $request->get('phone'),
+                'job'           => $request->get('job'),
+                'field'         => $request->get('field') ?? 'characters.character_id',
+                'type'          => $request->get('type') ?? 'exact',
+                'value'         => $request->get('value'),
+            ],
             'time'       => $end - $start,
             'playerMap'  => Player::fetchSteamPlayerNameMap($characters->toArray($request), 'steamIdentifier'),
+            'vehicleMap' => $vehicleMap,
+            'advanced'   => $request->has('advanced'),
+            'error'      => $error,
         ]);
     }
 
@@ -180,7 +298,7 @@ class PlayerCharacterController extends Controller
         }
 
         if (!$zone || !in_array($zone, [
-                'all', 'head', 'left_arm', 'right_arm', 'torso', 'left_leg', 'right_leg'
+                'all', 'head', 'left_arm', 'right_arm', 'torso', 'left_leg', 'right_leg',
             ])) {
             return back()->with('success', 'Invalid or no zone provided');
         }
@@ -189,7 +307,7 @@ class PlayerCharacterController extends Controller
             $json = [];
         } else if (is_array($json)) {
             $result = [];
-            foreach($json as $tattoo) {
+            foreach ($json as $tattoo) {
                 if (!isset($tattoo['overlay'])) {
                     continue;
                 }

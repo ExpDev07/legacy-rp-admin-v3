@@ -17,8 +17,9 @@ module.exports = {
                 'sans': [ 'Nunito', ...defaultTheme.fontFamily.sans ],
             },
             width: {
-                'inventory': '220px',
-                'alert':     '650px',
+                'inventory':          '220px',
+                'alert':              '650px',
+                'character_advanced': '550px',
             },
             colors: {
                 // Light & dark.

@@ -55,13 +55,37 @@
             "name": "Full Name",
             "plate": "Vehicle Plate",
             "job": "Job",
-            "phone": "Phone Number"
+            "phone": "Phone Number",
+            "field": "Field",
+            "value": "Value",
+            "type": "Type",
+            "fields": {
+                "character": "Character Table",
+                "vehicle": "Vehicle Table"
+            },
+            "types": {
+                "exact": "Exact Match",
+                "more": "More or equal (numbers only)",
+                "less": "Less or equal (numbers only)",
+                "like": "Like"
+            }
         },
         "result": {
             "player": "Player",
             "gender": "Gender",
-            "job": "Job"
-        }
+            "job": "Job",
+            "advanced": {
+                "title": "More Data",
+                "date_of_birth": "DoB",
+                "cash": "Cash",
+                "bank": "Bank",
+                "stocks_balance": "Stocks",
+                "jail": "Jail",
+                "phone": "Phone",
+                "vehicles": "Vehicles"
+            }
+        },
+        "none": "No Characters found"
     },
     "inventories": {
         "view": "View related inventory logs",
