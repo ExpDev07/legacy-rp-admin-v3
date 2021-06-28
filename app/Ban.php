@@ -51,6 +51,7 @@ class Ban extends Model
         'identifier',
         'smurf_account',
         'creator_name',
+        'creator_identifier',
         'reason',
         'timestamp',
         'expire',
