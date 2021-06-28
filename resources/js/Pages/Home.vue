@@ -10,7 +10,7 @@
             </p>
         </portal>
 
-        <div class="flex mt-14 justify-between">
+        <div class="flex mt-14 justify-between max-w-screen-2xl">
             <div class="p-4 max-w-xl pl-6 italic border-l-4 border-gray-300 inline-block bg-gray-100 shadow-lg dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100">
                 <span class="mb-1 block" v-html="quote.quote">
                     {{ quote.quote }}
