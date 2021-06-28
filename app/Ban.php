@@ -83,6 +83,11 @@ class Ban extends Model
         return $this->expire;
     }
 
+    public function getTimestamp(): int
+    {
+        return $this->timestamp->getTimestamp();
+    }
+
     /**
      * Checks if the ban has expired.
      *
