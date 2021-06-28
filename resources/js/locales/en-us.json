@@ -52,6 +52,51 @@
         "next": "Next",
         "page": "Page {0}"
     },
+    "advanced": {
+        "title": "Advanced Search",
+        "description": "Advanced search for different tables",
+        "results": "Results",
+        "no_results": "No results",
+        "search": "Search",
+        "show": "Show JSON Data",
+        "hide": "Hide JSON Data",
+        "form": {
+            "table": "Table-Name",
+            "field": "Field",
+            "type": "Type",
+            "value": "Value",
+            "types": {
+                "exact": "Exact Match",
+                "more": "More or equal (numbers only)",
+                "less": "Less or equal (numbers only)",
+                "like": "Like",
+                "not_null": "Is not NULL",
+                "null": "Is NULL",
+                "not_empty": "Is not empty",
+                "empty": "Is empty"
+            }
+        },
+        "characters": {
+            "player": "Player",
+            "character": "Character",
+            "more": "More Data"
+        },
+        "vehicles": {
+            "character": "Character",
+            "info": "Info",
+            "more": "More Data"
+        },
+        "users": {
+            "player": "Player",
+            "last_connection": "Last Connection",
+            "more": "More Data"
+        },
+        "properties": {
+            "character": "Character",
+            "address": "Address",
+            "more": "More Data"
+        }
+    },
     "characters": {
         "title": "Characters",
         "description": "Search for Characters.",
@@ -62,35 +107,11 @@
             "name": "Full Name",
             "plate": "Vehicle Plate",
             "job": "Job",
-            "phone": "Phone Number",
-            "field": "Field",
-            "value": "Value",
-            "type": "Type",
-            "fields": {
-                "character": "Character Table",
-                "vehicle": "Vehicle Table"
-            },
-            "types": {
-                "exact": "Exact Match",
-                "more": "More or equal (numbers only)",
-                "less": "Less or equal (numbers only)",
-                "like": "Like"
-            }
+            "phone": "Phone Number"
         },
         "result": {
             "player": "Player",
-            "gender": "Gender",
-            "job": "Job",
-            "advanced": {
-                "title": "More Data",
-                "date_of_birth": "DoB",
-                "cash": "Cash",
-                "bank": "Bank",
-                "stocks_balance": "Stocks",
-                "jail": "Jail",
-                "phone": "Phone",
-                "vehicles": "Vehicles"
-            }
+            "gender": "Gender"
         },
         "none": "No Characters found"
     },
