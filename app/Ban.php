@@ -51,6 +51,7 @@ class Ban extends Model
         'identifier',
         'smurf_account',
         'creator_name',
+        'creator_identifier',
         'reason',
         'timestamp',
         'expire',
@@ -81,6 +82,11 @@ class Ban extends Model
     public function getExpireTimeInSeconds(): ?int
     {
         return $this->expire;
+    }
+
+    public function getTimestamp(): int
+    {
+        return $this->timestamp->getTimestamp();
     }
 
     /**

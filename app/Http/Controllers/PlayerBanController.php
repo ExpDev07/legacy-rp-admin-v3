@@ -37,6 +37,8 @@ class PlayerBanController extends Controller
         $user = $request->user();
         $hash = Str::uuid()->toString();
 
+        var_dump($user->player->steam_identifier);
+
         // Create ban.
         $ban = array_merge([
             'ban_hash'           => $hash,
@@ -56,7 +58,12 @@ class PlayerBanController extends Controller
         // Go through the player's identifiers and create a ban record for each of them.
         Collection::make($identifiers)
             ->filter()
-            ->each(fn($identifier) => $player->bans()->updateOrCreate(['identifier' => $identifier], $ban));
+            ->each(function ($identifier) use ($player, $ban) {
+                $b = $ban;
+                $b['identifier'] = $identifier;
+
+                $player->bans()->updateOrCreate($b);
+            });
 
         // Create reason.
         $reason = $request->input('reason')
@@ -142,9 +149,12 @@ class PlayerBanController extends Controller
     public function update(Player $player, Ban $ban, BanUpdateRequest $request): RedirectResponse
     {
         $expireBefore = $ban->getExpireTimeInSeconds() ? $this->formatSeconds($ban->getExpireTimeInSeconds()) : 'permanent';
-        $expireAfter = $request->input('expire') ? $this->formatSeconds(intval($request->input('expire'))) : 'permanent';
+        $expireAfter = $request->input('expire') ? $this->formatSeconds(intval($request->input('expire')) + (time() - $ban->getTimestamp())) : 'permanent';
 
-        $ban->update($request->validated());
+        $bans = Ban::query()->where('ban_hash', '=', $ban->ban_hash)->get();
+        foreach ($bans->values() as $b) {
+            $b->update($request->validated());
+        }
 
         $user = $request->user();
         $reason = $request->input('reason') ?: 'No reason.';
