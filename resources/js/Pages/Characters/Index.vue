@@ -61,6 +61,19 @@
                             <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">* {{ t('global.search.exact') }}</small>
                             <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">** {{ t('global.search.like') }} {{ t('global.search.like_prepend') }}</small>
                         </div>
+                        <!-- Search button -->
+                        <div class="w-full px-3 mt-3">
+                            <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
+                            <span v-if="!isLoading">
+                                <i class="fas fa-search"></i>
+                                {{ t('characters.search') }}
+                            </span>
+                                <span v-else>
+                                <i class="fas fa-cog animate-spin"></i>
+                                {{ t('global.loading') }}
+                            </span>
+                            </button>
+                        </div>
                     </div>
                 </form>
             </template>
@@ -72,6 +85,9 @@
                 <h2>
                     {{ t('characters.title') }}
                 </h2>
+                <p class="text-muted dark:text-dark-muted text-xs">
+                    {{ t('global.results', time) }}
+                </p>
             </template>
 
             <template>
@@ -82,7 +98,7 @@
                         <th class="px-6 py-4">{{ t('characters.form.phone') }}</th>
                         <th class="px-6 py-4">{{ t('characters.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('characters.result.gender') }}</th>
-                        <th class="px-6 py-4">{{ t('characters.form.job') }}</th>
+                        <th class="px-6 py-4">{{ t('characters.result.job') }}</th>
                         <th class="px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="character in characters.data" :key="character.id">
@@ -125,7 +141,6 @@
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Pagination from './../../Components/Pagination';
-import throttle from "lodash/throttle";
 
 export default {
     layout: Layout,
@@ -148,27 +163,37 @@ export default {
         playerMap: {
             type: Object,
             required: true,
+        },
+        time: {
+            type: Number,
+            required: true,
         }
     },
+    data() {
+        return {
+            isLoading: false
+        };
+    },
     methods: {
-        refresh: function () {
-            this.$inertia.replace('/characters', {
-                data: this.filters,
-                preserveState: true,
-                preserveScroll: true,
-                only: [ 'characters' ],
-            });
+        refresh: async function () {
+            if (this.isLoading) {
+                return;
+            }
+
+            this.isLoading = true;
+            try {
+                await this.$inertia.replace('/characters', {
+                    data: this.filters,
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: [ 'characters', 'playerMap', 'time' ],
+                });
+            } catch(e) {}
+
+            this.isLoading = false;
         },
         playerName(steamIdentifier) {
             return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
-        }
-    },
-    watch: {
-        filters: {
-            deep: true,
-            handler: throttle(function () {
-                this.refresh();
-            }, 150),
         }
     }
 };

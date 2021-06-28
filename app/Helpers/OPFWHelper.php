@@ -10,6 +10,7 @@ use App\Player;
 use App\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
+use MongoDB\Driver\Session;
 
 class OPFWHelper
 {
@@ -130,6 +131,10 @@ class OPFWHelper
         ]);
 
         $response = $res->getBody()->getContents();
+
+        LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Executed route "' . $route . '"');
+        LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Data: ' . json_encode($data));
+        LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Result: ' . json_encode($response));
 
         return self::parseResponse($response);
     }

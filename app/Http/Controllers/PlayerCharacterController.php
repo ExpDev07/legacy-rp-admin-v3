@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Character;
+use App\Helpers\OPFWHelper;
 use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterIndexResource;
@@ -213,7 +214,13 @@ class PlayerCharacterController extends Controller
         $user = $request->user();
         PanelLog::logTattooRemoval($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $zone);
 
-        return back()->with('success', 'Tattoos were removed successfully. The player has to log-out (softnap) and log back in to the game for the changes to take affect.');
+        $info = 'In-Game Tattoo refresh failed, user has to softnap.';
+        $refresh = OPFWHelper::updateTattoos($player, $character->character_id);
+        if ($refresh->status) {
+            $info = 'In-Game tattoo refresh was successful too.';
+        }
+
+        return back()->with('success', 'Tattoos were removed successfully. ' . $info);
     }
 
 }
