@@ -29,6 +29,13 @@
         "results": "Search took {0} milliseconds.",
         "loading": "Loading..."
     },
+    "sidebar": {
+        "logs": "Logs",
+        "management": "Management",
+        "advanced": "Advanced",
+        "advanced_search": "Search",
+        "suspicious": "Suspicious"
+    },
     "home": {
         "title": "Dashboard",
         "welcome": "Hello, {0}. Welcome to the dashboard!",

@@ -46,6 +46,11 @@
         </g>
     </svg>
     <i class="fas fa-clipboard-list text-lg" v-else-if="name === 'paperstack'"></i>
+    <i class="fas fa-boxes" v-else-if="name === 'boxes'"></i>
+    <i class="fas fa-users" v-else-if="name === 'users'"></i>
+    <i class="fas fa-cogs" v-else-if="name === 'cogs'"></i>
+    <i class="fab fa-searchengin" v-else-if="name === 'search'"></i>
+    <i class="fas fa-heartbeat" v-else-if="name === 'heart'"></i>
 </template>
 
 <script>
