@@ -166,19 +166,46 @@
                     </div>
 
                     <!-- Expiration -->
-                    <div v-if="isTempBanning">
-                        <label class="italic font-semibold">
-                            {{ t('players.ban.expiration') }}
-                        </label>
-                        <div class="flex items-center">
-                            <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
-                            <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow" type="time" id="expireTime" name="expireTime" step="any" v-model="form.ban.expireTime" required>
+                    <div class="flex flex-wrap" v-if="isTempBanning">
+                        <div class="flex items-center space-x-3 w-full mb-3">
+                            <input class="block p-3 bg-gray-200 rounded shadow" type="checkbox" id="tempselect" v-model="isTempSelect">
+                            <label class="italic font-semibold" for="tempselect">
+                                {{ t('players.ban.temp-select') }}
+                            </label>
+                        </div>
+
+                        <div class="w-full" v-if="isTempSelect">
+                            <label class="italic font-semibold block mb-1">
+                                {{ t('players.ban.expiration') }}
+                            </label>
+                            <div class="flex items-center">
+                                <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow mr-1" type="date" id="expireDate" name="expireDate" step="any" :min="$moment().format('YYYY-MM-DD')" v-model="form.ban.expireDate" required>
+                                <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow" type="time" id="expireTime" name="expireTime" step="any" v-model="form.ban.expireTime" required>
+                            </div>
+                        </div>
+
+                        <div class="mr-1" v-if="!isTempSelect">
+                            <label class="italic font-semibold block mb-1">
+                                {{ t('players.ban.temp-value') }}
+                            </label>
+                            <input class="block p-3 bg-gray-200 dark:bg-gray-600 rounded shadow min-w-input" type="number" min="1" id="ban-value" step="1" required>
+                        </div>
+                        <div v-if="!isTempSelect">
+                            <label class="italic font-semibold block mb-1">
+                                {{ t('players.ban.temp-type') }}
+                            </label>
+                            <select class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 min-w-input" id="ban-type">
+                                <option value="hour">{{ t('players.ban.hour') }}</option>
+                                <option value="day">{{ t('players.ban.day') }}</option>
+                                <option value="week">{{ t('players.ban.week') }}</option>
+                                <option value="month">{{ t('players.ban.month') }}</option>
+                            </select>
                         </div>
                     </div>
 
                     <!-- Reason -->
                     <div>
-                        <label class="italic font-semibold" for="reason">
+                        <label class="italic font-semibold block mb-1" for="reason">
                             {{ t('players.ban.reason') }}
                         </label>
                         <textarea class="block w-full p-5 bg-gray-200 dark:bg-gray-600 rounded shadow" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.ban.reason"></textarea>
@@ -436,6 +463,7 @@ export default {
             isKicking: false,
             isStaffPM: false,
             isTempBanning: false,
+            isTempSelect: true,
             form: {
                 ban: {
                     reason: null,
@@ -493,8 +521,36 @@ export default {
             // Calculate expire relative to now in seconds if temp ban.
             if (this.isTempBanning) {
                 const nowUnix = this.$moment().unix();
-                const expireUnix = this.$moment(this.form.ban.expireDate + ' ' + this.form.ban.expireTime).unix();
-                expire = expireUnix - nowUnix;
+
+                if (this.isTempSelect) {
+                    const expireUnix = this.$moment(this.form.ban.expireDate + ' ' + this.form.ban.expireTime).unix();
+                    expire = expireUnix - nowUnix;
+                } else {
+                    let val = parseInt($('#ban-value').val());
+
+                    if (val <= 0) {
+                        return;
+                    }
+
+                    switch ($('#ban-type').val()) {
+                        case 'hour':
+                            val *= 60 * 60;
+                            break;
+                        case 'day':
+                            val *= 60 * 60 * 24;
+                            break;
+                        case 'week':
+                            val *= 60 * 60 * 24 * 7;
+                            break;
+                        case 'month':
+                            val *= 60 * 60 * 24 * 7 * 30;
+                            break;
+                        default:
+                            return;
+                    }
+
+                    expire = val;
+                }
             }
 
             // Send request.
@@ -504,6 +560,8 @@ export default {
 
             // Reset.
             this.isBanning = false;
+            this.isTempBanning = false;
+            this.isTempSelect = true;
             this.form.ban.reason = null;
             this.form.ban.expire = null;
             this.form.ban.expireDate = null;

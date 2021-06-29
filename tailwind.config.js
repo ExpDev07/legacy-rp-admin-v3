@@ -25,6 +25,9 @@ module.exports = {
                 'side-close':  '40px',
                 'side-open-two': '134px',
             },
+            minWidth: {
+                'input': '200px'
+            },
             colors: {
                 // Light & dark.
                 'light': defaultTheme.colors.white,
