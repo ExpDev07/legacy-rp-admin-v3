@@ -22,7 +22,7 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4 max-w-screen-sm">
                         <!-- Type -->
-                        <div class="w-1/2 px-3">
+                        <div class="w-2/3 px-3">
                             <label class="block mb-2" for="logType">
                                 {{ t('suspicious.type') }}
                             </label>
@@ -31,10 +31,11 @@
                                 <option value="items">{{ t('suspicious.types.items') }}</option>
                                 <option value="characters">{{ t('suspicious.types.characters') }}</option>
                                 <option value="pawn">{{ t('suspicious.types.pawn') }}</option>
+                                <option value="warehouse">{{ t('suspicious.types.warehouse') }}</option>
                             </select>
                         </div>
                         <!-- Search button -->
-                        <div class="w-1/2 px-3">
+                        <div class="w-1/3 px-3">
                             <label class="block mb-2">&nbsp;</label>
                             <button class="px-5 block py-2 w-full font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
                                 <span v-if="!isLoading">
@@ -58,7 +59,7 @@
                 <h2>
                     {{ t('logs.logs') }}
                 </h2>
-                <p class="mb-2 text-sm" v-if="logType === 'items' || logType === 'pawn'">
+                <p class="mb-2 text-sm" v-if="logType === 'items' || logType === 'pawn' || logType === 'warehouse'">
                     {{ t('suspicious.cached') }}
                 </p>
                 <p class="text-muted dark:text-dark-muted text-xs">
@@ -68,7 +69,7 @@
 
             <template>
                 <table class="w-full whitespace-no-wrap">
-                    <tr class="font-semibold text-left" v-if="logType === 'items' || logType === 'pawn'">
+                    <tr class="font-semibold text-left" v-if="logType === 'items' || logType === 'pawn' || logType === 'warehouse'">
                         <th class="px-6 py-4">{{ t('suspicious.items.player') }}</th>
                         <th class="px-6 py-4">{{ t('suspicious.items.details') }}</th>
                         <th class="px-6 py-4">{{ t('suspicious.items.time') }}</th>
@@ -96,7 +97,7 @@
                     </tr>
 
                     <!-- Pawn -->
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="logType === 'pawn'">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="logType === 'pawn' || logType === 'warehouse'">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.identifier">
                                 {{ playerName(log.identifier) }}

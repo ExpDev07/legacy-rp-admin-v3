@@ -58,11 +58,12 @@
         "filter": "Filter",
         "type": "Type",
         "search": "Search",
-        "cached": "Logs are cached for 30 minutes to save resources.",
+        "cached": "Logs are cached for 10 minutes to save resources.",
         "types": {
             "items": "Illegal items being moved",
             "characters": "Characters with a lot of money",
             "pawn": "Big pawn shop sales",
+            "warehouse": "Big warehouse sales",
             "none": "Select type"
         },
         "items": {

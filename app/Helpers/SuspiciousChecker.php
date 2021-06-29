@@ -65,7 +65,7 @@ class SuspiciousChecker
             ])->orderByDesc('timestamp')
             ->get()->toArray();
 
-        Cache::put($key, $entries, 30 * 60);
+        Cache::put($key, $entries, 10 * 60);
 
         return $entries;
     }
@@ -78,8 +78,8 @@ class SuspiciousChecker
     public static function findSuspiciousCharacters(): array
     {
         return Character::query()
-            ->where(DB::raw('`cash`+`bank`'), '>=', 1250000)
-            ->orWhere('stocks_balance', '>=', 1000000)
+            ->where(DB::raw('`cash`+`bank`'), '>=', 1000000)
+            ->orWhere('stocks_balance', '>=', 500000)
             ->select(['steam_identifier', 'character_id', 'cash', 'bank', 'stocks_balance', 'first_name', 'last_name'])
             ->get()->toArray();
     }
@@ -97,49 +97,62 @@ class SuspiciousChecker
             return Cache::get($key, []);
         }
 
-        $logs = Log::query()
-            ->where('action', '=', 'Used Pawn Shop')
-            ->select(['details', 'timestamp'])
-            ->orderByDesc('timestamp')
-            ->get()->toArray();
+        $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 30 as `time`, `identifier` FROM `user_logs` WHERE action = 'Used Pawn Shop' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
 
-        $eval = [];
-        foreach ($logs as $log) {
-            $re = '/] \((steam:.+?)\).+?received \$(\d+)/mi';
-            preg_match($re, $log['details'], $match);
+        $sus = self::getSaleLogEntries($sql, 100000, 'jewelry');
 
-            if (sizeof($match) !== 3) {
-                continue;
-            }
+        Cache::put($key, $sus, 10 * 60);
 
-            $identifier = $match[1];
-            $cash = intval($match[2]);
-            $time = ceil(strtotime($log['timestamp']) / (5 * 60)) * (5 * 60);
+        return $sus;
+    }
 
-            if (!isset($eval[$time])) {
-                $eval[$time] = [];
-            }
-            if (!isset($eval[$time][$identifier])) {
-                $eval[$time][$identifier] = 0;
-            }
+    /**
+     * Finds entries where a lot of materials have been sold at the warehouse
+     *
+     * @return array
+     */
+    public static function findSuspiciousWarehouseUsages(): array
+    {
+        $key = 'warehouse_transactions';
 
-            $eval[$time][$identifier] += $cash;
+        if (Cache::has($key)) {
+            return Cache::get($key, []);
         }
+
+        $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 30 as `time`, `identifier` FROM `user_logs` WHERE action = 'Sold materials' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
+
+        $sus = self::getSaleLogEntries($sql, 10000, 'materials');
+
+        Cache::put($key, $sus, 10 * 60);
+
+        return $sus;
+    }
+
+    /**
+     * Parses [cash, identifier, time] arrays
+     *
+     * @param string $sql
+     * @param int $threshold
+     * @param string $name
+     * @return array
+     */
+    private static function getSaleLogEntries(string $sql, int $threshold, string $name): array
+    {
+        DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+        $logs = DB::select($sql);
 
         $sus = [];
-        foreach ($eval as $time => $ids) {
-            foreach ($ids as $id => $cash) {
-                if ($cash > 100000) {
-                    $sus[] = [
-                        'identifier' => $id,
-                        'details'    => 'Sold jewelry worth $' . number_format($cash) . ' in the span of 5 minutes',
-                        'timestamp'  => date('c', $time),
-                    ];
-                }
+        foreach ($logs as $log) {
+            $cash = intval($log->cash);
+
+            if ($cash > $threshold) {
+                $sus[] = [
+                    'identifier' => $log->identifier,
+                    'details'    => 'Sold ' . $name . ' worth $' . number_format($cash) . ' in the span of 5 minutes',
+                    'timestamp'  => date('c', intval($log->time)),
+                ];
             }
         }
-
-        Cache::put($key, $sus, 30 * 60);
 
         return $sus;
     }

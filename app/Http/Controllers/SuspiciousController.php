@@ -44,6 +44,10 @@ class SuspiciousController extends Controller
                     $logs = SuspiciousChecker::findSuspiciousPawnShopUsages();
                     $map = Player::fetchSteamPlayerNameMap($logs, 'identifier');
                     break;
+                case 'warehouse':
+                    $logs = SuspiciousChecker::findSuspiciousWarehouseUsages();
+                    $map = Player::fetchSteamPlayerNameMap($logs, 'identifier');
+                    break;
             }
         }
 
