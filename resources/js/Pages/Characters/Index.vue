@@ -98,7 +98,7 @@
                         <th class="px-6 py-4">{{ t('characters.form.phone') }}</th>
                         <th class="px-6 py-4">{{ t('characters.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('characters.result.gender') }}</th>
-                        <th class="px-6 py-4">{{ t('characters.result.job') }}</th>
+                        <th class="px-6 py-4">{{ t('characters.form.job') }}</th>
                         <th class="px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="character in characters.data" :key="character.id">

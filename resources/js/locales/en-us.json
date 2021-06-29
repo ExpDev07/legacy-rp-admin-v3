@@ -29,6 +29,13 @@
         "results": "Search took {0} milliseconds.",
         "loading": "Loading..."
     },
+    "sidebar": {
+        "logs": "Logs",
+        "management": "Management",
+        "advanced": "Advanced",
+        "advanced_search": "Search",
+        "suspicious": "Suspicious"
+    },
     "home": {
         "title": "Dashboard",
         "welcome": "Hello, {0}. Welcome to the dashboard!",
@@ -37,7 +44,8 @@
         "ban": {
             "steam": "Steam ID",
             "reason": "Reason",
-            "length": "Length"
+            "length": "Length",
+            "time": "Created at"
         },
         "no_bans": "No recent bans by you"
     },
@@ -51,6 +59,33 @@
         "previous": "Previous",
         "next": "Next",
         "page": "Page {0}"
+    },
+    "suspicious": {
+        "title": "Suspicious Things",
+        "description": "Suspicious log entries, characters, etc.",
+        "filter": "Filter",
+        "type": "Type",
+        "search": "Search",
+        "cached": "Logs are cached for 5 minutes to save resources and allow for quicker pagination.",
+        "types": {
+            "items": "Illegal items being moved",
+            "characters": "Characters with a lot of money",
+            "pawn": "Big pawn shop sales",
+            "warehouse": "Big warehouse sales",
+            "none": "Select type"
+        },
+        "items": {
+            "player": "Player",
+            "details": "Log details",
+            "time": "Timestamp"
+        },
+        "characters": {
+            "character": "Character",
+            "cash": "Cash",
+            "bank": "Bank",
+            "stocks_balance": "Stocks"
+        },
+        "no_logs": "No entries found"
     },
     "advanced": {
         "title": "Advanced Search",
@@ -180,7 +215,14 @@
             "banned_for": "Banned for about {0}",
             "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
             "forever": "<i>{0}</i> permanently banned this player",
-            "forever_edit": "forever"
+            "forever_edit": "forever",
+            "temp-select": "Toggle date/time input",
+            "temp-type": "Length Unit",
+            "temp-value": "Length",
+            "hour": "Hour(s)",
+            "day": "Day(s)",
+            "week": "Week(s)",
+            "month": "Month(s)"
         },
         "show": {
             "played": "<b>{0}</b> played",
