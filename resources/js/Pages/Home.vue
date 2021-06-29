@@ -46,23 +46,25 @@
             </h3>
             <table class="w-full whitespace-no-wrap table-fixed max-w-screen-lg">
                 <tr class="font-semibold text-left">
-                    <th class="px-6 py-4 w-1/4">{{ t('home.ban.steam') }}</th>
-                    <th class="px-6 py-4 w-2/4">{{ t('home.ban.reason') }}</th>
-                    <th class="px-6 py-4 w-1/4">{{ t('home.ban.length') }}</th>
+                    <th class="px-6 py-4">{{ t('home.ban.steam') }}</th>
+                    <th class="px-6 py-4">{{ t('home.ban.reason') }}</th>
+                    <th class="px-6 py-4">{{ t('home.ban.length') }}</th>
+                    <th class="px-6 py-4">{{ t('home.ban.time') }}</th>
                 </tr>
                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="ban in bans">
-                    <td class="px-6 py-3 border-t w-1/4">
+                    <td class="px-6 py-3 border-t">
                         <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + ban.identifier">
                             {{ ban.identifier }}
                         </inertia-link>
                     </td>
-                    <td class="px-6 py-3 border-t w-2/4" :title="ban.reason" v-if="ban.reason.length > 50">
+                    <td class="px-6 py-3 border-t" :title="ban.reason" v-if="ban.reason.length > 50">
                         {{ ban.reason.substr(0, 50) + '...' }}
                     </td>
-                    <td class="px-6 py-3 border-t w-2/4" v-else>
+                    <td class="px-6 py-3 border-t" v-else>
                         {{ ban.reason }}
                     </td>
-                    <td class="px-6 py-3 border-t w-1/4">{{ banTime(ban) }}</td>
+                    <td class="px-6 py-3 border-t">{{ banTime(ban) }}</td>
+                    <td class="px-6 py-3 border-t">{{ ban.timestamp | formatTime }}</td>
                 </tr>
                 <tr v-if="bans.length === 0">
                     <td class="px-6 py-6 text-center border-t" colspan="100%">

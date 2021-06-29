@@ -37,7 +37,8 @@
         "ban": {
             "steam": "Steam ID",
             "reason": "Reason",
-            "length": "Length"
+            "length": "Length",
+            "time": "Created at"
         },
         "no_bans": "No recent bans by you"
     },
