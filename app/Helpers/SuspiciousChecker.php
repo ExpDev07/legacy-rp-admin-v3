@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 class SuspiciousChecker
 {
     /**
-     * Items that cannot be obtained naturally
+     * Non stackable items that cannot be obtained naturally
      */
-    const UnusualItems = [
+    const SingleUnusualItems = [
         'Flare Gun',
         'Up-n-Atomizer',
         'Ceramic Pistol',
@@ -47,23 +47,16 @@ class SuspiciousChecker
      */
     public static function findInvalidItems(): array
     {
-        $items = self::UnusualItems;
+        $items = self::SingleUnusualItems;
         $key = 'unusual_items_' . md5(json_encode($items));
 
         if (Cache::has($key)) {
             return Cache::get($key, []);
         }
 
-        $entries = Log::query()
-            ->where('action', '=', 'Item Moved')
-            ->where(function ($query) use ($items) {
-                foreach ($items as $item) {
-                    $query->orWhere('details', 'LIKE', '%x ' . $item . ' to%');
-                }
-            })->select([
-                'identifier', 'details', 'timestamp',
-            ])->orderByDesc('timestamp')
-            ->get()->toArray();
+        $sql = "SELECT `identifier`, `details`, `timestamp` FROM `user_logs` WHERE action = 'Item Moved' AND SUBSTRING_INDEX(SUBSTRING_INDEX(details, ' moved ', -1), ' to ', 1) IN ('1x " . implode('\', \'1x ', $items) . "')";
+
+        $entries = json_decode(json_encode(DB::select($sql)), true);
 
         Cache::put($key, $entries, 10 * 60);
 
@@ -97,7 +90,7 @@ class SuspiciousChecker
             return Cache::get($key, []);
         }
 
-        $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 30 as `time`, `identifier` FROM `user_logs` WHERE action = 'Used Pawn Shop' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
+        $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 300 as `time`, `identifier` FROM `user_logs` WHERE action = 'Used Pawn Shop' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
 
         $sus = self::getSaleLogEntries($sql, 100000, 'jewelry');
 
@@ -119,7 +112,7 @@ class SuspiciousChecker
             return Cache::get($key, []);
         }
 
-        $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 30 as `time`, `identifier` FROM `user_logs` WHERE action = 'Sold materials' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
+        $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 300 as `time`, `identifier` FROM `user_logs` WHERE action = 'Sold materials' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
 
         $sus = self::getSaleLogEntries($sql, 10000, 'materials');
 
