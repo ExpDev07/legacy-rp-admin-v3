@@ -25,6 +25,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\SuspiciousController;
 use App\Http\Controllers\TwitterController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Advanced search.
     Route::get('/advanced', [AdvancedSearchController::class, 'index']);
+
+    // Suspicious.
+    Route::get('/suspicious', [SuspiciousController::class, 'index']);
 
     // Twitter.
     Route::resource('twitter', TwitterController::class);

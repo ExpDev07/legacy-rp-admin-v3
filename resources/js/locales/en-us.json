@@ -52,6 +52,32 @@
         "next": "Next",
         "page": "Page {0}"
     },
+    "suspicious": {
+        "title": "Suspicious Things",
+        "description": "Suspicious log entries, characters, etc.",
+        "filter": "Filter",
+        "type": "Type",
+        "search": "Search",
+        "cached": "Logs are cached for 30 minutes to save resources.",
+        "types": {
+            "items": "Illegal items being moved",
+            "characters": "Characters with a lot of money",
+            "pawn": "Big pawn shop sales",
+            "none": "Select type"
+        },
+        "items": {
+            "player": "Player",
+            "details": "Log details",
+            "time": "Timestamp"
+        },
+        "characters": {
+            "character": "Character",
+            "cash": "Cash",
+            "bank": "Bank",
+            "stocks_balance": "Stocks"
+        },
+        "no_logs": "No entries found"
+    },
     "advanced": {
         "title": "Advanced Search",
         "description": "Advanced search for different tables",
