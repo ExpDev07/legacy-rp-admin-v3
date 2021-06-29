@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class SuspiciousChecker
 {
+    const CacheTime = 5 * 60;
+
     /**
      * Non stackable items that cannot be obtained naturally
      */
@@ -58,7 +60,7 @@ class SuspiciousChecker
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
-        Cache::put($key, $entries, 10 * 60);
+        Cache::put($key, $entries, self::CacheTime);
 
         return $entries;
     }
@@ -94,7 +96,7 @@ class SuspiciousChecker
 
         $sus = self::getSaleLogEntries($sql, 100000, 'jewelry');
 
-        Cache::put($key, $sus, 10 * 60);
+        Cache::put($key, $sus, self::CacheTime);
 
         return $sus;
     }
@@ -116,7 +118,7 @@ class SuspiciousChecker
 
         $sus = self::getSaleLogEntries($sql, 10000, 'materials');
 
-        Cache::put($key, $sus, 10 * 60);
+        Cache::put($key, $sus, self::CacheTime);
 
         return $sus;
     }

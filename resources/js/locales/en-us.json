@@ -66,7 +66,7 @@
         "filter": "Filter",
         "type": "Type",
         "search": "Search",
-        "cached": "Logs are cached for 10 minutes to save resources.",
+        "cached": "Logs are cached for 5 minutes to save resources and allow for quicker pagination.",
         "types": {
             "items": "Illegal items being moved",
             "characters": "Characters with a lot of money",
