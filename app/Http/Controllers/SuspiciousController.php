@@ -26,27 +26,24 @@ class SuspiciousController extends Controller
         $start = round(microtime(true) * 1000);
 
         $logs = [];
-        $map = ['none' => 'none'];
         $type = null;
+        $map = 'identifier';
 
         // Filtering by type.
         if ($type = $request->input('logType')) {
             switch ($type) {
                 case 'items':
                     $logs = SuspiciousChecker::findInvalidItems();
-                    $map = Player::fetchSteamPlayerNameMap($logs, 'identifier');
                     break;
                 case 'characters':
                     $logs = SuspiciousChecker::findSuspiciousCharacters();
-                    $map = Player::fetchSteamPlayerNameMap($logs, 'steam_identifier');
+                    $map = 'steam_identifier';
                     break;
                 case 'pawn':
                     $logs = SuspiciousChecker::findSuspiciousPawnShopUsages();
-                    $map = Player::fetchSteamPlayerNameMap($logs, 'identifier');
                     break;
                 case 'warehouse':
                     $logs = SuspiciousChecker::findSuspiciousWarehouseUsages();
-                    $map = Player::fetchSteamPlayerNameMap($logs, 'identifier');
                     break;
             }
         }
@@ -56,6 +53,8 @@ class SuspiciousController extends Controller
         $page = Paginator::resolveCurrentPage('page');
 
         $logs = array_slice($logs, ($page - 1) * 15, 15);
+
+        $map = Player::fetchSteamPlayerNameMap($logs, $map);
 
         $end = round(microtime(true) * 1000);
 

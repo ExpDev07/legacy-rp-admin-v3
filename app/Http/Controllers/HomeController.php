@@ -6,6 +6,7 @@ use App\Ban;
 use App\Helpers\GeneralHelper;
 use App\Http\Resources\BanResource;
 use App\Server;
+use App\Player;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,11 +34,12 @@ class HomeController extends Controller
             ->orWhere('creator_name', '=', $name)
             ->orderByDesc('timestamp')
             ->where('identifier', 'LIKE', 'steam:%')
-            ->limit(8)->get());
+            ->limit(8)->get())->toArray($request);
 
         return Inertia::render('Home', [
-            'quote' => $quote,
-            'bans'  => $bans->toArray($request),
+            'quote'     => $quote,
+            'bans'      => $bans,
+            'playerMap' => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
         ]);
     }
 

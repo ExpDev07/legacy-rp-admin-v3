@@ -231,7 +231,7 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'logs', 'time', 'links', 'page', 'logType' ],
+                    only: [ 'logs', 'time', 'links', 'page', 'logType', 'playerMap' ],
                 });
             } catch(e) {}
 

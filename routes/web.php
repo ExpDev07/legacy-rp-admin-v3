@@ -26,6 +26,7 @@ use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\SuspiciousController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\TwitterController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -83,6 +84,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Servers.
     Route::resource('servers', ServerController::class);
+
+    // Testing.
+    Route::get('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

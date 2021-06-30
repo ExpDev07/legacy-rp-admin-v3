@@ -15,10 +15,10 @@
                     </inertia-link>
                     <a
                         href="#"
-                        class="flex flex-wrap items-center px-5 py-2 mb-3 -mt-1 rounded hover:bg-indigo-700 hover:text-white h-side-close overflow-hidden"
+                        class="flex flex-wrap items-center px-5 py-2 mb-3 -mt-1 rounded hover:bg-indigo-700 hover:text-white overflow-hidden"
                         :class="len(link.sub.length)"
                         @click="$event.preventDefault()"
-                        v-else
+                        v-else-if="$page.auth.player.isSuperAdmin"
                     >
                         <span class="block w-full mb-2">
                             <icon class="w-4 h-4 mr-3 fill-current" :name="link.icon"></icon>
@@ -37,6 +37,17 @@
                             </li>
                         </ul>
                     </a>
+                    <inertia-link
+                        class="flex items-center px-5 py-2 mb-3 rounded hover:bg-gray-900 hover:text-white"
+                        :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
+                        :href="sub.url"
+                        v-if="'sub' in link && !$page.auth.player.isSuperAdmin"
+                        v-for="sub in link.sub"
+                        :key="sub.label"
+                    >
+                        <icon class="w-4 h-4 mr-3 fill-current" :name="sub.icon"></icon>
+                        {{ sub.label }}
+                    </inertia-link>
                 </li>
             </ul>
         </nav>
@@ -144,7 +155,7 @@ export default {
         len(length) {
             switch(length) {
                 case 2:
-                    return 'hover:h-side-open-two';
+                    return 'h-side-close hover:h-side-open-two';
                 default:
                     return '';
             }
