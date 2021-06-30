@@ -54,7 +54,7 @@
                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="ban in bans">
                     <td class="px-6 py-3 border-t">
                         <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + ban.identifier">
-                            {{ ban.identifier }}
+                            {{ playerName(ban.identifier) }}
                         </inertia-link>
                     </td>
                     <td class="px-6 py-3 border-t" :title="ban.reason" v-if="ban.reason.length > 50">
@@ -122,6 +122,9 @@ export default {
         },
         banTime(ban) {
             return ban.expireAt ? this.$options.filters.humanizeSeconds(this.$moment(ban.expireAt).unix() - this.$moment(ban.timestamp).unix()) : this.t('players.ban.forever_edit');
+        },
+        playerName(steamIdentifier) {
+            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
         }
     },
     mounted() {
@@ -142,6 +145,10 @@ export default {
         },
         bans: {
             type: Array,
+            required: true,
+        },
+        playerMap: {
+            type: Object,
             required: true,
         },
     }
