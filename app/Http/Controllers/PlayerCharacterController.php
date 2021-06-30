@@ -21,6 +21,10 @@ use Inertia\Response;
 
 class PlayerCharacterController extends Controller
 {
+    const ValidTattooZones = [
+        'all', 'head', 'left_arm', 'right_arm', 'torso', 'left_leg', 'right_leg',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -176,26 +180,24 @@ class PlayerCharacterController extends Controller
         $map = json_decode(file_get_contents(__DIR__ . '/../../../helpers/tattoo-map.json'), true);
 
         if (!$map || !is_array($map)) {
-            return back()->with('success', 'Failed to load zone map');
+            return back()->with('error', 'Failed to load zone map');
         }
 
-        if (!$zone || !in_array($zone, [
-                'all', 'head', 'left_arm', 'right_arm', 'torso', 'left_leg', 'right_leg'
-            ])) {
-            return back()->with('success', 'Invalid or no zone provided');
+        if (!$zone || !in_array($zone, self::ValidTattooZones)) {
+            return back()->with('error', 'Invalid or no zone provided');
         }
 
         if ($zone === 'all') {
             $json = [];
         } else if (is_array($json)) {
             $result = [];
-            foreach($json as $tattoo) {
+            foreach ($json as $tattoo) {
                 if (!isset($tattoo['overlay'])) {
                     continue;
                 }
 
                 $key = strtolower($tattoo['overlay']);
-                $z = isset($map[$key]) ? $map[$key] : null;
+                $z = isset($map[$key]) ? $map[$key]['zone'] : null;
 
                 if (!$z || $z !== $zone) {
                     $result[] = $tattoo;

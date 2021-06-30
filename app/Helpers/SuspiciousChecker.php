@@ -15,6 +15,7 @@ class SuspiciousChecker
      * Non stackable items that cannot be obtained naturally
      */
     const SingleUnusualItems = [
+        'Fist',
         'Flare Gun',
         'Up-n-Atomizer',
         'Ceramic Pistol',
