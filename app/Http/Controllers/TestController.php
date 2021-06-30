@@ -32,18 +32,28 @@ class TestController extends Controller
             return self::respond(false, 'Failed to load tattoo map');
         }
 
-        if (!$zone || !in_array($zone, PlayerCharacterController::ValidTattooZones)) {
+        $valid = PlayerCharacterController::ValidTattooZones;
+        $valid[] = 'none';
+
+        if (!$zone || !in_array($zone, $valid)) {
             return self::respond(false, 'Invalid tattoo zone');
         }
 
-        $json = [];
-        foreach ($map as $key => $tattoo) {
-            if ($tattoo['zone'] === $zone || $zone === 'all') {
-                $json[] = [
-                    'overlay'    => $key,
-                    'collection' => $tattoo['collection'],
-                ];
+        $tattoos = json_decode($character->tattoos_data, true);
+        $json = $request->query('add') ? $tattoos : [];
+        if ($zone !== 'none') {
+            foreach ($map as $key => $tattoo) {
+                if ($tattoo['zone'] === $zone || $zone === 'all') {
+                    $json[] = [
+                        'overlay'    => $key,
+                        'collection' => $tattoo['collection'],
+                    ];
+                }
             }
+        }
+
+        if (sizeof($json) > sizeof($map) * 2) {
+            return self::respond(false, 'too many tattoos, max: ' . (sizeof($map) * 2) . ', current: ' . sizeof($tattoos) . ', new: ' . sizeof($json));
         }
 
         $character->update([
