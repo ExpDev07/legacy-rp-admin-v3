@@ -87,7 +87,7 @@
                             <i class="mr-1 fas fa-gavel"></i>
                             {{ t('players.show.pm_confirm') }}
                         </button>
-                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" type="button" @click="isKicking = false">
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" type="button" @click="isStaffPM = false">
                             {{ t('global.cancel') }}
                         </button>
                     </div>
