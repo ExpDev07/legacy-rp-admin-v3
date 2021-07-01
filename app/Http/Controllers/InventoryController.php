@@ -11,6 +11,7 @@ use App\Property;
 use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,10 +28,10 @@ class InventoryController extends Controller
     public function character(Character $character, Request $request): Response
     {
         $inventories = [
-            'character-' . $character->character_id . ':',
-            'locker-police-' . $character->character_id . ':',
-            'locker-mechanic-' . $character->character_id . ':',
-            'locker-ems-' . $character->character_id . ':',
+            'character-' . $character->character_id,
+            'locker-police-' . $character->character_id,
+            'locker-mechanic-' . $character->character_id,
+            'locker-ems-' . $character->character_id,
         ];
 
         return $this->searchInventories($request, $inventories);
@@ -48,10 +49,10 @@ class InventoryController extends Controller
         $type = $vehicle->vehicleType();
 
         $inventories = [
-            'trunk-' . $type . '-' . $vehicle->plate . ':',
-            'trunk-' . $type . '-' . $vehicle->vehicle_id . ':',
-            'glovebox-' . $type . '-' . $vehicle->plate . ':',
-            'glovebox-' . $type . '-' . $vehicle->vehicle_id . ':',
+            'trunk-' . $type . '-' . $vehicle->plate,
+            'trunk-' . $type . '-' . $vehicle->vehicle_id,
+            'glovebox-' . $type . '-' . $vehicle->plate,
+            'glovebox-' . $type . '-' . $vehicle->vehicle_id,
         ];
 
         return $this->searchInventories($request, $inventories);
@@ -67,39 +68,40 @@ class InventoryController extends Controller
     public function property(Property $property, Request $request): Response
     {
         $inventories = [
-            'property-' . $property->property_id . '-',
+            'property-' . $property->property_id . '-%',
         ];
 
-        return $this->searchInventories($request, $inventories);
+        return $this->searchInventories($request, $inventories, 'LIKE');
     }
 
     /**
      * @param Request $request
      * @param array $inventories
+     * @param bool $likeSearch
      * @return Response
      */
-    private function searchInventories(Request $request, array $inventories): Response
+    private function searchInventories(Request $request, array $inventories, bool $likeSearch = false): Response
     {
         $start = round(microtime(true) * 1000);
 
-        $query = Log::query()->orderByDesc('timestamp');
+        $fromSql = "SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' to ', -1), ' from ', 1), ':', 1)";
+        $toSql = "SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' to ', -1), ' from inventory ', -1), ':', 1)";
 
-        $query->fromSub('SELECT * FROM user_logs WHERE action=\'Item Moved\'', 'logs');
+        if ($likeSearch) {
+            $where = [];
+            foreach ($inventories as $inventory) {
+                $where[] = "(" . $fromSql . " LIKE '" . $inventory . "' OR $toSql LIKE '" . $inventory . "')";
+            }
+            $where = implode(' OR ', $where);
+        } else {
+            $where = $fromSql . " IN ('" . implode("', '", $inventories) . "')";
+        }
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $logs = InventoryLogResource::collection([]);
-        if (!empty($inventories)) {
-            foreach ($inventories as $inventory) {
-                $query->orWhere('details', 'LIKE', '%' . $inventory . '%');
-            }
+        $sql = "SELECT `identifier`, `details`, `timestamp` FROM `user_logs` WHERE `action`='Item Moved' AND (" . $where . ") ORDER BY `timestamp` LIMIT 15 OFFSET " . (($page - 1) * 15);
 
-            $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
-
-            $query->limit(15)->offset(($page - 1) * 15);
-
-            $logs = InventoryLogResource::collection($query->get());
-        }
+        $logs = InventoryLogResource::collection(DB::select($sql));
 
         $end = round(microtime(true) * 1000);
 

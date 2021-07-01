@@ -18,7 +18,6 @@ class InventoryLogResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'              => $this->id,
             'timestamp'       => $this->timestamp,
             'steamIdentifier' => $this->identifier,
             'inventoryFrom'   => Inventory::parseLogDetails($this->details, 'from'),
