@@ -27,6 +27,7 @@
             "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field."
         },
         "results": "Search took {0} milliseconds.",
+        "entries": "Showing {0} total entries on {1} page(s).",
         "loading": "Loading..."
     },
     "sidebar": {
@@ -66,12 +67,13 @@
         "filter": "Filter",
         "type": "Type",
         "search": "Search",
-        "cached": "Logs are cached for 5 minutes to save resources and allow for quicker pagination.",
+        "cached": "Logs are cached for 10 minutes to save resources and allow for quicker pagination.",
         "types": {
             "items": "Illegal items being moved",
             "characters": "Characters with a lot of money",
             "pawn": "Big pawn shop sales",
             "warehouse": "Big warehouse sales",
+            "unusual": "Big item movements",
             "none": "Select type"
         },
         "items": {
