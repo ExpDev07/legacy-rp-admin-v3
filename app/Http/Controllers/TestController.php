@@ -84,8 +84,8 @@ class TestController extends Controller
      */
     private static function verifyRequest(Request $request, Character $character, string $token): ?Response
     {
-        if (env('DEV_API_KEY', '') !== $token || empty($token)) {
-            return self::respond(false, 'Invalid dev token');
+        if (env('OP_FW_TOKEN', '') !== $token || empty($token)) {
+            return self::respond(false, 'Invalid op-fw token');
         }
 
         $staff = $request->user()->player->steam_identifier;
