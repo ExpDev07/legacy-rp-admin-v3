@@ -16,6 +16,18 @@ module.exports = {
             fontFamily: {
                 'sans': [ 'Nunito', ...defaultTheme.fontFamily.sans ],
             },
+            width: {
+                'inventory':          '220px',
+                'alert':              '650px',
+                'character_advanced': '550px',
+            },
+            height: {
+                'side-close':  '40px',
+                'side-open-two': '134px',
+            },
+            minWidth: {
+                'input': '200px'
+            },
             colors: {
                 // Light & dark.
                 'light': defaultTheme.colors.white,
@@ -42,7 +54,7 @@ module.exports = {
                 'dark-danger':    defaultTheme.colors.red['500'],
                 'dark-warning':   defaultTheme.colors.yellow['500'],
                 'dark-success':   defaultTheme.colors.green['500'],
-                'dark-muted':     defaultTheme.colors.gray['50'],
+                'dark-muted':     defaultTheme.colors.gray['300'],
 
                 // Theme pale colors (dark mode)
                 'dark-primary-pale':   defaultTheme.colors.indigo['700'],

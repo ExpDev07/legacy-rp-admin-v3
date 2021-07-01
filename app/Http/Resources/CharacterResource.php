@@ -23,7 +23,8 @@ class CharacterResource extends JsonResource
             'firstName'                  => $this->first_name,
             'lastName'                   => $this->last_name,
             'name'                       => $this->name,
-            'dateOfBirth'                => $this->date_of_birth->format('Y-m-d'),
+            'phoneNumber'                => $this->phone_number,
+            'dateOfBirth'                => $this->date_of_birth,
             'cash'                       => $this->cash,
             'bank'                       => $this->bank,
             'money'                      => $this->money,
@@ -33,6 +34,7 @@ class CharacterResource extends JsonResource
             'positionName'               => $this->position_name,
             'backstory'                  => $this->backstory,
             'vehicles'                   => VehicleResource::collection($this->vehicles),
+            'properties'                 => PropertyResource::collection($this->properties),
             'characterDeleted'           => $this->character_deleted,
             'characterDeletionTimestamp' => $this->character_deletion_timestamp,
         ];

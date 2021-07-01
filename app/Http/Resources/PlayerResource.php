@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +17,9 @@ class PlayerResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $path = explode('/', $request->path());
+        $loadStatus = sizeof($path) === 2 && $path[0] = 'players';
+
         return [
             'id'              => $this->user_id,
             'steamIdentifier' => $this->steam_identifier,
@@ -29,6 +33,7 @@ class PlayerResource extends JsonResource
             'isBanned'        => $this->isBanned(),
             'warnings'        => $this->warnings()->count(),
             'ban'             => new BanResource($this->getActiveBan()),
+            'status'          => $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null,
         ];
     }
 

@@ -31,27 +31,6 @@
             </template>
         </modal>
 
-        <modal :show.sync="isViewing" v-if="selectedServer">
-            <template #header>
-                <h1>
-                   Connections
-                </h1>
-                <p>
-                    This is an overview of all the connections for Server #{{ selectedServer.id }}.
-                </p>
-            </template>
-
-            <template #default>
-                Connections
-            </template>
-
-            <template #actions>
-                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200" @click="isViewing = false">
-                    Close
-                </button>
-            </template>
-        </modal>
-
         <portal to="title">
             <h1 class="dark:text-white">
                 {{ t('servers.title') }}
@@ -83,13 +62,13 @@
                         <h3 class="mb-2">
                             {{ t('servers.list.server') }} #{{ server.id }}
                         </h3>
-                        <h4 class="italic text-primary dark:text-dark-primary">
+                        <h4 class="italic text-primary dark:text-dark-primary" v-if="server.information !== null">
                             {{ t('servers.list.running') }} {{ server.information.serverVersion }}
                         </h4>
                     </template>
 
                     <template #default>
-                        <ul class="list-disc list-inside">
+                        <ul class="list-disc list-inside" v-if="server.information !== null">
                             <li>
                                 {{ t('servers.list.uptime') }}: <span class="font-semibold">{{ server.information.serverUptime }}</span>
                             </li>
@@ -103,13 +82,16 @@
                                 {{ t('servers.list.loading') }}: <span class="font-semibold">{{ server.information.joiningAmount }}</span>
                             </li>
                         </ul>
+                        <p class="mt-2" v-else>
+                            {{ t('servers.no_data') }}
+                        </p>
                         <p class="mt-6 italic text-muted dark:text-dark-muted">
                             {{ t('servers.list.retrieved', server.url) }}
                         </p>
                     </template>
 
                     <template #footer>
-                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/'">
+                        <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/servers/' + server.id">
                             {{ t('global.view') }}
                         </inertia-link>
                     </template>
@@ -134,7 +116,6 @@ export default {
         Card,
     },
     props: {
-        selectedServer: null,
         servers: {
             type: Object,
             required: true,
@@ -146,16 +127,6 @@ export default {
             form: {
                 url: '',
             },
-        }
-    },
-    computed: {
-        isViewing: {
-            get() {
-                return this.selectedServer !== null;
-            },
-            set(value) {
-                if (! value) this.selectedServer = null;
-            }
         }
     },
     methods: {

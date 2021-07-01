@@ -6,6 +6,10 @@ import moment from 'moment';
 import Localization from './Plugins/localization.js';
 import humanizeSeconds from './Filters/humanizeSeconds.js';
 import formatTime from './Filters/formatTime.js';
+import formatGender from './Filters/formatGender.js';
+import linkify from 'vue-linkify'
+
+Vue.directive('linkified', linkify);
 
 // Plugins.
 Vue.use(InertiaApp);
@@ -18,6 +22,7 @@ Vue.prototype.$moment = moment;
 // Custom filters.
 Vue.filter('humanizeSeconds', humanizeSeconds);
 Vue.filter('formatTime', formatTime);
+Vue.filter('formatGender', formatGender);
 
 // Create Vue.
 const app = document.getElementById('app');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarningsTable extends Migration
+class CreatePanelLogsTable extends Migration
 {
 
     /**
@@ -14,12 +14,12 @@ class CreateWarningsTable extends Migration
      */
     public function up()
     {
-        Schema::create('warnings', function (Blueprint $table) {
-            $table->id('id');
-            $table->unsignedBigInteger('issuer_id');
-            $table->unsignedBigInteger('player_id');
-            $table->text('message');
-            $table->timestamps();
+        Schema::create('panel_logs', function (Blueprint $table) {
+            $table->id();
+            $table->string('source_identifier');
+            $table->string('target_identifier');
+            $table->timestamp('timestamp')->useCurrent();
+            $table->string('log');
         });
     }
 
@@ -30,7 +30,7 @@ class CreateWarningsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warnings');
+        Schema::dropIfExists('panel_logs');
     }
 
 }

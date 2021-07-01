@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\LoggingHelper;
+use App\Helpers\SessionHelper;
+use App\Player;
 use App\User;
 use Illuminate\Http\Request;
 use kanalumaddela\LaravelSteamLogin\Http\Controllers\AbstractSteamLoginController;
@@ -20,18 +23,58 @@ class SteamController extends AbstractSteamLoginController
      */
     public function authenticated(Request $request, SteamUser $steam)
     {
+        $session = SessionHelper::getInstance();
+
+        LoggingHelper::log($session->getSessionKey(), 'Login triggered, getting user info');
         // Make sure to fetch the steam user information.
         $steam->getUserInfo();
 
+        LoggingHelper::log($session->getSessionKey(), 'Updating user in table');
         // Create the user or update them if already exists.
         $user = User::query()->updateOrCreate([
             'account_id' => $steam->steamId,
-            'name' => $steam->name,
-            'avatar' => $steam->avatar,
+            'name'       => $steam->name,
+            'avatar'     => $steam->avatar,
         ]);
 
-        // Log them in!
-        auth()->login($user, true);
+        LoggingHelper::log($session->getSessionKey(), 'Loading player');
+        $start = round(microtime(true) * 1000);
+
+        $player = Player::query()
+            ->where('steam_identifier', '=', 'steam:' . dechex(intval($steam->steamId)))
+            ->first();
+
+        $end = round(microtime(true) * 1000);
+        LoggingHelper::log($session->getSessionKey(), 'Player loaded in ' . ($end - $start) . 'ms');
+
+        $user = $user->toArray();
+
+        if (array_key_exists('avatar', $user) && empty($user['avatar'])) {
+            LoggingHelper::log($session->getSessionKey(), 'Setting default avatar');
+            $user['avatar'] = '/images/op-logo.png';
+        }
+
+        if ($player && !empty($user['avatar'])) {
+            $user['player'] = $player->toArray();
+            $user['player']['avatar'] = $user['avatar'];
+
+            LoggingHelper::log($session->getSessionKey(), 'Putting user in session');
+            $session->put('user', $user);
+        } else {
+            LoggingHelper::log($session->getSessionKey(), 'Failed to create login session {player:' . json_encode(!!$player) . ', user->avatar:' . json_encode(!empty($user['avatar'])) . '}');
+            LoggingHelper::log($session->getSessionKey(), 'user->' . json_encode([
+                'account_id' => $steam->steamId,
+                'identifier' => 'steam:' . dechex(intval($steam->steamId)),
+                'name'       => $steam->name,
+                'avatar'     => $steam->avatar,
+            ]));
+            LoggingHelper::log($session->getSessionKey(), 'steam->' . json_encode($steam->toArray()));
+            LoggingHelper::log($session->getSessionKey(), 'player->' . json_encode($player ? $player->toArray() : null));
+
+            return redirect('/login')->with('error', 'Failed to get information from steam, please contact a developer.');
+        }
+
+        return redirect('/');
     }
 
 }

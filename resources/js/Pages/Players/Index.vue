@@ -20,11 +20,42 @@
 
             <template>
                 <form @submit.prevent>
-                    <label class="block mb-4 font-semibold" for="name">
-                        {{ t('players.search_label') }}
-                    </label>
-                    <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
+                    <div class="flex flex-wrap mb-4">
+                        <div class="w-3/4 px-3">
+                            <label class="block mb-4 font-semibold" for="name">
+                                {{ t('players.search_label') }}
+                            </label>
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
+                        </div>
+                        <div class="w-1/4 px-3">
+                            <label class="block mb-4 font-semibold" for="banned">
+                                {{ t('players.is_banned') }}
+                            </label>
+                            <select class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="banned" name="banned" v-model="filters.banned">
+                                <option value="all">{{ t('global.all') }}</option>
+                                <option value="yes">{{ t('global.banned') }}</option>
+                                <option value="no">{{ t('global.not_banned') }}</option>
+                            </select>
+                        </div>
+                    </div>
                 </form>
+                <!-- Description -->
+                <div class="w-full mt-3">
+                    <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">{{ t('global.search.players') }}</small>
+                </div>
+                <!-- Search button -->
+                <div class="w-full mt-3">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
+                        <span v-if="!isLoading">
+                            <i class="fas fa-search"></i>
+                            {{ t('players.search_btn') }}
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </span>
+                    </button>
+                </div>
             </template>
         </v-section>
 
@@ -33,11 +64,15 @@
                 <h2>
                     {{ t('players.title') }}
                 </h2>
+                <p class="text-muted dark:text-dark-muted text-xs">
+                    {{ t('global.results', time) }}
+                </p>
             </template>
 
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left">
+                        <th class="px-6 py-4">{{ t('global.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.identifier') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.playtime') }}</th>
@@ -45,7 +80,15 @@
                         <th class="w-64 px-6 py-4">{{ t('players.form.banned') }}?</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="player in players.data" v-bind:key="player.id">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="player in players" v-bind:key="player.id">
+                        <td class="px-6 py-3 border-t" :title="t('global.server_timeout')">
+                            <span class="font-semibold" v-if="player.status.status === 'online'">
+                                {{ player.status.serverId }} <sup>{{ player.status.serverName }}</sup>
+                            </span>
+                            <span class="font-semibold" v-else>
+                                {{ t('global.status.' + player.status.status) }}
+                            </span>
+                        </td>
                         <td class="px-6 py-3 border-t">{{ player.steamIdentifier }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playTime | humanizeSeconds }}</td>
@@ -64,7 +107,7 @@
                             </inertia-link>
                         </td>
                     </tr>
-                    <tr v-if="players.data.length === 0">
+                    <tr v-if="players.length === 0">
                         <td class="px-6 py-6 text-center border-t" colspan="100%">
                             {{ t('players.none') }}
                         </td>
@@ -73,45 +116,97 @@
             </template>
 
             <template #footer>
-                <pagination v-bind:links="players.links" v-bind:meta="players.meta" />
+                <div class="flex items-center justify-between mt-6 mb-1">
+
+                    <!-- Navigation -->
+                    <div class="flex flex-wrap">
+                        <inertia-link
+                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            :href="links.prev"
+                            v-if="page >= 2"
+                        >
+                            <i class="mr-1 fas fa-arrow-left"></i>
+                            {{ t("pagination.previous") }}
+                        </inertia-link>
+                        <inertia-link
+                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            v-if="players.length === 15"
+                            :href="links.next"
+                        >
+                            {{ t("pagination.next") }}
+                            <i class="ml-1 fas fa-arrow-right"></i>
+                        </inertia-link>
+                    </div>
+
+                    <!-- Meta -->
+                    <div class="font-semibold">
+                        {{ t("pagination.page", page) }}
+                    </div>
+
+                </div>
             </template>
         </v-section>
     </div>
 </template>
 
 <script>
-import throttle from 'lodash/throttle';
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
+import Badge from './../../Components/Badge';
 import Pagination from './../../Components/Pagination';
 
 export default {
     layout: Layout,
     components: {
         VSection,
+        Badge,
         Pagination,
     },
     props: {
         players: {
-            type: Object,
+            type: Array,
             required: true,
         },
         filters: {
             query: String,
+            banned: String,
+        },
+        time: {
+            type: Number,
+            required: true,
+        },
+        links: {
+            type: Object,
+            required: true,
+        },
+        page: {
+            type: Number,
+            required: true,
         },
     },
-    watch: {
-        filters: {
-            handler: throttle(function () {
-                this.$inertia.replace('/players', {
+    data() {
+        return {
+            isLoading: false
+        };
+    },
+    methods: {
+        refresh: async function () {
+            if (this.isLoading) {
+                return;
+            }
+
+            this.isLoading = true;
+            try {
+                await this.$inertia.replace('/players', {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'players' ],
+                    only: [ 'players', 'time' ],
                 });
-            }, 150),
-            deep: true,
+            } catch(e) {}
+
+            this.isLoading = false;
         },
-    },
+    }
 }
 </script>

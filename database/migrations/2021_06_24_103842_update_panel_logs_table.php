@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLogsTable extends Migration
+class UpdatePanelLogsTable extends Migration
 {
 
     /**
@@ -14,13 +14,8 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_logs', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('identifier');
+        Schema::table('panel_logs', function (Blueprint $table) {
             $table->string('action');
-            $table->longText('details');
-            $table->json('metadata');
-            $table->timestamp('timestamp');
         });
     }
 
@@ -31,7 +26,9 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_logs');
+        Schema::table('panel_logs', function (Blueprint $table) {
+            $table->dropColumn('action');
+        });
     }
 
 }

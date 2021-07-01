@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\LoggingHelper;
+use App\Helpers\SessionHelper;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,6 +31,15 @@ class LoginController extends Controller
      */
     public function render(): Response
     {
+        $session = SessionHelper::getInstance();
+
+        if (session()->get('isLogout')) {
+            LoggingHelper::log($session->getSessionKey(), 'Rendering login view while coming from logout');
+
+            session()->forget('isLogout');
+            session()->forget('error');
+        }
+
         return Inertia::render('Login');
     }
 

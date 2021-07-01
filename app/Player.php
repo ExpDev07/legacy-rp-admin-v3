@@ -3,11 +3,13 @@
 namespace App;
 
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
 use SteamID;
 
@@ -118,11 +120,15 @@ class Player extends Model
         $identifier = $this->identifier;
         $identifiers = $this->identifiers;
 
+        if (!is_array($identifiers)) {
+            return [$identifier];
+        }
+
         if (in_array($identifier, $identifiers, true)) {
             return $identifiers;
         }
 
-        return array_merge([ $identifier ], $identifiers);
+        return array_merge([$identifier], $identifiers);
     }
 
     /**
@@ -154,7 +160,8 @@ class Player extends Model
      *
      * @return bool
      */
-    public function isSuperAdmin(): bool {
+    public function isSuperAdmin(): bool
+    {
         return $this->is_super_admin ?? false;
     }
 
@@ -165,7 +172,7 @@ class Player extends Model
      */
     public function isBanned(): bool
     {
-        return ! is_null($this->getActiveBan());
+        return !is_null($this->getActiveBan());
     }
 
     /**
@@ -178,7 +185,7 @@ class Player extends Model
         return $this
             ->bans()
             ->get()
-            ->filter(fn (Ban $ban) => !$ban->hasExpired())
+            ->filter(fn(Ban $ban) => !$ban->hasExpired())
             ->first();
     }
 
@@ -236,6 +243,16 @@ class Player extends Model
     }
 
     /**
+     * Gets the panel_logs relationship.
+     *
+     * @return HasMany
+     */
+    public function panelLogs(): HasMany
+    {
+        return $this->hasMany(PanelLog::class, 'target_identifier', 'steam_identifier');
+    }
+
+    /**
      * Gets the query for bans.
      *
      * @return Builder
@@ -245,6 +262,102 @@ class Player extends Model
         return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
+    /**
+     * Returns a map of steamIdentifier->serverId,server for each online player
+     *
+     * @param bool $useCache
+     * @return array
+     */
+    public static function getAllOnlinePlayers(bool $useCache): array
+    {
+        $serverIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        if (!$serverIps) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($serverIps as $serverIp) {
+            if ($serverIp) {
+                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp, $useCache);
+
+                foreach($steamIdentifiers as $key => $val) {
+                    if (!isset($result[$key])) {
+                        $result[$key] = [
+                            'id'     => intval($val),
+                            'server' => $serverIp
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the online status of the player
+     *
+     * @param string $steamIdentifier
+     * @param bool $useCache
+     * @return PlayerStatus
+     */
+    public static function getOnlineStatus(string $steamIdentifier, bool $useCache): PlayerStatus
+    {
+        $serverIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        if (!$serverIps) {
+            return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
+        }
+
+        $players = self::getAllOnlinePlayers($useCache);
+        if (isset($players[$steamIdentifier])) {
+            $player = $players[$steamIdentifier];
+            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id']);
+        }
+
+        return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
+    }
+
+    /**
+     * Returns a map of steamIdentifier->player_name
+     * This is used instead of a left join as it appears to be a lot faster
+     *
+     * @param array $source
+     * @param string|array $sourceKey
+     * @return array
+     */
+    public static function fetchSteamPlayerNameMap(array $source, $sourceKey): array
+    {
+        if (!is_array($sourceKey)) {
+            $sourceKey = [$sourceKey];
+        }
+
+        $identifiers = [];
+        foreach ($source as $entry) {
+            foreach($sourceKey as $key) {
+                if (!in_array($entry[$key], $identifiers)) {
+                    $identifiers[] = $entry[$key];
+                }
+            }
+        }
+
+        $identifiers = array_values(array_unique($identifiers));
+
+        $players = self::query()->whereIn('steam_identifier', $identifiers)->select([
+            'steam_identifier', 'player_name',
+        ])->get();
+        $playerMap = [];
+        foreach ($players as $player) {
+            $playerMap[$player->steam_identifier] = $player->player_name;
+        }
+
+        if (empty($playerMap)) {
+            $playerMap['empty'] = 'empty';
+        }
+
+        return $playerMap;
+    }
 }
 
 /**
@@ -258,8 +371,7 @@ function get_steam_id(string $identifier): ?SteamID
     try {
         // Get rid of any prefix.
         return new SteamID(hexdec(explode('steam:', $identifier)[1]));
-    }
-    catch (Exception $ex) {
+    } catch (Exception $ex) {
         return null;
     }
 }

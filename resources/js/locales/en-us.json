@@ -8,11 +8,47 @@
         "staff": "Staff Member",
         "super": "Super Admin",
         "cancel": "Cancel",
-        "view": "View"
+        "view": "View",
+        "refresh": "Refresh",
+        "status": {
+            "online": "Online",
+            "offline": "Offline",
+            "unavailable": "Unavailable"
+        },
+        "all": "All",
+        "back": "Back",
+        "server_id": "Server ID",
+        "server_timeout": "Server ID is cached for 5 minutes",
+        "info": "Info",
+        "search": {
+            "like": "Returns all rows where this field contains your query.",
+            "exact": "Returns all rows where this field exactly matches your query.",
+            "like_prepend": "If you put \"=\" in front of your query, it will search for an exact match which is faster in some occasions.",
+            "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field."
+        },
+        "results": "Search took {0} milliseconds.",
+        "entries": "Showing {0} total entries on {1} page(s).",
+        "loading": "Loading..."
+    },
+    "sidebar": {
+        "logs": "Logs",
+        "management": "Management",
+        "advanced": "Advanced",
+        "advanced_search": "Search",
+        "suspicious": "Suspicious"
     },
     "home": {
         "title": "Dashboard",
-        "welcome": "Hello, {0}. Welcome to the dashboard!"
+        "welcome": "Hello, {0}. Welcome to the dashboard!",
+        "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue.",
+        "bans": "Last 8 bans issued by you",
+        "ban": {
+            "steam": "Steam ID",
+            "reason": "Reason",
+            "length": "Length",
+            "time": "Created at"
+        },
+        "no_bans": "No recent bans by you"
     },
     "nav": {
         "dark": "Dark Mode",
@@ -25,20 +61,142 @@
         "next": "Next",
         "page": "Page {0}"
     },
+    "suspicious": {
+        "title": "Suspicious Things",
+        "description": "Suspicious log entries, characters, etc.",
+        "filter": "Filter",
+        "type": "Type",
+        "search": "Search",
+        "cached": "Logs are cached for 10 minutes to save resources and allow for quicker pagination.",
+        "types": {
+            "items": "Illegal items being moved",
+            "characters": "Characters with a lot of money",
+            "pawn": "Big pawn shop sales",
+            "warehouse": "Big warehouse sales",
+            "unusual": "Big item movements",
+            "none": "Select type"
+        },
+        "items": {
+            "player": "Player",
+            "details": "Log details",
+            "time": "Timestamp"
+        },
+        "characters": {
+            "character": "Character",
+            "cash": "Cash",
+            "bank": "Bank",
+            "stocks_balance": "Stocks"
+        },
+        "no_logs": "No entries found"
+    },
+    "advanced": {
+        "title": "Advanced Search",
+        "description": "Advanced search for different tables",
+        "results": "Results",
+        "no_results": "No results",
+        "search": "Search",
+        "show": "Show JSON Data",
+        "hide": "Hide JSON Data",
+        "form": {
+            "table": "Table-Name",
+            "field": "Field",
+            "type": "Type",
+            "value": "Value",
+            "types": {
+                "exact": "Exact Match",
+                "more": "More or equal (numbers only)",
+                "less": "Less or equal (numbers only)",
+                "like": "Like",
+                "not_null": "Is not NULL",
+                "null": "Is NULL",
+                "not_empty": "Is not empty",
+                "empty": "Is empty"
+            }
+        },
+        "characters": {
+            "player": "Player",
+            "character": "Character",
+            "more": "More Data"
+        },
+        "vehicles": {
+            "character": "Character",
+            "info": "Info",
+            "more": "More Data"
+        },
+        "users": {
+            "player": "Player",
+            "last_connection": "Last Connection",
+            "more": "More Data"
+        },
+        "properties": {
+            "character": "Character",
+            "address": "Address",
+            "more": "More Data"
+        }
+    },
     "characters": {
         "title": "Characters",
         "description": "Search for Characters.",
         "filter": "Filter Characters",
+        "search": "Search characters",
         "form": {
             "character_id": "Character ID",
             "name": "Full Name",
-            "plate": "Vehicle Plate"
+            "plate": "Vehicle Plate",
+            "job": "Job",
+            "phone": "Phone Number"
         },
         "result": {
             "player": "Player",
-            "gender": "Gender",
-            "job": "Job"
+            "gender": "Gender"
+        },
+        "none": "No Characters found"
+    },
+    "inventories": {
+        "view": "View related inventory logs",
+        "show": {
+            "error": "Invalid Inventory",
+            "title": "Inventory",
+            "type": {
+                "ground": "This is a ground inventory.",
+                "character": "This is a character inventory.",
+                "trunk": "This inventory is the trunk of a vehicle.",
+                "glovebox": "This inventory is the glovebox of a vehicle.",
+                "property": "This inventory is a storage container inside a property."
+            },
+            "vehicle": "Vehicle",
+            "owner": "Vehicle Owner",
+            "property": "Property",
+            "prop_owner": "Property Owner",
+            "prop_description": "The property is owned by {0} (#{1})",
+            "unknown_prop": "Unknown Property",
+            "character": "Character",
+            "view_character": "View Character",
+            "view_player": "View Player",
+            "plate_id": "Plate / ID",
+            "unknown_vehicle": "Unknown vehicle, possibly npc/local."
+        },
+        "character": {
+            "title": "Inventory Logs",
+            "movement": "Movement",
+            "item": "Moved Item",
+            "unknown": "Unknown",
+            "description": "Inventory logs related to a character"
         }
+    },
+    "twitter": {
+        "title": "Twitter Feed",
+        "description": "Latest twitter posts from inside the city",
+        "no_posts": "No Twitter posts",
+        "account": "Account",
+        "message": "Message",
+        "likes": "Likes",
+        "time": "Time",
+        "posts": "Posts",
+        "search": "Search",
+        "placeholder_message": "Selling keys hmu",
+        "placeholder_username": "iRobBanks",
+        "filter": "Filter posts"
     },
     "players": {
         "title": "Players",
@@ -46,13 +204,27 @@
         "search": "Search",
         "search_label": "Search by name, steam identifier, or any other identifier such as Discord id.",
         "none": "No players was found.",
+        "search_btn": "Search players",
+        "is_banned": "Is Banned",
         "ban": {
             "issuing": "Issuing ban",
             "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",
             "temporary": "This is a temporary ban",
             "expiration": "Expiration",
             "reason": "Reason",
-            "do_ban": "Ban player"
+            "do_ban": "Ban player",
+            "update_ban": "Update Ban",
+            "banned_for": "Banned for about {0}",
+            "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
+            "forever": "<i>{0}</i> permanently banned this player",
+            "forever_edit": "forever",
+            "temp-select": "Toggle date/time input",
+            "temp-type": "Length Unit",
+            "temp-value": "Length",
+            "hour": "Hour(s)",
+            "day": "Day(s)",
+            "week": "Week(s)",
+            "month": "Month(s)"
         },
         "show": {
             "played": "<b>{0}</b> played",
@@ -63,7 +235,16 @@
             "no_reason": "No reason.",
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
-            "no_warnings": "This player has not received any warnings."
+            "no_warnings": "This player has not received any warnings.",
+            "no_panel_logs": "This player has no panel logs.",
+            "edit_ban": "Edit Ban",
+            "kick": "Kick Player",
+            "staffpm": "StaffPM Player",
+            "kick_confirm": "Are you sure you want to kick this player from the server?",
+            "kick_reason": "Reason",
+            "pm_message": "Message",
+            "pm_confirm": "Send StaffPM",
+            "panel_logs": "Latest 25 Panel Logs"
         },
         "form": {
             "identifier": "Identifier",
@@ -90,15 +271,41 @@
             "parked": "Parked at <i>{0}</i>",
             "none": "This character does not own any vehicles."
         },
+        "properties": {
+            "properties": "Properties",
+            "none": "This character does not have access to any properties.",
+            "cost": "Maintenance Cost",
+            "rent": "Rent"
+        },
+        "motels": {
+            "motels": "Motels",
+            "none": "This character does not have access to any motels.",
+            "expires": "Expires"
+        },
         "characters": {
             "characters": "Characters",
             "hide": "Hide deleted",
             "show": "Show deleted",
-            "none": "This player has not created any characters yet."
+            "none": "This player has not created any characters yet.",
+            "remove_tattoo": "Remove Characters Tattoos",
+            "sure_tattoos": "Are you sure you want to remove this characters tattoos?",
+            "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to log-out (soft-nap) and log back in to the game for the changes to take affect.</b>",
+            "tattoo_do": "Remove tattoos",
+            "tattoo_zone": "Tattoo Body-Part",
+            "zone": {
+                "all": "All",
+                "head": "Head",
+                "left_arm": "Left Arm",
+                "right_arm": "Right Arm",
+                "torso": "Torso",
+                "left_leg": "Left Leg",
+                "right_leg": "Right Leg"
+            }
         },
         "edit": {
             "born": "Born on <b>{0}</b>",
             "cash": "<b>{0}</b> in cash/bank",
+            "cash_title": "{0} in cash and {1} bank",
             "stocks": "<b>{0}</b> in stocks",
             "prename": "First Name",
             "surname": "First Name",
@@ -106,7 +313,8 @@
             "dob": "Date of Birth",
             "deleted": "Deleted at",
             "update": "Update Character",
-            "job": "Job"
+            "job": "Job",
+            "phone": "Phone Number"
         }
     },
     "logs": {
@@ -123,11 +331,28 @@
         "timestamp": "Timestamp",
         "no_logs": "No logged actions were found.",
         "placeholder_action": "Death",
-        "placeholder_details": "Marius killed jax with an AK-47"
+        "placeholder_details": "Marius killed jax with an AK-47",
+        "search": "Search in logs"
+    },
+    "panel_logs": {
+        "title": "Panel Logs",
+        "description": "On this page you can view and filter the panel logs.",
+        "logs": "Logs",
+        "filter": "Filter Logs",
+        "source": "Source",
+        "target": "Target",
+        "action": "Action",
+        "log": "Message",
+        "timestamp": "Timestamp",
+        "no_logs": "No logs were found.",
+        "placeholder_action": "Kicked Player",
+        "placeholder_log": "Twoot kicked Twentz",
+        "search": "Search logs"
     },
     "servers": {
         "title": "Servers",
         "description": "An overview of the game servers.",
+        "no_data": "No API data available",
         "list": {
             "server": "Server",
             "running": "Running",
@@ -142,6 +367,12 @@
             "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
             "url": "URL",
             "do": "Add"
+        },
+        "show": {
+            "table": "Online Players",
+            "players": "Players: {0}",
+            "joined": "Joined at",
+            "delete": "Delete Server"
         }
     },
     "login": {
