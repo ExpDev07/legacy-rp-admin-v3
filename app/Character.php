@@ -79,6 +79,11 @@ class Character extends Model
     ];
 
     /**
+     * @var array
+     */
+    private static $cache = [];
+
+    /**
      * Gets the full name by concatenating first name and last name together.
      *
      * @return string
@@ -96,6 +101,18 @@ class Character extends Model
     protected function getMoneyAttribute(): int
     {
         return $this->cash + $this->bank;
+    }
+
+    /**
+     * @param int $characterId
+     * @return array|null
+     */
+    public static function find(int $characterId): ?array
+    {
+        if (!isset(self::$cache[$characterId])) {
+            self::$cache[$characterId] = self::query()->where('character_id', '=', $characterId)->first()->toArray() ?? [];
+        }
+        return self::$cache[$characterId];
     }
 
     /**

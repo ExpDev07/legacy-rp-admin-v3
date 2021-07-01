@@ -198,30 +198,16 @@ class AdvancedSearchController extends Controller
 
         $data = $query->get()->toArray();
 
-        $characters = [];
-
-        $result = array_map(function ($entry) use ($characters) {
+        $result = array_map(function ($entry) {
             $json = $entry;
 
             unset($json['vehicle_id']);
             unset($json['model_name']);
             unset($json['owner_cid']);
 
-            if (!isset($characters[$entry['owner_cid']])) {
-                $character = Character::query()->where('character_id', '=', $entry['owner_cid'])->first(['first_name', 'last_name']);
-                $characters[$entry['owner_cid']] = $character ?? null;
-            }
-
             return [
                 [
-                    'link' => [
-                        'target' => $characters[$entry['owner_cid']]
-                            ? '/players/' . $characters[$entry['owner_cid']]['steam_identifier'] . '/characters/' . $characters[$entry['owner_cid']]['character_id'] . '/edit'
-                            : '',
-                        'label'  => $characters[$entry['owner_cid']]
-                            ? $characters[$entry['owner_cid']]['first_name'] . ' ' . $characters[$entry['owner_cid']]['last_name']
-                            : $entry['owner_cid'],
-                    ],
+                    'link' => self::characterLinkArray($entry['owner_cid']),
                 ],
                 $entry['model_name'] . ' (' . $entry['vehicle_id'] . ')',
                 self::formatJSON($json),
@@ -255,29 +241,15 @@ class AdvancedSearchController extends Controller
 
         $data = $query->get()->toArray();
 
-        $characters = [];
-
-        $result = array_map(function ($entry) use ($characters) {
+        $result = array_map(function ($entry) {
             $json = $entry;
 
             unset($json['property_renter_cid']);
             unset($json['property_address']);
 
-            if (!isset($characters[$entry['property_renter_cid']])) {
-                $character = Character::query()->where('character_id', '=', $entry['property_renter_cid'])->first(['first_name', 'last_name']);
-                $characters[$entry['property_renter_cid']] = $character ?? null;
-            }
-
             return [
                 [
-                    'link' => [
-                        'target' => $characters[$entry['property_renter_cid']]
-                            ? '/players/' . $characters[$entry['property_renter_cid']]['steam_identifier'] . '/characters/' . $characters[$entry['property_renter_cid']]['character_id'] . '/edit'
-                            : '',
-                        'label'  => $characters[$entry['property_renter_cid']]
-                            ? $characters[$entry['property_renter_cid']]['first_name'] . ' ' . $characters[$entry['property_renter_cid']]['last_name']
-                            : ($entry['property_renter'] ?? 'N/A'),
-                    ],
+                    'link' => self::characterLinkArray($entry['property_renter_cid']),
                 ],
                 $entry['property_address'],
                 self::formatJSON($json),
@@ -371,7 +343,7 @@ class AdvancedSearchController extends Controller
 
             if (!isset($players[$entry['steam_identifier']])) {
                 $player = Player::query()->where('steam_identifier', '=', $entry['steam_identifier'])->first(['player_name']);
-                $players[$entry['steam_identifier']] = $player ? $player['player_name'] : $entry['steam_identifier'];
+                $players[$entry['steam_identifier']] = $player ? $player->player_name : $entry['steam_identifier'];
             }
 
             return [
@@ -419,6 +391,24 @@ class AdvancedSearchController extends Controller
             default:
                 $query->where($field, $type, $value);
         }
+    }
+
+    /**
+     * @param int $characterId
+     * @return array
+     */
+    private static function characterLinkArray(int $characterId): array
+    {
+        $character = Character::find($characterId);
+
+        return [
+            'target' => $character
+                ? '/players/' . $character['steam_identifier'] . '/characters/' . $character['character_id'] . '/edit'
+                : '',
+            'label'  => $character
+                ? $character['first_name'] . ' ' . $character['last_name']
+                : ($characterId ?? 'N/A'),
+        ];
     }
 
     /**
