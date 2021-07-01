@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SuspiciousChecker
 {
-    const CacheTime = 5 * 60;
+    const CacheTime = 10 * 60;
 
     /**
      * Non stackable items that cannot be obtained naturally
@@ -43,6 +43,7 @@ class SuspiciousChecker
         'Flare',
     ];
 
+
     /**
      * Finds items that cant be obtained in the city
      *
@@ -64,6 +65,38 @@ class SuspiciousChecker
         Cache::put($key, $entries, self::CacheTime);
 
         return $entries;
+    }
+
+    /**
+     * Finds item movements that have unusual amounts
+     *
+     * @return array
+     */
+    public static function findUnusualItems(): array
+    {
+        $key = 'unusual_item_movement';
+
+        if (Cache::has($key)) {
+            return Cache::get($key, []);
+        }
+
+        $sql = "SELECT * FROM (SELECT `identifier`, SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', 1)) as `amount`, SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', -1) as `item`, `details`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 600) * 600 as `time` FROM `user_logs` WHERE `action`='Item Moved' GROUP BY CONCAT(`identifier`, '|', `time`, '|', `item`) ORDER BY `time` DESC) `logs` WHERE amount > 250";
+
+        DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
+        $logs = DB::select($sql);
+
+        $sus = [];
+        foreach ($logs as $log) {
+            $sus[] = [
+                'identifier' => $log->identifier,
+                'details'    => 'Moved ' . number_format(intval($log->amount)) . ' of ' . $log->item . ' in the span of 10 minutes',
+                'timestamp'  => date('c', intval($log->time)),
+            ];
+        }
+
+        Cache::put($key, $sus, self::CacheTime);
+
+        return $sus;
     }
 
     /**

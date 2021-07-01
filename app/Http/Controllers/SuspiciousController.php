@@ -45,12 +45,17 @@ class SuspiciousController extends Controller
                 case 'warehouse':
                     $logs = SuspiciousChecker::findSuspiciousWarehouseUsages();
                     break;
+                case 'unusual':
+                    $logs = SuspiciousChecker::findUnusualItems();
+                    break;
             }
         }
 
         $type = $type ?? '';
 
         $page = Paginator::resolveCurrentPage('page');
+
+        $total = sizeof($logs);
 
         $logs = array_slice($logs, ($page - 1) * 15, 15);
 
@@ -66,6 +71,7 @@ class SuspiciousController extends Controller
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
             'page'      => $page,
+            'total'   => $total,
             'logType'   => $type,
             'playerMap' => $map,
         ]);
