@@ -62,7 +62,7 @@ class PlayerController extends Controller
         // Filtering isBanned.
         if ($banned = $request->input('banned')) {
             if ($banned === 'yes' || $banned === 'no') {
-                $ids = array_map(function($b) {
+                $ids = array_map(function ($b) {
                     return $b['identifier'];
                 }, Ban::query()->where('identifier', 'LIKE', 'steam:%')->select(['identifier'])->groupBy('identifier')->get()->toArray());
 
@@ -92,9 +92,9 @@ class PlayerController extends Controller
                 'query'  => $request->input('query'),
                 'banned' => $request->input('banned') ?: 'all',
             ],
-            'links'     => $this->getPageUrls($page),
+            'links'   => $this->getPageUrls($page),
             'time'    => $end - $start,
-            'page'      => $page,
+            'page'    => $page,
         ]);
     }
 
@@ -111,6 +111,7 @@ class PlayerController extends Controller
             'characters' => CharacterResource::collection($player->characters),
             'warnings'   => WarningResource::collection($player->warnings()->oldest()->get()),
             'panelLogs'  => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(25)->get()),
+            'discord'    => $player->getDiscordInfo(),
         ]);
     }
 

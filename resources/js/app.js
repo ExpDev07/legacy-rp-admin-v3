@@ -7,11 +7,14 @@ import Localization from './Plugins/localization.js';
 import humanizeSeconds from './Filters/humanizeSeconds.js';
 import formatTime from './Filters/formatTime.js';
 import formatGender from './Filters/formatGender.js';
-import linkify from 'vue-linkify'
+import linkify from 'vue-linkify';
+import VueClipboard from 'vue-clipboard2';
 
+// Directives.
 Vue.directive('linkified', linkify);
 
 // Plugins.
+Vue.use(VueClipboard);
 Vue.use(InertiaApp);
 Vue.use(PortalVue);
 Vue.use(Localization);
