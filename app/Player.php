@@ -97,7 +97,9 @@ class Player extends Model
      */
     public function getAvatarAttribute(): string
     {
-        return $this->getSteamUser()->avatar ?? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+        $steam = $this->getSteamUser();
+
+        return $steam && $steam->avatar ? $steam->avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
     }
 
     /**
@@ -202,14 +204,18 @@ class Player extends Model
     /**
      * Gets the steam user.
      *
-     * @return SteamUser
+     * @return SteamUser|null
      */
-    public function getSteamUser(): SteamUser
+    public function getSteamUser(): ?SteamUser
     {
-        $steam = new SteamUser($this->getSteamID()->ConvertToUInt64());
-        $steam->getUserInfo();
+        try {
+            $steam = new SteamUser($this->getSteamID()->ConvertToUInt64());
+            $steam->getUserInfo();
 
-        return $steam;
+            return $steam;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     /***
@@ -281,11 +287,11 @@ class Player extends Model
             if ($serverIp) {
                 $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp, $useCache);
 
-                foreach($steamIdentifiers as $key => $val) {
+                foreach ($steamIdentifiers as $key => $val) {
                     if (!isset($result[$key])) {
                         $result[$key] = [
                             'id'     => intval($val),
-                            'server' => $serverIp
+                            'server' => $serverIp,
                         ];
                     }
                 }
@@ -335,7 +341,7 @@ class Player extends Model
 
         $identifiers = [];
         foreach ($source as $entry) {
-            foreach($sourceKey as $key) {
+            foreach ($sourceKey as $key) {
                 if (!in_array($entry[$key], $identifiers)) {
                     $identifiers[] = $entry[$key];
                 }
