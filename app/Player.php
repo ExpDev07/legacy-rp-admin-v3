@@ -102,6 +102,19 @@ class Player extends Model
         return $steam && $steam->avatar ? $steam->avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
     }
 
+    public function getDiscordID(): string
+    {
+        $ids = $this->getIdentifiers();
+
+        foreach($ids as $id) {
+            if (Str::startsWith($id, 'discord:')) {
+                return str_replace('discord:', '', $id);
+            }
+        }
+
+        return '';
+    }
+
     /**
      * Gets a URL to the player's steam profile.
      *
