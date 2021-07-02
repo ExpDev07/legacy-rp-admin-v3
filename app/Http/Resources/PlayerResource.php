@@ -22,8 +22,8 @@ class PlayerResource extends JsonResource
 
         return [
             'id'              => $this->user_id,
+            'discord'         => $this->getDiscordID(),
             'steamIdentifier' => $this->steam_identifier,
-            'avatar'          => $this->avatar,
             'playerName'      => $this->player_name,
             'playTime'        => $this->playtime,
             'lastConnection'  => $this->last_connection,

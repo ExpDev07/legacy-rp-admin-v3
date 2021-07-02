@@ -30,10 +30,12 @@ class HomeController extends Controller
         $name = $user->player->player_name;
 
         $bans = BanResource::collection(Ban::query()
-            ->orWhere('creator_identifier', '=', $identifier)
-            ->orWhere('creator_name', '=', $name)
-            ->orderByDesc('timestamp')
+            ->where(function ($query) use ($identifier, $name) {
+                $query->orWhere('creator_identifier', '=', $identifier);
+                $query->orWhere('creator_name', '=', $name);
+            })
             ->where('identifier', 'LIKE', 'steam:%')
+            ->orderByDesc('timestamp')
             ->limit(8)->get())->toArray($request);
 
         return Inertia::render('Home', [
