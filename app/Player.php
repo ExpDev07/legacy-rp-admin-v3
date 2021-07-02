@@ -3,7 +3,6 @@
 namespace App;
 
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -234,7 +233,7 @@ class Player extends Model
     /**
      * Gets the steam user.
      *
-     * @return SteamUser|null
+     * @return array|null
      */
     public function getSteamUser(): ?array
     {
