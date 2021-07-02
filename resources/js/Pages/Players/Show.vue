@@ -334,6 +334,15 @@
                                 <i class="fas fa-briefcase mr-1"></i>
                                 {{ t('inventories.view') }}
                             </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
+                                href="#"
+                                @click="deleteCharacter($event, character.id)"
+                                v-if="!character.characterDeleted"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('players.characters.delete') }}
+                            </inertia-link>
                         </template>
                     </card>
                 </div>
@@ -547,6 +556,16 @@ export default {
             // Reset.
             this.isKicking = false;
             this.form.kick.reason = null;
+        },
+        async deleteCharacter(e, characterId) {
+            e.preventDefault();
+
+            if (!confirm(this.t('players.show.delete_character'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.delete('/players/' + this.player.steamIdentifier + '/characters/' + characterId);
         },
         async submitBan() {
             // Default expiration.
