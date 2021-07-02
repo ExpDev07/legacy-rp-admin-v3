@@ -244,6 +244,15 @@
                     <i class="mr-1 fab fa-steam"></i>
                     {{ t('players.show.steam') }}
                 </a>
+                <a
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
+                    target="_blank"
+                    :href="'https://discordapp.com/users/' + player.discord"
+                    v-if="player.discord"
+                >
+                    <i class="mr-1 fab fa-discord"></i>
+                    {{ t('players.show.discord') }}
+                </a>
 
             </div>
         </v-section>

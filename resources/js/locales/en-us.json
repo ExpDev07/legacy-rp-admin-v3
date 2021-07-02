@@ -235,6 +235,7 @@
             "no_reason": "No reason.",
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
+            "discord": "Open Discord profile",
             "no_warnings": "This player has not received any warnings.",
             "no_panel_logs": "This player has no panel logs.",
             "edit_ban": "Edit Ban",
