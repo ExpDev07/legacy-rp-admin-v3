@@ -236,6 +236,7 @@
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
             "discord": "Open Discord profile",
+            "discord_copy": "Copy Discord Info to clipboard",
             "no_warnings": "This player has not received any warnings.",
             "no_panel_logs": "This player has no panel logs.",
             "edit_ban": "Edit Ban",
@@ -245,7 +246,8 @@
             "kick_reason": "Reason",
             "pm_message": "Message",
             "pm_confirm": "Send StaffPM",
-            "panel_logs": "Latest 25 Panel Logs"
+            "panel_logs": "Latest 25 Panel Logs",
+            "delete_character": "Are you sure you want to delete this character?"
         },
         "form": {
             "identifier": "Identifier",
@@ -293,6 +295,7 @@
             "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to log-out (soft-nap) and log back in to the game for the changes to take affect.</b>",
             "tattoo_do": "Remove tattoos",
             "tattoo_zone": "Tattoo Body-Part",
+            "delete": "Delete this character",
             "zone": {
                 "all": "All",
                 "head": "Head",

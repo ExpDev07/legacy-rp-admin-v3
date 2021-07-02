@@ -14,6 +14,7 @@ use App\Player;
 use App\Property;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -163,6 +164,32 @@ class PlayerCharacterController extends Controller
         PanelLog::logCharacterEdit($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $changed);
 
         return back()->with('success', 'Character was successfully updated.');
+    }
+
+    /**
+     * Deletes the specified resource.
+     *
+     * @param Player $player
+     * @param Character $character
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function destroy(Request $request, Player $player, Character $character): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can delete characters.');
+        }
+
+        if ($character->character_deleted) {
+            return back()->with('error', 'Character is already deleted.');
+        }
+
+        if (DB::statement('UPDATE `characters` SET `character_deleted` = 1, `character_deletion_timestamp`=' . time() . ' WHERE `character_id` = ' . $character->character_id)) {
+            return back()->with('success', 'Character was successfully deleted.');
+        }
+
+        return back()->with('error', 'Failed to delete character.');
     }
 
     /**

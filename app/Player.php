@@ -3,11 +3,11 @@
 namespace App;
 
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
@@ -99,14 +99,30 @@ class Player extends Model
     {
         $steam = $this->getSteamUser();
 
-        return $steam && $steam->avatar ? $steam->avatar : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+        return $steam && isset($steam['avatar']) ? $steam['avatar'] : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
     }
 
+    /**
+     * Returns the discord user info (username, avatar, etc)
+     *
+     * @return array|null
+     */
+    public function getDiscordInfo(): ?array
+    {
+        $user = DiscordUser::getUser($this->getDiscordID());
+        return $user ? $user->toArray() : null;
+    }
+
+    /**
+     * Returns the discord user id
+     *
+     * @return string
+     */
     public function getDiscordID(): string
     {
         $ids = $this->getIdentifiers();
 
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             if (Str::startsWith($id, 'discord:')) {
                 return str_replace('discord:', '', $id);
             }
@@ -217,15 +233,25 @@ class Player extends Model
     /**
      * Gets the steam user.
      *
-     * @return SteamUser|null
+     * @return array|null
      */
-    public function getSteamUser(): ?SteamUser
+    public function getSteamUser(): ?array
     {
+        $id = $this->getSteamID()->ConvertToUInt64();
+        $key = 'steam_user_' . md5($id);
+
+        if (Cache::store('file')->has($key)) {
+            return Cache::store('file')->get($key);
+        }
+
         try {
-            $steam = new SteamUser($this->getSteamID()->ConvertToUInt64());
+            $steam = new SteamUser($id);
             $steam->getUserInfo();
 
-            return $steam;
+            $info = $steam->toArray();
+            Cache::store('file')->put($key, $info, 24 * 60 * 60);
+
+            return $info;
         } catch (\Exception $e) {
             return null;
         }

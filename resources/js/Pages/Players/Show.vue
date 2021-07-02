@@ -254,6 +254,35 @@
                     {{ t('players.show.discord') }}
                 </a>
 
+                <a
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
+                    target="_blank"
+                    v-if="discord"
+                    href="#"
+                    :title="t('players.show.discord_copy')"
+                    @click="copyText($event, '<@' + discord.id + '> ' + discord.username + '#' + discord.discriminator)"
+                >
+                    <avatar
+                        class="mr-3"
+                        :src="discord.avatar"
+                        :alt="discord.username + ' Avatar'"
+                    />
+                    <span>
+                        {{ discord.username }}#{{ discord.discriminator }}
+                    </span>
+                </a>
+                <a
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
+                    target="_blank"
+                    v-else-if="player.discord"
+                    href="#"
+                    :title="t('players.show.discord_copy')"
+                    @click="copyText($event, '<@' + discord.id + '>')"
+                >
+                    <i class="mr-1 fab fa-discord"></i>
+                    {{ t('players.show.discord') }}
+                </a>
+
             </div>
         </v-section>
 
@@ -313,6 +342,15 @@
                             >
                                 <i class="fas fa-briefcase mr-1"></i>
                                 {{ t('inventories.view') }}
+                            </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
+                                href="#"
+                                @click="deleteCharacter($event, character.id)"
+                                v-if="!character.characterDeleted"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('players.characters.delete') }}
                             </inertia-link>
                         </template>
                     </card>
@@ -433,6 +471,7 @@ import Badge from './../../Components/Badge';
 import Alert from './../../Components/Alert';
 import Card from './../../Components/Card';
 import Avatar from './../../Components/Avatar';
+import VueClipboard from 'vue-clipboard2';
 
 export default {
     layout: Layout,
@@ -442,6 +481,7 @@ export default {
         Alert,
         Card,
         Avatar,
+        VueClipboard,
     },
     props: {
         player: {
@@ -459,6 +499,9 @@ export default {
         warnings: {
             type: Array,
             required: true,
+        },
+        discord: {
+            type: Object,
         },
     },
     data() {
@@ -522,6 +565,16 @@ export default {
             // Reset.
             this.isKicking = false;
             this.form.kick.reason = null;
+        },
+        async deleteCharacter(e, characterId) {
+            e.preventDefault();
+
+            if (!confirm(this.t('players.show.delete_character'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.delete('/players/' + this.player.steamIdentifier + '/characters/' + characterId);
         },
         async submitBan() {
             // Default expiration.
@@ -592,7 +645,21 @@ export default {
             } else {
                 $('.card-deleted').addClass('hidden');
             }
+        },
+        copyText(e, text) {
+            e.preventDefault();
+            const button = $(e.target).closest('a');
+
+            this.$copyText(text).then(function() {
+                button.removeClass('bg-blue-800');
+                button.addClass('bg-green-600');
+
+                setTimeout(function() {
+                    button.removeClass('bg-green-600');
+                    button.addClass('bg-blue-800');
+                }, 500);
+            });
         }
-    },
+    }
 };
 </script>
