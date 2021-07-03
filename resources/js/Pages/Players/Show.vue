@@ -244,19 +244,9 @@
                     <i class="mr-1 fab fa-steam"></i>
                     {{ t('players.show.steam') }}
                 </a>
-                <a
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
-                    target="_blank"
-                    :href="'https://discordapp.com/users/' + player.discord"
-                    v-if="player.discord"
-                >
-                    <i class="mr-1 fab fa-discord"></i>
-                    {{ t('players.show.discord') }}
-                </a>
 
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
-                    target="_blank"
                     v-if="discord"
                     href="#"
                     :title="t('players.show.discord_copy')"
@@ -273,7 +263,6 @@
                 </a>
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
-                    target="_blank"
                     v-else-if="player.discord"
                     href="#"
                     :title="t('players.show.discord_copy')"
@@ -347,7 +336,7 @@
                                 class="block px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
                                 href="#"
                                 @click="deleteCharacter($event, character.id)"
-                                v-if="!character.characterDeleted"
+                                v-if="!character.characterDeleted && $page.auth.player.isSuperAdmin"
                             >
                                 <i class="fas fa-briefcase mr-1"></i>
                                 {{ t('players.characters.delete') }}
