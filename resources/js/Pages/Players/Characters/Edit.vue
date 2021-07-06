@@ -2,11 +2,11 @@
     <div>
 
         <portal to="title">
-            <div class="flex items-start space-x-10">
+            <div class="flex items-start space-x-10 mobile:flex-wrap">
                 <h1 class="dark:text-white">
                     {{ character.name }} #{{ character.id }}
                 </h1>
-                <div class="flex items-center space-x-5">
+                <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary">
                         <span class="font-semibold">
                             {{ character.gender | formatGender(t) }}
@@ -31,12 +31,12 @@
         <portal to="actions">
             <div>
                 <!-- Remove Tattoos -->
-                <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="function(e) {e.preventDefault(); isTattooRemoval = true}">
+                <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isTattooRemoval = true}">
                     <i class="fas fa-eraser"></i>
                     {{ t('players.characters.remove_tattoo') }}
                 </a>
                 <!-- Back -->
-                <a class="px-5 py-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500" :href="'/players/' + player.steamIdentifier">
+                <a class="px-5 py-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" :href="'/players/' + player.steamIdentifier">
                     <i class="fas fa-backward"></i>
                     {{ t('global.back') }}
                 </a>
@@ -87,19 +87,19 @@
                 <form @submit.prevent="submit(false)">
                     <!-- Name -->
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="first_name">
                                 {{ t('players.edit.prename') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="first_name" v-model="form.first_name">
                         </div>
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="last_name">
                                 {{ t('players.edit.surname') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="last_name" v-model="form.last_name">
                         </div>
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2">
                                 {{ t('players.edit.phone') }}
                             </label>
@@ -148,7 +148,7 @@
 
             <template>
                 <div class="flex flex-wrap mb-4">
-                    <div class="w-1/4 px-3">
+                    <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                         <label class="block mb-3" for="job">
                             {{ t('players.job.name') }}
                         </label>
@@ -156,7 +156,7 @@
                             <option :value="job.name" v-for="job in jobs">{{ job.name || t('global.none') }}</option>
                         </select>
                     </div>
-                    <div class="w-1/4 px-3" v-if="form.job_name === job.name" v-for="job in jobs">
+                    <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.job_name === job.name" v-for="job in jobs">
                         <label class="block mb-3" for="department">
                             {{ t('players.job.department') }}
                         </label>
@@ -165,7 +165,7 @@
                         </select>
                     </div>
                     <template v-if="form.job_name === job.name" v-for="job in jobs">
-                        <div class="w-1/4 px-3" v-if="form.department_name === department.name" v-for="department in job.departments">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.department_name === department.name" v-for="department in job.departments">
                             <label class="block mb-3" for="position">
                                 {{ t('players.job.position') }}
                             </label>
@@ -174,7 +174,7 @@
                             </select>
                         </div>
                     </template>
-                    <div class="w-1/4 px-3">
+                    <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                         <label class="block mb-3">&nbsp;</label>
                         <button class="block w-full px-4 py-3 mb-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="updateJob">
                             {{ t('players.job.set') }}

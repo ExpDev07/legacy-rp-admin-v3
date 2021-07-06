@@ -12,6 +12,11 @@ module.exports = {
         purgeLayersByDefault: true,
     },
     theme: {
+        screens: {
+            'mobile': {
+                'max': '640px'
+            }
+        },
         extend: {
             fontFamily: {
                 'sans': [ 'Nunito', ...defaultTheme.fontFamily.sans ],

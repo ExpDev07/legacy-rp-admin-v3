@@ -29,21 +29,21 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
                         <!-- Source -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="source">
                                 {{ t('panel_logs.source') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="source" placeholder="steam:11000010df22c8b" v-model="filters.source">
                         </div>
                         <!-- Target -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="target">
                                 {{ t('panel_logs.target') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="target" placeholder="steam:11000010d322da9" v-model="filters.target">
                         </div>
                         <!-- Action -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="action">
                                 {{ t('panel_logs.action') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
@@ -92,27 +92,27 @@
 
             <template>
                 <table class="w-full whitespace-no-wrap">
-                    <tr class="font-semibold text-left">
+                    <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('panel_logs.source') }}</th>
                         <th class="px-6 py-4">{{ t('panel_logs.target') }}</th>
                         <th class="px-6 py-4">{{ t('panel_logs.action') }}</th>
                         <th class="px-6 py-4">{{ t('panel_logs.log') }}</th>
                         <th class="px-6 py-4">{{ t('panel_logs.timestamp') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" :key="log.id">
-                        <td class="px-6 py-3 border-t">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="log in logs" :key="log.id">
+                        <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.source_identifier">
                                 {{ playerName(log.source_identifier) }}
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t">
+                        <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.target_identifier">
                                 {{ playerName(log.target_identifier) }}
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t">{{ log.action }}</td>
-                        <td class="px-6 py-3 border-t" >{{ log.log }}</td>
-                        <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ log.action }}</td>
+                        <td class="px-6 py-3 border-t mobile:block" >{{ log.log }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">

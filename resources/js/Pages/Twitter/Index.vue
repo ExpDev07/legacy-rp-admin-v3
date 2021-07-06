@@ -29,14 +29,14 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
                         <!-- Details -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-3" for="username">
                                 {{ t('twitter.account') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="username" :placeholder="t('twitter.placeholder_username')" v-model="filters.username">
                         </div>
                         <!-- Details -->
-                        <div class="w-2/3 px-3">
+                        <div class="w-2/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-3" for="message">
                                 {{ t('twitter.message') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
@@ -78,7 +78,7 @@
 
             <template>
                 <table class="w-full whitespace-no-wrap">
-                    <tr class="font-semibold text-left">
+                    <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4"></th>
                         <th class="px-6 py-4">{{ t('twitter.account') }}</th>
                         <th class="px-6 py-4">{{ t('twitter.message') }}</th>
@@ -86,29 +86,29 @@
                         <th class="px-6 py-4">{{ t('twitter.time') }}</th>
                         <th class="px-6 py-4"></th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="post in posts" :key="post.id">
-                        <td class="px-6 py-3 border-t" v-if="user(post.authorId)">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="post in posts" :key="post.id">
+                        <td class="px-6 py-3 border-t mobile:block" v-if="user(post.authorId)">
                             <img
                                 class="inline-block w-8 h-8 rounded-full ring-2 ring-white"
                                 :src="user(post.authorId).avatarUrl"
                                 @error="avatarError"
                             />
                         </td>
-                        <td class="px-6 py-3 border-t" v-else></td>
-                        <td class="px-6 py-3 border-t" v-if="user(post.authorId)">
+                        <td class="px-6 py-3 border-t mobile:hidden" v-else></td>
+                        <td class="px-6 py-3 border-t mobile:block" v-if="user(post.authorId)">
                             <span class="font-semibold" v-if="user(post.authorId).username.length <= 18">{{ user(post.authorId).username }}</span>
                             <span class="font-semibold" :title="user(post.authorId).username" v-else>{{ user(post.authorId).username.substring(0, 15) + '...' }}</span>
                         </td>
-                        <td class="px-6 py-3 border-t" v-else></td>
-                        <td class="px-6 py-3 border-t max-w-2xl" v-linkified:options="{ className: 'text-indigo-600 dark:text-indigo-400' }">{{ post.message }}</td>
-                        <td class="px-6 py-3 border-t">{{ post.likes }}</td>
-                        <td class="px-6 py-3 border-t">{{ post.time | formatTime(true) }}</td>
-                        <td class="px-6 py-3 border-t" v-if="character(post.realUser)">
+                        <td class="px-6 py-3 border-t mobile:hidden" v-else></td>
+                        <td class="px-6 py-3 border-t max-w-2xl mobile:block" v-linkified:options="{ className: 'text-indigo-600 dark:text-indigo-400' }">{{ post.message }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ post.likes }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ post.time | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block" v-if="character(post.realUser)">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + character(post.realUser).steam_identifier">
                                 <i class="fas fa-chevron-right"></i>
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t" v-else></td>
+                        <td class="px-6 py-3 border-t mobile:hidden" v-else></td>
                     </tr>
                     <tr v-if="posts.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
