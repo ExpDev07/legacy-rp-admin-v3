@@ -268,7 +268,7 @@
             "name": "Name",
             "department": "Department",
             "position": "Position",
-            "reset": "Reset"
+            "set": "Update Job"
         },
         "vehicles": {
             "vehicles": "Vehicles",
@@ -320,7 +320,8 @@
             "deleted": "Deleted at",
             "update": "Update Character",
             "job": "Job",
-            "phone": "Phone Number"
+            "phone": "Phone Number",
+            "gender": "Gender"
         }
     },
     "logs": {

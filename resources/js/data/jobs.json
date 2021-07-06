@@ -1,0 +1,384 @@
+[
+    {
+        "name": "Law Enforcement",
+        "departments": [
+            {
+                "name": "SASP",
+                "positions": [
+                    "Cadet",
+                    "Trooper",
+                    "Trooper First Class",
+                    "Senior Trooper",
+                    "Corporal",
+                    "Sergeant",
+                    "Sergeant First Class",
+                    "Lieutenant",
+                    "Captain",
+                    "Assistant Commissioner",
+                    "Senior Assistant Commissioner",
+                    "Deputy Commissioner",
+                    "Commissioner"
+                ]
+            },
+            {
+                "name": "Bolingbroke Penitentiary",
+                "positions": [
+                    "Guard"
+                ]
+            },
+            {
+                "name": "Park Rangers",
+                "positions": [
+                    "Trainee",
+                    "Ranger",
+                    "Supervisor",
+                    "Director"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Medical",
+        "departments": [
+            {
+                "name": "Los Santos Medical Center",
+                "positions": [
+                    "EMT",
+                    "Paramedic",
+                    "Specialist",
+                    "Sergeant",
+                    "Lieutenant",
+                    "Captain",
+                    "Assistant Director",
+                    "Deputy Director",
+                    "Director"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Government",
+        "departments": [
+            {
+                "name": "Waste Collector",
+                "positions": [
+                    "Employee"
+                ]
+            },
+            {
+                "name": "State",
+                "positions": [
+                    "Assistant",
+                    "Advisor",
+                    "Employee",
+                    "Manager",
+                    "Deputy Mayor",
+                    "Mayor"
+                ]
+            },
+            {
+                "name": "Law",
+                "positions": [
+                    "Legal Assistant",
+                    "Paralegal",
+                    "Attorney",
+                    "Assistant District Attorney",
+                    "District Attorney",
+                    "Judge"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Transportation",
+        "departments": [
+            {
+                "name": "Trucker",
+                "positions": [
+                    "Amateur"
+                ]
+            },
+            {
+                "name": "GoPostal",
+                "positions": [
+                    "Amateur"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Taxi",
+        "departments": [
+            {
+                "name": "Downtown Cab Co.",
+                "positions": [
+                    "Amateur"
+                ]
+            },
+            {
+                "name": "Uber",
+                "positions": [
+                    "Amateur"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Journalist",
+        "departments": [
+            {
+                "name": "Weazel News",
+                "positions": [
+                    "Reporter",
+                    "Camera Man",
+                    "Manager"
+                ]
+            },
+            {
+                "name": "Los Santos Meteor",
+                "positions": [
+                    "Reporter",
+                    "Camera Man",
+                    "Manager"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Vehicle Dealership",
+        "departments": [
+            {
+                "name": "Premium Deluxe Motorsport",
+                "positions": [
+                    "Apprentice",
+                    "Salesman",
+                    "Senior Salesman",
+                    "Assistant Manager",
+                    "Boss"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Mechanic",
+        "departments": [
+            {
+                "name": "Los Santos Customs",
+                "positions": [
+                    "Tow Driver",
+                    "Intern Mechanic",
+                    "Lead Mechanic",
+                    "Adept Mechanic",
+                    "Expert Mechanic",
+                    "Veteran Mechanic",
+                    "Boss"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Relator",
+        "departments": [
+            {
+                "name": "Dynasty 8",
+                "positions": [
+                    "Salesperson",
+                    "Boss"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Business",
+        "departments": [
+            {
+                "name": "Los Santos Aviation",
+                "positions": [
+                    "Pilot",
+                    "Instructor",
+                    "Manager"
+                ]
+            },
+            {
+                "name": "Merryweather Security",
+                "positions": [
+                    "Guard"
+                ]
+            },
+            {
+                "name": "Vanilla Unicorn",
+                "positions": [
+                    "Bartender",
+                    "Dancer",
+                    "Manager"
+                ]
+            },
+            {
+                "name": "Tequi-la-la",
+                "positions": [
+                    "Bartender",
+                    "Singer",
+                    "Manager"
+                ]
+            },
+            {
+                "name": "Bahama Mamas",
+                "positions": [
+                    "Bartender",
+                    "DJ",
+                    "Manager"
+                ]
+            },
+            {
+                "name": "Yellow Jack Inn",
+                "positions": [
+                    "Bartender",
+                    "Manager"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Gang",
+        "departments": [
+            {
+                "name": "Hippies",
+                "positions": [
+                    "Weed Smoker"
+                ]
+            },
+            {
+                "name": "Madrazo Cartel",
+                "positions": [
+                    "Halc\u00f3n",
+                    "Sicario",
+                    "Teniente",
+                    "Capit\u00e1n",
+                    "Capo"
+                ]
+            },
+            {
+                "name": "\\\"Neil Brothers",
+                "positions": [
+                    "Weed Smoker"
+                ]
+            },
+            {
+                "name": "Rednecks",
+                "positions": [
+                    "Weed Smoker"
+                ]
+            },
+            {
+                "name": "The Lost MC",
+                "positions": [
+                    "Biker",
+                    "Leader"
+                ]
+            },
+            {
+                "name": "Peaky Blinders",
+                "positions": [
+                    "Family"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Bar and Club",
+        "departments": [
+            {
+                "name": "Bar Jobs",
+                "positions": [
+                    "Bartender",
+                    "Bar Security",
+                    "Bar Manager",
+                    "Bar Owner"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Casino",
+        "departments": [
+            {
+                "name": "Casino Jobs",
+                "positions": [
+                    "Casino Dealer",
+                    "Casino Security",
+                    "Casino Manager",
+                    "Casino Owner"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Burger Shot",
+        "departments": [
+            {
+                "name": "Burger Shot",
+                "positions": [
+                    "Employee",
+                    "Manager",
+                    "Boss"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Vintner",
+        "departments": [
+            {
+                "name": "Vintner",
+                "positions": [
+                    "Employee",
+                    "Manager",
+                    "Boss"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Bean Machine",
+        "departments": [
+            {
+                "name": "Restaurant",
+                "positions": [
+                    "Waiter",
+                    "Bartender",
+                    "Manager",
+                    "Owner"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Comedy Club",
+        "departments": [
+            {
+                "name": "Club",
+                "positions": [
+                    "Waiter",
+                    "Bartender",
+                    "Manager",
+                    "Owner"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "Arcade Bar",
+        "departments": [
+            {
+                "name": "Bar",
+                "positions": [
+                    "Waiter",
+                    "Bartender",
+                    "Croupier",
+                    "Manager",
+                    "Owner"
+                ]
+            }
+        ]
+    }
+]
