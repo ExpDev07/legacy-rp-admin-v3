@@ -35,7 +35,11 @@
                         </div>
                         <div class="w-1/4 px-3">
                             <label class="block mb-4 font-semibold" for="discord">
-                                {{ t('players.discord') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                                {{ t('players.discord') }}
+                                <sup class="text-muted dark:text-dark-muted">
+                                    <a class="dark:text-blue-300 text-blue-500" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID" target="_blank" :title="t('players.discord_description')">[?]</a>
+                                    *
+                                </sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>

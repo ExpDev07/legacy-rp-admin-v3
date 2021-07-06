@@ -208,6 +208,7 @@
         "none": "No players was found.",
         "search_btn": "Search players",
         "is_banned": "Is Banned",
+        "discord_description": "How do i get someones Discord ID",
         "ban": {
             "issuing": "Issuing ban",
             "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",
