@@ -43,20 +43,24 @@ class PlayerController extends Controller
             $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, last_connection DESC');
         }
 
-        // Querying.
-        if ($q = $request->input('query')) {
-            if (Str::startsWith($q, 'identifier=')) {
-                $q = str_replace('identifier=', '', $q);
-                $query->where('steam_identifier', $q);
-            } else if (Str::startsWith($q, 'name=')) {
-                $q = str_replace('name=', '', $q);
-                $query->where('player_name', $q);
+        // Filtering by name.
+        if ($name = $request->input('name')) {
+            if (Str::startsWith($name, '=')) {
+                $name = Str::substr($name, 1);
+                $query->where('player_name', $name);
             } else {
-                $query
-                    ->where('player_name', 'like', "%{$q}%")
-                    ->orWhere('steam_identifier', 'like', "%{$q}%")
-                    ->orWhere('identifiers', 'like', "%{$q}%");
+                $query->where('player_name', 'like', "%{$name}%");
             }
+        }
+
+        // Filtering by steam_identifier.
+        if ($steam = $request->input('steam')) {
+            $query->where('steam_identifier', $steam);
+        }
+
+        // Filtering by discord.
+        if ($discord = $request->input('discord')) {
+            $query->where('identifiers', 'LIKE', '%discord:' . $discord . '%');
         }
 
         // Filtering isBanned.
@@ -89,7 +93,9 @@ class PlayerController extends Controller
         return Inertia::render('Players/Index', [
             'players' => PlayerIndexResource::collection($players),
             'filters' => [
-                'query'  => $request->input('query'),
+                'name'  => $request->input('name'),
+                'steam'  => $request->input('steam'),
+                'discord'  => $request->input('discord'),
                 'banned' => $request->input('banned') ?: 'all',
             ],
             'links'   => $this->getPageUrls($page),
