@@ -21,15 +21,31 @@
             <template>
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-3/4 px-3">
+                        <div class="w-1/4 px-3">
                             <label class="block mb-4 font-semibold" for="name">
-                                {{ t('players.search_label') }}
+                                {{ t('players.name') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
-                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster | steam:11000010df22c8b | 150219115892703232" v-model="filters.query">
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster" v-model="filters.name">
+                        </div>
+                        <div class="w-1/4 px-3">
+                            <label class="block mb-4 font-semibold" for="steam">
+                                {{ t('players.steam') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                            </label>
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="steam" name="steam" placeholder="steam:11000010df22c8b" v-model="filters.steam">
+                        </div>
+                        <div class="w-1/4 px-3">
+                            <label class="block mb-4 font-semibold" for="discord">
+                                {{ t('players.discord') }}
+                                <sup class="text-muted dark:text-dark-muted">
+                                    <a class="dark:text-blue-300 text-blue-500" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID" target="_blank" :title="t('players.discord_description')">[?]</a>
+                                    *
+                                </sup>
+                            </label>
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>
                         <div class="w-1/4 px-3">
                             <label class="block mb-4 font-semibold" for="banned">
-                                {{ t('players.is_banned') }}
+                                {{ t('players.is_banned') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <select class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="banned" name="banned" v-model="filters.banned">
                                 <option value="all">{{ t('global.all') }}</option>
@@ -38,11 +54,12 @@
                             </select>
                         </div>
                     </div>
+                    <!-- Description -->
+                    <div class="w-full px-3 mt-3">
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">* {{ t('global.search.exact') }}</small>
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">** {{ t('global.search.like') }} {{ t('global.search.like_prepend') }}</small>
+                    </div>
                 </form>
-                <!-- Description -->
-                <div class="w-full mt-3">
-                    <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">{{ t('global.search.players') }}</small>
-                </div>
                 <!-- Search button -->
                 <div class="w-full mt-3">
                     <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
@@ -168,7 +185,9 @@ export default {
             required: true,
         },
         filters: {
-            query: String,
+            name: String,
+            steam: String,
+            discord: String,
             banned: String,
         },
         time: {

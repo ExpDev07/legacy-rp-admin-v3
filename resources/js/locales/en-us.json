@@ -202,10 +202,13 @@
         "title": "Players",
         "description": "Search Players!",
         "search": "Search",
-        "search_label": "Search by name, steam identifier, or any other identifier such as Discord id.",
+        "name": "Player Name",
+        "steam": "Steam Identifier",
+        "discord": "Discord ID",
         "none": "No players was found.",
         "search_btn": "Search players",
         "is_banned": "Is Banned",
+        "discord_description": "How do i get someones Discord ID",
         "ban": {
             "issuing": "Issuing ban",
             "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",
@@ -266,7 +269,7 @@
             "name": "Name",
             "department": "Department",
             "position": "Position",
-            "reset": "Reset"
+            "set": "Update Job"
         },
         "vehicles": {
             "vehicles": "Vehicles",
@@ -318,7 +321,8 @@
             "deleted": "Deleted at",
             "update": "Update Character",
             "job": "Job",
-            "phone": "Phone Number"
+            "phone": "Phone Number",
+            "gender": "Gender"
         }
     },
     "logs": {

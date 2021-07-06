@@ -84,7 +84,7 @@
             </template>
 
             <template>
-                <form @submit.prevent="submit">
+                <form @submit.prevent="submit(false)">
                     <!-- Name -->
                     <div class="flex flex-wrap mb-4">
                         <div class="w-1/3 px-3">
@@ -120,7 +120,7 @@
                     </div>
                     <div class="px-3 mb-6">
                         <label class="block mb-3" for="gender">
-                            Gender
+                            {{ t('players.edit.gender') }}
                         </label>
                         <select class="block w-56 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="gender" v-model="form.gender">
                             <option value="0">{{ t('global.male') }}</option>
@@ -140,35 +140,48 @@
 
         <!-- Job -->
         <v-section>
-            <div class="flex items-center justify-between mx-3 space-x-6">
-                <h2 class="mr-12 text-2xl font-semibold">
+            <template #header>
+                <h2>
                     {{ t('players.job.job') }}
                 </h2>
-                <div class="flex items-center justify-center flex-1 space-x-4">
-                    <p class="text-xl">
-                        <span class="font-semibold">{{ t('players.job.name') }}:</span> {{ character.jobName || t('global.none') }}
-                    </p>
-                    <button @click.prevent="resetJobName" class="px-6 py-1 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="button">
-                        {{ t('players.job.reset') }}
-                    </button>
+            </template>
+
+            <template>
+                <div class="flex flex-wrap mb-4">
+                    <div class="w-1/4 px-3">
+                        <label class="block mb-3" for="job">
+                            {{ t('players.job.name') }}
+                        </label>
+                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" v-model="form.job_name">
+                            <option :value="job.name" v-for="job in jobs">{{ job.name || t('global.none') }}</option>
+                        </select>
+                    </div>
+                    <div class="w-1/4 px-3" v-if="form.job_name === job.name" v-for="job in jobs">
+                        <label class="block mb-3" for="department">
+                            {{ t('players.job.department') }}
+                        </label>
+                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="department" v-model="form.department_name">
+                            <option :value="department.name" v-for="department in job.departments">{{ department.name || t('global.none') }}</option>
+                        </select>
+                    </div>
+                    <template v-if="form.job_name === job.name" v-for="job in jobs">
+                        <div class="w-1/4 px-3" v-if="form.department_name === department.name" v-for="department in job.departments">
+                            <label class="block mb-3" for="position">
+                                {{ t('players.job.position') }}
+                            </label>
+                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="position" v-model="form.position_name">
+                                <option :value="position" v-for="position in department.positions">{{ position || t('global.none') }}</option>
+                            </select>
+                        </div>
+                    </template>
+                    <div class="w-1/4 px-3">
+                        <label class="block mb-3">&nbsp;</label>
+                        <button class="block w-full px-4 py-3 mb-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="updateJob">
+                            {{ t('players.job.set') }}
+                        </button>
+                    </div>
                 </div>
-                <div class="flex items-center justify-center flex-1 space-x-6">
-                    <p class="text-xl">
-                        <span class="font-semibold">{{ t('players.job.department') }}:</span> {{ character.departmentName || t('global.none') }}
-                    </p>
-                    <button @click.prevent="resetDepartmentName" class="px-6 py-1 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="button">
-                        {{ t('players.job.reset') }}
-                    </button>
-                </div>
-                <div class="flex items-center justify-center flex-1 space-x-6">
-                    <p class="text-xl">
-                        <span class="font-semibold">{{ t('players.job.position') }}:</span> {{ character.positionName || t('global.none') }}
-                    </p>
-                    <button @click.prevent="resetPositionName" class="px-6 py-1 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="button">
-                        {{ t('players.job.reset') }}
-                    </button>
-                </div>
-            </div>
+            </template>
         </v-section>
 
         <!-- Vehicles -->
@@ -301,6 +314,7 @@ import VSection from './../../../Components/Section';
 import Card from './../../../Components/Card';
 import Badge from './../../../Components/Badge';
 import Modal from "../../../Components/Modal";
+import Jobs from "../../../data/jobs.json";
 
 export default {
     layout: Layout,
@@ -325,6 +339,34 @@ export default {
         },
     },
     data() {
+        let jobs = Jobs.sort((a, b) => {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+        });
+
+        for (let x = 0; x < jobs.length; x++) {
+            let departments = jobs[x].departments.sort((a, b) => {
+                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+            });
+
+            for (let y = 0; y < departments.length; y++) {
+                departments[y].positions = departments[y].positions.reverse();
+            }
+
+            jobs[x].departments = departments;
+        }
+
+        jobs.unshift({
+            name: null,
+            departments: [
+                {
+                    name: null,
+                    positions: [
+                        null
+                    ]
+                }
+            ]
+        });
+
         return {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
@@ -347,26 +389,46 @@ export default {
                 position_name: this.character.positionName,
             },
             isTattooRemoval: false,
+            jobs: jobs,
         };
     },
     methods: {
-        submit() {
-            this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id, this.form)
+        submit(isJobUpdate) {
+            let form = this.form;
+            if (isJobUpdate) {
+                form.first_name = this.character.firstName;
+                form.last_name = this.character.lastName;
+                form.date_of_birth = this.character.dateOfBirth;
+                form.gender = this.character.gender;
+                form.backstory = this.character.backstory;
+            } else {
+                form.job_name = this.character.jobName;
+                form.department_name = this.character.departmentName;
+                form.position_name = this.character.positionName;
+            }
+
+            this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id, form)
         },
-        resetJobName() {
-            this.form.job_name = null;
-            this.form.department_name = null;
-            this.form.position_name = null;
-            this.submit();
+        sortJobs(array, type) {
+            console.log(array);
+            switch(type) {
+                case 'job':
+                case 'department':
+                    array.sort((a, b) => {
+                        return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+                    });
+                    return array;
+                case 'position':
+                    array.sort((a, b) => {
+                        return a.toLowerCase() < b.toLowerCase() ? -1 : 1
+                    });
+                    return array;
+            }
+
+            return [];
         },
-        resetDepartmentName() {
-            this.form.department_name = null;
-            this.form.position_name = null;
-            this.submit();
-        },
-        resetPositionName() {
-            this.form.position_name = null;
-            this.submit();
+        updateJob() {
+            this.submit(true);
         },
         async removeTattoos() {
             // Send request.
