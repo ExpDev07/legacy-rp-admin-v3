@@ -1,11 +1,11 @@
 <template>
     <div>
         <portal to="title">
-            <div class="flex items-start space-x-10">
+            <div class="flex items-start space-x-10 mobile:flex-wrap">
                 <h1 class="dark:text-white">
                     {{ player.playerName }}
                 </h1>
-                <div class="flex items-center space-x-5">
+                <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
@@ -36,27 +36,27 @@
         <portal to="actions">
             <div>
                 <!-- StaffPM -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500" @click="isStaffPM = true" v-if="player.status.status === 'online'">
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isStaffPM = true" v-if="player.status.status === 'online'">
                     <i class="fas fa-envelope-open-text"></i>
                     {{ t('players.show.staffpm') }}
                 </button>
                 <!-- Kicking -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500" @click="isKicking = true" v-if="player.status.status === 'online'">
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isKicking = true" v-if="player.status.status === 'online'">
                     <i class="fas fa-user-minus"></i>
                     {{ t('players.show.kick') }}
                 </button>
                 <!-- Edit Ban -->
-                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'" v-if="player.isBanned">
+                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'" v-if="player.isBanned">
                     <i class="mr-1 fas fa-edit"></i>
                     {{ t('players.show.edit_ban') }}
                 </inertia-link>
                 <!-- Unbanning -->
-                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
+                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3" method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id" v-if="player.isBanned">
                     <i class="mr-1 fas fa-lock-open"></i>
                     {{ t('players.show.unban') }}
                 </inertia-link>
                 <!-- Banning -->
-                <button class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger" @click="isBanning = true" v-else>
+                <button class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isBanning = true" v-else>
                     <i class="mr-1 fas fa-gavel"></i>
                     {{ t('players.show.issue') }}
                 </button>
@@ -230,14 +230,14 @@
             <div class="flex flex-wrap items-center text-center">
 
                 <inertia-link
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded"
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     :href="'/logs?identifier=' + player.steamIdentifier"
                 >
                     <i class="mr-1 fas fa-toilet-paper"></i>
                     {{ t('players.show.logs') }}
                 </inertia-link>
                 <a
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-gray-800 rounded"
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-gray-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     target="_blank"
                     :href="player.steamProfileUrl"
                 >
@@ -246,7 +246,7 @@
                 </a>
 
                 <a
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     v-if="discord"
                     href="#"
                     :title="t('players.show.discord_copy')"
@@ -262,7 +262,7 @@
                     </span>
                 </a>
                 <a
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded"
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     v-else-if="player.discord"
                     href="#"
                     :title="t('players.show.discord_copy')"
@@ -432,13 +432,13 @@
 
             <template>
                 <table class="w-full whitespace-no-wrap">
-                    <tr class="font-semibold text-left">
+                    <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('logs.action') }}</th>
                         <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in panelLogs" :key="log.id">
-                        <td class="px-6 py-3 border-t">{{ log.log }}</td>
-                        <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="log in panelLogs" :key="log.id">
+                        <td class="px-6 py-3 border-t mobile:block">{{ log.log }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="panelLogs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">

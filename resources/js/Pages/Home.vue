@@ -10,8 +10,8 @@
             </p>
         </portal>
 
-        <div class="flex mt-14 justify-between max-w-screen-2xl">
-            <div class="p-4 max-w-xl pl-6 italic border-l-4 border-gray-300 inline-block bg-gray-100 shadow-lg dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100">
+        <div class="flex mt-14 justify-between max-w-screen-2xl mobile:flex-wrap">
+            <div class="p-4 max-w-xl pl-6 italic border-l-4 border-gray-300 inline-block bg-gray-100 shadow-lg dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100 mobile:w-full mobile:mb-3">
                 <span class="mb-1 block" v-html="quote.quote">
                     {{ quote.quote }}
                 </span>
@@ -20,7 +20,7 @@
                 </span>
             </div>
 
-            <div class="ml-8">
+            <div class="ml-8 mobile:w-full mobile:ml-0">
                 <div class="p-4 bg-gray-100 shadow-lg dark:bg-gray-700 dark:text-gray-100 flex justify-between">
                     <vue-circle ref="serverCount"
                                 :progress="playerCountPercentage()"
@@ -33,7 +33,7 @@
                                 insert-mode="append"
                                 :thickness="7"
                                 :show-percent="false">
-                        <p class="text-sm font-semibold">{{ joinedPlayers }}</p>
+                        <p class="text-sm font-semibold mobile:-mt-12">{{ joinedPlayers }}</p>
                     </vue-circle>
                     <p class="ml-3 pt-5" v-html="playerCount">{{ playerCount }}</p>
                 </div>
@@ -45,26 +45,26 @@
                 {{ t('home.bans') }}
             </h3>
             <table class="w-full whitespace-no-wrap table-fixed max-w-screen-lg">
-                <tr class="font-semibold text-left">
+                <tr class="font-semibold text-left mobile:hidden">
                     <th class="px-6 py-4">{{ t('home.ban.steam') }}</th>
                     <th class="px-6 py-4">{{ t('home.ban.reason') }}</th>
                     <th class="px-6 py-4">{{ t('home.ban.length') }}</th>
                     <th class="px-6 py-4">{{ t('home.ban.time') }}</th>
                 </tr>
-                <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="ban in bans">
-                    <td class="px-6 py-3 border-t">
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="ban in bans">
+                    <td class="px-6 py-3 border-t mobile:block">
                         <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + ban.identifier">
                             {{ playerName(ban.identifier) }}
                         </inertia-link>
                     </td>
-                    <td class="px-6 py-3 border-t" :title="ban.reason" v-if="ban.reason.length > 50">
+                    <td class="px-6 py-3 border-t mobile:block" :title="ban.reason" v-if="ban.reason.length > 50">
                         {{ ban.reason.substr(0, 50) + '...' }}
                     </td>
-                    <td class="px-6 py-3 border-t" v-else>
+                    <td class="px-6 py-3 border-t mobile:block" v-else>
                         {{ ban.reason }}
                     </td>
-                    <td class="px-6 py-3 border-t">{{ banTime(ban) }}</td>
-                    <td class="px-6 py-3 border-t">{{ ban.timestamp | formatTime }}</td>
+                    <td class="px-6 py-3 border-t mobile:block">{{ banTime(ban) }}</td>
+                    <td class="px-6 py-3 border-t mobile:block">{{ ban.timestamp | formatTime }}</td>
                 </tr>
                 <tr v-if="bans.length === 0">
                     <td class="px-6 py-6 text-center border-t" colspan="100%">

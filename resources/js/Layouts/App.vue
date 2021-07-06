@@ -10,11 +10,11 @@
 
             <div class="flex flex-grow overflow-hidden">
                 <!-- Sidebar -->
-                <sidebar class="flex-shrink-0" />
+                <sidebar class="flex-shrink-0" v-if="!isMobile()" />
 
                 <!-- Content -->
                 <div class="flex flex-col flex-grow overflow-y-auto dark:bg-gray-800 dark:text-white" scroll-region>
-                    <div class="flex-grow p-12">
+                    <div class="flex-grow p-12 mobile: px-4">
 
                         <!-- Flash message -->
                         <div>
@@ -43,6 +43,9 @@
 
                     </div>
 
+                    <!-- Mobile Sidebar -->
+                    <sidebar class="flex-shrink-0" v-if="isMobile()" />
+
                     <!-- Footer -->
                     <foot />
                 </div>
@@ -64,6 +67,11 @@ export default {
         Foot,
         Sidebar,
         Navbar,
+    },
+    methods: {
+        isMobile() {
+            return $(window).width() <= 640;
+        }
     },
     beforeCreate() {
         this.loadLocale(this.$page.lang);

@@ -21,19 +21,19 @@
             <template>
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-1/4 px-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="name">
                                 {{ t('players.name') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster" v-model="filters.name">
                         </div>
-                        <div class="w-1/4 px-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="steam">
                                 {{ t('players.steam') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="steam" name="steam" placeholder="steam:11000010df22c8b" v-model="filters.steam">
                         </div>
-                        <div class="w-1/4 px-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="discord">
                                 {{ t('players.discord') }}
                                 <sup class="text-muted dark:text-dark-muted">
@@ -43,7 +43,7 @@
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>
-                        <div class="w-1/4 px-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="banned">
                                 {{ t('players.is_banned') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
@@ -88,7 +88,7 @@
 
             <template>
                 <table class="w-full whitespace-no-wrap">
-                    <tr class="font-semibold text-left">
+                    <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('global.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.identifier') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.name') }}</th>
@@ -97,8 +97,8 @@
                         <th class="w-64 px-6 py-4">{{ t('players.form.banned') }}?</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="player in players" v-bind:key="player.id">
-                        <td class="px-6 py-3 border-t" :title="t('global.server_timeout')">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in players" v-bind:key="player.id">
+                        <td class="px-6 py-3 border-t mobile:block" :title="t('global.server_timeout')">
                             <span class="font-semibold" v-if="player.status.status === 'online'">
                                 {{ player.status.serverId }} <sup>{{ player.status.serverName }}</sup>
                             </span>
@@ -106,11 +106,11 @@
                                 {{ t('global.status.' + player.status.status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 border-t">{{ player.steamIdentifier }}</td>
-                        <td class="px-6 py-3 border-t">{{ player.playerName }}</td>
-                        <td class="px-6 py-3 border-t">{{ player.playTime | humanizeSeconds }}</td>
-                        <td class="px-6 py-3 border-t">{{ player.warnings }}</td>
-                        <td class="px-6 py-3 text-center border-t">
+                        <td class="px-6 py-3 border-t mobile:block">{{ player.steamIdentifier }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ player.playerName }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ player.playTime | humanizeSeconds }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ player.warnings }}</td>
+                        <td class="px-6 py-3 text-center border-t mobile:block">
                             <span class="block px-4 py-2 text-white bg-red-500 rounded dark:bg-red-600" v-if="player.isBanned">
                                 {{ t('global.banned') }}
                             </span>
@@ -118,14 +118,14 @@
                                 {{ t('global.not_banned') }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 border-t">
+                        <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + player.steamIdentifier">
                                 <i class="fas fa-chevron-right"></i>
                             </inertia-link>
                         </td>
                     </tr>
                     <tr v-if="players.length === 0">
-                        <td class="px-6 py-6 text-center border-t" colspan="100%">
+                        <td class="px-6 py-6 text-center border-t mobile:block" colspan="100%">
                             {{ t('players.none') }}
                         </td>
                     </tr>

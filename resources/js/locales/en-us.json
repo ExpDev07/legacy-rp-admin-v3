@@ -51,8 +51,8 @@
         "no_bans": "No recent bans by you"
     },
     "nav": {
-        "dark": "Dark Mode",
-        "light": "Light Mode",
+        "dark": "Dark",
+        "light": "Light",
         "logout": "Logout",
         "report": "Report a bug!"
     },

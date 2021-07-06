@@ -29,21 +29,21 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
                         <!-- Identifier -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="identifier">
                                 {{ t('logs.identifier') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
                         </div>
                         <!-- Action -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="action">
                                 {{ t('logs.action') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action">
                         </div>
                         <!-- Server -->
-                        <div class="w-1/3 px-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="server">
                                 {{ t('logs.server_id') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
@@ -92,20 +92,20 @@
 
             <template>
                 <table class="w-full whitespace-no-wrap">
-                    <tr class="font-semibold text-left">
+                    <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('logs.player') }}</th>
                         <th class="px-6 py-4">{{ t('logs.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('logs.action') }}</th>
                         <th class="px-6 py-4">{{ t('logs.details') }}</th>
                         <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" :key="log.id">
-                        <td class="px-6 py-3 border-t">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="log in logs" :key="log.id">
+                        <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steamIdentifier">
                                 {{ playerName(log.steamIdentifier) }}
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t" :title="t('global.server_timeout')">
+                        <td class="px-6 py-3 border-t mobile:block" :title="t('global.server_timeout')">
                             <span class="font-semibold" v-if="log.status.status === 'online'">
                                 {{ log.status.serverId }}
                             </span>
@@ -113,9 +113,9 @@
                                 {{ t('global.status.' + log.status.status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 border-t">{{ log.action }}</td>
-                        <td class="px-6 py-3 border-t" v-html="parseLog(log.details)">{{ parseLog(log.details) }}</td>
-                        <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ log.action }}</td>
+                        <td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)">{{ parseLog(log.details) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">

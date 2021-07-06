@@ -2,7 +2,7 @@
     <div class="flex">
 
         <!-- Branding / Logo -->
-        <div class="flex-shrink-0 px-8 py-3 text-center text-white bg-gray-900">
+        <div class="flex-shrink-0 px-8 py-3 text-center text-white bg-gray-900 mobile:hidden">
             <inertia-link href="/" class="flex justify-between">
                 <img src="/images/op-logo.png" class="block" />
                 <h1 class="text-lg px-4">

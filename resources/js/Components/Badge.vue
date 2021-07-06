@@ -1,5 +1,5 @@
 <template>
-    <div class="px-5 py-1 border-2 rounded" :class="{ 'inline-block' : small }">
+    <div class="px-5 py-1 border-2 rounded mobile:block mobile:w-full mobile:m-0 mobile:mb-3" :class="{ 'inline-block' : small }">
         <slot />
     </div>
 </template>
