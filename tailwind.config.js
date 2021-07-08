@@ -15,7 +15,12 @@ module.exports = {
         screens: {
             'mobile': {
                 'max': '640px'
-            }
+            },
+            'sm': '640px',
+            'md': '768px',
+            'lg': '1024px',
+            'xl': '1280px',
+            '2xl': '1536px',
         },
         extend: {
             fontFamily: {
@@ -25,6 +30,7 @@ module.exports = {
                 'inventory':          '220px',
                 'alert':              '650px',
                 'character_advanced': '550px',
+                '90': '90px',
             },
             height: {
                 'side-close':  '40px',

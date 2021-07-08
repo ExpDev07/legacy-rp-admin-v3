@@ -21,6 +21,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\PanelLogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
+use App\Http\Controllers\PlayerCharacterVehicleController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Twitter.
     Route::resource('twitter', TwitterController::class);
+    Route::post('tweets/delete/{post}', [TwitterController::class, 'deleteTweet']);
 
     // Logs.
     Route::resource('logs', LogController::class);
@@ -80,6 +82,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Characters.
     Route::resource('characters', PlayerCharacterController::class);
+    Route::post('vehicles/delete/{vehicle}', [PlayerCharacterController::class, 'deleteVehicle']);
     Route::post('/players/{player}/characters/{character}/removeTattoos', [PlayerCharacterController::class, 'removeTattoos']);
 
     // Servers.
