@@ -85,9 +85,10 @@
                         <th class="px-6 py-4">{{ t('twitter.likes') }}</th>
                         <th class="px-6 py-4">{{ t('twitter.time') }}</th>
                         <th class="px-6 py-4"></th>
+                        <th class="px-6 py-4" v-if="$page.auth.player.isSuperAdmin"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="post in posts" :key="post.id">
-                        <td class="px-6 py-3 border-t mobile:block" v-if="user(post.authorId)">
+                        <td class="px-6 py-3 border-t mobile:block w-90 mobile:w-full" v-if="user(post.authorId)">
                             <img
                                 class="inline-block w-8 h-8 rounded-full ring-2 ring-white"
                                 :src="user(post.authorId).avatarUrl"
@@ -109,6 +110,15 @@
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:hidden" v-else></td>
+                        <td class="px-6 py-3 border-t mobile:block" v-if="$page.auth.player.isSuperAdmin">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-red-600 dark:bg-red-400 rounded"
+                                href="#"
+                                @click="deleteTweet($event, post.id)"
+                            >
+                                <i class="fas fa-trash-alt"></i>
+                            </inertia-link>
+                        </td>
                     </tr>
                     <tr v-if="posts.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
@@ -208,6 +218,16 @@ export default {
         avatarError(e) {
             // Replace with default
             e.target.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAgACADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABAcABv/EABYBAQEBAAAAAAAAAAAAAAAAAAABBf/aAAwDAQACEAMQAAAByyULWyeIJQp6akTd0vdTdwT/xAAaEAEBAAMBAQAAAAAAAAAAAAADBAECEAAT/9oACAEBAAEFAvTgj7UAgbcjL4z2Fhp+DvhCbfBlyepQ9RUr8//EABgRAAIDAAAAAAAAAAAAAAAAAAADARMh/9oACAEDAQE/AUKsnR6q5wQ2udHtsnD/xAAYEQACAwAAAAAAAAAAAAAAAAAAAwETIf/aAAgBAgEBPwF7a4wQ2yNHqsjBCq40/8QAHxAAAgECBwAAAAAAAAAAAAAAAQIAEDEDESEiQVGB/9oACAEBAAY/Aplhj2ZYg9qi83MdebiqMLER2NgK7Dp0ZvOnQp//xAAaEAEAAgMBAAAAAAAAAAAAAAABABEQITFx/9oACAEBAAE/IYqs11aCCqN8GxyAhx6LEIceCZYvQYxdIc2Id9pWShDrsKjH/9oADAMBAAIAAwAAABDzzzz/xAAZEQEBAAMBAAAAAAAAAAAAAAABABEhMUH/2gAIAQMBAT8QBzggM4Y28MZYaL//xAAZEQEBAAMBAAAAAAAAAAAAAAABABEhMUH/2gAIAQIBAT8QQ3pkd6Jy9E7Zbb//xAAfEAEAAQMFAQEAAAAAAAAAAAABEQAxURAhQYHBYXH/2gAIAQEAAT8QoUw3t+OXy9CmG9v1w+aLAuKOcIvhSvnVGOQ3wpHzuhkHNNmL0fZGRwxCdMlH23M5YgO2CixN9CVj3E5Dh/KJGNcTlOX90//Z';
+        },
+        async deleteTweet(e, tweetId) {
+            e.preventDefault();
+
+            if (!confirm(this.t('twitter.delete_tweet'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/tweets/delete/' + tweetId);
         },
         refresh: async function () {
             if (this.isLoading) {

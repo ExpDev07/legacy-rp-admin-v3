@@ -194,6 +194,7 @@ class AdvancedSearchController extends Controller
     {
         $query = Vehicle::query()->orderBy('vehicle_id');
         self::where($query, $field, $type, $value);
+        $query->where('vehicle_deleted', '=', '0');
         $query->select(self::Config['vehicles'])->limit(15)->offset(($page - 1) * 15);
 
         $data = $query->get()->toArray();

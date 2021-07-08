@@ -12,6 +12,7 @@ use App\Motel;
 use App\PanelLog;
 use App\Player;
 use App\Property;
+use App\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -250,6 +251,27 @@ class PlayerCharacterController extends Controller
         }
 
         return back()->with('success', 'Tattoos were removed successfully. ' . $info);
+    }
+
+    /**
+     * Deletes the specified vehicle.
+     *
+     * @param Request $request
+     * @param Vehicle $vehicle
+     * @return RedirectResponse
+     */
+    public function deleteVehicle(Request $request, Vehicle $vehicle): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can delete vehicles.');
+        }
+
+        $vehicle->update([
+            'vehicle_deleted' => '1',
+        ]);
+
+        return back()->with('success', 'Vehicle was successfully deleted.');
     }
 
 }

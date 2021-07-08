@@ -41,6 +41,7 @@ class Vehicle extends Model
         'garage_identifier',
         'model_name',
         'plate',
+        'vehicle_deleted',
     ];
 
     /**

@@ -338,7 +338,7 @@
                                 @click="deleteCharacter($event, character.id)"
                                 v-if="!character.characterDeleted && $page.auth.player.isSuperAdmin"
                             >
-                                <i class="fas fa-briefcase mr-1"></i>
+                                <i class="fas fa-trash-alt mr-1"></i>
                                 {{ t('players.characters.delete') }}
                             </inertia-link>
                         </template>

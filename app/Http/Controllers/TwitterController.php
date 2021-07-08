@@ -9,6 +9,7 @@ use App\Log;
 use App\Player;
 use App\TwitterPost;
 use App\TwitterUser;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
@@ -28,7 +29,7 @@ class TwitterController extends Controller
     {
         $start = round(microtime(true) * 1000);
 
-        $query = TwitterPost::query()->orderByDesc('time');
+        $query = TwitterPost::query()->orderByDesc('time')->where('is_deleted', '=', '0');
 
         // Filtering by username.
         if ($username = $request->input('username')) {
@@ -80,6 +81,27 @@ class TwitterController extends Controller
             'userMap'      => TwitterUser::fetchIdMap($posts->toArray($request), 'authorId'),
             'page'         => $page,
         ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param Request $request
+     * @param TwitterPost $post
+     * @return RedirectResponse
+     */
+    public function deleteTweet(Request $request, TwitterPost $post): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can delete tweets.');
+        }
+
+        $post->update([
+            'is_deleted' => '1',
+        ]);
+
+        return back()->with('success', 'Successfully deleted tweet');
     }
 
 }

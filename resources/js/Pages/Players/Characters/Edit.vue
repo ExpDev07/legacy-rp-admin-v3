@@ -221,6 +221,15 @@
                                 <i class="fas fa-briefcase mr-1"></i>
                                 {{ t('inventories.view') }}
                             </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
+                                @click="deleteVehicle($event, vehicle.id)"
+                                href="#"
+                                v-if="$page.auth.player.isSuperAdmin"
+                            >
+                                <i class="fas fa-trash-alt mr-1"></i>
+                                {{ t('global.delete') }}
+                            </inertia-link>
                         </template>
                     </card>
                 </div>
@@ -408,6 +417,16 @@ export default {
             }
 
             this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id, form)
+        },
+        async deleteVehicle(e, vehicleId) {
+            e.preventDefault();
+
+            if (!confirm(this.t('players.vehicles.delete_vehicle'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/vehicles/delete/' + vehicleId);
         },
         sortJobs(array, type) {
             console.log(array);

@@ -10,6 +10,7 @@
         "cancel": "Cancel",
         "view": "View",
         "refresh": "Refresh",
+        "delete": "Delete",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -196,7 +197,8 @@
         "search": "Search",
         "placeholder_message": "Selling keys hmu",
         "placeholder_username": "iRobBanks",
-        "filter": "Filter posts"
+        "filter": "Filter posts",
+        "delete_tweet": "Are you sure you want to delete this tweet?"
     },
     "players": {
         "title": "Players",
@@ -275,7 +277,8 @@
             "vehicles": "Vehicles",
             "plate": "Plate Number",
             "parked": "Parked at <i>{0}</i>",
-            "none": "This character does not own any vehicles."
+            "none": "This character does not own any vehicles.",
+            "delete_vehicle": "Are you sure you want to delete this vehicle?"
         },
         "properties": {
             "properties": "Properties",

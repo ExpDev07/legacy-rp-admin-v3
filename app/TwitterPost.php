@@ -38,10 +38,12 @@ class TwitterPost extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'authorId',
         'message',
         'time',
         'likes',
+        'is_deleted',
     ];
 
     /**
@@ -50,8 +52,9 @@ class TwitterPost extends Model
      * @var array
      */
     protected $casts = [
-        'time' => 'datetime',
-        'likes' => 'integer',
+        'time'       => 'datetime',
+        'likes'      => 'integer',
+        'is_deleted' => 'integer',
     ];
 
     /**

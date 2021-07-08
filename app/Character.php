@@ -132,7 +132,7 @@ class Character extends Model
      */
     public function vehicles(): HasMany
     {
-        return $this->hasMany(Vehicle::class, 'owner_cid');
+        return $this->hasMany(Vehicle::class, 'owner_cid')->where('vehicle_deleted', '=', '0');
     }
 
     /**
