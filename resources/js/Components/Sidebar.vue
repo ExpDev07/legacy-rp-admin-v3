@@ -140,6 +140,11 @@ export default {
                     url: '/twitter',
                 },
                 {
+                    label: this.t('map.title'),
+                    icon: 'map',
+                    url: '/map',
+                },
+                {
                     label: this.t('servers.title'),
                     icon: 'office',
                     url: '/servers',
