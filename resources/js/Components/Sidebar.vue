@@ -25,7 +25,7 @@
                             {{ link.label }}
                         </span>
                         <ul class="w-full">
-                            <li v-for="sub in link.sub">
+                            <li v-for="sub in link.sub" :key="sub.label">
                                 <inertia-link
                                     class="flex items-center px-5 py-2 mt-1 rounded hover:bg-gray-900 hover:text-white"
                                     :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
@@ -65,6 +65,7 @@
                         class="flex items-center px-5 py-2 mb-3 rounded hover:bg-gray-900 hover:text-white text-sm"
                         :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
                         :href="sub.url"
+                        :key="sub.label"
                         v-if="'sub' in link && (!('private' in link && link.private) || $page.auth.player.isSuperAdmin)"
                     >
                         {{ sub.label }}

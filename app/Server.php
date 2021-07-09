@@ -73,6 +73,12 @@ class Server extends Model
         return $serverIp;
     }
 
+    public static function getServerName(string $serverIp): string
+    {
+        $serverIp = self::fixApiUrl($serverIp);
+        return explode('.', str_replace('https://', '', $serverIp))[0];
+    }
+
     /**
      * Returns an associative array (steamIdentifier -> serverId)
      *

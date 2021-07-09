@@ -18,10 +18,10 @@ use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\PanelLogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
-use App\Http\Controllers\PlayerCharacterVehicleController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
@@ -87,6 +87,10 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Servers.
     Route::resource('servers', ServerController::class);
+
+    // Map.
+    Route::get('/map', [MapController::class, 'index']);
+    Route::get('/map/data', [MapController::class, 'data']);
 
     // Testing.
     Route::get('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);

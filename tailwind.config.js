@@ -30,11 +30,13 @@ module.exports = {
                 'inventory':          '220px',
                 'alert':              '650px',
                 'character_advanced': '550px',
-                '90': '90px',
+                '90':                 '90px',
+                'map':                '1160px'
             },
             height: {
-                'side-close':  '40px',
+                'side-close':    '40px',
                 'side-open-two': '134px',
+                'max':           'calc(100vh - (210px + 120px))'
             },
             minWidth: {
                 'input': '200px'

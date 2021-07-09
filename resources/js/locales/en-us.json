@@ -51,6 +51,12 @@
         },
         "no_bans": "No recent bans by you"
     },
+    "map": {
+        "title": "Live-Map",
+        "loading": "Loading player data...",
+        "error": "Player data for {0} empty or not available!",
+        "data": "Currently {0} online players."
+    },
     "nav": {
         "dark": "Dark",
         "light": "Light",
