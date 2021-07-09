@@ -51,6 +51,7 @@
     <i class="fas fa-cogs" v-else-if="name === 'cogs'"></i>
     <i class="fab fa-searchengin" v-else-if="name === 'search'"></i>
     <i class="fas fa-heartbeat" v-else-if="name === 'heart'"></i>
+    <i class="fas fa-map" v-else-if="name === 'map'"></i>
 </template>
 
 <script>

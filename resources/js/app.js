@@ -9,6 +9,8 @@ import formatTime from './Filters/formatTime.js';
 import formatGender from './Filters/formatGender.js';
 import linkify from 'vue-linkify';
 import VueClipboard from 'vue-clipboard2';
+import 'leaflet/dist/leaflet.css';
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
 // Directives.
 Vue.directive('linkified', linkify);

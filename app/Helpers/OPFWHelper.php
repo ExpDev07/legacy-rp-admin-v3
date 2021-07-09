@@ -2,15 +2,12 @@
 
 namespace App\Helpers;
 
-use App\Http\Requests\KickStoreRequest;
-use App\Http\Requests\StaffPMStoreRequest;
 use App\OPFWResponse;
 use App\PanelLog;
 use App\Player;
-use App\User;
+use App\Server;
 use GuzzleHttp\Client;
-use Illuminate\Http\RedirectResponse;
-use MongoDB\Driver\Session;
+use Illuminate\Support\Facades\Cache;
 
 class OPFWHelper
 {
@@ -108,13 +105,66 @@ class OPFWHelper
     }
 
     /**
+     * Updates job data for a player
+     *
+     * @param Player $player
+     * @param string $character_id
+     * @return OPFWResponse
+     */
+    public static function updateJob(Player $player, string $character_id): OPFWResponse
+    {
+        $steam = $player->steam_identifier;
+
+        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        if (!$status->isOnline()) {
+            return new OPFWResponse(true, 'Player is offline, no refresh needed.');
+        }
+
+        $response = self::executeRoute($status->serverIp . 'execute/refreshJob', [
+            'steamIdentifier' => $steam,
+            'characterId'     => $character_id,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Updated job data for player.';
+        }
+
+        return $response;
+    }
+
+    /**
+     * Gets the world.json
+     *
+     * @param string $serverIp
+     * @return array|null
+     */
+    public static function getWorldJSON(string $serverIp): ?array
+    {
+        $serverIp = Server::fixApiUrl($serverIp);
+        $cache = 'world_json_' . md5($serverIp);
+
+        if (Cache::store('file')->has($cache)) {
+            return Cache::store('file')->get($cache);
+        } else {
+            $data = self::executeRoute($serverIp . 'world.json', [], false);
+
+            if ($data->data) {
+                Cache::store('file')->set($cache, $data->data, 5);
+            }
+
+            return $data->data;
+        }
+    }
+
+    /**
      * Executes an op-fw route
      *
      * @param string $route
      * @param array $data
+     * @param bool $isPost
      * @return OPFWResponse
      */
-    private static function executeRoute(string $route, array $data): OPFWResponse
+    private static function executeRoute(string $route, array $data, bool $isPost = true): OPFWResponse
     {
         $token = env('OP_FW_TOKEN');
 
@@ -123,7 +173,7 @@ class OPFWHelper
         }
 
         $client = new Client();
-        $res = $client->request('POST', $route, [
+        $res = $client->request($isPost ? 'POST' : 'GET', $route, [
             'query'   => $data,
             'headers' => [
                 'Authorization' => 'Bearer ' . $token,

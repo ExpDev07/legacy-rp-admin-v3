@@ -53,7 +53,7 @@ class PlayerStatus
         $this->serverIp = Server::fixApiUrl($serverIp);
         $this->serverId = $serverId;
 
-        $this->serverName = explode('.', str_replace('https://', '', $this->serverIp))[0];
+        $this->serverName = Server::getServerName($serverIp);
     }
 
     public function isOnline(): bool
