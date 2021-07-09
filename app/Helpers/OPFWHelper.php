@@ -108,6 +108,34 @@ class OPFWHelper
     }
 
     /**
+     * Updates job data for a player
+     *
+     * @param Player $player
+     * @param string $character_id
+     * @return OPFWResponse
+     */
+    public static function updateJob(Player $player, string $character_id): OPFWResponse
+    {
+        $steam = $player->steam_identifier;
+
+        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        if (!$status->isOnline()) {
+            return new OPFWResponse(true, 'Player is offline, no refresh needed.');
+        }
+
+        $response = self::executeRoute($status->serverIp . 'execute/refreshJob', [
+            'steamIdentifier' => $steam,
+            'characterId'     => $character_id,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Updated job data for player.';
+        }
+
+        return $response;
+    }
+
+    /**
      * Executes an op-fw route
      *
      * @param string $route

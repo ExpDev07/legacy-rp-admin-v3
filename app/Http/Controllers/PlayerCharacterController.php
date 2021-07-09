@@ -161,10 +161,19 @@ class PlayerCharacterController extends Controller
 
         $character->update($data);
 
+        $info = '';
+        if ($request->has('jobUpdate')) {
+            $info = 'In-Game Job refresh failed, user has to softnap.';
+            $refresh = OPFWHelper::updateJob($player, $character->character_id);
+            if ($refresh->status) {
+                $info = 'In-Game Job refresh was successful too.';
+            }
+        }
+
         $user = $request->user();
         PanelLog::logCharacterEdit($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $changed);
 
-        return back()->with('success', 'Character was successfully updated.');
+        return back()->with('success', 'Character was successfully updated. ' . $info);
     }
 
     /**
