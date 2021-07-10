@@ -4,13 +4,28 @@
         <portal to="title">
             <h1 class="dark:text-white !mb-2">
                 {{ t('map.title') }}
-                <select class="inline-block w-90 ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="server">
-                    <option v-for="server in servers" :key="server.id" :value="server.id">{{ server.name }}</option>
+                <select class="inline-block w-90 ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
+                        id="server">
+                    <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
                 </select>
             </h1>
             <p>
                 {{ data }}
             </p>
+        </portal>
+
+        <portal to="actions">
+            <div>
+                <!-- Play/Pause -->
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isPaused = true" v-if="!isPaused">
+                    <i class="fas fa-pause"></i>
+                    {{ t('map.pause') }}
+                </button>
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isPaused = false" v-if="isPaused">
+                    <i class="fas fa-play"></i>
+                    {{ t('map.play') }}
+                </button>
+            </div>
         </portal>
 
         <template>
@@ -24,8 +39,20 @@
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import L from "leaflet";
-import { GestureHandling } from "leaflet-gesture-handling";
+import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
+
+(function(global){
+    let MarkerMixin = {
+        _updateZIndex: function (offset) {
+            this._icon.style.zIndex = this.options.forceZIndex ? (this.options.forceZIndex + (this.options.zIndexOffset || 0)) : (this._zIndex + offset);
+        },
+        setForceZIndex: function(forceZIndex) {
+            this.options.forceZIndex = forceZIndex ? forceZIndex : null;
+        }
+    };
+    if (global) global.include(MarkerMixin);
+})(L.Marker);
 
 export default {
     layout: Layout,
@@ -40,10 +67,12 @@ export default {
     },
     data() {
         return {
-            players: [],
             map: null,
             markers: {},
-            data: this.t('map.loading')
+            data: this.t('map.loading'),
+            connection: null,
+            isPaused: false,
+            isDevelopment: false // For local development set it to true
         };
     },
     methods: {
@@ -56,7 +85,40 @@ export default {
                 lng: coords.x
             }
         },
-        async refreshMap() {
+        async doMapRefresh(server) {
+            const _this = this;
+
+            if (this.connection) {
+                this.connection.close();
+            }
+
+            try {
+                this.connection = new WebSocket((this.isDevelopment ? "ws://" : "wss://") + window.location.hostname + ":8080/map/go/socket?server=" + encodeURIComponent(server));
+
+                this.connection.onmessage = function (event) {
+                    try {
+                        const data = JSON.parse(event.data);
+
+                        _this.renderMapData(data);
+                    } catch (e) {
+                        console.error('Failed to parse socket message ', e)
+                    }
+                }
+
+                this.connection.onclose = function () {
+                    _this.data = _this.t('map.closed', $('#server option:selected').text());
+                };
+            } catch (e) {
+                this.data = this.t('map.closed', $('#server option:selected').text());
+
+                console.error('Failed to connect to socket', e);
+            }
+        },
+        renderMapData(data) {
+            if (this.isPaused) {
+                return;
+            }
+
             const conf = {
                 game: {
                     bounds: {
@@ -78,54 +140,93 @@ export default {
 
                 return _this.coords(coords);
             };
+            const getIcon = (isDriving, isPassenger) => {
+                const zoom = _this.map.getZoom();
+                const zoomModifier = zoom === 7 ? 1.1 : 1;
 
-            const server = $('#server').val();
-            const data = (await axios.get('/map/data?server=' + (server ? server : 0))).data;
+                let icon = new L.Icon(
+                    {
+                        iconUrl: '/images/circle.png',
+                        iconSize: [17 * zoomModifier, 17 * zoomModifier],
+                        iconAnchor: [(17 * zoomModifier) / 2, (17 * zoomModifier) / 2]
+                    }
+                );
 
-            if (data && 'players' in data && Array.isArray(data.players)) {
-                this.players = data.players;
+                if (isDriving) {
+                    icon = new L.Icon(
+                        {
+                            iconUrl: '/images/car.png',
+                            iconSize: [20 * zoomModifier, 20 * zoomModifier],
+                            iconAnchor: [(20 * zoomModifier) / 2, (20 * zoomModifier) / 2]
+                        }
+                    );
+                } else if (isPassenger) {
+                    icon = new L.Icon(
+                        {
+                            iconUrl: '/images/circle_red.png',
+                            iconSize: [12 * zoomModifier, 12 * zoomModifier],
+                            iconAnchor: [(12 * zoomModifier) / 2, (12 * zoomModifier) / 2]
+                        }
+                    )
+                }
 
+                return icon;
+            };
+
+            if (data && Array.isArray(data)) {
                 if (this.map) {
                     const _this = this;
                     let markers = this.markers;
 
                     let validIds = [];
-                    $.each(this.players, function (_, player) {
+                    $.each(data, function (_, player) {
                         const id = "player_" + player.character.id,
                             coords = convert(player.coords),
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
-                            icon = 'vehicle' in player && player.vehicle ? '/images/car.png' : '/images/circle.png',
-                            size = 'vehicle' in player && player.vehicle ? [20, 20] : [17, 17],
-                            iconObj = new L.Icon(
-                                {
-                                    iconUrl: icon,
-                                    iconSize: size,
-                                    iconAnchor: [size[0] / 2, size[1] / 2]
-                                }
-                            );
+                            isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
+                            isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
+                            icon = getIcon(isDriving, isPassenger);
 
                         validIds.push(id);
 
                         if (id in markers) {
+                            markers[id].setIcon(icon);
                             markers[id].setLatLng(coords);
-                            markers[id].setIcon(iconObj);
                             markers[id].setRotationAngle(heading);
                         } else {
                             let marker = L.marker(coords,
                                 {
-                                    icon: iconObj,
+                                    icon: icon,
                                     rotationAngle: heading
                                 }
                             );
 
                             marker.addTo(_this.map);
-                            marker.bindPopup(player.character.fullName + ' (#' + player.character.id + ')');
+
+                            marker.bindPopup('');
 
                             markers[id] = marker;
                         }
+
+                        let extra = '';//'<br>Altitude: ' + Math.round(player.coords.z);
+                        if (isDriving) {
+                            extra += '<br>Is driving';
+                            markers[id].options.forceZIndex = 100;
+                            //markers[id].setZIndexOffset(2);
+                        } else if (isPassenger) {
+                            extra += '<br>Is a passenger';
+                            markers[id].options.forceZIndex = 102;
+                            //markers[id].setZIndexOffset(3);
+                        } else {
+                            extra += '<br>Is on foot';
+                            markers[id].options.forceZIndex = 101;
+                            //markers[id].setZIndexOffset(1);
+                        }
+
+                        markers[id]._popup.setContent(player.character.fullName + ' (<a href="/players/' + player.steamIdentifier + '">#' + player.character.id + '</a>)' + extra);
                     });
 
-                    $.each(markers, function(id, marker) {
+                    $.each(markers, function (id, marker) {
                         if (!validIds.includes(id)) {
                             _this.map.removeLayer(marker);
                             delete markers[id];
@@ -139,41 +240,63 @@ export default {
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
-
-            setTimeout(function() {
-                _this.refreshMap();
-            }, 5000);
         },
         async buildMap() {
             if (this.map) {
                 return;
             }
+            const range = (coords, max) => {
+                if (coords.x < 0 || coords.y < 0 || coords.x > max || coords.y > max) {
+                    coords.z = 2;
+                    coords.y = 0;
+                    coords.x = 0;
+                }
+
+                return coords;
+            };
 
             L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
+            const _this = this;
             L.TileLayer.GTA = L.TileLayer.extend({
-                getTileUrl: function(coords) {
+                getTileUrl: function (coords) {
                     coords.x = coords.x < 0 ? 0 : coords.x;
                     coords.y = coords.y < 0 ? 0 : coords.y;
 
-                    switch(coords.z) {
+                    switch (coords.z) {
+                        case 0:
+                            coords = range(coords, 0);
+                            break;
+                        case 1:
+                            coords = range(coords, 1);
+                            break;
                         case 2:
+                            coords = range(coords, 3);
                             break;
                         case 3:
+                            coords = range(coords, 7);
                             break;
                         case 4:
+                            coords = range(coords, 15);
                             break;
                         case 5:
+                            coords = range(coords, 31);
                             break;
                         case 6:
+                            coords = range(coords, 63);
+                            break;
+                        case 7:
+                            coords = range(coords, 127);
+                            break;
+                        case 8:
                             break;
                     }
 
-                    return '/images/tiles/' + coords.z + '_' + coords.x + '_' + coords.y + '.jpg';
+                    return (_this.isDevelopment ? 'http://' : 'https://') + window.location.hostname + ':8080/map/go/tiles/' + coords.z + '_' + coords.x + '_' + coords.y + '.jpg';
                 }
             });
 
-            L.tileLayer.gta = function() {
+            L.tileLayer.gta = function () {
                 return new L.TileLayer.GTA();
             }
 
@@ -181,7 +304,7 @@ export default {
                 crs: L.CRS.Simple,
                 gestureHandling: true,
                 minZoom: 2,
-                maxZoom: 6,
+                maxZoom: 7,
                 maxBounds: L.latLngBounds(L.latLng(-41, 66), L.latLng(-217, 185))
             });
 
@@ -189,15 +312,21 @@ export default {
 
             this.map.setView([-124, 124], 3);
 
-            this.map.on('click', function(e) {
+            this.map.on('click', function (e) {
                 console.log('map', e.latlng);
             });
-
-            await this.refreshMap();
         }
     },
     mounted() {
+        const _this = this;
         this.buildMap();
+
+        $(document).ready(function () {
+            $('#server').on('change', function () {
+                _this.doMapRefresh($(this).val());
+            });
+            $('#server').trigger('change');
+        });
     }
 };
 </script>

@@ -141,6 +141,8 @@ Create a symbolic link at **public/storage** so that it points to **storage/app/
 $ php artisan storage:link
 ```
 
+Install and run the socket server from [legacyrp-admin-panel-sockets](https://github.com/milan60/legacyrp-admin-panel-sockets)
+
 Compile frontend assets (use "dev" for development and "prod" for production):
 ```bash
 $ npm run dev/prod
