@@ -55,7 +55,10 @@
         "title": "Live-Map",
         "loading": "Loading player data...",
         "error": "Player data for {0} empty or not available!",
-        "data": "Currently {0} online players."
+        "closed": "Data connection for {0} was closed.",
+        "data": "Currently {0} online players.",
+        "play": "Continue update",
+        "pause": "Pause update"
     },
     "nav": {
         "dark": "Dark",
