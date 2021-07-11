@@ -85,6 +85,13 @@ export default {
                 lng: coords.x
             }
         },
+        hostname(isSocket) {
+            if (isSocket) {
+                return this.isDevelopment ? 'ws://' + window.location.hostname + ':8080/' : 'wss://' + window.location.hostname + ':8443/';
+            } else {
+                return this.isDevelopment ? 'http://' + window.location.hostname + ':8080/' : 'https://' + window.location.hostname + ':8443/';
+            }
+        },
         async doMapRefresh(server) {
             const _this = this;
 
@@ -93,7 +100,7 @@ export default {
             }
 
             try {
-                this.connection = new WebSocket((this.isDevelopment ? "ws://" : "wss://") + window.location.hostname + ":8080/map/go/socket?server=" + encodeURIComponent(server));
+                this.connection = new WebSocket(this.hostname(true) + "/map/go/socket?server=" + encodeURIComponent(server));
 
                 this.connection.onmessage = function (event) {
                     try {
@@ -257,7 +264,8 @@ export default {
 
             L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
-            const _this = this;
+            const _this = this,
+                url = this.hostname(false);
             L.TileLayer.GTA = L.TileLayer.extend({
                 getTileUrl: function (coords) {
                     coords.x = coords.x < 0 ? 0 : coords.x;
@@ -292,7 +300,7 @@ export default {
                             break;
                     }
 
-                    return (_this.isDevelopment ? 'http://' : 'https://') + window.location.hostname + ':8080/map/go/tiles/' + coords.z + '_' + coords.x + '_' + coords.y + '.jpg';
+                    return url + '/map/go/tiles/' + coords.z + '_' + coords.x + '_' + coords.y + '.jpg';
                 }
             });
 
