@@ -87,9 +87,9 @@ export default {
         },
         hostname(isSocket) {
             if (isSocket) {
-                return this.isDevelopment ? 'ws://' + window.location.hostname + ':8080/' : 'wss://' + window.location.hostname + ':8443/';
+                return this.isDevelopment ? 'ws://' + window.location.hostname + ':8080/' : 'wss://' + window.location.hostname + ':8443';
             } else {
-                return this.isDevelopment ? 'http://' + window.location.hostname + ':8080/' : 'https://' + window.location.hostname + ':8443/';
+                return this.isDevelopment ? 'http://' + window.location.hostname + ':8080/' : 'https://' + window.location.hostname + ':8443';
             }
         },
         async doMapRefresh(server) {
