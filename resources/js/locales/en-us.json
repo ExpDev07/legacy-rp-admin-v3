@@ -58,7 +58,9 @@
         "closed": "Data connection for {0} was closed.",
         "data": "Currently {0} online players.",
         "play": "Continue update",
-        "pause": "Pause update"
+        "pause": "Pause update",
+        "track": "Track character",
+        "stop_track": "Stop tracking character"
     },
     "nav": {
         "dark": "Dark",

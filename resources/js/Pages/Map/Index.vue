@@ -41,6 +41,7 @@ import VSection from './../../Components/Section';
 import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
+import custom_icons from "../../data/vehicles.json";
 
 (function(global){
     let MarkerMixin = {
@@ -72,7 +73,8 @@ export default {
             data: this.t('map.loading'),
             connection: null,
             isPaused: false,
-            isDevelopment: false // For local development set it to true
+            trackedPlayer: window.location.hash.substr(1),
+            firstRefresh: true
         };
     },
     methods: {
@@ -86,10 +88,12 @@ export default {
             }
         },
         hostname(isSocket) {
+            const isDev = window.location.hostname === 'localhost';
+
             if (isSocket) {
-                return this.isDevelopment ? 'ws://' + window.location.hostname + ':8080/' : 'wss://' + window.location.hostname + ':8443';
+                return isDev ? 'ws://' + window.location.hostname + ':8080' : 'wss://' + window.location.hostname + ':8443';
             } else {
-                return this.isDevelopment ? 'http://' + window.location.hostname + ':8080/' : 'https://' + window.location.hostname + ':8443';
+                return isDev ? 'http://' + window.location.hostname + ':8080' : 'https://' + window.location.hostname + ':8443';
             }
         },
         async doMapRefresh(server) {
@@ -107,6 +111,8 @@ export default {
                         const data = JSON.parse(event.data);
 
                         _this.renderMapData(data);
+
+                        _this.firstRefresh = false;
                     } catch (e) {
                         console.error('Failed to parse socket message ', e)
                     }
@@ -121,22 +127,88 @@ export default {
                 console.error('Failed to connect to socket', e);
             }
         },
+        getVehicleType(vehicle) {
+            if (!vehicle) {
+                return null;
+            }
+
+            let ret = {
+                type: 'car',
+                size: 23
+            };
+
+            $.each(custom_icons, function(type, cfg) {
+                if (cfg.models.includes(vehicle.model)) {
+                    ret.type = type;
+                    ret.size = cfg.size;
+                }
+            });
+
+            return ret;
+        },
+        getIcon(player, isDriving, isPassenger, isInvisible) {
+            let size = {
+                circle: 17,
+                circle_red: 12,
+                circle_green: 13
+            };
+
+            let icon = new L.Icon(
+                {
+                    iconUrl: '/images/circle.png',
+                    iconSize: [size.circle, size.circle]
+                }
+            );
+
+            if (isInvisible) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/circle_green.png',
+                        iconSize: [size.circle_green, size.circle_green]
+                    }
+                );
+            } else if (isDriving) {
+                const info = this.getVehicleType(player.vehicle);
+
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/' + info.type + '.png',
+                        iconSize: [info.size, info.size]
+                    }
+                );
+            } else if (isPassenger) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/circle_red.png',
+                        iconSize: [size.circle_red, size.circle_red]
+                    }
+                )
+            }
+
+            return icon;
+        },
         renderMapData(data) {
             if (this.isPaused) {
                 return;
             }
 
+            if (this.trackedPlayer && this.trackedPlayer in this.markers) {
+                this.map.dragging.disable();
+            } else {
+                this.map.dragging.enable();
+            }
+
             const conf = {
                 game: {
                     bounds: {
-                        min: {x: -2870, y: 7000},
-                        max: {x: 4000, y: -3500}
+                        min: {x: -2862.10546875, y: 7616.0966796875},
+                        max: {x: 4195.29248046875, y: -3579.89013671875}
                     }
                 },
                 map: {
                     bounds: {
-                        min: {x: 85.5, y: -67.1},
-                        max: {x: 172.1, y: -199.4}
+                        min: {x: 85.546875, y: -59.62890625},
+                        max: {x: 174.2109375, y: -200.24609375}
                     }
                 }
             };
@@ -147,43 +219,27 @@ export default {
 
                 return _this.coords(coords);
             };
-            const getIcon = (isDriving, isPassenger) => {
-                const zoom = _this.map.getZoom();
-                const zoomModifier = zoom === 7 ? 1.1 : 1;
-
-                let icon = new L.Icon(
-                    {
-                        iconUrl: '/images/circle.png',
-                        iconSize: [17 * zoomModifier, 17 * zoomModifier],
-                        iconAnchor: [(17 * zoomModifier) / 2, (17 * zoomModifier) / 2]
-                    }
-                );
-
-                if (isDriving) {
-                    icon = new L.Icon(
-                        {
-                            iconUrl: '/images/car.png',
-                            iconSize: [20 * zoomModifier, 20 * zoomModifier],
-                            iconAnchor: [(20 * zoomModifier) / 2, (20 * zoomModifier) / 2]
-                        }
-                    );
-                } else if (isPassenger) {
-                    icon = new L.Icon(
-                        {
-                            iconUrl: '/images/circle_red.png',
-                            iconSize: [12 * zoomModifier, 12 * zoomModifier],
-                            iconAnchor: [(12 * zoomModifier) / 2, (12 * zoomModifier) / 2]
-                        }
-                    )
-                }
-
-                return icon;
-            };
 
             if (data && Array.isArray(data)) {
                 if (this.map) {
                     const _this = this;
                     let markers = this.markers;
+
+                    let vehicles = {};
+                    $.each(data, function (index, player) {
+                        if (!('character' in player) || !player.character) {
+                            player.character = {
+                                id: 0,
+                                fullName: 'N/A'
+                            };
+                        }
+
+                        if ('vehicle' in player && player.vehicle && player.vehicle.driving) {
+                            vehicles[player.vehicle.id] = player.character.id === 0 ? 'Nobody' : player.character.fullName;
+                        }
+
+                        data[index] = player
+                    });
 
                     let validIds = [];
                     $.each(data, function (_, player) {
@@ -192,7 +248,10 @@ export default {
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
-                            icon = getIcon(isDriving, isPassenger);
+                            isInvisible = 'invisible' in player && player.invisible,
+                            speed = 'vehicle' in player && player.vehicle && 'speed' in player.vehicle ? player.vehicle.speed : null,
+                            icon = _this.getIcon(player, isDriving, isPassenger, isInvisible),
+                            vehicle = _this.getVehicleType(player.vehicle);
 
                         validIds.push(id);
 
@@ -215,19 +274,33 @@ export default {
                             markers[id] = marker;
                         }
 
-                        let extra = '';//'<br>Altitude: ' + Math.round(player.coords.z);
-                        if (isDriving) {
-                            extra += '<br>Is driving';
-                            markers[id].options.forceZIndex = 100;
-                            //markers[id].setZIndexOffset(2);
-                        } else if (isPassenger) {
-                            extra += '<br>Is a passenger';
-                            markers[id].options.forceZIndex = 102;
-                            //markers[id].setZIndexOffset(3);
-                        } else {
-                            extra += '<br>Is on foot';
+                        let extra = '<br>Altitude: ' + Math.round(player.coords.z) + 'm';
+                        if (speed) {
+                            extra += '<br>Speed: ' + Math.round(speed * 2.236936) + ' mph';
+                        }
+
+                        let attributes = [];
+                        if (isInvisible) {
+                            attributes.push('invisible');
                             markers[id].options.forceZIndex = 101;
-                            //markers[id].setZIndexOffset(1);
+                        }
+                        if (isDriving) {
+                            attributes.push('driving (' + vehicle.type + ')');
+                            markers[id].options.forceZIndex = 100;
+                        } else if (isPassenger) {
+                            attributes.push('passenger of ' + (player.vehicle.id in vehicles ? vehicles[player.vehicle.id] : 'Nobody'));
+                            markers[id].options.forceZIndex = 102;
+                        } else {
+                            attributes.push('on foot');
+                            markers[id].options.forceZIndex = 101;
+                        }
+                        extra += '<br><i>Is ' + attributes.shift() + (attributes.length > 0 ? ' and ' + attributes.join(', ') : '') + '</i>';
+                        if (_this.trackedPlayer === id) {
+                            extra += '<br><br><a href="#" class="track-cid" data-trackid="stop"">' + _this.t('map.stop_track') + '</a>';
+
+                            _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom());
+                        } else {
+                            extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '"">' + _this.t('map.track') + '</a>';
                         }
 
                         markers[id]._popup.setContent(player.character.fullName + ' (<a href="/players/' + player.steamIdentifier + '">#' + player.character.id + '</a>)' + extra);
@@ -264,8 +337,7 @@ export default {
 
             L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
 
-            const _this = this,
-                url = this.hostname(false);
+            const url = this.hostname(false);
             L.TileLayer.GTA = L.TileLayer.extend({
                 getTileUrl: function (coords) {
                     coords.x = coords.x < 0 ? 0 : coords.x;
@@ -323,6 +395,24 @@ export default {
             this.map.on('click', function (e) {
                 console.log('map', e.latlng);
             });
+
+            const _this = this;
+            $('#map').on('click', '.track-cid', function(e) {
+                e.preventDefault();
+
+                const track = $(this).data('trackid');
+                if (track === 'stop') {
+                    _this.trackedPlayer = null;
+                    window.location.hash = '';
+                } else {
+                    _this.trackedPlayer = track;
+                    window.location.hash = track;
+
+                    _this.map.closePopup();
+                }
+            });
+
+            $('#map').append('<style>.leaflet-marker-icon {transform-origin: center center !important;}</style>');
         }
     },
     mounted() {
