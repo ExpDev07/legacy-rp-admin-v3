@@ -1,5 +1,5 @@
 {
-    "helicopter.png": {
+    "helicopter": {
         "size": 28,
         "models": [
             "906515397",
@@ -35,7 +35,7 @@
             "thruster"
         ]
     },
-    "boat.png": {
+    "boat": {
         "size": 28,
         "models": [
             "dinghy",
@@ -66,7 +66,7 @@
             "predator"
         ]
     },
-    "plane.png": {
+    "plane": {
         "size": 28,
         "models": [
             "alphaz1",
@@ -104,7 +104,7 @@
             "vestra"
         ]
     },
-    "jet.png": {
+    "jet": {
         "size": 25,
         "models": [
             "besra",
@@ -116,7 +116,7 @@
         ]
     },
 
-    "tank.png": {
+    "tank": {
         "size": 27,
         "models": [
             "apc",

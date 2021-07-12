@@ -127,22 +127,88 @@ export default {
                 console.error('Failed to connect to socket', e);
             }
         },
+        getVehicleType(vehicle) {
+            if (!vehicle) {
+                return null;
+            }
+
+            let ret = {
+                type: 'car',
+                size: 23
+            };
+
+            $.each(custom_icons, function(type, cfg) {
+                if (cfg.models.includes(vehicle.model)) {
+                    ret.type = type;
+                    ret.size = cfg.size;
+                }
+            });
+
+            return ret;
+        },
+        getIcon(player, isDriving, isPassenger, isInvisible) {
+            let size = {
+                circle: 17,
+                circle_red: 12,
+                circle_green: 13
+            };
+
+            let icon = new L.Icon(
+                {
+                    iconUrl: '/images/circle.png',
+                    iconSize: [size.circle, size.circle]
+                }
+            );
+
+            if (isInvisible) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/circle_green.png',
+                        iconSize: [size.circle_green, size.circle_green]
+                    }
+                );
+            } else if (isDriving) {
+                const info = this.getVehicleType(player.vehicle);
+
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/' + info.type + '.png',
+                        iconSize: [info.size, info.size]
+                    }
+                );
+            } else if (isPassenger) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/circle_red.png',
+                        iconSize: [size.circle_red, size.circle_red]
+                    }
+                )
+            }
+
+            return icon;
+        },
         renderMapData(data) {
             if (this.isPaused) {
                 return;
             }
 
+            if (this.trackedPlayer && this.trackedPlayer in this.markers) {
+                this.map.dragging.disable();
+            } else {
+                this.map.dragging.enable();
+            }
+
             const conf = {
                 game: {
                     bounds: {
-                        min: {x: -2870, y: 7000},
-                        max: {x: 4000, y: -3500}
+                        min: {x: -2862.10546875, y: 7616.0966796875},
+                        max: {x: 4195.29248046875, y: -3579.89013671875}
                     }
                 },
                 map: {
                     bounds: {
-                        min: {x: 85.5, y: -67.1},
-                        max: {x: 172.1, y: -199.4}
+                        min: {x: 85.546875, y: -59.62890625},
+                        max: {x: 174.2109375, y: -200.24609375}
                     }
                 }
             };
@@ -152,60 +218,6 @@ export default {
                 coords.y = _this.mapNumber(coords.y, conf.game.bounds.min.y, conf.game.bounds.max.y, conf.map.bounds.min.y, conf.map.bounds.max.y);
 
                 return _this.coords(coords);
-            };
-            const getIcon = (player, isDriving, isPassenger, isInvisible) => {
-                const zoom = _this.map.getZoom();
-                const zoomModifier = zoom === 7 ? 1.2 : 1;
-                let size = {
-                    car: 23,
-                    circle: 17,
-                    circle_red: 12,
-                    circle_green: 13
-                };
-
-                let icon = new L.Icon(
-                    {
-                        iconUrl: '/images/circle.png',
-                        iconSize: [size.circle * zoomModifier, size.circle * zoomModifier],
-                        iconAnchor: [(size.car * zoomModifier) / 2, (size.car * zoomModifier) / 2]
-                    }
-                );
-
-                if (isInvisible) {
-                    icon = new L.Icon(
-                        {
-                            iconUrl: '/images/circle_green.png',
-                            iconSize: [size.circle_green * zoomModifier, size.circle_green * zoomModifier],
-                            iconAnchor: [(size.car * zoomModifier) / 2, (size.car * zoomModifier) / 2]
-                        }
-                    );
-                } else if (isDriving) {
-                    let iconImage = 'car.png';
-                    $.each(custom_icons, function(image, cfg) {
-                        if (cfg.models.includes(player.vehicle.model)) {
-                            iconImage = image;
-                            size.car = cfg.size;
-                        }
-                    });
-
-                    icon = new L.Icon(
-                        {
-                            iconUrl: '/images/' + iconImage,
-                            iconSize: [size.car * zoomModifier, size.car * zoomModifier],
-                            iconAnchor: [(size.car * zoomModifier) / 2, (size.car * zoomModifier) / 2]
-                        }
-                    );
-                } else if (isPassenger) {
-                    icon = new L.Icon(
-                        {
-                            iconUrl: '/images/circle_red.png',
-                            iconSize: [size.circle_red * zoomModifier, size.circle_red * zoomModifier],
-                            iconAnchor: [(size.car * zoomModifier) / 2, (size.car * zoomModifier) / 2]
-                        }
-                    )
-                }
-
-                return icon;
             };
 
             if (data && Array.isArray(data)) {
@@ -229,7 +241,6 @@ export default {
                         data[index] = player
                     });
 
-                    let hasTracked = false;
                     let validIds = [];
                     $.each(data, function (_, player) {
                         const id = "player_" + player.character.id,
@@ -239,7 +250,8 @@ export default {
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
                             isInvisible = 'invisible' in player && player.invisible,
                             speed = 'vehicle' in player && player.vehicle && 'speed' in player.vehicle ? player.vehicle.speed : null,
-                            icon = getIcon(player, isDriving, isPassenger, isInvisible);
+                            icon = _this.getIcon(player, isDriving, isPassenger, isInvisible),
+                            vehicle = _this.getVehicleType(player.vehicle);
 
                         validIds.push(id);
 
@@ -273,7 +285,7 @@ export default {
                             markers[id].options.forceZIndex = 101;
                         }
                         if (isDriving) {
-                            attributes.push('driving');
+                            attributes.push('driving (' + vehicle.type + ')');
                             markers[id].options.forceZIndex = 100;
                         } else if (isPassenger) {
                             attributes.push('passenger of ' + (player.vehicle.id in vehicles ? vehicles[player.vehicle.id] : 'Nobody'));
@@ -286,19 +298,13 @@ export default {
                         if (_this.trackedPlayer === id) {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="stop"">' + _this.t('map.stop_track') + '</a>';
 
-                            _this.map.dragging.disable();
                             _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom());
-                            hasTracked = true;
                         } else {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '"">' + _this.t('map.track') + '</a>';
                         }
 
                         markers[id]._popup.setContent(player.character.fullName + ' (<a href="/players/' + player.steamIdentifier + '">#' + player.character.id + '</a>)' + extra);
                     });
-
-                    if (!hasTracked) {
-                        this.map.dragging.enable();
-                    }
 
                     $.each(markers, function (id, marker) {
                         if (!validIds.includes(id)) {
@@ -405,6 +411,8 @@ export default {
                     _this.map.closePopup();
                 }
             });
+
+            $('#map').append('<style>.leaflet-marker-icon {transform-origin: center center !important;}</style>');
         }
     },
     mounted() {
