@@ -31,7 +31,7 @@
         <template>
             <div class="relative">
                 <div id="map" class="w-map h-max -mt-12 max-w-full relative"></div>
-                <pre class="bg-gray-200 text-blue-500 text-xxs leading-4 absolute bottom-0 left-0 rounded-tr px-1 py-0.5 cursor-pointer z-1k" @click="copyText($event, clickedCoords)" v-if="clickedCoords">{{ clickedCoords }}</pre>
+                <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k" @click="copyText($event, clickedCoords)" v-if="clickedCoords">{{ clickedCoords }}</pre>
             </div>
         </template>
 
@@ -425,6 +425,7 @@ export default {
                 maxZoom: 7,
                 maxBounds: L.latLngBounds(L.latLng(-41, 66), L.latLng(-217, 185))
             });
+            this.map.attributionControl.addAttribution('<a href="https://github.com/milan60" target="_blank">milan60</a>');
 
             L.tileLayer.gta().addTo(this.map);
 
@@ -461,7 +462,12 @@ export default {
                 }
             });
 
-            $('#map').append('<style>.leaflet-marker-icon {transform-origin: center center !important;}.leaflet-grab {cursor: default;}</style>');
+            const styles = [
+                '.leaflet-marker-icon {transform-origin: center center !important;}',
+                '.leaflet-grab {cursor: default;}',
+                '.coordinate-attr{font-size: 11px;padding: 0 5px;color:rgb(0, 120, 168);line-height:16.5px}',
+            ];
+            $('#map').append('<style>' + styles.join('') + '</style>');
         }
     },
     mounted() {
