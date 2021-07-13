@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\LoggingHelper;
 use App\Helpers\SessionHelper;
 use Closure;
@@ -35,6 +36,8 @@ class StaffMiddleware
             return redirect('/login')->with('error',
                 'You must be a staff member to access the dashboard! If you believe this is a mistake, contact a developer.'
             );
+        } else {
+            GeneralHelper::updateSocketSession();
         }
 
         return $next($request);

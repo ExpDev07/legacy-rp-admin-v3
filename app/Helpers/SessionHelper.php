@@ -175,11 +175,27 @@ class SessionHelper
                 LoggingHelper::log($helper->sessionKey, $log);
             }
 
+            $uri = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+            $extraDomains = [
+                parse_url($uri, PHP_URL_HOST) . ':8080',
+                parse_url($uri, PHP_URL_HOST) . ':8443',
+            ];
+
             setcookie($key, $helper->sessionKey, [
                 'expires' => time() + self::Lifetime,
                 'secure'  => true,
                 'path'    => '/',
             ]);
+
+            foreach ($extraDomains as $domain) {
+                setcookie($key, $helper->sessionKey, [
+                    'expires' => time() + self::Lifetime,
+                    'secure'  => true,
+                    'path'    => '/',
+                    'domain'  => $domain,
+                ]);
+            }
 
             $helper->load();
             $helper->store();
