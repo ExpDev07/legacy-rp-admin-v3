@@ -29,7 +29,10 @@
         </portal>
 
         <template>
-            <div id="map" class="w-map h-max -mt-12 max-w-full"></div>
+            <div class="relative">
+                <div id="map" class="w-map h-max -mt-12 max-w-full relative"></div>
+                <pre class="bg-gray-200 text-blue-500 text-xxs leading-4 absolute bottom-0 left-0 rounded-tr px-1 py-0.5 cursor-pointer z-1k" @click="copyText($event, clickedCoords)" v-if="clickedCoords">{{ clickedCoords }}</pre>
+            </div>
         </template>
 
     </div>
@@ -55,6 +58,16 @@ import custom_icons from "../../data/vehicles.json";
     if (global) global.include(MarkerMixin);
 })(L.Marker);
 
+// Some functions for debugging
+let printPlayerInfo = null;
+window.debug = function(cid) {
+    printPlayerInfo = cid;
+};
+window.track = function(cid) {
+    window.location.hash = 'player_' + cid;
+    window.location.reload();
+};
+
 export default {
     layout: Layout,
     components: {
@@ -74,12 +87,43 @@ export default {
             connection: null,
             isPaused: false,
             trackedPlayer: window.location.hash.substr(1),
-            firstRefresh: true
+            firstRefresh: true,
+            clickedCoords: ''
         };
     },
     methods: {
+        getBounds() {
+            return {
+                game: {
+                    bounds: {
+                        min: {x: -2862.10546875, y: 7616.0966796875},
+                        max: {x: 4195.29248046875, y: -3579.89013671875}
+                    }
+                },
+                map: {
+                    bounds: {
+                        min: {x: 85.546875, y: -59.62890625},
+                        max: {x: 174.2109375, y: -200.24609375}
+                    }
+                }
+            };
+        },
         mapNumber(val, in_min, in_max, out_min, out_max) {
             return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        },
+        copyText(e, text) {
+            e.preventDefault();
+            const button = $(e.target).closest('a');
+
+            this.$copyText(text).then(function() {
+                button.removeClass('bg-blue-800');
+                button.addClass('bg-green-600');
+
+                setTimeout(function() {
+                    button.removeClass('bg-green-600');
+                    button.addClass('bg-blue-800');
+                }, 500);
+            });
         },
         coords(coords) {
             return {
@@ -198,20 +242,7 @@ export default {
                 this.map.dragging.enable();
             }
 
-            const conf = {
-                game: {
-                    bounds: {
-                        min: {x: -2862.10546875, y: 7616.0966796875},
-                        max: {x: 4195.29248046875, y: -3579.89013671875}
-                    }
-                },
-                map: {
-                    bounds: {
-                        min: {x: 85.546875, y: -59.62890625},
-                        max: {x: 174.2109375, y: -200.24609375}
-                    }
-                }
-            };
+            const conf = this.getBounds();
             const _this = this;
             const convert = coords => {
                 coords.x = _this.mapNumber(coords.x, conf.game.bounds.min.x, conf.game.bounds.max.x, conf.map.bounds.min.x, conf.map.bounds.max.x);
@@ -227,15 +258,8 @@ export default {
 
                     let vehicles = {};
                     $.each(data, function (index, player) {
-                        if (!('character' in player) || !player.character) {
-                            player.character = {
-                                id: 0,
-                                fullName: 'N/A'
-                            };
-                        }
-
                         if ('vehicle' in player && player.vehicle && player.vehicle.driving) {
-                            vehicles[player.vehicle.id] = player.character.id === 0 ? 'Nobody' : player.character.fullName;
+                            vehicles[player.vehicle.id] = !player.character ? 'Nobody' : player.character.fullName;
                         }
 
                         data[index] = player
@@ -243,6 +267,10 @@ export default {
 
                     let validIds = [];
                     $.each(data, function (_, player) {
+                        if (!player.character) {
+                            return;
+                        }
+
                         const id = "player_" + player.character.id,
                             coords = convert(player.coords),
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
@@ -252,6 +280,11 @@ export default {
                             speed = 'vehicle' in player && player.vehicle && 'speed' in player.vehicle ? player.vehicle.speed : null,
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible),
                             vehicle = _this.getVehicleType(player.vehicle);
+
+                        if (printPlayerInfo && printPlayerInfo === player.character.id) {
+                            printPlayerInfo = null;
+                            console.info('Player debug', player);
+                        }
 
                         validIds.push(id);
 
@@ -269,7 +302,9 @@ export default {
 
                             marker.addTo(_this.map);
 
-                            marker.bindPopup('');
+                            marker.bindPopup('', {
+                                autoPan: false
+                            });
 
                             markers[id] = marker;
                         }
@@ -285,7 +320,7 @@ export default {
                             markers[id].options.forceZIndex = 101;
                         }
                         if (isDriving) {
-                            attributes.push('driving (' + vehicle.type + ')');
+                            attributes.push('driving (' + (vehicle.type === 'car' ? 'car/bike' : vehicle.type) + ')');
                             markers[id].options.forceZIndex = 100;
                         } else if (isPassenger) {
                             attributes.push('passenger of ' + (player.vehicle.id in vehicles ? vehicles[player.vehicle.id] : 'Nobody'));
@@ -298,7 +333,9 @@ export default {
                         if (_this.trackedPlayer === id) {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="stop"">' + _this.t('map.stop_track') + '</a>';
 
-                            _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom());
+                            _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom(), {
+                                duration: 0.1
+                            });
                         } else {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '"">' + _this.t('map.track') + '</a>';
                         }
@@ -325,6 +362,7 @@ export default {
             if (this.map) {
                 return;
             }
+            const _this = this;
             const range = (coords, max) => {
                 if (coords.x < 0 || coords.y < 0 || coords.x > max || coords.y > max) {
                     coords.z = 2;
@@ -393,10 +431,21 @@ export default {
             this.map.setView([-124, 124], 3);
 
             this.map.on('click', function (e) {
-                console.log('map', e.latlng);
+                const conf = _this.getBounds();
+                let map = {
+                    x: e.latlng.lng,
+                    y: e.latlng.lat,
+                };
+                let game = {
+                    x: _this.mapNumber(e.latlng.lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x),
+                    y: _this.mapNumber(e.latlng.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y),
+                };
+
+                _this.clickedCoords = "[X=" + Math.round(game.x) + ",Y=" + Math.round(game.y) + "] / [X=" + map.x + ",Y=" + map.y + "]";
+
+                console.info('Clicked coordinates', map);
             });
 
-            const _this = this;
             $('#map').on('click', '.track-cid', function(e) {
                 e.preventDefault();
 
@@ -412,7 +461,7 @@ export default {
                 }
             });
 
-            $('#map').append('<style>.leaflet-marker-icon {transform-origin: center center !important;}</style>');
+            $('#map').append('<style>.leaflet-marker-icon {transform-origin: center center !important;}.leaflet-grab {cursor: default;}</style>');
         }
     },
     mounted() {
