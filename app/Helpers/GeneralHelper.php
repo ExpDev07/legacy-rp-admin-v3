@@ -66,4 +66,25 @@ class GeneralHelper
 
         return $newElement;
     }
+
+    /**
+     * Creates a session file for authentication with the socket server
+     */
+    public static function updateSocketSession()
+    {
+        $session = SessionHelper::getInstance();
+        $key = $session->getSessionKey();
+
+        $dir = rtrim(rtrim(env('SOCKET_ROOT', ''), '/'), '\\');
+
+        if ($dir && file_exists($dir) && is_dir($dir)) {
+            $dir .= '/sessions/';
+
+            if (!file_exists($dir)) {
+                mkdir($dir);
+            }
+
+            file_put_contents($dir . '/' . $key . '.session', json_encode($session->get('user')));
+        }
+    }
 }
