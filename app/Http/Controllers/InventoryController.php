@@ -99,7 +99,7 @@ class InventoryController extends Controller
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $sql = "SELECT `identifier`, `details`, `timestamp` FROM `user_logs` WHERE `action`='Item Moved' AND (" . $where . ") ORDER BY `timestamp` LIMIT 15 OFFSET " . (($page - 1) * 15);
+        $sql = "SELECT `identifier`, `details`, `timestamp` FROM `user_logs` WHERE `action`='Item Moved' AND (" . $where . ") ORDER BY `timestamp` DESC LIMIT 15 OFFSET " . (($page - 1) * 15);
 
         $logs = InventoryLogResource::collection(DB::select($sql));
 

@@ -23,6 +23,12 @@ module.exports = {
             '2xl': '1536px',
         },
         extend: {
+            zIndex: {
+                '1k': '1000'
+            },
+            fontSize: {
+                'xxs': '11px',
+            },
             fontFamily: {
                 'sans': [ 'Nunito', ...defaultTheme.fontFamily.sans ],
             },
