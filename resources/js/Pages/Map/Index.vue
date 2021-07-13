@@ -88,7 +88,8 @@ export default {
             isPaused: false,
             trackedPlayer: window.location.hash.substr(1),
             firstRefresh: true,
-            clickedCoords: ''
+            clickedCoords: '',
+            afkMap: {}
         };
     },
     methods: {
@@ -231,6 +232,9 @@ export default {
 
             return icon;
         },
+        formatSeconds(seconds) {
+            return this.$moment.utc(seconds * 1000).format('HH:mm:ss');
+        },
         renderMapData(data) {
             if (this.isPaused) {
                 return;
@@ -281,9 +285,30 @@ export default {
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible),
                             vehicle = _this.getVehicleType(player.vehicle);
 
+                        const roundedCoords = {
+                            x: player.coords.x.toFixed(1),
+                            y: player.coords.y.toFixed(1),
+                        },
+                            now = Math.round((new Date()).getTime() / 1000);
+
+                        if (!(id in _this.afkMap)) {
+                            _this.afkMap[id] = {
+                                coords: roundedCoords,
+                                lastChange: now,
+                            };
+                        } else if (_this.afkMap[id].coords.x !== roundedCoords.x || _this.afkMap[id].coords.y !== roundedCoords.y) {
+                            _this.afkMap[id].coords = roundedCoords;
+                            _this.afkMap[id].lastChange = now;
+                        }
+
+                        const afkTime = now - _this.afkMap[id].lastChange;
+
                         if (printPlayerInfo && printPlayerInfo === player.character.id) {
                             printPlayerInfo = null;
-                            console.info('Player debug', player);
+                            console.info('Player debug', {
+                                afkTime: afkTime,
+                                player: player
+                            });
                         }
 
                         validIds.push(id);
@@ -330,6 +355,11 @@ export default {
                             markers[id].options.forceZIndex = 101;
                         }
                         extra += '<br><i>Is ' + attributes.shift() + (attributes.length > 0 ? ' and ' + attributes.join(', ') : '') + '</i>';
+
+                        if (afkTime > 300) {
+                            extra += '<br><i>Hasn\'t moved in ' + _this.formatSeconds(afkTime) + '</i>';
+                        }
+
                         if (_this.trackedPlayer === id) {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="stop"">' + _this.t('map.stop_track') + '</a>';
 
