@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Player;
 use App\Server;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -26,8 +27,13 @@ class MapController extends Controller
             ];
         }
 
+        $staff = Player::query()->where('is_staff', '=', true)->select(['steam_identifier'])->get()->toArray();
+
         return Inertia::render('Map/Index', [
             'servers' => $serverIps,
+            'staff' => $staff ? array_map(function($player) {
+                return $player['steam_identifier'];
+            }, $staff) : []
         ]);
     }
 
