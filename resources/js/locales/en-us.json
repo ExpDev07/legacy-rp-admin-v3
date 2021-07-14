@@ -60,7 +60,8 @@
         "play": "Continue update",
         "pause": "Pause update",
         "track": "Track character",
-        "stop_track": "Stop tracking character"
+        "stop_track": "Stop tracking character",
+        "afk_title": "AFK Players"
     },
     "nav": {
         "dark": "Dark",

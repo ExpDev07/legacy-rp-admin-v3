@@ -29,9 +29,15 @@
         </portal>
 
         <template>
-            <div class="relative">
-                <div id="map" class="w-map h-max -mt-12 max-w-full relative"></div>
-                <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k" @click="copyText($event, clickedCoords)" v-if="clickedCoords">{{ clickedCoords }}</pre>
+            <div class="-mt-12" id="map-wrapper">
+                <div class="relative">
+                    <div id="map" class="w-map max-w-full relative h-max"></div>
+                    <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k" @click="copyText($event, clickedCoords)" v-if="clickedCoords">{{ clickedCoords }}</pre>
+                </div>
+                <div v-if="afkPeople" class="w-map-right pt-4">
+                    <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
+                    <pre v-html="afkPeople" class="text-sm">{{ afkPeople }}</pre>
+                </div>
             </div>
         </template>
 
@@ -89,7 +95,7 @@ export default {
             trackedPlayer: window.location.hash.substr(1),
             firstRefresh: true,
             clickedCoords: '',
-            afkMap: {}
+            afkPeople: ''
         };
     },
     methods: {
@@ -191,9 +197,10 @@ export default {
 
             return ret;
         },
-        getIcon(player, isDriving, isPassenger, isInvisible) {
+        getIcon(player, isDriving, isPassenger, isInvisible, isDead) {
             let size = {
                 circle: 17,
+                skull: 17,
                 circle_red: 12,
                 circle_green: 13
             };
@@ -205,7 +212,14 @@ export default {
                 }
             );
 
-            if (isInvisible) {
+            if (isDead) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/skull.png',
+                        iconSize: [size.skull, size.skull]
+                    }
+                );
+            } else if (isInvisible) {
                 icon = new L.Icon(
                     {
                         iconUrl: '/images/circle_green.png',
@@ -270,6 +284,7 @@ export default {
                     });
 
                     let validIds = [];
+                    let afkList = [];
                     $.each(data, function (_, player) {
                         if (!player.character) {
                             return;
@@ -281,34 +296,19 @@ export default {
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
                             isInvisible = 'invisible' in player && player.invisible,
+                            isDead = player.character && 'dead' in player.character && player.character.dead,
                             speed = 'vehicle' in player && player.vehicle && 'speed' in player.vehicle ? player.vehicle.speed : null,
-                            icon = _this.getIcon(player, isDriving, isPassenger, isInvisible),
+                            icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
                             vehicle = _this.getVehicleType(player.vehicle);
-
-                        const roundedCoords = {
-                            x: player.coords.x.toFixed(1),
-                            y: player.coords.y.toFixed(1),
-                        },
-                            now = Math.round((new Date()).getTime() / 1000);
-
-                        if (!(id in _this.afkMap)) {
-                            _this.afkMap[id] = {
-                                coords: roundedCoords,
-                                lastChange: now,
-                            };
-                        } else if (_this.afkMap[id].coords.x !== roundedCoords.x || _this.afkMap[id].coords.y !== roundedCoords.y) {
-                            _this.afkMap[id].coords = roundedCoords;
-                            _this.afkMap[id].lastChange = now;
-                        }
-
-                        const afkTime = now - _this.afkMap[id].lastChange;
 
                         if (printPlayerInfo && printPlayerInfo === player.character.id) {
                             printPlayerInfo = null;
-                            console.info('Player debug', {
-                                afkTime: afkTime,
-                                player: player
-                            });
+                            console.info('Player debug', player);
+                        }
+
+                        if (isNaN(coords.lat) || isNaN(coords.lng)) {
+                            console.debug('NaN Coords', coords, player);
+                            return;
                         }
 
                         validIds.push(id);
@@ -344,6 +344,10 @@ export default {
                             attributes.push('invisible');
                             markers[id].options.forceZIndex = 101;
                         }
+                        if (isDead) {
+                            attributes.push('dead');
+                            markers[id].options.forceZIndex = 101;
+                        }
                         if (isDriving) {
                             attributes.push('driving (' + (vehicle.type === 'car' ? 'car/bike' : vehicle.type) + ')');
                             markers[id].options.forceZIndex = 100;
@@ -356,22 +360,31 @@ export default {
                         }
                         extra += '<br><i>Is ' + attributes.shift() + (attributes.length > 0 ? ' and ' + attributes.join(', ') : '') + '</i>';
 
-                        if (afkTime > 300) {
-                            extra += '<br><i>Hasn\'t moved in ' + _this.formatSeconds(afkTime) + '</i>';
+                        if (player.afk > 300) {
+                            extra += '<br><i>Hasn\'t moved in ' + _this.formatSeconds(player.afk) + '</i>';
+                        }
+                        if (player.afk > 15 * 60) {
+                            afkList.push(`<tr>
+    <td class="pr-2"><a class="text-indigo-600 dark:text-indigo-400" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
+    <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
+    <td><a class="text-indigo-600 dark:text-indigo-400 track-cid" href="#" data-trackid="` + id + `">[Track]</a></td>
+</tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
                         if (_this.trackedPlayer === id) {
-                            extra += '<br><br><a href="#" class="track-cid" data-trackid="stop"">' + _this.t('map.stop_track') + '</a>';
+                            extra += '<br><br><a href="#" class="track-cid" data-trackid="stop">' + _this.t('map.stop_track') + '</a>';
 
                             _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom(), {
                                 duration: 0.1
                             });
                         } else {
-                            extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '"">' + _this.t('map.track') + '</a>';
+                            extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '">' + _this.t('map.track') + '</a>';
                         }
 
-                        markers[id]._popup.setContent(player.character.fullName + ' (<a href="/players/' + player.steamIdentifier + '">#' + player.character.id + '</a>)' + extra);
+                        markers[id]._popup.setContent(player.character.fullName + '<sup>' + player.source + '</sup> (<a href="/players/' + player.steamIdentifier + '" target="_blank">#' + player.character.id + '</a>)' + extra);
                     });
+
+                    this.afkPeople = afkList.length > 0 ? '<table>' + afkList.join("\n") + '</table>' : '';
 
                     $.each(markers, function (id, marker) {
                         if (!validIds.includes(id)) {
@@ -477,8 +490,10 @@ export default {
                 console.info('Clicked coordinates', map);
             });
 
-            $('#map').on('click', '.track-cid', function(e) {
+            $('#map-wrapper').on('click', '.track-cid', function(e) {
                 e.preventDefault();
+
+                console.log(this);
 
                 const track = $(this).data('trackid');
                 if (track === 'stop') {
