@@ -37,7 +37,8 @@ module.exports = {
                 'alert':              '650px',
                 'character_advanced': '550px',
                 '90':                 '90px',
-                'map':                '1160px'
+                'map':                '1160px',
+                'map-right':          'calc(100% - 1160px)'
             },
             height: {
                 'side-close':    '40px',
