@@ -49,7 +49,8 @@
             "length": "Length",
             "time": "Created at"
         },
-        "no_bans": "No recent bans by you"
+        "no_bans": "No recent bans by you",
+        "staff": "Active Staff members"
     },
     "map": {
         "title": "Live-Map",
@@ -61,7 +62,8 @@
         "pause": "Pause update",
         "track": "Track character",
         "stop_track": "Stop tracking character",
-        "afk_title": "AFK Players"
+        "afk_title": "AFK Players",
+        "command": "tp"
     },
     "nav": {
         "dark": "Dark",

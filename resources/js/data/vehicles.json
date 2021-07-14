@@ -154,6 +154,7 @@
             "mixer",
             "dump",
             "riot",
+            "riot2",
             "firetruk",
             "terbyte",
             "stockade3",
@@ -187,6 +188,51 @@
             "flatbed",
             "towtruck",
             "towtruck2"
+        ]
+    },
+    "ems_car": {
+        "size": 23,
+        "models": [
+            "ambulance",
+            "firetruk",
+            "lguard",
+            "romero",
+            "258787652",
+            "-525474865",
+            "-583006956"
+        ]
+    },
+    "police_car": {
+        "size": 23,
+        "models": [
+            "751500040",
+            "1014502499",
+            "1282700433",
+            "-1131225672",
+            "-883171617",
+            "-798860497",
+            "-892415012",
+            "545613214",
+            "588213414",
+            "-1572984573",
+            "-1311812071",
+            "658490459",
+            "-1992613535",
+            "941471002",
+            "235768976",
+            "fbi",
+            "fbi2",
+            "police",
+            "police2",
+            "police3",
+            "police4",
+            "policeb",
+            "policeold1",
+            "policeold2",
+            "policet",
+            "pranger",
+            "sheriff",
+            "sheriff2"
         ]
     },
     "bus": {

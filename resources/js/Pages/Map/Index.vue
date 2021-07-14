@@ -32,7 +32,7 @@
             <div class="-mt-12" id="map-wrapper">
                 <div class="relative">
                     <div id="map" class="w-map max-w-full relative h-max"></div>
-                    <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k" @click="copyText($event, clickedCoords)" v-if="clickedCoords">{{ clickedCoords }}</pre>
+                    <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k" v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
                 </div>
                 <div v-if="afkPeople" class="w-map-right pt-4">
                     <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
@@ -51,6 +51,7 @@ import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import custom_icons from "../../data/vehicles.json";
+const Rainbow = require('rainbowvis.js');
 
 (function(global){
     let MarkerMixin = {
@@ -99,6 +100,7 @@ export default {
             trackedPlayer: window.location.hash.substr(1),
             firstRefresh: true,
             clickedCoords: '',
+            coordsCommand: '',
             afkPeople: '',
             openPopup: null
         };
@@ -194,7 +196,7 @@ export default {
             };
 
             $.each(custom_icons, function(type, cfg) {
-                if (cfg.models.includes(vehicle.model)) {
+                if (cfg.models.includes(vehicle.model+"")) {
                     ret.type = type;
                     ret.size = cfg.size;
                 }
@@ -367,18 +369,25 @@ export default {
                             attributes.push('on foot');
                             markers[id].options.forceZIndex = 101;
                         }
-                        extra += '<br><i>Is ' + attributes.shift() + (attributes.length > 0 ? ' and ' + attributes.join(', ') : '') + '</i>';
+                        const lastExtra = attributes.pop();
+                        extra += '<br><i>Is ' + (attributes.length > 0 ? attributes.join(', ') + ' and ' : '') + lastExtra + '</i>';
 
-                        if (player.afk > 300) {
+                        if (player.afk > 15 * 60) {
                             extra += '<br><i>Hasn\'t moved in ' + _this.formatSeconds(player.afk) + '</i>';
                         }
-                        if (player.afk > 15 * 60) {
-                            const linkColor = isStaff ? 'text-green-600 dark:text-green-400' : 'text-indigo-600 dark:text-indigo-400';
+                        if (player.afk > 30 * 60) {
+                            const linkColor = isStaff ? 'rgb(16, 185, 129)' : (() => {
+                                let rainbow = new Rainbow();
+                                rainbow.setNumberRange(30 * 60, 3 * 60 * 60);
+                                rainbow.setSpectrum('#d9ff00', '#ffbf00', '#ff6600', '#ff0000');
+
+                                return '#' + rainbow.colourAt(player.afk);
+                            })();
 
                             afkList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
-    <td class="pr-2"><a class="` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
+    <td class="pr-2"><a style="color: ` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
     <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
-    <td><a class="` + linkColor + ` track-cid" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
+    <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
@@ -506,6 +515,7 @@ export default {
                 };
 
                 _this.clickedCoords = "[X=" + Math.round(game.x) + ",Y=" + Math.round(game.y) + "] / [X=" + map.x + ",Y=" + map.y + "]";
+                _this.coordsCommand = "/tp_coords " + Math.round(game.x) + " " + Math.round(game.y);
 
                 console.info('Clicked coordinates', map);
             });
