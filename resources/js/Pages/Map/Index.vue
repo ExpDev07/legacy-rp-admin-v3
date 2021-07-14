@@ -367,7 +367,8 @@ export default {
                             attributes.push('on foot');
                             markers[id].options.forceZIndex = 101;
                         }
-                        extra += '<br><i>Is ' + attributes.shift() + (attributes.length > 0 ? ' and ' + attributes.join(', ') : '') + '</i>';
+                        const lastExtra = attributes.pop();
+                        extra += '<br><i>Is ' + (attributes.length > 0 ? attributes.join(', ') + ' and ' : '') + lastExtra + '</i>';
 
                         if (player.afk > 300) {
                             extra += '<br><i>Hasn\'t moved in ' + _this.formatSeconds(player.afk) + '</i>';
