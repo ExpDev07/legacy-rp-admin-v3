@@ -44,9 +44,6 @@
             "dinghy4",
             "jetmax",
             "marquis",
-            "seashark",
-            "seashark2",
-            "seashark3",
             "speeder",
             "speeder2",
             "squalo",
@@ -66,53 +63,151 @@
             "predator"
         ]
     },
-    "plane": {
+    "light_plane": {
         "size": 28,
         "models": [
             "alphaz1",
-            "avenger",
-            "avenger2",
-            "blimp",
-            "blimp2",
-            "blimp3",
-            "bombushka",
-            "cargoplane",
             "cuban800",
             "dodo",
             "duster",
             "howard",
-            "jet",
-            "luxor",
-            "luxor2",
             "mammatus",
             "microlight",
-            "miljet",
-            "mogul",
-            "molotok",
-            "nimbus",
             "nokota",
-            "pyro",
             "rogue",
             "seabreeze",
-            "shamal",
-            "starling",
             "stunt",
-            "titan",
-            "tula",
             "velum",
             "velum2",
             "vestra"
         ]
     },
-    "jet": {
-        "size": 25,
+    "medium_plane": {
+        "size": 28,
+        "models": [
+            "blimp",
+            "blimp2",
+            "blimp3",
+            "luxor",
+            "luxor2",
+            "miljet",
+            "mogul",
+            "nimbus",
+            "shamal",
+            "tula",
+            "avenger",
+            "avenger2"
+        ]
+    },
+    "big_plane": {
+        "size": 36,
+        "models": [
+            "bombushka",
+            "cargoplane",
+            "jet",
+            "titan"
+        ]
+    },
+    "small_jet": {
+        "size": 28,
         "models": [
             "besra",
             "hydra",
             "lazer",
-            "strikeforce",
+            "pyro",
+            "molotok",
+            "starling",
+            "strikeforce"
+        ]
+    },
+    "big_jet": {
+        "size": 36,
+        "models": [
             "volatol",
             "alkonost"
+        ]
+    },
+
+    "dumptruck": {
+        "size": 28,
+        "models": [
+            "trash",
+            "trash2"
+        ]
+    },
+
+    "truck": {
+        "size": 28,
+        "models": [
+            "brickade",
+            "rallytruck",
+            "vetir",
+            "halftrack",
+            "chernobog",
+            "barracks3",
+            "barracks2",
+            "barracks",
+            "tiptruck2",
+            "tiptruck",
+            "rubble",
+            "mixer2",
+            "mixer",
+            "dump",
+            "riot",
+            "firetruk",
+            "terbyte",
+            "stockade3",
+            "stockade",
+            "pounder2",
+            "pounder",
+            "phantom3",
+            "phantom2",
+            "phantom",
+            "packer",
+            "mule4",
+            "mule3",
+            "mule2",
+            "mule",
+            "hauler2",
+            "hauler",
+            "cerberus3",
+            "cerberus2",
+            "cerberus",
+            "biff",
+            "benson",
+            "slamtruck",
+            "utillitruck",
+            "utillitruck2",
+            "scrap"
+        ]
+    },
+    "tow_truck": {
+        "size": 28,
+        "models": [
+            "flatbed",
+            "towtruck",
+            "towtruck2"
+        ]
+    },
+    "bus": {
+        "size": 28,
+        "models": [
+            "pbus",
+            "airbus",
+            "bus",
+            "coach",
+            "pbus2",
+            "rentalbus",
+            "tourbus"
+        ]
+    },
+
+    "jetsky": {
+        "size": 28,
+        "models": [
+            "seashark",
+            "seashark2",
+            "seashark3"
         ]
     },
 

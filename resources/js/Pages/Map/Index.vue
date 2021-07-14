@@ -207,7 +207,7 @@ export default {
 
             let icon = new L.Icon(
                 {
-                    iconUrl: '/images/circle.png',
+                    iconUrl: '/images/icons/circle.png',
                     iconSize: [size.circle, size.circle]
                 }
             );
@@ -215,14 +215,14 @@ export default {
             if (isDead) {
                 icon = new L.Icon(
                     {
-                        iconUrl: '/images/skull.png',
+                        iconUrl: '/images/icons/skull.png',
                         iconSize: [size.skull, size.skull]
                     }
                 );
             } else if (isInvisible) {
                 icon = new L.Icon(
                     {
-                        iconUrl: '/images/circle_green.png',
+                        iconUrl: '/images/icons/circle_green.png',
                         iconSize: [size.circle_green, size.circle_green]
                     }
                 );
@@ -231,14 +231,14 @@ export default {
 
                 icon = new L.Icon(
                     {
-                        iconUrl: '/images/' + info.type + '.png',
+                        iconUrl: '/images/icons/' + info.type + '.png',
                         iconSize: [info.size, info.size]
                     }
                 );
             } else if (isPassenger) {
                 icon = new L.Icon(
                     {
-                        iconUrl: '/images/circle_red.png',
+                        iconUrl: '/images/icons/circle_red.png',
                         iconSize: [size.circle_red, size.circle_red]
                     }
                 )

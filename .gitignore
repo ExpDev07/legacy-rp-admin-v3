@@ -4,6 +4,7 @@
 /public/fonts
 /public/build
 /public/mix-manifest.json
+/public/images/vendor/
 
 # IDE specific
 /.idea
