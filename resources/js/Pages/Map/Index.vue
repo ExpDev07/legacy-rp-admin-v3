@@ -83,6 +83,10 @@ export default {
         servers: {
             type: Array,
             required: true
+        },
+        staff: {
+            type: Array,
+            required: true
         }
     },
     data() {
@@ -95,7 +99,8 @@ export default {
             trackedPlayer: window.location.hash.substr(1),
             firstRefresh: true,
             clickedCoords: '',
-            afkPeople: ''
+            afkPeople: '',
+            openPopup: null
         };
     },
     methods: {
@@ -299,7 +304,8 @@ export default {
                             isDead = player.character && 'dead' in player.character && player.character.dead,
                             speed = 'vehicle' in player && player.vehicle && 'speed' in player.vehicle ? player.vehicle.speed : null,
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
-                            vehicle = _this.getVehicleType(player.vehicle);
+                            vehicle = _this.getVehicleType(player.vehicle),
+                            isStaff = _this.staff.includes(player.steamIdentifier);
 
                         if (printPlayerInfo && printPlayerInfo === player.character.id) {
                             printPlayerInfo = null;
@@ -348,6 +354,9 @@ export default {
                             attributes.push('dead');
                             markers[id].options.forceZIndex = 101;
                         }
+                        if (isStaff) {
+                            attributes.push('a staff member');
+                        }
                         if (isDriving) {
                             attributes.push('driving (' + (vehicle.type === 'car' ? 'car/bike' : vehicle.type) + ')');
                             markers[id].options.forceZIndex = 100;
@@ -364,10 +373,12 @@ export default {
                             extra += '<br><i>Hasn\'t moved in ' + _this.formatSeconds(player.afk) + '</i>';
                         }
                         if (player.afk > 15 * 60) {
-                            afkList.push(`<tr>
-    <td class="pr-2"><a class="text-indigo-600 dark:text-indigo-400" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
+                            const linkColor = isStaff ? 'text-green-600 dark:text-green-400' : 'text-indigo-600 dark:text-indigo-400';
+
+                            afkList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
+    <td class="pr-2"><a class="` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
     <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
-    <td><a class="text-indigo-600 dark:text-indigo-400 track-cid" href="#" data-trackid="` + id + `">[Track]</a></td>
+    <td><a class="` + linkColor + ` track-cid" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
@@ -377,11 +388,20 @@ export default {
                             _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom(), {
                                 duration: 0.1
                             });
+
+                            if (_this.firstRefresh) {
+                                _this.openPopup = id;
+                            }
                         } else {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '">' + _this.t('map.track') + '</a>';
                         }
 
                         markers[id]._popup.setContent(player.character.fullName + '<sup>' + player.source + '</sup> (<a href="/players/' + player.steamIdentifier + '" target="_blank">#' + player.character.id + '</a>)' + extra);
+
+                        if (_this.openPopup === id) {
+                            markers[id].openPopup();
+                            _this.openPopup = null;
+                        }
                     });
 
                     this.afkPeople = afkList.length > 0 ? '<table>' + afkList.join("\n") + '</table>' : '';
@@ -504,6 +524,10 @@ export default {
                     window.location.hash = track;
 
                     _this.map.closePopup();
+
+                    if ($(this).data('popup')) {
+                        _this.openPopup = track;
+                    }
                 }
             });
 
