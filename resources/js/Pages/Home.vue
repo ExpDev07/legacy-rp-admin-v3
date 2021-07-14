@@ -74,6 +74,17 @@
             </table>
         </div>
 
+        <div class="mt-5">
+            <h3 class="dark:text-white">
+                {{ t('home.staff') }}
+            </h3>
+            <div class="flex flex-wrap -mx-3">
+                <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-green-600 rounded m-3" v-for="player in staff" :key="player.id" :href="'/players/' + player.identifier">
+                    {{ player.playerName }}
+                </inertia-link>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -144,6 +155,10 @@ export default {
             required: true,
         },
         bans: {
+            type: Array,
+            required: true,
+        },
+        staff: {
             type: Array,
             required: true,
         },

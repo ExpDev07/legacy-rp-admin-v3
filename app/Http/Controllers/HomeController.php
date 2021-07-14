@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Ban;
 use App\Helpers\GeneralHelper;
 use App\Http\Resources\BanResource;
+use App\Http\Resources\PlayerIndexResource;
 use App\Server;
 use App\Player;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -38,10 +40,18 @@ class HomeController extends Controller
             ->orderByDesc('timestamp')
             ->limit(8)->get())->toArray($request);
 
+        $playerList = Player::getAllOnlinePlayers(true);
+        $players = array_keys($playerList);
+        usort($players, function ($a, $b) use ($playerList) {
+            return $playerList[$a]['id'] <=> $playerList[$b]['id'];
+        });
+        $staff = Player::query()->where('is_staff', '=', true)->whereIn('steam_identifier', $players)->get();
+
         return Inertia::render('Home', [
             'quote'     => $quote,
             'bans'      => $bans,
             'playerMap' => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
+            'staff'     => PlayerIndexResource::collection($staff),
         ]);
     }
 
