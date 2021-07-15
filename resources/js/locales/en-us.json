@@ -65,7 +65,12 @@
         "stop_track": "Stop tracking character",
         "afk_title": "AFK Players",
         "command": "tp",
-        "spy_satellite": "FiB Spy Satellite Map"
+        "spy_satellite": "FiB Spy Satellite Map",
+        "track_placeholder": "Track ID",
+        "track_server": "Server ID",
+        "track_steam": "Steam Identifier",
+        "track_character": "Character ID",
+        "do_track": "Track"
     },
     "nav": {
         "dark": "Dark",

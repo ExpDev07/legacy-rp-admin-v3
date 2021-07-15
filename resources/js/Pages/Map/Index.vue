@@ -35,6 +35,17 @@
 
         <template>
             <div class="-mt-12" id="map-wrapper">
+                <div class="flex flex-wrap mb-2">
+                    <input type="text" class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600" :placeholder="t('map.track_placeholder')" v-model="tracking.id" />
+                    <select class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1" v-model="tracking.type">
+                        <option value="server_">{{ t('map.track_server') }}</option>
+                        <option value="">{{ t('map.track_steam') }}</option>
+                        <option value="player_">{{ t('map.track_character') }}</option>
+                    </select>
+                    <button class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1" @click="trackId(tracking.type + tracking.id)">
+                        {{ t('map.do_track') }}
+                    </button>
+                </div>
                 <div class="relative">
                     <div id="map" class="w-map max-w-full relative h-max"></div>
                     <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k" v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
@@ -146,6 +157,10 @@ export default {
                 "Emergency Vehicles": L.layerGroup(),
                 "Vehicles": L.layerGroup(),
                 "Blips": L.layerGroup(),
+            },
+            tracking: {
+                id: '',
+                type: 'server_'
             }
         };
     },
@@ -185,6 +200,11 @@ export default {
         stopTracking() {
             this.trackedPlayer = null;
             window.location.hash = '';
+        },
+        trackId(id) {
+            this.trackedPlayer = id;
+            window.location.hash = id;
+            this.firstRefresh = true;
         },
         hostname(isSocket) {
             const isDev = window.location.hostname === 'localhost';
