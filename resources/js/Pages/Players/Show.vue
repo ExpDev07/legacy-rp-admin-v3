@@ -472,7 +472,6 @@ import Badge from './../../Components/Badge';
 import Alert from './../../Components/Alert';
 import Card from './../../Components/Card';
 import Avatar from './../../Components/Avatar';
-import VueClipboard from 'vue-clipboard2';
 
 export default {
     layout: Layout,
@@ -482,7 +481,6 @@ export default {
         Alert,
         Card,
         Avatar,
-        VueClipboard,
     },
     props: {
         player: {
