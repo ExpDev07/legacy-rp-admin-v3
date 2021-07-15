@@ -4,11 +4,11 @@ import Vue from 'vue';
 import PortalVue from 'portal-vue';
 import moment from 'moment';
 import Localization from './Plugins/localization.js';
+import Copy from './Plugins/copy-text.js';
 import humanizeSeconds from './Filters/humanizeSeconds.js';
 import formatTime from './Filters/formatTime.js';
 import formatGender from './Filters/formatGender.js';
 import linkify from 'vue-linkify';
-import VueClipboard from 'vue-clipboard2';
 import 'leaflet/dist/leaflet.css';
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 
@@ -16,10 +16,10 @@ import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 Vue.directive('linkified', linkify);
 
 // Plugins.
-Vue.use(VueClipboard);
 Vue.use(InertiaApp);
 Vue.use(PortalVue);
 Vue.use(Localization);
+Vue.use(Copy);
 
 // Properties / methods.
 Vue.prototype.$moment = moment;

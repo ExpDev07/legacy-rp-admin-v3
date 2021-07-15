@@ -11,6 +11,7 @@
         "view": "View",
         "refresh": "Refresh",
         "delete": "Delete",
+        "view_map": "View on Live-Map",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -63,7 +64,8 @@
         "track": "Track character",
         "stop_track": "Stop tracking character",
         "afk_title": "AFK Players",
-        "command": "tp"
+        "command": "tp",
+        "spy_satellite": "FiB Spy Satellite Map"
     },
     "nav": {
         "dark": "Dark",
@@ -266,7 +268,9 @@
             "pm_message": "Message",
             "pm_confirm": "Send StaffPM",
             "panel_logs": "Latest 25 Panel Logs",
-            "delete_character": "Are you sure you want to delete this character?"
+            "delete_character": "Are you sure you want to delete this character?",
+            "unload": "Unload Players Character",
+            "unload_confirm": "Are you sure you want to unload this players character? This will send them to the character selection screen."
         },
         "form": {
             "identifier": "Identifier",

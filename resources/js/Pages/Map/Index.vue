@@ -3,7 +3,7 @@
 
         <portal to="title">
             <h1 class="dark:text-white !mb-2">
-                {{ t('map.title') }}
+                <span id="map_title">{{ t('map.title') }}</span>
                 <select class="inline-block w-90 ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
                         id="server">
                     <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
@@ -16,6 +16,11 @@
 
         <portal to="actions">
             <div>
+                <!-- Stop tracking -->
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="stopTracking()" v-if="trackedPlayer">
+                    <i class="fas fa-stop mr-1"></i>
+                    {{ t('map.stop_track') }}
+                </button>
                 <!-- Play/Pause -->
                 <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isPaused = true" v-if="!isPaused">
                     <i class="fas fa-pause"></i>
@@ -66,13 +71,41 @@ const Rainbow = require('rainbowvis.js');
 })(L.Marker);
 
 // Some functions for debugging
-let printPlayerInfo = null;
+let playerCallback = null,
+    playerCallbackCid = null,
+    VueInstance = null;
 window.debug = function(cid) {
-    printPlayerInfo = cid;
+    playerCallbackCid = cid;
+    playerCallback = function(player, coords, _this) {
+        console.info('Player debug', player);
+    };
 };
 window.track = function(cid) {
     window.location.hash = 'player_' + cid;
     window.location.reload();
+};
+window.marker = function(cid) {
+    playerCallbackCid = cid;
+    playerCallback = function(player, coords, _this) {
+        console.info('Marker');
+        const markerCode = `{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`;
+        _this.copyText(null, markerCode);
+
+        console.info(`{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`, '(Copied to clipboard)');
+    };
+};
+window.convertCoords = function(coords) {
+    if (VueInstance) {
+        const converted = VueInstance.convertCoords(coords);
+
+        if ('x' in converted) {
+            console.info(`{x: ` + converted.x.toFixed(3) + `, y: ` + converted.y.toFixed(3) + `}`);
+        } else {
+            console.info(`{lat: ` + converted.lat + `, lng: ` + converted.lng + `}`);
+        }
+    } else {
+        console.error('VueInstance not set!');
+    }
 };
 
 export default {
@@ -86,6 +119,10 @@ export default {
             required: true
         },
         staff: {
+            type: Array,
+            required: true
+        },
+        blips: {
             type: Array,
             required: true
         }
@@ -102,7 +139,14 @@ export default {
             clickedCoords: '',
             coordsCommand: '',
             afkPeople: '',
-            openPopup: null
+            openPopup: null,
+            layers: {
+                "Players": L.layerGroup(),
+                "Dead Players": L.layerGroup(),
+                "Emergency Vehicles": L.layerGroup(),
+                "Vehicles": L.layerGroup(),
+                "Blips": L.layerGroup(),
+            }
         };
     },
     methods: {
@@ -126,24 +170,21 @@ export default {
             return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
         },
         copyText(e, text) {
-            e.preventDefault();
-            const button = $(e.target).closest('a');
+            if (e !== null) {
+                e.preventDefault();
+            }
 
-            this.$copyText(text).then(function() {
-                button.removeClass('bg-blue-800');
-                button.addClass('bg-green-600');
-
-                setTimeout(function() {
-                    button.removeClass('bg-green-600');
-                    button.addClass('bg-blue-800');
-                }, 500);
-            });
+            this.copyToClipboard(text);
         },
         coords(coords) {
             return {
                 lat: coords.y,
                 lng: coords.x
             }
+        },
+        stopTracking() {
+            this.trackedPlayer = null;
+            window.location.hash = '';
         },
         hostname(isSocket) {
             const isDev = window.location.hostname === 'localhost';
@@ -256,6 +297,45 @@ export default {
         formatSeconds(seconds) {
             return this.$moment.utc(seconds * 1000).format('HH:mm:ss');
         },
+        convertCoords(coords) {
+            const conf = this.getBounds();
+
+            if ('x' in coords) {
+                coords.x = this.mapNumber(coords.x, conf.game.bounds.min.x, conf.game.bounds.max.x, conf.map.bounds.min.x, conf.map.bounds.max.x);
+                coords.y = this.mapNumber(coords.y, conf.game.bounds.min.y, conf.game.bounds.max.y, conf.map.bounds.min.y, conf.map.bounds.max.y);
+
+                return this.coords(coords);
+            } else {
+                coords.x = this.mapNumber(coords.lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x);
+                coords.y = this.mapNumber(coords.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y);
+
+                return coords;
+            }
+        },
+        addToLayer(marker, layer) {
+            const _this = this;
+
+            $.each(this.layers, function(key) {
+                if (layer !== key) {
+                    _this.layers[key].removeLayer(marker);
+                }
+            });
+
+            this.layers[layer].addLayer(marker);
+        },
+        getLayer(player, isDriving, isPassenger, isInvisible, isDead) {
+            const vehicle = this.getVehicleType(player.vehicle);
+
+            if (vehicle && (vehicle.type === 'police_car' || vehicle.type === 'ems_car')) {
+                return "Emergency Vehicles";
+            } if (isDriving || isPassenger) {
+                return "Vehicles";
+            } else if (isDead) {
+                return "Dead Players";
+            } else {
+                return "Players";
+            }
+        },
         renderMapData(data) {
             if (this.isPaused) {
                 return;
@@ -266,15 +346,6 @@ export default {
             } else {
                 this.map.dragging.enable();
             }
-
-            const conf = this.getBounds();
-            const _this = this;
-            const convert = coords => {
-                coords.x = _this.mapNumber(coords.x, conf.game.bounds.min.x, conf.game.bounds.max.x, conf.map.bounds.min.x, conf.map.bounds.max.x);
-                coords.y = _this.mapNumber(coords.y, conf.game.bounds.min.y, conf.game.bounds.max.y, conf.map.bounds.min.y, conf.map.bounds.max.y);
-
-                return _this.coords(coords);
-            };
 
             if (data && Array.isArray(data)) {
                 if (this.map) {
@@ -298,20 +369,21 @@ export default {
                         }
 
                         const id = "player_" + player.character.id,
-                            coords = convert(player.coords),
+                            coords = _this.convertCoords(player.coords),
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
                             isInvisible = 'invisible' in player && player.invisible,
                             isDead = player.character && 'dead' in player.character && player.character.dead,
-                            speed = 'vehicle' in player && player.vehicle && 'speed' in player.vehicle ? player.vehicle.speed : null,
+                            speed = 'speed' in player ? player.speed : null,
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
                             vehicle = _this.getVehicleType(player.vehicle),
                             isStaff = _this.staff.includes(player.steamIdentifier);
 
-                        if (printPlayerInfo && printPlayerInfo === player.character.id) {
-                            printPlayerInfo = null;
-                            console.info('Player debug', player);
+                        if (playerCallback && playerCallbackCid === player.character.id) {
+                            playerCallbackCid = null;
+                            playerCallback(player, coords, _this);
+                            playerCallback = null;
                         }
 
                         if (isNaN(coords.lat) || isNaN(coords.lng)) {
@@ -333,14 +405,14 @@ export default {
                                 }
                             );
 
-                            marker.addTo(_this.map);
-
                             marker.bindPopup('', {
                                 autoPan: false
                             });
 
                             markers[id] = marker;
                         }
+
+                        _this.addToLayer(markers[id], _this.getLayer(player, isDriving, isPassenger, isInvisible, isDead));
 
                         let extra = '<br>Altitude: ' + Math.round(player.coords.z) + 'm';
                         if (speed) {
@@ -389,6 +461,11 @@ export default {
     <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
     <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
+                        }
+
+                        if (_this.trackedPlayer && (_this.trackedPlayer === 'server_' + player.source || (_this.trackedPlayer.startsWith('steam:') && _this.trackedPlayer === player.steamIdentifier))) {
+                            _this.trackedPlayer = id;
+                            window.location.hash = id;
                         }
 
                         if (_this.trackedPlayer === id) {
@@ -503,6 +580,34 @@ export default {
 
             this.map.setView([-124, 124], 3);
 
+            L.control.layers({}, this.layers).addTo(this.map);
+
+            $.each(this.layers, function(key) {
+                _this.layers[key].addTo(_this.map);
+            });
+
+            $.each(this.blips, function (_, blip) {
+                const coords = eval('(() => (' + blip.coords + '))()'),
+                    coordsText = coords.x.toFixed(2) + ' ' + coords.y.toFixed(2);
+                let marker = L.marker(_this.convertCoords(coords),
+                    {
+                        icon: new L.Icon(
+                            {
+                                iconUrl: '/images/icons/' + blip.icon,
+                                iconSize: [22, 22]
+                            }
+                        ),
+                        forceZIndex: 99
+                    }
+                );
+
+                marker.bindPopup(blip.label + '<br><i>' + coordsText + '</i>', {
+                    autoPan: false
+                });
+
+                _this.layers["Blips"].addLayer(marker);
+            });
+
             this.map.on('click', function (e) {
                 const conf = _this.getBounds();
                 let map = {
@@ -522,8 +627,6 @@ export default {
 
             $('#map-wrapper').on('click', '.track-cid', function(e) {
                 e.preventDefault();
-
-                console.log(this);
 
                 const track = $(this).data('trackid');
                 if (track === 'stop') {
@@ -555,10 +658,20 @@ export default {
 
         $(document).ready(function () {
             $('#server').on('change', function () {
+                _this.firstRefresh = true;
+
                 _this.doMapRefresh($(this).val());
             });
             $('#server').trigger('change');
         });
+
+        if (Math.round(Math.random() * 100) === 1) { // 1% chance it says fib spy satellite map
+            $(document).ready(function() {
+                $('#map_title').text(_this.t('map.spy_satellite'));
+            });
+        }
+
+        VueInstance = this;
     }
 };
 </script>

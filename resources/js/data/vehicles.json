@@ -63,12 +63,17 @@
             "predator"
         ]
     },
+    "float_plane": {
+        "size": 28,
+        "models": [
+            "dodo"
+        ]
+    },
     "light_plane": {
         "size": 28,
         "models": [
             "alphaz1",
             "cuban800",
-            "dodo",
             "duster",
             "howard",
             "mammatus",

@@ -43,7 +43,6 @@
         "leaflet-gesture-handling": "^1.2.1",
         "leaflet-rotatedmarker": "^0.2.0",
         "rainbowvis.js": "^1.0.1",
-        "vue-clipboard2": "^0.3.1",
         "vue-linkify": "^1.0.1",
         "vue2-circle-progress": "^1.2.3"
     }

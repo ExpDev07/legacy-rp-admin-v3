@@ -106,9 +106,9 @@
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" :title="t('global.server_timeout')">
-                            <span class="font-semibold" v-if="log.status.status === 'online'">
+                            <a class="font-semibold" :href="'/map#server_' + log.status.serverId" :title="t('global.view_map')" v-if="log.status.status === 'online'">
                                 {{ log.status.serverId }}
-                            </span>
+                            </a>
                             <span class="font-semibold" v-else>
                                 {{ t('global.status.' + log.status.status) }}
                             </span>

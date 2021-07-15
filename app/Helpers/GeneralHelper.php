@@ -87,4 +87,45 @@ class GeneralHelper
             file_put_contents($dir . '/' . $key . '.session', json_encode($session->get('user')));
         }
     }
+
+    /**
+     * Parses a .map file
+     *
+     * @param string $file
+     * @return array|null
+     */
+    public static function parseMapFile(string $file): ?array
+    {
+        if (!file_exists($file)) {
+            return null;
+        }
+
+        $contents = str_replace("\r\n", "\n", file_get_contents($file));
+        if (!$contents) {
+            return null;
+        }
+
+        $lines = explode("\n", $contents);
+        $result = [];
+        foreach ($lines as $line) {
+            $re = '/^({.+?}) (.+?) (.+)$/m';
+            preg_match($re, $line, $matches);
+
+            if (sizeof($matches) < 4) {
+                continue;
+            }
+
+            $icon = $matches[2];
+            $obj = $matches[1];
+            $label = $matches[3];
+
+            $result[] = [
+                'icon'   => $icon,
+                'label'  => $label,
+                'coords' => $obj,
+            ];
+        }
+
+        return $result;
+    }
 }

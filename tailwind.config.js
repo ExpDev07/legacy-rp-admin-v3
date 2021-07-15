@@ -38,7 +38,8 @@ module.exports = {
                 'character_advanced': '550px',
                 '90':                 '90px',
                 'map':                '1160px',
-                'map-right':          'calc(100% - 1160px)'
+                'map-right':          'calc(100% - 1160px)',
+                'split':              'calc(50% - 10px)'
             },
             height: {
                 'side-close':    '40px',

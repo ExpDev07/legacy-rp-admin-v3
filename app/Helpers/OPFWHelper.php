@@ -133,10 +133,41 @@ class OPFWHelper
     }
 
     /**
+     * Unloads someones character
+     *
+     * @param Player $player
+     * @param string $character_id
+     * @return OPFWResponse
+     */
+    public static function unloadCharacter(string $staffSteamIdentifier, Player $player, string $character_id): OPFWResponse
+    {
+        $steam = $player->steam_identifier;
+
+        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        if (!$status->isOnline()) {
+            return new OPFWResponse(true, 'Player is offline, no unload needede.');
+        }
+
+        $response = self::executeRoute($status->serverIp . 'execute/unloadCharacter', [
+            'steamIdentifier' => $steam,
+            'characterId'     => $character_id,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Unloaded players character.';
+
+            PanelLog::logUnload($staffSteamIdentifier, $player->steam_identifier, $character_id);
+        }
+
+        return $response;
+    }
+
+    /**
      * Gets the world.json
      *
      * @param string $serverIp
      * @return array|null
+     * @deprecated No longer used
      */
     public static function getWorldJSON(string $serverIp): ?array
     {
