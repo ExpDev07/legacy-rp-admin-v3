@@ -16,6 +16,11 @@
 
         <portal to="actions">
             <div>
+                <!-- Stop tracking -->
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="trackedPlayer = null" v-if="trackedPlayer">
+                    <i class="fas fa-stop mr-1"></i>
+                    {{ t('map.stop_track') }}
+                </button>
                 <!-- Play/Pause -->
                 <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isPaused = true" v-if="!isPaused">
                     <i class="fas fa-pause"></i>
@@ -138,6 +143,7 @@ export default {
             layers: {
                 "Players": L.layerGroup(),
                 "Dead Players": L.layerGroup(),
+                "Emergency Vehicles": L.layerGroup(),
                 "Vehicles": L.layerGroup(),
                 "Blips": L.layerGroup(),
             }
@@ -313,8 +319,12 @@ export default {
 
             this.layers[layer].addLayer(marker);
         },
-        getLayer(isDriving, isPassenger, isInvisible, isDead) {
-            if (isDriving || isPassenger) {
+        getLayer(player, isDriving, isPassenger, isInvisible, isDead) {
+            const vehicle = this.getVehicleType(player.vehicle);
+
+            if (vehicle && (vehicle.type === 'police_car' || vehicle.type === 'ems_car')) {
+                return "Emergency Vehicles";
+            } if (isDriving || isPassenger) {
                 return "Vehicles";
             } else if (isDead) {
                 return "Dead Players";
@@ -398,7 +408,7 @@ export default {
                             markers[id] = marker;
                         }
 
-                        _this.addToLayer(markers[id], _this.getLayer(isDriving, isPassenger, isInvisible, isDead));
+                        _this.addToLayer(markers[id], _this.getLayer(player, isDriving, isPassenger, isInvisible, isDead));
 
                         let extra = '<br>Altitude: ' + Math.round(player.coords.z) + 'm';
                         if (speed) {
@@ -608,8 +618,6 @@ export default {
 
             $('#map-wrapper').on('click', '.track-cid', function(e) {
                 e.preventDefault();
-
-                console.log(this);
 
                 const track = $(this).data('trackid');
                 if (track === 'stop') {
