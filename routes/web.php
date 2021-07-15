@@ -57,6 +57,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::resource('players.warnings', PlayerWarningController::class);
     Route::post('/players/{player}/kick', [PlayerRouteController::class, 'kick']);
     Route::post('/players/{player}/staffPM', [PlayerRouteController::class, 'staffPM']);
+    Route::post('/players/{player}/unloadCharacter', [PlayerRouteController::class, 'unloadCharacter']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);

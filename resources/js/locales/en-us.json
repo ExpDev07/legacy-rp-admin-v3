@@ -268,7 +268,9 @@
             "pm_message": "Message",
             "pm_confirm": "Send StaffPM",
             "panel_logs": "Latest 25 Panel Logs",
-            "delete_character": "Are you sure you want to delete this character?"
+            "delete_character": "Are you sure you want to delete this character?",
+            "unload": "Unload Players Character",
+            "unload_confirm": "Are you sure you want to unload this players character? This will send them to the character selection screen."
         },
         "form": {
             "identifier": "Identifier",

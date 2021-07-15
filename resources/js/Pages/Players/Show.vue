@@ -329,14 +329,21 @@
                             <inertia-link class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
                                 {{ t('global.view') }}
                             </inertia-link>
-                            <inertia-link
-                                class="block px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
-                                :href="'/inventories/character/' + character.id"
-                                v-if="!character.characterDeleted"
-                            >
-                                <i class="fas fa-briefcase mr-1"></i>
-                                {{ t('inventories.view') }}
-                            </inertia-link>
+                            <div class="flex justify-between flex-wrap">
+                                <button class="block w-full px-4 py-3 2xl:w-split text-center text-white mt-3 bg-warning dark:bg-dark-warning rounded" v-if="player.status.status === 'online'" @click="unloadCharacter(character.id)">
+                                    <i class="fas fa-bolt mr-1"></i>
+                                    {{ t('players.show.unload') }}
+                                </button>
+                                <inertia-link
+                                    class="block w-full px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
+                                    :class="{ '2xl:w-split' : player.status.status === 'online' }"
+                                    :href="'/inventories/character/' + character.id"
+                                    v-if="!character.characterDeleted"
+                                >
+                                    <i class="fas fa-briefcase mr-1"></i>
+                                    {{ t('inventories.view') }}
+                                </inertia-link>
+                            </div>
                             <inertia-link
                                 class="block px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
                                 href="#"
@@ -559,6 +566,16 @@ export default {
             // Reset.
             this.isKicking = false;
             this.form.kick.reason = null;
+        },
+        async unloadCharacter(character) {
+            if (!confirm(this.t('players.show.unload_confirm'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/unloadCharacter', {
+                character: character
+            });
         },
         async deleteCharacter(e, characterId) {
             e.preventDefault();

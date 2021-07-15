@@ -134,6 +134,22 @@ class PanelLog extends Model
         self::createLog($fromIdentifier, $toIdentifier, $log, 'Kicked Player');
     }
 
+    /**
+     * Logs a character unload from the panel
+     *
+     * @param string $fromIdentifier
+     * @param string $toIdentifier
+     * @param string $character
+     */
+    public static function logUnload(string $fromIdentifier, string $toIdentifier, string $character)
+    {
+        $from = self::resolvePlayerLogName($fromIdentifier);
+        $to = self::resolvePlayerLogName($toIdentifier);
+
+        $log = $from . ' unloaded ' . $to . '\'s character (#' . $character . ')';
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Unloaded Character');
+    }
+
     private static function resolvePlayerLogName(string $identifier): string
     {
         $player = Player::query()->where('steam_identifier', $identifier)->first();
