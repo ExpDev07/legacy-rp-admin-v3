@@ -134,7 +134,13 @@ export default {
             clickedCoords: '',
             coordsCommand: '',
             afkPeople: '',
-            openPopup: null
+            openPopup: null,
+            layers: {
+                "Players": L.layerGroup(),
+                "Dead Players": L.layerGroup(),
+                "Vehicles": L.layerGroup(),
+                "Blips": L.layerGroup(),
+            }
         };
     },
     methods: {
@@ -296,6 +302,26 @@ export default {
                 return coords;
             }
         },
+        addToLayer(marker, layer) {
+            const _this = this;
+
+            $.each(this.layers, function(key) {
+                if (layer !== key) {
+                    _this.layers[key].removeLayer(marker);
+                }
+            });
+
+            this.layers[layer].addLayer(marker);
+        },
+        getLayer(isDriving, isPassenger, isInvisible, isDead) {
+            if (isDriving || isPassenger) {
+                return "Vehicles";
+            } else if (isDead) {
+                return "Dead Players";
+            } else {
+                return "Players";
+            }
+        },
         renderMapData(data) {
             if (this.isPaused) {
                 return;
@@ -365,14 +391,14 @@ export default {
                                 }
                             );
 
-                            marker.addTo(_this.map);
-
                             marker.bindPopup('', {
                                 autoPan: false
                             });
 
                             markers[id] = marker;
                         }
+
+                        _this.addToLayer(markers[id], _this.getLayer(isDriving, isPassenger, isInvisible, isDead));
 
                         let extra = '<br>Altitude: ' + Math.round(player.coords.z) + 'm';
                         if (speed) {
@@ -535,6 +561,12 @@ export default {
 
             this.map.setView([-124, 124], 3);
 
+            L.control.layers({}, this.layers).addTo(this.map);
+
+            $.each(this.layers, function(key) {
+                _this.layers[key].addTo(_this.map);
+            });
+
             $.each(this.blips, function (_, blip) {
                 const coords = eval('(() => (' + blip.coords + '))()'),
                     coordsText = coords.x.toFixed(2) + ' ' + coords.y.toFixed(2);
@@ -550,11 +582,11 @@ export default {
                     }
                 );
 
-                marker.addTo(_this.map);
-
                 marker.bindPopup(blip.label + '<br><i>' + coordsText + '</i>', {
                     autoPan: false
                 });
+
+                _this.layers["Blips"].addLayer(marker);
             });
 
             this.map.on('click', function (e) {
