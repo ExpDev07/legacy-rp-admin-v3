@@ -11,6 +11,7 @@
         "view": "View",
         "refresh": "Refresh",
         "delete": "Delete",
+        "view_map": "View on Live-Map",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -63,7 +64,8 @@
         "track": "Track character",
         "stop_track": "Stop tracking character",
         "afk_title": "AFK Players",
-        "command": "tp"
+        "command": "tp",
+        "spy_satellite": "FiB Spy Satellite Map"
     },
     "nav": {
         "dark": "Dark",

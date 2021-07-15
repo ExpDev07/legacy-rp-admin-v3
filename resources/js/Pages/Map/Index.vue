@@ -3,7 +3,7 @@
 
         <portal to="title">
             <h1 class="dark:text-white !mb-2">
-                {{ t('map.title') }}
+                <span id="map_title">{{ t('map.title') }}</span>
                 <select class="inline-block w-90 ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
                         id="server">
                     <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
@@ -17,7 +17,7 @@
         <portal to="actions">
             <div>
                 <!-- Stop tracking -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="trackedPlayer = null" v-if="trackedPlayer">
+                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="stopTracking()" v-if="trackedPlayer">
                     <i class="fas fa-stop mr-1"></i>
                     {{ t('map.stop_track') }}
                 </button>
@@ -181,6 +181,10 @@ export default {
                 lat: coords.y,
                 lng: coords.x
             }
+        },
+        stopTracking() {
+            this.trackedPlayer = null;
+            window.location.hash = '';
         },
         hostname(isSocket) {
             const isDev = window.location.hostname === 'localhost';
@@ -371,7 +375,7 @@ export default {
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
                             isInvisible = 'invisible' in player && player.invisible,
                             isDead = player.character && 'dead' in player.character && player.character.dead,
-                            speed = 'vehicle' in player && player.vehicle && 'speed' in player.vehicle ? player.vehicle.speed : null,
+                            speed = 'speed' in player ? player.speed : null,
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
                             vehicle = _this.getVehicleType(player.vehicle),
                             isStaff = _this.staff.includes(player.steamIdentifier);
@@ -457,6 +461,11 @@ export default {
     <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
     <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
+                        }
+
+                        if (_this.trackedPlayer && (_this.trackedPlayer === 'server_' + player.source || (_this.trackedPlayer.startsWith('steam:') && _this.trackedPlayer === player.steamIdentifier))) {
+                            _this.trackedPlayer = id;
+                            window.location.hash = id;
                         }
 
                         if (_this.trackedPlayer === id) {
@@ -649,10 +658,18 @@ export default {
 
         $(document).ready(function () {
             $('#server').on('change', function () {
+                _this.firstRefresh = true;
+
                 _this.doMapRefresh($(this).val());
             });
             $('#server').trigger('change');
         });
+
+        if (Math.round(Math.random() * 100) === 1) { // 1% chance it says fib spy satellite map
+            $(document).ready(function() {
+                $('#map_title').text(_this.t('map.spy_satellite'));
+            });
+        }
 
         VueInstance = this;
     }
