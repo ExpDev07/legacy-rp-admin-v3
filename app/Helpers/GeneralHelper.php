@@ -85,6 +85,9 @@ class GeneralHelper
             }
 
             file_put_contents($dir . '/' . $key . '.session', json_encode($session->get('user')));
+
+            // Making sure it actually there before we load (only a second so no biggie)
+            sleep(1);
         }
     }
 
