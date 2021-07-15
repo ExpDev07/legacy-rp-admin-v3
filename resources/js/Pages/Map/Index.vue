@@ -15,7 +15,7 @@
         </portal>
 
         <portal to="actions">
-            <div>
+            <div class="mb-2">
                 <!-- Stop tracking -->
                 <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="stopTracking()" v-if="trackedPlayer">
                     <i class="fas fa-stop mr-1"></i>
