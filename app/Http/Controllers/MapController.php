@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GeneralHelper;
 use App\Player;
 use App\Server;
 use Illuminate\Http\Request;
@@ -31,9 +32,10 @@ class MapController extends Controller
 
         return Inertia::render('Map/Index', [
             'servers' => $serverIps,
-            'staff' => $staff ? array_map(function($player) {
+            'staff'   => $staff ? array_map(function ($player) {
                 return $player['steam_identifier'];
-            }, $staff) : []
+            }, $staff) : [],
+            'blips'   => GeneralHelper::parseMapFile(__DIR__ . '/../../../helpers/markers.map') ?? [],
         ]);
     }
 

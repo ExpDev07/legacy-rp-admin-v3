@@ -639,15 +639,15 @@ export default {
             e.preventDefault();
             const button = $(e.target).closest('a');
 
-            this.$copyText(text).then(function() {
-                button.removeClass('bg-blue-800');
-                button.addClass('bg-green-600');
+            this.copyToClipboard(text)
 
-                setTimeout(function() {
-                    button.removeClass('bg-green-600');
-                    button.addClass('bg-blue-800');
-                }, 500);
-            });
+            button.removeClass('bg-blue-800');
+            button.addClass('bg-green-600');
+
+            setTimeout(function() {
+                button.removeClass('bg-green-600');
+                button.addClass('bg-blue-800');
+            }, 500);
         }
     }
 };

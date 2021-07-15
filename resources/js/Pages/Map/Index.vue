@@ -66,13 +66,41 @@ const Rainbow = require('rainbowvis.js');
 })(L.Marker);
 
 // Some functions for debugging
-let printPlayerInfo = null;
+let playerCallback = null,
+    playerCallbackCid = null,
+    VueInstance = null;
 window.debug = function(cid) {
-    printPlayerInfo = cid;
+    playerCallbackCid = cid;
+    playerCallback = function(player, coords, _this) {
+        console.info('Player debug', player);
+    };
 };
 window.track = function(cid) {
     window.location.hash = 'player_' + cid;
     window.location.reload();
+};
+window.marker = function(cid) {
+    playerCallbackCid = cid;
+    playerCallback = function(player, coords, _this) {
+        console.info('Marker');
+        const markerCode = `{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`;
+        _this.copyText(null, markerCode);
+
+        console.info(`{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`, '(Copied to clipboard)');
+    };
+};
+window.convertCoords = function(coords) {
+    if (VueInstance) {
+        const converted = VueInstance.convertCoords(coords);
+
+        if ('x' in converted) {
+            console.info(`{x: ` + converted.x.toFixed(3) + `, y: ` + converted.y.toFixed(3) + `}`);
+        } else {
+            console.info(`{lat: ` + converted.lat + `, lng: ` + converted.lng + `}`);
+        }
+    } else {
+        console.error('VueInstance not set!');
+    }
 };
 
 export default {
@@ -86,6 +114,10 @@ export default {
             required: true
         },
         staff: {
+            type: Array,
+            required: true
+        },
+        blips: {
             type: Array,
             required: true
         }
@@ -126,18 +158,11 @@ export default {
             return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
         },
         copyText(e, text) {
-            e.preventDefault();
-            const button = $(e.target).closest('a');
+            if (e !== null) {
+                e.preventDefault();
+            }
 
-            this.$copyText(text).then(function() {
-                button.removeClass('bg-blue-800');
-                button.addClass('bg-green-600');
-
-                setTimeout(function() {
-                    button.removeClass('bg-green-600');
-                    button.addClass('bg-blue-800');
-                }, 500);
-            });
+            this.copyToClipboard(text);
         },
         coords(coords) {
             return {
@@ -256,6 +281,21 @@ export default {
         formatSeconds(seconds) {
             return this.$moment.utc(seconds * 1000).format('HH:mm:ss');
         },
+        convertCoords(coords) {
+            const conf = this.getBounds();
+
+            if ('x' in coords) {
+                coords.x = this.mapNumber(coords.x, conf.game.bounds.min.x, conf.game.bounds.max.x, conf.map.bounds.min.x, conf.map.bounds.max.x);
+                coords.y = this.mapNumber(coords.y, conf.game.bounds.min.y, conf.game.bounds.max.y, conf.map.bounds.min.y, conf.map.bounds.max.y);
+
+                return this.coords(coords);
+            } else {
+                coords.x = this.mapNumber(coords.lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x);
+                coords.y = this.mapNumber(coords.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y);
+
+                return coords;
+            }
+        },
         renderMapData(data) {
             if (this.isPaused) {
                 return;
@@ -266,15 +306,6 @@ export default {
             } else {
                 this.map.dragging.enable();
             }
-
-            const conf = this.getBounds();
-            const _this = this;
-            const convert = coords => {
-                coords.x = _this.mapNumber(coords.x, conf.game.bounds.min.x, conf.game.bounds.max.x, conf.map.bounds.min.x, conf.map.bounds.max.x);
-                coords.y = _this.mapNumber(coords.y, conf.game.bounds.min.y, conf.game.bounds.max.y, conf.map.bounds.min.y, conf.map.bounds.max.y);
-
-                return _this.coords(coords);
-            };
 
             if (data && Array.isArray(data)) {
                 if (this.map) {
@@ -298,7 +329,7 @@ export default {
                         }
 
                         const id = "player_" + player.character.id,
-                            coords = convert(player.coords),
+                            coords = _this.convertCoords(player.coords),
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
@@ -309,9 +340,10 @@ export default {
                             vehicle = _this.getVehicleType(player.vehicle),
                             isStaff = _this.staff.includes(player.steamIdentifier);
 
-                        if (printPlayerInfo && printPlayerInfo === player.character.id) {
-                            printPlayerInfo = null;
-                            console.info('Player debug', player);
+                        if (playerCallback && playerCallbackCid === player.character.id) {
+                            playerCallbackCid = null;
+                            playerCallback(player, coords, _this);
+                            playerCallback = null;
                         }
 
                         if (isNaN(coords.lat) || isNaN(coords.lng)) {
@@ -503,6 +535,28 @@ export default {
 
             this.map.setView([-124, 124], 3);
 
+            $.each(this.blips, function (_, blip) {
+                const coords = eval('(() => (' + blip.coords + '))()'),
+                    coordsText = coords.x.toFixed(2) + ' ' + coords.y.toFixed(2);
+                let marker = L.marker(_this.convertCoords(coords),
+                    {
+                        icon: new L.Icon(
+                            {
+                                iconUrl: '/images/icons/' + blip.icon,
+                                iconSize: [22, 22]
+                            }
+                        ),
+                        forceZIndex: 99
+                    }
+                );
+
+                marker.addTo(_this.map);
+
+                marker.bindPopup(blip.label + '<br><i>' + coordsText + '</i>', {
+                    autoPan: false
+                });
+            });
+
             this.map.on('click', function (e) {
                 const conf = _this.getBounds();
                 let map = {
@@ -559,6 +613,8 @@ export default {
             });
             $('#server').trigger('change');
         });
+
+        VueInstance = this;
     }
 };
 </script>
