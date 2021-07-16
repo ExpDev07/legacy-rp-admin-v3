@@ -119,6 +119,17 @@ window.convertCoords = function(coords) {
     }
 };
 
+window.loadHistory = function(server, player, day) {
+    if (VueInstance) {
+        $.post(VueInstance.hostname() + '/map/go/history', {
+            server: server,
+            player: player,
+            day: day,
+            token: VueInstance.token
+        }, console.log);
+    }
+};
+
 export default {
     layout: Layout,
     components: {
@@ -135,6 +146,10 @@ export default {
         },
         blips: {
             type: Array,
+            required: true
+        },
+        token: {
+            type: String,
             required: true
         }
     },

@@ -8,6 +8,7 @@ use App\Server;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Helpers\SessionHelper;
 
 class MapController extends Controller
 {
@@ -36,6 +37,7 @@ class MapController extends Controller
                 return $player['steam_identifier'];
             }, $staff) : [],
             'blips'   => GeneralHelper::parseMapFile(__DIR__ . '/../../../helpers/markers.map') ?? [],
+            'token'   => SessionHelper::getInstance()->getSessionKey(),
         ]);
     }
 
