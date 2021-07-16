@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Cache;
 
 class OPFWHelper
 {
+    const RetryAttempts = 2;
+
     /**
      * Sends a staff pm to a player
      *
@@ -31,7 +33,7 @@ class OPFWHelper
         }
 
         $response = self::executeRoute($status->serverIp . 'execute/staffMessage', [
-            'steamIdentifier' => $staffSteamIdentifier,
+            'steamIdentifier' => 'steam:110000107343566',//$staffSteamIdentifier,
             'targetSource'    => $status->serverId,
             'message'         => $message,
         ]);
@@ -203,21 +205,32 @@ class OPFWHelper
             return new OPFWResponse(false, 'Invalid OP-FW configuration.');
         }
 
+        $result = null;
+
         $client = new Client();
-        $res = $client->request($isPost ? 'POST' : 'GET', $route, [
-            'query'   => $data,
-            'headers' => [
-                'Authorization' => 'Bearer ' . $token,
-            ],
-        ]);
+        for ($x=0;$x<self::RetryAttempts;$x++) {
+            $res = $client->request($isPost ? 'POST' : 'GET', $route, [
+                'query'   => $data,
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token,
+                ],
+            ]);
 
-        $response = $res->getBody()->getContents();
+            $response = $res->getBody()->getContents();
 
-        LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Executed route "' . $route . '"');
-        LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Data: ' . json_encode($data));
-        LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Result: ' . json_encode($response));
+            LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Executed route "' . $route . '"');
+            LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Data: ' . json_encode($data));
+            LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Result: ' . json_encode($response));
 
-        return self::parseResponse($response);
+            $result = self::parseResponse($response);
+            if (!$result->status) {
+                sleep(2);
+            } else {
+                return $result;
+            }
+        }
+
+        return $result;
     }
 
     /**

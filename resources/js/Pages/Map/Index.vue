@@ -665,9 +665,11 @@ export default {
             });
 
             const styles = [
-                '.leaflet-marker-icon {transform-origin: center center !important;}',
-                '.leaflet-grab {cursor: default;}',
-                '.coordinate-attr{font-size: 11px;padding: 0 5px;color:rgb(0, 120, 168);line-height:16.5px}',
+                '.leaflet-marker-icon {transform-origin:center center !important;}',
+                '.leaflet-grab {cursor:default;}',
+                '.coordinate-attr {font-size: 11px;padding:0 5px;color:rgb(0, 120, 168);line-height:16.5px}',
+                '.leaflet-control-layers-overlays {user-select:none !important}',
+                '.leaflet-control-layers-selector {outline:none !important}'
             ];
             $('#map').append('<style>' + styles.join('') + '</style>');
         }

@@ -79,7 +79,7 @@
                 {{ t('home.staff') }}
             </h3>
             <div class="flex flex-wrap -mx-3">
-                <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-green-600 rounded m-3" v-for="player in staff" :key="player.id" :href="'/players/' + player.identifier">
+                <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-green-600 rounded m-3" v-for="player in staff" :key="player.id" :href="'/players/' + player.steamIdentifier">
                     {{ player.playerName }}
                 </inertia-link>
             </div>
