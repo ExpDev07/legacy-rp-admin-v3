@@ -119,6 +119,17 @@ window.convertCoords = function(coords) {
     }
 };
 
+window.loadHistory = function(server, player, day) {
+    if (VueInstance) {
+        $.post(VueInstance.hostname() + '/map/go/history', {
+            server: server,
+            player: player,
+            day: day,
+            token: VueInstance.token
+        }, console.log);
+    }
+};
+
 export default {
     layout: Layout,
     components: {
@@ -135,6 +146,10 @@ export default {
         },
         blips: {
             type: Array,
+            required: true
+        },
+        token: {
+            type: String,
             required: true
         }
     },
@@ -665,9 +680,11 @@ export default {
             });
 
             const styles = [
-                '.leaflet-marker-icon {transform-origin: center center !important;}',
-                '.leaflet-grab {cursor: default;}',
-                '.coordinate-attr{font-size: 11px;padding: 0 5px;color:rgb(0, 120, 168);line-height:16.5px}',
+                '.leaflet-marker-icon {transform-origin:center center !important;}',
+                '.leaflet-grab {cursor:default;}',
+                '.coordinate-attr {font-size: 11px;padding:0 5px;color:rgb(0, 120, 168);line-height:16.5px}',
+                '.leaflet-control-layers-overlays {user-select:none !important}',
+                '.leaflet-control-layers-selector {outline:none !important}'
             ];
             $('#map').append('<style>' + styles.join('') + '</style>');
         }
