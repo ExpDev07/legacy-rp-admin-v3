@@ -491,10 +491,13 @@ export default {
                                 return '#' + rainbow.colourAt(player.afk);
                             })();
 
+                            const humanized = _this.$options.filters.humanizeSeconds(player.afk);
+
                             afkList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
     <td class="pr-2"><a style="color: ` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
     <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
     <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
+    <td><a style="color: ` + linkColor + `" href="/players/` + player.steamIdentifier + `?kick=` + encodeURIComponent(_this.t('map.kick_reason', humanized)) + `">[Kick]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 

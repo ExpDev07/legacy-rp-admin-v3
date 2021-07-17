@@ -93,10 +93,10 @@ class PlayerController extends Controller
         return Inertia::render('Players/Index', [
             'players' => PlayerIndexResource::collection($players),
             'filters' => [
-                'name'  => $request->input('name'),
-                'steam'  => $request->input('steam'),
-                'discord'  => $request->input('discord'),
-                'banned' => $request->input('banned') ?: 'all',
+                'name'    => $request->input('name'),
+                'steam'   => $request->input('steam'),
+                'discord' => $request->input('discord'),
+                'banned'  => $request->input('banned') ?: 'all',
             ],
             'links'   => $this->getPageUrls($page),
             'time'    => $end - $start,
@@ -107,10 +107,11 @@ class PlayerController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param Player $player
      * @return Response
      */
-    public function show(Player $player): Response
+    public function show(Request $request, Player $player): Response
     {
         return Inertia::render('Players/Show', [
             'player'     => new PlayerResource($player),
@@ -118,6 +119,7 @@ class PlayerController extends Controller
             'warnings'   => WarningResource::collection($player->warnings()->oldest()->get()),
             'panelLogs'  => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(25)->get()),
             'discord'    => $player->getDiscordInfo(),
+            'kickReason' => trim($request->query('kick')) ?? '',
         ]);
     }
 

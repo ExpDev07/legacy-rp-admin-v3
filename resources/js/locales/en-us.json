@@ -70,7 +70,8 @@
         "track_server": "Server ID",
         "track_steam": "Steam Identifier",
         "track_character": "Character ID",
-        "do_track": "Track"
+        "do_track": "Track",
+        "kick_reason": "You were afk for more than {0}, consider leaving the server or going to the character selection screen when you have to be afk for longer periods of time"
     },
     "nav": {
         "dark": "Dark",
