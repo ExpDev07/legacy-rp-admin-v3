@@ -308,7 +308,7 @@
                         </template>
                     </card>
                 </div>
-                <p class="text-muted dark:text-dark-muted" v-if="character.properties.length === 0">
+                <p class="text-muted dark:text-dark-muted" v-if="motels.length === 0">
                     {{ t('players.motels.none') }}
                 </p>
             </template>
