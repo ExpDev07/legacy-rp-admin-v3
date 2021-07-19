@@ -146,7 +146,7 @@ class GeneralHelper
         $stats = Ban::query()->fromSub(function ($query) {
             $query->from('user_bans')->select([
                 DB::raw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\') AS `date`'),
-            ])->orderByDesc('timestamp');//->groupBy('ban_hash');
+            ])->orderByDesc('timestamp')->groupBy('ban_hash');
         }, 'bans')->select([
             DB::raw('COUNT(`date`) as `count`'),
             'date',
