@@ -91,10 +91,6 @@
             </p>
         </div>
 
-        <div class="mt-7">
-            <canvas id="ban_stats" class="w-full" height="400"></canvas>
-        </div>
-
     </div>
 </template>
 
@@ -159,57 +155,6 @@ export default {
                 _this.refresh();
             }, 30 * 1000);
         });
-
-        $(document).ready(function() {
-            console.log(_this.statistics.labels, _this.statistics.data);
-
-            const ctx = document.getElementById('ban_stats').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: _this.statistics.labels,
-                    datasets: [{
-                        label: 'Active bans',
-                        data: _this.statistics.data,
-                        backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                        fill: true,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    devicePixelRatio: 2,
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        yAxes: [{
-                            display: true,
-                            ticks: {
-                                beginAtZero: true
-                            },
-                            gridLines: {
-                                display: true,
-                                color: "rgba(128, 128, 128, 0.3)"
-                            }
-                        }],
-                        xAxes: [{
-                            display: false,
-                            gridLines: {
-                                display: false
-                            }
-                        }]
-                    },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    hover: {
-                        mode: 'nearest',
-                        intersect: true
-                    },
-                }
-            });
-        });
     },
     props: {
         quote: {
@@ -225,10 +170,6 @@ export default {
             required: true,
         },
         playerMap: {
-            type: Object,
-            required: true,
-        },
-        statistics: {
             type: Object,
             required: true,
         },

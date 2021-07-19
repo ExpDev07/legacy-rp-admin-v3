@@ -26,6 +26,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\SuspiciousController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TwitterController;
@@ -92,6 +93,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Map.
     Route::get('/map', [MapController::class, 'index']);
     Route::get('/map/data', [MapController::class, 'data']);
+
+    // Statistics.
+    Route::get('/statistics', [StatisticsController::class, 'render']);
 
     // Testing.
     Route::get('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);

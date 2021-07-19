@@ -52,7 +52,6 @@ class HomeController extends Controller
             'bans'       => $bans,
             'playerMap'  => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
             'staff'      => PlayerIndexResource::collection($staff),
-            'statistics' => GeneralHelper::getBanStats(),
         ]);
     }
 

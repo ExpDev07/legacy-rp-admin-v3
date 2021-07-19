@@ -37,7 +37,8 @@
         "management": "Management",
         "advanced": "Advanced",
         "advanced_search": "Search",
-        "suspicious": "Suspicious"
+        "suspicious": "Suspicious",
+        "data": "Data"
     },
     "home": {
         "title": "Dashboard",
@@ -52,6 +53,12 @@
         },
         "no_bans": "No recent bans by you",
         "staff": "Active Staff members"
+    },
+    "statistics": {
+        "title": "Statistics",
+        "description": "Some general statistics",
+        "bans": "Active Bans",
+        "warnings": "Warnings"
     },
     "map": {
         "title": "Live-Map",
