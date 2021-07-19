@@ -135,14 +135,25 @@ export default {
                     ]
                 },
                 {
+                    label: this.t('sidebar.data'),
+                    icon: 'server',
+                    sub: [
+                        {
+                            label: this.t('map.title'),
+                            icon: 'map',
+                            url: '/map',
+                        },
+                        {
+                            label: this.t('statistics.title'),
+                            icon: 'statistics',
+                            url: '/statistics',
+                        }
+                    ]
+                },
+                {
                     label: this.t('twitter.title'),
                     icon: 'twitter',
                     url: '/twitter',
-                },
-                {
-                    label: this.t('map.title'),
-                    icon: 'map',
-                    url: '/map',
                 },
                 {
                     label: this.t('servers.title'),
