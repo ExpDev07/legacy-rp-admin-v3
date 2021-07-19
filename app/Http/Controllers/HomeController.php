@@ -48,10 +48,11 @@ class HomeController extends Controller
         $staff = Player::query()->where('is_staff', '=', true)->whereIn('steam_identifier', $players)->get();
 
         return Inertia::render('Home', [
-            'quote'     => $quote,
-            'bans'      => $bans,
-            'playerMap' => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
-            'staff'     => PlayerIndexResource::collection($staff),
+            'quote'      => $quote,
+            'bans'       => $bans,
+            'playerMap'  => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
+            'staff'      => PlayerIndexResource::collection($staff),
+            'statistics' => GeneralHelper::getBanStats(),
         ]);
     }
 

@@ -57,11 +57,14 @@
                             {{ playerName(ban.identifier) }}
                         </inertia-link>
                     </td>
-                    <td class="px-6 py-3 border-t mobile:block" :title="ban.reason" v-if="ban.reason.length > 50">
+                    <td class="px-6 py-3 border-t mobile:block" :title="ban.reason" v-if="ban.reason && ban.reason.length > 50">
                         {{ ban.reason.substr(0, 50) + '...' }}
                     </td>
-                    <td class="px-6 py-3 border-t mobile:block" v-else>
+                    <td class="px-6 py-3 border-t mobile:block" v-else-if="ban.reason">
                         {{ ban.reason }}
+                    </td>
+                    <td class="px-6 py-3 border-t mobile:block italic" v-else>
+                        {{ t('global.none') }}
                     </td>
                     <td class="px-6 py-3 border-t mobile:block">{{ banTime(ban) }}</td>
                     <td class="px-6 py-3 border-t mobile:block">{{ ban.timestamp | formatTime }}</td>
@@ -83,6 +86,13 @@
                     {{ player.playerName }}
                 </inertia-link>
             </div>
+            <p class="italic" v-if="staff.length === 0">
+                {{ t('global.none') }}
+            </p>
+        </div>
+
+        <div class="mt-7">
+            <canvas id="ban_stats" class="w-full" height="400"></canvas>
         </div>
 
     </div>
@@ -90,7 +100,8 @@
 
 <script>
 import Layout from './../Layouts/App';
-import VueCircle from 'vue2-circle-progress'
+import VueCircle from 'vue2-circle-progress';
+import "chart.js";
 
 export default {
     layout: Layout,
@@ -148,6 +159,57 @@ export default {
                 _this.refresh();
             }, 30 * 1000);
         });
+
+        $(document).ready(function() {
+            console.log(_this.statistics.labels, _this.statistics.data);
+
+            const ctx = document.getElementById('ban_stats').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: _this.statistics.labels,
+                    datasets: [{
+                        label: 'Active bans',
+                        data: _this.statistics.data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.3)',
+                        fill: true,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    devicePixelRatio: 2,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            gridLines: {
+                                display: true,
+                                color: "rgba(128, 128, 128, 0.3)"
+                            }
+                        }],
+                        xAxes: [{
+                            display: false,
+                            gridLines: {
+                                display: false
+                            }
+                        }]
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                }
+            });
+        });
     },
     props: {
         quote: {
@@ -163,6 +225,10 @@ export default {
             required: true,
         },
         playerMap: {
+            type: Object,
+            required: true,
+        },
+        statistics: {
             type: Object,
             required: true,
         },
