@@ -166,6 +166,7 @@ export default {
             coordsCommand: '',
             afkPeople: '',
             openPopup: null,
+            isDragging: false,
             layers: {
                 "Players": L.layerGroup(),
                 "Dead Players": L.layerGroup(),
@@ -184,14 +185,14 @@ export default {
             return {
                 game: {
                     bounds: {
-                        min: {x: -2862.10546875, y: 7616.0966796875},
-                        max: {x: 4195.29248046875, y: -3579.89013671875}
+                        min: {x: -2861.829, y: 7679.829},
+                        max: {x: 4180.101, y: -3579.837}
                     }
                 },
                 map: {
                     bounds: {
-                        min: {x: 85.546875, y: -59.62890625},
-                        max: {x: 174.2109375, y: -200.24609375}
+                        min: {x: 58.45703125, y: -14.693359375},
+                        max: {x: 203.40234375, y: -246.373046875}
                     }
                 }
             };
@@ -372,7 +373,7 @@ export default {
             }
         },
         renderMapData(data) {
-            if (this.isPaused) {
+            if (this.isPaused || this.isDragging) {
                 return;
             }
 
@@ -550,71 +551,25 @@ export default {
                 return;
             }
             const _this = this;
-            const range = (coords, max) => {
-                if (coords.x < 0 || coords.y < 0 || coords.x > max || coords.y > max) {
-                    coords.z = 2;
-                    coords.y = 0;
-                    coords.x = 0;
-                }
-
-                return coords;
-            };
 
             L.Map.addInitHook("addHandler", "gestureHandling", GestureHandling);
-
-            const url = this.hostname(false);
-            L.TileLayer.GTA = L.TileLayer.extend({
-                getTileUrl: function (coords) {
-                    coords.x = coords.x < 0 ? 0 : coords.x;
-                    coords.y = coords.y < 0 ? 0 : coords.y;
-
-                    switch (coords.z) {
-                        case 0:
-                            coords = range(coords, 0);
-                            break;
-                        case 1:
-                            coords = range(coords, 1);
-                            break;
-                        case 2:
-                            coords = range(coords, 3);
-                            break;
-                        case 3:
-                            coords = range(coords, 7);
-                            break;
-                        case 4:
-                            coords = range(coords, 15);
-                            break;
-                        case 5:
-                            coords = range(coords, 31);
-                            break;
-                        case 6:
-                            coords = range(coords, 63);
-                            break;
-                        case 7:
-                            coords = range(coords, 127);
-                            break;
-                        case 8:
-                            break;
-                    }
-
-                    return url + '/map/go/tiles/' + coords.z + '_' + coords.x + '_' + coords.y + '.jpg';
-                }
-            });
-
-            L.tileLayer.gta = function () {
-                return new L.TileLayer.GTA();
-            }
 
             this.map = L.map('map', {
                 crs: L.CRS.Simple,
                 gestureHandling: true,
-                minZoom: 2,
-                maxZoom: 7,
-                maxBounds: L.latLngBounds(L.latLng(-41, 66), L.latLng(-217, 185))
+                minZoom: 1,
+                maxZoom: 8,
+                maxBounds: L.latLngBounds(L.latLng(0, 0), L.latLng(-256, 256))
             });
             this.map.attributionControl.addAttribution('<a href="https://github.com/milan60" target="_blank">milan60</a>');
 
-            L.tileLayer.gta().addTo(this.map);
+            L.tileLayer("https://cdn.celestial.network/tiles/{z}/{x}/{y}.jpg", {
+                noWrap: true,
+                bounds: [
+                    [0, 0],
+                    [-256, 256],
+                ],
+            }).addTo(this.map);
 
             this.map.setView([-124, 124], 3);
 
@@ -660,7 +615,14 @@ export default {
                 _this.clickedCoords = "[X=" + Math.round(game.x) + ",Y=" + Math.round(game.y) + "] / [X=" + map.x + ",Y=" + map.y + "]";
                 _this.coordsCommand = "/tp_coords " + Math.round(game.x) + " " + Math.round(game.y);
 
-                console.info('Clicked coordinates', map);
+                console.info('Clicked coordinates', map, game);
+            });
+
+            this.map.on('dragstart', function (e) {
+                _this.isDragging = true;
+            });
+            this.map.on('dragend', function (e) {
+                _this.isDragging = false;
             });
 
             $('#map-wrapper').on('click', '.track-cid', function(e) {
