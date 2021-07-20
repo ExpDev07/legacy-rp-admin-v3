@@ -58,7 +58,9 @@
         "title": "Statistics",
         "description": "Some general statistics",
         "bans": "Active Bans",
-        "warnings": "Warnings"
+        "warnings": "Warnings",
+        "creations": "Character creations",
+        "deletions": "Character deletions"
     },
     "map": {
         "title": "Live-Map",

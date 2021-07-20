@@ -107,32 +107,41 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
 });
 
 // Used to get logs.
-Route::get('/op-fw-logs/{api_key}', function (string $api_key) {
-    $file = rtrim(storage_path('logs'), '/\\') . '/op-fw.log';
-
-    if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
-        return response()->download($file, 'op-fw.log');
+Route::get('/op-logs/{type}/{api_key}', function (string $type, string $api_key) {
+    $file = '';
+    switch ($type) {
+        case 'default':
+            $file = storage_path('logs/op-fw.log');
+            break;
+        case 'access':
+            $file = storage_path('logs/op-fw-access.log');
+            break;
+        case 'error':
+            $file = storage_path('logs/error.log');
+            break;
     }
 
-    return (new Response('Unauthorized', 403))
-        ->header('Content-Type', 'text/plain');
+    return doOPLogFileDownload($file, $api_key);
 });
 
-// Used to get error logs.
-Route::get('/op-fw-errors/{api_key}', function (string $api_key) {
-    $file = storage_path('logs/error.log');
+function doOPLogFileDownload(string $path, string $api_key)
+{
+    if (!$path) {
+        return (new Response('Invalid file', 400))
+            ->header('Content-Type', 'text/plain');
+    }
 
     if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
-        if (!file_exists($file)) {
+        if (!file_exists($path)) {
             return (new Response('Empty file', 200))
                 ->header('Content-Type', 'text/plain');
         }
-        return response()->download($file, 'op-fw.log');
+        return response()->download($path, basename($path));
     }
 
     return (new Response('Unauthorized', 403))
         ->header('Content-Type', 'text/plain');
-});
+}
 
 // Used for testing purposes.
 Route::get('/test', function () {

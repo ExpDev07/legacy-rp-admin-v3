@@ -26,8 +26,10 @@ class StatisticsController extends Controller
     public function render(Request $request): Response
     {
         return Inertia::render('Statistics/Index', [
-            'bans'     => StatisticsHelper::getBanStats(),
-            'warnings' => StatisticsHelper::getWarningStats(),
+            'bans'      => StatisticsHelper::getBanStats(),
+            'warnings'  => StatisticsHelper::getWarningStats(),
+            'creations' => StatisticsHelper::getCharacterCreationStats(),
+            'deletions' => StatisticsHelper::getCharacterDeletionStats(),
         ]);
     }
 
