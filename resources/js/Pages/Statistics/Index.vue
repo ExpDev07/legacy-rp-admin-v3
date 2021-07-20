@@ -16,7 +16,7 @@
             </div>
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
-                <canvas id="warning_stats" class="w-full" height="400"></canvas>
+                <canvas id="character_stats" class="w-full" height="400"></canvas>
             </div>
         </template>
 
@@ -30,20 +30,30 @@ import "chart.js";
 export default {
     layout: Layout,
     methods: {
-        renderChart(id, title, labels, data) {
+        renderChart(id, titles, labels, data, colors) {
             const ctx = document.getElementById(id).getContext('2d');
             new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{
-                        label: title,
-                        data: data,
-                        backgroundColor: 'rgba(54, 162, 235, 0.3)',
-                        fill: true,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
+                    datasets: [
+                        {
+                            label: titles[0],
+                            data: data[0],
+                            backgroundColor: 'rgba(' + colors[0] + ', 0.3)',
+                            fill: true,
+                            borderColor: 'rgba(' + colors[0] + ', 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: titles[1],
+                            data: data[1],
+                            backgroundColor: 'rgba(' + colors[1] + ', 0.3)',
+                            fill: true,
+                            borderColor: 'rgba(' + colors[1] + ', 1)',
+                            borderWidth: 1
+                        }
+                    ]
                 },
                 options: {
                     devicePixelRatio: 2,
@@ -83,8 +93,21 @@ export default {
         const _this = this;
 
         $(document).ready(function() {
-            _this.renderChart('ban_stats', _this.t('statistics.bans'), _this.bans.labels, _this.bans.data);
-            _this.renderChart('warning_stats', _this.t('statistics.warnings'), _this.warnings.labels, _this.warnings.data);
+            _this.renderChart(
+                'ban_stats',
+                [_this.t('statistics.bans'), _this.t('statistics.warnings')],
+                _this.bans.labels,
+                [_this.bans.data, _this.warnings.data],
+                ['54, 162, 235', '145, 55, 235']
+            );
+            _this.renderChart(
+                'character_stats',
+                [_this.t('statistics.creations'),
+                _this.t('statistics.deletions')],
+                _this.creations.labels,
+                [_this.creations.data, _this.deletions.data],
+                ['87, 235, 54', '235, 54, 54']
+            );
         });
     },
     props: {
@@ -93,6 +116,14 @@ export default {
             required: true,
         },
         warnings: {
+            type: Object,
+            required: true,
+        },
+        creations: {
+            type: Object,
+            required: true,
+        },
+        deletions: {
             type: Object,
             required: true,
         },
