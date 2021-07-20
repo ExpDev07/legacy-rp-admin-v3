@@ -33,7 +33,7 @@ class OPFWHelper
         }
 
         $response = self::executeRoute($status->serverIp . 'execute/staffMessage', [
-            'steamIdentifier' => 'steam:110000107343566',//$staffSteamIdentifier,
+            'steamIdentifier' => $staffSteamIdentifier,
             'targetSource'    => $status->serverId,
             'message'         => $message,
         ]);
