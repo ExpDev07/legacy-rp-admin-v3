@@ -12,6 +12,13 @@ class LoggingHelper
     private static ?string $logFile = null;
 
     /**
+     * Where the access logfile resides
+     *
+     * @var string|null
+     */
+    private static ?string $accessLogFile = null;
+
+    /**
      * If register_shutdown_function has been set yet
      *
      * @var bool
@@ -40,6 +47,13 @@ class LoggingHelper
     private static ?int $lastTime = null;
 
     /**
+     * If this is a simple access log
+     *
+     * @var bool
+     */
+    private static bool $isAccessLog = true;
+
+    /**
      * Creates a log entry
      *
      * @param string $sessionKey
@@ -48,6 +62,10 @@ class LoggingHelper
     public static function log(string $sessionKey, string $msg)
     {
         self::init();
+
+        if ($msg !== 'ACCEPTED') {
+            self::$isAccessLog = false;
+        }
 
         self::$lastSessionKey = $sessionKey;
         self::registerShutdown();
@@ -78,6 +96,9 @@ class LoggingHelper
     {
         if (self::$logFile === null) {
             self::$logFile = rtrim(storage_path('logs'), '/\\') . '/op-fw.log';
+        }
+        if (self::$accessLogFile === null) {
+            self::$accessLogFile = rtrim(storage_path('logs'), '/\\') . '/op-fw-access.log';
         }
 
         self::registerShutdown();
@@ -142,7 +163,7 @@ class LoggingHelper
 
         $logs[] = '--- CLOSED ' . $time;
 
-        file_put_contents(self::$logFile, implode('', $logs) . PHP_EOL, FILE_APPEND);
+        file_put_contents(self::$isAccessLog ? self::$accessLogFile : self::$logFile, implode('', $logs) . PHP_EOL, FILE_APPEND);
     }
 
     /**
