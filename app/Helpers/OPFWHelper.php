@@ -54,7 +54,7 @@ class OPFWHelper
      * @param string $reason
      * @return OPFWResponse
      */
-    public static function kickPlayer(string $staffSteamIdentifier, Player $player, string $reason): OPFWResponse
+    public static function kickPlayer(string $staffSteamIdentifier, string $staffPlayerName, Player $player, string $reason): OPFWResponse
     {
         $steam = $player->steam_identifier;
 
@@ -65,7 +65,7 @@ class OPFWHelper
 
         $response = self::executeRoute($status->serverIp . 'execute/kickPlayer', [
             'steamIdentifier'         => $steam,
-            'reason'                  => $reason,
+            'reason'                  => 'You have been kicked by ' . $staffPlayerName . ' for reason `' . $reason . '`',
             'removeReconnectPriority' => false,
         ]);
 
@@ -208,7 +208,7 @@ class OPFWHelper
         $result = null;
 
         $client = new Client();
-        for ($x=0;$x<self::RetryAttempts;$x++) {
+        for ($x = 0; $x < self::RetryAttempts; $x++) {
             $res = $client->request($isPost ? 'POST' : 'GET', $route, [
                 'query'   => $data,
                 'headers' => [

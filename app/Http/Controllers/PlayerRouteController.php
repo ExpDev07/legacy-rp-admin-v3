@@ -26,7 +26,7 @@ class PlayerRouteController extends Controller
         $user = $request->user();
         $reason = $request->input('reason') ?: 'You were kicked by ' . $user->player->player_name;
 
-        return OPFWHelper::kickPlayer($user->player->steam_identifier, $player, $reason)->redirect();
+        return OPFWHelper::kickPlayer($user->player->steam_identifier, $user->player->player_name, $player, $reason)->redirect();
     }
 
     /**
