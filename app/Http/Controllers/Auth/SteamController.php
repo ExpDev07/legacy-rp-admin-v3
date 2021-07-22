@@ -60,14 +60,18 @@ class SteamController extends AbstractSteamLoginController
 
             LoggingHelper::log($session->getSessionKey(), 'Putting user in session');
             $session->put('user', $user);
+
+            if ($session->exists('returnTo')) {
+                return redirect($session->get('returnTo'));
+            }
         } else {
             LoggingHelper::log($session->getSessionKey(), 'Failed to create login session {player:' . json_encode(!!$player) . ', user->avatar:' . json_encode(!empty($user['avatar'])) . '}');
             LoggingHelper::log($session->getSessionKey(), 'user->' . json_encode([
-                'account_id' => $steam->steamId,
-                'identifier' => 'steam:' . dechex(intval($steam->steamId)),
-                'name'       => $steam->name,
-                'avatar'     => $steam->avatar,
-            ]));
+                    'account_id' => $steam->steamId,
+                    'identifier' => 'steam:' . dechex(intval($steam->steamId)),
+                    'name'       => $steam->name,
+                    'avatar'     => $steam->avatar,
+                ]));
             LoggingHelper::log($session->getSessionKey(), 'steam->' . json_encode($steam->toArray()));
             LoggingHelper::log($session->getSessionKey(), 'player->' . json_encode($player ? $player->toArray() : null));
 

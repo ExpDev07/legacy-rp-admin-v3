@@ -98,7 +98,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/statistics', [StatisticsController::class, 'render']);
 
     // Testing.
-    Route::get('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
+    Route::post('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
