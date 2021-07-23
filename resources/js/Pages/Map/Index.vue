@@ -67,6 +67,7 @@ import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import custom_icons from "../../data/vehicles.json";
+import model_hash from "../../data/model_hash.json";
 const Rainbow = require('rainbowvis.js');
 
 (function(global){
@@ -207,6 +208,22 @@ export default {
 
             this.copyToClipboard(text);
         },
+        convertVehicleHash(vehicle) {
+            const hash = parseInt(vehicle);
+            if (isNaN(hash)) {
+                return vehicle in model_hash ? model_hash[vehicle] : null;
+            } else {
+                let result = null;
+                $.each(model_hash, function(model, _hash) {
+                    if (hash === _hash) {
+                        result = model;
+                        return false;
+                    }
+                });
+
+                return result;
+            }
+        },
         coords(coords) {
             return {
                 lat: coords.y,
@@ -272,8 +289,10 @@ export default {
                 size: 23
             };
 
+            const inverse = this.convertVehicleHash(vehicle.model);
+
             $.each(custom_icons, function(type, cfg) {
-                if (cfg.models.includes(vehicle.model+"")) {
+                if (cfg.models.includes(vehicle.model+"") || (inverse && cfg.models.includes(inverse+""))) {
                     ret.type = type;
                     ret.size = cfg.size;
                 }
