@@ -174,7 +174,7 @@
                 </div>
 
                 <p class="text-gray-100">
-                    {{ player.ban.reason || t('players.show.no_reason') }}
+                    <span class="whitespace-pre-line">{{ player.ban.reason || t('players.show.no_reason') }}</span>
                 </p>
 
             </alert>
@@ -450,7 +450,7 @@
 
                     <template>
                         <p class="text-muted dark:text-dark-muted">
-                            {{ warning.message }}
+                            <span class="whitespace-pre-line">{{ warning.message }}</span>
                         </p>
                     </template>
                 </card>
