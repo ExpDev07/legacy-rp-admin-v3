@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Ban;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -129,5 +130,27 @@ class GeneralHelper
         }
 
         return $result;
+    }
+
+    /**
+     * Simple GET request
+     *
+     * @param string $url
+     * @return string
+     */
+    public static function get(string $url): string
+    {
+        $client = new Client(
+            [
+                'verify' => false,
+            ]
+        );
+
+        $res = $client->request('GET', $url, [
+            'timeout'         => 3,
+            'connect_timeout' => 3,
+        ]);
+
+        return $res->getBody()->getContents();
     }
 }

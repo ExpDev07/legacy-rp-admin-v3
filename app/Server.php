@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\OPFWHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -76,7 +77,21 @@ class Server extends Model
     public static function getServerName(string $serverIp): string
     {
         $serverIp = self::fixApiUrl($serverIp);
-        return explode('.', str_replace('https://', '', $serverIp))[0];
+
+        $host = str_replace('https://', '', $serverIp);
+        $host = explode('/', $host)[0];
+
+        $names = explode(',', env('SERVER_NAMES', ''));
+        if (!empty($names)) {
+            foreach($names as $def) {
+                $def = explode('=', $def);
+                if (sizeof($def) === 2 && $def[0] === $host) {
+                    return $def[1];
+                }
+            }
+        }
+
+        return preg_match('/^\d+\.\d+\.\d+\.\d+(:\d+)?$/m', $host) ? $host : explode('.', $host)[0];
     }
 
     /**
@@ -104,7 +119,7 @@ class Server extends Model
 
             $json = null;
             try {
-                $json = Http::timeout(3)->get($serverIp . 'connections.json')->body() ?? null;
+                $json = GeneralHelper::get($serverIp . 'connections.json') ?? null;
             } catch (Throwable $t) {
                 return [];
             }
@@ -157,7 +172,7 @@ class Server extends Model
                 $serverIp = self::fixApiUrl($serverIp);
 
                 try {
-                    $json = Http::timeout(3)->get($serverIp . 'api.json')->body() ?? [];
+                    $json = GeneralHelper::get($serverIp . 'api.json') ?? [];
 
                     $response = OPFWHelper::parseResponse($json);
 

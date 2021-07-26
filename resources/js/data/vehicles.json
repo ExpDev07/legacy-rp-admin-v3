@@ -110,7 +110,8 @@
             "bombushka",
             "cargoplane",
             "jet",
-            "titan"
+            "titan",
+            "afo"
         ]
     },
     "small_jet": {
@@ -237,7 +238,8 @@
             "policet",
             "pranger",
             "sheriff",
-            "sheriff2"
+            "sheriff2",
+            "peel50police"
         ]
     },
     "bus": {
@@ -273,6 +275,64 @@
             "scarab2",
             "scarab3",
             "trailersmall2"
+        ]
+    },
+
+    "big_boat": {
+        "size": 45,
+        "models": [
+            "amels200",
+            "titanic2"
+        ]
+    },
+
+    "falcon": {
+        "size": 35,
+        "models": [
+            "falcon"
+        ]
+    },
+
+    "star_destroyer": {
+        "size": 45,
+        "models": [
+            "stardestroy"
+        ]
+    },
+
+    "death_star": {
+        "size": 40,
+        "models": [
+            "deathstar"
+        ]
+    },
+
+    "pod_racer": {
+        "size": 35,
+        "models": [
+            "podracer"
+        ]
+    },
+
+    "royal_naboo": {
+        "size": 40,
+        "models": [
+            "royalnaboo"
+        ]
+    },
+
+    "x_wing": {
+        "size": 40,
+        "models": [
+            "xwing2"
+        ]
+    },
+
+    "tie_fighter": {
+        "size": 40,
+        "models": [
+            "tiefighterx",
+            "520411583"
         ]
     }
 }

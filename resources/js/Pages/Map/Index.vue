@@ -67,7 +67,6 @@ import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import custom_icons from "../../data/vehicles.json";
-import model_hash from "../../data/model_hash.json";
 const Rainbow = require('rainbowvis.js');
 
 (function(global){
@@ -208,22 +207,6 @@ export default {
 
             this.copyToClipboard(text);
         },
-        convertVehicleHash(vehicle) {
-            const hash = parseInt(vehicle);
-            if (isNaN(hash)) {
-                return vehicle in model_hash ? model_hash[vehicle] : null;
-            } else {
-                let result = null;
-                $.each(model_hash, function(model, _hash) {
-                    if (hash === _hash) {
-                        result = model;
-                        return false;
-                    }
-                });
-
-                return result;
-            }
-        },
         coords(coords) {
             return {
                 lat: coords.y,
@@ -289,10 +272,8 @@ export default {
                 size: 23
             };
 
-            const inverse = this.convertVehicleHash(vehicle.model);
-
             $.each(custom_icons, function(type, cfg) {
-                if (cfg.models.includes(vehicle.model+"") || (inverse && cfg.models.includes(inverse+""))) {
+                if (cfg.models.includes(vehicle.model+"")) {
                     ret.type = type;
                     ret.size = cfg.size;
                 }
@@ -637,10 +618,10 @@ export default {
                 console.info('Clicked coordinates', map, game);
             });
 
-            this.map.on('dragstart', function (e) {
+            this.map.on('dragstart', function () {
                 _this.isDragging = true;
             });
-            this.map.on('dragend', function (e) {
+            this.map.on('dragend', function () {
                 _this.isDragging = false;
             });
 
@@ -682,8 +663,7 @@ export default {
                 _this.firstRefresh = true;
 
                 _this.doMapRefresh($(this).val());
-            });
-            $('#server').trigger('change');
+            }).trigger('change');
         });
 
         if (Math.round(Math.random() * 100) === 1) { // 1% chance it says fib spy satellite map
