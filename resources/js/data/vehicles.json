@@ -282,28 +282,57 @@
         "size": 45,
         "models": [
             "amels200",
-            "-87525510"
+            "titanic2"
         ]
     },
 
     "falcon": {
-        "size": 30,
+        "size": 35,
         "models": [
             "falcon"
         ]
     },
 
     "star_destroyer": {
-        "size": 30,
+        "size": 45,
         "models": [
             "stardestroy"
         ]
     },
 
     "death_star": {
-        "size": 30,
+        "size": 40,
         "models": [
             "deathstar"
+        ]
+    },
+
+    "pod_racer": {
+        "size": 35,
+        "models": [
+            "podracer"
+        ]
+    },
+
+    "royal_naboo": {
+        "size": 40,
+        "models": [
+            "royalnaboo"
+        ]
+    },
+
+    "x_wing": {
+        "size": 40,
+        "models": [
+            "xwing2"
+        ]
+    },
+
+    "tie_fighter": {
+        "size": 40,
+        "models": [
+            "tiefighterx",
+            "520411583"
         ]
     }
 }
