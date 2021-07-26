@@ -207,7 +207,11 @@ class OPFWHelper
 
         $result = null;
 
-        $client = new Client();
+        $client = new Client(
+            [
+                'verify' => false,
+            ]
+        );
         for ($x = 0; $x < self::RetryAttempts; $x++) {
             $res = $client->request($isPost ? 'POST' : 'GET', $route, [
                 'query'   => $data,

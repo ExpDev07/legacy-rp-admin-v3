@@ -450,7 +450,7 @@
 
                     <template>
                         <p class="text-muted dark:text-dark-muted">
-                            <span class="whitespace-pre-line">{{ warning.message }}</span>
+                            <span class="whitespace-pre-line" v-html="formatWarning(warning.message)">{{ formatWarning(warning.message) }}</span>
                         </p>
                     </template>
                 </card>
@@ -723,14 +723,73 @@ export default {
                 button.removeClass('bg-green-600');
                 button.addClass('bg-blue-800');
             }, 500);
+        },
+        urlify(text, callback) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function (url) {
+                return callback(url);
+            });
+        },
+        formatWarning(warning) {
+            return this.urlify(warning, function(url) {
+                const ext = url.split(/[#?]/)[0].split('.').pop().trim();
+                let extraClass = 'user-link';
+
+                switch(ext) {
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                    case 'webp':
+                    case 'gif':
+                        extraClass = 'user-image';
+                        break;
+                    case 'mp4':
+                    case 'mov':
+                    case 'webm':
+                    case 'avi':
+                    case 'mkv':
+                        extraClass = 'user-video';
+                        break;
+                }
+
+                return '<a href="' + url + '" target="_blank" class="text-indigo-600 dark:text-indigo-400 ' + extraClass + '">' + url + '</a>';
+            });
+        },
+        viewImage(el, url) {
+            $(el).replaceWith('<div class="user-close relative">' +
+                '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
+                '<img class="block max-h-96 max-w-full" src="' + url + '" />' +
+                '</div>');
+        },
+        viewVideo(el, url) {
+            $(el).replaceWith('<div class="user-close relative">' +
+                    '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
+                    '<video class="block max-h-96 max-w-full" controls autoplay><source src="' + url + '">Your browser does not support the video tag.</video>' +
+                '</div>');
         }
     },
     mounted() {
-        console.log(this.kickReason);
         if (this.kickReason) {
             this.isKicking = true;
             this.form.kick.reason = this.kickReason;
         }
+
+        const _this = this;
+        $(document).ready(function() {
+            $('body').on('click', 'a.user-image', function(e) {
+                e.preventDefault();
+
+                _this.viewImage(this, $(this).attr('href'));
+            }).on('click', 'a.user-video', function(e) {
+                e.preventDefault();
+
+                _this.viewVideo(this, $(this).attr('href'));
+            }).on('click', '.user-close a', function(e) {
+                e.preventDefault();
+
+                $(this).closest('.user-close').replaceWith(_this.formatWarning($(this).data('original')));
+            });
+        });
     }
 };
 </script>

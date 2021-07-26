@@ -110,7 +110,8 @@
             "bombushka",
             "cargoplane",
             "jet",
-            "titan"
+            "titan",
+            "afo"
         ]
     },
     "small_jet": {
@@ -237,7 +238,8 @@
             "policet",
             "pranger",
             "sheriff",
-            "sheriff2"
+            "sheriff2",
+            "peel50police"
         ]
     },
     "bus": {
@@ -273,6 +275,35 @@
             "scarab2",
             "scarab3",
             "trailersmall2"
+        ]
+    },
+
+    "big_boat": {
+        "size": 45,
+        "models": [
+            "amels200",
+            "-87525510"
+        ]
+    },
+
+    "falcon": {
+        "size": 30,
+        "models": [
+            "falcon"
+        ]
+    },
+
+    "star_destroyer": {
+        "size": 30,
+        "models": [
+            "stardestroy"
+        ]
+    },
+
+    "death_star": {
+        "size": 30,
+        "models": [
+            "deathstar"
         ]
     }
 }
