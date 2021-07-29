@@ -7,6 +7,7 @@ use App\Log;
 use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,6 +30,16 @@ class LogController extends Controller
         // Filtering by identifier.
         if ($identifier = $request->input('identifier')) {
             $query->where('identifier', $identifier);
+        }
+
+        // Filtering by before.
+        if ($before = $request->input('before')) {
+            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '<', $before);
+        }
+
+        // Filtering by after.
+        if ($after = $request->input('after')) {
+            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', $after);
         }
 
         // Filtering by server.
@@ -74,7 +85,9 @@ class LogController extends Controller
                 'identifier',
                 'server',
                 'action',
-                'details'
+                'details',
+                'after',
+                'before'
             ),
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
