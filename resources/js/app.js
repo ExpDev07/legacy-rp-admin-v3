@@ -11,6 +11,7 @@ import formatGender from './Filters/formatGender.js';
 import linkify from 'vue-linkify';
 import 'leaflet/dist/leaflet.css';
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
+import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 
 // Directives.
 Vue.directive('linkified', linkify);
