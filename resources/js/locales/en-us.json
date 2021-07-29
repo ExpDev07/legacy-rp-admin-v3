@@ -52,7 +52,8 @@
             "time": "Created at"
         },
         "no_bans": "No recent bans by you",
-        "staff": "Active Staff members"
+        "staff": "Active Staff members",
+        "locations": "/tp_coords locations"
     },
     "statistics": {
         "title": "Statistics",

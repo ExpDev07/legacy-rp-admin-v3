@@ -1,0 +1,127 @@
+{
+    "Pillbox Bushes": {
+        "z": 42.7,
+        "y": -561,
+        "x": 302
+    },
+    "Maze Bank Roof": {
+        "z": 326,
+        "y": -819,
+        "x": -75
+    },
+    "MRPD Log-Out": {
+        "z": 34,
+        "y": -979,
+        "x": 441
+    },
+    "Garbage HQ": {
+        "z": 37,
+        "y": -2215,
+        "x": 832
+    },
+    "Airport Hangar": {
+        "z": 25.5,
+        "y": -2951,
+        "x": -916.5
+    },
+    "Pier": {
+        "z": 13,
+        "y": -1200,
+        "x": -1852
+    },
+    "Casino": {
+        "z": 112,
+        "y": 67,
+        "x": 969
+    },
+    "Jewelry Store": {
+        "z": 55,
+        "y": -230,
+        "x": -625
+    },
+    "PDM": {
+        "z": 29.5,
+        "y": -1092.3,
+        "x": -23.7
+    },
+    "Zancudo Military Base": {
+        "z": 38.2,
+        "y": 3293.8,
+        "x": -2153.5
+    },
+    "Sandy Shores Airport": {
+        "z": 40.6,
+        "y": 3309,
+        "x": 1710.7
+    },
+    "Prison (Bolingbroke)": {
+        "z": 55.6,
+        "y": 2574,
+        "x": 1823
+    },
+    "Sandy Shores Paintball": {
+        "z": 41.7,
+        "y": 2663,
+        "x": 552.4
+    },
+    "FlyWheels Mechanic": {
+        "z": 12.8,
+        "y": -2058,
+        "x": -1153.5
+    },
+    "Sunken Ship (Diving)": {
+        "z": 9.7,
+        "y": -159.1,
+        "x": 2871.5
+    },
+    "Grapeseed Airfield": {
+        "z": 40.8,
+        "y": 4822.2,
+        "x": 2156
+    },
+    "Paleto PD": {
+        "z": 32.8,
+        "y": 5992,
+        "x": -509
+    },
+    "Paleto Clothing Store": {
+        "z": 31.3,
+        "y": 6509.2,
+        "x": 6.3
+    },
+    "Zancudo Clothing Store": {
+        "z": 18.6,
+        "y": 2713.8,
+        "x": -1102.9
+    },
+    "Humane Labs": {
+        "z": 37,
+        "y": 3741.6,
+        "x": 3601.6
+    },
+    "Sandy Shores PD": {
+        "z": 33.7,
+        "y": 3688.3,
+        "x": 1843
+    },
+    "Yoga Place": {
+        "z": 183.6,
+        "y": 806.3,
+        "x": -1478.3
+    },
+    "Docks": {
+        "z": 32.4,
+        "y": -3118,
+        "x": 500.3
+    },
+    "Hidden Island Base": {
+        "z": 16.3,
+        "y": 5205,
+        "x": -2166.2
+    },
+    "Legion Square": {
+        "z": 29.8,
+        "y": -956,
+        "x": 206.7
+    }
+}
