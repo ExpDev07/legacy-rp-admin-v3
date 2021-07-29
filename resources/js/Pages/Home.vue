@@ -89,6 +89,12 @@
             <p class="italic" v-if="staff.length === 0">
                 {{ t('global.none') }}
             </p>
+            <h3 class="dark:text-white mt-4 mb-2">
+                {{ t('home.locations') }}
+            </h3>
+            <div class="flex flex-wrap justify-between max-w-screen-lg w-full -mx-4">
+                <a href="#" class="text-indigo-600 dark:text-indigo-300 px-4 py-1" @click="copyCoords($event)" :data-coords="coords.x + ' ' + coords.y + ' ' + coords.z" v-for="(coords, name) in locations" :key="name">{{ name }}</a>
+            </div>
         </div>
 
     </div>
@@ -98,6 +104,7 @@
 import Layout from './../Layouts/App';
 import VueCircle from 'vue2-circle-progress';
 import "chart.js";
+const TPLocations = require('../data/tp_locations.json');
 
 export default {
     layout: Layout,
@@ -105,12 +112,21 @@ export default {
         VueCircle
     },
     data() {
+        const ordered = Object.keys(TPLocations).sort().reduce(
+            (obj, key) => {
+                obj[key] = TPLocations[key];
+                return obj;
+            },
+            {}
+        );
+
         return {
             playerCount: 'N/A',
             totalPlayers: 1,
             joinedPlayers: 1,
             queuePlayers: 1,
-            serverCount: 1
+            serverCount: 1,
+            locations: ordered
         };
     },
     methods: {
@@ -121,6 +137,17 @@ export default {
             const percentage = Math.floor(100 * (this.joinedPlayers / this.totalPlayers));
 
             return percentage > 100 ? 100 : percentage;
+        },
+        copyCoords(e) {
+            e.preventDefault();
+
+            const coords = '/tp_coords ' + $(e.target).data('coords');
+            this.copyToClipboard(coords);
+
+            $(e.target).addClass('dark:!text-green-400 !text-green-600');
+            setTimeout(function() {
+                $(e.target).removeClass('dark:!text-green-400 !text-green-600');
+            }, 750);
         },
         refresh: async function () {
             try {

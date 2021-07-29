@@ -66,6 +66,7 @@ import VSection from './../../Components/Section';
 import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
+import 'leaflet-fullscreen';
 import custom_icons from "../../data/vehicles.json";
 const Rainbow = require('rainbowvis.js');
 
@@ -546,6 +547,23 @@ export default {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
         },
+        debugLocations(locations) {
+            const _this = this;
+
+            $.each(locations, function(k, coords) {
+                L.marker(_this.convertCoords(coords),
+                    {
+                        icon: new L.Icon(
+                            {
+                                iconUrl: '/images/icons/circle_red.png',
+                                iconSize: [25, 25]
+                            }
+                        ),
+                        forceZIndex: 300
+                    }
+                ).addTo(_this.map);
+            });
+        },
         async buildMap() {
             if (this.map) {
                 return;
@@ -601,6 +619,8 @@ export default {
                 _this.layers["Blips"].addLayer(marker);
             });
 
+            //this.debugLocations(require('../../data/tp_locations.json'));
+
             this.map.on('click', function (e) {
                 const conf = _this.getBounds();
                 let map = {
@@ -624,6 +644,13 @@ export default {
             this.map.on('dragend', function () {
                 _this.isDragging = false;
             });
+            this.map.on('fullscreenchange', function () {
+                setTimeout(function() {
+                    _this.map._onResize();
+                }, 500);
+            });
+
+            this.map.addControl(new L.Control.Fullscreen());
 
             $('#map-wrapper').on('click', '.track-cid', function(e) {
                 e.preventDefault();

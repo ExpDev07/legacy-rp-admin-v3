@@ -41,6 +41,7 @@
     "dependencies": {
         "chart.js": "2.9.4",
         "leaflet": "^1.7.1",
+        "leaflet-fullscreen": "^1.0.2",
         "leaflet-gesture-handling": "^1.2.1",
         "leaflet-rotatedmarker": "^0.2.0",
         "rainbowvis.js": "^1.0.1",
