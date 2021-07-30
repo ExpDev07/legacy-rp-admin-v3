@@ -198,7 +198,7 @@ export default {
                     }
                 },
                 cayo: {
-                    minMap: {x: 169.00685935021698, y: -166.5205908658534}, // higher than these and you're on cayo perico
+                    minMap: {x: 149.03777506175518, y: -166.5205908658534}, // top left corner of transition point
                     game: {
                         bounds: {
                             min: {x: 3925.583, y: -4688.479},
@@ -207,12 +207,12 @@ export default {
                     },
                     map: {
                         bounds: {
-                            min: {x: 196.84375, y: -211.58984375},
-                            max: {x: 244.94921875, y: -241.978515625}
+                            min: {x: 195.0625, y: -210.908203125},
+                            max: {x: 242.9453125, y: -246.48828125}
                         }
                     }
                 },
-                version: "v5"
+                version: "cayo_v2"
             };
         },
         mapNumber(val, in_min, in_max, out_min, out_max) {
@@ -372,8 +372,8 @@ export default {
                 const y = this.mapNumber(coords.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y);
 
                 if (coords.lng > conf.cayo.minMap.x && coords.lat < conf.cayo.minMap.y || this.cayoCalibrationMode) {
-                    coords.x = this.mapNumber(coords.x, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x);
-                    coords.y = this.mapNumber(coords.y, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y);
+                    coords.x = this.mapNumber(coords.lng, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x);
+                    coords.y = this.mapNumber(coords.lat, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y);
                 } else {
                     coords.x = x;
                     coords.y = y;
@@ -612,7 +612,7 @@ export default {
                 maxZoom: 8,
                 maxBounds: L.latLngBounds(L.latLng(0, 0), L.latLng(-256, 256))
             });
-            this.map.attributionControl.addAttribution('<a href="https://github.com/milan60" target="_blank">milan60</a>');
+            this.map.attributionControl.addAttribution('map by <a href="https://github.com/milan60" target="_blank">milan60</a>, cayo-perico by Spitfire2k6');
 
             const b = this.getBounds();
             L.tileLayer("https://cdn.celestial.network/tiles_" + b.version + "/{z}/{x}/{y}.jpg", {
@@ -661,17 +661,7 @@ export default {
                     x: e.latlng.lng,
                     y: e.latlng.lat,
                 };
-                let game = {
-                    x: _this.mapNumber(e.latlng.lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x),
-                    y: _this.mapNumber(e.latlng.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y),
-                };
-
-                if (_this.cayoCalibrationMode) {
-                    game = {
-                        x: _this.mapNumber(e.latlng.lng, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x),
-                        y: _this.mapNumber(e.latlng.lat, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y),
-                    };
-                }
+                let game = _this.convertCoords(e.latlng);
 
                 _this.clickedCoords = "[X=" + Math.round(game.x) + ",Y=" + Math.round(game.y) + "] / [X=" + map.x + ",Y=" + map.y + "]";
                 _this.coordsCommand = "/tp_coords " + Math.round(game.x) + " " + Math.round(game.y);
