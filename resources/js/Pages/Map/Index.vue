@@ -372,8 +372,8 @@ export default {
                 const y = this.mapNumber(coords.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y);
 
                 if (coords.lng > conf.cayo.minMap.x && coords.lat < conf.cayo.minMap.y || this.cayoCalibrationMode) {
-                    coords.x = this.mapNumber(coords.x, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x);
-                    coords.y = this.mapNumber(coords.y, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y);
+                    coords.x = this.mapNumber(coords.lng, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x);
+                    coords.y = this.mapNumber(coords.lat, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y);
                 } else {
                     coords.x = x;
                     coords.y = y;
@@ -661,17 +661,7 @@ export default {
                     x: e.latlng.lng,
                     y: e.latlng.lat,
                 };
-                let game = {
-                    x: _this.mapNumber(e.latlng.lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x),
-                    y: _this.mapNumber(e.latlng.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y),
-                };
-
-                if (_this.cayoCalibrationMode) {
-                    game = {
-                        x: _this.mapNumber(e.latlng.lng, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x),
-                        y: _this.mapNumber(e.latlng.lat, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y),
-                    };
-                }
+                let game = _this.convertCoords(e.latlng);
 
                 _this.clickedCoords = "[X=" + Math.round(game.x) + ",Y=" + Math.round(game.y) + "] / [X=" + map.x + ",Y=" + map.y + "]";
                 _this.coordsCommand = "/tp_coords " + Math.round(game.x) + " " + Math.round(game.y);
