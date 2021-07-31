@@ -39,7 +39,8 @@ module.exports = {
                 '90':                 '90px',
                 'map':                '1160px',
                 'map-right':          'calc(100% - 1160px)',
-                'split':              'calc(50% - 10px)'
+                'split':              'calc(50% - 10px)',
+                'tp':                 '170px'
             },
             height: {
                 'side-close':    '40px',
