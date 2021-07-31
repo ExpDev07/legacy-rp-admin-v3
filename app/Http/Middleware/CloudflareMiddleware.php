@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
  *
  * @package App\Http\Middleware
  */
-class LogMiddleware
+class CloudflareMiddleware
 {
 
     /**
@@ -24,14 +24,8 @@ class LogMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $session = SessionHelper::getInstance();
-
-        $user = $session->get('user');
-        if (!$user || !is_array($user) || !isset($user['name'])) {
-            $user['name'] = 'N/A';
-        }
-
-        LoggingHelper::log($session->getSessionKey(), 'ACCEPTED ' . $user['name']);
+        $_SERVER['REMOTE_ADDR'] = isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
+        $request->server->set('REMOTE_ADDR', $_SERVER['REMOTE_ADDR']);
 
         return $next($request);
     }

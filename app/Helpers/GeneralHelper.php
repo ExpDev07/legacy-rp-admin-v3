@@ -2,13 +2,13 @@
 
 namespace App\Helpers;
 
-use App\Ban;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class GeneralHelper
 {
+    private static $GETCache = [];
+
     /**
      * Returns a random inspiring quote
      *
@@ -140,6 +140,13 @@ class GeneralHelper
      */
     public static function get(string $url): string
     {
+        if (isset(self::$GETCache[$url])) {
+            LoggingHelper::quickLog("Returning cached request '" . $url . "'");
+            return self::$GETCache[$url];
+        }
+
+        $start = round(microtime(true) * 1000);
+
         $client = new Client(
             [
                 'verify' => false,
@@ -151,6 +158,13 @@ class GeneralHelper
             'connect_timeout' => 3,
         ]);
 
-        return $res->getBody()->getContents();
+        $body = $res->getBody()->getContents();
+
+        $taken = round(microtime(true) * 1000) - $start;
+        LoggingHelper::quickLog("Completed request '" . $url . "' in " . $taken . "ms");
+
+        self::$GETCache[$url] = $body;
+
+        return $body;
     }
 }

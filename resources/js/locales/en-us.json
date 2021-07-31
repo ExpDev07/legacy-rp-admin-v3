@@ -53,7 +53,10 @@
         },
         "no_bans": "No recent bans by you",
         "staff": "Active Staff members",
-        "locations": "/tp_coords locations"
+        "locations": "/tp_coords locations",
+        "location_description": "Hidden locations around the city to avoid no-clipping long distances.",
+        "staff_locations": "Staff locations",
+        "staff_description": "Roofs for staff to chill on while doing staff stuff."
     },
     "statistics": {
         "title": "Statistics",

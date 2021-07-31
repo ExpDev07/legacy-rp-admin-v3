@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
+use App\Http\Middleware\CloudflareMiddleware;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\LogMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -38,6 +39,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        CloudflareMiddleware::class,
         TrustProxies::class,
         CheckForMaintenanceMode::class,
         ValidatePostSize::class,

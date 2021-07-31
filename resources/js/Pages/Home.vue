@@ -10,7 +10,7 @@
             </p>
         </portal>
 
-        <div class="flex mt-14 justify-between max-w-screen-2xl mobile:flex-wrap">
+        <div class="flex -mt-6 justify-between max-w-screen-2xl mobile:flex-wrap">
             <div class="p-4 max-w-xl pl-6 italic border-l-4 border-gray-300 inline-block bg-gray-100 shadow-lg dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100 mobile:w-full mobile:mb-3">
                 <span class="mb-1 block" v-html="quote.quote">
                     {{ quote.quote }}
@@ -89,11 +89,23 @@
             <p class="italic" v-if="staff.length === 0">
                 {{ t('global.none') }}
             </p>
-            <h3 class="dark:text-white mt-4 mb-2">
+            <h3 class="dark:text-white mt-4">
                 {{ t('home.locations') }}
             </h3>
-            <div class="flex flex-wrap justify-between max-w-screen-lg w-full -mx-4">
-                <a href="#" class="text-indigo-600 dark:text-indigo-300 px-4 py-1" @click="copyCoords($event)" :data-coords="coords.x + ' ' + coords.y + ' ' + coords.z" v-for="(coords, name) in locations" :key="name">{{ name }}</a>
+            <p class="text-sm mb-1 text-muted dark:text-dark-muted">
+                {{ t('home.location_description') }}
+            </p>
+            <div class="flex flex-wrap justify-between max-w-screen-lg w-full -mx-3">
+                <a href="#" class="w-tp text-indigo-600 dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300 px-3 py-0.5 text-sm" @click="copyCoords($event)" :data-coords="coords.x + ' ' + coords.y + ' ' + coords.z" v-for="(coords, name) in generalLocations" :key="name">{{ name }}</a>
+            </div>
+            <h3 class="dark:text-white mt-3">
+                {{ t('home.staff_locations') }}
+            </h3>
+            <p class="text-sm mb-1 text-muted dark:text-dark-muted">
+                {{ t('home.staff_description') }}
+            </p>
+            <div class="flex flex-wrap justify-between max-w-screen-lg w-full -mx-3">
+                <a href="#" class="w-tp text-indigo-600 dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300 px-3 py-0.5 text-sm" @click="copyCoords($event)" :data-coords="coords.x + ' ' + coords.y + ' ' + coords.z" v-for="(coords, name) in staffLocations" :key="name">{{ name }}</a>
             </div>
         </div>
 
@@ -112,9 +124,16 @@ export default {
         VueCircle
     },
     data() {
-        const ordered = Object.keys(TPLocations).sort().reduce(
+        const generalLocations = Object.keys(TPLocations.general).sort().reduce(
             (obj, key) => {
-                obj[key] = TPLocations[key];
+                obj[key] = TPLocations.general[key];
+                return obj;
+            },
+            {}
+        );
+        const staffLocations = Object.keys(TPLocations.staff).sort().reduce(
+            (obj, key) => {
+                obj[key] = TPLocations.staff[key];
                 return obj;
             },
             {}
@@ -126,7 +145,8 @@ export default {
             joinedPlayers: 1,
             queuePlayers: 1,
             serverCount: 1,
-            locations: ordered
+            generalLocations: generalLocations,
+            staffLocations: staffLocations
         };
     },
     methods: {

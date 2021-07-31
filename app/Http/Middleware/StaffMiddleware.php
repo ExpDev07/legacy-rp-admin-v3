@@ -40,14 +40,15 @@ class StaffMiddleware
         // Check for staff status.
         if (!$this->isStaff($request) || !$this->checkSessionLock()) {
             $session = SessionHelper::getInstance();
-            LoggingHelper::log($session->getSessionKey(), 'StaffMiddleware user is not staff, dropping session');
-            LoggingHelper::log($session->getSessionKey(), 'session.user->' . json_encode($session->get('user')));
-
-            SessionHelper::drop();
+            LoggingHelper::log($session->getSessionKey(), 'StaffMiddleware check failed');
+            LoggingHelper::log($session->getSessionKey(), 'session.user -> ' . json_encode($this->cleanupUserDump($session->get('user'))));
 
             if ($_SERVER['REQUEST_METHOD'] === 'GET' && !in_array($requestPath, self::IgnoreGETRoutes)) {
                 return $this->render();
             } else {
+                LoggingHelper::log($session->getSessionKey(), 'Dropping session');
+                SessionHelper::drop();
+
                 return redirect('/login')->with('error',
                     'You must be a staff member to access the dashboard! If you believe this is a mistake, contact a developer.'
                 );
@@ -91,6 +92,11 @@ class StaffMiddleware
 
     protected function checkSessionLock(): bool
     {
+        $detail = [
+            'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'ip' => $_SERVER['REMOTE_ADDR'],
+        ];
+
         $session = SessionHelper::getInstance();
         if ($session->exists('session_lock')) {
             $lock = $session->get('session_lock');
@@ -98,8 +104,10 @@ class StaffMiddleware
 
             $valid = $lock === $print;
             if (!$valid) {
-                LoggingHelper::log($session->getSessionKey(), 'StaffMiddleware "checkSessionLock" is invalid');
+                LoggingHelper::log($session->getSessionKey(), 'StaffMiddleware session-lock is invalid');
                 LoggingHelper::log($session->getSessionKey(), $lock . ' != ' . $print);
+                LoggingHelper::log($session->getSessionKey(), 'current.detail -> ' . json_encode($detail));
+                LoggingHelper::log($session->getSessionKey(), 'session.detail -> ' . json_encode($session->get('session_detail')));
 
                 $this->error = 'Your session is invalid, please log in again.';
             }
@@ -107,6 +115,7 @@ class StaffMiddleware
             return $valid;
         } else {
             $session->put('session_lock', $this->getFingerprint());
+            $session->put('session_detail', $detail);
             return true;
         }
     }
@@ -114,7 +123,7 @@ class StaffMiddleware
     private function getFingerprint(): string
     {
         $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $ip = isset($_SERVER["HTTP_CF_CONNECTING_IP"]) ? $_SERVER["HTTP_CF_CONNECTING_IP"] : $_SERVER['REMOTE_ADDR'];
+        $ip = $_SERVER['REMOTE_ADDR'];
 
         return sha1($ua . '_' . $ip);
     }
@@ -139,6 +148,38 @@ class StaffMiddleware
         return Inertia::render('Login', [
             'error' => $this->error ? $this->error . ' If you believe this is a mistake, please contact a developer.' : '',
         ]);
+    }
+
+    private function cleanupUserDump($user)
+    {
+        if (is_array($user)) {
+            if (isset($user['avatar'])) {
+                unset($user['avatar']);
+            }
+
+            if (isset($user['player']) && is_array($user['player'])) {
+                if (isset($user['player']['identifiers'])) {
+                    unset($user['player']['identifiers']);
+                }
+                if (isset($user['player']['user_settings'])) {
+                    unset($user['player']['user_settings']);
+                }
+                if (isset($user['player']['user_data'])) {
+                    unset($user['player']['user_data']);
+                }
+                if (isset($user['player']['activity_points'])) {
+                    unset($user['player']['activity_points']);
+                }
+                if (isset($user['player']['staff_points'])) {
+                    unset($user['player']['staff_points']);
+                }
+                if (isset($user['player']['avatar'])) {
+                    unset($user['player']['avatar']);
+                }
+            }
+        }
+
+        return $user;
     }
 
 }
