@@ -283,4 +283,32 @@ class PlayerCharacterController extends Controller
         return back()->with('success', 'Vehicle was successfully deleted.');
     }
 
+    /**
+     * Edits the specified vehicle.
+     *
+     * @param Request $request
+     * @param Vehicle $vehicle
+     * @return RedirectResponse
+     */
+    public function editVehicle(Request $request, Vehicle $vehicle): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can edit vehicles.');
+        }
+
+        $owner = $request->post('owner');
+
+        $character = Character::query()->where('character_id', '=', $owner)->first(['character_id', 'steam_identifier']);
+        if (!$character) {
+            return back()->with('error', 'Invalid character id.');
+        }
+
+        $vehicle->update([
+            'owner_cid' => $character->character_id,
+        ]);
+
+        return redirect('/players/' . $character->steam_identifier . '/characters/' . $character->character_id . '/edit')->with('success', 'Vehicle was successfully edited.');
+    }
+
 }

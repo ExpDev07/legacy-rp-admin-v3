@@ -184,6 +184,27 @@
             </template>
         </v-section>
 
+        <!-- Vehicle Editing -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isVehicleEdit">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.characters.vehicle.edit') }}</h3>
+                <div class="w-full p-3 flex justify-between">
+                    <label class="mr-4 block w-1/3 text-center pt-2 font-bold" for="vehicleOwner">
+                        {{ t('players.characters.vehicle.owner') }}
+                    </label>
+                    <input class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="number" min="1" max="99999" id="vehicleOwner" v-model="vehicleForm.owner">
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isVehicleEdit = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="editVehicle">
+                        {{ t('players.characters.vehicle.confirm') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Vehicles -->
         <v-section>
             <template #header>
@@ -220,6 +241,15 @@
                             >
                                 <i class="fas fa-briefcase mr-1"></i>
                                 {{ t('inventories.view') }}
+                            </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white mt-3 bg-warning dark:bg-dark-warning rounded"
+                                @click="startEditVehicle($event, vehicle)"
+                                href="#"
+                                v-if="$page.auth.player.isSuperAdmin"
+                            >
+                                <i class="fas fa-trash-alt mr-1"></i>
+                                {{ t('players.characters.vehicle.confirm') }}
                             </inertia-link>
                             <inertia-link
                                 class="block px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
@@ -397,8 +427,13 @@ export default {
                 department_name: this.character.departmentName,
                 position_name: this.character.positionName,
             },
+            vehicleForm: {
+                id: 0,
+                owner: 0
+            },
             isTattooRemoval: false,
             jobs: jobs,
+            isVehicleEdit: false,
         };
     },
     methods: {
@@ -429,7 +464,6 @@ export default {
             await this.$inertia.post('/vehicles/delete/' + vehicleId);
         },
         sortJobs(array, type) {
-            console.log(array);
             switch(type) {
                 case 'job':
                 case 'department':
@@ -449,6 +483,13 @@ export default {
         updateJob() {
             this.submit(true);
         },
+        startEditVehicle(e, vehicle) {
+            e.preventDefault();
+
+            this.vehicleForm.id = vehicle.id;
+            this.vehicleForm.owner = vehicle.owner_cid;
+            this.isVehicleEdit = true;
+        },
         async removeTattoos() {
             // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/removeTattoos', {
@@ -457,6 +498,13 @@ export default {
 
             // Reset.
             this.isTattooRemoval = false;
+        },
+        async editVehicle() {
+            // Send request.
+            await this.$inertia.post('/vehicles/edit/' + this.vehicleForm.id, this.vehicleForm);
+
+            // Reset.
+            this.isVehicleEdit = false;
         },
     },
 }

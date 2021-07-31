@@ -344,6 +344,11 @@
                 "torso": "Torso",
                 "left_leg": "Left Leg",
                 "right_leg": "Right Leg"
+            },
+            "vehicle": {
+                "edit": "Edit Vehicle",
+                "owner": "Owner CID",
+                "confirm": "Edit Vehicle"
             }
         },
         "edit": {
