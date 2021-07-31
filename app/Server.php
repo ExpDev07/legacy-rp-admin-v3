@@ -6,7 +6,6 @@ use App\Helpers\GeneralHelper;
 use App\Helpers\OPFWHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -46,7 +45,7 @@ class Server extends Model
      */
     public function fetchApi(): array
     {
-        $data = Http::get(self::fixApiUrl($this->url) . 'api.json')->body() ?? null;
+        $data = GeneralHelper::get(self::fixApiUrl($this->url) . 'api.json') ?? null;
 
         $response = OPFWHelper::parseResponse($data);
 

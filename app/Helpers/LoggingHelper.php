@@ -53,6 +53,11 @@ class LoggingHelper
      */
     private static bool $isAccessLog = true;
 
+    public static function quickLog(string $msg)
+    {
+        self::log(SessionHelper::getInstance()->getSessionKey(), $msg);
+    }
+
     /**
      * Creates a log entry
      *
@@ -122,7 +127,7 @@ class LoggingHelper
             $path;
 
         if (in_array($path, [
-            '/logs'
+            '/logs',
         ])) {
             if (empty($get)) {
                 $msg .= '?';
@@ -141,13 +146,13 @@ class LoggingHelper
     public static function endRequest()
     {
         $max = 0;
-        foreach(self::$entries as $entry) {
+        foreach (self::$entries as $entry) {
             if (is_array($entry) && strlen($entry[0]) > $max) {
                 $max = strlen($entry[0]);
             }
         }
 
-        $logs = array_map(function($entry) use ($max) {
+        $logs = array_map(function ($entry) use ($max) {
             if (is_array($entry)) {
                 return '    [' . str_pad($entry[0], $max, ' ') . '] ' . $entry[1];
             }
