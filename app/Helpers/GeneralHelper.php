@@ -165,6 +165,7 @@ class GeneralHelper
             LoggingHelper::quickLog("Request error '" . $url . "' in " . $taken . "ms");
             LoggingHelper::quickLog(get_class($t) . ': ' . $t->getMessage());
 
+            self::$GETCache[$url] = '';
             return '';
         }
 
