@@ -314,14 +314,7 @@ export default {
                 }
             );
 
-            if (isDead) {
-                icon = new L.Icon(
-                    {
-                        iconUrl: '/images/icons/skull.png',
-                        iconSize: [size.skull, size.skull]
-                    }
-                );
-            } else if (isInvisible) {
+            if (isInvisible) {
                 icon = new L.Icon(
                     {
                         iconUrl: '/images/icons/circle_green.png',
@@ -335,6 +328,13 @@ export default {
                     {
                         iconUrl: '/images/icons/' + info.type + '.png',
                         iconSize: [info.size, info.size]
+                    }
+                );
+            } else if (isDead) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/icons/skull.png',
+                        iconSize: [size.skull, size.skull]
                     }
                 );
             } else if (isPassenger) {
