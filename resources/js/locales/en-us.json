@@ -70,6 +70,7 @@
         "title": "Live-Map",
         "loading": "Loading player data...",
         "error": "Player data for {0} empty or not available!",
+        "advanced_error": "Data for {0} not available: {1}",
         "closed": "Data connection for {0} was closed.",
         "data": "Currently {0} online players.",
         "play": "Continue update",

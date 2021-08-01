@@ -17,16 +17,22 @@
         <portal to="actions">
             <div class="mb-2">
                 <!-- Stop tracking -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="stopTracking()" v-if="trackedPlayer">
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="stopTracking()" v-if="trackedPlayer">
                     <i class="fas fa-stop mr-1"></i>
                     {{ t('map.stop_track') }}
                 </button>
                 <!-- Play/Pause -->
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isPaused = true" v-if="!isPaused">
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isPaused = true" v-if="!isPaused">
                     <i class="fas fa-pause"></i>
                     {{ t('map.pause') }}
                 </button>
-                <button class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="isPaused = false" v-if="isPaused">
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isPaused = false" v-if="isPaused">
                     <i class="fas fa-play"></i>
                     {{ t('map.play') }}
                 </button>
@@ -36,19 +42,27 @@
         <template>
             <div class="-mt-12" id="map-wrapper">
                 <div class="flex flex-wrap mb-2">
-                    <input type="text" class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600" :placeholder="t('map.track_placeholder')" v-model="tracking.id" />
-                    <select class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1" v-model="tracking.type">
+                    <input type="text"
+                           class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600"
+                           :placeholder="t('map.track_placeholder')" v-model="tracking.id"/>
+                    <select
+                        class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1"
+                        v-model="tracking.type">
                         <option value="server_">{{ t('map.track_server') }}</option>
                         <option value="">{{ t('map.track_steam') }}</option>
                         <option value="player_">{{ t('map.track_character') }}</option>
                     </select>
-                    <button class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1" @click="trackId(tracking.type + tracking.id)">
+                    <button
+                        class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                        @click="trackId(tracking.type + tracking.id)">
                         {{ t('map.do_track') }}
                     </button>
                 </div>
                 <div class="relative">
                     <div id="map" class="w-map max-w-full relative h-max"></div>
-                    <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k" v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
+                    <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k"
+                         v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span
+                        @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
                 </div>
                 <div v-if="afkPeople" class="w-map-right pt-4">
                     <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
@@ -68,14 +82,15 @@ import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import 'leaflet-fullscreen';
 import custom_icons from "../../data/vehicles.json";
+
 const Rainbow = require('rainbowvis.js');
 
-(function(global){
+(function (global) {
     let MarkerMixin = {
         _updateZIndex: function (offset) {
             this._icon.style.zIndex = this.options.forceZIndex ? (this.options.forceZIndex + (this.options.zIndexOffset || 0)) : (this._zIndex + offset);
         },
-        setForceZIndex: function(forceZIndex) {
+        setForceZIndex: function (forceZIndex) {
             this.options.forceZIndex = forceZIndex ? forceZIndex : null;
         }
     };
@@ -86,19 +101,19 @@ const Rainbow = require('rainbowvis.js');
 let playerCallback = null,
     playerCallbackCid = null,
     VueInstance = null;
-window.debug = function(cid) {
+window.debug = function (cid) {
     playerCallbackCid = cid;
-    playerCallback = function(player, coords, _this) {
+    playerCallback = function (player, coords, _this) {
         console.info('Player debug', player);
     };
 };
-window.track = function(cid) {
+window.track = function (cid) {
     window.location.hash = 'player_' + cid;
     window.location.reload();
 };
-window.marker = function(cid) {
+window.marker = function (cid) {
     playerCallbackCid = cid;
-    playerCallback = function(player, coords, _this) {
+    playerCallback = function (player, coords, _this) {
         console.info('Marker');
         const markerCode = `{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`;
         _this.copyText(null, markerCode);
@@ -106,7 +121,7 @@ window.marker = function(cid) {
         console.info(`{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`, '(Copied to clipboard)');
     };
 };
-window.convertCoords = function(coords) {
+window.convertCoords = function (coords) {
     if (VueInstance) {
         const converted = VueInstance.convertCoords(coords);
 
@@ -120,7 +135,7 @@ window.convertCoords = function(coords) {
     }
 };
 
-window.loadHistory = function(server, player, day) {
+window.loadHistory = function (server, player, day) {
     if (VueInstance) {
         $.post(VueInstance.hostname() + '/map/go/history', {
             server: server,
@@ -290,8 +305,8 @@ export default {
                 size: 23
             };
 
-            $.each(custom_icons, function(type, cfg) {
-                if (cfg.models.includes(vehicle.model+"")) {
+            $.each(custom_icons, function (type, cfg) {
+                if (cfg.models.includes(vehicle.model + "")) {
                     ret.type = type;
                     ret.size = cfg.size;
                 }
@@ -393,7 +408,7 @@ export default {
         addToLayer(marker, layer) {
             const _this = this;
 
-            $.each(this.layers, function(key) {
+            $.each(this.layers, function (key) {
                 if (layer !== key) {
                     _this.layers[key].removeLayer(marker);
                 }
@@ -406,7 +421,8 @@ export default {
 
             if (vehicle && (vehicle.type === 'police_car' || vehicle.type === 'ems_car')) {
                 return "Emergency Vehicles";
-            } if (isDriving || isPassenger) {
+            }
+            if (isDriving || isPassenger) {
                 return "Vehicles";
             } else if (isDead) {
                 return "Dead Players";
@@ -425,7 +441,9 @@ export default {
                 this.map.dragging.enable();
             }
 
-            if (data && Array.isArray(data)) {
+            if (data && 'status' in data && data.status) {
+                this.data = this.t('map.advanced_error', $('#server option:selected').text(), data.message);
+            } else if (data && Array.isArray(data)) {
                 if (this.map) {
                     const _this = this;
                     let markers = this.markers;
@@ -591,7 +609,7 @@ export default {
         debugLocations(locations) {
             const _this = this;
 
-            $.each(locations, function(k, coords) {
+            $.each(locations, function (k, coords) {
                 L.marker(_this.convertCoords(coords),
                     {
                         icon: new L.Icon(
@@ -635,7 +653,7 @@ export default {
 
             L.control.layers({}, this.layers).addTo(this.map);
 
-            $.each(this.layers, function(key) {
+            $.each(this.layers, function (key) {
                 _this.layers[key].addTo(_this.map);
             });
 
@@ -684,14 +702,14 @@ export default {
                 _this.isDragging = false;
             });
             this.map.on('fullscreenchange', function () {
-                setTimeout(function() {
+                setTimeout(function () {
                     _this.map._onResize();
                 }, 500);
             });
 
             this.map.addControl(new L.Control.Fullscreen());
 
-            $('#map-wrapper').on('click', '.track-cid', function(e) {
+            $('#map-wrapper').on('click', '.track-cid', function (e) {
                 e.preventDefault();
 
                 const track = $(this).data('trackid');
@@ -734,7 +752,7 @@ export default {
         });
 
         if (Math.round(Math.random() * 100) === 1) { // 1% chance it says fib spy satellite map
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#map_title').text(_this.t('map.spy_satellite'));
             });
         }
