@@ -311,9 +311,9 @@ class Player extends Model
      * Returns a map of steamIdentifier->serverId,server for each online player
      *
      * @param bool $useCache
-     * @return array
+     * @return array|null
      */
-    public static function getAllOnlinePlayers(bool $useCache): array
+    public static function getAllOnlinePlayers(bool $useCache): ?array
     {
         $serverIps = explode(',', env('OP_FW_SERVERS', ''));
 
@@ -325,6 +325,10 @@ class Player extends Model
         foreach ($serverIps as $serverIp) {
             if ($serverIp) {
                 $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp, $useCache);
+
+                if ($steamIdentifiers === null) {
+                    return null;
+                }
 
                 foreach ($steamIdentifiers as $key => $val) {
                     if (!isset($result[$key])) {
@@ -356,6 +360,11 @@ class Player extends Model
         }
 
         $players = self::getAllOnlinePlayers($useCache);
+
+        if ($players === null) {
+            return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
+        }
+
         if (isset($players[$steamIdentifier])) {
             $player = $players[$steamIdentifier];
             return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id']);

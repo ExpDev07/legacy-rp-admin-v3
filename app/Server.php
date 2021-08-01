@@ -82,7 +82,7 @@ class Server extends Model
 
         $names = explode(',', env('SERVER_NAMES', ''));
         if (!empty($names)) {
-            foreach($names as $def) {
+            foreach ($names as $def) {
                 $def = explode('=', $def);
                 if (sizeof($def) === 2 && $def[0] === $host) {
                     return $def[1];
@@ -98,9 +98,9 @@ class Server extends Model
      *
      * @param string $serverIp
      * @param bool $useCache
-     * @return array
+     * @return array|null
      */
-    public static function fetchSteamIdentifiers(string $serverIp, bool $useCache): array
+    public static function fetchSteamIdentifiers(string $serverIp, bool $useCache): ?array
     {
         if (!$serverIp) {
             return [];
@@ -119,6 +119,10 @@ class Server extends Model
             $json = null;
             try {
                 $json = GeneralHelper::get($serverIp . 'connections.json') ?? null;
+
+                if (!$json) {
+                    return null;
+                }
             } catch (Throwable $t) {
                 return [];
             }
@@ -151,9 +155,9 @@ class Server extends Model
     /**
      * Collects all the /api.json data from all servers
      *
-     * @return array
+     * @return array|null
      */
-    public static function collectAllApiData(): array
+    public static function collectAllApiData(): ?array
     {
         $serverIps = explode(',', env('OP_FW_SERVERS', ''));
 
@@ -173,16 +177,21 @@ class Server extends Model
                 try {
                     $json = GeneralHelper::get($serverIp . 'api.json') ?? [];
 
-                    $response = OPFWHelper::parseResponse($json);
+                    if (!$json) {
+                        $result = null;
+                        break;
+                    } else {
+                        $response = OPFWHelper::parseResponse($json);
 
-                    if ($response->status && $response->data) {
-                        $json = $response->data;
+                        if ($response->status && $response->data) {
+                            $json = $response->data;
 
-                        $result[] = [
-                            'joined' => isset($json['joinedAmount']) ? intval($json['joinedAmount']) : 0,
-                            'total'  => isset($json['maxClients']) ? intval($json['maxClients']) : 0,
-                            'queue'  => isset($json['queueAmount']) ? intval($json['queueAmount']) : 0,
-                        ];
+                            $result[] = [
+                                'joined' => isset($json['joinedAmount']) ? intval($json['joinedAmount']) : 0,
+                                'total'  => isset($json['maxClients']) ? intval($json['maxClients']) : 0,
+                                'queue'  => isset($json['queueAmount']) ? intval($json['queueAmount']) : 0,
+                            ];
+                        }
                     }
                 } catch (Throwable $t) {
                 }

@@ -15,7 +15,8 @@
         "status": {
             "online": "Online",
             "offline": "Offline",
-            "unavailable": "Unavailable"
+            "unavailable": "Unavailable",
+            "unavailable_info": "Player status or id is unavailable at this moment"
         },
         "all": "All",
         "back": "Back",
@@ -56,7 +57,8 @@
         "locations": "/tp_coords locations",
         "location_description": "Hidden locations around the city to avoid no-clipping long distances.",
         "staff_locations": "Staff locations",
-        "staff_description": "Roofs for staff to chill on while doing staff stuff."
+        "staff_description": "Roofs for staff to chill on while doing staff stuff.",
+        "no_player_count": "Player count is not available at this time"
     },
     "statistics": {
         "title": "Statistics",

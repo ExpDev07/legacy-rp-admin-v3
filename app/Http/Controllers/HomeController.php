@@ -40,7 +40,7 @@ class HomeController extends Controller
             ->orderByDesc('timestamp')
             ->limit(8)->get())->toArray($request);
 
-        $playerList = Player::getAllOnlinePlayers(true);
+        $playerList = Player::getAllOnlinePlayers(true) ?? [];
         $players = array_keys($playerList);
         usort($players, function ($a, $b) use ($playerList) {
             return $playerList[$a]['id'] <=> $playerList[$b]['id'];
@@ -48,10 +48,10 @@ class HomeController extends Controller
         $staff = Player::query()->where('is_staff', '=', true)->whereIn('steam_identifier', $players)->get();
 
         return Inertia::render('Home', [
-            'quote'      => $quote,
-            'bans'       => $bans,
-            'playerMap'  => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
-            'staff'      => PlayerIndexResource::collection($staff),
+            'quote'     => $quote,
+            'bans'      => $bans,
+            'playerMap' => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
+            'staff'     => PlayerIndexResource::collection($staff),
         ]);
     }
 
@@ -71,15 +71,19 @@ class HomeController extends Controller
     /**
      * Returns player count info
      *
-     * @return array
+     * @return array|null
      */
-    private function playerCount(): array
+    private function playerCount(): ?array
     {
         $totalPlayers = 0;
         $joinedPlayers = 0;
         $queuePlayers = 0;
 
         $data = Server::collectAllApiData();
+        if (!$data) {
+            return null;
+        }
+
         foreach ($data as $server) {
             $totalPlayers += $server['total'];
             $joinedPlayers += $server['joined'];
