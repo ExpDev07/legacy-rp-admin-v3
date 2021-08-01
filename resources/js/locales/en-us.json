@@ -257,7 +257,7 @@
             "update_ban": "Update Ban",
             "banned_for": "Banned for about {0}",
             "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
-            "forever": "<i>{0}</i> permanently banned this player",
+            "forever": "<i>{0}</i> indefinitely banned this player",
             "forever_edit": "forever",
             "temp-select": "Toggle date/time input",
             "temp-type": "Length Unit",
