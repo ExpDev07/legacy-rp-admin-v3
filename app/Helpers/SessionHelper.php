@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 
 class SessionHelper
 {
+    const Cookie = 'op_fw_session_store';
     const Alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
     const Lifetime = 60 * 60 * 24 * 365;
 
@@ -156,11 +157,10 @@ class SessionHelper
     public static function getInstance(): SessionHelper
     {
         if (self::$instance === null) {
-            $key = Str::slug(env('APP_NAME', 'laravel'), '_') . '_session_store';
             $helper = new SessionHelper();
 
             $helper->storage = rtrim(storage_path('framework/session_storage'), '/\\') . '/';
-            $helper->sessionKey = !empty($_COOKIE[$key]) && is_string($_COOKIE[$key]) ? $_COOKIE[$key] : null;
+            $helper->sessionKey = !empty($_COOKIE[self::Cookie]) && is_string($_COOKIE[self::Cookie]) ? $_COOKIE[self::Cookie] : null;
 
             if ($helper->sessionKey === null || !file_exists($helper->getSessionFile())) {
                 $log = 'Creating new session key';
@@ -182,14 +182,14 @@ class SessionHelper
                 parse_url($uri, PHP_URL_HOST) . ':8443',
             ];
 
-            setcookie($key, $helper->sessionKey, [
+            setcookie(self::Cookie, $helper->sessionKey, [
                 'expires' => time() + self::Lifetime,
                 'secure'  => true,
                 'path'    => '/',
             ]);
 
             foreach ($extraDomains as $domain) {
-                setcookie($key, $helper->sessionKey, [
+                setcookie(self::Cookie, $helper->sessionKey, [
                     'expires' => time() + self::Lifetime,
                     'secure'  => true,
                     'path'    => '/',

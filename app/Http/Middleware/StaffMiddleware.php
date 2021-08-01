@@ -112,6 +112,8 @@ class StaffMiddleware
                 $this->error = 'Your session is invalid, please log in again.';
             }
 
+            $session->put('session_detail', $detail);
+
             return $valid;
         } else {
             $session->put('session_lock', $this->getFingerprint());
