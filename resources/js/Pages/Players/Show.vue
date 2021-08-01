@@ -310,7 +310,7 @@
                     v-else-if="player.discord"
                     href="#"
                     :title="t('players.show.discord_copy')"
-                    @click="copyText($event, '<@' + discord.id + '>')"
+                    @click="copyText($event, '<@' + player.discord + '>')"
                 >
                     <i class="mr-1 fab fa-discord"></i>
                     {{ t('players.show.discord') }}
