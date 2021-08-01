@@ -102,6 +102,9 @@
                             <span class="font-semibold" v-if="player.status.status === 'online'">
                                 {{ player.status.serverId }} <sup>{{ player.status.serverName }}</sup>
                             </span>
+                            <span class="font-semibold" v-else-if="player.status.status === 'unavailable'" :title="t('global.status.unavailable_info')">
+                                {{ t('global.status.unavailable') }}
+                            </span>
                             <span class="font-semibold" v-else>
                                 {{ t('global.status.' + player.status.status) }}
                             </span>

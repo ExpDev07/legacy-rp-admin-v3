@@ -29,7 +29,7 @@ class PlayerController extends Controller
     {
         $start = round(microtime(true) * 1000);
 
-        $playerList = Player::getAllOnlinePlayers(true);
+        $playerList = Player::getAllOnlinePlayers(true) ?? [];
         $players = array_keys($playerList);
         usort($players, function ($a, $b) use ($playerList) {
             return $playerList[$a]['id'] <=> $playerList[$b]['id'];

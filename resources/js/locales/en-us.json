@@ -15,7 +15,8 @@
         "status": {
             "online": "Online",
             "offline": "Offline",
-            "unavailable": "Unavailable"
+            "unavailable": "Unavailable",
+            "unavailable_info": "Player status or id is unavailable at this moment"
         },
         "all": "All",
         "back": "Back",
@@ -56,7 +57,8 @@
         "locations": "/tp_coords locations",
         "location_description": "Hidden locations around the city to avoid no-clipping long distances.",
         "staff_locations": "Staff locations",
-        "staff_description": "Roofs for staff to chill on while doing staff stuff."
+        "staff_description": "Roofs for staff to chill on while doing staff stuff.",
+        "no_player_count": "Player count is not available at this time"
     },
     "statistics": {
         "title": "Statistics",
@@ -257,7 +259,7 @@
             "update_ban": "Update Ban",
             "banned_for": "Banned for about {0}",
             "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
-            "forever": "<i>{0}</i> permanently banned this player",
+            "forever": "<i>{0}</i> indefinitely banned this player",
             "forever_edit": "forever",
             "temp-select": "Toggle date/time input",
             "temp-type": "Length Unit",

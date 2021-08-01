@@ -21,7 +21,7 @@
             </div>
 
             <div class="ml-8 mobile:w-full mobile:ml-0">
-                <div class="p-4 bg-gray-100 shadow-lg dark:bg-gray-700 dark:text-gray-100 flex justify-between">
+                <div class="p-4 bg-gray-100 shadow-lg dark:bg-gray-700 dark:text-gray-100 flex justify-between" v-if="playerCount">
                     <vue-circle ref="serverCount"
                                 :progress="playerCountPercentage()"
                                 :size="70"
@@ -36,6 +36,9 @@
                         <p class="text-sm font-semibold mobile:-mt-12">{{ joinedPlayers }}</p>
                     </vue-circle>
                     <p class="ml-3 pt-5" v-html="playerCount">{{ playerCount }}</p>
+                </div>
+                <div class="p-4 bg-gray-100 shadow-lg dark:bg-gray-700 dark:text-gray-100 flex justify-between" v-else>
+                    <p class="py-5 px-3">{{ t('home.no_player_count') }}</p>
                 </div>
             </div>
         </div>
@@ -182,6 +185,8 @@ export default {
                     this.playerCount = this.localizePlayerCount()
 
                     this.$refs.serverCount.updateProgress(this.playerCountPercentage());
+                } else {
+                    this.playerCount = null;
                 }
             } catch(e) {}
         },

@@ -24,6 +24,11 @@
                                 player.status.serverId
                             }}]</sup></span>
                     </badge>
+                    <badge class="border-red-200 bg-warning-pale dark:bg-dark-warning-pale"
+                           v-else-if="player.status.status === 'unavailable'"
+                           :title="t('global.status.unavailable_info')">
+                        <span class="font-semibold">{{ t('global.status.unavailable') }}</span>
+                    </badge>
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-else>
                         <span class="font-semibold">{{ t('global.status.' + player.status.status) }}</span>
                     </badge>
