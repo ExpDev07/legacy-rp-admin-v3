@@ -445,6 +445,7 @@ export default {
                 form.date_of_birth = this.character.dateOfBirth;
                 form.gender = this.character.gender;
                 form.backstory = this.character.backstory;
+                form.jobUpdate = 'yes';
             } else {
                 form.job_name = this.character.jobName;
                 form.department_name = this.character.departmentName;
