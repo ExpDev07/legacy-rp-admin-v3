@@ -147,18 +147,26 @@ class GeneralHelper
 
         $start = round(microtime(true) * 1000);
 
-        $client = new Client(
-            [
-                'verify' => false,
-            ]
-        );
+        try {
+            $client = new Client(
+                [
+                    'verify' => false,
+                ]
+            );
 
-        $res = $client->request('GET', $url, [
-            'timeout'         => 3,
-            'connect_timeout' => 3,
-        ]);
+            $res = $client->request('GET', $url, [
+                'timeout'         => 3,
+                'connect_timeout' => 1,
+            ]);
 
-        $body = $res->getBody()->getContents();
+            $body = $res->getBody()->getContents();
+        } catch (\Throwable $t) {
+            $taken = round(microtime(true) * 1000) - $start;
+            LoggingHelper::quickLog("Request error '" . $url . "' in " . $taken . "ms");
+            LoggingHelper::quickLog(get_class($t) . ': ' . $t->getMessage());
+
+            return '';
+        }
 
         $taken = round(microtime(true) * 1000) - $start;
         LoggingHelper::quickLog("Completed request '" . $url . "' in " . $taken . "ms");
