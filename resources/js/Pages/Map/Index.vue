@@ -303,6 +303,7 @@ export default {
             let size = {
                 circle: 17,
                 skull: 17,
+                skull_red: 12,
                 circle_red: 12,
                 circle_green: 13
             };
@@ -330,13 +331,13 @@ export default {
                         iconSize: [info.size, info.size]
                     }
                 );
-            } else if (isDead) {
+            } else if (isPassenger && isDead) {
                 icon = new L.Icon(
                     {
-                        iconUrl: '/images/icons/skull.png',
-                        iconSize: [size.skull, size.skull]
+                        iconUrl: '/images/icons/skull_red.png',
+                        iconSize: [size.skull_red, size.skull_red]
                     }
-                );
+                )
             } else if (isPassenger) {
                 icon = new L.Icon(
                     {
@@ -344,6 +345,13 @@ export default {
                         iconSize: [size.circle_red, size.circle_red]
                     }
                 )
+            } else if (isDead) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/icons/skull.png',
+                        iconSize: [size.skull, size.skull]
+                    }
+                );
             }
 
             return icon;
