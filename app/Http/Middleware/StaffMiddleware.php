@@ -109,7 +109,7 @@ class StaffMiddleware
                 LoggingHelper::log($session->getSessionKey(), 'current.detail -> ' . json_encode($detail));
                 LoggingHelper::log($session->getSessionKey(), 'session.detail -> ' . json_encode($session->get('session_detail')));
 
-                $this->error = 'Your session is invalid, please log in again.';
+                $this->error = 'Your session is invalid, please refresh this page or log in again.';
             }
 
             $session->put('session_detail', $detail);

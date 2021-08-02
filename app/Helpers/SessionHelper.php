@@ -8,7 +8,7 @@ class SessionHelper
 {
     const Cookie = 'op_fw_session_store';
     const Alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    const Lifetime = 60 * 60 * 24 * 365;
+    const Lifetime = 60 * 60 * 24 * 2;
 
     /**
      * Singleton instance
@@ -133,6 +133,8 @@ class SessionHelper
         if (file_exists($this->getSessionFile())) {
             $json = json_decode(file_get_contents($this->getSessionFile()), true) ?: [];
             $this->value = $json;
+
+            touch($this->getSessionFile());
         } else {
             LoggingHelper::log($this->sessionKey, 'Session file did not exist while loading data');
             $this->value = [];
