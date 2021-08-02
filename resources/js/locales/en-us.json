@@ -8,6 +8,7 @@
         "staff": "Staff Member",
         "super": "Super Admin",
         "cancel": "Cancel",
+        "close": "Close",
         "view": "View",
         "refresh": "Refresh",
         "delete": "Delete",
@@ -66,7 +67,8 @@
         "bans": "Active Bans",
         "warnings": "Warnings",
         "creations": "Character creations",
-        "deletions": "Character deletions"
+        "deletions": "Character deletions",
+        "lucky_wheel": "Lucky Wheel Spins"
     },
     "map": {
         "title": "Live-Map",
@@ -392,7 +394,29 @@
         "no_logs": "No logged actions were found.",
         "placeholder_action": "Death",
         "placeholder_details": "Marius killed jax with an AK-47",
-        "search": "Search in logs"
+        "search": "Search in logs",
+        "detail": {
+            "title": "Detailed disconnect reason",
+            "description": "This will explain in more detail how user '{0}' left the game.",
+            "reasons": {
+                "exited": "The user exited the game by typing 'quit' in the F8 console or pressing ALT and F4 or similar.",
+                "disconnected": "The user disconnected from the server by typing 'disconnect' in the F8 console or similar.",
+                "crash": "The users game crashed with the given error message.",
+                "timeout": "The users connection to the server timed out. This is usually the case when internet connectivity drops out.",
+                "banned": "The user was banned by a staff member with the give reason.",
+                "restart": "The user was kicked by the server as it was restarting.",
+                "kicked": "The user was kicked by a staff member with the given reason.",
+                "job": "The users job priority expired. This means the user was in the queue too long for the job priority so the system kicked them out of the queue.",
+                "doors": "The server tried to synchronize doors with the client but failed, so it kicked the user as it cannot recover from this error.",
+                "global": "The system detected that the user was most likely doing something malicious and handed out a global OP-FW ban.",
+                "editor": "The player opened their Rockstar Editor which automatically leaves the server you're currently in.",
+                "overflow": "Safety measure by FiveM as a protection from cheaters spamming your server with events.",
+                "another": "The user directly connected to another server without first disconnecting from this one.",
+                "config": "While connecting the servers configuration was unable to load causing the user to get rejected.",
+
+                "unknown": "No detailed description available. You can ask a developer for more help."
+            }
+        }
     },
     "panel_logs": {
         "title": "Panel Logs",

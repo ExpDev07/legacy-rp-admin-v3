@@ -443,6 +443,27 @@
                                 <span class="text-muted dark:text-dark-muted">
                                     {{ warning.createdAt | formatTime }}
                                 </span>
+                                <button
+                                    class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-yellow-500 rounded"
+                                    @click="warningEditId = warning.id"
+                                    v-if="warningEditId !== warning.id && $page.auth.player.steamIdentifier === warning.issuer.steamIdentifier"
+                                >
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button
+                                    class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-success dark:bg-dark-success rounded"
+                                    @click="editWarning(warning.id)"
+                                    v-if="warningEditId === warning.id"
+                                >
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button
+                                    class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-muted dark:bg-dark-muted rounded"
+                                    @click="warningEditId = 0"
+                                    v-if="warningEditId === warning.id"
+                                >
+                                    <i class="fas fa-ban"></i>
+                                </button>
                                 <inertia-link
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
                                     method="DELETE"
@@ -454,9 +475,10 @@
                     </template>
 
                     <template>
-                        <p class="text-muted dark:text-dark-muted">
+                        <p class="text-muted dark:text-dark-muted" v-if="warningEditId !== warning.id">
                             <span class="whitespace-pre-line" v-html="formatWarning(warning.message)">{{ formatWarning(warning.message) }}</span>
                         </p>
+                        <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" :id="'warning_' + warning.id" v-else-if="warningEditId === warning.id">{{ warning.message }}</textarea>
                     </template>
                 </card>
                 <p class="text-muted dark:text-dark-muted" v-if="warnings.length === 0">
@@ -575,6 +597,7 @@ export default {
             isStaffPM: false,
             isTempBanning: false,
             isTempSelect: true,
+            warningEditId: 0,
             form: {
                 ban: {
                     reason: null,
@@ -704,6 +727,15 @@ export default {
 
             // Reset.
             this.form.warning.message = null;
+        },
+        async editWarning(id) {
+            // Send request.
+            await this.$inertia.put('/players/' + this.player.steamIdentifier + '/warnings/' + id, {
+                message: $('#warning_' + id).val(),
+            });
+
+            // Reset.
+            this.warningEditId = 0;
         },
         hideDeleted(e) {
             e.preventDefault();
