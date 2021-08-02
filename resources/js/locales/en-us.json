@@ -67,7 +67,8 @@
         "bans": "Active Bans",
         "warnings": "Warnings",
         "creations": "Character creations",
-        "deletions": "Character deletions"
+        "deletions": "Character deletions",
+        "lucky_wheel": "Lucky Wheel Spins"
     },
     "map": {
         "title": "Live-Map",

@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Ban;
 use App\Character;
 use App\Warning;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -95,6 +96,34 @@ class StatisticsHelper
     }
 
     /**
+     * Returns Lucky Wheel statistics
+     *
+     * @return array
+     */
+    public static function getLuckyWheelStats(): array
+    {
+        $key = 'lucky_wheel_spins_statistics';
+        if (Cache::has($key)) {
+            return Cache::get($key, []);
+        }
+
+        $stats = DB::table('lucky_wheel_spins')->fromSub(function ($query) {
+            $query->from('lucky_wheel_spins')->select([
+                DB::raw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\') AS `date`'),
+            ])->orderByDesc('timestamp');
+        }, 'spins')->select([
+            DB::raw('COUNT(`date`) as `count`'),
+            'date',
+        ])->groupBy('date')->get()->toArray();
+
+        $data = self::parseHistoricData($stats);
+
+        Cache::put($key, $data, 6 * 60 * 60);
+
+        return $data;
+    }
+
+    /**
      * Returns Character creation statistics
      *
      * @return array
@@ -126,6 +155,7 @@ class StatisticsHelper
     {
         $map = [];
         foreach ($stats as $row) {
+            $row = (array)$row;
             $map[$row['date']] = $row['count'];
         }
 

@@ -18,6 +18,10 @@
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <canvas id="character_stats" class="w-full" height="400"></canvas>
             </div>
+
+            <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
+                <canvas id="lucky_wheel_stats" class="w-full" height="400"></canvas>
+            </div>
         </template>
 
     </div>
@@ -32,28 +36,31 @@ export default {
     methods: {
         renderChart(id, titles, labels, data, colors) {
             const ctx = document.getElementById(id).getContext('2d');
+            let datasets = [
+                {
+                    label: titles[0],
+                    data: data[0],
+                    backgroundColor: 'rgba(' + colors[0] + ', 0.3)',
+                    fill: true,
+                    borderColor: 'rgba(' + colors[0] + ', 1)',
+                    borderWidth: 1
+                }
+            ];
+            if (titles.length > 1) {
+                datasets.push({
+                    label: titles[1],
+                    data: data[1],
+                    backgroundColor: 'rgba(' + colors[1] + ', 0.3)',
+                    fill: true,
+                    borderColor: 'rgba(' + colors[1] + ', 1)',
+                    borderWidth: 1
+                });
+            }
             new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: titles[0],
-                            data: data[0],
-                            backgroundColor: 'rgba(' + colors[0] + ', 0.3)',
-                            fill: true,
-                            borderColor: 'rgba(' + colors[0] + ', 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: titles[1],
-                            data: data[1],
-                            backgroundColor: 'rgba(' + colors[1] + ', 0.3)',
-                            fill: true,
-                            borderColor: 'rgba(' + colors[1] + ', 1)',
-                            borderWidth: 1
-                        }
-                    ]
+                    datasets: datasets
                 },
                 options: {
                     devicePixelRatio: 2,
@@ -108,6 +115,13 @@ export default {
                 [_this.creations.data, _this.deletions.data],
                 ['87, 235, 54', '235, 54, 54']
             );
+            _this.renderChart(
+                'lucky_wheel_stats',
+                [_this.t('statistics.lucky_wheel')],
+                _this.luckyWheel.labels,
+                [_this.luckyWheel.data],
+                ['235, 145, 55']
+            );
         });
     },
     props: {
@@ -124,6 +138,10 @@ export default {
             required: true,
         },
         deletions: {
+            type: Object,
+            required: true,
+        },
+        luckyWheel: {
             type: Object,
             required: true,
         },
