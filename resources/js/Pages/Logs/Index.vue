@@ -61,23 +61,7 @@
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
                                    id="details" :placeholder="t('logs.placeholder_details')" v-model="filters.details">
                         </div>
-                        <!-- Before -->
-                        <div class="w-1/6 px-3 pr-1 mobile:w-full mobile:mb-3">
-                            <label class="block mb-3 mt-3" for="before-date">
-                                {{ t('logs.before-date') }} <sup class="text-muted dark:text-dark-muted">*</sup>
-                            </label>
-                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
-                                   id="before-date" type="date" placeholder="">
-                        </div>
-                        <!-- Before -->
-                        <div class="w-1/6 px-3 pl-1 mobile:w-full mobile:mb-3">
-                            <label class="block mb-3 mt-3" for="before-time">
-                                {{ t('logs.before-time') }} <sup class="text-muted dark:text-dark-muted">*</sup>
-                            </label>
-                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
-                                   id="before-time" type="time" placeholder="">
-                        </div>
-                        <!-- After -->
+                        <!-- After Date -->
                         <div class="w-1/6 px-3 pr-1 mobile:w-full mobile:mb-3">
                             <label class="block mb-3 mt-3" for="after-date">
                                 {{ t('logs.after-date') }} <sup class="text-muted dark:text-dark-muted">*</sup>
@@ -85,13 +69,29 @@
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="after-date"
                                    type="date" placeholder="">
                         </div>
-                        <!-- Before -->
+                        <!-- After Time -->
                         <div class="w-1/6 px-3 pl-1 mobile:w-full mobile:mb-3">
                             <label class="block mb-3 mt-3" for="after-time">
                                 {{ t('logs.after-time') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
                                    id="after-time" type="time" placeholder="">
+                        </div>
+                        <!-- Before Date -->
+                        <div class="w-1/6 px-3 pr-1 mobile:w-full mobile:mb-3">
+                            <label class="block mb-3 mt-3" for="before-date">
+                                {{ t('logs.before-date') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                            </label>
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                   id="before-date" type="date" placeholder="">
+                        </div>
+                        <!-- Before Time -->
+                        <div class="w-1/6 px-3 pl-1 mobile:w-full mobile:mb-3">
+                            <label class="block mb-3 mt-3" for="before-time">
+                                {{ t('logs.before-time') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                            </label>
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                   id="before-time" type="time" placeholder="">
                         </div>
                     </div>
                     <!-- Description -->
