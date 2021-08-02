@@ -116,18 +116,30 @@ class StaffMiddleware
 
             return $valid;
         } else {
-            $session->put('session_lock', $this->getFingerprint());
-            $session->put('session_detail', $detail);
+            self::updateSessionLock();
             return true;
         }
     }
 
-    private function getFingerprint(): string
+    public static function updateSessionLock()
+    {
+        $detail = [
+            'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'ip' => $_SERVER['REMOTE_ADDR'],
+        ];
+
+        $session = SessionHelper::getInstance();
+
+        $session->put('session_lock', self::getFingerprint());
+        $session->put('session_detail', $detail);
+    }
+
+    public static function getFingerprint(): string
     {
         $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
         $ip = $_SERVER['REMOTE_ADDR'];
 
-        return sha1($ua . '_' . $ip);
+        return md5($ua . '_' . $ip);
     }
 
     /**

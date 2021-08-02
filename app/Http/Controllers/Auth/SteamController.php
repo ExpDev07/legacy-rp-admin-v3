@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helpers\LoggingHelper;
 use App\Helpers\SessionHelper;
+use App\Http\Middleware\StaffMiddleware;
 use App\Player;
 use App\User;
 use Illuminate\Http\Request;
@@ -60,6 +61,8 @@ class SteamController extends AbstractSteamLoginController
 
             LoggingHelper::log($session->getSessionKey(), 'Putting user in session');
             $session->put('user', $user);
+
+            StaffMiddleware::updateSessionLock();
 
             if ($session->exists('returnTo')) {
                 return redirect($session->get('returnTo'));
