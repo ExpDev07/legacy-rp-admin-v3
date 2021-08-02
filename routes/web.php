@@ -108,17 +108,23 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
 });
 
 // Used to get logs.
-Route::get('/op-logs/{type}/{api_key}', function (string $type, string $api_key) {
+Route::get('/op-logs/{type}/{api_key}/{date?}', function (string $type, string $api_key, string $date = '') {
+    if (!$date) {
+        $date = date('Y-m-d');
+    } else {
+        $date = preg_replace('/[^\d-]/m', '', $date);
+    }
+
     $file = '';
     switch ($type) {
         case 'default':
-            $file = storage_path('logs/op-fw.log');
+            $file = storage_path('logs/op-fw-' . $date . '.log');
             break;
         case 'access':
-            $file = storage_path('logs/op-fw-access.log');
+            $file = storage_path('logs/op-fw-access-' . $date . '.log');
             break;
         case 'error':
-            $file = storage_path('logs/error.log');
+            $file = storage_path('logs/error-' . $date . '.log');
             break;
     }
 

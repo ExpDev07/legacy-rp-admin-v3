@@ -100,10 +100,10 @@ class LoggingHelper
     private static function init()
     {
         if (self::$logFile === null) {
-            self::$logFile = rtrim(storage_path('logs'), '/\\') . '/op-fw.log';
+            self::$logFile = rtrim(storage_path('logs'), '/\\') . '/op-fw-' . date('Y-m-d') . '.log';
         }
         if (self::$accessLogFile === null) {
-            self::$accessLogFile = rtrim(storage_path('logs'), '/\\') . '/op-fw-access.log';
+            self::$accessLogFile = rtrim(storage_path('logs'), '/\\') . '/op-fw-access-' . date('Y-m-d') . '.log';
         }
 
         self::registerShutdown();
