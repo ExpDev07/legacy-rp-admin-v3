@@ -329,9 +329,9 @@ export default {
             const match = matches && matches.length === 1 && matches[0].trim() ? matches[0].trim() : null;
 
             if (match) {
-                const descriptions = [// /^You have disconnected from the server/gmi is still unknown
+                const descriptions = [
                     [/^Exiting/gmi, this.t('logs.detail.reasons.exited')],
-                    [/^Disconnected/gmi, this.t('logs.detail.reasons.disconnected')],
+                    [/^Disconnected|^You have disconnected from the server/gmi, this.t('logs.detail.reasons.disconnected')],
                     [/Game crashed: /gmi, this.t('logs.detail.reasons.crash')],
                     [/(?<=connection|You) timed out[!.]|^Timed out after/gmi, this.t('logs.detail.reasons.timeout')],
                     [/^You have been banned/gmi, this.t('logs.detail.reasons.banned')],
