@@ -26,6 +26,27 @@ class PlayerWarningController extends Controller
     }
 
     /**
+     * Updates the specified resource.
+     *
+     * @param Player $player
+     * @param Warning $warning
+     * @param WarningStoreRequest $request
+     * @return RedirectResponse
+     */
+    public function update(Player $player, Warning $warning, WarningStoreRequest $request): RedirectResponse
+    {
+        $staffIdentifier = $request->user()->player->steam_identifier;
+        $issuer = $warning->issuer()->first();
+        if (!$issuer || $staffIdentifier !== $issuer->steam_identifier) {
+            return back()->with('error', 'You can only edit your own warnings!');
+        }
+
+        $warning->update($request->validated());
+
+        return back()->with('success', 'Successfully updated warning');
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param Player $player
