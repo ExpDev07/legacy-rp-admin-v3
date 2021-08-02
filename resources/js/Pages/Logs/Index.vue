@@ -204,6 +204,28 @@
             </template>
         </v-section>
 
+        <modal :show.sync="showLogDetail">
+            <template #header>
+                <h1 class="dark:text-white">
+                    {{ t('logs.detail.title') }}
+                </h1>
+                <p class="dark:text-dark-muted !-mt-3 italic">
+                    {{ t('logs.detail.description', log_detail.user) }}
+                </p>
+            </template>
+
+            <template #default>
+                <pre class="text-lg block mb-2">{{ log_detail.reason }}</pre>
+                {{ log_detail.description }}
+            </template>
+
+            <template #actions>
+                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="showLogDetail = false">
+                    {{ t('global.close') }}
+                </button>
+            </template>
+        </modal>
+
     </div>
 </template>
 
@@ -211,11 +233,13 @@
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Pagination from './../../Components/Pagination';
+import Modal from './../../Components/Modal';
 
 export default {
     layout: Layout,
     components: {
         Pagination,
+        Modal,
         VSection,
     },
     props: {
@@ -250,7 +274,13 @@ export default {
     },
     data() {
         return {
-            isLoading: false
+            isLoading: false,
+            showLogDetail: false,
+            log_detail: {
+                user: '',
+                reason: '',
+                description: ''
+            }
         };
     },
     methods: {
@@ -293,6 +323,57 @@ export default {
 
             this.isLoading = false;
         },
+        parseDisconnectLog(details) {
+            const regex = /(?<=\) has disconnected from the server .+? with reason: `)(.+?)(?=`\.)/gm;
+            const matches = details.match(regex);
+            const match = matches && matches.length === 1 && matches[0].trim() ? matches[0].trim() : null;
+
+            if (match) {
+                const descriptions = [// /^You have disconnected from the server/gmi is still unknown
+                    [/^Exiting/gmi, this.t('logs.detail.reasons.exited')],
+                    [/^Disconnected/gmi, this.t('logs.detail.reasons.disconnected')],
+                    [/Game crashed: /gmi, this.t('logs.detail.reasons.crash')],
+                    [/(?<=connection|You) timed out[!.]|^Timed out after/gmi, this.t('logs.detail.reasons.timeout')],
+                    [/^You have been banned/gmi, this.t('logs.detail.reasons.banned')],
+                    [/^The server is restarting/gmi, this.t('logs.detail.reasons.restart')],
+                    [/^You have been kicked/gmi, this.t('logs.detail.reasons.kicked')],
+                    [/^Your Job Priority expired/gmi, this.t('logs.detail.reasons.job')],
+                    [/^Failed to sync doors/gmi, this.t('logs.detail.reasons.doors')],
+                    [/^You have been globally banned from all OP-FW servers/gmi, this.t('logs.detail.reasons.global')],
+                    [/^Entering Rockstar Editor/gmi, this.t('logs.detail.reasons.editor')],
+                    [/^Reliable network event overflow/gmi, this.t('logs.detail.reasons.overflow')],
+                    [/^Connecting to another server/gmi, this.t('logs.detail.reasons.another')],
+                    [/^Obtaining configuration from server failed/gmi, this.t('logs.detail.reasons.config')],
+                ];
+
+                let description = '';
+                for (let x in descriptions) {
+                    const entry = descriptions[x];
+
+                    if (entry[0].test(match)) {
+                        description = entry[1];
+                        break;
+                    }
+                }
+
+                if (!description) {
+                    description = this.t('logs.detail.reasons.unknown');
+                }
+
+                const html = $('<div />').append(
+                    $('<a></a>', {
+                        "data-reason" : match,
+                        "data-description" : description,
+                        "class": "text-yellow-800 dark:text-yellow-200 exit-log",
+                        "href": "#"
+                    }).text(match)
+                ).html();
+
+                return details.replace(match, html);
+            }
+
+            return details;
+        },
         parseLog(details) {
             const regex = /(to|from) (inventory )?((trunk|glovebox|character|property)-(\d+-)?\d+:\d+)/gmi;
 
@@ -313,13 +394,24 @@ export default {
                 details = details.replaceAll(inventories[x], '<a title="' + this.t('inventories.view') + '" class="text-indigo-600 dark:text-indigo-400" href="/inventory/' + inventories[x] + '">' + inventories[x] + '</a>');
             }
 
-            return details;
+            return this.parseDisconnectLog(details);
         },
         playerName(steamIdentifier) {
             return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
         }
     },
     mounted() {
+        const _this = this;
+        $('body').on('click', 'a.exit-log', function(e) {
+            e.preventDefault();
+            const parent = $(this).closest('tr');
+
+            _this.showLogDetail = true;
+            _this.log_detail.user = $('td:first-child a', parent).text().trim();
+            _this.log_detail.reason = $(this).data('reason');
+            _this.log_detail.description = $(this).data('description');
+        });
+
         if (this.filters.before) {
             const d = new Date(this.filters.before * 1000);
 
