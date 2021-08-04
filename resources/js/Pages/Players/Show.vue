@@ -443,6 +443,9 @@
                                 <span class="text-muted dark:text-dark-muted">
                                     {{ warning.createdAt | formatTime }}
                                 </span>
+                                <sup class="ml-2 italic text-sm text-gray-600 dark:text-gray-400" v-if="warning.updatedAt !== warning.createdAt" :title="t('players.show.warning_edited_title', formatTime(warning.updatedAt))">
+                                    {{ t('players.show.warning_edited') }}
+                                </sup>
                                 <button
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-yellow-500 rounded"
                                     @click="warningEditId = warning.id"
@@ -626,6 +629,9 @@ export default {
             return this.player.ban.expireAt
                 ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt))
                 : this.t('players.ban.forever', this.player.ban.issuer);
+        },
+        formatTime(t) {
+            return this.$options.filters.formatTime(t);
         },
         async pmPlayer() {
             // Send request.
