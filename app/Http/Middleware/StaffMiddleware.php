@@ -104,12 +104,18 @@ class StaffMiddleware
 
             $valid = $lock === $print;
             if (!$valid) {
+                $sDetail = $session->get('session_detail');
+
                 LoggingHelper::log($session->getSessionKey(), 'StaffMiddleware session-lock is invalid');
                 LoggingHelper::log($session->getSessionKey(), $lock . ' != ' . $print);
                 LoggingHelper::log($session->getSessionKey(), 'current.detail -> ' . json_encode($detail));
-                LoggingHelper::log($session->getSessionKey(), 'session.detail -> ' . json_encode($session->get('session_detail')));
+                LoggingHelper::log($session->getSessionKey(), 'session.detail -> ' . json_encode($sDetail));
 
                 $this->error = 'Your session is invalid, please refresh this page or log in again.';
+
+                if ($sDetail && isset($sDetail['ip']) && $sDetail['ip'] !== $detail['ip']) {
+                    $this->error .= ' (Log-in from new ip)';
+                }
             }
 
             $session->put('session_detail', $detail);
