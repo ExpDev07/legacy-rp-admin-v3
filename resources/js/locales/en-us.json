@@ -13,6 +13,8 @@
         "refresh": "Refresh",
         "delete": "Delete",
         "view_map": "View on Live-Map",
+        "yes": "Yes",
+        "no": "No",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -185,7 +187,8 @@
             "name": "Full Name",
             "plate": "Vehicle Plate",
             "job": "Job",
-            "phone": "Phone Number"
+            "phone": "Phone Number",
+            "deleted": "Is Deleted"
         },
         "result": {
             "player": "Player",

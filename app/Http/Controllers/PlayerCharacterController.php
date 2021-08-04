@@ -86,6 +86,17 @@ class PlayerCharacterController extends Controller
             }
         }
 
+        // Filtering isDeleted.
+        if ($deleted = $request->input('deleted')) {
+            if ($deleted === 'yes' || $deleted === 'no') {
+                if ($deleted === 'yes') {
+                    $query->where('character_deleted', '=', '1');
+                } else if ($deleted === 'no') {
+                    $query->where('character_deleted', '=', '0');
+                }
+            }
+        }
+
         $query->select([
             'character_id', 'steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',
             'department_name', 'position_name', 'phone_number',
@@ -99,13 +110,14 @@ class PlayerCharacterController extends Controller
 
         return Inertia::render('Characters/Index', [
             'characters' => $characters,
-            'filters'    => $request->all(
-                'cid',
-                'name',
-                'vehicle_plate',
-                'phone',
-                'job'
-            ),
+            'filters'    => [
+                'character_id'  => $request->input('character_id'),
+                'name'          => $request->input('name'),
+                'vehicle_plate' => $request->input('vehicle_plate'),
+                'phone'         => $request->input('phone'),
+                'job'           => $request->input('job'),
+                'deleted'       => $request->input('deleted') ?: 'all',
+            ],
             'time'       => $end - $start,
             'playerMap'  => Player::fetchSteamPlayerNameMap($characters->toArray($request), 'steamIdentifier'),
         ]);
