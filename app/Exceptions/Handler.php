@@ -40,7 +40,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
-        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+        if (
+            $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException || // 404 doesn't need to be logged to avoid filling the log file
+            $exception instanceof \Illuminate\Encryption\MissingAppKeyException // /api/players Illuminate\Encryption\MissingAppKeyException: No application encryption key has been specified.
+        ) {
             parent::report($exception);
             return;
         }

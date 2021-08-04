@@ -50,11 +50,22 @@
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="phone" placeholder="606-0992" v-model="filters.phone">
                         </div>
                         <!-- Job -->
-                        <div class="w-3/4 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="job">
                                 {{ t('characters.form.job') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" placeholder="Government Waste Collector Employee" v-model="filters.job">
+                        </div>
+                        <!-- Deletion status -->
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-2" for="deleted">
+                                {{ t('characters.form.deleted') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                            </label>
+                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 dark:bg-gray-600 border rounded" id="deleted" name="deleted" v-model="filters.deleted">
+                                <option value="all">{{ t('global.all') }}</option>
+                                <option value="yes">{{ t('global.yes') }}</option>
+                                <option value="no">{{ t('global.no') }}</option>
+                            </select>
                         </div>
                         <!-- Description -->
                         <div class="w-full px-3 mt-3">
@@ -159,6 +170,7 @@ export default {
             vehicle_plate: String,
             phone: String,
             job: String,
+            deleted: String,
         },
         playerMap: {
             type: Object,
