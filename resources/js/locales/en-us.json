@@ -377,7 +377,7 @@
             "cash_title": "{0} in cash and {1} bank",
             "stocks": "<b>{0}</b> in stocks",
             "prename": "First Name",
-            "surname": "First Name",
+            "surname": "Last Name",
             "backstory": "Backstory",
             "dob": "Date of Birth",
             "deleted": "Deleted at",
