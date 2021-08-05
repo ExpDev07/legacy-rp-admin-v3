@@ -22,20 +22,24 @@
             </template>
 
             <template>
-                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg" v-if="inventory.type === 'character'">
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg"
+                     v-if="inventory.type === 'character'">
                     <card v-if="inventory.character">
                         <template #header>
                             <h3 class="mb-2">
                                 {{ t('inventories.show.character') }}
                             </h3>
                             <h4>
-                                {{ inventory.character.first_name }} {{ inventory.character.last_name }} (#{{ inventory.character.character_id }})
+                                {{ inventory.character.first_name }} {{ inventory.character.last_name }}
+                                (#{{ inventory.character.character_id }})
                             </h4>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.edit.dob') }}:</span> {{ $moment(inventory.character.date_of_birth).format('l') }}
+                                <span>{{ t('players.edit.dob') }}:</span>
+                                {{ $moment(inventory.character.date_of_birth).format('l') }}
                             </h4>
                             <h4 class="text-red-700 dark:text-red-300" v-if="inventory.character.character_deleted">
-                                <span>{{ t('players.edit.deleted') }}:</span> {{ $moment(inventory.character.character_deletion_timestamp).format('l') }}
+                                <span>{{ t('players.edit.deleted') }}:</span>
+                                {{ $moment(inventory.character.character_deletion_timestamp).format('l') }}
                             </h4>
                         </template>
 
@@ -46,16 +50,21 @@
                         </template>
 
                         <template #footer>
-                            <inertia-link class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                            <inertia-link
+                                class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
                                 {{ t('inventories.show.view_character') }}
                             </inertia-link>
-                            <inertia-link class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + inventory.character.steam_identifier">
+                            <inertia-link
+                                class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier">
                                 {{ t('inventories.show.view_player') }}
                             </inertia-link>
                         </template>
                     </card>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg" v-else-if="inventory.type === 'trunk' || inventory.type === 'glovebox'">
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg"
+                     v-else-if="inventory.type === 'trunk' || inventory.type === 'glovebox'">
                     <card v-if="inventory.vehicle">
                         <template #header>
                             <h3 class="mb-2">
@@ -126,13 +135,16 @@
                                 {{ t('inventories.show.owner') }}
                             </h3>
                             <h4>
-                                {{ inventory.character.first_name }} {{ inventory.character.last_name }} (#{{ inventory.character.character_id }})
+                                {{ inventory.character.first_name }} {{ inventory.character.last_name }}
+                                (#{{ inventory.character.character_id }})
                             </h4>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.edit.dob') }}:</span> {{ $moment(inventory.character.date_of_birth).format('l') }}
+                                <span>{{ t('players.edit.dob') }}:</span>
+                                {{ $moment(inventory.character.date_of_birth).format('l') }}
                             </h4>
                             <h4 class="text-red-700 dark:text-red-300" v-if="inventory.character.character_deleted">
-                                <span>{{ t('players.edit.deleted') }}:</span> {{ $moment(inventory.character.character_deletion_timestamp).format('l') }}
+                                <span>{{ t('players.edit.deleted') }}:</span>
+                                {{ $moment(inventory.character.character_deletion_timestamp).format('l') }}
                             </h4>
                         </template>
 
@@ -143,10 +155,14 @@
                         </template>
 
                         <template #footer>
-                            <inertia-link class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                            <inertia-link
+                                class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
                                 {{ t('inventories.show.view_character') }}
                             </inertia-link>
-                            <inertia-link class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + inventory.character.steam_identifier">
+                            <inertia-link
+                                class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier">
                                 {{ t('inventories.show.view_player') }}
                             </inertia-link>
                             <inertia-link
@@ -160,23 +176,36 @@
                     </card>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg" v-else-if="inventory.type === 'property'">
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg"
+                     v-else-if="inventory.type === 'property'">
                     <card v-if="inventory.property">
                         <template #header>
                             <h3 class="mb-2">
                                 {{ inventory.property.property_address }}
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.properties.cost') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(inventory.property.property_cost) }}
+                                <span>{{ t('players.properties.cost') }}:</span> {{
+                                    new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD'
+                                    }).format(inventory.property.property_cost)
+                                }}
                             </h4>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.properties.rent') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(inventory.property.property_income) }}
+                                <span>{{ t('players.properties.rent') }}:</span> {{
+                                    new Intl.NumberFormat('en-US', {
+                                        style: 'currency',
+                                        currency: 'USD'
+                                    }).format(inventory.property.property_income)
+                                }}
                             </h4>
                         </template>
 
                         <template>
                             <p>
-                                {{ t('inventories.show.prop_description', inventory.property.property_renter, inventory.property.property_renter_cid) }}
+                                {{
+                                    t('inventories.show.prop_description', inventory.property.property_renter, inventory.property.property_renter_cid)
+                                }}
                             </p>
                         </template>
 
@@ -220,13 +249,16 @@
                                 {{ t('inventories.show.prop_owner') }}
                             </h3>
                             <h4>
-                                {{ inventory.character.first_name }} {{ inventory.character.last_name }} (#{{ inventory.character.character_id }})
+                                {{ inventory.character.first_name }} {{ inventory.character.last_name }}
+                                (#{{ inventory.character.character_id }})
                             </h4>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.edit.dob') }}:</span> {{ $moment(inventory.character.date_of_birth).format('l') }}
+                                <span>{{ t('players.edit.dob') }}:</span>
+                                {{ $moment(inventory.character.date_of_birth).format('l') }}
                             </h4>
                             <h4 class="text-red-700 dark:text-red-300" v-if="inventory.character.character_deleted">
-                                <span>{{ t('players.edit.deleted') }}:</span> {{ $moment(inventory.character.character_deletion_timestamp).format('l') }}
+                                <span>{{ t('players.edit.deleted') }}:</span>
+                                {{ $moment(inventory.character.character_deletion_timestamp).format('l') }}
                             </h4>
                         </template>
 
@@ -237,10 +269,14 @@
                         </template>
 
                         <template #footer>
-                            <inertia-link class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                            <inertia-link
+                                class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
                                 {{ t('inventories.show.view_character') }}
                             </inertia-link>
-                            <inertia-link class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded" :href="'/players/' + inventory.character.steam_identifier">
+                            <inertia-link
+                                class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier">
                                 {{ t('inventories.show.view_player') }}
                             </inertia-link>
                             <inertia-link
@@ -263,13 +299,29 @@
 
                     <template>
                         <div class="flex flex-wrap justify-between -mx-2">
-                            <div class="p-2 text-center w-inventory_slot h-inventory_slot break-words dark:bg-gray-700 m-2 rounded border cursor-default relative" v-for="(item, slot) in cleanContents" :key="slot">
-                                <span class="block font-semibold relative top-1/2 -translate-y-1/2 transform overflow-hidden overflow-ellipsis max-h-full" :title="t('inventories.show.content_title', slot, item.amount, item.item)" v-if="item.item">
-                                    {{ item.item }}
-                                    <sup class="font-semibold italic">{{ item.amount }}</sup>
-                                </span>
-                                <span class="block font-semibold relative top-1/2 -translate-y-1/2 transform opacity-70" :title="t('inventories.show.content_empty', slot)" v-else>
+                            <div
+                                class="p-2 text-center w-inventory_slot h-inventory_slot break-words dark:bg-gray-700 m-2 rounded border cursor-default relative"
+                                v-for="(item, slot) in cleanContents" :key="slot">
+
+                                <img
+                                    :src="'/images/icons/items/' + item.item + '.png'"
+                                    :alt="item.item"
+                                    :title="t('inventories.show.content_title', slot, item.amount, item.item)"
+                                    class="block h-full w-full"
+                                    v-if="item.item"
+                                />
+
+                                <span class="block font-semibold relative top-1/2 -translate-y-1/2 transform opacity-70"
+                                      :title="t('inventories.show.content_empty', slot)" v-else>
                                     {{ t('inventories.show.empty') }}
+                                </span>
+
+                                <span class="block absolute -top-3 right-5 bg-gray-800 py-1 px-2 text-xs rounded" v-if="item.item">
+                                    {{ item.amount }}
+                                </span>
+
+                                <span class="block absolute bottom-0 left-1/2 transform -translate-x-1/2 py-1 px-2 text-xs w-full overflow-hidden overflow-ellipsis whitespace-nowrap" v-if="item.item">
+                                    {{ item.item }}
                                 </span>
 
                                 <button
@@ -315,7 +367,7 @@ export default {
     data() {
         let clean = {},
             maxSlot = 0;
-        $.each(this.contents, function(_, item) {
+        $.each(this.contents, function (_, item) {
             const key = item.inventory_slot;
 
             if (key > maxSlot) {
@@ -331,6 +383,10 @@ export default {
                 };
             }
         });
+
+        while (maxSlot % 5 !== 0) {
+            maxSlot++;
+        }
 
         let cleaned = {};
         for (let x = 1; x <= maxSlot; x++) {
@@ -356,7 +412,7 @@ export default {
         contents: {
             type: Array,
             required: true,
-        }
+        },
     }
 };
 </script>
