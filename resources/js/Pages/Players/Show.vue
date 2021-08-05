@@ -395,16 +395,24 @@
                                     <i class="fas fa-briefcase mr-1"></i>
                                     {{ t('inventories.view') }}
                                 </inertia-link>
+                                <inertia-link
+                                    class="block w-full px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
+                                    :href="'/inventory/character-' + character.id + ':1'"
+                                    v-if="$page.auth.player.isSuperAdmin"
+                                >
+                                    <i class="fas fa-box mr-1"></i>
+                                    {{ t('inventories.show_inv') }}
+                                </inertia-link>
+                                <inertia-link
+                                    class="block w-full px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
+                                    href="#"
+                                    @click="deleteCharacter($event, character.id)"
+                                    v-if="!character.characterDeleted && $page.auth.player.isSuperAdmin"
+                                >
+                                    <i class="fas fa-trash-alt mr-1"></i>
+                                    {{ t('players.characters.delete') }}
+                                </inertia-link>
                             </div>
-                            <inertia-link
-                                class="block px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
-                                href="#"
-                                @click="deleteCharacter($event, character.id)"
-                                v-if="!character.characterDeleted && $page.auth.player.isSuperAdmin"
-                            >
-                                <i class="fas fa-trash-alt mr-1"></i>
-                                {{ t('players.characters.delete') }}
-                            </inertia-link>
                         </template>
                     </card>
                 </div>

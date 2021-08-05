@@ -65,6 +65,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);
     Route::get('/inventories/property/{property}', [InventoryController::class, 'property']);
     Route::get('/inventory/{inventory}', [InventoryController::class, 'show']);
+    Route::delete('/inventory/{inventory}/clear/{slot}', [InventoryController::class, 'clear']);
 
     // Advanced search.
     Route::get('/advanced', [AdvancedSearchController::class, 'index']);

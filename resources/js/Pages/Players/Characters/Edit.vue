@@ -438,21 +438,22 @@ export default {
     },
     methods: {
         submit(isJobUpdate) {
-            let form = this.form;
+            let form = this.form,
+                query = '';
             if (isJobUpdate) {
                 form.first_name = this.character.firstName;
                 form.last_name = this.character.lastName;
                 form.date_of_birth = this.character.dateOfBirth;
                 form.gender = this.character.gender;
                 form.backstory = this.character.backstory;
-                form.jobUpdate = 'yes';
+                query = '?jobUpdate=yes';
             } else {
                 form.job_name = this.character.jobName;
                 form.department_name = this.character.departmentName;
                 form.position_name = this.character.positionName;
             }
 
-            this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id, form)
+            this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + query, form)
         },
         async deleteVehicle(e, vehicleId) {
             e.preventDefault();

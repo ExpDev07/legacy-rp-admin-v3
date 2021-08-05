@@ -150,7 +150,7 @@ class SuspiciousChecker
 
         $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 300 as `time`, `identifier` FROM `user_logs` WHERE action = 'Sold materials' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
 
-        $sus = self::getSaleLogEntries($sql, 10000, 'materials');
+        $sus = self::getSaleLogEntries($sql, 20000, 'materials');
 
         Cache::put($key, $sus, self::CacheTime);
 

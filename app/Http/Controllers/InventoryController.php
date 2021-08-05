@@ -9,6 +9,7 @@ use App\Log;
 use App\Player;
 use App\Property;
 use App\Vehicle;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -90,11 +91,11 @@ class InventoryController extends Controller
         if ($likeSearch) {
             $where = [];
             foreach ($inventories as $inventory) {
-                $where[] = "(" . $fromSql . " LIKE '" . $inventory . "' OR $toSql LIKE '" . $inventory . "')";
+                $where[] = "(" . $fromSql . " LIKE '" . $inventory . "' OR " . $toSql . " LIKE '" . $inventory . "')";
             }
             $where = implode(' OR ', $where);
         } else {
-            $where = $fromSql . " IN ('" . implode("', '", $inventories) . "')";
+            $where = "(" . $fromSql . " IN ('" . implode("', '", $inventories) . "') OR " . $toSql . " IN ('" . implode("', '", $inventories) . "'))";
         }
 
         $page = Paginator::resolveCurrentPage('page');
@@ -123,9 +124,59 @@ class InventoryController extends Controller
      */
     public function show(string $inventory, Request $request): Response
     {
+        $inventory = Inventory::parseDescriptor($inventory)->get();
+
+        $superAdmin = $request->user()->player->is_super_admin;
+        if ($superAdmin) {
+            $contents = DB::table('inventories')
+                ->where('inventory_name', '=', explode(':', $inventory->descriptor)[0])
+                ->select(['id', 'item_name', 'inventory_slot'])
+                ->get()->toArray();
+        } else {
+            $contents = [];
+        }
+
         return Inertia::render('Inventories/Show', [
-            'inventory' => Inventory::parseDescriptor($inventory)->get(),
+            'inventory' => $inventory,
+            'contents'  => $contents,
         ]);
+    }
+
+    /**
+     * Clears a slot in a certain inventory
+     *
+     * @param string $inventory
+     * @param int $slot
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function clear(string $inventory, int $slot, Request $request): RedirectResponse
+    {
+        $inventory = Inventory::parseDescriptor($inventory)->get();
+
+        $superAdmin = $request->user()->player->is_super_admin;
+        if (!$superAdmin) {
+            return back()->with('error', 'You are not a super admin');
+        }
+
+        $name = explode(':', $inventory->descriptor)[0];
+
+        $content = DB::table('inventories')
+            ->where('inventory_name', '=', $name)
+            ->where('inventory_slot', '=', $slot)
+            ->select(['id'])
+            ->first();
+
+        if (!$content) {
+            return back()->with('error', 'Slot ' . $slot . ' in inventory ' . $name . ' is already empty');
+        }
+
+        DB::table('inventories')
+            ->where('inventory_name', '=', $name)
+            ->where('inventory_slot', '=', $slot)
+            ->delete();
+
+        return back()->with('success', 'Cleared slot ' . $slot . ' in inventory ' . $name);
     }
 
 }
