@@ -398,6 +398,7 @@
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
                                     :href="'/inventory/character-' + character.id + ':1'"
+                                    v-if="$page.auth.player.isSuperAdmin"
                                 >
                                     <i class="fas fa-box mr-1"></i>
                                     {{ t('inventories.show_inv') }}

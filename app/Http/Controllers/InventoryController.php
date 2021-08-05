@@ -91,11 +91,11 @@ class InventoryController extends Controller
         if ($likeSearch) {
             $where = [];
             foreach ($inventories as $inventory) {
-                $where[] = "(" . $fromSql . " LIKE '" . $inventory . "' OR $toSql LIKE '" . $inventory . "')";
+                $where[] = "(" . $fromSql . " LIKE '" . $inventory . "' OR " . $toSql . " LIKE '" . $inventory . "')";
             }
             $where = implode(' OR ', $where);
         } else {
-            $where = $fromSql . " IN ('" . implode("', '", $inventories) . "')";
+            $where = "(" . $fromSql . " IN ('" . implode("', '", $inventories) . "') OR " . $toSql . " IN ('" . implode("', '", $inventories) . "'))";
         }
 
         $page = Paginator::resolveCurrentPage('page');
