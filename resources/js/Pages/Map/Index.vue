@@ -167,7 +167,7 @@ export default {
         token: {
             type: String,
             required: true
-        }
+        },
     },
     data() {
         return {
@@ -264,6 +264,19 @@ export default {
                 return isDev ? 'http://' + window.location.hostname + ':8080' : 'https://' + window.location.hostname + ':8443';
             }
         },
+        getOTToken() {
+            const _this = this;
+
+            return new Promise(function(resolve, reject) {
+                $.get(_this.hostname(false) + '/map/go/token?token=' + _this.token, function(data) {
+                    if (data.status) {
+                        resolve(data.token);
+                    } else {
+                        reject(data.error);
+                    }
+                }).fail(reject);
+            });
+        },
         async doMapRefresh(server) {
             const _this = this;
 
@@ -272,7 +285,9 @@ export default {
             }
 
             try {
-                this.connection = new WebSocket(this.hostname(true) + "/map/go/socket?server=" + encodeURIComponent(server));
+                const token = await this.getOTToken();
+
+                this.connection = new WebSocket(this.hostname(true) + "/map/go/socket?ott=" + token + "&server=" + encodeURIComponent(server));
 
                 this.connection.onmessage = function (event) {
                     try {
