@@ -198,6 +198,7 @@
     },
     "inventories": {
         "view": "View related inventory logs",
+        "show_inv": "Show inventory",
         "show": {
             "error": "Invalid Inventory",
             "title": "Inventory",
