@@ -165,31 +165,6 @@ class OPFWHelper
     }
 
     /**
-     * Gets the world.json
-     *
-     * @param string $serverIp
-     * @return array|null
-     * @deprecated No longer used
-     */
-    public static function getWorldJSON(string $serverIp): ?array
-    {
-        $serverIp = Server::fixApiUrl($serverIp);
-        $cache = 'world_json_' . md5($serverIp);
-
-        if (Cache::store('file')->has($cache)) {
-            return Cache::store('file')->get($cache);
-        } else {
-            $data = self::executeRoute($serverIp . 'world.json', [], false);
-
-            if ($data->data) {
-                Cache::store('file')->set($cache, $data->data, 5);
-            }
-
-            return $data->data;
-        }
-    }
-
-    /**
      * Executes an op-fw route
      *
      * @param string $route
