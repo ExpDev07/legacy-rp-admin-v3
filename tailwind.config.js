@@ -40,12 +40,15 @@ module.exports = {
                 'map':                '1160px',
                 'map-right':          'calc(100% - 1160px)',
                 'split':              'calc(50% - 10px)',
-                'tp':                 '170px'
+                'tp':                 '170px',
+                'inventory_contents': '700px',
+                'inventory_slot':     '110px',
             },
             height: {
-                'side-close':    '40px',
-                'side-open-two': '134px',
-                'max':           'calc(100vh - (210px + 120px))'
+                'side-close':     '40px',
+                'side-open-two':  '134px',
+                'max':            'calc(100vh - (210px + 120px))',
+                'inventory_slot': '70px',
             },
             minWidth: {
                 'input': '200px'

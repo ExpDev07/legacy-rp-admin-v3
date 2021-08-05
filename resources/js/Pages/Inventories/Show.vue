@@ -253,6 +253,39 @@
                         </template>
                     </card>
                 </div>
+
+                <card v-if="cleanContents" class="w-inventory_contents max-w-full">
+                    <template #header>
+                        <h3 class="mb-2">
+                            {{ t('inventories.show.contents') }}
+                        </h3>
+                    </template>
+
+                    <template>
+                        <div class="flex flex-wrap justify-between -mx-2">
+                            <div class="p-2 text-center w-inventory_slot h-inventory_slot break-words dark:bg-gray-700 m-2 rounded border cursor-default relative" v-for="(item, slot) in cleanContents" :key="slot">
+                                <span class="block font-semibold relative top-1/2 -translate-y-1/2 transform overflow-hidden overflow-ellipsis max-h-full" :title="t('inventories.show.content_title', slot, item.amount, item.item)" v-if="item.item">
+                                    {{ item.item }}
+                                    <sup class="font-semibold italic">{{ item.amount }}</sup>
+                                </span>
+                                <span class="block font-semibold relative top-1/2 -translate-y-1/2 transform opacity-70" :title="t('inventories.show.content_empty', slot)" v-else>
+                                    {{ t('inventories.show.empty') }}
+                                </span>
+
+                                <button
+                                    class="py-1 px-2 text-xs text-white bg-red-500 rounded hover:bg-red-600 absolute -top-3 -right-3"
+                                    :title="t('inventories.show.empty_title', slot)"
+                                    v-if="item.item"
+                                    @click="confirmInventoryClear($event, slot)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <template #footer>
+                    </template>
+                </card>
             </template>
         </v-section>
 
@@ -272,11 +305,58 @@ export default {
         VSection,
         Card,
     },
+    methods: {
+        async confirmInventoryClear(e, slot) {
+            if (confirm(this.t('inventories.show.empty_confirm', slot))) {
+                await this.$inertia.delete('/inventory/' + this.inventory.descriptor + '/clear/' + slot);
+            }
+        }
+    },
+    data() {
+        let clean = {},
+            maxSlot = 0;
+        $.each(this.contents, function(_, item) {
+            const key = item.inventory_slot;
+
+            if (key > maxSlot) {
+                maxSlot = key;
+            }
+
+            if (key in clean && clean[key].item === item.item_name) {
+                clean[key].amount++;
+            } else {
+                clean[key] = {
+                    item: item.item_name,
+                    amount: 1
+                };
+            }
+        });
+
+        let cleaned = {};
+        for (let x = 1; x <= maxSlot; x++) {
+            if (!(x in clean)) {
+                cleaned[x] = {
+                    item: null,
+                    amount: 0
+                };
+            } else {
+                cleaned[x] = clean[x];
+            }
+        }
+
+        return {
+            cleanContents: cleaned
+        }
+    },
     props: {
         inventory: {
             type: Object,
             required: true,
+        },
+        contents: {
+            type: Array,
+            required: true,
         }
-    },
+    }
 };
 </script>
