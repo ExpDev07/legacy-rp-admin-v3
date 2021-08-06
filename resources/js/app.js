@@ -12,7 +12,6 @@ import linkify from 'vue-linkify';
 import 'leaflet/dist/leaflet.css';
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
-import VueCookies from 'vue-cookies';
 
 // Directives.
 Vue.directive('linkified', linkify);
@@ -22,7 +21,6 @@ Vue.use(InertiaApp);
 Vue.use(PortalVue);
 Vue.use(Localization);
 Vue.use(Copy);
-Vue.use(VueCookies);
 
 // Properties / methods.
 Vue.prototype.$moment = moment;

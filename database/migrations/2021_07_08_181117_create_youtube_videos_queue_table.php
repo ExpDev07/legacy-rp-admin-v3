@@ -22,7 +22,7 @@ class CreateYoutubeVideosQueueTable extends Migration
         if (!Schema::hasColumn("youtube_videos_queue", "video_id")) {
             Schema::table("youtube_videos_queue", function (Blueprint $table) {
                 $table->longText('video_id')->nullable()->default(null);
-                $table->index('video_id');
+                // $table->index('video_id');
             });
         }
     }
