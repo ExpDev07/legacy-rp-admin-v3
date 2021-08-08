@@ -427,13 +427,20 @@
             <template #header>
                 <h2>
                     {{ t('players.form.warnings') }} ({{ player.warnings }})
+                    <select class="inline-block ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
+                            id="warningFilter" @change="filterWarnings">
+                        <option value="all" selected>{{ t('global.all') }}</option>
+                        <option value="warning">{{ t('players.show.warning_type.warning') }}</option>
+                        <option value="note">{{ t('players.show.warning_type.note') }}</option>
+                    </select>
                 </h2>
             </template>
 
             <template>
                 <card
-                    v-for="(warning) in warnings"
+                    v-for="(warning) in filteredWarnings"
                     :key="warning.id"
+                    class="relative"
                 >
                     <template #header>
                         <div class="flex items-center justify-between">
@@ -445,6 +452,8 @@
                                 />
                                 <h4>
                                     {{ warning.issuer.playerName }}
+                                    -
+                                    <span v-html="wrapWarningType(warning.warningType)">{{ wrapWarningType(warning.warningType) }}</span>
                                 </h4>
                             </div>
                             <div class="flex items-center">
@@ -492,7 +501,7 @@
                         <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" :id="'warning_' + warning.id" v-else-if="warningEditId === warning.id">{{ warning.message }}</textarea>
                     </template>
                 </card>
-                <p class="text-muted dark:text-dark-muted" v-if="warnings.length === 0">
+                <p class="text-muted dark:text-dark-muted" v-if="filteredWarnings.length === 0">
                     {{ t('players.show.no_warnings') }}
                 </p>
             </template>
@@ -514,10 +523,13 @@
                     >
                     </textarea>
 
-                    <button class="px-5 py-2 font-semibold text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                            type="submit">
-                        <i class="mr-1 fas fa-exclamation"></i>
-                        {{ t('players.warning.do') }}
+                    <button class="px-5 py-2 font-semibold text-white bg-red-500 dark:bg-red-500 rounded" @click="form.warning.warning_type = 'warning'" type="submit">
+                        <i class="mr-1 fas fa-exclamation-triangle"></i>
+                        {{ t('players.warning.do_warn') }}
+                    </button>
+                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-yellow-400 dark:bg-yellow-500 rounded" @click="form.warning.warning_type = 'note'" type="submit">
+                        <i class="mr-1 fas fa-sticky-note"></i>
+                        {{ t('players.warning.do_note') }}
                     </button>
                 </form>
             </template>
@@ -609,6 +621,7 @@ export default {
             isTempBanning: false,
             isTempSelect: true,
             warningEditId: 0,
+            filteredWarnings: this.warnings,
             form: {
                 ban: {
                     reason: null,
@@ -624,12 +637,30 @@ export default {
                 },
                 warning: {
                     message: null,
+                    warning_type: null,
                 },
             },
             isShowingDeletedCharacters: false,
         }
     },
     methods: {
+        wrapWarningType(type) {
+            const label = this.t('players.show.warning_type.' + type);
+
+            switch(type) {
+                case 'warning':
+                    return '<span class="italic text-red-500"><i class="fas fa-exclamation-triangle"></i> ' + label + '</span>';
+                case 'note':
+                    return '<span class="italic text-yellow-400"><i class="fas fa-sticky-note"></i> ' + label + '</span>';
+            }
+
+            return '';
+        },
+        filterWarnings() {
+            const filter = $('#warningFilter').val();
+
+            this.filteredWarnings = this.warnings.filter((w) => !filter || filter === 'all' || w.warningType === filter);
+        },
         localizeBan() {
             if (!this.player.ban) {
                 return '';
@@ -725,6 +756,7 @@ export default {
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', {...this.form.ban, expire});
 
             this.local.ban = this.localizeBan();
+            this.filterWarnings();
 
             // Reset.
             this.isBanning = false;
@@ -739,6 +771,8 @@ export default {
             // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/warnings', this.form.warning);
 
+            this.filterWarnings();
+
             // Reset.
             this.form.warning.message = null;
         },
@@ -747,6 +781,8 @@ export default {
             await this.$inertia.put('/players/' + this.player.steamIdentifier + '/warnings/' + id, {
                 message: $('#warning_' + id).val(),
             });
+
+            this.filterWarnings();
 
             // Reset.
             this.warningEditId = 0;

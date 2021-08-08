@@ -292,7 +292,7 @@
             "steam": "Open Steam profile",
             "discord": "Open Discord profile",
             "discord_copy": "Copy Discord Info to clipboard",
-            "no_warnings": "This player has not received any warnings.",
+            "no_warnings": "This player has not received any warnings or notes.",
             "no_panel_logs": "This player has no panel logs.",
             "edit_ban": "Edit Ban",
             "kick": "Kick Player",
@@ -306,19 +306,24 @@
             "unload": "Unload Players Character",
             "unload_confirm": "Are you sure you want to unload this players character? This will send them to the character selection screen.",
             "warning_edited": "Edited",
-            "warning_edited_title": "Edited on {0}"
+            "warning_edited_title": "Edited on {0}",
+            "warning_type": {
+                "warning": "Warning",
+                "note": "Note"
+            }
         },
         "form": {
             "identifier": "Identifier",
             "name": "Name",
             "playtime": "Playtime",
-            "warnings": "Warnings",
+            "warnings": "Warnings/Notes",
             "banned": "Banned"
         },
         "warning": {
-            "give": "Give warning",
+            "give": "Add warning/note",
             "placeholder": "{0} did an oopsie.",
-            "do": "Warn player"
+            "do_warn": "Add as warning",
+            "do_note": "Add as note"
         },
         "job": {
             "job": "Job",

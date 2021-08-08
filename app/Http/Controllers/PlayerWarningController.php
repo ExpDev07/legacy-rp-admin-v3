@@ -22,7 +22,7 @@ class PlayerWarningController extends Controller
         $player->warnings()->create(array_merge($request->validated(), [
             'issuer_id' => $request->user()->player->user_id,
         ]));
-        return back()->with('success', 'The player has successfully been warned.');
+        return back()->with('success', 'Warning/Note has been added successfully.');
     }
 
     /**
@@ -38,12 +38,12 @@ class PlayerWarningController extends Controller
         $staffIdentifier = $request->user()->player->steam_identifier;
         $issuer = $warning->issuer()->first();
         if (!$issuer || $staffIdentifier !== $issuer->steam_identifier) {
-            return back()->with('error', 'You can only edit your own warnings!');
+            return back()->with('error', 'You can only edit your own warnings/notes!');
         }
 
         $warning->update($request->validated());
 
-        return back()->with('success', 'Successfully updated warning');
+        return back()->with('success', 'Successfully updated warning/note');
     }
 
     /**
@@ -53,10 +53,10 @@ class PlayerWarningController extends Controller
      * @param Warning $warning
      * @return RedirectResponse
      */
-    public function destroy(Player $player, Warning $warning)
+    public function destroy(Player $player, Warning $warning): RedirectResponse
     {
         $warning->forceDelete();
-        return back()->with('success', 'The warning has successfully been deleted from the player\'s record.');
+        return back()->with('success', 'The warning/note has successfully been deleted from the player\'s record.');
     }
 
 }
