@@ -22,7 +22,7 @@ class CreateTokensTable extends Migration
         if (!Schema::hasColumn("tokens", "token")) {
             Schema::table("tokens", function (Blueprint $table) {
                 $table->longText('token')->nullable()->default(null);
-                $table->index('token');
+                // $table->index('token');
             });
         }
     }
