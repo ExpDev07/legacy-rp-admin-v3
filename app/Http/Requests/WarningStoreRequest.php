@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Warning;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class WarningStoreRequest extends FormRequest
 {
@@ -15,7 +17,8 @@ class WarningStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => ['required'],
+            'message'      => ['required'],
+            'warning_type' => ['required', Rule::in(Warning::ValidTypes)],
         ];
     }
 

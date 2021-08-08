@@ -12,6 +12,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Warning extends Model
 {
+    const ValidTypes = [
+        self::TypeNote,
+        self::TypeWarning,
+    ];
+
+    const TypeNote    = 'note';
+    const TypeWarning = 'warning';
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +28,7 @@ class Warning extends Model
     protected $fillable = [
         'issuer_id',
         'message',
+        'warning_type',
     ];
 
     /**

@@ -14,7 +14,7 @@ class UpdatePanelLogsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('panel_logs', 'log')) {
+        if (!Schema::hasColumn('panel_logs', 'log')) {
             Schema::table('panel_logs', function (Blueprint $table) {
                 $table->longText('log')->change();
             });
@@ -28,11 +28,9 @@ class UpdatePanelLogsTable extends Migration
      */
     public function down()
     {
-        if (Schema::hasColumn('panel_logs', 'log')) {
-            Schema::table('panel_logs', function (Blueprint $table) {
-                $table->string('log')->change();
-            });
-        }
+        Schema::table('panel_logs', function (Blueprint $table) {
+            $table->dropColumn('log');
+        });
     }
 
 }

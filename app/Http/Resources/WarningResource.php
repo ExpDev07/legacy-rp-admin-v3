@@ -17,12 +17,13 @@ class WarningResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'id'        => $this->id,
-            'message'   => $this->message,
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
-            'player'    => new PlayerResource($this->player),
-            'issuer'    => new PlayerResource($this->issuer),
+            'id'          => $this->id,
+            'message'     => $this->message,
+            'warningType' => $this->warning_type,
+            'createdAt'   => $this->created_at,
+            'updatedAt'   => $this->updated_at,
+            'player'      => new PlayerResource($this->player),
+            'issuer'      => new PlayerResource($this->issuer),
         ];
     }
 
