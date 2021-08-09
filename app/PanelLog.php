@@ -103,6 +103,23 @@ class PanelLog extends Model
     }
 
     /**
+     * Logs spawn resets from the panel
+     *
+     * @param string $fromIdentifier
+     * @param string $toIdentifier
+     * @param string $characterId
+     * @param string $spawn
+     */
+    public static function logSpawnReset(string $fromIdentifier, string $toIdentifier, string $characterId, string $spawn)
+    {
+        $from = self::resolvePlayerLogName($fromIdentifier);
+        $to = self::resolvePlayerLogName($toIdentifier);
+
+        $log = $from . ' reset spawn point (spawn: ' . $spawn . ') character ' . $characterId . ' of ' . $to;
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Spawn reset');
+    }
+
+    /**
      * Logs a staffPM sent from the panel
      *
      * @param string $fromIdentifier

@@ -23,7 +23,7 @@
 
             <template>
                 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg"
-                     v-if="inventory.type === 'character'">
+                     v-if="inventory.type === 'character' || inventory.type === 'locker-police' || inventory.type === 'locker-mechanic' || inventory.type === 'locker-ems'">
                     <card v-if="inventory.character">
                         <template #header>
                             <h3 class="mb-2">

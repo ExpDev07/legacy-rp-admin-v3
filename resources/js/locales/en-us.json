@@ -199,6 +199,8 @@
     "inventories": {
         "view": "View related inventory logs",
         "show_inv": "Show inventory",
+        "show_trunk": "Show trunk inventory",
+        "show_glovebox": "Show glovebox inventory",
         "show": {
             "error": "Invalid Inventory",
             "title": "Inventory",
@@ -207,7 +209,12 @@
                 "character": "This is a character inventory.",
                 "trunk": "This inventory is the trunk of a vehicle.",
                 "glovebox": "This inventory is the glovebox of a vehicle.",
-                "property": "This inventory is a storage container inside a property."
+                "property": "This inventory is a storage container inside a property.",
+                "evidence": "This inventory is the evidence locker of a police department.",
+                "locker-police": "This inventory is someones police locker.",
+                "locker-mechanic": "This inventory is someones mechanic locker.",
+                "locker-ems": "This inventory is someones ems locker.",
+                "motel": "This inventory is a storage container inside a motel."
             },
             "vehicle": "Vehicle",
             "owner": "Vehicle Owner",
@@ -301,7 +308,7 @@
             "kick_reason": "Reason",
             "pm_message": "Message",
             "pm_confirm": "Send StaffPM",
-            "panel_logs": "Latest 25 Panel Logs",
+            "panel_logs": "Latest 10 Panel Logs",
             "delete_character": "Are you sure you want to delete this character?",
             "unload": "Unload Players Character",
             "unload_confirm": "Are you sure you want to unload this players character? This will send them to the character selection screen.",
@@ -357,7 +364,7 @@
             "none": "This player has not created any characters yet.",
             "remove_tattoo": "Remove Characters Tattoos",
             "sure_tattoos": "Are you sure you want to remove this characters tattoos?",
-            "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to log-out (soft-nap) and log back in to the game for the changes to take affect.</b>",
+            "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to log-out (soft-nap) and log back in to the game for the changes to take effect.</b>",
             "tattoo_do": "Remove tattoos",
             "tattoo_zone": "Tattoo Body-Part",
             "delete": "Delete this character",
@@ -370,6 +377,17 @@
                 "left_leg": "Left Leg",
                 "right_leg": "Right Leg"
             },
+            "reset_spawn": "Reset Spawn-Point",
+            "sure_spawn": "Are you sure you want to reset this characters spawn-point?",
+            "spawn_point": "Reset location",
+            "spawn": {
+                "airport": "Airport",
+                "sandy": "Sandy Shores",
+                "zancudo": "Zancudo Clothing-Store",
+                "paleto": "Paleto"
+            },
+            "spawn_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to be logged out (soft-napping) for the changes to take effect.</b>",
+            "spawn_do": "Reset Spawn-Point",
             "vehicle": {
                 "edit": "Edit Vehicle",
                 "owner": "Owner CID",

@@ -59,6 +59,7 @@ class Character extends Model
         'character_deletion_timestamp',
 
         'tattoos_data',
+        'coords',
     ];
 
     /**

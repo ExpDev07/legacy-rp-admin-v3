@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Character;
 use App\Http\Resources\InventoryLogResource;
 use App\Inventory;
-use App\Log;
 use App\Player;
 use App\Property;
 use App\Vehicle;
@@ -13,7 +12,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -140,6 +138,51 @@ class InventoryController extends Controller
             'inventory' => $inventory,
             'contents'  => $contents,
         ]);
+    }
+
+    /**
+     * Finds an inventory of a certain type.
+     *
+     * @param string $type
+     * @param string $id
+     * @param Request $request
+     * @return RedirectResponse|\Illuminate\Http\Response
+     */
+    public function find(string $type, string $id, Request $request)
+    {
+        if (!is_numeric($id)) {
+            return (new \Illuminate\Http\Response(json_encode(['error' => 'Invalid inventory id']), 200))
+                ->header('Content-Type', 'application/json');
+        }
+
+        $inv = null;
+        switch ($type) {
+            case 'trunk':
+                $inv = DB::table('inventories')
+                    ->where('inventory_name', 'LIKE', '%trunk-%')
+                    ->where('inventory_name', 'LIKE', '%-' . $id)
+                    ->select(['inventory_name'])->first();
+                break;
+            case 'glovebox':
+                $inv = DB::table('inventories')
+                    ->where('inventory_name', 'LIKE', '%glovebox-%')
+                    ->where('inventory_name', 'LIKE', '%-' . $id)
+                    ->select(['inventory_name'])->first();
+                break;
+        }
+
+        if ($inv) {
+            $url = '/inventory/' . $inv->inventory_name . ':1';
+
+            if ($request->query('json')) {
+                return (new \Illuminate\Http\Response(json_encode(['redirect' => $url]), 200))
+                    ->header('Content-Type', 'application/json');
+            }
+            return redirect($url);
+        } else {
+            return (new \Illuminate\Http\Response(json_encode(['error' => 'Inventory not found']), 200))
+                ->header('Content-Type', 'application/json');
+        }
     }
 
     /**

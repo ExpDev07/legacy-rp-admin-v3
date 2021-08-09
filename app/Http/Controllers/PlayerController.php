@@ -117,7 +117,7 @@ class PlayerController extends Controller
             'player'     => new PlayerResource($player),
             'characters' => CharacterResource::collection($player->characters),
             'warnings'   => WarningResource::collection($player->warnings()->oldest()->get()),
-            'panelLogs'  => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(25)->get()),
+            'panelLogs'  => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
             'discord'    => $player->getDiscordInfo(),
             'kickReason' => trim($request->query('kick')) ?? '',
         ]);

@@ -132,12 +132,14 @@ class PlayerCharacterController extends Controller
      */
     public function edit(Player $player, Character $character): Response
     {
+        $resetCoords = json_decode(file_get_contents(__DIR__ . '/../../../helpers/coords_reset.json'), true);
         $motels = Motel::query()->where('cid', $character->character_id)->get()->sortBy(['motel', 'room_id']);
 
         return Inertia::render('Players/Characters/Edit', [
-            'player'    => new PlayerResource($player),
-            'character' => new CharacterResource($character),
-            'motels'    => $motels->toArray(),
+            'player'      => new PlayerResource($player),
+            'character'   => new CharacterResource($character),
+            'motels'      => $motels->toArray(),
+            'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
         ]);
     }
 
@@ -272,6 +274,37 @@ class PlayerCharacterController extends Controller
         }
 
         return back()->with('success', 'Tattoos were removed successfully. ' . $info);
+    }
+
+    /**
+     * Removes a characters tattoos
+     *
+     * @param Player $player
+     * @param Character $character
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function resetSpawn(Player $player, Character $character, Request $request): RedirectResponse
+    {
+        $spawn = $request->get('spawn');
+        $resetCoords = json_decode(file_get_contents(__DIR__ . '/../../../helpers/coords_reset.json'), true);
+
+        if (!$resetCoords || !is_array($resetCoords)) {
+            return back()->with('error', 'Failed to load spawn points');
+        }
+
+        if (!$spawn || !isset($resetCoords[$spawn])) {
+            return back()->with('error', 'Invalid or no spawn provided');
+        }
+
+        $character->update([
+            'coords' => json_encode($resetCoords[$spawn]),
+        ]);
+
+        $user = $request->user();
+        PanelLog::logSpawnReset($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $spawn);
+
+        return back()->with('success', 'Spawn was reset successfully.');
     }
 
     /**

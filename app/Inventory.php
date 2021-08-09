@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\In;
 
 /**
@@ -18,9 +19,7 @@ class Inventory
         'glovebox',
         'ground',
         'property',
-        'locker-mechanic',
-        'locker-police',
-        'locker-ems',
+        'locker-\w+?',
         'motel-\w+?',
         'evidence',
     ];
@@ -30,28 +29,28 @@ class Inventory
      *
      * @var string
      */
-    public string $title;
+    public string $title = '';
 
     /**
      * The Inventory descriptor (e.g. "trunk-4-15214:31")
      *
      * @var string
      */
-    public string $descriptor;
+    public string $descriptor = '';
 
     /**
      * The type of inventory. Can be ("ground", "character", "glovebox", "trunk", etc.)
      *
      * @var string
      */
-    public string $type;
+    public string $type = '';
 
     /**
      * The id of the inventory
      *
      * @var string
      */
-    public string $id;
+    public string $id = '';
 
     /**
      * Contains additional information
@@ -130,9 +129,16 @@ class Inventory
         $inventory->title = $type . '-' . $server . $id;
         $inventory->id = $id;
 
+        if (Str::contains($inventory->type, 'motel')) {
+            $inventory->type = explode('-', $inventory->type)[0];
+        }
+
         switch ($type) {
             case 'ground':
             case 'character':
+            case 'locker-police':
+            case 'locker-mechanic':
+            case 'locker-ems':
                 if (!is_numeric($id)) {
                     return new Inventory($descriptor);
                 }
@@ -162,7 +168,7 @@ class Inventory
 
                 break;
             default:
-                return new Inventory($descriptor);
+                return $inventory;
         }
 
         return $inventory;
@@ -194,6 +200,10 @@ class Inventory
      */
     public static function parseDescriptor(string $descriptor): Inventory
     {
+        if (!Str::contains($descriptor, ':')) {
+            $descriptor .= ':1';
+        }
+
         return self::parseLogDetails('from inventory ' . $descriptor, 'from');
     }
 
@@ -213,14 +223,15 @@ class Inventory
     /**
      * Loads
      *
-     * @return Inventory|null
+     * @return Inventory
      */
-    public function get(): ?Inventory
+    public function get(): Inventory
     {
         switch ($this->type) {
-            case 'ground':
-                return $this;
             case 'character':
+            case 'locker-police':
+            case 'locker-mechanic':
+            case 'locker-ems':
                 $query = Character::query()->where('character_id', $this->id);
                 $this->character = $query->first();
                 return $this;
@@ -249,7 +260,7 @@ class Inventory
                 }
                 return $this;
             default:
-                return null;
+                return $this;
         }
     }
 }

@@ -65,6 +65,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);
     Route::get('/inventories/property/{property}', [InventoryController::class, 'property']);
     Route::get('/inventory/{inventory}', [InventoryController::class, 'show']);
+    Route::get('/inventory_find/{type}/{id}', [InventoryController::class, 'find']);
     Route::delete('/inventory/{inventory}/clear/{slot}', [InventoryController::class, 'clear']);
 
     // Advanced search.
@@ -88,6 +89,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('vehicles/delete/{vehicle}', [PlayerCharacterController::class, 'deleteVehicle']);
     Route::post('vehicles/edit/{vehicle}', [PlayerCharacterController::class, 'editVehicle']);
     Route::post('/players/{player}/characters/{character}/removeTattoos', [PlayerCharacterController::class, 'removeTattoos']);
+    Route::post('/players/{player}/characters/{character}/resetSpawn', [PlayerCharacterController::class, 'resetSpawn']);
 
     // Servers.
     Route::resource('servers', ServerController::class);

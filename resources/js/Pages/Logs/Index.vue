@@ -375,7 +375,7 @@ export default {
             return details;
         },
         parseLog(details) {
-            const regex = /(to|from) (inventory )?((trunk|glovebox|character|property)-(\d+-)?\d+:\d+)/gmi;
+            const regex = /(to|from) (inventory )?((trunk|glovebox|character|property|motel-\w+?|evidence|ground|locker-\w+?)-(\d+-)?\d+:\d+)/gmi;
 
             let inventories = [];
 

@@ -351,6 +351,7 @@
                         v-for="(character) in characters"
                         :key="character.id"
                         v-bind:deleted="character.characterDeleted"
+                        class="relative"
                     >
                         <template #header>
                             <h3 class="mb-2">
@@ -396,12 +397,12 @@
                                     {{ t('inventories.view') }}
                                 </inertia-link>
                                 <inertia-link
-                                    class="block w-full px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
+                                    class="block px-2 py-1 text-center text-white absolute top-1 right-1 bg-blue-600 dark:bg-blue-400 rounded"
                                     :href="'/inventory/character-' + character.id + ':1'"
+                                    :title="t('inventories.show_inv')"
                                     v-if="$page.auth.player.isSuperAdmin"
                                 >
-                                    <i class="fas fa-box mr-1"></i>
-                                    {{ t('inventories.show_inv') }}
+                                    <i class="fas fa-box"></i>
                                 </inertia-link>
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
