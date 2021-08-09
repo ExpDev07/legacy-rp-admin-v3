@@ -128,8 +128,15 @@ export default {
                     return 'bg-blue-700 hover:bg-blue-600 text-white';
                 case 'glovebox':
                     return 'bg-indigo-700 hover:bg-indigo-600 text-white';
+                case 'motel':
                 case 'property':
                     return 'bg-yellow-400 hover:bg-yellow-400 text-black';
+                case 'locker-police':
+                case 'locker-ems':
+                case 'locker-mechanic':
+                    return 'bg-pink-400 hover:bg-pink-400 text-black';
+                case 'evidence':
+                    return 'bg-purple-400 hover:bg-purple-400 text-black';
                 default:
                     return 'bg-gray-800 hover:bg-gray-700 text-white';
             }
