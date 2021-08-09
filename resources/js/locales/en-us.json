@@ -207,7 +207,12 @@
                 "character": "This is a character inventory.",
                 "trunk": "This inventory is the trunk of a vehicle.",
                 "glovebox": "This inventory is the glovebox of a vehicle.",
-                "property": "This inventory is a storage container inside a property."
+                "property": "This inventory is a storage container inside a property.",
+                "evidence": "This inventory is the evidence locker of a police department.",
+                "locker-police": "This inventory is someones police locker.",
+                "locker-mechanic": "This inventory is someones mechanic locker.",
+                "locker-ems": "This inventory is someones ems locker.",
+                "motel": "This inventory is a storage container inside a motel."
             },
             "vehicle": "Vehicle",
             "owner": "Vehicle Owner",
