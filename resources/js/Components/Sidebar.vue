@@ -147,11 +147,6 @@ export default {
                             label: this.t('statistics.title'),
                             icon: 'statistics',
                             url: '/statistics',
-                        },
-                        {
-                            label: this.t('inventories.search.label'),
-                            icon: 'pallet',
-                            url: '/search_inventory',
                         }
                     ]
                 },
@@ -179,6 +174,11 @@ export default {
                             label: this.t('sidebar.suspicious'),
                             icon: 'heart',
                             url: '/suspicious',
+                        },
+                        {
+                            label: this.t('inventories.search.label'),
+                            icon: 'pallet',
+                            url: '/search_inventory',
                         }
                     ]
                 },
