@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Character;
 use App\Http\Resources\InventoryLogResource;
 use App\Inventory;
+use App\Motel;
 use App\Player;
 use App\Property;
 use App\Vehicle;
@@ -300,12 +301,42 @@ class InventoryController extends Controller
                 break;
             case 'evidence':
                 if ($evidenceId) {
-                    // TODO: when Ben gets back to me on how evidence lockers work
+                    $invs = DB::table('inventories')
+                        ->where('inventory_name', 'LIKE', 'evidence-' . $evidenceId . '-%')
+                        ->groupBy(['inventory_name'])
+                        ->select(['inventory_name'])->get()->toArray();
+
+                    foreach ($invs as $inv) {
+                        $split = explode('-', $inv->inventory_name);
+                        if (sizeof($split) !== 3) {
+                            continue;
+                        }
+
+                        $inventories[] = ['name' => 'Evidence ' . $split[2], 'id' => $inv->inventory_name];
+                    }
                 }
                 break;
             case 'motel':
                 if ($character) {
-                    // TODO: when Ben gets back to me on how motels work
+                    $map = json_decode(file_get_contents(__DIR__ . '/../../../helpers/motels.json'), true);
+
+                    if (is_array($map) && !empty($map)) {
+                        $motels = Motel::query()
+                            ->where('cid', '=', $character->character_id)
+                            ->select(['motel', 'room_id'])
+                            ->get()->toArray();
+
+                        foreach ($motels as $motel) {
+                            $id = isset($map[$motel['motel']]) ? $map[$motel['motel']] : null;
+
+                            if ($id) {
+                                $inventories[] = [
+                                    'name' => $motel['motel'] . ' (Room ' . $motel['room_id'] . ')',
+                                    'id'   => 'motel-' . $id . '-' . $motel['room_id'],
+                                ];
+                            }
+                        }
+                    }
                 }
                 break;
             case 'property':
@@ -352,7 +383,7 @@ class InventoryController extends Controller
                 'inventory_type'        => $request->input('inventory_type') ?? 'character',
                 'inventory_cid'         => $request->input('inventory_cid'),
                 'inventory_plate_id'    => $request->input('inventory_plate_id'),
-                'inventory_evidence_id' => $request->input('inventory_evidence_id'),
+                'inventory_evidence_id' => $request->input('inventory_evidence_id') ?? 1,
             ],
         ]);
     }
