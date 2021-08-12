@@ -384,7 +384,7 @@ export default {
             }
         });
 
-        while (maxSlot === 0 || maxSlot % 5 !== 0) {
+        while (maxSlot % 5 !== 0) {
             maxSlot++;
         }
 
