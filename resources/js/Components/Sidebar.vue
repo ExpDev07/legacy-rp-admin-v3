@@ -147,6 +147,11 @@ export default {
                             label: this.t('statistics.title'),
                             icon: 'statistics',
                             url: '/statistics',
+                        },
+                        {
+                            label: this.t('inventories.search.label'),
+                            icon: 'pallet',
+                            url: '/search_inventory',
                         }
                     ]
                 },
@@ -195,6 +200,8 @@ export default {
             switch(length) {
                 case 2:
                     return 'h-side-close hover:h-side-open-two';
+                case 3:
+                    return 'h-side-close hover:h-side-open-three';
                 default:
                     return '';
             }

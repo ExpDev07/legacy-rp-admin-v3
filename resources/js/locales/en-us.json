@@ -15,6 +15,7 @@
         "view_map": "View on Live-Map",
         "yes": "Yes",
         "no": "No",
+        "do_search": "Search",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -201,6 +202,24 @@
         "show_inv": "Show inventory",
         "show_trunk": "Show trunk inventory",
         "show_glovebox": "Show glovebox inventory",
+        "search": {
+            "title": "Search Inventories",
+            "label": "Inventories",
+            "type": "Inventory Type",
+            "types": {
+                "character": "Locker and Pockets (Police/EMS/etc.)",
+                "vehicle": "Vehicle (Trunk/Glove-box)",
+                "evidence": "Evidence Locker",
+                "motel": "Motels",
+                "property": "Property"
+            },
+            "cid": "CID (Owner/Character)",
+            "plate_id": "Plate / ID",
+            "evidence_id": "Evidence ID",
+            "name": "Inventory Descriptor",
+            "id": "Inventory ID",
+            "none": "No inventories matching your search or no not-empty inventories found"
+        },
         "show": {
             "error": "Invalid Inventory",
             "title": "Inventory",

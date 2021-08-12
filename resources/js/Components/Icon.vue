@@ -54,6 +54,7 @@
     <i class="fas fa-map" v-else-if="name === 'map'"></i>
     <i class="fas fa-server" v-else-if="name === 'server'"></i>
     <i class="fas fa-chart-line" v-else-if="name === 'statistics'"></i>
+    <i class="fas fa-pallet" v-else-if="name === 'pallet'"></i>
 </template>
 
 <script>

@@ -73,7 +73,7 @@
                     <td class="px-6 py-3 border-t mobile:block">{{ ban.timestamp | formatTime }}</td>
                 </tr>
                 <tr v-if="bans.length === 0">
-                    <td class="px-6 py-6 text-center border-t" colspan="100%">
+                    <td class="px-6 py-6 text-center border-t" colspan="4">
                         {{ t('home.no_bans') }}
                     </td>
                 </tr>
