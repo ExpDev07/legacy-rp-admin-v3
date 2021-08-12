@@ -290,7 +290,7 @@
                     </card>
                 </div>
 
-                <card v-if="cleanContents" class="w-inventory_contents max-w-full">
+                <card v-if="cleanContents && $page.auth.player.isSuperAdmin" class="w-inventory_contents max-w-full">
                     <template #header>
                         <h3 class="mb-2">
                             {{ t('inventories.show.contents') }}
@@ -384,7 +384,7 @@ export default {
             }
         });
 
-        while (maxSlot % 5 !== 0) {
+        while (maxSlot === 0 || maxSlot % 5 !== 0) {
             maxSlot++;
         }
 
