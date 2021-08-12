@@ -45,10 +45,11 @@ module.exports = {
                 'inventory_slot':     '100px',
             },
             height: {
-                'side-close':     '40px',
-                'side-open-two':  '134px',
-                'max':            'calc(100vh - (210px + 120px))',
-                'inventory_slot': '100px',
+                'side-close':      '40px',
+                'side-open-two':   '134px',
+                'side-open-three': '180px',
+                'max':             'calc(100vh - (210px + 120px))',
+                'inventory_slot':  '100px',
             },
             minWidth: {
                 'input': '200px'

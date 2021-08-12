@@ -67,6 +67,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/inventory/{inventory}', [InventoryController::class, 'show']);
     Route::get('/inventory_find/{type}/{id}', [InventoryController::class, 'find']);
     Route::delete('/inventory/{inventory}/clear/{slot}', [InventoryController::class, 'clear']);
+    Route::get('/search_inventory', [InventoryController::class, 'search']);
 
     // Advanced search.
     Route::get('/advanced', [AdvancedSearchController::class, 'index']);

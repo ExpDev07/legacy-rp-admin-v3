@@ -159,13 +159,13 @@ class InventoryController extends Controller
         switch ($type) {
             case 'trunk':
                 $inv = DB::table('inventories')
-                    ->where('inventory_name', 'LIKE', '%trunk-%')
+                    ->where('inventory_name', 'LIKE', 'trunk-%')
                     ->where('inventory_name', 'LIKE', '%-' . $id)
                     ->select(['inventory_name'])->first();
                 break;
             case 'glovebox':
                 $inv = DB::table('inventories')
-                    ->where('inventory_name', 'LIKE', '%glovebox-%')
+                    ->where('inventory_name', 'LIKE', 'glovebox-%')
                     ->where('inventory_name', 'LIKE', '%-' . $id)
                     ->select(['inventory_name'])->first();
                 break;
@@ -220,6 +220,141 @@ class InventoryController extends Controller
             ->delete();
 
         return back()->with('success', 'Cleared slot ' . $slot . ' in inventory ' . $name);
+    }
+
+    /**
+     * Search for inventories
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function search(Request $request): Response
+    {
+        $inventories = [];
+
+        $cid = intval($request->input('inventory_cid')) ?? null;
+        $plate = trim($request->input('inventory_plate_id')) ?? null;
+        $evidenceId = intval($request->input('inventory_evidence_id')) ?? null;
+
+        $character = null;
+        $vehicle = null;
+        switch ($request->input('inventory_type')) {
+            case 'character':
+            case 'motel':
+            case 'property':
+                if ($cid) {
+                    $character = Character::query()->where('character_id', '=', $cid)->first();
+                }
+                break;
+            case 'vehicle':
+                if ($plate) {
+                    if (is_numeric($plate)) {
+                        $vehicle = Vehicle::query()->where('vehicle_id', '=', intval($plate))->first();
+                    } else {
+                        $vehicle = Vehicle::query()->where('plate', '=', $plate)->first();
+                    }
+                }
+                break;
+        }
+
+        switch ($request->input('inventory_type')) {
+            case 'character':
+                if ($character) {
+                    $name = $character->first_name . ' ' . $character->last_name;
+                    $id = $character->character_id;
+
+                    $inventories = [
+                        ['name' => $name . ' Pockets', 'id' => 'character-' . $id],
+                        ['name' => $name . ' PD Locker', 'id' => 'locker-police-' . $id],
+                        ['name' => $name . ' EMS Locker', 'id' => 'locker-ems-' . $id],
+                        ['name' => $name . ' Mechanic Locker', 'id' => 'locker-mechanic-' . $id],
+                    ];
+                }
+                break;
+            case 'vehicle':
+                if ($vehicle) {
+                    $trunk = DB::table('inventories')
+                        ->where('inventory_name', 'LIKE', 'trunk-%')
+                        ->where('inventory_name', 'LIKE', '%-' . $vehicle->vehicle_id)
+                        ->select(['inventory_name'])->first();
+
+                    if ($trunk) {
+                        $inventories[] = [
+                            'name' => 'Trunk (' . $vehicle->plate . ')',
+                            'id'   => $trunk->inventory_name,
+                        ];
+                    }
+
+                    $glove = DB::table('inventories')
+                        ->where('inventory_name', 'LIKE', 'glovebox-%')
+                        ->where('inventory_name', 'LIKE', '%-' . $vehicle->vehicle_id)
+                        ->select(['inventory_name'])->first();
+
+                    if ($glove) {
+                        $inventories[] = [
+                            'name' => 'Glove-box (' . $vehicle->plate . ')',
+                            'id'   => $glove->inventory_name,
+                        ];
+                    }
+                }
+                break;
+            case 'evidence':
+                if ($evidenceId) {
+                    // TODO: when Ben gets back to me on how evidence lockers work
+                }
+                break;
+            case 'motel':
+                if ($character) {
+                    // TODO: when Ben gets back to me on how motels work
+                }
+                break;
+            case 'property':
+                if ($character) {
+                    $properties = Property::query()
+                        ->where('property_renter_cid', '=', $character->character_id)
+                        ->select([
+                            'property_address',
+                            'property_id',
+                        ])->get()->toArray();
+
+                    if (!empty($properties)) {
+                        $query = DB::table('inventories');
+                        $names = [];
+                        foreach ($properties as $property) {
+                            $names[$property['property_id']] = $property['property_address'];
+
+                            $query->orWhere('inventory_name', 'LIKE', 'property-' . $property['property_id'] . '-%');
+                        }
+
+                        $inv = $query->groupBy(['inventory_name'])->select(['inventory_name'])->get()->toArray();
+                        foreach ($inv as $inventory) {
+                            $split = explode('-', $inventory->inventory_name);
+                            if (sizeof($split) !== 3) {
+                                continue;
+                            }
+
+                            $id = $split[1];
+                            $container = $split[2];
+
+                            $inventories[] = [
+                                'name' => $names[$id . ''] . ' (Container ' . $container . ')',
+                                'id'   => $inventory->inventory_name,
+                            ];
+                        }
+                    }
+                }
+                break;
+        }
+
+        return Inertia::render('Inventories/Search', [
+            'inventories' => $inventories,
+            'filters'     => [
+                'inventory_type'        => $request->input('inventory_type') ?? 'character',
+                'inventory_cid'         => $request->input('inventory_cid'),
+                'inventory_plate_id'    => $request->input('inventory_plate_id'),
+                'inventory_evidence_id' => $request->input('inventory_evidence_id'),
+            ],
+        ]);
     }
 
 }
