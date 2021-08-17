@@ -11,6 +11,72 @@ class SuspiciousChecker
 {
     const CacheTime = 10 * 60;
 
+    const IgnoreUnusualMovement = [
+        'Snowballs'      => 1500,
+        'Water'          => 1500,
+        'Weed 1oz'       => 700,
+        'Weed 1q'        => 700,
+        'Cocaine Bag'    => 750,
+        'Acid'           => 400,
+        'Fertilizer'     => 500,
+        'Sub Ammo'       => 650,
+        'Rifle Ammo'     => 650,
+        'Shotgun Ammo'   => 350,
+        'Cheeseburger'   => 500,
+        'Hamburger'      => 500,
+        'Thermite'       => 500,
+        'Coke'           => 700,
+        'First Aid Kit'  => 400,
+        'Weed Seeds'     => 800,
+        'Joint'          => 800,
+        'Scrap Metal'    => 700,
+        'Pistol Ammo'    => 600,
+        'Aluminium'      => 600,
+        'Steel'          => 600,
+        'Silver Watches' => 350,
+        'Gold Watches'   => 350,
+        'Necklaces'      => 500,
+    ];
+
+    /**
+     * Items ids that cannot be obtained naturally
+     */
+    const UnusualItems = [
+        'weapon_unarmed',
+        'weapon_flaregun',
+        'weapon_raypistol',
+        'weapon_ceramicpistol',
+        'weapon_navyrevolver',
+        'weapon_raycarbine',
+        'weapon_mg',
+        'weapon_combatmg',
+        'weapon_combatmg_mk2',
+        'weapon_sniperrifle',
+        'weapon_heavysniper',
+        'weapon_heavysniper_mk2',
+        'weapon_marksmanrifle',
+        'weapon_marksmanrifle_mk2',
+        'weapon_rpg',
+        'weapon_grenadelauncher',
+        'weapon_grenadelauncher_smoke',
+        'weapon_minigun',
+        'weapon_firework',
+        'weapon_railgun',
+        'weapon_hominglauncher',
+        'weapon_compactlauncher',
+        'weapon_rayminigun',
+        'weapon_grenade',
+        'weapon_bzgas',
+        'weapon_molotov',
+        'weapon_stickybomb',
+        'weapon_proxmine',
+        'weapon_pipebomb',
+        'weapon_ball',
+        'weapon_smokegrenade',
+        'weapon_flare',
+        'weapon_hazardcan',
+    ];
+
     /**
      * Non stackable items that cannot be obtained naturally
      */
@@ -43,7 +109,6 @@ class SuspiciousChecker
         'Flare',
     ];
 
-
     /**
      * Finds items that cant be obtained in the city
      *
@@ -68,13 +133,36 @@ class SuspiciousChecker
     }
 
     /**
+     * Finds inventories containing a lot of items of the same type
+     *
+     * @return array
+     */
+    public static function findUnusualInventories(): array
+    {
+        $items = self::UnusualItems;
+        $key = 'unusual_inventories_' . md5(json_encode($items));
+
+        if (Cache::has($key)) {
+            return Cache::get($key, []);
+        }
+
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `admin-panel`.inventories GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 150 OR `item_name` IN ('" . implode("', '", $items) . "');";
+
+        $entries = json_decode(json_encode(DB::select($sql)), true);
+
+        Cache::put($key, $entries, self::CacheTime);
+
+        return $entries;
+    }
+
+    /**
      * Finds item movements that have unusual amounts
      *
      * @return array
      */
     public static function findUnusualItems(): array
     {
-        $key = 'unusual_item_movement';
+        $key = 'unusual_item_movement_' . md5(json_encode(self::IgnoreUnusualMovement));
 
         if (Cache::has($key)) {
             return Cache::get($key, []);
@@ -87,6 +175,10 @@ class SuspiciousChecker
 
         $sus = [];
         foreach ($logs as $log) {
+            if (isset(self::IgnoreUnusualMovement[$log->item]) && self::IgnoreUnusualMovement[$log->item] > intval($log->amount)) {
+                continue;
+            }
+
             $sus[] = [
                 'identifier' => $log->identifier,
                 'details'    => 'Moved ' . number_format(intval($log->amount)) . ' of ' . $log->item . ' in the span of 10 minutes',

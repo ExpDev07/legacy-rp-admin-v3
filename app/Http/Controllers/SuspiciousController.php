@@ -48,6 +48,9 @@ class SuspiciousController extends Controller
                 case 'unusual':
                     $logs = SuspiciousChecker::findUnusualItems();
                     break;
+                case 'inventories':
+                    $logs = SuspiciousChecker::findUnusualInventories();
+                    break;
             }
         }
 
@@ -59,7 +62,7 @@ class SuspiciousController extends Controller
 
         $logs = array_slice($logs, ($page - 1) * 15, 15);
 
-        $map = Player::fetchSteamPlayerNameMap($logs, $map);
+        $map = in_array($type, ['inventories']) ? ['none' => 'none'] : Player::fetchSteamPlayerNameMap($logs, $map);
 
         $end = round(microtime(true) * 1000);
 
@@ -71,7 +74,7 @@ class SuspiciousController extends Controller
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
             'page'      => $page,
-            'total'   => $total,
+            'total'     => $total,
             'logType'   => $type,
             'playerMap' => $map,
         ]);

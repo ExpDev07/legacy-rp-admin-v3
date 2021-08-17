@@ -108,7 +108,7 @@
                 {{ t('home.staff_description') }}
             </p>
             <div class="flex flex-wrap justify-between max-w-screen-lg w-full -mx-3">
-                <a href="#" class="w-tp text-indigo-600 dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300 px-3 py-0.5 text-sm" @click="copyCoords($event)" :data-coords="coords.x + ' ' + coords.y + ' ' + coords.z" v-for="(coords, name) in staffLocations" :key="name">{{ name }}</a>
+                <a href="#" class="w-tp-staff text-indigo-600 dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300 px-3 py-0.5 text-sm" @click="copyCoords($event)" :data-coords="coords.x + ' ' + coords.y + ' ' + coords.z" v-for="(coords, name) in staffLocations" :key="name">{{ name }}</a>
             </div>
         </div>
 

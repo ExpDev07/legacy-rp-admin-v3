@@ -61,7 +61,7 @@
         "locations": "/tp_coords locations",
         "location_description": "Hidden locations around the city to avoid no-clipping long distances.",
         "staff_locations": "Staff locations",
-        "staff_description": "Roofs for staff to chill on while doing staff stuff.",
+        "staff_description": "Locations for staff to be at without being seen by other players.",
         "no_player_count": "Player count is not available at this time"
     },
     "statistics": {
@@ -118,6 +118,7 @@
             "pawn": "Big pawn shop sales",
             "warehouse": "Big warehouse sales",
             "unusual": "Big item movements",
+            "inventories": "Unusual Items in Inventories",
             "none": "Select type"
         },
         "items": {
@@ -396,6 +397,9 @@
                 "left_leg": "Left Leg",
                 "right_leg": "Right Leg"
             },
+            "edit_cash": "Cash balance",
+            "edit_bank": "Bank balance",
+            "balance_do": "Update balance",
             "reset_spawn": "Reset Spawn-Point",
             "sure_spawn": "Are you sure you want to reset this characters spawn-point?",
             "spawn_point": "Reset location",

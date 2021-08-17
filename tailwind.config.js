@@ -41,6 +41,7 @@ module.exports = {
                 'map-right':          'calc(100% - 1160px)',
                 'split':              'calc(50% - 10px)',
                 'tp':                 '170px',
+                'tp-staff':           '200px',
                 'inventory_contents': '660px',
                 'inventory_slot':     '100px',
             },
