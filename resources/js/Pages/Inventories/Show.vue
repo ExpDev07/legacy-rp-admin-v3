@@ -8,10 +8,13 @@
             <h1 class="dark:text-white" v-else>
                 {{ t('inventories.show.error') }}
             </h1>
+            <p v-if="snapshot">
+                {{ t('inventories.show.snap_time', formatTime(snapshot.created), snapshot.created_by.player_name, formatTime(snapshot.expires)) }}
+            </p>
         </portal>
 
         <!-- Table -->
-        <v-section class="overflow-x-auto" v-if="inventory">
+        <v-section class="overflow-x-auto relative" v-if="inventory">
             <template #header>
                 <h2>
                     {{ t('global.info') }}
@@ -19,6 +22,13 @@
                 <p>
                     {{ t('inventories.show.type.' + inventory.type) }}
                 </p>
+                <a v-if="snapshotUrl" :href="'/inventory/snapshot/' + snapshotUrl" target="_blank" class="mt-3 text-white block px-5 py-2 border-2 rounded border-blue-500 bg-blue-600 dark:bg-blue-400">
+                    {{ t('inventories.show.snap_url', snapshotUrl) }}
+                </a>
+
+                <button class="block px-2 py-1 text-center text-white absolute top-1 right-1 bg-blue-600 dark:bg-blue-400 rounded" :title="t('inventories.show.snapshot')" @click="createSnapshot" v-if="!snapshot && !snapshotUrl">
+                    <i class="fas fa-camera"></i>
+                </button>
             </template>
 
             <template>
@@ -292,7 +302,10 @@
 
                 <card v-if="cleanContents && $page.auth.player.isSuperAdmin" class="w-inventory_contents max-w-full">
                     <template #header>
-                        <h3 class="mb-2">
+                        <h3 class="mb-2" v-if="snapshot">
+                            {{ t('inventories.show.snap_contents', formatTime(snapshot.created)) }}
+                        </h3>
+                        <h3 class="mb-2" v-else>
                             {{ t('inventories.show.contents') }}
                         </h3>
                     </template>
@@ -362,7 +375,22 @@ export default {
             if (confirm(this.t('inventories.show.empty_confirm', slot))) {
                 await this.$inertia.delete('/inventory/' + this.inventory.descriptor + '/clear/' + slot);
             }
-        }
+        },
+        async createSnapshot() {
+            try {
+                const data = await axios.post('/inventory/' + this.inventory.descriptor + '/createSnapshot');
+
+                if (data.data && 'hash' in data.data) {
+                    this.snapshotUrl = data.data.hash;
+                    return;
+                }
+            } catch(e) {}
+
+            alert('Failed to create inventory snapshot');
+        },
+        formatTime(t) {
+            return this.$options.filters.formatTime(t * 1000, true);
+        },
     },
     data() {
         let clean = {},
@@ -401,13 +429,18 @@ export default {
         }
 
         return {
-            cleanContents: cleaned
+            cleanContents: cleaned,
+            snapshotUrl: ''
         }
     },
     props: {
         inventory: {
             type: Object,
             required: true,
+        },
+        snapshot: {
+            type: Object,
+            required: false,
         },
         contents: {
             type: Array,

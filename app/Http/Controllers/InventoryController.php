@@ -12,7 +12,9 @@ use App\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -111,6 +113,73 @@ class InventoryController extends Controller
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
             'page'      => $page,
+        ]);
+    }
+
+    /**
+     * Creates a snapshot of an inventory at that exact moment in time
+     *
+     * @param string $inventory
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function createSnapshot(string $inventory, Request $request): \Illuminate\Http\Response
+    {
+        $inventory = Inventory::parseDescriptor($inventory);
+        $name = explode(':', $inventory->descriptor)[0];
+
+        $contents = DB::table('inventories')
+            ->where('inventory_name', '=', $name)
+            ->select(['id', 'item_name', 'inventory_slot'])
+            ->get()->toArray();
+
+        $snapshot = [
+            'hash'           => Str::uuid()->toString(),
+            'inventory_name' => $name,
+            'contents'       => $contents,
+            'created'        => time(),
+            'expires'        => time() + (2 * 24 * 60 * 60),
+            'created_by'     => $request->user()->player->steam_identifier,
+        ];
+
+        Cache::put('inv_snap_' . $snapshot['hash'], $snapshot, 2 * 24 * 60 * 60);
+
+        return (new \Illuminate\Http\Response(json_encode(['hash' => $snapshot['hash']]), 200))
+            ->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Show a snapshot
+     *
+     * @param string $snapshot
+     * @param Request $request
+     * @return Response|null
+     */
+    public function showSnapshot(string $snapshot, Request $request): ?Response
+    {
+        $key = 'inv_snap_' . $snapshot;
+        if (!Cache::has($key)) {
+            abort(404, 'Snapshot not found.');
+            return null;
+        }
+
+        $snapshot = Cache::get($key);
+
+        $superAdmin = $request->user()->player->is_super_admin;
+        if (!$superAdmin) {
+            $snapshot['contents'] = [];
+        }
+
+        $snapshot['created_by'] = Player::query()->where('steam_identifier', '=', $snapshot['created_by'])->select([
+            'player_name',
+        ])->first()->toArray();
+
+        $inventory = Inventory::parseDescriptor($snapshot['inventory_name'])->get();
+
+        return Inertia::render('Inventories/Show', [
+            'inventory' => $inventory,
+            'contents'  => $snapshot['contents'],
+            'snapshot'  => $snapshot,
         ]);
     }
 
