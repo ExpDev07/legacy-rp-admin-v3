@@ -39,6 +39,45 @@ class SuspiciousChecker
     ];
 
     /**
+     * Items ids that cannot be obtained naturally
+     */
+    const UnusualItems = [
+        'weapon_unarmed',
+        'weapon_flaregun',
+        'weapon_raypistol',
+        'weapon_ceramicpistol',
+        'weapon_navyrevolver',
+        'weapon_raycarbine',
+        'weapon_mg',
+        'weapon_combatmg',
+        'weapon_combatmg_mk2',
+        'weapon_sniperrifle',
+        'weapon_heavysniper',
+        'weapon_heavysniper_mk2',
+        'weapon_marksmanrifle',
+        'weapon_marksmanrifle_mk2',
+        'weapon_rpg',
+        'weapon_grenadelauncher',
+        'weapon_grenadelauncher_smoke',
+        'weapon_minigun',
+        'weapon_firework',
+        'weapon_railgun',
+        'weapon_hominglauncher',
+        'weapon_compactlauncher',
+        'weapon_rayminigun',
+        'weapon_grenade',
+        'weapon_bzgas',
+        'weapon_molotov',
+        'weapon_stickybomb',
+        'weapon_proxmine',
+        'weapon_pipebomb',
+        'weapon_ball',
+        'weapon_smokegrenade',
+        'weapon_flare',
+        'weapon_hazardcan',
+    ];
+
+    /**
      * Non stackable items that cannot be obtained naturally
      */
     const SingleUnusualItems = [
@@ -100,7 +139,7 @@ class SuspiciousChecker
      */
     public static function findUnusualInventories(): array
     {
-        $items = self::SingleUnusualItems;
+        $items = self::UnusualItems;
         $key = 'unusual_inventories_' . md5(json_encode($items));
 
         if (Cache::has($key)) {
