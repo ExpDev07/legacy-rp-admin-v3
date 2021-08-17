@@ -277,7 +277,7 @@ class PlayerCharacterController extends Controller
     }
 
     /**
-     * Removes a characters tattoos
+     * Resets a characters spawnpoint
      *
      * @param Player $player
      * @param Character $character
@@ -305,6 +305,32 @@ class PlayerCharacterController extends Controller
         PanelLog::logSpawnReset($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $spawn);
 
         return back()->with('success', 'Spawn was reset successfully.');
+    }
+
+    /**
+     * Edits a characters balance
+     *
+     * @param Player $player
+     * @param Character $character
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function editBalance(Player $player, Character $character, Request $request): RedirectResponse
+    {
+        $cash = intval($request->post("cash"));
+        $bank = intval($request->post("bank"));
+
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can edit a characters balance.');
+        }
+
+        $character->update([
+            'cash' => $cash,
+            'bank' => $bank,
+        ]);
+
+        return back()->with('success', 'Balance has been updated successfully.');
     }
 
     /**

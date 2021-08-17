@@ -18,8 +18,16 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="character.characterDeleted">
                         <span class="font-semibold">{{ t('players.edit.deleted') }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
                     </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" :title="local.cashTitle" v-html="local.cash">
-                        {{ local.cash }}
+                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary relative">
+                        <span v-html="local.cash" :title="local.cashTitle">{{ local.cash }}</span>
+
+                        <button
+                            class="block px-1 py-1 text-center text-black dark:text-white text-xs absolute top-0 right-1 bg-transparent rounded"
+                            @click="isEditingBalance = true"
+                            v-if="$page.auth.player.isSuperAdmin"
+                        >
+                            <i class="fas fa-edit"></i>
+                        </button>
                     </badge>
                     <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.stocks">
                         {{ local.stocks }}
@@ -75,6 +83,33 @@
                     </button>
                     <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="removeTattoos">
                         {{ t('players.characters.tattoo_do') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Balance -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isEditingBalance">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.characters.sure_tattoos') }}</h3>
+                <div class="w-full p-3 flex justify-between">
+                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="cash">
+                        {{ t('players.characters.edit_cash') }}
+                    </label>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="cash" type="number" min="-1000000000" max="1000000000" v-model="balanceForm.cash" />
+                </div>
+                <div class="w-full p-3 flex justify-between">
+                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="bank">
+                        {{ t('players.characters.edit_bank') }}
+                    </label>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="bank" type="number" min="-1000000000" max="1000000000" v-model="balanceForm.bank" />
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isEditingBalance = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="editBalance">
+                        {{ t('players.characters.balance_do') }}
                     </button>
                 </div>
             </div>
@@ -487,10 +522,15 @@ export default {
                 id: 0,
                 owner: 0
             },
+            balanceForm: {
+                cash: this.character.cash,
+                bank: this.character.bank
+            },
             isTattooRemoval: false,
             isResetSpawn: false,
             jobs: jobs,
             isVehicleEdit: false,
+            isEditingBalance: false,
         };
     },
     methods: {
@@ -588,6 +628,15 @@ export default {
 
             // Reset.
             this.isVehicleEdit = false;
+        },
+        async editBalance() {
+            // Send request.
+            await this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/editBalance', this.balanceForm);
+
+            this.local.cash = this.t("players.edit.cash", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.money));
+
+            // Reset.
+            this.isEditingBalance = false;
         },
     },
 }

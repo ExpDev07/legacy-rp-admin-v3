@@ -397,6 +397,9 @@
                 "left_leg": "Left Leg",
                 "right_leg": "Right Leg"
             },
+            "edit_cash": "Cash balance",
+            "edit_bank": "Bank balance",
+            "balance_do": "Update balance",
             "reset_spawn": "Reset Spawn-Point",
             "sure_spawn": "Are you sure you want to reset this characters spawn-point?",
             "spawn_point": "Reset location",
