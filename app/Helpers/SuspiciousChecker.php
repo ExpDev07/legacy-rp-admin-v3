@@ -192,7 +192,7 @@ class SuspiciousChecker
             return Cache::get($key, []);
         }
 
-        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` WHERE `item_name` NOT IN ('" . implode("', '", self::IgnoreItems) . "') GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 350 OR `item_name` IN ('" . implode("', '", $items) . "');";
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` WHERE `item_name` NOT IN ('" . implode("', '", self::IgnoreItems) . "') GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "');";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
