@@ -43,6 +43,47 @@ class SuspiciousChecker
         'Necklaces'      => 500,
     ];
 
+    const IgnoreItems = [
+        // Food
+        'water',
+        'hamburger',
+        'belgian_fries',
+        'coke',
+        'wonder_waffle',
+        'cheeseburger',
+        'donut',
+        'green_apple',
+        'sandwich',
+        'taco',
+        'banana',
+        'smores',
+
+        // Drugs are irrelevant cause people hoard them
+        'acid',
+        'cocaine_bag',
+        'weed_seeds',
+        'weed_1q',
+        'weed_1oz',
+        'oxy',
+
+        // Ammo same deal as with drugs
+        'pistol_ammo',
+        'rifle_ammo',
+        'shotgun_ammo',
+        'sub_ammo',
+
+        // Materials cuz mechanics
+        'scrap_metal',
+        'rubber',
+        'steel',
+
+        // Some general stuff people just like to hoard
+        'evidence_bag_empty',
+        'fertilizer',
+        'paper_bag',
+        'weapon_snowball'
+    ];
+
     /**
      * Items ids that cannot be obtained naturally
      */
@@ -145,13 +186,13 @@ class SuspiciousChecker
     public static function findUnusualInventories(): array
     {
         $items = self::UnusualItems;
-        $key = 'unusual_inventories_' . md5(json_encode($items));
+        $key = 'unusual_inventories_' . md5(json_encode($items)) . '_' . md5(json_encode(self::IgnoreItems));
 
         if (Cache::has($key)) {
             return Cache::get($key, []);
         }
 
-        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 150 OR `item_name` IN ('" . implode("', '", $items) . "');";
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` WHERE `item_name` NOT IN ('" . implode("', '", self::IgnoreItems) . "') GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 350 OR `item_name` IN ('" . implode("', '", $items) . "');";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
