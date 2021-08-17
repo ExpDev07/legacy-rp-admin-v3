@@ -224,6 +224,8 @@
         "show": {
             "error": "Invalid Inventory",
             "title": "Inventory",
+            "snapshot": "Create a snapshot of the inventory",
+            "snap_time": "This is a snapshot taken at {0} by {1}. It will expire at {2}",
             "type": {
                 "ground": "This is a ground inventory.",
                 "character": "This is a character inventory.",
@@ -248,6 +250,8 @@
             "plate_id": "Plate / ID",
             "unknown_vehicle": "Unknown vehicle, possibly npc/local.",
             "contents": "Inventory Contents",
+            "snap_contents": "Inventory Contents at {0}",
+            "snap_url": "Successfully created snapshot {0}",
             "empty": "Empty",
             "content_title": "Slot {0} has {1} of {2}",
             "content_empty": "Slot {0} is empty",
