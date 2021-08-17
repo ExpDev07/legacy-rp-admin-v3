@@ -118,6 +118,7 @@
             "pawn": "Big pawn shop sales",
             "warehouse": "Big warehouse sales",
             "unusual": "Big item movements",
+            "inventories": "Unusual Items in Inventories",
             "none": "Select type"
         },
         "items": {

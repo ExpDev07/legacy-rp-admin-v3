@@ -33,6 +33,7 @@
                                 <option value="pawn">{{ t('suspicious.types.pawn') }}</option>
                                 <option value="warehouse">{{ t('suspicious.types.warehouse') }}</option>
                                 <option value="unusual">{{ t('suspicious.types.unusual') }}</option>
+                                <option value="inventories">{{ t('suspicious.types.inventories') }}</option>
                             </select>
                         </div>
                         <!-- Search button -->
@@ -60,7 +61,7 @@
                 <h2>
                     {{ t('logs.logs') }}
                 </h2>
-                <p class="mb-2 text-sm" v-if="logType === 'items' || logType === 'pawn' || logType === 'warehouse' || logType === 'unusual'">
+                <p class="mb-2 text-sm" v-if="logType === 'items' || logType === 'pawn' || logType === 'warehouse' || logType === 'unusual' || logType === 'inventories'">
                     {{ t('suspicious.cached') }}
                 </p>
                 <p class="text-muted dark:text-dark-muted text-xs">
@@ -77,6 +78,11 @@
                         <th class="px-6 py-4">{{ t('suspicious.characters.bank') }}</th>
                         <th class="px-6 py-4">{{ t('suspicious.characters.stocks_balance') }}</th>
                     </tr>
+                    <tr class="font-semibold text-left" v-else-if="logType === 'inventories'">
+                        <th class="px-6 py-4">{{ t('suspicious.items.player') }}</th>
+                        <th class="px-6 py-4">{{ t('suspicious.items.details') }}</th>
+                        <th class="px-6 py-4">{{ t('suspicious.items.time') }}</th>
+                    </tr>
                     <tr class="font-semibold text-left" v-else>
                         <th class="px-6 py-4">{{ t('suspicious.items.player') }}</th>
                         <th class="px-6 py-4">{{ t('suspicious.items.details') }}</th>
@@ -92,6 +98,21 @@
                         </td>
                         <td class="px-6 py-3 border-t" v-html="parseLog(log.details)">{{ parseLog(log.details) }}</td>
                         <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
+                    </tr>
+
+                    <!-- Inventories -->
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="logType === 'inventories'">
+                        <td class="px-6 py-3 border-t">
+                            {{ log.item_name }}
+                        </td>
+                        <td class="px-6 py-3 border-t">
+                            {{ log.amount }}
+                        </td>
+                        <td class="px-6 py-3 border-t">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/inventory/' + log.inventory_name">
+                                {{ log.inventory_name }}
+                            </inertia-link>
+                        </td>
                     </tr>
 
                     <!-- Characters -->
@@ -118,7 +139,7 @@
                     </tr>
 
                     <!-- Default -->
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-else>
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="['pawn', 'warehouse', 'unusual'].includes(logType)">
                         <td class="px-6 py-3 border-t">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.identifier">
                                 {{ playerName(log.identifier) }}
