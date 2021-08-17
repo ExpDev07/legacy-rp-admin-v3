@@ -79,9 +79,9 @@
                         <th class="px-6 py-4">{{ t('suspicious.characters.stocks_balance') }}</th>
                     </tr>
                     <tr class="font-semibold text-left" v-else-if="logType === 'inventories'">
-                        <th class="px-6 py-4">{{ t('suspicious.items.player') }}</th>
-                        <th class="px-6 py-4">{{ t('suspicious.items.details') }}</th>
-                        <th class="px-6 py-4">{{ t('suspicious.items.time') }}</th>
+                        <th class="px-6 py-4">{{ t('suspicious.items.item') }}</th>
+                        <th class="px-6 py-4">{{ t('suspicious.items.amount') }}</th>
+                        <th class="px-6 py-4">{{ t('suspicious.items.inventory') }}</th>
                     </tr>
                     <tr class="font-semibold text-left" v-else>
                         <th class="px-6 py-4">{{ t('suspicious.items.player') }}</th>
