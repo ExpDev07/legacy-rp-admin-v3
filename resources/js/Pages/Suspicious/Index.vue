@@ -79,9 +79,8 @@
                         <th class="px-6 py-4">{{ t('suspicious.characters.stocks_balance') }}</th>
                     </tr>
                     <tr class="font-semibold text-left" v-else-if="logType === 'inventories'">
-                        <th class="px-6 py-4">{{ t('suspicious.items.item') }}</th>
-                        <th class="px-6 py-4">{{ t('suspicious.items.amount') }}</th>
-                        <th class="px-6 py-4">{{ t('suspicious.items.inventory') }}</th>
+                        <th class="px-6 py-4 w-3/4">{{ t('suspicious.items.item') }}</th>
+                        <th class="px-6 py-4 w-1/4">{{ t('suspicious.items.inventory') }}</th>
                     </tr>
                     <tr class="font-semibold text-left" v-else>
                         <th class="px-6 py-4">{{ t('suspicious.items.player') }}</th>
@@ -102,15 +101,12 @@
 
                     <!-- Inventories -->
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="logType === 'inventories'">
-                        <td class="px-6 py-3 border-t">
-                            {{ log.item_name }}
+                        <td class="px-6 py-3 border-t w-3/4">
+                            <pre class="whitespace-pre-wrap text-xs">{{ log.items }}</pre>
                         </td>
-                        <td class="px-6 py-3 border-t">
-                            {{ log.amount }}
-                        </td>
-                        <td class="px-6 py-3 border-t">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/inventory/' + log.inventory_name">
-                                {{ log.inventory_name }}
+                        <td class="px-6 py-3 border-t w-1/4">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/inventory/' + log.inventory">
+                                {{ log.inventory }}
                             </inertia-link>
                         </td>
                     </tr>

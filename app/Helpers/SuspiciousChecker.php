@@ -45,43 +45,44 @@ class SuspiciousChecker
 
     const IgnoreItems = [
         // Food
-        'water',
-        'hamburger',
-        'belgian_fries',
-        'coke',
-        'wonder_waffle',
-        'cheeseburger',
-        'donut',
-        'green_apple',
-        'sandwich',
-        'taco',
-        'banana',
-        'smores',
+        'water'              => 800,
+        'hamburger'          => 800,
+        'belgian_fries'      => 800,
+        'coke'               => 800,
+        'wonder_waffle'      => 800,
+        'cheeseburger'       => 800,
+        'cheesecake'         => 800,
+        'donut'              => 800,
+        'green_apple'        => 800,
+        'sandwich'           => 800,
+        'taco'               => 800,
+        'banana'             => 800,
+        'smores'             => 800,
 
         // Drugs are irrelevant cause people hoard them
-        'acid',
-        'cocaine_bag',
-        'weed_seeds',
-        'weed_1q',
-        'weed_1oz',
-        'oxy',
+        'acid'               => 250,
+        'cocaine_bag'        => 250,
+        'weed_seeds'         => 250,
+        'weed_1q'            => 250,
+        'weed_1oz'           => 250,
+        'oxy'                => 250,
 
         // Ammo same deal as with drugs
-        'pistol_ammo',
-        'rifle_ammo',
-        'shotgun_ammo',
-        'sub_ammo',
+        'pistol_ammo'        => 250,
+        'rifle_ammo'         => 250,
+        'shotgun_ammo'       => 250,
+        'sub_ammo'           => 250,
 
         // Materials cuz mechanics
-        'scrap_metal',
-        'rubber',
-        'steel',
+        'scrap_metal'        => 350,
+        'rubber'             => 350,
+        'steel'              => 350,
 
         // Some general stuff people just like to hoard
-        'evidence_bag_empty',
-        'fertilizer',
-        'paper_bag',
-        'weapon_snowball'
+        'evidence_bag_empty' => 500,
+        'fertilizer'         => 250,
+        'paper_bag'          => 500,
+        'weapon_snowball'    => 800,
     ];
 
     /**
@@ -192,11 +193,32 @@ class SuspiciousChecker
             return Cache::get($key, []);
         }
 
-        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` WHERE `item_name` NOT IN ('" . implode("', '", self::IgnoreItems) . "') GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "');";
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "');";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
-        Cache::put($key, $entries, self::CacheTime);
+        $cleaned = [];
+        foreach ($entries as $entry) {
+            if (isset(self::IgnoreItems[$entry['item_name']]) && intval($entry['amount']) < self::IgnoreItems[$entry['item_name']]) {
+                continue;
+            }
+
+            if (!isset($cleaned[$entry['inventory_name']])) {
+                $cleaned[$entry['inventory_name']] = [];
+            }
+
+            $cleaned[$entry['inventory_name']][] = $entry['amount'] . 'x ' . $entry['item_name'];
+        }
+
+        $finished = [];
+        foreach ($cleaned as $name => $contents) {
+            $finished[] = [
+                'items'     => implode("\n", $contents),
+                'inventory' => $name,
+            ];
+        }
+
+        Cache::put($key, $finished, self::CacheTime);
 
         return $entries;
     }
