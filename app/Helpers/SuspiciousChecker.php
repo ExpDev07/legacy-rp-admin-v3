@@ -60,18 +60,18 @@ class SuspiciousChecker
         'smores'             => 800,
 
         // Drugs are irrelevant cause people hoard them
-        'acid'               => 250,
-        'cocaine_bag'        => 250,
+        'acid'               => 400,
+        'cocaine_bag'        => 320,
         'weed_seeds'         => 250,
         'weed_1q'            => 250,
         'weed_1oz'           => 250,
         'oxy'                => 250,
 
         // Ammo same deal as with drugs
-        'pistol_ammo'        => 250,
-        'rifle_ammo'         => 250,
-        'shotgun_ammo'       => 250,
-        'sub_ammo'           => 250,
+        'pistol_ammo'        => 340,
+        'rifle_ammo'         => 340,
+        'shotgun_ammo'       => 340,
+        'sub_ammo'           => 340,
 
         // Materials cuz mechanics
         'scrap_metal'        => 350,
@@ -82,7 +82,7 @@ class SuspiciousChecker
         'evidence_bag_empty' => 500,
         'fertilizer'         => 250,
         'paper_bag'          => 500,
-        'weapon_snowball'    => 800,
+        'weapon_snowball'    => 900,
     ];
 
     /**
@@ -119,7 +119,7 @@ class SuspiciousChecker
         'weapon_proxmine',
         'weapon_pipebomb',
         'weapon_ball',
-        'weapon_smokegrenade',
+        //'weapon_smokegrenade', // People can get these now
         'weapon_flare',
         'weapon_hazardcan',
     ];
@@ -220,7 +220,7 @@ class SuspiciousChecker
 
         Cache::put($key, $finished, self::CacheTime);
 
-        return $entries;
+        return $finished;
     }
 
     /**
