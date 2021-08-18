@@ -125,8 +125,7 @@
             "player": "Player",
             "details": "Log details",
             "time": "Timestamp",
-            "item": "Item",
-            "amount": "Amount",
+            "item": "Items",
             "inventory": "Inventory"
         },
         "characters": {
