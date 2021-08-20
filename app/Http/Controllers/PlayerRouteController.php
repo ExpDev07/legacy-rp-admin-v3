@@ -6,6 +6,8 @@ use App\Helpers\OPFWHelper;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 class PlayerRouteController extends Controller
 {
@@ -65,6 +67,49 @@ class PlayerRouteController extends Controller
         }
 
         return OPFWHelper::unloadCharacter($user->player->steam_identifier, $player, $character)->redirect();
+    }
+
+    /**
+     * Returns all linked accounts
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return Response
+     */
+    public function linkedAccounts(Player $player, Request $request): Response
+    {
+        $identifiers = $player->getIdentifiers();
+        $linked = [
+            'total'  => 0,
+            'linked' => [],
+        ];
+
+        foreach ($identifiers as $identifier) {
+            if (Str::startsWith($identifier, "ip:")) {
+                continue;
+            }
+
+            if (!isset($linked['linked'][$identifier])) {
+                $linked['linked'][$identifier] = [
+                    'label'    => Player::getIdentifierLabel($identifier),
+                    'accounts' => [],
+                ];
+            }
+
+            $accounts = Player::query()
+                ->where('identifiers', 'LIKE', '%' . $identifier . '%')
+                ->where('steam_identifier', '!=', $player->steam_identifier)
+                ->select(['steam_identifier', 'player_name'])
+                ->get()->toArray();
+            $linked['linked'][$identifier]['accounts'] = $accounts;
+
+            $linked['total'] += sizeof($accounts);
+        }
+
+        return (new Response([
+            'status' => true,
+            'data'   => $linked,
+        ], 200))->header('Content-Type', 'application/json');
     }
 
 }

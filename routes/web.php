@@ -59,6 +59,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/kick', [PlayerRouteController::class, 'kick']);
     Route::post('/players/{player}/staffPM', [PlayerRouteController::class, 'staffPM']);
     Route::post('/players/{player}/unloadCharacter', [PlayerRouteController::class, 'unloadCharacter']);
+    Route::get('/players/{player}/linked', [PlayerRouteController::class, 'linkedAccounts']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
