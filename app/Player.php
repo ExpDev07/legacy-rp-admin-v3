@@ -159,7 +159,7 @@ class Player extends Model
             return $identifiers;
         }
 
-        return array_merge([$identifier], $identifiers);
+        return array_filter(array_merge([$identifier], $identifiers));
     }
 
     /**
@@ -411,6 +411,26 @@ class Player extends Model
         }
 
         return $playerMap;
+    }
+
+    public static function getIdentifierLabel(string $identifier): string
+    {
+        $type = explode(':', $identifier)[0];
+
+        switch ($type) {
+            case 'ip':
+                return 'IP-Address';
+            case 'steam':
+                return 'Steam Account';
+            case 'discord':
+                return 'Discord Account';
+            case 'fivem':
+                return 'FiveM Account';
+            case 'license':
+                return 'Rockstar Account';
+            default:
+                return 'Unknown Identifier';
+        }
     }
 }
 

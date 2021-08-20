@@ -92,6 +92,48 @@
             </div>
         </portal>
 
+        <!-- Linked Accounts -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.linked_title') }}</h3>
+                <div v-if="isShowingLinkedLoading">
+                    <div class="flex justify-center items-center my-6 mt-12">
+                        <div>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked" :key="identifier">
+                        <div class="p-3 w-1/2">
+                            <b class="block">{{ link.label }}</b>
+                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{ identifier }}</pre>
+                        </div>
+                        <div class="p-3 w-1/2" v-if="link.accounts.length > 0">
+                            <a
+                                class="px-5 py-1 mb-2 border-2 rounded block w-full border-blue-200 bg-primary-pale dark:bg-dark-primary-pale"
+                                :href="'/players/' + account.steam_identifier"
+                                target="_blank"
+                                v-for="account in link.accounts"
+                                :key="account.steam_identifier"
+                            >
+                                <span class="font-semibold">{{ account.player_name }}</span>
+                            </a>
+                        </div>
+                        <div class="p-3 w-1/2" v-else>
+                            <span class="italic text-sm">{{ t('players.show.no_link') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isShowingLinked = false">
+                        {{ t('global.close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- StaffPM -->
         <div>
             <!-- Issuing -->
@@ -294,6 +336,9 @@
                     {{ t('players.show.steam') }}
                 </a>
 
+            </div>
+            <div class="flex flex-wrap items-center text-center">
+
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     v-if="discord"
@@ -320,6 +365,20 @@
                     <i class="mr-1 fab fa-discord"></i>
                     {{ t('players.show.discord') }}
                 </a>
+
+                <button
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
+                    @click="showLinked"
+                >
+                    <avatar
+                        class="mr-3"
+                        :src="player.avatar"
+                        :alt="player.playerName + ' Avatar'"
+                    />
+                    <span>
+                        {{ t('players.show.linked') }}
+                    </span>
+                </button>
 
             </div>
         </v-section>
@@ -642,13 +701,41 @@ export default {
                 },
             },
             isShowingDeletedCharacters: false,
+            isShowingLinked: false,
+            isShowingLinkedLoading: false,
+            linkedAccounts: {
+                total: 0,
+                linked: []
+            }
         }
     },
     methods: {
+        async showLinked() {
+            this.isShowingLinkedLoading = true;
+            this.isShowingLinked = true;
+
+            this.linkedAccounts.total = 0;
+            this.linkedAccounts.linked = [];
+
+            try {
+                const data = await axios.get('/players/' + this.player.steamIdentifier + '/linked');
+
+                if (data.data && data.data.status) {
+                    const linked = data.data.data;
+
+                    console.log(linked);
+
+                    this.linkedAccounts.total = linked.total;
+                    this.linkedAccounts.linked = linked.linked;
+                }
+            } catch(e) {}
+
+            this.isShowingLinkedLoading = false;
+        },
         wrapWarningType(type) {
             const label = this.t('players.show.warning_type.' + type);
 
-            switch(type) {
+            switch (type) {
                 case 'warning':
                     return '<span class="italic text-red-500"><i class="fas fa-exclamation-triangle"></i> ' + label + '</span>';
                 case 'note':
@@ -819,11 +906,11 @@ export default {
             });
         },
         formatWarning(warning) {
-            return this.urlify(warning, function(url) {
+            return this.urlify(warning, function (url) {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
                 let extraClass = 'user-link';
 
-                switch(ext) {
+                switch (ext) {
                     case 'jpg':
                     case 'jpeg':
                     case 'png':
@@ -851,8 +938,8 @@ export default {
         },
         viewVideo(el, url) {
             $(el).replaceWith('<div class="user-close relative">' +
-                    '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
-                    '<video class="block max-h-96 max-w-full" controls autoplay><source src="' + url + '">Your browser does not support the video tag.</video>' +
+                '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
+                '<video class="block max-h-96 max-w-full" controls autoplay><source src="' + url + '">Your browser does not support the video tag.</video>' +
                 '</div>');
         }
     },
@@ -863,16 +950,16 @@ export default {
         }
 
         const _this = this;
-        $(document).ready(function() {
-            $('body').on('click', 'a.user-image', function(e) {
+        $(document).ready(function () {
+            $('body').on('click', 'a.user-image', function (e) {
                 e.preventDefault();
 
                 _this.viewImage(this, $(this).attr('href'));
-            }).on('click', 'a.user-video', function(e) {
+            }).on('click', 'a.user-video', function (e) {
                 e.preventDefault();
 
                 _this.viewVideo(this, $(this).attr('href'));
-            }).on('click', '.user-close a', function(e) {
+            }).on('click', '.user-close a', function (e) {
                 e.preventDefault();
 
                 $(this).closest('.user-close').replaceWith(_this.formatWarning($(this).data('original')));
