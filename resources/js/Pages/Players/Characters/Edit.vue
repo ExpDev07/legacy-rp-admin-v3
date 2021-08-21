@@ -22,7 +22,7 @@
                         <span v-html="local.cash" :title="local.cashTitle">{{ local.cash }}</span>
 
                         <button
-                            class="block px-1 py-1 text-center text-black dark:text-white text-xs absolute top-0 right-1 bg-transparent rounded"
+                            class="block px-1 py-1 text-center text-black dark:text-white text-xs absolute top-0 right-0 bg-transparent rounded"
                             @click="isEditingBalance = true"
                             v-if="$page.auth.player.isSuperAdmin"
                         >

@@ -60,6 +60,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/staffPM', [PlayerRouteController::class, 'staffPM']);
     Route::post('/players/{player}/unloadCharacter', [PlayerRouteController::class, 'unloadCharacter']);
     Route::get('/players/{player}/linked', [PlayerRouteController::class, 'linkedAccounts']);
+    Route::delete('/players/{player}/removeIdentifier/{identifier}', [PlayerRouteController::class, 'removeIdentifier']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
