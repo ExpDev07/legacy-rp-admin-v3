@@ -11,6 +11,15 @@ use Illuminate\Support\Str;
 
 class PlayerRouteController extends Controller
 {
+    const AllowedIdentifiers = [
+        'steam',
+        'discord',
+        'fivem',
+        'license',
+        'license2',
+        'live',
+        'xbl',
+    ];
 
     /**
      * Kick a player from the game
@@ -110,6 +119,43 @@ class PlayerRouteController extends Controller
             'status' => true,
             'data'   => $linked,
         ], 200))->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Removes a certain identifier
+     *
+     * @param Player $player
+     * @param string $identifier
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function removeIdentifier(Player $player, string $identifier, Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can remove identifiers.');
+        }
+
+        $identifiers = $player->getIdentifiers();
+
+        if (!in_array($identifier, $identifiers)) {
+            return back()->with('error', 'That identifier doesn\'t belong to the player.');
+        }
+
+        $type = explode(':', $identifier)[0];
+        if (!in_array($type, self::AllowedIdentifiers)) {
+            return back()->with('error', 'You cannot remove the identifier of type "' . $type . '".');
+        }
+
+        $filtered = array_values(array_filter($identifiers, function ($id) use ($identifier) {
+            return $id !== $identifier;
+        }));
+
+        $player->update([
+            'identifiers' => $filtered,
+        ]);
+
+        return back()->with('success', 'Identifier has been removed successfully.');
     }
 
 }

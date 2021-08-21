@@ -106,9 +106,18 @@
                 </div>
                 <div v-else>
                     <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked" :key="identifier">
-                        <div class="p-3 w-1/2">
+                        <div class="p-3 w-1/2 relative">
                             <b class="block">{{ link.label }}</b>
                             <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{ identifier }}</pre>
+
+                            <button
+                                class="p-1 absolute top-0 right-0 text-xs font-semibold bg-transparent text-red-600 dark:text-red-400 rounded"
+                                @click="removeIdentifier(identifier)"
+                                :title="t('global.remove')"
+                                v-if="$page.auth.player.isSuperAdmin"
+                            >
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                         <div class="p-3 w-1/2" v-if="link.accounts.length > 0">
                             <a
@@ -941,6 +950,17 @@ export default {
                 '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
                 '<video class="block max-h-96 max-w-full" controls autoplay><source src="' + url + '">Your browser does not support the video tag.</video>' +
                 '</div>');
+        },
+        async removeIdentifier(identifier) {
+            if (!confirm(this.t('players.show.identifier_remove'))) {
+                return;
+            }
+
+            this.isShowingLinked = false;
+            this.isShowingLinkedLoading = false;
+
+            // Send request.
+            await this.$inertia.delete('/players/' + this.player.steamIdentifier + '/removeIdentifier/' + identifier);
         }
     },
     mounted() {
