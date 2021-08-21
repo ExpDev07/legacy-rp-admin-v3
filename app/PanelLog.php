@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * A panel action that has been logged.
@@ -62,6 +63,14 @@ class PanelLog extends Model
     public function identifiers(): array
     {
         return array_unique([$this->source_identifier, $this->target_identifier]);
+    }
+
+    /**
+     * Removes all panel logs older than 1 month
+     */
+    private static function doCleanup()
+    {
+        self::query()->where('timestamp', '<=', Carbon::now()->subMonths(1))->delete();
     }
 
     /**
@@ -185,12 +194,14 @@ class PanelLog extends Model
      */
     private static function createLog(string $source, string $target, string $log, string $action)
     {
-        PanelLog::query()->create([
+        self::query()->create([
             'source_identifier' => $source,
             'target_identifier' => $target,
             'log'               => $log,
             'action'            => $action,
         ]);
+
+        self::doCleanup();
     }
 
 }

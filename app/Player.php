@@ -427,7 +427,12 @@ class Player extends Model
             case 'fivem':
                 return 'FiveM Account';
             case 'license':
+            case 'license2':
                 return 'Rockstar Account';
+            case 'live':
+                return 'Microsoft Account';
+            case 'xbl':
+                return 'XBox Live';
             default:
                 return 'Unknown Identifier';
         }
