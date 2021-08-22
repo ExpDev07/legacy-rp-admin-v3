@@ -541,7 +541,7 @@
                                 </button>
                                 <button
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-success dark:bg-dark-success rounded"
-                                    @click="editWarning(warning.id)"
+                                    @click="editWarning(warning.id, warning.warningType)"
                                     v-if="warningEditId === warning.id"
                                 >
                                     <i class="fas fa-save"></i>
@@ -873,10 +873,11 @@ export default {
             // Reset.
             this.form.warning.message = null;
         },
-        async editWarning(id) {
+        async editWarning(id, warningType) {
             // Send request.
             await this.$inertia.put('/players/' + this.player.steamIdentifier + '/warnings/' + id, {
                 message: $('#warning_' + id).val(),
+                warning_type: warningType,
             });
 
             this.filterWarnings();
