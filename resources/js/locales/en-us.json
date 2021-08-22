@@ -86,6 +86,7 @@
         "track": "Track character",
         "stop_track": "Stop tracking character",
         "afk_title": "AFK Players",
+        "invisible_title": "Invisible Players",
         "command": "tp",
         "spy_satellite": "FiB Spy Satellite Map",
         "track_placeholder": "Track ID",

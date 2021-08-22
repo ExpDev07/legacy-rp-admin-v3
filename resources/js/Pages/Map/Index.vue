@@ -64,9 +64,15 @@
                          v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span
                         @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
                 </div>
-                <div v-if="afkPeople" class="w-map-right pt-4">
-                    <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
-                    <pre v-html="afkPeople" class="text-sm">{{ afkPeople }}</pre>
+                <div class="flex flex-wrap">
+                    <div v-if="afkPeople" class="pt-4 mr-4">
+                        <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
+                        <pre v-html="afkPeople" class="text-sm">{{ afkPeople }}</pre>
+                    </div>
+                    <div v-if="invisiblePeople" class="pt-4">
+                        <h3 class="mb-2">{{ t('map.invisible_title') }}</h3>
+                        <pre v-html="invisiblePeople" class="text-sm">{{ invisiblePeople }}</pre>
+                    </div>
                 </div>
             </div>
         </template>
@@ -181,6 +187,7 @@ export default {
             clickedCoords: '',
             coordsCommand: '',
             afkPeople: '',
+            invisiblePeople: '',
             openPopup: null,
             isDragging: false,
             layers: {
@@ -474,6 +481,7 @@ export default {
 
                     let validIds = [];
                     let afkList = [];
+                    let invisibleList = [];
                     $.each(data, function (_, player) {
                         if (!player.character) {
                             return;
@@ -577,6 +585,14 @@ export default {
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
+                        if (isInvisible) {
+                            invisibleList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
+    <td class="pr-2"><a style="color: ` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
+    <td class="pr-2">is invisible</td>
+    <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
+</tr>`.replace(/\r?\n(\s{4})?/gm, ''));
+                        }
+
                         if (_this.trackedPlayer && (_this.trackedPlayer === 'server_' + player.source || (_this.trackedPlayer.startsWith('steam:') && _this.trackedPlayer === player.steamIdentifier))) {
                             _this.trackedPlayer = id;
                             window.location.hash = id;
@@ -605,6 +621,7 @@ export default {
                     });
 
                     this.afkPeople = afkList.length > 0 ? '<table>' + afkList.join("\n") + '</table>' : '';
+                    this.invisiblePeople = invisibleList.length > 0 ? '<table>' + invisibleList.join("\n") + '</table>' : '';
 
                     $.each(markers, function (id, marker) {
                         if (!validIds.includes(id)) {
