@@ -94,7 +94,7 @@
 
         <!-- Linked Accounts -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.show.linked_title') }}</h3>
                 <div v-if="isShowingLinkedLoading">
                     <div class="flex justify-center items-center my-6 mt-12">
