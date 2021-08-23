@@ -55,6 +55,9 @@ module.exports = {
             minWidth: {
                 'input': '200px'
             },
+            maxHeight: {
+                'max': 'calc(100% - 60px)'
+            },
             colors: {
                 // Light & dark.
                 'light': defaultTheme.colors.white,

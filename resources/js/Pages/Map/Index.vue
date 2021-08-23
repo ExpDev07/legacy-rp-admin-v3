@@ -587,9 +587,9 @@ export default {
 
                         if (isInvisible) {
                             invisibleList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
-    <td class="pr-2"><a style="color: ` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
+    <td class="pr-2"><a style="color:#54BBFF" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
     <td class="pr-2">is invisible</td>
-    <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
+    <td><a class="track-cid" style="color:#54BBFF" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
