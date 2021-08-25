@@ -585,7 +585,7 @@ export default {
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
-                        if (isInvisible) {
+                        if (isInvisible && !isStaff) {
                             invisibleList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
     <td class="pr-2"><a style="color:#54BBFF" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
     <td class="pr-2">is invisible</td>
@@ -714,7 +714,6 @@ export default {
             //this.debugLocations(require('../../data/tp_locations.json'));
 
             this.map.on('click', function (e) {
-                const conf = _this.getBounds();
                 let map = {
                     x: e.latlng.lng,
                     y: e.latlng.lat,

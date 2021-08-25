@@ -495,7 +495,7 @@
         <v-section>
             <template #header>
                 <h2>
-                    {{ t('players.form.warnings') }} ({{ player.warnings }})
+                    {{ t('players.show.warnings') }} ({{ player.warnings }})
                     <select class="inline-block ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
                             id="warningFilter" @change="filterWarnings">
                         <option value="all" selected>{{ t('global.all') }}</option>
