@@ -349,13 +349,14 @@
             "warning_type": {
                 "warning": "Warning",
                 "note": "Note"
-            }
+            },
+            "warnings": "Warnings/Notes"
         },
         "form": {
             "identifier": "Identifier",
             "name": "Name",
             "playtime": "Playtime",
-            "warnings": "Warnings/Notes",
+            "warnings": "Warnings",
             "banned": "Banned"
         },
         "warning": {

@@ -9,6 +9,7 @@ use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
+use App\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -81,7 +82,7 @@ class PlayerController extends Controller
         $query->select([
             'steam_identifier', 'player_name', 'playtime', 'identifiers',
         ]);
-        $query->selectSub('SELECT COUNT(`id`) FROM `warnings` WHERE `player_id` = `user_id`', 'warning_count');
+        $query->selectSub('SELECT COUNT(`id`) FROM `warnings` WHERE `player_id` = `user_id` AND `warning_type` = \'' . Warning::TypeWarning . '\'', 'warning_count');
 
         $page = Paginator::resolveCurrentPage('page');
         $query->limit(15)->offset(($page - 1) * 15);
