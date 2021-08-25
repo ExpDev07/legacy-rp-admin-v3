@@ -714,7 +714,6 @@ export default {
             //this.debugLocations(require('../../data/tp_locations.json'));
 
             this.map.on('click', function (e) {
-                const conf = _this.getBounds();
                 let map = {
                     x: e.latlng.lng,
                     y: e.latlng.lat,
