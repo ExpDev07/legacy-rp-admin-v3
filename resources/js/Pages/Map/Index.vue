@@ -41,28 +41,73 @@
 
         <template>
             <div class="-mt-12" id="map-wrapper">
-                <div class="flex flex-wrap mb-2">
-                    <input type="text"
-                           class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600"
-                           :placeholder="t('map.track_placeholder')" v-model="tracking.id"/>
-                    <select
-                        class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1"
-                        v-model="tracking.type">
-                        <option value="server_">{{ t('map.track_server') }}</option>
-                        <option value="">{{ t('map.track_steam') }}</option>
-                        <option value="player_">{{ t('map.track_character') }}</option>
-                    </select>
+                <div class="flex flex-wrap justify-between mb-2 w-map max-w-full">
+                    <div class="flex flex-wrap">
+                        <input type="text"
+                               class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600"
+                               :placeholder="t('map.track_placeholder')" v-model="tracking.id"/>
+                        <select
+                            class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1"
+                            v-model="tracking.type">
+                            <option value="server_">{{ t('map.track_server') }}</option>
+                            <option value="">{{ t('map.track_steam') }}</option>
+                            <option value="player_">{{ t('map.track_character') }}</option>
+                        </select>
+                        <button
+                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                            @click="trackId(tracking.type + tracking.id)">
+                            {{ t('map.do_track') }}
+                        </button>
+                    </div>
                     <button
                         class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                        @click="trackId(tracking.type + tracking.id)">
-                        {{ t('map.do_track') }}
+                        @click="advancedTracking = !advancedTracking"
+                        :title="advancedTracking ? t('global.enabled') : t('global.disabled')"
+                    >
+                        {{ t('map.advanced_track') }}
+                        <i class="fas fa-check ml-1" v-if="advancedTracking"></i>
+                        <i class="fas fa-times ml-1" v-else></i>
                     </button>
                 </div>
-                <div class="relative">
+                <div class="relative w-map max-w-full">
                     <div id="map" class="w-map max-w-full relative h-max"></div>
                     <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k"
                          v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span
                         @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
+                    <pre
+                        class="w-map-gauge bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
+                        v-if="advancedTracking && trackedPlayer"
+                    >{{ tracking.data.advanced }}</pre>
+                    <div
+                        class="w-map-gauge bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
+                        :class="{'hidden' : !advancedTracking || !trackedPlayer}"
+                    >
+                        <div class="relative w-map-other-gauge">
+                            <img src="/images/height-indicator.png" style="height: 90px" alt="Height indicator" />
+                            <div
+                                class="font-bold absolute border-b-2 border-gray-700 left-8 text-gray-700 w-map-height-ind text-right text-xxs leading-3"
+                                :style="'bottom: ' + tracking.data.alt + '%;'"
+                            >
+                                {{ tracking.data.altitude }}
+                            </div>
+                        </div>
+                        <vue-speedometer
+                            class="inline-block"
+                            :value="tracking.data.speed"
+                            labelFontSize="12px"
+                            :ringWidth="20"
+                            :height="90"
+                            :width="120"
+                            startColor="#90EF90"
+                            endColor="#fa1e43"
+                            :minValue="0"
+                            :maxValue="360"
+                            :segments="4"
+                            currentValueText="${value}mph"
+                            valueTextFontSize="14px"
+                            :needleHeightRatio="0.7"
+                        />
+                    </div>
                 </div>
                 <div class="flex flex-wrap">
                     <div v-if="afkPeople" class="pt-4 mr-4">
@@ -88,6 +133,7 @@ import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import 'leaflet-fullscreen';
 import custom_icons from "../../data/vehicles.json";
+import VueSpeedometer from "vue-speedometer";
 
 const Rainbow = require('rainbowvis.js');
 
@@ -156,6 +202,7 @@ export default {
     layout: Layout,
     components: {
         VSection,
+        VueSpeedometer,
     },
     props: {
         servers: {
@@ -199,8 +246,15 @@ export default {
             },
             tracking: {
                 id: '',
-                type: 'server_'
+                type: 'server_',
+                data: {
+                    speed: 0,
+                    alt: 0,
+                    altitude: '0m',
+                    advanced: 'Loading...'
+                }
             },
+            advancedTracking: false,
             cayoCalibrationMode: false // Set this to true to recalibrate the cayo perico map
         };
     },
@@ -488,6 +542,7 @@ export default {
                         }
 
                         const id = "player_" + player.character.id,
+                            originalCoords = Math.round(player.coords.x) + ' ' + Math.round(player.coords.y) + ' ' + Math.round(player.coords.z),
                             coords = _this.convertCoords(player.coords),
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
@@ -604,6 +659,20 @@ export default {
                             _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom(), {
                                 duration: 0.1
                             });
+
+                            _this.tracking.data.speed = Math.round(speed * 2.236936);
+
+                            const feet = Math.round(player.coords.z * 3.281);
+
+                            _this.tracking.data.alt = (feet / 5000) * 100;
+                            _this.tracking.data.alt = _this.tracking.data.alt > 99 ? 99 : _this.tracking.data.alt;
+                            _this.tracking.data.altitude = feet + 'ft';
+
+                            _this.tracking.data.advanced = [
+                                player.character.fullName + ' (' + player.source + ')',
+                                'Coords:  ' + originalCoords,
+                                'Vehicle: ' + (player.vehicle ? player.vehicle.model : 'n/a')
+                            ].join("\n");
 
                             if (_this.firstRefresh) {
                                 _this.openPopup = id;

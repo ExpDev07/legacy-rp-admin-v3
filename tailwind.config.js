@@ -14,7 +14,7 @@ module.exports = {
     theme: {
         screens: {
             'mobile': {
-                'max': '640px'
+                'max': '640px',
             },
             'sm': '640px',
             'md': '768px',
@@ -44,6 +44,9 @@ module.exports = {
                 'tp-staff':           '200px',
                 'inventory_contents': '660px',
                 'inventory_slot':     '100px',
+                'map-gauge':          '258px',
+                'map-other-gauge':    'calc(100% - 125px)',
+                'map-height-ind':     '60px',
             },
             height: {
                 'side-close':      '40px',
@@ -53,10 +56,14 @@ module.exports = {
                 'inventory_slot':  '100px',
             },
             minWidth: {
-                'input': '200px'
+                'input': '200px',
             },
             maxHeight: {
-                'max': 'calc(100% - 60px)'
+                'max': 'calc(100% - 60px)',
+            },
+            inset: {
+                'attr':  '16.5px',
+                'attr2': '119px',
             },
             colors: {
                 // Light & dark.
