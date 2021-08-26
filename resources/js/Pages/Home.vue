@@ -6,7 +6,7 @@
                 {{ t("home.title") }}
             </h1>
             <p>
-                {{ t("home.welcome", $page.auth.user.name) }}
+                {{ t("home.welcome", $page.auth.user.name) }} <inertia-link href="/changelog" class="text-indigo-600 !no-underline dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">{{ t('changelog.title') }}</inertia-link>
             </p>
         </portal>
 

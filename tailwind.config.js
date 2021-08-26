@@ -61,6 +61,9 @@ module.exports = {
             maxHeight: {
                 'max': 'calc(100% - 60px)',
             },
+            listStyleType: {
+                'dash': "'-'"
+            },
             inset: {
                 'attr':  '16.5px',
                 'attr2': '119px',
