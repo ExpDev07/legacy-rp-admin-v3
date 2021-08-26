@@ -265,6 +265,24 @@
         ]
     },
 
+    "go-kart": {
+        "size": 24,
+        "models": [
+            "veto",
+            "veto2"
+        ]
+    },
+
+    "open_wheel": {
+        "size": 26,
+        "models": [
+            "formula",
+            "formula2",
+            "openwheel1",
+            "openwheel2"
+        ]
+    },
+
     "tank": {
         "size": 27,
         "models": [
