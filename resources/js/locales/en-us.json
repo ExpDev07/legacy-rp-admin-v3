@@ -16,6 +16,8 @@
         "view_map": "View on Live-Map",
         "yes": "Yes",
         "no": "No",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
         "do_search": "Search",
         "status": {
             "online": "Online",
@@ -94,6 +96,7 @@
         "track_steam": "Steam Identifier",
         "track_character": "Character ID",
         "do_track": "Track",
+        "advanced_track": "Advanced Track",
         "kick_reason": "You were afk for more than {0}, consider leaving the server or going to the character selection screen when you have to be afk for longer periods of time"
     },
     "nav": {

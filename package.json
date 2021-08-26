@@ -46,6 +46,7 @@
         "leaflet-rotatedmarker": "^0.2.0",
         "rainbowvis.js": "^1.0.1",
         "vue-linkify": "^1.0.1",
+        "vue-speedometer": "^1.8.0",
         "vue2-circle-progress": "^1.2.3"
     }
 }
