@@ -48,6 +48,10 @@
         "suspicious": "Suspicious",
         "data": "Data"
     },
+    "changelog": {
+        "title": "Recent Updates",
+        "description": "Listing of the most recent updates to the panel"
+    },
     "home": {
         "title": "Dashboard",
         "welcome": "Hello, {0}. Welcome to the dashboard!",

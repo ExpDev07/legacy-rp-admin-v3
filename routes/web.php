@@ -15,6 +15,7 @@ use App\Http\Controllers\AdvancedSearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
+use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
@@ -49,7 +50,7 @@ Route::group(['namespace' => 'Auth'], function () {
 Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
     Route::get('/', [HomeController::class, 'render']);
-    Route::get('/', [HomeController::class, 'render']);
+    Route::get('/changelog', [ChangelogController::class, 'render']);
 
     // Players.
     Route::resource('players', PlayerController::class);
