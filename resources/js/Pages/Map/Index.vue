@@ -109,6 +109,28 @@
                         />
                     </div>
                 </div>
+                <div class="my-2 flex flex-wrap -mx-2 justify-between text-xs w-map max-w-full">
+                    <div class="mx-2">
+                        <img src="/images/icons/circle.png" class="w-map-icon inline-block" alt="on foot" />
+                        <span class="leading-map-icon">Someone is on foot</span>
+                    </div>
+                    <div class="mx-2">
+                        <img src="/images/icons/circle_green.png" class="w-map-icon inline-block" alt="invisible" />
+                        <span class="leading-map-icon">Someone is invisible</span>
+                    </div>
+                    <div class="mx-2">
+                        <img src="/images/icons/circle_red.png" class="w-map-icon inline-block" alt="passenger" />
+                        <span class="leading-map-icon">Someone is a passenger</span>
+                    </div>
+                    <div class="mx-2">
+                        <img src="/images/icons/skull.png" class="w-map-icon inline-block" alt="dead" />
+                        <span class="leading-map-icon">Someone is dead</span>
+                    </div>
+                    <div class="mx-2">
+                        <img src="/images/icons/skull_red.png" class="w-map-icon inline-block" alt="dead passenger" />
+                        <span class="leading-map-icon">Someone is dead and a passenger</span>
+                    </div>
+                </div>
                 <div class="flex flex-wrap">
                     <div v-if="afkPeople" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
@@ -133,6 +155,7 @@ import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import 'leaflet-fullscreen';
 import custom_icons from "../../data/vehicles.json";
+import ignore_invisible from "../../data/ignore_invisible.json";
 import VueSpeedometer from "vue-speedometer";
 
 const Rainbow = require('rainbowvis.js');
@@ -338,6 +361,49 @@ export default {
                 }).fail(reject);
             });
         },
+        shouldIgnoreInvisible(coords, steamIdentifier) {
+            const parseSpot = spot => {
+                const parts = spot.coords.split(' ');
+
+                return {
+                    "x": parseInt(parts[0]),
+                    "y": parseInt(parts[1]),
+                    "z": parseInt(parts[2]),
+                    "radius": spot.radius,
+                    "height": spot.height,
+                };
+            };
+            const isInside = (spot, coords) => {
+                return (
+                    spot.z - spot.height < coords.z &&
+                    spot.z + spot.height > coords.z
+                ) && (
+                    Math.pow(coords.x - spot.x, 2) + Math.pow(coords.y - spot.y, 2) < Math.pow(spot.radius, 2)
+                );
+            }
+
+            // Check if staff member
+            if (this.staff.includes(steamIdentifier)) {
+                return true;
+            }
+
+            // Check if they are inside an apartment (most of the time that's about -99 below the ground)
+            if (coords.z < -90 && coords.z > -110) {
+                return true;
+            }
+
+            // Check if they are inside one of the ignore cylinders
+            for (let x = 0; x < ignore_invisible.length; x++) {
+                const spot = parseSpot(ignore_invisible[x]);
+
+                if (isInside(spot, coords)) {
+                    return true;
+                }
+            }
+
+            // Hmm why are they invisible?
+            return false;
+        },
         async doMapRefresh(server) {
             const _this = this;
 
@@ -542,12 +608,14 @@ export default {
                         }
 
                         const id = "player_" + player.character.id,
-                            originalCoords = Math.round(player.coords.x) + ' ' + Math.round(player.coords.y) + ' ' + Math.round(player.coords.z),
+                            rawCoords = {x: Math.round(player.coords.x), y: Math.round(player.coords.y), z: Math.round(player.coords.z)},
+                            originalCoords = rawCoords.x + ' ' + rawCoords.y + ' ' + rawCoords.z,
                             coords = _this.convertCoords(player.coords),
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
                             isInvisible = 'invisible' in player && player.invisible,
+                            ignoreInvisible = _this.shouldIgnoreInvisible(rawCoords, player.steamIdentifier),
                             isDead = player.character && 'dead' in player.character && player.character.dead,
                             speed = 'speed' in player ? player.speed : null,
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
@@ -595,7 +663,7 @@ export default {
 
                         let attributes = [];
                         if (isInvisible) {
-                            attributes.push('invisible');
+                            attributes.push('invisible' + (ignoreInvisible ? ' (ok)' : ''));
                             markers[id].options.forceZIndex = 101;
                         }
                         if (isDead) {
@@ -633,16 +701,16 @@ export default {
                             const humanized = _this.$options.filters.humanizeSeconds(player.afk);
 
                             afkList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
-    <td class="pr-2"><a style="color: ` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
+    <td class="pr-2"><a style="color: ` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + ` (` + player.source + `)</a></td>
     <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
     <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
     <td><a style="color: ` + linkColor + `" href="/players/` + player.steamIdentifier + `?kick=` + encodeURIComponent(_this.t('map.kick_reason', humanized)) + `">[Kick]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
-                        if (isInvisible && !isStaff) {
-                            invisibleList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
-    <td class="pr-2"><a style="color:#54BBFF" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a></td>
+                        if (isInvisible && !ignoreInvisible) {
+                            invisibleList.push(`<tr>
+    <td class="pr-2"><a style="color:#54BBFF" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a> (` + player.source + `)</td>
     <td class="pr-2">is invisible</td>
     <td><a class="track-cid" style="color:#54BBFF" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
@@ -668,11 +736,17 @@ export default {
                             _this.tracking.data.alt = _this.tracking.data.alt > 99 ? 99 : _this.tracking.data.alt;
                             _this.tracking.data.altitude = feet + 'ft';
 
-                            _this.tracking.data.advanced = [
+                            let trackingInfo = [
                                 player.character.fullName + ' (' + player.source + ')',
-                                'Coords:  ' + originalCoords,
-                                'Vehicle: ' + (player.vehicle ? player.vehicle.model : 'n/a')
-                            ].join("\n");
+                                'Coords:  ' + originalCoords
+                            ];
+
+                            !player.vehicle || trackingInfo.push('Vehicle: ' + player.vehicle.model);
+                            player.afk < 15 || trackingInfo.push('AFK since ' + _this.$options.filters.humanizeSeconds(player.afk));
+
+                            _this.tracking.data.advanced = trackingInfo.join("\n");
+
+                            markers[id].options.forceZIndex = 200;
 
                             if (_this.firstRefresh) {
                                 _this.openPopup = id;

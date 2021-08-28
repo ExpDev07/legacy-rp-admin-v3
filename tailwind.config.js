@@ -32,6 +32,9 @@ module.exports = {
             fontFamily: {
                 'sans': [ 'Nunito', ...defaultTheme.fontFamily.sans ],
             },
+            lineHeight: {
+                'map-icon': '20px',
+            },
             width: {
                 'inventory':          '220px',
                 'alert':              '650px',
@@ -47,6 +50,7 @@ module.exports = {
                 'map-gauge':          '258px',
                 'map-other-gauge':    'calc(100% - 125px)',
                 'map-height-ind':     '60px',
+                'map-icon':           '20px',
             },
             height: {
                 'side-close':      '40px',

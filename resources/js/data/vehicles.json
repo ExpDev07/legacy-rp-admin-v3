@@ -204,29 +204,29 @@
             "firetruk",
             "lguard",
             "romero",
-            "258787652",
-            "-525474865",
-            "-583006956"
+            "1200RTA",
+            "16exp_ems",
+            "ambulance6"
         ]
     },
     "police_car": {
         "size": 23,
         "models": [
-            "751500040",
-            "1014502499",
-            "1282700433",
-            "-1131225672",
-            "-883171617",
-            "-798860497",
-            "-892415012",
-            "545613214",
-            "588213414",
-            "-1572984573",
-            "-1311812071",
-            "658490459",
-            "-1992613535",
-            "941471002",
-            "235768976",
+            "newvic",
+            "13capricenf",
+            "14chargernf",
+            "16ramnf",
+            "16explorernf",
+            "16f150nf",
+            "18tahoenf",
+            "18chargernf",
+            "18taurusnf",
+            "challenger18",
+            "kawasaki",
+            "sspres",
+            "umoracle",
+            "polnspeedo",
+            "zr1RB",
             "fbi",
             "fbi2",
             "police",
@@ -350,8 +350,7 @@
     "tie_fighter": {
         "size": 40,
         "models": [
-            "tiefighterx",
-            "520411583"
+            "tiefighterx"
         ]
     }
 }

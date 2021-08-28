@@ -1,0 +1,56 @@
+[
+    {
+        "coords": "-36 -1052 28",
+        "radius": 5,
+        "label": "Los Santos Customs 8"
+    },
+    {
+        "coords": "935 -971 39",
+        "radius": 20,
+        "height": 3,
+        "label": "Los Santos Customs 7"
+    },
+    {
+        "coords": "-211 -1324 31",
+        "radius": 20,
+        "height": 3,
+        "label": "Los Santos Customs 6"
+    },
+    {
+        "coords": "110 6627 32",
+        "radius": 20,
+        "height": 3,
+        "label": "Los Santos Customs 5"
+    },
+    {
+        "coords": "1175 2640 38",
+        "radius": 20,
+        "height": 3,
+        "label": "Los Santos Customs 4"
+    },
+    {
+        "coords": "-1154 -2005 13",
+        "radius": 20,
+        "height": 3,
+        "label": "Los Santos Customs 3"
+    },
+    {
+        "coords": "732 -1089 22",
+        "radius": 20,
+        "height": 3,
+        "label": "Los Santos Customs 2"
+    },
+    {
+        "coords": "-339 -137 39",
+        "radius": 20,
+        "height": 3,
+        "label": "Los Santos Customs 1"
+    },
+
+    {
+        "coords": "-76 75 73",
+        "radius": 8,
+        "height": 4,
+        "label": "Exclusive Dealership"
+    }
+]
