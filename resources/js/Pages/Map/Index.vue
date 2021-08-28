@@ -361,7 +361,7 @@ export default {
                 }).fail(reject);
             });
         },
-        shouldIgnoreInvisible(coords) {
+        shouldIgnoreInvisible(coords, steamIdentifier) {
             const parseSpot = spot => {
                 const parts = spot.coords.split(' ');
 
@@ -380,6 +380,11 @@ export default {
                 ) && (
                     Math.pow(coords.x - spot.x, 2) + Math.pow(coords.y - spot.y, 2) < Math.pow(spot.radius, 2)
                 );
+            }
+
+            // Check if staff member
+            if (this.staff.includes(steamIdentifier)) {
+                return true;
             }
 
             // Check if they are inside an apartment (most of the time that's about -99 below the ground)
@@ -610,7 +615,7 @@ export default {
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
                             isInvisible = 'invisible' in player && player.invisible,
-                            ignoreInvisible = _this.shouldIgnoreInvisible(rawCoords),
+                            ignoreInvisible = _this.shouldIgnoreInvisible(rawCoords, player.steamIdentifier),
                             isDead = player.character && 'dead' in player.character && player.character.dead,
                             speed = 'speed' in player ? player.speed : null,
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
@@ -703,8 +708,8 @@ export default {
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
                         }
 
-                        if (isInvisible && !ignoreInvisible && !isStaff) {
-                            invisibleList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
+                        if (isInvisible && !ignoreInvisible) {
+                            invisibleList.push(`<tr>
     <td class="pr-2"><a style="color:#54BBFF" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a> (` + player.source + `)</td>
     <td class="pr-2">is invisible</td>
     <td><a class="track-cid" style="color:#54BBFF" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
@@ -731,11 +736,15 @@ export default {
                             _this.tracking.data.alt = _this.tracking.data.alt > 99 ? 99 : _this.tracking.data.alt;
                             _this.tracking.data.altitude = feet + 'ft';
 
-                            _this.tracking.data.advanced = [
+                            let trackingInfo = [
                                 player.character.fullName + ' (' + player.source + ')',
-                                'Coords:  ' + originalCoords,
-                                'Vehicle: ' + (player.vehicle ? player.vehicle.model : 'n/a')
-                            ].join("\n");
+                                'Coords:  ' + originalCoords
+                            ];
+
+                            !player.vehicle || trackingInfo.push('Vehicle: ' + player.vehicle.model);
+                            player.afk < 15 || trackingInfo.push('AFK since ' + _this.$options.filters.humanizeSeconds(player.afk));
+
+                            _this.tracking.data.advanced = trackingInfo.join("\n");
 
                             markers[id].options.forceZIndex = 200;
 
