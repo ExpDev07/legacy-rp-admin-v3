@@ -85,18 +85,19 @@
 {x: -247.358, y: 6331.569} blips/medical.png Paleto Bay Clinic
 {x: 299.196, y: -584.769} blips/medical.png Pillbox Hill Medical Center
 {x: 1150.602, y: -1530.250} blips/medical.png St. Fiacre Hospital
+{x: 1837, y: 3676} blips/medical.png Sandy Shores Medical Center
 
 // Police
-{x: 434.387, y: -981.917} blips/police.png Police Department 1
-{x: 638.176, y: 1.899} blips/police.png Police Department 2
-{x: 1855.398, y: 3683.248} blips/police.png Police Department 3
-{x: -443.182, y: 6016.523} blips/police.png Police Department 4
-{x: 360.804, y: -1584.620} blips/police.png Police Department 5
-{x: -561.930, y: -130.840} blips/police.png Police Department 6
-{x: 827.433, y: -1290.013} blips/police.png Police Department 7
-{x: 379.160, y: 792.422} blips/police.png Police Department 8
-{x: -1632.290, y: -1015.622} blips/police.png Police Department 9
-{x: 2534.334, y: -384.501} blips/police.png Police Department 10
+{x: 434.387, y: -981.917} blips/police.png Mission Row Police Station
+{x: 638.176, y: 1.899} blips/police.png Vinewood Police Station
+{x: 1855.398, y: 3683.248} blips/police.png Sandy Shores Sheriff's Station
+{x: -443.182, y: 6016.523} blips/police.png Paleto Bay Sheriff's Office
+{x: 360.804, y: -1584.620} blips/police.png Davis Sheriff's Station
+{x: -561.930, y: -130.840} blips/police.png Rockford Hills Police Headquarters
+{x: 827.433, y: -1290.013} blips/police.png La Mesa Police Station
+{x: 379.160, y: 792.422} blips/police.png Beaver Bush Ranger Station
+{x: -1632.290, y: -1015.622} blips/police.png Del Perro Police Station
+{x: 2534.334, y: -384.501} blips/police.png N.O.O.S.E. Headquarters
 
 // Police Sea HQ
 {x: -800.281, y: -1512.382} blips/sea_hq.png Police Sea HQ
