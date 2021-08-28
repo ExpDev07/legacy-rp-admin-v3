@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Helpers\GeneralHelper;
 use App\Helpers\LoggingHelper;
 use App\Helpers\SessionHelper;
+use App\Player;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -36,10 +37,10 @@ class StaffMiddleware
     public function handle(Request $request, Closure $next)
     {
         $requestPath = strtok($_SERVER["REQUEST_URI"], '?');
+        $session = SessionHelper::getInstance();
 
         // Check for staff status.
         if (!$this->isStaff($request) || !$this->checkSessionLock()) {
-            $session = SessionHelper::getInstance();
             LoggingHelper::log($session->getSessionKey(), 'StaffMiddleware check failed');
             LoggingHelper::log($session->getSessionKey(), 'session.user -> ' . json_encode($this->cleanupUserDump($session->get('user'))));
 
@@ -54,6 +55,26 @@ class StaffMiddleware
                 );
             }
         } else {
+            if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+                $user = $session->get('user');
+
+                $player = Player::query()->where('steam_identifier', '=', $user['player']['steam_identifier'])->select([
+                    'player_name', 'is_super_admin', 'is_staff'
+                ])->first();
+
+                $user['player']['player_name'] = $player->player_name;
+                $user['player']['is_super_admin'] = $player->is_super_admin;
+                $user['player']['is_staff'] = $player->is_staff;
+
+                $session->put('user', $user);
+
+                if (!$player->is_staff) {
+                    return redirect('/login')->with('error',
+                        'Your staff status has changed, please log in again!'
+                    );
+                }
+            }
+
             GeneralHelper::updateSocketSession();
         }
 
