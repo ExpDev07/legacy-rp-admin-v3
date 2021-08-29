@@ -221,6 +221,11 @@ window.loadHistory = function (server, player, day) {
     }
 };
 
+let InvisibleHistoryDebug = {};
+function getInvisibleHistory() {
+    return Object.keys(InvisibleHistoryDebug);
+}
+
 export default {
     layout: Layout,
     components: {
@@ -388,7 +393,7 @@ export default {
             }
 
             // Check if they are inside an apartment (most of the time that's about -99 below the ground)
-            if (coords.z < -90 && coords.z > -110) {
+            if (coords.z < -90 && coords.z > -140) {
                 return true;
             }
 
@@ -399,6 +404,11 @@ export default {
                 if (isInside(spot, coords)) {
                     return true;
                 }
+            }
+
+            const key = coords.x + ' ' + coords.y + ' ' + coords.z;
+            if (!(key in InvisibleHistoryDebug)) {
+                InvisibleHistoryDebug[key] = steamIdentifier;
             }
 
             // Hmm why are they invisible?
