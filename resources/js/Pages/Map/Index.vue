@@ -39,6 +39,36 @@
             </div>
         </portal>
 
+        <!-- Area Add -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-1k" v-if="isAddingDetectionArea">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                <h3 class="mb-2">
+                        {{ t('map.area_title') }}
+                </h3>
+
+                <!-- Radius -->
+                <div class="w-full p-3 flex justify-between">
+                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="area_radius">
+                        {{ t('map.area_radius') }}
+                    </label>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="400" id="area_radius" value="5" v-model="form.area_radius" />
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex items-center mt-2">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded mr-2"
+                            @click="confirmArea">
+                        <i class="mr-1 fas fa-plus"></i>
+                        {{ t('map.area_add') }}
+                    </button>
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            @click="isAddingDetectionArea = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <template>
             <div class="-mt-12" id="map-wrapper">
                 <div class="flex flex-wrap justify-between mb-2 w-map max-w-full">
@@ -59,15 +89,22 @@
                             {{ t('map.do_track') }}
                         </button>
                     </div>
-                    <button
-                        class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                        @click="advancedTracking = !advancedTracking"
-                        :title="advancedTracking ? t('global.enabled') : t('global.disabled')"
-                    >
-                        {{ t('map.advanced_track') }}
-                        <i class="fas fa-check ml-1" v-if="advancedTracking"></i>
-                        <i class="fas fa-times ml-1" v-else></i>
-                    </button>
+                    <div class="flex flex-wrap">
+                        <button
+                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                            @click="addArea">
+                            {{ t('map.area_add') }}
+                        </button>
+                        <button
+                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                            @click="advancedTracking = !advancedTracking"
+                            :title="advancedTracking ? t('global.enabled') : t('global.disabled')"
+                        >
+                            {{ t('map.advanced_track') }}
+                            <i class="fas fa-check ml-1" v-if="advancedTracking"></i>
+                            <i class="fas fa-times ml-1" v-else></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="relative w-map max-w-full">
                     <div id="map" class="w-map max-w-full relative h-max"></div>
@@ -129,6 +166,17 @@
                     <div class="mx-2">
                         <img src="/images/icons/skull_red.png" class="w-map-icon inline-block" alt="dead passenger" />
                         <span class="leading-map-icon">Someone is dead and a passenger</span>
+                    </div>
+                </div>
+                <div class="flex flex-wrap" v-if="detectionAreas.length > 0">
+                    <div class="pt-4 mr-4" v-for="(area, index) in detectionAreas">
+                        <h3 class="mb-2">
+                            {{ t('map.area_label', index + 1) }}
+                            <sup>
+                                <a href="#" class="text-red-500 font-bold" @click="removeArea($event, index)" :title="t('global.remove')">&#x1F5D9;</a>
+                            </sup>
+                        </h3>
+                        <pre class="text-xs" v-html="area.html">{{ area.html }}</pre>
                     </div>
                 </div>
                 <div class="flex flex-wrap">
@@ -260,11 +308,20 @@ export default {
             trackedPlayer: window.location.hash.substr(1),
             firstRefresh: true,
             clickedCoords: '',
+            rawClickedCoords: null,
             coordsCommand: '',
             afkPeople: '',
             invisiblePeople: '',
             openPopup: null,
             isDragging: false,
+            isAddingDetectionArea: false,
+            form: {
+                area_radius: 0,
+                area_location: {
+                    x: 0,
+                    y: 0
+                }
+            },
             layers: {
                 "Players": L.layerGroup(),
                 "Dead Players": L.layerGroup(),
@@ -272,6 +329,7 @@ export default {
                 "Vehicles": L.layerGroup(),
                 "Blips": L.layerGroup(),
             },
+            detectionAreas: [],
             tracking: {
                 id: '',
                 type: 'server_',
@@ -343,6 +401,115 @@ export default {
             this.trackedPlayer = id;
             window.location.hash = id;
             this.firstRefresh = true;
+        },
+        confirmArea() {
+            if (this.form.area_radius < 1 || this.form.area_radius > 500) {
+                return alert(this.t('map.area_inv_radius'));
+            }
+
+            const convertDistance = d => {
+                const a = this.convertCoords({x: 0, y: 0}),
+                    b = this.convertCoords({x: d, y: d});
+
+                return Math.abs(b.lat - a.lat);
+            };
+
+            this.isAddingDetectionArea = false;
+            const area = {
+                    x: this.form.area_location.x,
+                    y: this.form.area_location.y,
+                    radius: this.form.area_radius,
+                    people: [],
+                    html: ''
+                },
+                coords = this.convertCoords(this.form.area_location);
+
+            area.marker = L.marker(coords,
+                {
+                    icon: new L.Icon(
+                        {
+                            iconUrl: '/images/icons/area.png',
+                            iconSize: [16, 16]
+                        }
+                    ),
+                    forceZIndex: 300
+                }
+            );
+            area.marker.bindPopup(this.t('map.area_label', this.detectionAreas.length + 1) +
+                '<br><span class="italic">' + area.x + ' ' + area.y + '</span>', {
+                autoPan: false
+            });
+            area.marker.addTo(this.map);
+
+            area.circle = L.circle(coords, {
+                radius: convertDistance(area.radius),
+                color: '#FFBF00',
+                fillColor: '#FFBF00',
+                weight: 2,
+                opacity: 0.85,
+                fill: true
+            });
+            area.circle.addTo(this.map);
+
+            this.detectionAreas.push(area);
+
+            this.form.area_location = null;
+        },
+        addArea() {
+            if (!this.rawClickedCoords) {
+                return alert(this.t('map.area_no_location'));
+            }
+
+            this.form.area_location = this.rawClickedCoords;
+            this.form.area_radius = 5;
+
+            this.isAddingDetectionArea = true;
+        },
+        removeArea(e, index) {
+            e.preventDefault();
+
+            this.map.removeLayer(this.detectionAreas[index].marker);
+            this.map.removeLayer(this.detectionAreas[index].circle);
+
+            let areas = [];
+            for (let x=0;x<this.detectionAreas.length;x++) {
+                if (x !== index) {
+                    areas.push(this.detectionAreas[x]);
+                }
+            }
+
+            this.detectionAreas = areas;
+        },
+        cleanupDetectionAreas() {
+            const _this = this;
+
+            $.each(this.detectionAreas, function (index, area) {
+                const people = Object.values(area.people);
+
+                _this.detectionAreas[index].html = people.length > 0 ? '<table>' + people.join('') + '</table>' : _this.t('map.area_none');
+            });
+        },
+        updateDetectionAreas(coords, player) {
+            if (!player.character) {
+                return;
+            }
+
+            const _this = this;
+            $.each(this.detectionAreas, function (index, area) {
+                const key = player.steamIdentifier,
+                    dist = Math.sqrt((coords.x - area.x) ** 2 + (coords.y - area.y) ** 2);
+
+                if (dist > area.radius) {
+                    delete area.people[key];
+                } else {
+                    area.people[key] = `<tr>
+    <td class="pr-2"><a style="color: #FFBF00" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a> (` + player.source + `)</td>
+    <td><a class="track-cid" style="color: #FFBF00" href="#" data-trackid="player_` + player.character.id + `" data-popup="true">[Track]</a></td>
+</tr>`.replace(/\r?\n(\s{4})?/gm, '');
+                }
+
+                _this.detectionAreas[index] = area;
+            });
         },
         hostname(isSocket) {
             const isDev = window.location.hostname === 'localhost';
@@ -638,6 +805,8 @@ export default {
                             playerCallback = null;
                         }
 
+                        _this.updateDetectionAreas(rawCoords, player);
+
                         if (isNaN(coords.lat) || isNaN(coords.lng)) {
                             console.debug('NaN Coords', coords, player);
                             return;
@@ -776,6 +945,8 @@ export default {
                     this.afkPeople = afkList.length > 0 ? '<table>' + afkList.join("\n") + '</table>' : '';
                     this.invisiblePeople = invisibleList.length > 0 ? '<table>' + invisibleList.join("\n") + '</table>' : '';
 
+                    this.cleanupDetectionAreas();
+
                     $.each(markers, function (id, marker) {
                         if (!validIds.includes(id)) {
                             _this.map.removeLayer(marker);
@@ -874,6 +1045,7 @@ export default {
                 let game = _this.convertCoords(e.latlng);
 
                 _this.clickedCoords = "[X=" + Math.round(game.x) + ",Y=" + Math.round(game.y) + "] / [X=" + map.x + ",Y=" + map.y + "]";
+                _this.rawClickedCoords = {x: Math.round(game.x), y: Math.round(game.y)};
                 _this.coordsCommand = "/tp_coords " + Math.round(game.x) + " " + Math.round(game.y);
 
                 console.info('Clicked coordinates', map, game);
@@ -918,7 +1090,8 @@ export default {
                 '.coordinate-attr {font-size: 11px;padding:0 5px;color:rgb(0, 120, 168);line-height:16.5px}',
                 '.leaflet-control-layers-overlays {user-select:none !important}',
                 '.leaflet-control-layers-selector {outline:none !important}',
-                '.leaflet-container {background:#143D6B}'
+                '.leaflet-container {background:#143D6B}',
+                'path.leaflet-interactive[stroke="#FFBF00"] {cursor:default}'
             ];
             $('#map').append('<style>' + styles.join('') + '</style>');
         }
