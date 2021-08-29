@@ -631,11 +631,6 @@ export default {
                 }
             }
 
-            const key = coords.x + ' ' + coords.y + ' ' + coords.z;
-            if (!(key in InvisibleHistoryDebug)) {
-                InvisibleHistoryDebug[key] = steamIdentifier;
-            }
-
             // Hmm why are they invisible?
             return false;
         },
@@ -951,6 +946,11 @@ export default {
     <td class="pr-2">is invisible</td>
     <td><a class="track-cid" style="color:#54BBFF" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
 </tr>`.replace(/\r?\n(\s{4})?/gm, ''));
+
+                            const invKey = rawCoords.x + ' ' + rawCoords.y + ' ' + rawCoords.z;
+                            if (!(invKey in InvisibleHistoryDebug)) {
+                                InvisibleHistoryDebug[invKey] = player.steamIdentifier;
+                            }
                         }
 
                         if (_this.trackedPlayer && (_this.trackedPlayer === 'server_' + player.source || (_this.trackedPlayer.startsWith('steam:') && _this.trackedPlayer === player.steamIdentifier))) {
