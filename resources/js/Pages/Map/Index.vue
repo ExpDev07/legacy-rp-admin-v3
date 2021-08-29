@@ -977,7 +977,7 @@ export default {
                             });
                         }
 
-                        if ((isInvisible && !ignoreInvisible) || true) {
+                        if (isInvisible && !ignoreInvisible) {
                             invisibleList.push({
                                 name: player.character.fullName,
                                 steam: player.steamIdentifier,
