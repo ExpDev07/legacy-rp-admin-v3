@@ -489,6 +489,8 @@ export default {
             this.detectionAreas.push(area);
 
             this.form.area_location = null;
+            this.form.area_type = 'normal';
+            this.form.area_radius = 5;
         },
         addArea() {
             if (!this.rawClickedCoords) {
