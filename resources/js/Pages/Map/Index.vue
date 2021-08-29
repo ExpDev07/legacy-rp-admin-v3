@@ -189,13 +189,17 @@
                         <h3 class="mb-2">
                             {{ t('map.area_label', index + 1) }}
                             <sup>
+                                ({{ area.people.length }})
                                 <a href="#" class="text-red-500 font-bold" @click="removeArea($event, index)" :title="t('global.remove')">&#x1F5D9;</a>
                             </sup>
                         </h3>
                         <table class="text-xs font-mono">
                             <tr v-for="(player, x) in area.people" :key="x">
                                 <td class="pr-2">
-                                    <a class="text-yellow-500" target="_blank" :href="'/players/' + player.steam">{{ player.name }} ({{ player.source }})</a>
+                                    <a class="text-yellow-500" target="_blank" :href="'/players/' + player.steam">{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2 text-yellow-500">
+                                    ({{ player.source }})
                                 </td>
                                 <td class="pr-2" v-if="player.exited_at" :title="t('map.area_time', humanizeMilliseconds(player.exited_at - player.entered_at))">
                                     {{ t('map.area_exit', $moment(player.exited_at).fromNow()) }}
@@ -211,13 +215,43 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap">
-                    <div v-if="afkPeople" class="pt-4 mr-4">
+                    <div v-if="afkPeople.length > 0" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
-                        <pre v-html="afkPeople" class="text-sm">{{ afkPeople }}</pre>
+                        <table class="text-sm font-mono">
+                            <tr v-for="(player, x) in afkPeople" :key="x" :title="player.is_staff ? t('map.is_staff') : ''">
+                                <td class="pr-2">
+                                    <a :style="'color:' + player.color" target="_blank" :href="'/players/' + player.steam">{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2" :style="'color:' + player.color">
+                                    ({{ player.source }})
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.afk_move', formatSeconds(player.afk)) }}
+                                </td>
+                                <td>
+                                    <a class="track-cid" :style="'color:' + player.color" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div v-if="invisiblePeople" class="pt-4">
+                    <div v-if="invisiblePeople.length > 0" class="pt-4">
                         <h3 class="mb-2">{{ t('map.invisible_title') }}</h3>
-                        <pre v-html="invisiblePeople" class="text-sm">{{ invisiblePeople }}</pre>
+                        <table class="text-sm font-mono">
+                            <tr v-for="(player, x) in invisiblePeople" :key="x">
+                                <td class="pr-2">
+                                    <a class="dark:text-red-400 text-red-600" target="_blank" :href="'/players/' + player.steam">{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2 dark:text-red-400 text-red-600">
+                                    ({{ player.source }})
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.invisible') }}
+                                </td>
+                                <td>
+                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -302,7 +336,9 @@ window.loadHistory = function (server, player, day) {
 
 let InvisibleHistoryDebug = {};
 window.getInvisibleHistory = function() {
-    return Object.keys(InvisibleHistoryDebug);
+    return Object.keys(InvisibleHistoryDebug).sort((a, b) => {
+        return InvisibleHistoryDebug[b] - InvisibleHistoryDebug[a];
+    });
 }
 
 export default {
@@ -341,8 +377,8 @@ export default {
             clickedCoords: '',
             rawClickedCoords: null,
             coordsCommand: '',
-            afkPeople: '',
-            invisiblePeople: '',
+            afkPeople: [],
+            invisiblePeople: [],
             openPopup: null,
             isDragging: false,
             isAddingDetectionArea: false,
@@ -618,7 +654,7 @@ export default {
             }
 
             // Check if they are inside an apartment (most of the time that's about -99 below the ground)
-            if (coords.z < -90 && coords.z > -140) {
+            if (coords.z < -90) {
                 return true;
             }
 
@@ -930,26 +966,30 @@ export default {
                                 return '#' + rainbow.colourAt(player.afk);
                             })();
 
-                            const humanized = _this.$options.filters.humanizeSeconds(player.afk);
-
-                            afkList.push(`<tr title="` + (isStaff ? 'Is a staff member' : '') + `">
-    <td class="pr-2"><a style="color: ` + linkColor + `" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + ` (` + player.source + `)</a></td>
-    <td class="pr-2">hasn't moved in ` + _this.formatSeconds(player.afk) + `</td>
-    <td><a class="track-cid" style="color: ` + linkColor + `" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
-    <td><a style="color: ` + linkColor + `" href="/players/` + player.steamIdentifier + `?kick=` + encodeURIComponent(_this.t('map.kick_reason', humanized)) + `">[Kick]</a></td>
-</tr>`.replace(/\r?\n(\s{4})?/gm, ''));
+                            afkList.push({
+                                color: linkColor,
+                                is_staff: isStaff,
+                                name: player.character.fullName,
+                                steam: player.steamIdentifier,
+                                afk: player.afk,
+                                cid: player.character.id,
+                                source: player.source
+                            });
                         }
 
-                        if (isInvisible && !ignoreInvisible) {
-                            invisibleList.push(`<tr>
-    <td class="pr-2"><a style="color:#54BBFF" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a> (` + player.source + `)</td>
-    <td class="pr-2">is invisible</td>
-    <td><a class="track-cid" style="color:#54BBFF" href="#" data-trackid="` + id + `" data-popup="true">[Track]</a></td>
-</tr>`.replace(/\r?\n(\s{4})?/gm, ''));
+                        if ((isInvisible && !ignoreInvisible) || true) {
+                            invisibleList.push({
+                                name: player.character.fullName,
+                                steam: player.steamIdentifier,
+                                cid: player.character.id,
+                                source: player.source
+                            });
 
                             const invKey = rawCoords.x + ' ' + rawCoords.y + ' ' + rawCoords.z;
-                            if (!(invKey in InvisibleHistoryDebug)) {
-                                InvisibleHistoryDebug[invKey] = player.steamIdentifier;
+                            if (invKey in InvisibleHistoryDebug) {
+                                InvisibleHistoryDebug[invKey]++;
+                            } else {
+                                InvisibleHistoryDebug[invKey] = 1;
                             }
                         }
 
@@ -1000,8 +1040,8 @@ export default {
                         }
                     });
 
-                    this.afkPeople = afkList.length > 0 ? '<table>' + afkList.join("\n") + '</table>' : '';
-                    this.invisiblePeople = invisibleList.length > 0 ? '<table>' + invisibleList.join("\n") + '</table>' : '';
+                    this.afkPeople = afkList;
+                    this.invisiblePeople = invisibleList;
 
                     $.each(markers, function (id, marker) {
                         if (!validIds.includes(id)) {
