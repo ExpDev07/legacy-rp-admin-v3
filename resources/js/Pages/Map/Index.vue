@@ -301,7 +301,7 @@ window.loadHistory = function (server, player, day) {
 };
 
 let InvisibleHistoryDebug = {};
-function getInvisibleHistory() {
+window.getInvisibleHistory = function() {
     return Object.keys(InvisibleHistoryDebug);
 }
 
