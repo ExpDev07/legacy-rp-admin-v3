@@ -194,7 +194,10 @@
                             </sup>
                         </h3>
                         <table class="text-xs font-mono">
-                            <tr v-for="(player, x) in area.people" :key="x">
+                            <tr v-if="area.people.length === 0">
+                                {{ t('map.area_none') }}
+                            </tr>
+                            <tr v-for="(player, x) in area.people" :key="x" v-else>
                                 <td class="pr-2">
                                     <a class="text-yellow-500" target="_blank" :href="'/players/' + player.steam">{{ player.name }}</a>
                                 </td>
