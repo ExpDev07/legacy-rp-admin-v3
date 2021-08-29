@@ -47,12 +47,28 @@
                 </h3>
 
                 <!-- Radius -->
-                <div class="w-full p-3 flex justify-between">
+                <div class="w-full p-3 flex justify-between px-0">
                     <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="area_radius">
                         {{ t('map.area_radius') }}
                     </label>
                     <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="400" id="area_radius" value="5" v-model="form.area_radius" />
                 </div>
+
+                <!-- Type -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="area_type">
+                        {{ t('map.area_type.title') }}
+                    </label>
+                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="area_type" v-model="form.area_type">
+                        <option value="normal">{{ t('map.area_type.normal') }}</option>
+                        <option value="persistent">{{ t('map.area_type.persistent') }}</option>
+                    </select>
+                </div>
+
+                <p class="my-2">
+                    <span class="font-bold">{{ t('map.area_type.normal') }}</span>: {{ t('map.area_type.normal_description') }}<br>
+                    <span class="font-bold">{{ t('map.area_type.persistent') }}</span>: {{ t('map.area_type.persistent_description') }}
+                </p>
 
                 <!-- Buttons -->
                 <div class="flex items-center mt-2">
@@ -169,14 +185,29 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap" v-if="detectionAreas.length > 0">
-                    <div class="pt-4 mr-4" v-for="(area, index) in detectionAreas">
+                    <div class="pt-4 mr-4" v-for="(area, index) in detectionAreas" :key="index">
                         <h3 class="mb-2">
                             {{ t('map.area_label', index + 1) }}
                             <sup>
                                 <a href="#" class="text-red-500 font-bold" @click="removeArea($event, index)" :title="t('global.remove')">&#x1F5D9;</a>
                             </sup>
                         </h3>
-                        <pre class="text-xs" v-html="area.html">{{ area.html }}</pre>
+                        <table class="text-xs font-mono">
+                            <tr v-for="(player, x) in area.people" :key="x">
+                                <td class="pr-2">
+                                    <a class="text-yellow-500" target="_blank" :href="'/players/' + player.steam">{{ player.name }} ({{ player.source }})</a>
+                                </td>
+                                <td class="pr-2" v-if="player.exited_at" :title="t('map.area_time', humanizeMilliseconds(player.exited_at - player.entered_at))">
+                                    {{ t('map.area_exit', $moment(player.exited_at).fromNow()) }}
+                                </td>
+                                <td class="pr-2" v-else>
+                                    {{ t('map.area_inside') }}
+                                </td>
+                                <td>
+                                    <a class="track-cid text-yellow-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
                 <div class="flex flex-wrap">
@@ -317,6 +348,7 @@ export default {
             isAddingDetectionArea: false,
             form: {
                 area_radius: 0,
+                area_type: 'normal',
                 area_location: {
                     x: 0,
                     y: 0
@@ -416,11 +448,13 @@ export default {
 
             this.isAddingDetectionArea = false;
             const area = {
-                    x: this.form.area_location.x,
-                    y: this.form.area_location.y,
-                    radius: this.form.area_radius,
+                    x: parseInt(this.form.area_location.x),
+                    y: parseInt(this.form.area_location.y),
+                    radius: parseInt(this.form.area_radius),
+                    type: this.form.area_type+'',
                     people: [],
-                    html: ''
+
+                    _timestamp: Date.now()
                 },
                 coords = this.convertCoords(this.form.area_location);
 
@@ -436,7 +470,8 @@ export default {
                 }
             );
             area.marker.bindPopup(this.t('map.area_label', this.detectionAreas.length + 1) +
-                '<br><span class="italic">' + area.x + ' ' + area.y + '</span>', {
+                '<br><span class="italic">' + area.x + ' ' + area.y + ' (' + area.radius + 'm)</span>' +
+                '<br>' + this.t('map.area_type.title') + ': <span class="italic">' + this.t('map.area_type.' + area.type) + '</span>', {
                 autoPan: false
             });
             area.marker.addTo(this.map);
@@ -480,14 +515,10 @@ export default {
 
             this.detectionAreas = areas;
         },
-        cleanupDetectionAreas() {
-            const _this = this;
+        humanizeMilliseconds(ms) {
+            const sec = Math.round(ms / 1000);
 
-            $.each(this.detectionAreas, function (index, area) {
-                const people = Object.values(area.people);
-
-                _this.detectionAreas[index].html = people.length > 0 ? '<table>' + people.join('') + '</table>' : _this.t('map.area_none');
-            });
+            return this.$options.filters.humanizeSeconds(sec) + ' (' + sec + 's)';
         },
         updateDetectionAreas(coords, player) {
             if (!player.character) {
@@ -496,19 +527,44 @@ export default {
 
             const _this = this;
             $.each(this.detectionAreas, function (index, area) {
-                const key = player.steamIdentifier,
-                    dist = Math.sqrt((coords.x - area.x) ** 2 + (coords.y - area.y) ** 2);
+                const dist = Math.sqrt((coords.x - area.x) ** 2 + (coords.y - area.y) ** 2);
 
-                if (dist > area.radius) {
-                    delete area.people[key];
-                } else {
-                    area.people[key] = `<tr>
-    <td class="pr-2"><a style="color: #FFBF00" target="_blank" href="/players/` + player.steamIdentifier + `">` + player.character.fullName + `</a> (` + player.source + `)</td>
-    <td><a class="track-cid" style="color: #FFBF00" href="#" data-trackid="player_` + player.character.id + `" data-popup="true">[Track]</a></td>
-</tr>`.replace(/\r?\n(\s{4})?/gm, '');
+                if (area.people.length >= 800) {
+                    return;
                 }
 
-                _this.detectionAreas[index] = area;
+                if (dist > area.radius) {
+                    area.people = area.people.filter((p, x) => {
+                        if (p.exited_at) {
+                            return true;
+                        } else if (p.steam === player.steamIdentifier) {
+                            if (area.type === 'persistent') {
+                                area.people[x].exited_at = Date.now();
+                                return true;
+                            }
+                            return false;
+                        }
+                        return true;
+                    });
+                } else {
+                    const addToList = area.people.filter(p => {
+                        return p.steam === player.steamIdentifier && !p.exited_at;
+                    }).length === 0;
+
+                    if (addToList) {
+                        area.people.push({
+                            steam: player.steamIdentifier,
+                            cid: player.character.id,
+                            source: player.source,
+                            name: player.character.fullName,
+                            entered_at: Date.now(),
+                            exited_at: null
+                        });
+                    }
+                }
+
+                _this.detectionAreas[index].people = area.people;
+                _this.detectionAreas[index]._timestamp = Date.now();
             });
         },
         hostname(isSocket) {
@@ -944,8 +1000,6 @@ export default {
 
                     this.afkPeople = afkList.length > 0 ? '<table>' + afkList.join("\n") + '</table>' : '';
                     this.invisiblePeople = invisibleList.length > 0 ? '<table>' + invisibleList.join("\n") + '</table>' : '';
-
-                    this.cleanupDetectionAreas();
 
                     $.each(markers, function (id, marker) {
                         if (!validIds.includes(id)) {
