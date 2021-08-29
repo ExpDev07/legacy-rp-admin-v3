@@ -1,7 +1,7 @@
 [
     {
         "coords": "-36 -1052 28",
-        "radius": 5,
+        "radius": 20,
         "height": 3,
         "label": "Los Santos Customs 8"
     },
@@ -43,7 +43,7 @@
     },
     {
         "coords": "-339 -137 39",
-        "radius": 20,
+        "radius": 22,
         "height": 3,
         "label": "Los Santos Customs 1"
     },
@@ -53,5 +53,100 @@
         "radius": 8,
         "height": 4,
         "label": "Exclusive Dealership"
+    },
+
+    {
+        "coords": "-120 -11 10",
+        "radius": 10,
+        "height": 70,
+        "label": "Garage with no floor"
+    },
+
+    {
+        "coords": "1174 -3197 -39",
+        "radius": 4,
+        "height": 3,
+        "label": "Warehouse Office Exit"
+    },
+    {
+        "coords": "992 -3098 -39",
+        "radius": 4,
+        "height": 3,
+        "label": "Warehouse Office Entry"
+    },
+    {
+        "coords": "747 -1399 27",
+        "radius": 4,
+        "height": 3,
+        "label": "Enter Warehouse"
+    },
+    {
+        "coords": "1028 -3101 -39",
+        "radius": 4,
+        "height": 3,
+        "label": "Exit Warehouse"
+    },
+
+    {
+        "coords": "346 -583 29",
+        "radius": 4,
+        "height": 3,
+        "label": "Enter Upper Pillbox"
+    },
+    {
+        "coords": "332 -596 43",
+        "radius": 4,
+        "height": 3,
+        "label": "Enter Lower Pillbox"
+    },
+    {
+        "coords": "330 -601 43",
+        "radius": 4,
+        "height": 3,
+        "label": "Enter Pillbox Roof"
+    },
+    {
+        "coords": "339 -584 74",
+        "radius": 4,
+        "height": 3,
+        "label": "Exit Pillbox Roof"
+    },
+
+    {
+        "coords": "936 47 81",
+        "radius": 4,
+        "height": 3,
+        "label": "Enter Casino"
+    },
+    {
+        "coords": "1090 206 -49",
+        "radius": 4,
+        "height": 3,
+        "label": "Exit Casino"
+    },
+
+    {
+        "coords": "-1156 -1519 10",
+        "radius": 13,
+        "height": 5,
+        "label": "Interior"
+    },
+    {
+        "coords": "-806 175 72",
+        "radius": 20,
+        "height": 10,
+        "label": "Interior"
+    },
+    {
+        "coords": "1274 -1711 55",
+        "radius": 10,
+        "height": 3,
+        "label": "Interior"
+    },
+    {
+        "coords": "1973 3818 33",
+        "radius": 5,
+        "height": 3,
+        "label": "Interior"
     }
 ]
