@@ -51,7 +51,7 @@
                     <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="area_radius">
                         {{ t('map.area_radius') }}
                     </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="400" id="area_radius" value="5" v-model="form.area_radius" />
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="2500" id="area_radius" value="5" v-model="form.area_radius" />
                 </div>
 
                 <!-- Type -->
@@ -435,7 +435,7 @@ export default {
             this.firstRefresh = true;
         },
         confirmArea() {
-            if (this.form.area_radius < 1 || this.form.area_radius > 500) {
+            if (this.form.area_radius < 1 || this.form.area_radius > 2500) {
                 return alert(this.t('map.area_inv_radius'));
             }
 
