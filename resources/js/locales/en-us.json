@@ -121,6 +121,8 @@
             "is_not_dead": "Is not dead",
             "is_invisible": "Is invisible",
             "is_not_invisible": "Is not invisible",
+            "is_staff": "Is staff",
+            "is_not_staff": "Is not staff",
             "is_male": "Character is male",
             "is_female": "Character is female"
         },
