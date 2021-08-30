@@ -90,6 +90,8 @@
                         <option value="is_not_vehicle">{{ t('map.area_filters.is_not_vehicle') }}</option>
                         <option value="is_dead">{{ t('map.area_filters.is_dead') }}</option>
                         <option value="is_not_dead">{{ t('map.area_filters.is_not_dead') }}</option>
+                        <option value="is_staff">{{ t('map.area_filters.is_staff') }}</option>
+                        <option value="is_not_staff">{{ t('map.area_filters.is_not_staff') }}</option>
                         <option value="is_invisible">{{ t('map.area_filters.is_invisible') }}</option>
                         <option value="is_not_invisible">{{ t('map.area_filters.is_not_invisible') }}</option>
                         <option value="is_male">{{ t('map.area_filters.is_male') }}</option>
@@ -614,12 +616,17 @@ export default {
         },
         checkAreaFilter(filters, player) {
             const character = player.character && player.character.id in this.characters ? this.characters[player.character.id] : null,
+                _this = this,
                 check = filter => {
                     switch (filter) {
                         case 'is_vehicle':
                             return !!player.vehicle;
                         case 'is_not_vehicle':
                             return !player.vehicle;
+                        case 'is_staff':
+                            return _this.staff.includes(player.steamIdentifier);
+                        case 'is_not_staff':
+                            return !_this.staff.includes(player.steamIdentifier);
                         case 'is_dead':
                             return player.character && player.character.dead;
                         case 'is_not_dead':
