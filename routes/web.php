@@ -115,6 +115,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
     // Player count api
     Route::get('players', [HomeController::class, 'playerCountApi']);
+
+    // Character info api
+    Route::post('characters', [PlayerCharacterController::class, 'getCharacters']);
 });
 
 // Used to get logs.
