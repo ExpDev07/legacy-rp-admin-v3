@@ -532,7 +532,8 @@ export default {
             };
 
             this.isAddingDetectionArea = false;
-            const area = {
+            const _this = this,
+                area = {
                     x: parseInt(this.form.area_location.x),
                     y: parseInt(this.form.area_location.y),
                     radius: parseInt(this.form.area_radius),
@@ -542,7 +543,8 @@ export default {
 
                     _timestamp: Date.now()
                 },
-                coords = this.convertCoords(this.form.area_location);
+                coords = this.convertCoords(this.form.area_location),
+                formattedFilters = area.filters.map(f => _this.t('map.area_filters.' + f));
 
             area.marker = L.marker(coords,
                 {
@@ -557,7 +559,8 @@ export default {
             );
             area.marker.bindPopup(this.t('map.area_label', this.detectionAreas.length + 1) +
                 '<br><span class="italic">' + area.x + ' ' + area.y + ' (' + area.radius + 'm)</span>' +
-                '<br>' + this.t('map.area_type.title') + ': <span class="italic">' + this.t('map.area_type.' + area.type) + '</span>', {
+                '<br>' + this.t('map.area_type.title') + ': <span class="italic">' + this.t('map.area_type.' + area.type) + '</span>' +
+                '<br>' + (formattedFilters.length > 0 ? this.t('map.area_filter') + ': <span class="italic">' + formattedFilters.join(', ') + '</span>' : this.t('map.filter_none')), {
                 autoPan: false
             });
             area.marker.addTo(this.map);
