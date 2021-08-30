@@ -71,7 +71,7 @@ module.exports = {
             },
             inset: {
                 'attr':  '16.5px',
-                'attr2': '119px',
+                'attr2': '118.5px',
             },
             colors: {
                 // Light & dark.

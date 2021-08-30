@@ -16,13 +16,6 @@
 
         <portal to="actions">
             <div class="mb-2">
-                <!-- Stop tracking -->
-                <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="stopTracking()" v-if="trackedPlayer">
-                    <i class="fas fa-stop mr-1"></i>
-                    {{ t('map.stop_track') }}
-                </button>
                 <!-- Play/Pause -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -142,6 +135,11 @@
                             @click="trackId(tracking.type + tracking.id)">
                             {{ t('map.do_track') }}
                         </button>
+                        <button
+                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                            @click="stopTracking()" v-if="trackedPlayer">
+                            {{ t('map.stop_track') }}
+                        </button>
                     </div>
                     <div class="flex flex-wrap">
                         <button
@@ -166,11 +164,11 @@
                          v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span
                         @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
                     <pre
-                        class="w-map-gauge bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
+                        class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
                         v-if="advancedTracking && trackedPlayer"
                     >{{ tracking.data.advanced }}</pre>
                     <div
-                        class="w-map-gauge bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
+                        class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
                         :class="{'hidden' : !advancedTracking || !trackedPlayer}"
                     >
                         <div class="relative w-map-other-gauge">
@@ -1377,7 +1375,8 @@ export default {
                 '.leaflet-control-layers-overlays {user-select:none !important}',
                 '.leaflet-control-layers-selector {outline:none !important}',
                 '.leaflet-container {background:#143D6B}',
-                'path.leaflet-interactive[stroke="#FFBF00"] {cursor:default}'
+                'path.leaflet-interactive[stroke="#FFBF00"] {cursor:default}',
+                '.leaflet-attr {width:' + $('.leaflet-bottom.leaflet-right').width() + 'px}'
             ];
             $('#map').append('<style>' + styles.join('') + '</style>');
         }
