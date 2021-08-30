@@ -16,13 +16,6 @@
 
         <portal to="actions">
             <div class="mb-2">
-                <!-- Stop tracking -->
-                <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="stopTracking()" v-if="trackedPlayer">
-                    <i class="fas fa-stop mr-1"></i>
-                    {{ t('map.stop_track') }}
-                </button>
                 <!-- Play/Pause -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -94,6 +87,8 @@
                         <option value="is_not_staff">{{ t('map.area_filters.is_not_staff') }}</option>
                         <option value="is_invisible">{{ t('map.area_filters.is_invisible') }}</option>
                         <option value="is_not_invisible">{{ t('map.area_filters.is_not_invisible') }}</option>
+                        <option value="is_highlighted">{{ t('map.area_filters.is_highlighted') }}</option>
+                        <option value="is_not_highlighted">{{ t('map.area_filters.is_not_highlighted') }}</option>
                         <option value="is_male">{{ t('map.area_filters.is_male') }}</option>
                         <option value="is_female">{{ t('map.area_filters.is_female') }}</option>
                     </select>
@@ -140,6 +135,11 @@
                             @click="trackId(tracking.type + tracking.id)">
                             {{ t('map.do_track') }}
                         </button>
+                        <button
+                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                            @click="stopTracking()" v-if="trackedPlayer">
+                            {{ t('map.stop_track') }}
+                        </button>
                     </div>
                     <div class="flex flex-wrap">
                         <button
@@ -164,11 +164,11 @@
                          v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span
                         @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
                     <pre
-                        class="w-map-gauge bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
+                        class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
                         v-if="advancedTracking && trackedPlayer"
                     >{{ tracking.data.advanced }}</pre>
                     <div
-                        class="w-map-gauge bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
+                        class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
                         :class="{'hidden' : !advancedTracking || !trackedPlayer}"
                     >
                         <div class="relative w-map-other-gauge">
@@ -248,6 +248,7 @@
                                 </td>
                                 <td>
                                     <a class="track-cid text-yellow-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="highlight-cid text-yellow-600" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
                         </table>
@@ -269,6 +270,7 @@
                                 </td>
                                 <td>
                                     <a class="track-cid" :style="'color:' + player.color" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="highlight-cid" :style="'color:' + player.color" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
                         </table>
@@ -288,6 +290,27 @@
                                 </td>
                                 <td>
                                     <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="highlight-cid dark:text-red-400 text-red-600" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div v-if="Object.keys(highlightedPeople).length > 0" class="pt-4">
+                        <h3 class="mb-2">{{ t('map.highlighted_title') }}</h3>
+                        <table class="text-sm font-mono">
+                            <tr v-for="(player, steam) in highlightedPeople" :key="steam" v-if="player !== true">
+                                <td class="pr-2">
+                                    <a class="dark:text-red-400 text-red-600" target="_blank" :href="'/players/' + steam">{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2 dark:text-red-400 text-red-600">
+                                    ({{ player.source }})
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.highlighted') }}
+                                </td>
+                                <td>
+                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="dark:text-red-400 text-red-600" href="#" @click="stopHighlight($event, steam)">[{{ t('global.remove') }}]</a>
                                 </td>
                             </tr>
                         </table>
@@ -449,6 +472,7 @@ export default {
                 }
             },
             characters: {},
+            highlightedPeople: {},
             advancedTracking: false,
             cayoCalibrationMode: false // Set this to true to recalibrate the cayo perico map
         };
@@ -520,6 +544,11 @@ export default {
             e.preventDefault();
 
             this.form.filters.splice(index, 1);
+        },
+        stopHighlight(e, steam) {
+            e.preventDefault();
+
+            delete this.highlightedPeople[steam];
         },
         confirmArea() {
             if (this.form.area_radius < 1 || this.form.area_radius > 5000) {
@@ -635,6 +664,10 @@ export default {
                             return player.invisible;
                         case 'is_not_invisible':
                             return !player.invisible;
+                        case 'is_highlighted':
+                            return player.steamIdentifier in _this.highlightedPeople;
+                        case 'is_not_highlighted':
+                            return !(player.steamIdentifier in _this.highlightedPeople);
                         case 'is_male':
                             return character && character.gender === 0;
                         case 'is_female':
@@ -818,6 +851,7 @@ export default {
         getIcon(player, isDriving, isPassenger, isInvisible, isDead) {
             let size = {
                 circle: 17,
+                circle_yellow: 17,
                 skull: 17,
                 skull_red: 12,
                 circle_red: 12,
@@ -831,7 +865,14 @@ export default {
                 }
             );
 
-            if (isInvisible) {
+            if (player.steamIdentifier in this.highlightedPeople) {
+                icon = new L.Icon(
+                    {
+                        iconUrl: '/images/icons/circle_yellow.png',
+                        iconSize: [size.circle_yellow, size.circle_yellow]
+                    }
+                );
+            } else if (isInvisible) {
                 icon = new L.Icon(
                     {
                         iconUrl: '/images/icons/circle_green.png',
@@ -1101,6 +1142,10 @@ export default {
                             window.location.hash = id;
                         }
 
+                        if (player.steamIdentifier in _this.highlightedPeople) {
+                            markers[id].options.forceZIndex = 150;
+                        }
+
                         if (_this.trackedPlayer === id) {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="stop">' + _this.t('map.stop_track') + '</a>';
 
@@ -1118,7 +1163,7 @@ export default {
 
                             let trackingInfo = [
                                 player.character.fullName + ' (' + player.source + ')',
-                                'Coords:  ' + originalCoords
+                                'Coords: ' + originalCoords
                             ];
 
                             !player.vehicle || trackingInfo.push('Vehicle: ' + player.vehicle.model);
@@ -1133,6 +1178,18 @@ export default {
                             }
                         } else {
                             extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '">' + _this.t('map.track') + '</a>';
+                        }
+
+                        if (player.steamIdentifier in _this.highlightedPeople) {
+                            _this.highlightedPeople[player.steamIdentifier] = {
+                                name: player.character.fullName,
+                                source: player.source,
+                                cid: player.character.id
+                            };
+
+                            extra += '<br><a href="#" class="highlight-cid stop_highlight" data-steam="' + player.steamIdentifier + '">' + _this.t('map.stop_highlight') + '</a>';
+                        } else {
+                            extra += '<br><a href="#" class="highlight-cid" data-steam="' + player.steamIdentifier + '">' + _this.t('map.do_highlight') + '</a>';
                         }
 
                         markers[id]._popup.setContent(player.character.fullName + '<sup>' + player.source + '</sup> (<a href="/players/' + player.steamIdentifier + '" target="_blank">#' + player.character.id + '</a>)' + extra);
@@ -1300,6 +1357,17 @@ export default {
                 }
             });
 
+            $('#map-wrapper').on('click', '.highlight-cid', function (e) {
+                e.preventDefault();
+
+                const steam = $(this).data('steam');
+                if ($(this).hasClass('stop_highlight')) {
+                    delete _this.highlightedPeople[steam];
+                } else {
+                    _this.highlightedPeople[steam] = true;
+                }
+            });
+
             const styles = [
                 '.leaflet-marker-icon {transform-origin:center center !important;}',
                 '.leaflet-grab {cursor:default;}',
@@ -1307,7 +1375,8 @@ export default {
                 '.leaflet-control-layers-overlays {user-select:none !important}',
                 '.leaflet-control-layers-selector {outline:none !important}',
                 '.leaflet-container {background:#143D6B}',
-                'path.leaflet-interactive[stroke="#FFBF00"] {cursor:default}'
+                'path.leaflet-interactive[stroke="#FFBF00"] {cursor:default}',
+                '.leaflet-attr {width:' + $('.leaflet-bottom.leaflet-right').width() + 'px}'
             ];
             $('#map').append('<style>' + styles.join('') + '</style>');
         }
