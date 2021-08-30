@@ -61,6 +61,12 @@
         "height": 70,
         "label": "Garage with no floor"
     },
+    {
+        "coords": "-781 -699 0",
+        "radius": 50,
+        "height": 80,
+        "label": "Church"
+    },
 
     {
         "coords": "1174 -3197 -39",

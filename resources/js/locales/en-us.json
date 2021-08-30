@@ -5,6 +5,7 @@
         "none": "None",
         "banned": "Banned",
         "not_banned": "Not banned",
+        "trusted": "Trusted",
         "staff": "Staff Member",
         "super": "Super Admin",
         "cancel": "Cancel",

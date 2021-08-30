@@ -29,6 +29,7 @@ class PlayerResource extends JsonResource
             'playTime'        => $this->playtime,
             'lastConnection'  => $this->last_connection,
             'steamProfileUrl' => $this->getSteamProfileUrl(),
+            'isTrusted'       => $this->is_trusted,
             'isStaff'         => $this->isStaff(),
             'isSuperAdmin'    => $this->isSuperAdmin(),
             'isBanned'        => $this->isBanned(),
