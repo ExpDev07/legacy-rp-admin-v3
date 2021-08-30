@@ -10,19 +10,21 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
+                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="player.isTrusted">
+                        <span class="font-semibold">{{ t('global.trusted') }}</span>
+                    </badge>
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff">
                         <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
-                           v-if="player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
                            v-if="player.status.status === 'online'">
-                        <span class="font-semibold">{{ t('global.status.online') }} <sup>[{{
-                                player.status.serverId
-                            }}]</sup></span>
+                        <span class="font-semibold">{{ t('global.status.online') }}
+                            <sup>[{{ player.status.serverId }}]</sup>
+                        </span>
                     </badge>
                     <badge class="border-red-200 bg-warning-pale dark:bg-dark-warning-pale"
                            v-else-if="player.status.status === 'unavailable'"

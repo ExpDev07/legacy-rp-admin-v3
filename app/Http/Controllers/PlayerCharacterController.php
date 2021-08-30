@@ -382,4 +382,29 @@ class PlayerCharacterController extends Controller
         return redirect('/players/' . $character->steam_identifier . '/characters/' . $character->character_id . '/edit')->with('success', 'Vehicle was successfully edited.');
     }
 
+    /**
+     * Returns basic character info for the map
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getCharacters(Request $request): \Illuminate\Http\Response
+    {
+        $ids = $request->post('ids', []);
+        if (empty($ids) || !is_array($ids)) {
+            return (new \Illuminate\Http\Response([
+                'status'  => false
+            ], 200))->header('Content-Type', 'application/json');
+        }
+
+        $characters = Character::query()->whereIn('character_id', $ids)->select([
+            'character_id', 'gender'
+        ])->get()->toArray();
+
+        return (new \Illuminate\Http\Response([
+            'status'  => true,
+            'data' => $characters,
+        ], 200))->header('Content-Type', 'application/json');
+    }
+
 }

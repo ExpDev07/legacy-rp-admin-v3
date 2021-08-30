@@ -40,23 +40,23 @@
         </portal>
 
         <!-- Area Add -->
-        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-1k" v-if="isAddingDetectionArea">
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isAddingDetectionArea">
             <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
                 <h3 class="mb-2">
-                        {{ t('map.area_title') }}
+                    {{ t('map.area_title') }}
                 </h3>
 
                 <!-- Radius -->
                 <div class="w-full p-3 flex justify-between px-0">
-                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="area_radius">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="area_radius">
                         {{ t('map.area_radius') }}
                     </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="2500" id="area_radius" value="5" v-model="form.area_radius" />
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="5000" id="area_radius" value="5" v-model="form.area_radius" />
                 </div>
 
                 <!-- Type -->
                 <div class="w-full p-3 flex justify-between px-0">
-                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="area_type">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="area_type">
                         {{ t('map.area_type.title') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="area_type" v-model="form.area_type">
@@ -64,6 +64,40 @@
                         <option value="persistent">{{ t('map.area_type.persistent') }}</option>
                     </select>
                 </div>
+
+                <hr>
+
+                <h4 class="my-2">
+                    {{ t('map.area_filter') }}
+                    <sup>
+                        <a href="#" class="text-success dark:text-dark-success font-bold text-lg" @click="addFilter($event)">+</a>
+                    </sup>
+                </h4>
+
+                <!-- Filters -->
+                <div class="w-full flex justify-between mb-2" v-if="form.filters.length === 0">
+                    {{ t('map.filter_none') }}
+                </div>
+                <div class="w-full flex justify-between mb-2" v-for="(filter, index) in form.filters" :key="index" v-else>
+                    <label class="mr-4 block w-1/4 pt-2 font-bold">
+                        {{ t('map.area_filters.title') }} #{{ index }}
+                        <sup>
+                            <a href="#" class="text-red-500 font-bold" @click="removeFilter($event, index)">&#x1F5D9;</a>
+                        </sup>
+                    </label>
+                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" v-model="form.filters[index]">
+                        <option value="is_vehicle">{{ t('map.area_filters.is_vehicle') }}</option>
+                        <option value="is_not_vehicle">{{ t('map.area_filters.is_not_vehicle') }}</option>
+                        <option value="is_dead">{{ t('map.area_filters.is_dead') }}</option>
+                        <option value="is_not_dead">{{ t('map.area_filters.is_not_dead') }}</option>
+                        <option value="is_invisible">{{ t('map.area_filters.is_invisible') }}</option>
+                        <option value="is_not_invisible">{{ t('map.area_filters.is_not_invisible') }}</option>
+                        <option value="is_male">{{ t('map.area_filters.is_male') }}</option>
+                        <option value="is_female">{{ t('map.area_filters.is_female') }}</option>
+                    </select>
+                </div>
+
+                <hr>
 
                 <p class="my-2">
                     <span class="font-bold">{{ t('map.area_type.normal') }}</span>: {{ t('map.area_type.normal_description') }}<br>
@@ -391,7 +425,8 @@ export default {
                 area_location: {
                     x: 0,
                     y: 0
-                }
+                },
+                filters: []
             },
             layers: {
                 "Players": L.layerGroup(),
@@ -411,6 +446,7 @@ export default {
                     advanced: 'Loading...'
                 }
             },
+            characters: {},
             advancedTracking: false,
             cayoCalibrationMode: false // Set this to true to recalibrate the cayo perico map
         };
@@ -473,8 +509,18 @@ export default {
             window.location.hash = id;
             this.firstRefresh = true;
         },
+        addFilter(e) {
+            e.preventDefault();
+
+            this.form.filters.push('is_invisible');
+        },
+        removeFilter(e, index) {
+            e.preventDefault();
+
+            this.form.filters.splice(index, 1);
+        },
         confirmArea() {
-            if (this.form.area_radius < 1 || this.form.area_radius > 2500) {
+            if (this.form.area_radius < 1 || this.form.area_radius > 5000) {
                 return alert(this.t('map.area_inv_radius'));
             }
 
@@ -486,16 +532,19 @@ export default {
             };
 
             this.isAddingDetectionArea = false;
-            const area = {
+            const _this = this,
+                area = {
                     x: parseInt(this.form.area_location.x),
                     y: parseInt(this.form.area_location.y),
                     radius: parseInt(this.form.area_radius),
-                    type: this.form.area_type+'',
+                    type: this.form.area_type + '',
                     people: [],
+                    filters: [...new Set(this.form.filters)],
 
                     _timestamp: Date.now()
                 },
-                coords = this.convertCoords(this.form.area_location);
+                coords = this.convertCoords(this.form.area_location),
+                formattedFilters = area.filters.map(f => _this.t('map.area_filters.' + f));
 
             area.marker = L.marker(coords,
                 {
@@ -510,7 +559,8 @@ export default {
             );
             area.marker.bindPopup(this.t('map.area_label', this.detectionAreas.length + 1) +
                 '<br><span class="italic">' + area.x + ' ' + area.y + ' (' + area.radius + 'm)</span>' +
-                '<br>' + this.t('map.area_type.title') + ': <span class="italic">' + this.t('map.area_type.' + area.type) + '</span>', {
+                '<br>' + this.t('map.area_type.title') + ': <span class="italic">' + this.t('map.area_type.' + area.type) + '</span>' +
+                '<br>' + (formattedFilters.length > 0 ? this.t('map.area_filter') + ': <span class="italic">' + formattedFilters.join(', ') + '</span>' : this.t('map.filter_none')), {
                 autoPan: false
             });
             area.marker.addTo(this.map);
@@ -530,6 +580,7 @@ export default {
             this.form.area_location = null;
             this.form.area_type = 'normal';
             this.form.area_radius = 5;
+            this.form.filters = [];
         },
         addArea() {
             if (!this.rawClickedCoords) {
@@ -561,6 +612,38 @@ export default {
 
             return this.$options.filters.humanizeSeconds(sec) + ' (' + sec + 's)';
         },
+        checkAreaFilter(filters, player) {
+            const character = player.character && player.character.id in this.characters ? this.characters[player.character.id] : null,
+                check = filter => {
+                    switch (filter) {
+                        case 'is_vehicle':
+                            return !!player.vehicle;
+                        case 'is_not_vehicle':
+                            return !player.vehicle;
+                        case 'is_dead':
+                            return player.character && player.character.dead;
+                        case 'is_not_dead':
+                            return player.character && !player.character.dead;
+                        case 'is_invisible':
+                            return player.invisible;
+                        case 'is_not_invisible':
+                            return !player.invisible;
+                        case 'is_male':
+                            return character && character.gender === 0;
+                        case 'is_female':
+                            return character && character.gender === 1;
+                    }
+
+                    return true;
+                };
+
+            for (let x = 0; x < filters.length; x++) {
+                if (!check(filters[x])) {
+                    return false;
+                }
+            }
+            return true;
+        },
         updateDetectionAreas(coords, player) {
             if (!player.character) {
                 return;
@@ -574,7 +657,7 @@ export default {
                     return;
                 }
 
-                if (dist > area.radius) {
+                if (dist > area.radius || !_this.checkAreaFilter(area.filters, player)) {
                     area.people = area.people.filter((p, x) => {
                         if (p.exited_at) {
                             return true;
@@ -841,7 +924,7 @@ export default {
                 return "Players";
             }
         },
-        renderMapData(data) {
+        async renderMapData(data) {
             if (this.isPaused || this.isDragging) {
                 return;
             }
@@ -868,6 +951,8 @@ export default {
                         data[index] = player
                     });
 
+                    let unknownCharacters = [];
+
                     let validIds = [];
                     let afkList = [];
                     let invisibleList = [];
@@ -877,7 +962,11 @@ export default {
                         }
 
                         const id = "player_" + player.character.id,
-                            rawCoords = {x: Math.round(player.coords.x), y: Math.round(player.coords.y), z: Math.round(player.coords.z)},
+                            rawCoords = {
+                                x: Math.round(player.coords.x),
+                                y: Math.round(player.coords.y),
+                                z: Math.round(player.coords.z)
+                            },
                             originalCoords = rawCoords.x + ' ' + rawCoords.y + ' ' + rawCoords.z,
                             coords = _this.convertCoords(player.coords),
                             heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
@@ -895,6 +984,10 @@ export default {
                             playerCallbackCid = null;
                             playerCallback(player, coords, _this);
                             playerCallback = null;
+                        }
+
+                        if (!unknownCharacters.includes(player.character.id) && !(player.character.id in _this.characters)) {
+                            unknownCharacters.push(player.character.id);
                         }
 
                         _this.updateDetectionAreas(rawCoords, player);
@@ -1056,6 +1149,23 @@ export default {
                     this.markers = markers;
 
                     this.data = this.t('map.data', Object.keys(this.markers).length);
+
+                    if (unknownCharacters.length > 0) {
+                        // Prevent it being requested twice while the other is still loading
+                        $.each(unknownCharacters, function (_, id) {
+                            _this.characters[id] = null;
+                        });
+
+                        axios.post('/api/characters', {
+                            ids: unknownCharacters
+                        }).then(function (result) {
+                            if (result.data && result.data.status) {
+                                $.each(result.data.data, function (_, ch) {
+                                    _this.characters[ch.character_id] = ch;
+                                });
+                            }
+                        });
+                    }
                 }
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());

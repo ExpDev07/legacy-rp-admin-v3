@@ -57,6 +57,7 @@ class Player extends Model
         'identifiers',
         'is_staff',
         'is_super_admin',
+        'is_trusted',
         'is_soft_banned',
         'playtime',
         'total_joins',
@@ -72,6 +73,7 @@ class Player extends Model
     protected $casts = [
         'identifiers'     => 'array',
         'last_connection' => 'datetime',
+        'is_trusted'      => 'boolean',
         'is_staff'        => 'boolean',
         'is_super_admin'  => 'boolean',
         'is_soft_banned'  => 'boolean',

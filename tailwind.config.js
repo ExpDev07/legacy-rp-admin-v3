@@ -24,7 +24,8 @@ module.exports = {
         },
         extend: {
             zIndex: {
-                '1k': '1000'
+                '1k': '1000',
+                '2k': '2000'
             },
             fontSize: {
                 'xxs': '11px',
