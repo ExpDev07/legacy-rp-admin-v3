@@ -148,5 +148,17 @@
         "radius": 5,
         "height": 3,
         "label": "Interior"
+    },
+    {
+        "coords": "-15 -1434 31",
+        "radius": 5,
+        "height": 3,
+        "label": "Interior"
+    },
+    {
+        "coords": "3 529 175",
+        "radius": 20,
+        "height": 10,
+        "label": "Interior"
     }
 ]
