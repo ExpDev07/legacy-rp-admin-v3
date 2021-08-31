@@ -146,25 +146,37 @@
     {
         "coords": "1274 -1711 55",
         "radius": 10,
-        "height": 3,
+        "height": 5,
         "label": "Interior"
     },
     {
         "coords": "1973 3818 33",
         "radius": 5,
-        "height": 3,
+        "height": 5,
         "label": "Interior"
     },
     {
         "coords": "-15 -1434 31",
         "radius": 5,
-        "height": 3,
+        "height": 5,
         "label": "Interior"
     },
     {
         "coords": "3 529 175",
         "radius": 20,
         "height": 10,
+        "label": "Interior"
+    },
+    {
+        "coords": "-110 -11 71",
+        "radius": 5,
+        "height": 5,
+        "label": "Interior"
+    },
+    {
+        "coords": "345 -999 -30",
+        "radius": 15,
+        "height": 70,
         "label": "Interior"
     }
 ]
