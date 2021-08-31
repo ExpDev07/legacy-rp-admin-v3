@@ -51,7 +51,9 @@
     },
     "changelog": {
         "title": "Recent Updates",
-        "description": "Listing of the most recent updates to the panel"
+        "description": "Listing of the most recent updates to the panel",
+        "current": "Current",
+        "soon": "Coming soon"
     },
     "home": {
         "title": "Dashboard",
