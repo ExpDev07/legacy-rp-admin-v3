@@ -189,6 +189,13 @@
             "scrap"
         ]
     },
+    "bearcat": {
+        "size": 28,
+        "models": [
+            "riot",
+            "riot2"
+        ]
+    },
     "tow_truck": {
         "size": 28,
         "models": [
@@ -224,15 +231,11 @@
             "challenger18",
             "kawasaki",
             "sspres",
-            "umoracle",
             "polnspeedo",
             "zr1RB",
-            "fbi",
-            "fbi2",
             "police",
             "police2",
             "police3",
-            "police4",
             "policeb",
             "policeold1",
             "policeold2",
@@ -243,6 +246,23 @@
             "peel50police"
         ]
     },
+    "unmarked_pd": {
+        "size": 23,
+        "models": [
+            "umoracle",
+            "fbi",
+            "fbi2",
+            "police4",
+            "fibb",
+            "fibb2",
+            "fibc3",
+            "fibd3",
+            "fibh",
+            "fibk2",
+            "fibs"
+        ]
+    },
+
     "bus": {
         "size": 28,
         "models": [
