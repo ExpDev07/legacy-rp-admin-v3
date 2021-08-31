@@ -115,7 +115,6 @@ class StaffMiddleware
     {
         $detail = [
             'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-            'ip' => $_SERVER['REMOTE_ADDR'],
         ];
 
         $session = SessionHelper::getInstance();
@@ -133,10 +132,6 @@ class StaffMiddleware
                 LoggingHelper::log($session->getSessionKey(), 'session.detail -> ' . json_encode($sDetail));
 
                 $this->error = 'Your session is invalid, please refresh this page or log in again.';
-
-                if ($sDetail && isset($sDetail['ip']) && $sDetail['ip'] !== $detail['ip']) {
-                    $this->error .= ' (Log-in from new ip)';
-                }
             }
 
             $session->put('session_detail', $detail);
@@ -152,7 +147,6 @@ class StaffMiddleware
     {
         $detail = [
             'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-            'ip' => $_SERVER['REMOTE_ADDR'],
         ];
 
         $session = SessionHelper::getInstance();
@@ -164,9 +158,8 @@ class StaffMiddleware
     public static function getFingerprint(): string
     {
         $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $ip = $_SERVER['REMOTE_ADDR'];
 
-        return md5($ua . '_' . $ip);
+        return md5($ua);
     }
 
     /**
