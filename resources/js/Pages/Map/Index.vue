@@ -753,7 +753,7 @@ export default {
                 }).fail(reject);
             });
         },
-        shouldIgnoreInvisible(coords, steamIdentifier) {
+        shouldIgnoreInvisible(coords, steamIdentifier, player) {
             const parseSpot = spot => {
                 const parts = spot.coords.split(' ');
 
@@ -772,6 +772,11 @@ export default {
                 ) && (
                     Math.pow(coords.x - spot.x, 2) + Math.pow(coords.y - spot.y, 2) < Math.pow(spot.radius, 2)
                 );
+            }
+
+            // If you're invisible for a brief moment it shouldn't be an issue
+            if ('invisible_since' in player && player.invisible_since <= 2) {
+                return true;
             }
 
             // Check if staff member
@@ -1021,7 +1026,7 @@ export default {
                             isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
                             isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
                             isInvisible = 'invisible' in player && player.invisible,
-                            ignoreInvisible = _this.shouldIgnoreInvisible(rawCoords, player.steamIdentifier),
+                            ignoreInvisible = _this.shouldIgnoreInvisible(rawCoords, player.steamIdentifier, player),
                             isDead = player.character && 'dead' in player.character && player.character.dead,
                             speed = 'speed' in player ? player.speed : null,
                             icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
