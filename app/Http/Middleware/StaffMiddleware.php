@@ -22,7 +22,7 @@ class StaffMiddleware
     const IgnoreGETRoutes = [
         '/map/data',
         '/api/players',
-        '/api/characters'
+        '/api/characters',
     ];
 
     /**
@@ -58,7 +58,7 @@ class StaffMiddleware
                 );
             }
         } else {
-            if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            if ($_SERVER['REQUEST_METHOD'] !== 'GET' || time() - $this->lastUpdated() > 15) {
                 $user = $session->get('user');
 
                 $player = Player::query()->where('steam_identifier', '=', $user['player']['steam_identifier'])->select([
@@ -70,6 +70,7 @@ class StaffMiddleware
                 $user['player']['is_staff'] = $player->is_staff;
 
                 $session->put('user', $user);
+                $session->put('last_updated', time());
 
                 if (!$player->is_staff) {
                     return redirect('/login')->with('error',
@@ -82,6 +83,13 @@ class StaffMiddleware
         }
 
         return $next($request);
+    }
+
+    protected function lastUpdated(): int
+    {
+        $session = SessionHelper::getInstance();
+
+        return $session->exists('last_updated') ? intval($session->get('last_updated')) : 0;
     }
 
     /**

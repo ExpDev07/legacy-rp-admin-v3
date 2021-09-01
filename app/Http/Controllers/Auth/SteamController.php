@@ -65,6 +65,7 @@ class SteamController extends AbstractSteamLoginController
             // Session lock update
             $session->put('session_lock', StaffMiddleware::getSessionDetail());
             $session->put('session_detail', StaffMiddleware::getFingerprint());
+            $session->put('last_updated', time());
 
             StaffMiddleware::updateSessionLock();
 
