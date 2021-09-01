@@ -112,11 +112,12 @@ class StaffMiddleware
         return false;
     }
 
-    protected static function getSessionDetail(): array
+    public static function getSessionDetail(): array
     {
         return [
-            'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-            'db' => DB::connection()->getDatabaseName(),
+            'ua'   => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'db'   => DB::connection()->getDatabaseName(),
+            'host' => $_SERVER['HTTP_HOST'],
         ];
     }
 

@@ -62,6 +62,10 @@ class SteamController extends AbstractSteamLoginController
             LoggingHelper::log($session->getSessionKey(), 'Putting user in session');
             $session->put('user', $user);
 
+            // Session lock update
+            $session->put('session_lock', StaffMiddleware::getSessionDetail());
+            $session->put('session_detail', StaffMiddleware::getFingerprint());
+
             StaffMiddleware::updateSessionLock();
 
             if ($session->exists('returnTo')) {
