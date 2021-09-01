@@ -142,7 +142,7 @@ class InventoryController extends Controller
             'created_by'     => $request->user()->player->steam_identifier,
         ];
 
-        Cache::put('inv_snap_' . $snapshot['hash'], $snapshot, 2 * 24 * 60 * 60);
+        Cache::put(CLUSTER . 'inv_snap_' . $snapshot['hash'], $snapshot, 2 * 24 * 60 * 60);
 
         return (new \Illuminate\Http\Response(json_encode(['hash' => $snapshot['hash']]), 200))
             ->header('Content-Type', 'application/json');
@@ -157,7 +157,7 @@ class InventoryController extends Controller
      */
     public function showSnapshot(string $snapshot, Request $request): ?Response
     {
-        $key = 'inv_snap_' . $snapshot;
+        $key = CLUSTER . 'inv_snap_' . $snapshot;
         if (!Cache::has($key)) {
             abort(404, 'Snapshot not found.');
             return null;

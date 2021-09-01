@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class SessionHelper
 {
-    const Cookie = 'op_fw_session_store_';
+    const Cookie   = 'op_fw_session_store_';
     const Alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
     const Lifetime = 60 * 60 * 24 * 2;
 
@@ -122,7 +122,7 @@ class SessionHelper
      */
     private function getSessionFile(): string
     {
-        return $this->storage . $this->sessionKey . '.session';
+        return $this->storage . CLUSTER . $this->sessionKey . '.session';
     }
 
     /**
@@ -158,7 +158,7 @@ class SessionHelper
      */
     public static function getInstance(): SessionHelper
     {
-        $cookie = 'op_' . md5(self::Cookie . '_' . md5(env('APP_KEY', '')));
+        $cookie = CLUSTER . self::Cookie;
 
         if (self::$instance === null) {
             $helper = new SessionHelper();
@@ -188,8 +188,9 @@ class SessionHelper
 
             setcookie($cookie, $helper->sessionKey, [
                 'expires' => time() + self::Lifetime,
-                'secure'  => true,
+                'secure'  => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443,
                 'path'    => '/',
+                'domain'  => parse_url($uri, PHP_URL_HOST),
             ]);
 
             foreach ($extraDomains as $domain) {

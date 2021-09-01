@@ -240,7 +240,7 @@ class Player extends Model
     public function getSteamUser(): ?array
     {
         $id = $this->getSteamID()->ConvertToUInt64();
-        $key = 'steam_user_' . md5($id);
+        $key = CLUSTER . 'steam_user_' . md5($id);
 
         if (Cache::store('file')->has($key)) {
             return Cache::store('file')->get($key);

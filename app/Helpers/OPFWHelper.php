@@ -173,7 +173,7 @@ class OPFWHelper
     public static function getWorldJSON(string $serverIp): ?array
     {
         $serverIp = Server::fixApiUrl($serverIp);
-        $cache = 'world_json_' . md5($serverIp);
+        $cache = CLUSTER . 'world_json_' . md5($serverIp);
 
         if (Cache::store('file')->has($cache)) {
             return Cache::store('file')->get($cache);

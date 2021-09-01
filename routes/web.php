@@ -131,13 +131,13 @@ Route::get('/op-logs/{type}/{api_key}/{date?}', function (string $type, string $
     $file = '';
     switch ($type) {
         case 'default':
-            $file = storage_path('logs/op-fw-' . $date . '.log');
+            $file = storage_path('logs/' . CLUSTER . '_op-fw-' . $date . '.log');
             break;
         case 'access':
-            $file = storage_path('logs/op-fw-access-' . $date . '.log');
+            $file = storage_path('logs/' . CLUSTER . '_op-fw-access-' . $date . '.log');
             break;
         case 'error':
-            $file = storage_path('logs/error-' . $date . '.log');
+            $file = storage_path('logs/' . CLUSTER . '_error-' . $date . '.log');
             break;
     }
 

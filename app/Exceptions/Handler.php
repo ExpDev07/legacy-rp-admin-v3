@@ -48,7 +48,7 @@ class Handler extends ExceptionHandler
             return;
         }
 
-        $log = storage_path('logs/error-' . date('Y-m-d') . '.log');
+        $log = storage_path('logs/' . CLUSTER . '_error-' . date('Y-m-d') . '.log');
         $timestamp = date(\DateTimeInterface::RFC3339);
         $trace = $exception->getTrace();
         $stack = [];

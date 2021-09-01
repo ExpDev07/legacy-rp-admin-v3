@@ -18,7 +18,7 @@ class StatisticsHelper
      */
     public static function getBanStats(): array
     {
-        $key = 'ban_statistics';
+        $key = CLUSTER . 'ban_statistics';
         if (Cache::has($key)) {
             return Cache::get($key, []);
         }
@@ -46,7 +46,7 @@ class StatisticsHelper
      */
     public static function getWarningStats(): array
     {
-        $key = 'warning_statistics';
+        $key = CLUSTER . 'warning_statistics';
         if (Cache::has($key)) {
             return Cache::get($key, []);
         }
@@ -74,7 +74,7 @@ class StatisticsHelper
      */
     public static function getCharacterCreationStats(): array
     {
-        $key = 'character_creation_statistics';
+        $key = CLUSTER . 'character_creation_statistics';
         if (Cache::has($key)) {
             return Cache::get($key, []);
         }
@@ -102,7 +102,7 @@ class StatisticsHelper
      */
     public static function getLuckyWheelStats(): array
     {
-        $key = 'lucky_wheel_spins_statistics';
+        $key = CLUSTER . 'lucky_wheel_spins_statistics';
         if (Cache::has($key)) {
             return Cache::get($key, []);
         }
@@ -130,7 +130,7 @@ class StatisticsHelper
      */
     public static function getCharacterDeletionStats(): array
     {
-        $key = 'character_deletion_statistics';
+        $key = CLUSTER . 'character_deletion_statistics';
         if (Cache::has($key)) {
             return Cache::get($key, []);
         }
