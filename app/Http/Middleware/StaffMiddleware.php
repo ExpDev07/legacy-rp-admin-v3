@@ -8,6 +8,7 @@ use App\Helpers\SessionHelper;
 use App\Player;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -59,7 +60,7 @@ class StaffMiddleware
                 $user = $session->get('user');
 
                 $player = Player::query()->where('steam_identifier', '=', $user['player']['steam_identifier'])->select([
-                    'player_name', 'is_super_admin', 'is_staff'
+                    'player_name', 'is_super_admin', 'is_staff',
                 ])->first();
 
                 $user['player']['player_name'] = $player->player_name;
@@ -111,16 +112,22 @@ class StaffMiddleware
         return false;
     }
 
+    protected static function getSessionDetail(): array
+    {
+        return [
+            'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'db' => DB::connection()->getDatabaseName(),
+        ];
+    }
+
     protected function checkSessionLock(): bool
     {
-        $detail = [
-            'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-        ];
+        $detail = self::getSessionDetail();
 
         $session = SessionHelper::getInstance();
         if ($session->exists('session_lock')) {
             $lock = $session->get('session_lock');
-            $print = $this->getFingerprint();
+            $print = self::getFingerprint();
 
             $valid = $lock === $print;
             if (!$valid) {
@@ -157,9 +164,7 @@ class StaffMiddleware
 
     public static function getFingerprint(): string
     {
-        $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-
-        return md5($ua);
+        return md5(json_encode(self::getSessionDetail()));
     }
 
     /**
