@@ -158,7 +158,7 @@ class SessionHelper
      */
     public static function getInstance(): SessionHelper
     {
-        $cookie = md5(self::Cookie . '_' . md5(env('APP_KEY', '')));
+        $cookie = 'op_' . md5(self::Cookie . '_' . md5(env('APP_KEY', '')));
 
         if (self::$instance === null) {
             $helper = new SessionHelper();
