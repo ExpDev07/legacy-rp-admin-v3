@@ -15,6 +15,15 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+define('CLUSTER', explode('.', $_SERVER['HTTP_HOST'] ?? '')[0]);
+
+$envDir = realpath(__DIR__ . '/../envs/' . CLUSTER);
+if (file_exists($envDir)) {
+    $app->useEnvironmentPath($envDir);
+} else {
+    die('Invalid config');
+}
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces

@@ -32,7 +32,7 @@ class ChangelogController extends Controller
 
     private function getRecentUpdates(): array
     {
-        $key = 'recent_updates';
+        $key = CLUSTER . 'recent_updates';
         if (Cache::has($key)) {
             return Cache::get($key);
         }

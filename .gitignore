@@ -15,7 +15,7 @@
 /public/storage
 /storage/*.key
 /vendor
-.env
+envs/.env
 .env.backup
 .phpunit.result.cache
 Homestead.json

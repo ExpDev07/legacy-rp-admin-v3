@@ -105,7 +105,7 @@ class Server extends Model
         if (!$serverIp) {
             return [];
         }
-        $cacheKey = 'server_data_' . md5($serverIp);
+        $cacheKey = CLUSTER . 'server_data_' . md5($serverIp);
 
         if ($useCache) {
             if (Cache::store('file')->has($cacheKey)) {
@@ -160,8 +160,8 @@ class Server extends Model
             return [];
         }
 
-        if (Cache::store('file')->has('server_all_api')) {
-            return Cache::store('file')->get('server_all_api');
+        if (Cache::store('file')->has(CLUSTER . 'server_all_api')) {
+            return Cache::store('file')->get(CLUSTER . 'server_all_api');
         }
 
         $result = [];
@@ -193,7 +193,7 @@ class Server extends Model
             }
         }
 
-        Cache::store('file')->set('server_all_api', $result, 5 * 60);
+        Cache::store('file')->set(CLUSTER . 'server_all_api', $result, 5 * 60);
 
         return $result;
     }

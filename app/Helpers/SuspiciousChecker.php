@@ -164,7 +164,7 @@ class SuspiciousChecker
     public static function findInvalidItems(): array
     {
         $items = self::SingleUnusualItems;
-        $key = 'unusual_items_' . md5(json_encode($items));
+        $key = CLUSTER . 'unusual_items_' . md5(json_encode($items));
 
         if (Cache::has($key)) {
             return Cache::get($key, []);
@@ -187,7 +187,7 @@ class SuspiciousChecker
     public static function findUnusualInventories(): array
     {
         $items = self::UnusualItems;
-        $key = 'unusual_inventories_' . md5(json_encode($items)) . '_' . md5(json_encode(self::IgnoreItems));
+        $key = CLUSTER . 'unusual_inventories_' . md5(json_encode($items)) . '_' . md5(json_encode(self::IgnoreItems));
 
         if (Cache::has($key)) {
             return Cache::get($key, []);
@@ -230,7 +230,7 @@ class SuspiciousChecker
      */
     public static function findUnusualItems(): array
     {
-        $key = 'unusual_item_movement_' . md5(json_encode(self::IgnoreUnusualMovement));
+        $key = CLUSTER . 'unusual_item_movement_' . md5(json_encode(self::IgnoreUnusualMovement));
 
         if (Cache::has($key)) {
             return Cache::get($key, []);
@@ -280,7 +280,7 @@ class SuspiciousChecker
      */
     public static function findSuspiciousPawnShopUsages(): array
     {
-        $key = 'pawn_transactions';
+        $key = CLUSTER . 'pawn_transactions';
 
         if (Cache::has($key)) {
             return Cache::get($key, []);
@@ -302,7 +302,7 @@ class SuspiciousChecker
      */
     public static function findSuspiciousWarehouseUsages(): array
     {
-        $key = 'warehouse_transactions';
+        $key = CLUSTER . 'warehouse_transactions';
 
         if (Cache::has($key)) {
             return Cache::get($key, []);

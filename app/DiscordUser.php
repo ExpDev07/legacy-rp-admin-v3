@@ -32,7 +32,7 @@ class DiscordUser
      */
     public static function getUser(string $discordId): ?DiscordUser
     {
-        $key = self::CacheKey . '_' . md5($discordId);
+        $key = CLUSTER . self::CacheKey . '_' . md5($discordId);
 
         if (Cache::store('file')->has($key)) {
             $cache = Cache::store('file')->get($key) ?? null;
