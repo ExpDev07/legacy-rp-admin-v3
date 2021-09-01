@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class SessionHelper
 {
-    const Cookie = 'op_fw_session_store';
+    const Cookie = 'op_fw_session_store_';
     const Alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
     const Lifetime = 60 * 60 * 24 * 2;
 
@@ -158,11 +158,13 @@ class SessionHelper
      */
     public static function getInstance(): SessionHelper
     {
+        $cookie = 'op_' . md5(self::Cookie . '_' . md5(env('APP_KEY', '')));
+
         if (self::$instance === null) {
             $helper = new SessionHelper();
 
             $helper->storage = rtrim(storage_path('framework/session_storage'), '/\\') . '/';
-            $helper->sessionKey = !empty($_COOKIE[self::Cookie]) && is_string($_COOKIE[self::Cookie]) ? $_COOKIE[self::Cookie] : null;
+            $helper->sessionKey = !empty($_COOKIE[$cookie]) && is_string($_COOKIE[$cookie]) ? $_COOKIE[$cookie] : null;
 
             if ($helper->sessionKey === null || !file_exists($helper->getSessionFile())) {
                 $log = 'Creating new session key';
@@ -184,14 +186,14 @@ class SessionHelper
                 parse_url($uri, PHP_URL_HOST) . ':8443',
             ];
 
-            setcookie(self::Cookie, $helper->sessionKey, [
+            setcookie($cookie, $helper->sessionKey, [
                 'expires' => time() + self::Lifetime,
                 'secure'  => true,
                 'path'    => '/',
             ]);
 
             foreach ($extraDomains as $domain) {
-                setcookie(self::Cookie, $helper->sessionKey, [
+                setcookie($cookie, $helper->sessionKey, [
                     'expires' => time() + self::Lifetime,
                     'secure'  => true,
                     'path'    => '/',

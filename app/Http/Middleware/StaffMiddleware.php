@@ -8,6 +8,7 @@ use App\Helpers\SessionHelper;
 use App\Player;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,6 +21,8 @@ class StaffMiddleware
 {
     const IgnoreGETRoutes = [
         '/map/data',
+        '/api/players',
+        '/api/characters',
     ];
 
     /**
@@ -55,11 +58,11 @@ class StaffMiddleware
                 );
             }
         } else {
-            if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            if ($_SERVER['REQUEST_METHOD'] !== 'GET' || time() - $this->lastUpdated() > 15) {
                 $user = $session->get('user');
 
                 $player = Player::query()->where('steam_identifier', '=', $user['player']['steam_identifier'])->select([
-                    'player_name', 'is_super_admin', 'is_staff'
+                    'player_name', 'is_super_admin', 'is_staff',
                 ])->first();
 
                 $user['player']['player_name'] = $player->player_name;
@@ -67,6 +70,7 @@ class StaffMiddleware
                 $user['player']['is_staff'] = $player->is_staff;
 
                 $session->put('user', $user);
+                $session->put('last_updated', time());
 
                 if (!$player->is_staff) {
                     return redirect('/login')->with('error',
@@ -79,6 +83,13 @@ class StaffMiddleware
         }
 
         return $next($request);
+    }
+
+    protected function lastUpdated(): int
+    {
+        $session = SessionHelper::getInstance();
+
+        return $session->exists('last_updated') ? intval($session->get('last_updated')) : 0;
     }
 
     /**
@@ -111,16 +122,23 @@ class StaffMiddleware
         return false;
     }
 
+    public static function getSessionDetail(): array
+    {
+        return [
+            'ua'   => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'db'   => DB::connection()->getDatabaseName(),
+            'host' => $_SERVER['HTTP_HOST'],
+        ];
+    }
+
     protected function checkSessionLock(): bool
     {
-        $detail = [
-            'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-        ];
+        $detail = self::getSessionDetail();
 
         $session = SessionHelper::getInstance();
         if ($session->exists('session_lock')) {
             $lock = $session->get('session_lock');
-            $print = $this->getFingerprint();
+            $print = self::getFingerprint();
 
             $valid = $lock === $print;
             if (!$valid) {
@@ -157,9 +175,7 @@ class StaffMiddleware
 
     public static function getFingerprint(): string
     {
-        $ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-
-        return md5($ua);
+        return md5(json_encode(self::getSessionDetail()));
     }
 
     /**
