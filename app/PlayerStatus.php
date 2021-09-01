@@ -34,6 +34,13 @@ class PlayerStatus
     public int $serverId = 0;
 
     /**
+     * The loaded character id if they are loaded into one
+     *
+     * @var int|null
+     */
+    public ?int $character = 0;
+
+    /**
      * The ip of the server the player is in
      *
      * @var string
@@ -47,11 +54,12 @@ class PlayerStatus
      */
     public string $serverName = '';
 
-    public function __construct(string $status, string $serverIp, int $serverId)
+    public function __construct(string $status, string $serverIp, int $serverId, ?int $character = null)
     {
         $this->status = $status;
         $this->serverIp = Server::fixApiUrl($serverIp);
         $this->serverId = $serverId;
+        $this->character = $character;
 
         $this->serverName = Server::getServerName($serverIp);
     }

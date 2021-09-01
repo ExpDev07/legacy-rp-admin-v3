@@ -422,6 +422,7 @@
                         :key="character.id"
                         v-bind:deleted="character.characterDeleted"
                         class="relative"
+                        :class="{ 'shadow-lg' : player.status.character === character.id }"
                     >
                         <template #header>
                             <h3 class="mb-2">
@@ -474,6 +475,13 @@
                                 >
                                     <i class="fas fa-box"></i>
                                 </inertia-link>
+                                <button
+                                    class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-green-500 dark:bg-green-400 rounded"
+                                    :title="t('players.characters.loaded')"
+                                    v-if="player.status.character === character.id"
+                                >
+                                    <i class="fas fa-plug"></i>
+                                </button>
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
                                     href="#"

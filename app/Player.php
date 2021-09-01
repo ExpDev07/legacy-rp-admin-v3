@@ -332,11 +332,12 @@ class Player extends Model
                     return null;
                 }
 
-                foreach ($steamIdentifiers as $key => $val) {
+                foreach ($steamIdentifiers as $key => $player) {
                     if (!isset($result[$key])) {
                         $result[$key] = [
-                            'id'     => intval($val),
-                            'server' => $serverIp,
+                            'id'        => intval($player['source']),
+                            'character' => $player['character'],
+                            'server'    => $serverIp,
                         ];
                     }
                 }
@@ -369,7 +370,7 @@ class Player extends Model
 
         if (isset($players[$steamIdentifier])) {
             $player = $players[$steamIdentifier];
-            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id']);
+            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id'], $player['character']);
         }
 
         return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
