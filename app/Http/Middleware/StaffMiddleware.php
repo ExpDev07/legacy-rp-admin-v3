@@ -21,6 +21,8 @@ class StaffMiddleware
 {
     const IgnoreGETRoutes = [
         '/map/data',
+        '/api/players',
+        '/api/characters'
     ];
 
     /**
