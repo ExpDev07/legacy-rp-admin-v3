@@ -105,7 +105,7 @@ class Server extends Model
         if (!$serverIp) {
             return [];
         }
-        $cacheKey = 'identifiers_' . md5($serverIp);
+        $cacheKey = 'server_data_' . md5($serverIp);
 
         if ($useCache) {
             if (Cache::store('file')->has($cacheKey)) {
@@ -118,7 +118,7 @@ class Server extends Model
 
             $json = null;
             try {
-                $json = GeneralHelper::get($serverIp . 'connections.json') ?? null;
+                $json = OPFWHelper::getWorldJSON($serverIp);
 
                 if (!$json) {
                     return null;
@@ -127,18 +127,13 @@ class Server extends Model
                 return [];
             }
 
-            $response = OPFWHelper::parseResponse($json);
-
-            if ($response->status && $response->data) {
-                $json = $response->data;
+            if (isset($json['players'])) {
                 $assoc = [];
-
-                foreach ($json['joining']['players'] as $player) {
-                    $assoc[$player['steamIdentifier']] = $player['source'];
-                }
-
-                foreach ($json['joined']['players'] as $player) {
-                    $assoc[$player['steamIdentifier']] = $player['source'];
+                foreach ($json['players'] as $player) {
+                    $assoc[$player['steamIdentifier']] = [
+                        'source' => $player['source'],
+                        'character' => $player['character'] ? $player['character']['id'] : null
+                    ];
                 }
 
                 self::$onlineMap[$cacheKey] = $assoc;

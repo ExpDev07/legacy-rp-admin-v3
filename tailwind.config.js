@@ -52,6 +52,7 @@ module.exports = {
                 'map-other-gauge':    'calc(100% - 125px)',
                 'map-height-ind':     '60px',
                 'map-icon':           '20px',
+                'ch-button':          '32px',
             },
             height: {
                 'side-close':      '40px',

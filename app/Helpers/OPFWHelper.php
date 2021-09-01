@@ -165,6 +165,32 @@ class OPFWHelper
     }
 
     /**
+     * Gets the world.json
+     *
+     * @param string $serverIp
+     * @return array|null
+     */
+    public static function getWorldJSON(string $serverIp): ?array
+    {
+        $serverIp = Server::fixApiUrl($serverIp);
+        $cache = 'world_json_' . md5($serverIp);
+
+        if (Cache::store('file')->has($cache)) {
+            return Cache::store('file')->get($cache);
+        } else {
+            $data = self::executeRoute($serverIp . 'world.json', [], false);
+
+            if ($data->data) {
+                Cache::store('file')->set($cache, $data->data, 10);
+            } else if (!$data->status) {
+                Cache::store('file')->set($cache, [], 10);
+            }
+
+            return $data->data;
+        }
+    }
+
+    /**
      * Executes an op-fw route
      *
      * @param string $route
@@ -189,10 +215,11 @@ class OPFWHelper
         );
         for ($x = 0; $x < self::RetryAttempts; $x++) {
             $res = $client->request($isPost ? 'POST' : 'GET', $route, [
-                'query'   => $data,
-                'headers' => [
+                'query'      => $data,
+                'headers'    => [
                     'Authorization' => 'Bearer ' . $token,
                 ],
+                'timeout' => 10,
             ]);
 
             $response = $res->getBody()->getContents();
