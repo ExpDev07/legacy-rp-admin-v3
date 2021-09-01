@@ -178,7 +178,7 @@ class OPFWHelper
         if (Cache::store('file')->has($cache)) {
             return Cache::store('file')->get($cache);
         } else {
-            $data = self::executeRoute($serverIp . 'world.json', [], false);
+            $data = self::executeRoute($serverIp . 'world.json', [], false, 3);
 
             if ($data->data) {
                 Cache::store('file')->set($cache, $data->data, 10);
@@ -196,9 +196,10 @@ class OPFWHelper
      * @param string $route
      * @param array $data
      * @param bool $isPost
+     * @param int $timeout
      * @return OPFWResponse
      */
-    private static function executeRoute(string $route, array $data, bool $isPost = true): OPFWResponse
+    private static function executeRoute(string $route, array $data, bool $isPost = true, int $timeout = 10): OPFWResponse
     {
         $token = env('OP_FW_TOKEN');
 
@@ -214,15 +215,19 @@ class OPFWHelper
             ]
         );
         for ($x = 0; $x < self::RetryAttempts; $x++) {
-            $res = $client->request($isPost ? 'POST' : 'GET', $route, [
-                'query'      => $data,
-                'headers'    => [
-                    'Authorization' => 'Bearer ' . $token,
-                ],
-                'timeout' => 10,
-            ]);
+            try {
+                $res = $client->request($isPost ? 'POST' : 'GET', $route, [
+                    'query'   => $data,
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $token,
+                    ],
+                    'timeout' => $timeout,
+                ]);
 
-            $response = $res->getBody()->getContents();
+                $response = $res->getBody()->getContents();
+            } catch(\Throwable $t) {
+                $response = $t->getMessage();
+            }
 
             LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Executed route "' . $route . '"');
             LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Data: ' . json_encode($data));
