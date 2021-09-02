@@ -45,7 +45,7 @@ class ChangelogController extends Controller
         $working = getcwd();
 
         chdir(__DIR__ . '/../../../');
-        $git = shell_exec('git show :/^pull');
+        $git = shell_exec('git show :"/^Merge pull request #"');
         preg_match('/(?<=Merge pull request #)\d+(?= from)/mi', $git, $match);
         $pr = !empty($match) ? intval($match[0]) : null;
 
