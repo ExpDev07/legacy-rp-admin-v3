@@ -387,7 +387,7 @@ window.convertCoords = function (coords) {
 
 window.loadHistory = function (server, player, day) {
     if (VueInstance) {
-        $.post(VueInstance.hostname() + '/map/go/history', {
+        $.post(VueInstance.hostname() + '/history', {
             server: server,
             player: player,
             day: day,
@@ -735,16 +735,16 @@ export default {
             const isDev = window.location.hostname === 'localhost';
 
             if (isSocket) {
-                return isDev ? 'ws://' + window.location.hostname + ':8080' : 'wss://' + window.location.hostname + ':8443';
+                return isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com';
             } else {
-                return isDev ? 'http://' + window.location.hostname + ':8080' : 'https://' + window.location.hostname + ':8443';
+                return isDev ? 'http://localhost:9999' : 'https://map.legacy-roleplay.com';
             }
         },
         getOTToken() {
             const _this = this;
 
             return new Promise(function(resolve, reject) {
-                $.get(_this.hostname(false) + '/map/go/token?token=' + _this.token, function(data) {
+                $.get(_this.hostname(false) + '/token?token=' + _this.token, function(data) {
                     if (data.status) {
                         resolve(data.token);
                     } else {
@@ -811,7 +811,7 @@ export default {
             try {
                 const token = await this.getOTToken();
 
-                this.connection = new WebSocket(this.hostname(true) + "/map/go/socket?ott=" + token + "&server=" + encodeURIComponent(server));
+                this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server));
 
                 this.connection.onmessage = function (event) {
                     try {
