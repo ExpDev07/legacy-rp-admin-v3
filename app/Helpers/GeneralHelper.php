@@ -177,4 +177,20 @@ class GeneralHelper
 
         return $body;
     }
+
+    public static function getCluster(): ?string
+    {
+        $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        $_SERVER['HTTP_HOST'] = trim(explode(':', $_SERVER['HTTP_HOST'])[0]);
+
+        $cluster = explode('.', $_SERVER['HTTP_HOST'])[0];
+
+        if (empty($cluster)) {
+            return null;
+        } else if ($cluster === 'localhost') {
+            return '';
+        } else {
+            return $cluster;
+        }
+    }
 }

@@ -12,6 +12,7 @@ import linkify from 'vue-linkify';
 import 'leaflet/dist/leaflet.css';
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
+const momentDuration = require("moment-duration-format");
 
 // Directives.
 Vue.directive('linkified', linkify);
@@ -21,6 +22,8 @@ Vue.use(InertiaApp);
 Vue.use(PortalVue);
 Vue.use(Localization);
 Vue.use(Copy);
+
+momentDuration(moment);
 
 // Properties / methods.
 Vue.prototype.$moment = moment;

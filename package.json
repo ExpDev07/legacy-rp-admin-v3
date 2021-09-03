@@ -44,6 +44,7 @@
         "leaflet-fullscreen": "^1.0.2",
         "leaflet-gesture-handling": "^1.2.1",
         "leaflet-rotatedmarker": "^0.2.0",
+        "moment-duration-format": "^2.3.2",
         "rainbowvis.js": "^1.0.1",
         "vue-linkify": "^1.0.1",
         "vue-speedometer": "^1.8.0",
