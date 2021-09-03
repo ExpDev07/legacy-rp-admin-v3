@@ -332,6 +332,7 @@ import 'leaflet-fullscreen';
 import custom_icons from "../../data/vehicles.json";
 import ignore_invisible from "../../data/ignore_invisible.json";
 import VueSpeedometer from "vue-speedometer";
+import moment from "moment";
 
 const Rainbow = require('rainbowvis.js');
 
@@ -809,15 +810,24 @@ export default {
             }
 
             try {
+                let lastError = null;
+
                 const token = await this.getOTToken();
 
                 this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server));
+                let socketStart = Date.now();
 
                 this.connection.onmessage = function (event) {
                     try {
                         const data = JSON.parse(event.data);
 
-                        _this.renderMapData(data);
+                        if ('status' in data && 'message' in data) {
+                            lastError = data.status + ' - ' + data.message;
+                            console.info('WebSocket:', lastError);
+                        } else {
+                            lastError = null;
+                            _this.renderMapData(data);
+                        }
 
                         _this.firstRefresh = false;
                     } catch (e) {
@@ -826,10 +836,16 @@ export default {
                 }
 
                 this.connection.onclose = function () {
-                    _this.data = _this.t('map.closed', $('#server option:selected').text());
+                    let connectionTime = _this.$moment.duration(Date.now() - socketStart, 'milliseconds').format('h[h] m[m] s[s]');
+
+                    if (lastError) {
+                        _this.data = _this.t('map.closed_expected', server, connectionTime);
+                    } else {
+                        _this.data = _this.t('map.closed_unexpected', server, connectionTime);
+                    }
                 };
             } catch (e) {
-                this.data = this.t('map.closed', $('#server option:selected').text());
+                this.data = this.t('map.closed_unexpected', $('#server option:selected').text(), '1 second');
 
                 console.error('Failed to connect to socket', e);
             }

@@ -11,17 +11,23 @@
 |
 */
 
+use App\Helpers\GeneralHelper;
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
-define('CLUSTER', explode('.', $_SERVER['HTTP_HOST'] ?? '')[0]);
+/*
+ * This all for multi-instance support
+ */
+
+define('CLUSTER', GeneralHelper::getCluster());
 
 $envDir = realpath(__DIR__ . '/../envs/' . CLUSTER);
-if (file_exists($envDir)) {
+if (file_exists($envDir) && CLUSTER !== null) {
     $app->useEnvironmentPath($envDir);
 } else {
-    die('Invalid config');
+    die('Invalid cluster');
 }
 
 /*
