@@ -7,6 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -42,7 +43,8 @@ class Handler extends ExceptionHandler
     {
         if (
             $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException || // 404 doesn't need to be logged to avoid filling the log file
-            $exception instanceof \Illuminate\Encryption\MissingAppKeyException // /api/players Illuminate\Encryption\MissingAppKeyException: No application encryption key has been specified.
+            $exception instanceof \Illuminate\Encryption\MissingAppKeyException || // /api/players Illuminate\Encryption\MissingAppKeyException: No application encryption key has been specified.
+            ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException && $exception->getStatusCode() === 503)
         ) {
             parent::report($exception);
             return;

@@ -12,6 +12,7 @@ use App\Http\Middleware\StaffMiddleware;
 use App\Http\Middleware\SuperAdminMiddleware;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
+use App\Http\Middleware\UpdateMiddleware;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
@@ -39,6 +40,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        UpdateMiddleware::class,
         CloudflareMiddleware::class,
         TrustProxies::class,
         CheckForMaintenanceMode::class,
