@@ -773,8 +773,8 @@ export default {
                 return '';
             }
             return this.player.ban.expireAt
-                ? this.t('players.show.ban', this.player.ban.issuer, this.$options.filters.formatTime(this.player.ban.expireAt))
-                : this.t('players.ban.forever', this.player.ban.issuer);
+                ? this.t('players.show.ban', this.formatBanCreator(this.player.ban.issuer), this.$options.filters.formatTime(this.player.ban.expireAt))
+                : this.t('players.ban.forever', this.formatBanCreator(this.player.ban.issuer));
         },
         formatTime(t) {
             return this.$options.filters.formatTime(t);
@@ -972,6 +972,12 @@ export default {
 
             // Send request.
             await this.$inertia.delete('/players/' + this.player.steamIdentifier + '/removeIdentifier/' + identifier);
+        },
+        formatBanCreator(creator) {
+            if (!creator) {
+                return this.t('global.system');
+            }
+            return creator;
         }
     },
     mounted() {
