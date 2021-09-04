@@ -29,20 +29,9 @@ class PlayerController extends Controller
     public function index(Request $request): Response
     {
         $start = round(microtime(true) * 1000);
-
-        $playerList = Player::getAllOnlinePlayers(true) ?? [];
-        $players = array_keys($playerList);
-        usort($players, function ($a, $b) use ($playerList) {
-            return $playerList[$a]['id'] <=> $playerList[$b]['id'];
-        });
-        $players = array_map(function ($player) {
-            return DB::connection()->getPdo()->quote($player);
-        }, $players);
+        $isOrdered = false;
 
         $query = Player::query();
-        if (!empty($players)) {
-            $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, last_connection DESC');
-        }
 
         // Filtering by name.
         if ($name = $request->input('name')) {
@@ -67,15 +56,29 @@ class PlayerController extends Controller
         // Filtering isBanned.
         if ($banned = $request->input('banned')) {
             if ($banned === 'yes' || $banned === 'no') {
-                $ids = array_map(function ($b) {
-                    return $b['identifier'];
-                }, Ban::query()->where('identifier', 'LIKE', 'steam:%')->select(['identifier'])->groupBy('identifier')->get()->toArray());
+                $ids = Ban::getAllBans(true);
 
                 if ($banned === 'yes') {
-                    $query->whereIn('steam_identifier', $ids);
+                    $query->whereIn('steam_identifier', $ids)->orderByRaw("FIELD(steam_identifier, '" . implode("','", $ids) . "') DESC");
+                    $isOrdered = true;
                 } else if ($banned === 'no') {
                     $query->whereNotIn('steam_identifier', $ids);
                 }
+            }
+        }
+
+        if (!$isOrdered) {
+            $playerList = Player::getAllOnlinePlayers(true) ?? [];
+            $players = array_keys($playerList);
+            usort($players, function ($a, $b) use ($playerList) {
+                return $playerList[$a]['id'] <=> $playerList[$b]['id'];
+            });
+            $players = array_map(function ($player) {
+                return DB::connection()->getPdo()->quote($player);
+            }, $players);
+
+            if (!empty($players)) {
+                $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, last_connection DESC');
             }
         }
 
@@ -91,8 +94,13 @@ class PlayerController extends Controller
 
         $end = round(microtime(true) * 1000);
 
+        $identifiers = array_values(array_map(function ($player) {
+            return $player['steam_identifier'];
+        }, $players->toArray()));
+
         return Inertia::render('Players/Index', [
             'players' => PlayerIndexResource::collection($players),
+            'banMap'  => Ban::getAllBans(false, $identifiers),
             'filters' => [
                 'name'    => $request->input('name'),
                 'steam'   => $request->input('steam'),
