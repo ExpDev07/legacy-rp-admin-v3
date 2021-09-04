@@ -122,7 +122,7 @@
                             >
                                 {{ t('global.banned') }}
                                 <span class="block text-xxs">
-                                    {{ t('global.by', banMap[player.steamIdentifier].creator_name) }}
+                                    {{ t('global.by', formatBanCreator(banMap[player.steamIdentifier].creator_name)) }}
                                 </span>
                             </span>
                             <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
@@ -241,6 +241,12 @@ export default {
 
             this.isLoading = false;
         },
+        formatBanCreator(creator) {
+            if (!creator) {
+                return this.t('global.system');
+            }
+            return creator;
+        }
     }
 }
 </script>
