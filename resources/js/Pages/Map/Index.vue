@@ -775,8 +775,8 @@ export default {
                 );
             }
 
-            // If you're invisible for a brief moment it shouldn't be an issue
-            if ('invisible_since' in player && player.invisible_since <= 2) {
+            // If you are in a shell (interior)
+            if (player.character && 'inShell' in player.character && player.character.inShell) {
                 return true;
             }
 

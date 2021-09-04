@@ -28,6 +28,11 @@ class Ban extends Model
     const UPDATED_AT = 'timestamp';
 
     /**
+     * @var array
+     */
+    protected static $bans = [];
+
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -121,4 +126,50 @@ class Ban extends Model
         return $this->belongsTo(Player::class, 'creator_name', 'player_name');
     }
 
+    public static function getBanForUser(string $steamIdentifier): ?array
+    {
+        if (empty(self::$bans)) {
+            $ban = Ban::query()
+                ->where('identifier', '=', $steamIdentifier)
+                ->select(['id', 'ban_hash', 'identifier', 'creator_name', 'reason', 'timestamp', 'expire', 'creator_identifier'])
+                ->first();
+            return $ban ? $ban->toArray() : null;
+        }
+
+        return isset(self::$bans[$steamIdentifier]) ? self::$bans[$steamIdentifier] : null;
+    }
+
+    public static function getAllBans(bool $returnOnlyIdentifiers, array $filterByIdentifiers = []): array
+    {
+        if (empty(self::$bans)) {
+            $query = Ban::query()
+                ->select(['id', 'ban_hash', 'identifier', 'creator_name', 'reason', 'timestamp', 'expire', 'creator_identifier']);
+
+            if (empty($filterByIdentifiers)) {
+                $query->where('identifier', 'LIKE', 'steam:%');
+            } else {
+                $query->whereIn('identifier', $filterByIdentifiers);
+            }
+
+            $bans = $query->orderBy('timestamp')
+                ->groupBy('identifier')
+                ->get()->toArray();
+
+            foreach ($bans as $ban) {
+                self::$bans[$ban['identifier']] = $ban;
+            }
+        }
+
+        $bans = self::$bans;
+        if (!empty($filterByIdentifiers)) {
+            $bans = array_filter($bans, function ($ban) use ($filterByIdentifiers) {
+                return in_array($ban['identifier'], $filterByIdentifiers);
+            });
+        }
+
+        if ($returnOnlyIdentifiers) {
+            return array_keys($bans);
+        }
+        return $bans;
+    }
 }

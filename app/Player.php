@@ -150,18 +150,14 @@ class Player extends Model
      */
     public function getIdentifiers(): array
     {
-        $identifier = $this->identifier;
-        $identifiers = $this->identifiers;
+        $identifiers = $this->identifiers ?? [];
+        $identifiers[] = $this->steam_identifier;
 
-        if (!is_array($identifiers)) {
-            return [$identifier];
-        }
-
-        if (in_array($identifier, $identifiers, true)) {
-            return $identifiers;
-        }
-
-        return array_filter(array_merge([$identifier], $identifiers));
+        return array_values(
+            array_unique(
+                $identifiers
+            )
+        );
     }
 
     /**

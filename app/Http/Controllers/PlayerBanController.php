@@ -37,8 +37,6 @@ class PlayerBanController extends Controller
         $user = $request->user();
         $hash = Str::uuid()->toString();
 
-        var_dump($user->player->steam_identifier);
-
         // Create ban.
         $ban = array_merge([
             'ban_hash'           => $hash,
@@ -47,23 +45,15 @@ class PlayerBanController extends Controller
         ], $request->validated());
 
         // Get identifiers to ban.
-        $identifiers = [
-            $player->getIdentifier('steam'),
-            $player->getIdentifier('license'),
-            $player->getIdentifier('discord'),
-            $player->getIdentifier('xbl'),
-            $player->getIdentifier('live'),
-        ];
+        $identifiers = $player->getIdentifiers();
 
         // Go through the player's identifiers and create a ban record for each of them.
-        Collection::make($identifiers)
-            ->filter()
-            ->each(function ($identifier) use ($player, $ban) {
-                $b = $ban;
-                $b['identifier'] = $identifier;
+        foreach($identifiers as $identifier) {
+            $b = $ban;
+            $b['identifier'] = $identifier;
 
-                $player->bans()->updateOrCreate($b);
-            });
+            $player->bans()->updateOrCreate($b);
+        }
 
         // Create reason.
         $reason = $request->input('reason')

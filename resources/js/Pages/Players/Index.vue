@@ -114,8 +114,16 @@
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playTime | humanizeSeconds }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.warnings }}</td>
                         <td class="px-6 py-3 text-center border-t mobile:block">
-                            <span class="block px-4 py-2 text-white bg-red-500 rounded dark:bg-red-600" v-if="player.isBanned">
+                            <span
+                                class="block px-4 py-2 text-white rounded"
+                                v-if="player.isBanned"
+                                :class="!banMap[player.steamIdentifier].reason ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
+                                :title="!banMap[player.steamIdentifier].reason ? t('players.ban.no_reason') : ''"
+                            >
                                 {{ t('global.banned') }}
+                                <span class="block text-xxs">
+                                    {{ t('global.by', banMap[player.steamIdentifier].creator_name) }}
+                                </span>
                             </span>
                             <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
                                 {{ t('global.not_banned') }}
@@ -185,6 +193,10 @@ export default {
     props: {
         players: {
             type: Array,
+            required: true,
+        },
+        banMap: {
+            type: Object,
             required: true,
         },
         filters: {

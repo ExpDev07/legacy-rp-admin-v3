@@ -5,6 +5,7 @@
         "none": "None",
         "banned": "Banned",
         "not_banned": "Not banned",
+        "by": "by {0}",
         "trusted": "Trusted",
         "staff": "Staff Member",
         "super": "Super Admin",
@@ -366,7 +367,8 @@
             "hour": "Hour(s)",
             "day": "Day(s)",
             "week": "Week(s)",
-            "month": "Month(s)"
+            "month": "Month(s)",
+            "no_reason": "This ban is missing a ban reason"
         },
         "show": {
             "played": "<b>{0}</b> played",
