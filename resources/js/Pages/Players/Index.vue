@@ -117,8 +117,8 @@
                             <span
                                 class="block px-4 py-2 text-white rounded"
                                 v-if="player.isBanned"
-                                :class="!banMap[player.steamIdentifier].reason ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
-                                :title="!banMap[player.steamIdentifier].reason ? t('players.ban.no_reason') : ''"
+                                :class="player.steamIdentifier in banMap && !banMap[player.steamIdentifier].reason ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
+                                :title="player.steamIdentifier in banMap && !banMap[player.steamIdentifier].reason ? t('players.ban.no_reason') : ''"
                             >
                                 {{ t('global.banned') }}
                                 <span class="block text-xxs">

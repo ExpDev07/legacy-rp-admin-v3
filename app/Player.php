@@ -302,7 +302,7 @@ class Player extends Model
      */
     public function bans(): Builder
     {
-        return Ban::query()->whereIn('identifier', $this->getIdentifiers());
+        return Ban::query()->where('identifier', '=', $this->steam_identifier);
     }
 
     /**
