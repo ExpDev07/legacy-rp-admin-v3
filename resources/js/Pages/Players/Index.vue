@@ -116,13 +116,13 @@
                         <td class="px-6 py-3 text-center border-t mobile:block">
                             <span
                                 class="block px-4 py-2 text-white rounded"
+                                :class="getBanInfo(player.steamIdentifier, 'reason') ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
+                                :title="getBanInfo(player.steamIdentifier, 'reason') ? t('players.ban.no_reason') : ''"
                                 v-if="player.isBanned"
-                                :class="player.steamIdentifier in banMap && !banMap[player.steamIdentifier].reason ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
-                                :title="player.steamIdentifier in banMap && !banMap[player.steamIdentifier].reason ? t('players.ban.no_reason') : ''"
                             >
                                 {{ t('global.banned') }}
                                 <span class="block text-xxs">
-                                    {{ t('global.by', formatBanCreator(banMap[player.steamIdentifier].creator_name)) }}
+                                    {{ t('global.by', formatBanCreator(getBanInfo(player.steamIdentifier, 'creator_name'))) }}
                                 </span>
                             </span>
                             <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
@@ -240,6 +240,14 @@ export default {
             } catch(e) {}
 
             this.isLoading = false;
+        },
+        getBanInfo(steamIdentifier, key) {
+            const ban = steamIdentifier in this.banMap ? this.banMap[steamIdentifier] : null;
+
+            if (key) {
+                return ban && key in ban ? ban[key] : null;
+            }
+            return ban;
         },
         formatBanCreator(creator) {
             if (!creator) {
