@@ -211,10 +211,9 @@ class Player extends Model
      */
     public function getActiveBan(): ?Ban
     {
-        return $this
-            ->bans()
+        return Ban::query()
+            ->where('identifier', '=', $this->steam_identifier)
             ->get()
-            ->filter(fn(Ban $ban) => !$ban->hasExpired())
             ->first();
     }
 
@@ -302,7 +301,7 @@ class Player extends Model
      */
     public function bans(): Builder
     {
-        return Ban::query()->where('identifier', '=', $this->steam_identifier);
+        return Ban::query()->whereIn('identifier', $this->getIdentifiers());
     }
 
     /**
