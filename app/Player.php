@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\CacheHelper;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -161,6 +162,18 @@ class Player extends Model
     }
 
     /**
+     * Returns all bannable identifiers
+     *
+     * @return array
+     */
+    public function getBannableIdentifiers(): array
+    {
+        return array_values(array_filter($this->getIdentifiers(), function($identifier) {
+            return !Str::startsWith($identifier, 'ip:');
+        }));
+    }
+
+    /**
      * Gets the identifier for the provided key.
      *
      * @param $key
@@ -235,10 +248,10 @@ class Player extends Model
     public function getSteamUser(): ?array
     {
         $id = $this->getSteamID()->ConvertToUInt64();
-        $key = CLUSTER . 'steam_user_' . md5($id);
+        $key = 'steam_user_' . md5($id);
 
-        if (Cache::store('file')->has($key)) {
-            return Cache::store('file')->get($key);
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         try {
@@ -246,7 +259,7 @@ class Player extends Model
             $steam->getUserInfo();
 
             $info = $steam->toArray();
-            Cache::store('file')->put($key, $info, 24 * 60 * 60);
+            CacheHelper::write($key, $info, CacheHelper::DAY);
 
             return $info;
         } catch (\Exception $e) {
@@ -395,14 +408,7 @@ class Player extends Model
         }
 
         $identifiers = array_values(array_unique($identifiers));
-
-        $players = self::query()->whereIn('steam_identifier', $identifiers)->select([
-            'steam_identifier', 'player_name',
-        ])->get();
-        $playerMap = [];
-        foreach ($players as $player) {
-            $playerMap[$player->steam_identifier] = $player->player_name;
-        }
+        $playerMap = CacheHelper::loadSteamPlayerNameMap($identifiers);
 
         if (empty($playerMap)) {
             $playerMap['empty'] = 'empty';

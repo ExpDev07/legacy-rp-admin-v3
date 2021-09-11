@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Character;
+use App\Helpers\CacheHelper;
 use App\Http\Resources\InventoryLogResource;
 use App\Inventory;
 use App\Motel;
@@ -142,7 +143,7 @@ class InventoryController extends Controller
             'created_by'     => $request->user()->player->steam_identifier,
         ];
 
-        Cache::put(CLUSTER . 'inv_snap_' . $snapshot['hash'], $snapshot, 2 * 24 * 60 * 60);
+        CacheHelper::write('inv_snap_' . $snapshot['hash'], $snapshot, 2 * CacheHelper::DAY);
 
         return (new \Illuminate\Http\Response(json_encode(['hash' => $snapshot['hash']]), 200))
             ->header('Content-Type', 'application/json');
@@ -157,13 +158,13 @@ class InventoryController extends Controller
      */
     public function showSnapshot(string $snapshot, Request $request): ?Response
     {
-        $key = CLUSTER . 'inv_snap_' . $snapshot;
-        if (!Cache::has($key)) {
+        $key = 'inv_snap_' . $snapshot;
+        if (!CacheHelper::exists($key)) {
             abort(404, 'Snapshot not found.');
             return null;
         }
 
-        $snapshot = Cache::get($key);
+        $snapshot = CacheHelper::read($key);
 
         $superAdmin = $request->user()->player->is_super_admin;
         if (!$superAdmin) {

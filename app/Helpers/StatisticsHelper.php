@@ -18,9 +18,9 @@ class StatisticsHelper
      */
     public static function getBanStats(): array
     {
-        $key = CLUSTER . 'ban_statistics';
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        $key = 'ban_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $stats = Ban::query()->fromSub(function ($query) {
@@ -34,7 +34,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        Cache::put($key, $data, 6 * 60 * 60);
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -46,9 +46,9 @@ class StatisticsHelper
      */
     public static function getWarningStats(): array
     {
-        $key = CLUSTER . 'warning_statistics';
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        $key = 'warning_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $stats = Warning::query()->fromSub(function ($query) {
@@ -62,7 +62,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        Cache::put($key, $data, 6 * 60 * 60);
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -74,9 +74,9 @@ class StatisticsHelper
      */
     public static function getCharacterCreationStats(): array
     {
-        $key = CLUSTER . 'character_creation_statistics';
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        $key = 'character_creation_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $stats = Character::query()->fromSub(function ($query) {
@@ -90,7 +90,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        Cache::put($key, $data, 6 * 60 * 60);
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -102,9 +102,9 @@ class StatisticsHelper
      */
     public static function getLuckyWheelStats(): array
     {
-        $key = CLUSTER . 'lucky_wheel_spins_statistics';
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        $key = 'lucky_wheel_spins_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $stats = DB::table('lucky_wheel_spins')->fromSub(function ($query) {
@@ -118,7 +118,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        Cache::put($key, $data, 6 * 60 * 60);
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -130,9 +130,9 @@ class StatisticsHelper
      */
     public static function getCharacterDeletionStats(): array
     {
-        $key = CLUSTER . 'character_deletion_statistics';
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        $key = 'character_deletion_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $stats = Character::query()->fromSub(function ($query) {
@@ -146,7 +146,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        Cache::put($key, $data, 6 * 60 * 60);
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
         return $data;
     }
