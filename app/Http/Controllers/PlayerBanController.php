@@ -45,7 +45,7 @@ class PlayerBanController extends Controller
         ], $request->validated());
 
         // Get identifiers to ban.
-        $identifiers = $player->getIdentifiers();
+        $identifiers = $player->getBannableIdentifiers();
 
         // Go through the player's identifiers and create a ban record for each of them.
         foreach($identifiers as $identifier) {

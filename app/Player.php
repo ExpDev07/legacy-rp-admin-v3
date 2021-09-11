@@ -162,6 +162,18 @@ class Player extends Model
     }
 
     /**
+     * Returns all bannable identifiers
+     *
+     * @return array
+     */
+    public function getBannableIdentifiers(): array
+    {
+        return array_values(array_filter($this->getIdentifiers(), function($identifier) {
+            return !Str::startsWith($identifier, 'ip:');
+        }));
+    }
+
+    /**
      * Gets the identifier for the provided key.
      *
      * @param $key
