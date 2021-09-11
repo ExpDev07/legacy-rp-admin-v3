@@ -173,17 +173,17 @@ class OPFWHelper
     public static function getWorldJSON(string $serverIp): ?array
     {
         $serverIp = Server::fixApiUrl($serverIp);
-        $cache = CLUSTER . 'world_json_' . md5($serverIp);
+        $cache = 'world_json_' . md5($serverIp);
 
-        if (Cache::store('file')->has($cache)) {
-            return Cache::store('file')->get($cache);
+        if (CacheHelper::exists($cache)) {
+            return CacheHelper::read($cache, []);
         } else {
             $data = self::executeRoute($serverIp . 'world.json', [], false, 3);
 
             if ($data->data) {
-                Cache::store('file')->set($cache, $data->data, 10);
+                CacheHelper::write($cache, $data->data, 10);
             } else if (!$data->status) {
-                Cache::store('file')->set($cache, [], 10);
+                CacheHelper::write($cache, [], 10);
             }
 
             return $data->data;
@@ -225,7 +225,7 @@ class OPFWHelper
                 ]);
 
                 $response = $res->getBody()->getContents();
-            } catch(\Throwable $t) {
+            } catch (\Throwable $t) {
                 $response = $t->getMessage();
             }
 

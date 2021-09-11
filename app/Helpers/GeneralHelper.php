@@ -16,10 +16,10 @@ class GeneralHelper
      */
     public static function inspiring(): array
     {
-        $key = CLUSTER . '_inspiring_quote';
+        $key = 'inspiring_quote';
         $quote = null;
-        if (Cache::store('file')->has($key)) {
-            $quote = Cache::store('file')->get($key);
+        if (CacheHelper::exists($key)) {
+            $quote = CacheHelper::read($key, []);
         }
 
         if (!$quote || !isset($quote['expires']) || $quote['expires'] < time()) {
@@ -39,7 +39,7 @@ class GeneralHelper
                 $quote = self::randomElement($json, $quote, 'quote');
                 $quote['expires'] = time() + (12 * 60 * 60);
 
-                Cache::store('file')->put($key, $quote);
+                CacheHelper::write($key, $quote);
             } else {
                 $quote = [
                     'quote'  => 'Quote machine broke',

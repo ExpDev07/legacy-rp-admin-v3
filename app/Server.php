@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\CacheHelper;
 use App\Helpers\GeneralHelper;
 use App\Helpers\OPFWHelper;
 use Illuminate\Database\Eloquent\Model;
@@ -105,11 +106,11 @@ class Server extends Model
         if (!$serverIp) {
             return [];
         }
-        $cacheKey = CLUSTER . 'server_data_' . md5($serverIp);
+        $cacheKey = 'server_data_' . md5($serverIp);
 
         if ($useCache) {
-            if (Cache::store('file')->has($cacheKey)) {
-                return Cache::store('file')->get($cacheKey);
+            if (CacheHelper::exists($cacheKey)) {
+                return CacheHelper::read($cacheKey, []);
             }
         }
 
@@ -131,8 +132,8 @@ class Server extends Model
                 $assoc = [];
                 foreach ($json['players'] as $player) {
                     $assoc[$player['steamIdentifier']] = [
-                        'source' => $player['source'],
-                        'character' => $player['character'] ? $player['character']['id'] : null
+                        'source'    => $player['source'],
+                        'character' => $player['character'] ? $player['character']['id'] : null,
                     ];
                 }
 
@@ -142,7 +143,7 @@ class Server extends Model
             }
         }
 
-        Cache::store('file')->set($cacheKey, self::$onlineMap[$cacheKey], 5 * 60);
+        CacheHelper::write($cacheKey, self::$onlineMap[$cacheKey], 5 * CacheHelper::MINUTE);
 
         return self::$onlineMap[$cacheKey];
     }
@@ -160,8 +161,8 @@ class Server extends Model
             return [];
         }
 
-        if (Cache::store('file')->has(CLUSTER . 'server_all_api')) {
-            return Cache::store('file')->get(CLUSTER . 'server_all_api');
+        if (CacheHelper::exists('server_all_api')) {
+            return CacheHelper::read('server_all_api', []);
         }
 
         $result = [];
@@ -193,7 +194,7 @@ class Server extends Model
             }
         }
 
-        Cache::store('file')->set(CLUSTER . 'server_all_api', $result, 5 * 60);
+        CacheHelper::write('server_all_api', $result, 5 * CacheHelper::MINUTE);
 
         return $result;
     }

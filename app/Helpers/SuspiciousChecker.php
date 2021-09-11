@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SuspiciousChecker
 {
-    const CacheTime = 10 * 60;
+    const CacheTime = 10 * CacheHelper::MINUTE;
 
     const IgnoreUnusualMovement = [
         'Snowballs'      => 1500,
@@ -113,7 +113,7 @@ class SuspiciousChecker
         'weapon_compactlauncher',
         'weapon_rayminigun',
         'weapon_grenade',
-        'weapon_bzgas',
+        //'weapon_bzgas', // People can get these now
         'weapon_molotov',
         'weapon_stickybomb',
         'weapon_proxmine',
@@ -146,8 +146,6 @@ class SuspiciousChecker
         'Homing Launcher',
         'Compact Grenade',
         'Widowmaker',
-        'Grenade',
-        'BZ Gas',
         'Molotov Cocktail',
         'Sticky Bomb',
         'Proximity Mines',
@@ -164,17 +162,17 @@ class SuspiciousChecker
     public static function findInvalidItems(): array
     {
         $items = self::SingleUnusualItems;
-        $key = CLUSTER . 'unusual_items_' . md5(json_encode($items));
+        $key = 'unusual_items_' . md5(json_encode($items));
 
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $sql = "SELECT `identifier`, `details`, `timestamp` FROM `user_logs` WHERE action = 'Item Moved' AND SUBSTRING_INDEX(SUBSTRING_INDEX(details, ' moved ', -1), ' to ', 1) IN ('1x " . implode('\', \'1x ', $items) . "')";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
-        Cache::put($key, $entries, self::CacheTime);
+        CacheHelper::write($key, $entries, self::CacheTime);
 
         return $entries;
     }
@@ -187,10 +185,10 @@ class SuspiciousChecker
     public static function findUnusualInventories(): array
     {
         $items = self::UnusualItems;
-        $key = CLUSTER . 'unusual_inventories_' . md5(json_encode($items)) . '_' . md5(json_encode(self::IgnoreItems));
+        $key = 'unusual_inventories_' . md5(json_encode($items)) . '_' . md5(json_encode(self::IgnoreItems));
 
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "');";
@@ -218,7 +216,7 @@ class SuspiciousChecker
             ];
         }
 
-        Cache::put($key, $finished, self::CacheTime);
+        CacheHelper::write($key, $finished, self::CacheTime);
 
         return $finished;
     }
@@ -230,10 +228,10 @@ class SuspiciousChecker
      */
     public static function findUnusualItems(): array
     {
-        $key = CLUSTER . 'unusual_item_movement_' . md5(json_encode(self::IgnoreUnusualMovement));
+        $key = 'unusual_item_movement_' . md5(json_encode(self::IgnoreUnusualMovement));
 
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $sql = "SELECT * FROM (SELECT `identifier`, SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', 1)) as `amount`, SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', -1) as `item`, `details`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 600) * 600 as `time` FROM `user_logs` WHERE `action`='Item Moved' GROUP BY CONCAT(`identifier`, '|', `time`, '|', `item`) ORDER BY `time` DESC) `logs` WHERE amount > 250";
@@ -254,7 +252,7 @@ class SuspiciousChecker
             ];
         }
 
-        Cache::put($key, $sus, self::CacheTime);
+        CacheHelper::write($key, $sus, self::CacheTime);
 
         return $sus;
     }
@@ -280,17 +278,17 @@ class SuspiciousChecker
      */
     public static function findSuspiciousPawnShopUsages(): array
     {
-        $key = CLUSTER . 'pawn_transactions';
+        $key = 'pawn_transactions';
 
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 300 as `time`, `identifier` FROM `user_logs` WHERE action = 'Used Pawn Shop' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
 
         $sus = self::getSaleLogEntries($sql, 100000, 'jewelry');
 
-        Cache::put($key, $sus, self::CacheTime);
+        CacheHelper::write($key, $sus, self::CacheTime);
 
         return $sus;
     }
@@ -302,17 +300,17 @@ class SuspiciousChecker
      */
     public static function findSuspiciousWarehouseUsages(): array
     {
-        $key = CLUSTER . 'warehouse_transactions';
+        $key = 'warehouse_transactions';
 
-        if (Cache::has($key)) {
-            return Cache::get($key, []);
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $sql = "SELECT SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, '$', -1), '.', 1)) as `cash`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 300) * 300 as `time`, `identifier` FROM `user_logs` WHERE action = 'Sold materials' GROUP BY CONCAT(`identifier`, '|', `time`) ORDER BY `time` DESC";
 
         $sus = self::getSaleLogEntries($sql, 20000, 'materials');
 
-        Cache::put($key, $sus, self::CacheTime);
+        CacheHelper::write($key, $sus, self::CacheTime);
 
         return $sus;
     }

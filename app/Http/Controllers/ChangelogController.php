@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ban;
+use App\Helpers\CacheHelper;
 use App\Helpers\GeneralHelper;
 use App\Http\Resources\BanResource;
 use App\Http\Resources\PlayerIndexResource;
@@ -32,9 +33,9 @@ class ChangelogController extends Controller
 
     private function getRecentUpdates(): array
     {
-        $key = CLUSTER . 'recent_updates';
-        if (Cache::has($key)) {
-            return Cache::get($key);
+        $key = 'recent_updates';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
 
         $pulls = json_decode(GeneralHelper::get('https://api.github.com/repos/ExpDev07/legacy-rp-admin-v3/pulls?state=closed'), true);
@@ -84,7 +85,7 @@ class ChangelogController extends Controller
             'updates' => $updates,
         ];
 
-        Cache::put($key, $updates, 10 * 60);
+        CacheHelper::write($key, $updates, 10 * CacheHelper::MINUTE);
 
         return $updates;
     }

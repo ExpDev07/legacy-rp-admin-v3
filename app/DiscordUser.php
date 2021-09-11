@@ -2,8 +2,8 @@
 
 namespace App;
 
+use App\Helpers\CacheHelper;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Cache;
 
 class DiscordUser
 {
@@ -32,10 +32,10 @@ class DiscordUser
      */
     public static function getUser(string $discordId): ?DiscordUser
     {
-        $key = CLUSTER . self::CacheKey . '_' . md5($discordId);
+        $key = self::CacheKey . '_' . md5($discordId);
 
-        if (Cache::store('file')->has($key)) {
-            $cache = Cache::store('file')->get($key) ?? null;
+        if (CacheHelper::exists($key)) {
+            $cache = CacheHelper::read($key) ?? null;
 
             if (self::fromArray($cache)) {
                 return self::fromArray($cache);
@@ -64,7 +64,7 @@ class DiscordUser
                 $user = self::fromArray($data);
 
                 if ($user) {
-                    Cache::store('file')->put($key, $user->toArray(true), 24 * 60 * 60);
+                    CacheHelper::write($key, $user->toArray(true), CacheHelper::DAY);
                 }
 
                 return $user;
