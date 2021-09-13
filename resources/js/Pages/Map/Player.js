@@ -34,7 +34,7 @@ class Player {
 
         this.invisible = {
             raw: rawData.invisible,
-            value: rawData.invisible && shouldIgnoreInvisible(staffMembers, rawData)
+            value: rawData.invisible && !shouldIgnoreInvisible(staffMembers, rawData)
         };
         this.afk = {
             time: rawData.afk,

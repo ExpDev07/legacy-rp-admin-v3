@@ -42,18 +42,18 @@ class PlayerContainer {
             this.vehicles[vehicle] = this.players[id].character.name;
         }
 
-        if (this.players[id].afk.value) {
-            this.afk.push(this.getPlayerListInfo(this.players[id]));
-        }
-        if (this.players[id].invisible.value) {
-            this.invisible.push(this.getPlayerListInfo(this.players[id]));
-        }
-
         if (this.players[id].character) {
             this.activePlayerIDs.push(id);
 
             if (this.players[id].isTracked()) {
                 this.isTrackedPlayerVisible = true;
+            }
+
+            if (this.players[id].afk.value) {
+                this.afk.push(this.getPlayerListInfo(this.players[id]));
+            }
+            if (this.players[id].invisible.value) {
+                this.invisible.push(this.getPlayerListInfo(this.players[id]));
             }
         }
     }
