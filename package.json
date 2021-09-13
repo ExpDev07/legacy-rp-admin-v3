@@ -19,7 +19,7 @@
         "@tailwindcss/ui": "^0.6.0",
         "aos": "^2.3.4",
         "autoprefixer": "^9.8.6",
-        "axios": "^0.19",
+        "axios": "^0.21",
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
