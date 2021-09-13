@@ -817,6 +817,8 @@ export default {
                         if (!_this.container.isActive(id) && id in markers) {
                             _this.map.removeLayer(markers[id]);
                             delete markers[id];
+
+                            _this.container.remove(id);
                             return;
                         } else if (!player.character) {
                             return;
