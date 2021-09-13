@@ -49,7 +49,7 @@
 
                 <!-- Type -->
                 <div class="w-full p-3 flex justify-between px-0">
-                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="area_type">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold">
                         {{ t('map.area_type.title') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="area_type" v-model="form.area_type">
@@ -137,7 +137,7 @@
                         </button>
                         <button
                             class="px-5 py-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                            @click="stopTracking()" v-if="trackedPlayer">
+                            @click="stopTracking()" v-if="container.isTrackedPlayerVisible">
                             {{ t('map.stop_track') }}
                         </button>
                     </div>
@@ -165,11 +165,11 @@
                         @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
                     <pre
                         class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
-                        v-if="advancedTracking && trackedPlayer"
+                        v-if="advancedTracking && container.isTrackedPlayerVisible"
                     >{{ tracking.data.advanced }}</pre>
                     <div
                         class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
-                        :class="{'hidden' : !advancedTracking || !trackedPlayer}"
+                        :class="{'hidden' : !advancedTracking || !container.isTrackedPlayerVisible}"
                     >
                         <div class="relative w-map-other-gauge">
                             <img src="/images/height-indicator.png" style="height: 90px" alt="Height indicator" />
@@ -196,6 +196,51 @@
                             valueTextFontSize="14px"
                             :needleHeightRatio="0.7"
                         />
+                    </div>
+
+                    <div v-if="rightClickedPlayer.id" class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
+                        <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
+                            <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name">{{ rightClickedPlayer.name }}</h2>
+                            <p class="text-muted dark:text-dark-muted mb-1">
+                                <span class="font-semibold">{{ t('players.steam') }}:</span>
+                                <a :href="'/players/' + rightClickedPlayer.id" target="_blank" class="text-blue-600 dark:text-blue-400 italic">{{ rightClickedPlayer.id }}</a>
+                            </p>
+                            <p class="text-muted dark:text-dark-muted mb-3">
+                                <span class="font-semibold">{{ t('players.name') }}:</span>
+                                <span class="italic">{{ rightClickedPlayer.playerName }}</span>
+                            </p>
+                            <div class="flex justify-between">
+                                <button
+                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                    @click="trackId(rightClickedPlayer.id)"
+                                    v-if="!rightClickedPlayer.tracked">
+                                    {{ t('map.do_track') }}
+                                </button>
+                                <button
+                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger"
+                                    @click="stopTracking()"
+                                    v-else>
+                                    {{ t('map.stop_track') }}
+                                </button>
+
+                                <button
+                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                    @click="highlightSteam(rightClickedPlayer.id)"
+                                    v-if="!(rightClickedPlayer.id in highlightedPeople)">
+                                    {{ t('map.do_highlight') }}
+                                </button>
+                                <button
+                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger"
+                                    @click="stopHighlight($event, rightClickedPlayer.id)"
+                                    v-else>
+                                    {{ t('map.stop_highlight') }}
+                                </button>
+
+                                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" @click="rightClickedPlayer.id = null">
+                                    {{ t('global.close') }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="my-2 flex flex-wrap -mx-2 justify-between text-xs w-map max-w-full">
@@ -329,12 +374,12 @@ import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import 'leaflet-fullscreen';
-import custom_icons from "../../data/vehicles.json";
-import ignore_invisible from "../../data/ignore_invisible.json";
 import VueSpeedometer from "vue-speedometer";
-import moment from "moment";
 
-const Rainbow = require('rainbowvis.js');
+import PlayerContainer from './PlayerContainer';
+import Player from './Player';
+import Vector3 from "./Vector3";
+import Bounds from './map.config';
 
 (function (global) {
     let MarkerMixin = {
@@ -347,62 +392,6 @@ const Rainbow = require('rainbowvis.js');
     };
     if (global) global.include(MarkerMixin);
 })(L.Marker);
-
-// Some functions for debugging
-let playerCallback = null,
-    playerCallbackCid = null,
-    VueInstance = null;
-window.debug = function (cid) {
-    playerCallbackCid = cid;
-    playerCallback = function (player, coords, _this) {
-        console.info('Player debug', player);
-    };
-};
-window.track = function (cid) {
-    window.location.hash = 'player_' + cid;
-    window.location.reload();
-};
-window.marker = function (cid) {
-    playerCallbackCid = cid;
-    playerCallback = function (player, coords, _this) {
-        console.info('Marker');
-        const markerCode = `{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`;
-        _this.copyText(null, markerCode);
-
-        console.info(`{lat: ` + coords.lat + `, lng: ` + coords.lng + `}`, '(Copied to clipboard)');
-    };
-};
-window.convertCoords = function (coords) {
-    if (VueInstance) {
-        const converted = VueInstance.convertCoords(coords);
-
-        if ('x' in converted) {
-            console.info(`{x: ` + converted.x.toFixed(3) + `, y: ` + converted.y.toFixed(3) + `}`);
-        } else {
-            console.info(`{lat: ` + converted.lat + `, lng: ` + converted.lng + `}`);
-        }
-    } else {
-        console.error('VueInstance not set!');
-    }
-};
-
-window.loadHistory = function (server, player, day) {
-    if (VueInstance) {
-        $.post(VueInstance.hostname() + '/history', {
-            server: server,
-            player: player,
-            day: day,
-            token: VueInstance.token
-        }, console.log);
-    }
-};
-
-let InvisibleHistoryDebug = {};
-window.getInvisibleHistory = function() {
-    return Object.keys(InvisibleHistoryDebug).sort((a, b) => {
-        return InvisibleHistoryDebug[b] - InvisibleHistoryDebug[a];
-    });
-}
 
 export default {
     layout: Layout,
@@ -431,11 +420,11 @@ export default {
     data() {
         return {
             map: null,
+            container: new PlayerContainer(this.staff),
             markers: {},
             data: this.t('map.loading'),
             connection: null,
             isPaused: false,
-            trackedPlayer: window.location.hash.substr(1),
             firstRefresh: true,
             clickedCoords: '',
             rawClickedCoords: null,
@@ -445,6 +434,12 @@ export default {
             openPopup: null,
             isDragging: false,
             isAddingDetectionArea: false,
+            rightClickedPlayer: {
+                id: null,
+                name: null,
+                playerName: null,
+                tracked: false
+            },
             form: {
                 area_radius: 0,
                 area_type: 'normal',
@@ -479,41 +474,6 @@ export default {
         };
     },
     methods: {
-        getBounds() {
-            return {
-                game: {
-                    bounds: {
-                        min: {x: -2861.987, y: 7664.36},
-                        max: {x: 4179.125, y: -3579.824}
-                    }
-                },
-                map: {
-                    bounds: {
-                        min: {x: 81.6328125, y: -9.986328125},
-                        max: {x: 178.2734375, y: -164.267578125}
-                    }
-                },
-                cayo: {
-                    minMap: {x: 149.03777506175518, y: -166.5205908658534}, // top left corner of transition point
-                    game: {
-                        bounds: {
-                            min: {x: 3925.583, y: -4688.479},
-                            max: {x: 5478.356, y: -5849.987}
-                        }
-                    },
-                    map: {
-                        bounds: {
-                            min: {x: 195.0625, y: -210.908203125},
-                            max: {x: 242.9453125, y: -246.48828125}
-                        }
-                    }
-                },
-                version: "cayo_v2"
-            };
-        },
-        mapNumber(val, in_min, in_max, out_min, out_max) {
-            return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-        },
         copyText(e, text) {
             if (e !== null) {
                 e.preventDefault();
@@ -521,20 +481,16 @@ export default {
 
             this.copyToClipboard(text);
         },
-        coords(coords) {
-            return {
-                lat: coords.y,
-                lng: coords.x
-            }
-        },
         stopTracking() {
-            this.trackedPlayer = null;
             window.location.hash = '';
+
+            this.rightClickedPlayer.id = null;
         },
         trackId(id) {
-            this.trackedPlayer = id;
             window.location.hash = id;
             this.firstRefresh = true;
+
+            this.rightClickedPlayer.id = null;
         },
         addFilter(e) {
             e.preventDefault();
@@ -546,10 +502,17 @@ export default {
 
             this.form.filters.splice(index, 1);
         },
+        highlightSteam(steam) {
+            this.highlightedPeople[steam] = true;
+
+            this.rightClickedPlayer.id = null;
+        },
         stopHighlight(e, steam) {
             e.preventDefault();
 
             delete this.highlightedPeople[steam];
+
+            this.rightClickedPlayer.id = null;
         },
         confirmArea() {
             if (this.form.area_radius < 1 || this.form.area_radius > 5000) {
@@ -557,10 +520,10 @@ export default {
             }
 
             const convertDistance = d => {
-                const a = this.convertCoords({x: 0, y: 0}),
-                    b = this.convertCoords({x: d, y: d});
+                const a = Vector3.fromGameCoords(0, 0),
+                    b = Vector3.fromGameCoords(d, d);
 
-                return Math.abs(b.lat - a.lat);
+                return Math.abs(b.toMap().lat - a.toMap().lat);
             };
 
             this.isAddingDetectionArea = false;
@@ -575,10 +538,10 @@ export default {
 
                     _timestamp: Date.now()
                 },
-                coords = this.convertCoords(this.form.area_location),
+                coords = Vector3.fromGameCoords(this.form.area_location.x, this.form.area_location.y),
                 formattedFilters = area.filters.map(f => _this.t('map.area_filters.' + f));
 
-            area.marker = L.marker(coords,
+            area.marker = L.marker(coords.toMap(),
                 {
                     icon: new L.Icon(
                         {
@@ -597,7 +560,7 @@ export default {
             });
             area.marker.addTo(this.map);
 
-            area.circle = L.circle(coords, {
+            area.circle = L.circle(coords.toMap(), {
                 radius: convertDistance(area.radius),
                 color: '#FFBF00',
                 fillColor: '#FFBF00',
@@ -645,7 +608,7 @@ export default {
             return this.$options.filters.humanizeSeconds(sec) + ' (' + sec + 's)';
         },
         checkAreaFilter(filters, player) {
-            const character = player.character && player.character.id in this.characters ? this.characters[player.character.id] : null,
+            const character = player.character.id in this.characters ? this.characters[player.character.id] : null,
                 _this = this,
                 check = filter => {
                     switch (filter) {
@@ -654,21 +617,21 @@ export default {
                         case 'is_not_vehicle':
                             return !player.vehicle;
                         case 'is_staff':
-                            return _this.staff.includes(player.steamIdentifier);
+                            return _this.staff.includes(player.player.steam);
                         case 'is_not_staff':
-                            return !_this.staff.includes(player.steamIdentifier);
+                            return !_this.staff.includes(player.player.steam);
                         case 'is_dead':
-                            return player.character && player.character.dead;
+                            return player.character && player.icon.dead;
                         case 'is_not_dead':
-                            return player.character && !player.character.dead;
+                            return player.character && !player.icon.dead;
                         case 'is_invisible':
-                            return player.invisible;
+                            return player.invisible.raw;
                         case 'is_not_invisible':
-                            return !player.invisible;
+                            return !player.invisible.raw;
                         case 'is_highlighted':
-                            return player.steamIdentifier in _this.highlightedPeople;
+                            return player.player.steam in _this.highlightedPeople;
                         case 'is_not_highlighted':
-                            return !(player.steamIdentifier in _this.highlightedPeople);
+                            return !(player.player.steam in _this.highlightedPeople);
                         case 'is_male':
                             return character && character.gender === 0;
                         case 'is_female':
@@ -685,12 +648,10 @@ export default {
             }
             return true;
         },
-        updateDetectionAreas(coords, player) {
-            if (!player.character) {
-                return;
-            }
+        updateDetectionAreas(player) {
+            const _this = this,
+                coords = player.location.toGame();
 
-            const _this = this;
             $.each(this.detectionAreas, function (index, area) {
                 const dist = Math.sqrt((coords.x - area.x) ** 2 + (coords.y - area.y) ** 2);
 
@@ -702,7 +663,7 @@ export default {
                     area.people = area.people.filter((p, x) => {
                         if (p.exited_at) {
                             return true;
-                        } else if (p.steam === player.steamIdentifier) {
+                        } else if (p.steam === player.player.steam) {
                             if (area.type === 'persistent') {
                                 area.people[x].exited_at = Date.now();
                                 return true;
@@ -713,15 +674,15 @@ export default {
                     });
                 } else {
                     const addToList = area.people.filter(p => {
-                        return p.steam === player.steamIdentifier && !p.exited_at;
+                        return p.steam === player.player.steam && !p.exited_at;
                     }).length === 0;
 
                     if (addToList) {
                         area.people.push({
-                            steam: player.steamIdentifier,
+                            steam: player.player.steam,
                             cid: player.character.id,
-                            source: player.source,
-                            name: player.character.fullName,
+                            source: player.player.source,
+                            name: player.character.name,
                             entered_at: Date.now(),
                             exited_at: null
                         });
@@ -753,54 +714,6 @@ export default {
                     }
                 }).fail(reject);
             });
-        },
-        shouldIgnoreInvisible(coords, steamIdentifier, player) {
-            const parseSpot = spot => {
-                const parts = spot.coords.split(' ');
-
-                return {
-                    "x": parseInt(parts[0]),
-                    "y": parseInt(parts[1]),
-                    "z": parseInt(parts[2]),
-                    "radius": spot.radius,
-                    "height": spot.height,
-                };
-            };
-            const isInside = (spot, coords) => {
-                return (
-                    spot.z - spot.height < coords.z &&
-                    spot.z + spot.height > coords.z
-                ) && (
-                    Math.pow(coords.x - spot.x, 2) + Math.pow(coords.y - spot.y, 2) < Math.pow(spot.radius, 2)
-                );
-            }
-
-            // If you are in a shell (interior)
-            if (player.character && 'inShell' in player.character && player.character.inShell) {
-                return true;
-            }
-
-            // Check if staff member
-            if (this.staff.includes(steamIdentifier)) {
-                return true;
-            }
-
-            // Check if they are inside an apartment (most of the time that's about -99 below the ground)
-            if (coords.z < -90) {
-                return true;
-            }
-
-            // Check if they are inside one of the ignore cylinders
-            for (let x = 0; x < ignore_invisible.length; x++) {
-                const spot = parseSpot(ignore_invisible[x]);
-
-                if (isInside(spot, coords)) {
-                    return true;
-                }
-            }
-
-            // Hmm why are they invisible?
-            return false;
         },
         async doMapRefresh(server) {
             const _this = this;
@@ -850,123 +763,8 @@ export default {
                 console.error('Failed to connect to socket', e);
             }
         },
-        getVehicleType(vehicle) {
-            if (!vehicle) {
-                return null;
-            }
-
-            let ret = {
-                type: 'car',
-                size: 23
-            };
-
-            $.each(custom_icons, function (type, cfg) {
-                if (cfg.models.includes(vehicle.model + "")) {
-                    ret.type = type;
-                    ret.size = cfg.size;
-                }
-            });
-
-            return ret;
-        },
-        getIcon(player, isDriving, isPassenger, isInvisible, isDead) {
-            let size = {
-                circle: 17,
-                circle_yellow: 17,
-                skull: 17,
-                skull_red: 12,
-                circle_red: 12,
-                circle_green: 13
-            };
-
-            let icon = new L.Icon(
-                {
-                    iconUrl: '/images/icons/circle.png',
-                    iconSize: [size.circle, size.circle]
-                }
-            );
-
-            if (player.steamIdentifier in this.highlightedPeople) {
-                icon = new L.Icon(
-                    {
-                        iconUrl: '/images/icons/circle_yellow.png',
-                        iconSize: [size.circle_yellow, size.circle_yellow]
-                    }
-                );
-            } else if (isInvisible) {
-                icon = new L.Icon(
-                    {
-                        iconUrl: '/images/icons/circle_green.png',
-                        iconSize: [size.circle_green, size.circle_green]
-                    }
-                );
-            } else if (isDriving) {
-                const info = this.getVehicleType(player.vehicle);
-
-                icon = new L.Icon(
-                    {
-                        iconUrl: '/images/icons/' + info.type + '.png',
-                        iconSize: [info.size, info.size]
-                    }
-                );
-            } else if (isPassenger && isDead) {
-                icon = new L.Icon(
-                    {
-                        iconUrl: '/images/icons/skull_red.png',
-                        iconSize: [size.skull_red, size.skull_red]
-                    }
-                )
-            } else if (isPassenger) {
-                icon = new L.Icon(
-                    {
-                        iconUrl: '/images/icons/circle_red.png',
-                        iconSize: [size.circle_red, size.circle_red]
-                    }
-                )
-            } else if (isDead) {
-                icon = new L.Icon(
-                    {
-                        iconUrl: '/images/icons/skull.png',
-                        iconSize: [size.skull, size.skull]
-                    }
-                );
-            }
-
-            return icon;
-        },
         formatSeconds(seconds) {
             return this.$moment.utc(seconds * 1000).format('HH:mm:ss');
-        },
-        convertCoords(coords) {
-            const conf = this.getBounds();
-
-            if ('x' in coords) {
-                const x = this.mapNumber(coords.x, conf.game.bounds.min.x, conf.game.bounds.max.x, conf.map.bounds.min.x, conf.map.bounds.max.x);
-                const y = this.mapNumber(coords.y, conf.game.bounds.min.y, conf.game.bounds.max.y, conf.map.bounds.min.y, conf.map.bounds.max.y);
-
-                if (x > conf.cayo.minMap.x && y < conf.cayo.minMap.y || this.cayoCalibrationMode) {
-                    coords.x = this.mapNumber(coords.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x);
-                    coords.y = this.mapNumber(coords.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y);
-                } else {
-                    coords.x = x;
-                    coords.y = y;
-                }
-
-                return this.coords(coords);
-            } else {
-                const x = this.mapNumber(coords.lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x);
-                const y = this.mapNumber(coords.lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y);
-
-                if (coords.lng > conf.cayo.minMap.x && coords.lat < conf.cayo.minMap.y || this.cayoCalibrationMode) {
-                    coords.x = this.mapNumber(coords.lng, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x);
-                    coords.y = this.mapNumber(coords.lat, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y);
-                } else {
-                    coords.x = x;
-                    coords.y = y;
-                }
-
-                return coords;
-            }
         },
         addToLayer(marker, layer) {
             const _this = this;
@@ -979,15 +777,15 @@ export default {
 
             this.layers[layer].addLayer(marker);
         },
-        getLayer(player, isDriving, isPassenger, isInvisible, isDead) {
-            const vehicle = this.getVehicleType(player.vehicle);
+        getLayer(player) {
+            const vehicle = player.vehicle;
 
-            if (vehicle && (vehicle.type === 'police_car' || vehicle.type === 'ems_car')) {
+            if (vehicle && (vehicle.icon.type === 'police_car' || vehicle.icon.type === 'ems_car')) {
                 return "Emergency Vehicles";
             }
-            if (isDriving || isPassenger) {
+            if (vehicle) {
                 return "Vehicles";
-            } else if (isDead) {
+            } else if (player.icon.dead) {
                 return "Dead Players";
             } else {
                 return "Players";
@@ -998,7 +796,7 @@ export default {
                 return;
             }
 
-            if (this.trackedPlayer && this.trackedPlayer in this.markers) {
+            if (this.container.isTrackedPlayerVisible) {
                 this.map.dragging.disable();
             } else {
                 this.map.dragging.enable();
@@ -1011,209 +809,72 @@ export default {
                     const _this = this;
                     let markers = this.markers;
 
-                    let vehicles = {};
-                    $.each(data, function (index, player) {
-                        if ('vehicle' in player && player.vehicle && player.vehicle.driving) {
-                            vehicles[player.vehicle.id] = !player.character ? 'Nobody' : player.character.fullName;
-                        }
-
-                        data[index] = player
-                    });
+                    this.container.updatePlayers(data);
 
                     let unknownCharacters = [];
 
-                    let validIds = [];
-                    let afkList = [];
-                    let invisibleList = [];
-                    $.each(data, function (_, player) {
-                        if (!player.character) {
+                    this.container.eachPlayer(function(id, player) {
+                        if (!_this.container.isActive(id) && id in markers) {
+                            _this.map.removeLayer(markers[id]);
+                            delete markers[id];
+                            return;
+                        } else if (!player.character) {
                             return;
                         }
 
-                        const id = "player_" + player.character.id,
-                            rawCoords = {
-                                x: Math.round(player.coords.x),
-                                y: Math.round(player.coords.y),
-                                z: Math.round(player.coords.z)
-                            },
-                            originalCoords = rawCoords.x + ' ' + rawCoords.y + ' ' + rawCoords.z,
-                            coords = _this.convertCoords(player.coords),
-                            heading = _this.mapNumber(-player.heading, -180, 180, 0, 360) - 180,
-                            isDriving = 'vehicle' in player && player.vehicle && player.vehicle.driving,
-                            isPassenger = 'vehicle' in player && player.vehicle && !player.vehicle.driving,
-                            isInvisible = 'invisible' in player && player.invisible,
-                            ignoreInvisible = _this.shouldIgnoreInvisible(rawCoords, player.steamIdentifier, player),
-                            isDead = player.character && 'dead' in player.character && player.character.dead,
-                            speed = 'speed' in player ? player.speed : null,
-                            icon = _this.getIcon(player, isDriving, isPassenger, isInvisible, isDead),
-                            vehicle = _this.getVehicleType(player.vehicle),
-                            isStaff = _this.staff.includes(player.steamIdentifier);
+                        const characterID = player.getCharacterID();
 
-                        if (playerCallback && playerCallbackCid === player.character.id) {
-                            playerCallbackCid = null;
-                            playerCallback(player, coords, _this);
-                            playerCallback = null;
+                        if (characterID && !unknownCharacters.includes(characterID) && !(characterID in _this.characters)) {
+                            unknownCharacters.push(characterID);
                         }
 
-                        if (!unknownCharacters.includes(player.character.id) && !(player.character.id in _this.characters)) {
-                            unknownCharacters.push(player.character.id);
-                        }
+                        _this.updateDetectionAreas(player);
 
-                        _this.updateDetectionAreas(rawCoords, player);
-
-                        if (isNaN(coords.lat) || isNaN(coords.lng)) {
-                            console.debug('NaN Coords', coords, player);
-                            return;
-                        }
-
-                        validIds.push(id);
-
+                        let marker;
                         if (id in markers) {
-                            markers[id].setIcon(icon);
-                            markers[id].setLatLng(coords);
-                            markers[id].setRotationAngle(heading);
+                            marker = markers[id];
                         } else {
-                            let marker = L.marker(coords,
-                                {
-                                    icon: icon,
-                                    rotationAngle: heading
-                                }
-                            );
-
-                            marker.bindPopup('', {
-                                autoPan: false
-                            });
-
-                            markers[id] = marker;
+                            marker = Player.newMarker();
                         }
+                        marker = player.updateMarker(marker, _this.highlightedPeople);
 
-                        _this.addToLayer(markers[id], _this.getLayer(player, isDriving, isPassenger, isInvisible, isDead));
+                        markers[id] = marker;
 
-                        let extra = '<br>Altitude: ' + Math.round(player.coords.z) + 'm';
-                        if (speed) {
-                            extra += '<br>Speed: ' + Math.round(speed * 2.236936) + ' mph';
-                        }
+                        _this.addToLayer(markers[id], _this.getLayer(player));
+                        markers[id]._icon.dataset.playerId = id;
 
-                        let attributes = [];
-                        if (isInvisible) {
-                            attributes.push('invisible' + (ignoreInvisible ? ' (ok)' : ''));
-                            markers[id].options.forceZIndex = 101;
-                        }
-                        if (isDead) {
-                            attributes.push('dead');
-                            markers[id].options.forceZIndex = 101;
-                        }
-                        if (isStaff) {
-                            attributes.push('a staff member');
-                        }
-                        if (isDriving) {
-                            attributes.push('driving (' + (vehicle.type === 'car' ? 'car/bike' : vehicle.type) + ')');
-                            markers[id].options.forceZIndex = 100;
-                        } else if (isPassenger) {
-                            attributes.push('passenger of ' + (player.vehicle.id in vehicles ? vehicles[player.vehicle.id] : 'Nobody'));
-                            markers[id].options.forceZIndex = 102;
-                        } else {
-                            attributes.push('on foot');
-                            markers[id].options.forceZIndex = 101;
-                        }
-                        const lastExtra = attributes.pop();
-                        extra += '<br><i>Is ' + (attributes.length > 0 ? attributes.join(', ') + ' and ' : '') + lastExtra + '</i>';
-
-                        if (player.afk > 15 * 60) {
-                            extra += '<br><i>Hasn\'t moved in ' + _this.formatSeconds(player.afk) + '</i>';
-                        }
-                        if (player.afk > 30 * 60) {
-                            const linkColor = isStaff ? 'rgb(16, 185, 129)' : (() => {
-                                let rainbow = new Rainbow();
-                                rainbow.setNumberRange(30 * 60, 3 * 60 * 60);
-                                rainbow.setSpectrum('#d9ff00', '#ffbf00', '#ff6600', '#ff0000');
-
-                                return '#' + rainbow.colourAt(player.afk);
-                            })();
-
-                            afkList.push({
-                                color: linkColor,
-                                is_staff: isStaff,
-                                name: player.character.fullName,
-                                steam: player.steamIdentifier,
-                                afk: player.afk,
-                                cid: player.character.id,
-                                source: player.source
-                            });
-                        }
-
-                        if (isInvisible && !ignoreInvisible) {
-                            invisibleList.push({
-                                name: player.character.fullName,
-                                steam: player.steamIdentifier,
-                                cid: player.character.id,
-                                source: player.source
-                            });
-
-                            const invKey = rawCoords.x + ' ' + rawCoords.y + ' ' + rawCoords.z;
-                            if (invKey in InvisibleHistoryDebug) {
-                                InvisibleHistoryDebug[invKey]++;
-                            } else {
-                                InvisibleHistoryDebug[invKey] = 1;
-                            }
-                        }
-
-                        if (_this.trackedPlayer && (_this.trackedPlayer === 'server_' + player.source || (_this.trackedPlayer.startsWith('steam:') && _this.trackedPlayer === player.steamIdentifier))) {
-                            _this.trackedPlayer = id;
-                            window.location.hash = id;
-                        }
-
-                        if (player.steamIdentifier in _this.highlightedPeople) {
-                            markers[id].options.forceZIndex = 150;
-                        }
-
-                        if (_this.trackedPlayer === id) {
-                            extra += '<br><br><a href="#" class="track-cid" data-trackid="stop">' + _this.t('map.stop_track') + '</a>';
-
-                            _this.map.setView(coords, _this.firstRefresh ? 6 : _this.map.getZoom(), {
+                        if (player.isTracked()) {
+                            _this.map.setView(player.location.toMap(), _this.firstRefresh ? 7 : _this.map.getZoom(), {
                                 duration: 0.1
                             });
 
-                            _this.tracking.data.speed = Math.round(speed * 2.236936);
+                            _this.tracking.data.speed = player.speed;
 
-                            const feet = Math.round(player.coords.z * 3.281);
-
+                            const feet = Math.round(player.location.z * 3.281);
                             _this.tracking.data.alt = (feet / 5000) * 100;
                             _this.tracking.data.alt = _this.tracking.data.alt > 99 ? 99 : _this.tracking.data.alt;
                             _this.tracking.data.altitude = feet + 'ft';
 
                             let trackingInfo = [
-                                player.character.fullName + ' (' + player.source + ')',
-                                'Coords: ' + originalCoords
+                                player.getTitle(),
+                                'Coords: ' + player.location.toStringGame()
                             ];
-
                             !player.vehicle || trackingInfo.push('Vehicle: ' + player.vehicle.model);
-                            player.afk < 15 || trackingInfo.push('AFK since ' + _this.$options.filters.humanizeSeconds(player.afk));
-
+                            player.afk < 15 || trackingInfo.push('AFK since ' + _this.$options.filters.humanizeSeconds(player.afk.time));
                             _this.tracking.data.advanced = trackingInfo.join("\n");
-
-                            markers[id].options.forceZIndex = 200;
 
                             if (_this.firstRefresh) {
                                 _this.openPopup = id;
                             }
-                        } else {
-                            extra += '<br><br><a href="#" class="track-cid" data-trackid="' + id + '">' + _this.t('map.track') + '</a>';
                         }
 
-                        if (player.steamIdentifier in _this.highlightedPeople) {
-                            _this.highlightedPeople[player.steamIdentifier] = {
-                                name: player.character.fullName,
-                                source: player.source,
+                        if (player.player.steam in _this.highlightedPeople) {
+                            _this.highlightedPeople[player.player.steam] = {
+                                name: player.character.name,
+                                source: player.player.source,
                                 cid: player.character.id
                             };
-
-                            extra += '<br><a href="#" class="highlight-cid stop_highlight" data-steam="' + player.steamIdentifier + '">' + _this.t('map.stop_highlight') + '</a>';
-                        } else {
-                            extra += '<br><a href="#" class="highlight-cid" data-steam="' + player.steamIdentifier + '">' + _this.t('map.do_highlight') + '</a>';
                         }
-
-                        markers[id]._popup.setContent(player.character.fullName + '<sup>' + player.source + '</sup> (<a href="/players/' + player.steamIdentifier + '" target="_blank">#' + player.character.id + '</a>)' + extra);
 
                         if (_this.openPopup === id) {
                             markers[id].openPopup();
@@ -1221,15 +882,8 @@ export default {
                         }
                     });
 
-                    this.afkPeople = afkList;
-                    this.invisiblePeople = invisibleList;
-
-                    $.each(markers, function (id, marker) {
-                        if (!validIds.includes(id)) {
-                            _this.map.removeLayer(marker);
-                            delete markers[id];
-                        }
-                    });
+                    this.afkPeople = this.container.afk;
+                    this.invisiblePeople = this.container.invisible;
 
                     this.markers = markers;
 
@@ -1256,7 +910,7 @@ export default {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
         },
-        debugLocations(locations) {
+        __debugLocations(locations) {
             const _this = this;
 
             $.each(locations, function (k, coords) {
@@ -1290,8 +944,7 @@ export default {
             });
             this.map.attributionControl.addAttribution('map by <a href="https://github.com/milan60" target="_blank">milan60</a>, cayo-perico by Spitfire2k6');
 
-            const b = this.getBounds();
-            L.tileLayer("https://cdn.celestial.network/tiles_" + b.version + "/{z}/{x}/{y}.jpg", {
+            L.tileLayer("https://cdn.celestial.network/tiles_" + Bounds.version + "/{z}/{x}/{y}.jpg", {
                 noWrap: true,
                 bounds: [
                     [0, 0],
@@ -1309,8 +962,10 @@ export default {
 
             $.each(this.blips, function (_, blip) {
                 const coords = eval('(() => (' + blip.coords + '))()'),
-                    coordsText = coords.x.toFixed(2) + ' ' + coords.y.toFixed(2);
-                let marker = L.marker(_this.convertCoords(coords),
+                    coordsText = coords.x.toFixed(2) + ' ' + coords.y.toFixed(2),
+                    location = Vector3.fromGameCoords(coords.x, coords.y, 0);
+
+                let marker = L.marker(location.toMap(),
                     {
                         icon: new L.Icon(
                             {
@@ -1329,20 +984,15 @@ export default {
                 _this.layers["Blips"].addLayer(marker);
             });
 
-            //this.debugLocations(require('../../data/tp_locations.json'));
+            //this.__debugLocations(require('../../data/tp_locations.json'));
 
             this.map.on('click', function (e) {
-                let map = {
-                    x: e.latlng.lng,
-                    y: e.latlng.lat,
-                };
-                let game = _this.convertCoords(e.latlng);
+                const coords = Vector3.fromMapCoords(e.latlng.lng, e.latlng.lat),
+                    map = coords.toMap();
 
-                _this.clickedCoords = "[X=" + Math.round(game.x) + ",Y=" + Math.round(game.y) + "] / [X=" + map.x + ",Y=" + map.y + "]";
-                _this.rawClickedCoords = {x: Math.round(game.x), y: Math.round(game.y)};
-                _this.coordsCommand = "/tp_coords " + Math.round(game.x) + " " + Math.round(game.y);
-
-                console.info('Clicked coordinates', map, game);
+                _this.clickedCoords = "[X=" + Math.round(coords.x) + ",Y=" + Math.round(coords.y) + "] / [Lng=" + map.lng.toFixed(3) + ",Lat=" + map.lat.toFixed(3) + "]";
+                _this.rawClickedCoords = {x: Math.round(coords.x), y: Math.round(coords.y)};
+                _this.coordsCommand = "/tp_coords " + Math.round(coords.x) + " " + Math.round(coords.y);
             });
 
             this.map.on('dragstart', function () {
@@ -1357,6 +1007,23 @@ export default {
                 }, 500);
             });
 
+            $('#map').on('contextmenu', 'img.leaflet-marker-icon', function(e) {
+                e.preventDefault();
+
+                const id = $(this).data('playerId');
+
+                if (id) {
+                    const player = _this.container.get(id);
+
+                    if (player) {
+                        _this.rightClickedPlayer.id = id;
+                        _this.rightClickedPlayer.name = player.getTitle(true);
+                        _this.rightClickedPlayer.playerName = player.player.name;
+                        _this.rightClickedPlayer.tracked = player.isTracked();
+                    }
+                }
+            });
+
             this.map.addControl(new L.Control.Fullscreen());
 
             $('#map-wrapper').on('click', '.track-cid', function (e) {
@@ -1364,10 +1031,8 @@ export default {
 
                 const track = $(this).data('trackid');
                 if (track === 'stop') {
-                    _this.trackedPlayer = null;
                     window.location.hash = '';
                 } else {
-                    _this.trackedPlayer = track;
                     window.location.hash = track;
 
                     _this.map.closePopup();
@@ -1419,8 +1084,6 @@ export default {
                 $('#map_title').text(_this.t('map.spy_satellite'));
             });
         }
-
-        VueInstance = this;
     }
 };
 </script>
