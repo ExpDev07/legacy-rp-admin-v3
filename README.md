@@ -121,9 +121,9 @@ $ composer install
 $ npm install
 ```
 
-Create a new file called ``.env`` and copy the contents from ``.env.example`` over to it, then apply your configurations.
+Create a new file called ``envs/.env`` and copy the contents from ``.env.example`` over to it, then apply your configurations.
 ```bash
-$ cp .env.example .env
+$ cp .env.example envs/.env
 ```
 
 Create a private and unique application key:
@@ -141,7 +141,7 @@ Create a symbolic link at **public/storage** so that it points to **storage/app/
 $ php artisan storage:link
 ```
 
-Install and run the socket server from [legacyrp-admin-panel-sockets](https://github.com/milan60/legacyrp-admin-panel-sockets)
+Install, configure and run the socket server from [legacyrp-admin-panel-sockets](https://github.com/milan60/legacyrp-admin-panel-sockets)
 
 Compile frontend assets (use "dev" for development and "prod" for production):
 ```bash
