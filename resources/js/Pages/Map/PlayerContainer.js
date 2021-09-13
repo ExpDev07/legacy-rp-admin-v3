@@ -26,6 +26,9 @@ class PlayerContainer {
         for (let x = 0; x < rawData.length; x++) {
             this.updatePlayer(rawData[x]);
         }
+
+        this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
+        this.afk.sort((b, a) => (a.afk > b.afk) ? 1 : ((b.afk > a.afk) ? -1 : 0));
     }
 
     updatePlayer(rawPlayer) {
@@ -85,6 +88,7 @@ class PlayerContainer {
             name: player.character ? player.character.name : 'N/A',
             steam: player.player.steam,
             afk: player.afk.time,
+            invisible: player.invisible.time,
             cid: player.character ? player.character.id : 0,
             source: player.player.source
         };
