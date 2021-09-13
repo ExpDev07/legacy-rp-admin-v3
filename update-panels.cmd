@@ -16,18 +16,18 @@ set END_TIME=powershell -command "$prev = Get-Content $env:TEMP\\pw_timestamp; $
 
 %START_TIME%
 echo|set /p=%INFO%Reading .env %DEFAULT%.....................
-FOR /F "tokens=* eol=#" %%i in ('type envs\\.env') do SET %%i
+FOR /F "tokens=* eol=#" %%i in ('type deploy.env') do SET %%i
+%END_TIME%
+
+%START_TIME%
+echo|set /p=%INFO%Testing ssh connection %DEFAULT%...........
+ssh -i %SSH_PRIVKEY% -o StrictHostKeyChecking=no %SSH_SERVER% "echo 'Connection successful'" >nul || goto :ssh_error
 %END_TIME%
 
 %START_TIME%
 echo|set /p=%INFO%Compiling for production %DEFAULT%.........
 call npm run production > npm.log 2>&1 || goto :compile_error
 del npm.log
-%END_TIME%
-
-%START_TIME%
-echo|set /p=%INFO%Testing ssh connection %DEFAULT%...........
-ssh -i %SSH_PRIVKEY% -o StrictHostKeyChecking=no %SSH_SERVER% "echo 'Connection successful'" >nul || goto :ssh_error
 %END_TIME%
 
 %START_TIME%
