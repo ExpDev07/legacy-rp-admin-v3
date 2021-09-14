@@ -21,7 +21,9 @@ $app = new Illuminate\Foundation\Application(
  * This all for multi-instance support
  */
 
-define('CLUSTER', GeneralHelper::getCluster());
+if (!defined('CLUSTER')) {
+    define('CLUSTER', GeneralHelper::getCluster());
+}
 
 $envDir = realpath(__DIR__ . '/../envs/' . CLUSTER);
 if (file_exists($envDir) && CLUSTER !== null) {
