@@ -41,6 +41,9 @@ class CacheHelper
 
         $filtered = [];
         foreach ($identifiers as $identifier) {
+            if (!isset($map[$identifier])) {
+                continue;
+            }
             $filtered[$identifier] = $map[$identifier];
         }
 

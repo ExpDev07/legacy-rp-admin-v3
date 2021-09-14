@@ -292,7 +292,7 @@
                                     {{ t('map.area_inside') }}
                                 </td>
                                 <td>
-                                    <a class="track-cid text-yellow-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="track-cid text-yellow-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
                                     <a class="highlight-cid text-yellow-600" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
@@ -314,13 +314,13 @@
                                     {{ t('map.afk_move', formatSeconds(player.afk)) }}
                                 </td>
                                 <td>
-                                    <a class="track-cid" :style="'color:' + player.color" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="track-cid" :style="'color:' + player.color" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
                                     <a class="highlight-cid" :style="'color:' + player.color" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <div v-if="invisiblePeople.length > 0" class="pt-4">
+                    <div v-if="invisiblePeople.length > 0" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.invisible_title') }}</h3>
                         <table class="text-sm font-mono">
                             <tr v-for="(player, x) in invisiblePeople" :key="x">
@@ -334,7 +334,7 @@
                                     {{ t('map.invisible') }}
                                 </td>
                                 <td>
-                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
                                     <a class="highlight-cid dark:text-red-400 text-red-600" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
@@ -354,7 +354,7 @@
                                     {{ t('map.highlighted') }}
                                 </td>
                                 <td>
-                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'player_' + player.cid" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
                                     <a class="dark:text-red-400 text-red-600" href="#" @click="stopHighlight($event, steam)">[{{ t('global.remove') }}]</a>
                                 </td>
                             </tr>
@@ -807,18 +807,14 @@ export default {
             } else if (data && Array.isArray(data)) {
                 if (this.map) {
                     const _this = this;
-                    let markers = this.markers;
 
                     this.container.updatePlayers(data);
 
-                    let unknownCharacters = [];
+                    let unknownCharacters = [],
+                        foundTracked = false;
 
                     this.container.eachPlayer(function(id, player) {
-                        if (!_this.container.isActive(id) && id in markers) {
-                            _this.map.removeLayer(markers[id]);
-                            delete markers[id];
-                            return;
-                        } else if (!player.character) {
+                        if (!player.character) {
                             return;
                         }
 
@@ -830,18 +826,13 @@ export default {
 
                         _this.updateDetectionAreas(player);
 
-                        let marker;
-                        if (id in markers) {
-                            marker = markers[id];
-                        } else {
-                            marker = Player.newMarker();
+                        if (!(id in _this.markers)) {
+                            _this.markers[id] = Player.newMarker();
                         }
-                        marker = player.updateMarker(marker, _this.highlightedPeople);
+                        _this.markers[id] = player.updateMarker(_this.markers[id], _this.highlightedPeople);
 
-                        markers[id] = marker;
-
-                        _this.addToLayer(markers[id], _this.getLayer(player));
-                        markers[id]._icon.dataset.playerId = id;
+                        _this.addToLayer(_this.markers[id], _this.getLayer(player));
+                        _this.markers[id]._icon.dataset.playerId = id;
 
                         if (player.isTracked()) {
                             _this.map.setView(player.location.toMap(), _this.firstRefresh ? 7 : _this.map.getZoom(), {
@@ -866,6 +857,8 @@ export default {
                             if (_this.firstRefresh) {
                                 _this.openPopup = id;
                             }
+
+                            foundTracked = true;
                         }
 
                         if (player.player.steam in _this.highlightedPeople) {
@@ -877,17 +870,30 @@ export default {
                         }
 
                         if (_this.openPopup === id) {
-                            markers[id].openPopup();
+                            _this.markers[id].openPopup();
                             _this.openPopup = null;
                         }
                     });
 
+                    for (const id in this.markers) {
+                        if (!this.markers.hasOwnProperty(id) || this.container.isActive(id)) {
+                            continue;
+                        }
+
+                        this.map.removeLayer(this.markers[id]);
+                        delete this.markers[id];
+
+                        this.container.remove(id);
+                    }
+
                     this.afkPeople = this.container.afk;
                     this.invisiblePeople = this.container.invisible;
 
-                    this.markers = markers;
-
                     this.data = this.t('map.data', Object.keys(this.markers).length);
+
+                    if (!foundTracked) {
+                        window.location.hash = '';
+                    }
 
                     if (unknownCharacters.length > 0) {
                         // Prevent it being requested twice while the other is still loading
