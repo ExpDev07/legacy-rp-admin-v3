@@ -4,16 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Ban;
 use App\BanStatistic;
-use App\Helpers\GeneralHelper;
-use App\Http\Resources\BanResource;
-use App\Http\Resources\PlayerIndexResource;
-use App\Server;
-use App\Player;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Http\Response;
 
 class CronjobController extends Controller
 {
@@ -21,17 +13,17 @@ class CronjobController extends Controller
      * Stores statistics for bans of the current day
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function updateBanStatistics(Request $request): \Illuminate\Http\Response
+    public function updateBanStatistics(Request $request): Response
     {
         if (!$this->validateRequest($request)) {
-            return (new \Illuminate\Http\Response('Unauthorized', 401))->header('Content-Type', 'text/plain');
+            return (new Response('Unauthorized', 401))->header('Content-Type', 'text/plain');
         }
 
         $date = date('Y-m-d');
 
-        $current = Ban::query()->groupBy('ban_hash')->count('ban_hash');
+        $current = intval(Ban::query()->selectRaw('COUNT(DISTINCT ban_hash) as count')->get()->first()['count']);
 
         /**
          * @var $today BanStatistic|null
@@ -60,7 +52,7 @@ class CronjobController extends Controller
             $today->update();
         }
 
-        return (new \Illuminate\Http\Response('Success', 200))->header('Content-Type', 'text/plain');
+        return (new Response('Success', 200))->header('Content-Type', 'text/plain');
     }
 
     /**

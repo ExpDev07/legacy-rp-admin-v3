@@ -27,7 +27,7 @@ $envDir = realpath(__DIR__ . '/../envs/' . CLUSTER);
 if (file_exists($envDir) && CLUSTER !== null) {
     $app->useEnvironmentPath($envDir);
 } else {
-    die('Invalid cluster');
+    die('Invalid cluster "' . CLUSTER . '"');
 }
 
 /*
