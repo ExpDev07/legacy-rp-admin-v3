@@ -12,6 +12,7 @@ use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,6 +57,11 @@ class ChangelogController extends Controller
         $updates = [];
         for ($x = 0; sizeof($updates) < 8 && $x < sizeof($pulls); $x++) {
             $pull = $pulls[$x];
+
+            if (!empty($pull['user']) && !empty($pull['user']['type']) && $pull['user']['type'] === 'Bot') {
+                // Don't show pull requests by bots
+                continue;
+            }
 
             $re = '/^\s*-\s+(.+?)$/m';
             preg_match_all($re, $pull['body'], $matches, PREG_SET_ORDER, 0);
