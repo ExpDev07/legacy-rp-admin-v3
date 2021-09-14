@@ -9,7 +9,6 @@ use App\Http\Resources\PlayerIndexResource;
 use App\Server;
 use App\Player;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 

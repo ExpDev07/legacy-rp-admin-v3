@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\ChangelogController;
+use App\Http\Controllers\CronjobController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
@@ -118,6 +119,11 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
 
     // Character info api
     Route::post('characters', [PlayerCharacterController::class, 'getCharacters']);
+});
+
+Route::group(['prefix' => 'cron'], function () {
+    // ban statistics cronjob
+    Route::get('bans', [CronjobController::class, 'updateBanStatistics']);
 });
 
 // Used to get logs.
