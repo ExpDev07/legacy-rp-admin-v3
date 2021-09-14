@@ -181,16 +181,6 @@ class GeneralHelper
 
     public static function getCluster(): ?string
     {
-        global $argv;
-
-        if (sizeof($argv) > 2 && $argv[0] === 'artisan' && $argv[1] === 'migrate') {
-            foreach($argv as $arg) {
-                if (Str::startsWith($arg, '--cluster=')) {
-                    return str_replace('--cluster=', '', $arg);
-                }
-            }
-        }
-
         $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_HOST'] ?? 'localhost';
         $_SERVER['HTTP_HOST'] = trim(explode(':', $_SERVER['HTTP_HOST'])[0]);
 
