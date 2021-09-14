@@ -32,6 +32,9 @@ if (sizeof($argv) > 2 && $argv[0] === 'artisan' && $argv[1] === 'migrate') {
 
     $argc = sizeof($cleanedArgv);
     $argv = $cleanedArgv;
+
+    $_SERVER['argv'] = $argv;
+    $_SERVER['argc'] = $argc;
 }
 
 // Continue with normal stuff
