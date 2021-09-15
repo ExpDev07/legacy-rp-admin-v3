@@ -1,5 +1,5 @@
 <template>
-    <div class="flex pt-3 mb-3 border-t w-full border-gray-400 dark:border-gray-500 px-2 relative hover:bg-gray-100 dark:hover:bg-gray-700">
+    <div class="flex pt-3 pb-3 border-t w-full border-gray-400 dark:border-gray-500 px-2 relative hover:bg-gray-100 dark:hover:bg-gray-700">
         <div v-if="dontLink" class="mr-2 flex-shrink-0">
             <img
                 class="block w-12 h-12 rounded-full"
