@@ -67,7 +67,7 @@ class TwitterUser extends Authenticatable
         foreach ($users as $user) {
             $userMap[$user->id] = [
                 'username'  => $user->username,
-                'avatarUrl' => $user->avatar_url,
+                'avatar_url' => $user->avatar_url,
             ];
         }
 

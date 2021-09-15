@@ -82,7 +82,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/suspicious', [SuspiciousController::class, 'index']);
 
     // Twitter.
-    Route::resource('twitter', TwitterController::class);
+    Route::get('twitter', [TwitterController::class, 'index']);
+    Route::get('twitter/{user}', [TwitterController::class, 'user']);
     Route::post('tweets/delete/{post}', [TwitterController::class, 'deleteTweet']);
 
     // Logs.
