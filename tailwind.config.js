@@ -66,6 +66,7 @@ module.exports = {
             },
             maxHeight: {
                 'max': 'calc(100% - 60px)',
+                'img': '500px'
             },
             listStyleType: {
                 'dash': "'-'"

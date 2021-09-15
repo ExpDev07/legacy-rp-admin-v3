@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Character;
-use App\Http\Resources\LogResource;
+use App\Http\Resources\CharacterResource;
+use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\TwitterPostResource;
-use App\Log;
 use App\Player;
 use App\TwitterPost;
 use App\TwitterUser;
@@ -77,9 +77,47 @@ class TwitterController extends Controller
             ),
             'links'        => $this->getPageUrls($page),
             'time'         => $end - $start,
-            'characterMap' => Character::fetchIdNameMap($posts->toArray($request), 'realUser'),
             'userMap'      => TwitterUser::fetchIdMap($posts->toArray($request), 'authorId'),
             'page'         => $page,
+        ]);
+    }
+
+    /**
+     * Shows a certain user and their tweets
+     *
+     * @param TwitterUser $user
+     * @return Response
+     */
+    public function user(TwitterUser $user): Response
+    {
+        $page = Paginator::resolveCurrentPage('page');
+
+        $tweets = TwitterPost::query()
+            ->where('authorId', '=', $user->id)
+            ->where('is_deleted', '=', '0')
+            ->select(['id', 'authorId', 'realUser', 'message', 'time', 'likes'])
+            ->orderByDesc('time')
+            ->limit(15)->offset(($page - 1) * 15)
+            ->get();
+
+        /**
+         * @var $character Character|null
+         */
+        $character = Character::query()
+            ->where('character_id', '=', $tweets->first()->realUser)
+            ->get()->first();
+
+        if (!$character) {
+            abort(404);
+        }
+
+        return Inertia::render('Twitter/User', [
+            'tweets'    => TwitterPostResource::collection($tweets),
+            'character' => new CharacterResource($character),
+            'player'    => new PlayerIndexResource($character->player()->get()->first()),
+            'user'      => $user->toArray(),
+            'links'     => $this->getPageUrls($page),
+            'page'      => $page,
         ]);
     }
 

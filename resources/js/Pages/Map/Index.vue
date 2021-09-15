@@ -264,6 +264,14 @@
                         <img src="/images/icons/skull_red.png" class="w-map-icon inline-block" alt="dead passenger" />
                         <span class="leading-map-icon">Someone is dead and a passenger</span>
                     </div>
+                    <div class="mx-2">
+                        <img src="/images/icons/circle_police.png" class="w-map-icon inline-block" alt="police" />
+                        <span class="leading-map-icon">Someone is on duty as police</span>
+                    </div>
+                    <div class="mx-2">
+                        <img src="/images/icons/circle_ems.png" class="w-map-icon inline-block" alt="ems" />
+                        <span class="leading-map-icon">Someone is on duty as ems</span>
+                    </div>
                 </div>
                 <div class="flex flex-wrap" v-if="detectionAreas.length > 0">
                     <div class="pt-4 mr-4" v-for="(area, index) in detectionAreas" :key="index">
