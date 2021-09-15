@@ -804,7 +804,7 @@ export default {
 
             if (data && 'status' in data && data.status) {
                 this.data = this.t('map.advanced_error', $('#server option:selected').text(), data.message);
-            } else if (data && Array.isArray(data)) {
+            } else if (data && 'players' in data && 'on_duty' in data && Array.isArray(data.players)) {
                 if (this.map) {
                     const _this = this;
 

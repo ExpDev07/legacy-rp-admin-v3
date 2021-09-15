@@ -350,6 +350,7 @@
         "description": "Search Players!",
         "search": "Search",
         "name": "Player Name",
+        "steam": "Steam Identifier",
         "discord": "Discord ID",
         "none": "No players was found.",
         "search_btn": "Search players",

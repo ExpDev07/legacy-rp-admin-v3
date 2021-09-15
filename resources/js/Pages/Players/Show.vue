@@ -742,8 +742,6 @@ export default {
                 if (data.data && data.data.status) {
                     const linked = data.data.data;
 
-                    console.log(linked);
-
                     this.linkedAccounts.total = linked.total;
                     this.linkedAccounts.linked = linked.linked;
                 }
