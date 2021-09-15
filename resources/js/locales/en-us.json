@@ -83,7 +83,13 @@
         "warnings": "Warnings",
         "creations": "Character creations",
         "deletions": "Character deletions",
-        "lucky_wheel": "Lucky Wheel Spins"
+        "lucky_wheel": "Lucky Wheel Spins",
+        "titles": {
+            "bans_move": "Bans over time",
+            "ban_warn": "Bans & Warnings",
+            "character": "Character creations & deletions",
+            "lucky_wheel": "Lucky Wheel Spins"
+        }
     },
     "map": {
         "title": "Live-Map",

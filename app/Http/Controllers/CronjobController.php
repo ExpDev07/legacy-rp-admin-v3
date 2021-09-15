@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Ban;
 use App\BanStatistic;
+use App\Helpers\CacheHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use WhichBrowser\Cache;
 
 class CronjobController extends Controller
 {
@@ -23,6 +25,10 @@ class CronjobController extends Controller
 
         $date = date('Y-m-d');
 
+        // Cleanup
+        BanStatistic::query()->where('last_updated', '<', time() - CacheHelper::MONTH)->forceDelete();
+
+        // Get count
         $current = intval(Ban::query()->selectRaw('COUNT(DISTINCT ban_hash) as count')->get()->first()['count']);
 
         /**

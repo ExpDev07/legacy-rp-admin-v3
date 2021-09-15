@@ -13,11 +13,11 @@ const IconSizes = {
 };
 
 class Player {
-    constructor(rawData, staffMembers) {
-        this.update(rawData, staffMembers);
+    constructor(rawData, staffMembers, onDutyList) {
+        this.update(rawData, staffMembers, onDutyList);
     }
 
-    update(rawData, staffMembers) {
+    update(rawData, staffMembers, onDutyList) {
         this.player = {
             name: rawData.name,
             steam: rawData.steamIdentifier,
@@ -42,6 +42,13 @@ class Player {
             value: rawData.afk > 30 * 60 && !this.player.isStaff
         };
 
+        this.onDuty = 'none';
+        if (onDutyList.police.includes(this.player.steam)) {
+            this.onDuty = 'police';
+        } else if (onDutyList.ems.includes(this.player.steam)) {
+            this.onDuty = 'ems';
+        }
+
         this.icon = {
             dead: this.character && this.character.isDead,
             driving: this.character && this.character.isDriving,
@@ -55,7 +62,9 @@ class Player {
             this.player.isStaff ? 'staff' : null,
             this.icon.driving ? 'driving (' + this.vehicle.icon.type + ')' : null,
             this.icon.passenger ? 'passenger' : null,
-            !this.icon.passenger && !this.icon.driving ? 'on foot' : null
+            !this.icon.passenger && !this.icon.driving ? 'on foot' : null,
+            this.onDuty === 'police' ? 'on duty (police)' : null,
+            this.onDuty === 'ems' ? 'on duty (ems)' : null,
         ].filter(a => !!a);
     }
 
@@ -146,6 +155,20 @@ class Player {
                 {
                     iconUrl: '/images/icons/skull.png',
                     iconSize: [IconSizes.skull, IconSizes.skull]
+                }
+            );
+        } else if (this.onDuty === 'police') {
+            icon = new L.Icon(
+                {
+                    iconUrl: '/images/icons/circle_police.png',
+                    iconSize: [IconSizes.circle, IconSizes.circle]
+                }
+            );
+        } else if (this.onDuty === 'ems') {
+            icon = new L.Icon(
+                {
+                    iconUrl: '/images/icons/circle_ems.png',
+                    iconSize: [IconSizes.circle, IconSizes.circle]
                 }
             );
         }

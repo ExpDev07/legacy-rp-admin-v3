@@ -23,21 +23,28 @@ class PlayerContainer {
 
         this.isTrackedPlayerVisible = false;
 
-        for (let x = 0; x < rawData.length; x++) {
-            this.updatePlayer(rawData[x]);
+        for (let x = 0; x < rawData.players.length; x++) {
+            this.updatePlayer(rawData.players[x], rawData.on_duty);
         }
 
         this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
         this.afk.sort((b, a) => (a.afk > b.afk) ? 1 : ((b.afk > a.afk) ? -1 : 0));
     }
 
-    updatePlayer(rawPlayer) {
+    updatePlayer(rawPlayer, onDutyList) {
         const id = Player.getPlayerID(rawPlayer);
 
+        if (!onDutyList.police) {
+            onDutyList.police = [];
+        }
+        if (!onDutyList.ems) {
+            onDutyList.ems = [];
+        }
+
         if (id in this.players) {
-            this.players[id].update(rawPlayer, this.staffMembers);
+            this.players[id].update(rawPlayer, this.staffMembers, onDutyList);
         } else {
-            this.players[id] = new Player(rawPlayer, this.staffMembers);
+            this.players[id] = new Player(rawPlayer, this.staffMembers, onDutyList);
         }
 
         const vehicle = this.players[id].getVehicleID();
