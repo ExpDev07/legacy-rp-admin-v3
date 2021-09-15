@@ -3,8 +3,11 @@
 namespace App\Helpers;
 
 use App\Ban;
+use App\BanStatistic;
 use App\Character;
 use App\Warning;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -40,6 +43,48 @@ class StatisticsHelper
     }
 
     /**
+     * Returns Ban movement statistics
+     *
+     * @return array
+     */
+    public static function getBanMoveStats(): array
+    {
+        $key = 'ban_move_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
+        }
+
+        $stats = BanStatistic::query()->select([
+            'day', 'opening', 'closing', 'high', 'low',
+        ])->get()->toArray();
+
+        $data = [
+            'labels' => [],
+            'data'   => [],
+        ];
+        foreach ($stats as $row) {
+            $data['labels'][] = $row['day'];
+            $d = DateTime::createFromFormat(
+                'Y-m-d',
+                $row['day'],
+                new DateTimeZone('UTC')
+            );
+
+            $data['data'][] = [
+                'x' => $d->getTimestamp() * 1000,
+                'o' => $row['opening'],
+                'h' => $row['high'],
+                'l' => $row['low'],
+                'c' => $row['closing'],
+            ];
+        }
+
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
+
+        return $data;
+    }
+
+    /**
      * Returns Warning statistics
      *
      * @return array
@@ -54,7 +99,7 @@ class StatisticsHelper
         $stats = Warning::query()->fromSub(function ($query) {
             $query->from('warnings')->select([
                 DB::raw('FROM_UNIXTIME(UNIX_TIMESTAMP(`created_at`), \'%Y-%m-%d\') AS `date`'),
-            ])->orderByDesc('created_at');
+            ])->where('warning_type', '=', Warning::TypeWarning)->orderByDesc('created_at');
         }, 'warnings')->select([
             DB::raw('COUNT(`date`) as `count`'),
             'date',

@@ -1,0 +1,97 @@
+<script>
+import {Candlestick} from 'vue-chartjs-financial';
+
+export default {
+    extends: Candlestick,
+    data() {
+        const _this = this;
+
+        return {
+            options: {
+                devicePixelRatio: 2,
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(128, 128, 128, 0.3)"
+                        }
+                    }],
+                    xAxes: [{
+                        display: false,
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: this.title,
+                    fontSize: 13
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                    bodyFontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+                    bodyFontStyle: 'bold',
+                    displayColors: false,
+                    callbacks: {
+                        title: function (tooltipItems, data) {
+                            return _this.dataLabels[tooltipItems[0].index];
+                        },
+                        label: function (tooltipItem, data) {
+                            const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            return [
+                                'Opening: ' + value.o,
+                                'Highest: ' + value.h,
+                                'Lowest:  ' + value.l,
+                                'Closing: ' + value.c,
+                            ];
+                        }
+                    }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+            }
+        };
+    },
+    mounted() {
+        let datasets = [];
+        for (let x = 0; x < this.data.length; x++) {
+            datasets.push({
+                label: this.title,
+                data: this.data[x]
+            });
+        }
+
+        this.renderChart({
+            labels: this.dataLabels,
+            datasets: datasets
+        }, this.options);
+    },
+    props: {
+        title: {
+            type: String,
+            required: true,
+        },
+        dataLabels: {
+            type: Array,
+            required: true,
+        },
+        data: {
+            type: Array,
+            required: true,
+        }
+    }
+}
+</script>

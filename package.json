@@ -35,17 +35,19 @@
         "sass-loader": "^7.1.0",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
         "vue": "^2.5.17",
+        "vue-chartjs": "^3.5.1",
         "vue-lottie": "^0.2.1",
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "chart.js": "2.9.4",
+        "chart.js": "^2.9.4",
         "leaflet": "^1.7.1",
         "leaflet-fullscreen": "^1.0.2",
         "leaflet-gesture-handling": "^1.2.1",
         "leaflet-rotatedmarker": "^0.2.0",
         "moment-duration-format": "^2.3.2",
         "rainbowvis.js": "^1.0.1",
+        "vue-chartjs-financial": "^1.0.1",
         "vue-linkify": "^1.0.1",
         "vue-speedometer": "^1.8.0",
         "vue2-circle-progress": "^1.2.3"
