@@ -35,7 +35,7 @@
                         <span class="font-semibold">{{ t('global.status.' + player.status.status) }}</span>
                     </badge>
 
-                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" v-html="local.played">
+                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" :title="player.playTime | formatTime(true)" v-html="local.played">
                         {{ local.played }}
                     </badge>
                 </div>
