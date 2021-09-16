@@ -739,19 +739,20 @@ export default {
                 this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server));
                 _this.socketStart = Date.now();
 
-                this.connection.onmessage = function (event) {
+                this.connection.onmessage = async function (event) {
                     try {
-                        const data = JSON.parse(event.data);
+                        const unzipped = await DataCompressor.GUnZIP(event.data),
+                            data = JSON.parse(unzipped);
+
+                        _this.firstRefresh = false;
 
                         if ('status' in data && 'message' in data) {
                             _this.lastConnectionError = data.status + ' - ' + data.message;
                             console.info('WebSocket:', _this.lastError);
                         } else {
                             _this.lastConnectionError = null;
-                            _this.renderMapData(data);
+                            await _this.renderMapData(data);
                         }
-
-                        _this.firstRefresh = false;
                     } catch (e) {
                         console.error('Failed to parse socket message ', e)
                     }

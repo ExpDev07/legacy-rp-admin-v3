@@ -1,4 +1,14 @@
+import * as pako from "pako";
+
 class DataCompressor {
+    static async GUnZIP(raw) {
+        const data = await raw.arrayBuffer();
+
+        return pako.ungzip(data, {
+            to: 'string'
+        });
+    }
+
     static decompressData(data) {
         if (data && 'p' in data && 'd' in data && Array.isArray(data.p) && typeof data.d === 'object') {
             const decompressor = new DataCompressor();
