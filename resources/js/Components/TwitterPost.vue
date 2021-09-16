@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         formatDate(date) {
-            const d = this.$moment.utc(date),
+            const d = this.$moment.utc(date).local(),
                 day = d.format('DD-MM-YYYY'),
                 today = this.$moment().format('DD-MM-YYYY'),
                 yesterday = this.$moment().subtract(1, 'days').format('DD-MM-YYYY'),
