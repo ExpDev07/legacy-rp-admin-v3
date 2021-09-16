@@ -96,6 +96,7 @@
         "loading": "Loading player data...",
         "error": "Player data for {0} empty or not available!",
         "advanced_error": "Data for {0} not available: {1}",
+        "try_reconnect": "Reconnecting in 3 seconds...",
         "closed_expected": "Data connection for {0} was closed after {1}.",
         "closed_unexpected": "Data connection for {0} was closed unexpectedly after {1}.",
         "data": "Currently {0} online players.",

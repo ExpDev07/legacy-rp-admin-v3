@@ -388,6 +388,7 @@ import PlayerContainer from './PlayerContainer';
 import Player from './Player';
 import Vector3 from "./Vector3";
 import Bounds from './map.config';
+import DataCompressor from "./DataCompressor";
 
 (function (global) {
     let MarkerMixin = {
@@ -475,6 +476,8 @@ export default {
                     advanced: 'Loading...'
                 }
             },
+            lastConnectionError: null,
+            socketStart: 0,
             characters: {},
             highlightedPeople: {},
             advancedTracking: false,
@@ -731,22 +734,20 @@ export default {
             }
 
             try {
-                let lastError = null;
-
                 const token = await this.getOTToken();
 
                 this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server));
-                let socketStart = Date.now();
+                _this.socketStart = Date.now();
 
                 this.connection.onmessage = function (event) {
                     try {
                         const data = JSON.parse(event.data);
 
                         if ('status' in data && 'message' in data) {
-                            lastError = data.status + ' - ' + data.message;
-                            console.info('WebSocket:', lastError);
+                            _this.lastConnectionError = data.status + ' - ' + data.message;
+                            console.info('WebSocket:', _this.lastError);
                         } else {
-                            lastError = null;
+                            _this.lastConnectionError = null;
                             _this.renderMapData(data);
                         }
 
@@ -757,12 +758,21 @@ export default {
                 }
 
                 this.connection.onclose = function () {
-                    let connectionTime = _this.$moment.duration(Date.now() - socketStart, 'milliseconds').format('h[h] m[m] s[s]');
+                    let connectionTime = _this.$moment.duration(Date.now() - _this.socketStart, 'milliseconds').format('h[h] m[m] s[s]');
 
-                    if (lastError) {
+                    if (_this.lastConnectionError) {
                         _this.data = _this.t('map.closed_expected', server, connectionTime);
                     } else {
                         _this.data = _this.t('map.closed_unexpected', server, connectionTime);
+                    }
+
+                    // Try reconnecting if the socket was active for more than 30 seconds
+                    if (Date.now() - _this.socketStart > 30 * 60 * 1000) {
+                        _this.data += ' ' + _this.t('map.try_reconnect');
+
+                        setTimeout(function() {
+                            _this.doMapRefresh(server);
+                        }, 3000);
                     }
                 };
             } catch (e) {
@@ -810,9 +820,11 @@ export default {
                 this.map.dragging.enable();
             }
 
+            data = DataCompressor.decompressData(data);
+
             if (data && 'status' in data && data.status) {
                 this.data = this.t('map.advanced_error', $('#server option:selected').text(), data.message);
-            } else if (data && 'players' in data && 'on_duty' in data && Array.isArray(data.players)) {
+            } else if (DataCompressor.isValid(data)) {
                 if (this.map) {
                     const _this = this;
 
