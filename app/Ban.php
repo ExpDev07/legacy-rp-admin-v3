@@ -126,6 +126,31 @@ class Ban extends Model
         return $this->belongsTo(Player::class, 'creator_name', 'player_name');
     }
 
+    /**
+     * Returns a formatted reason if the ban was automated
+     *
+     * @return string
+     */
+    public function getFormattedReason(): string
+    {
+        if ($this->creator_name) {
+            return $this->reason;
+        }
+
+        $reasons = json_decode(file_get_contents(__DIR__ . '/../helpers/automated-bans.json'), true);
+        $parts = explode('-', $this->reason);
+
+        $category = array_shift($parts);
+        $key = array_shift($parts);
+
+        if ($reasons && $category && $key && isset($reasons[$category]) && isset($reasons[$category][$key])) {
+            $reason = $reasons[$category][$key];
+
+            return str_replace('${DATA}', implode('-', $parts), $reason);
+        }
+        return $this->reason;
+    }
+
     public static function getBanForUser(string $steamIdentifier): ?array
     {
         if (empty(self::$bans)) {

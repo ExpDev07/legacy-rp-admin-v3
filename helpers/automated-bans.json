@@ -1,0 +1,94 @@
+{
+    "TIMEOUT_BYPASS": {
+        "PED_ROBBING": "Excessive ped-robbing! (Bypassed server-timeout, most likely using an injector to accomplish this.)",
+        "ZOMBIE_LOOTING": "Excessive zombie looting! (Bypassed server-timeout, most likely using an injector to accomplish this.)"
+    },
+    "ILLEGAL_VALUES": {
+        "DECORS_SYNC": "Syncing invalid decor value types.",
+        "RADIO_FREQUENCY": "Attempting to access illegal radio frequencies.",
+        "FIRE_EXTINGUISHER_MODEL": "Attempted to delete a fire extinguisher on all clients with a model that wasn't a fire extinguisher.",
+        "SECURITY_CAMERAS": "Attempting to tamper with illegal security cameras.",
+        "EXTERNAL_SOUND_EFFECT": "Attempted to tell other clients to play an external sound effect.",
+        "PED_OBJECT": "Attempting to add a ped object not in the 'allowed' list of ped objects.",
+        "SHOOTING_RANGE": "Attempting to pass invalid values for shootings spots.",
+        "INVALID_SHOOTING_SPOT": "Attempting to pass values for a shootings spot that doesn't exist.",
+        "PAWN_SHOP": "Attempting to pass values for a pawn shop that doesn't exist.",
+        "WEATHER_NAME": "Attempting to use a weather spell with an illegal weather name.",
+        "BURGER_SHOT_DELIVERY_ITEM_ID": "Attempting to use a burger shot delivery item with with an illegal item id.",
+        "BOOMBOX_ITEM_ID": "Attempting to use a boombox item with with an illegal item id.",
+        "LIGHTER_ITEM_ID": "Attempting to use a lighter item with with an illegal item id.",
+        "PROP_ITEM_ID": "Player attempted to use a prop item with with an illegal item id."
+    },
+    "NO_PERMISSIONS": {
+        "CHAT_CLEAR": "Player attempted to clear the chat for all players, but didn't have proper permissions to do so.",
+        "MUTE_PLAYER": "Player attempted to mute a player, but didn't have correct permissions to do so.",
+        "UNMUTE_PLAYER": "Player attempted to unmute a player, but didn't have correct permissions to do so.",
+        "ANNOUNCEMENT_MESSAGE": "Attempted to post a staff announcement.",
+        "STAFF_MESSAGE": "Player attempted sending a message in the staff chat, but wasn't staff.",
+        "ENTITY_WIPE": "Player attempted to wipe entities, but didn't have permissions.",
+        "FEATURE_TOGGLE": "Attempted to toggle their own or someone else's `${DATA}`, but didn't have proper permissions to do so.",
+        "MONEY_EVENT": "Attempted to toggle money event `${DATA}`.",
+        "KICK_PLAYER": "Attempted to kick a player without proper permissions.",
+        "BAN_PLAYER": "Attempted to ban a player without proper permissions.",
+        "HIDE_STAFF": "Attempted to hide their staff status without proper permissions.",
+        "TOGGLE_STAFF": "Attempted to toggle staff availability without proper permissions.",
+        "PROTECTIVE_MODE": "Attempted to toggle the server protective mode without proper permissions.",
+        "SPAWN_ITEM": "Attempted to spawn an item without proper permissions.",
+        "SET_HOUR": "Attempted to set the hour without required permissions.",
+        "SET_MINUTE": "Attempted to set the minute without required permissions.",
+        "SET_WEATHER": "Attempted to set the weather without required permissions.",
+        "FREEZE_TIME": "Attempted to freeze the time without required permissions.",
+        "FREEZE_WEATHER": "Attempted to freeze the weather without required permissions.",
+        "RESET_STATUS": "Attempted to reset a player's status without required permissions.",
+        "BLACKOUT": "Attempted to toggle a blackout without required permissions.",
+        "SET_MODEL_DETECTED": "Player attempted to add a model to the detection list, but didn't have correct permissions to do so.",
+        "SET_MODEL_UNDETECTED": "Player attempted to remove a model from the detection list, but didn't have correct permissions to do so.",
+        "REVIVE_PLAYER": "Player attempted to revive another player but they didn't have the requried permissions to do so.",
+        "REVIVE_SELF": "Player attempted to revive another themselves but they didn't have the requried permissions to do so.",
+        "SET_BODY_ARMOR_LEVEL_PLAYER": "Player attempted to set another player's body armor level but they didn't have the requried permissions to do so.",
+        "SET_BODY_ARMOR_LEVEL_SELF": "Player attempted to set their own body armor level but they didn't have the requried permissions to do so.",
+        "SPAWN_VEHICLE_FOR_PLAYER": "Player attempted to spawn a vehicle for someone else but they didn't have the requried permissions to do so.",
+        "SPAWN_VEHICLE_FOR_SELF": "Player attempted to spawn a vehicle for themselves but they didn't have the requried permissions to do so.",
+        "ADD_DETECTION_AREA": "Player attempted to add a detection area, but didn't have correct permissions to do so.",
+        "REMOVE_DETECTION_AREA": "Player attempted to remove a detection area, but didn't have correct permissions to do so.",
+        "SET_WARNING_MESSAGE": "Attempted to set the server's warning message without proper permissions.",
+        "GET_RECENT_DEATHS": "Player attempted to get recent deaths, but didn't have correct permissions to do so.",
+        "GET_PLAYER_LAST_DEATH": "Player attempted to get a player's last death, but didn't have correct permissions to do so.",
+        "WIPE_INVENTORIES": "Player attempted to wipe inventories, but didn't have correct permissions to do so.",
+        "WIPE_BOOMBOXES": "Player attempted to wipe boomboxes, but didn't have correct permissions to do so.",
+        "CHECK_PLAYTIME": "Player attempted to check someone else's playtime, but didn't have correct permissions to do so.",
+        "SPAWN_PROP": "Player attempted to spawn a prop but they didn't have the required permissions to do so.",
+        "SET_CASINO_SCREEN_ID": "Player attempted to set the casino screen id, but didn't have correct permissions to do so.",
+        "INJECT_CODE": "The player attempted to inject code but they were not a developer.",
+        "ADD_VEHICLE": "The player attempted to add a vehicle to someone's garage but they were not a super admin.",
+        "TOGGLE_VEHICLE_WEAPONS": "The player attempted to toggle vehicle weapons on a vehicle but they were not a super admin.",
+        "CREATE_INSTANCE": "The player attempted to create an instance but they were not a developer.",
+        "DESTROY_INSTANCE": "The player attempted to destroy an instance but they were not a developer.",
+        "ADD_PLAYER_TO_INSTANCE": "The player attempted to add a player to an instance but they were not a developer.",
+        "REMOVE_PLAYER_FROM_INSTANCE": "The player attempted to remove a player from an instance but they were not a developer.",
+        "GET_PLAYERS_FROM_INSTANCE": "The player attempted to get the players from an instance but they were not a developer.",
+        "TELEPORT_TO_COORDINATES": "The player attempted to teleport to some coordinates but they were not staff.",
+        "TELEPORT_TO_WAYPOINT": "The player attempted to teleport to a waypoint but they were not staff."
+    },
+    "MEDIOCRE": {
+        "BAD_CHAT_MESSAGE": "Attempted to post a possibly bad message in the OOC chat: `${DATA}`.",
+        "BAD_CHARACTER_CREATION_WORDS": "Attempted to create a character with a possibly bad word in either the name or backstory: `${DATA}`."
+    },
+    "INJECTION": {
+        "SERVER_EVENT": "Triggered an illegal server event with name `${DATA}`.",
+        "CLIENT_EVENT": "Triggered an illegal client event with name `${DATA}`."
+    },
+    "MODDING": {
+        "BAD_ENTITY_SPAWN": "Spawned in an entity with model name `${DATA}`."
+    },
+    "FRAUD": {
+        "CHARGEBACK": "Fraud / Chargeback"
+    },
+    "THREATS": {
+        "DDOS": "Threatening to attack our infrastructure."
+    },
+    "PEPEGA": {
+        "MODERATE": "You have been globally banned from all OP-FW servers without any specified reasons.",
+        "ULTIMATE": "yOu haVe bEeN BaNnEd fRom tHis sERveR"
+    }
+}

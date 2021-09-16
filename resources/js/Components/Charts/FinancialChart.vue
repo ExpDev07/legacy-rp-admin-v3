@@ -6,6 +6,23 @@ export default {
     data() {
         const _this = this;
 
+        const min = Math.min.apply(null, this.data[0].map(d => {
+            return Math.min.apply(null, [
+                d.o,
+                d.c,
+                d.h,
+                d.l
+            ]);
+        }));
+        const max = Math.max.apply(null, this.data[0].map(d => {
+            return Math.max.apply(null, [
+                d.o,
+                d.c,
+                d.h,
+                d.l
+            ]);
+        }));
+
         return {
             options: {
                 devicePixelRatio: 2,
@@ -15,7 +32,9 @@ export default {
                     yAxes: [{
                         display: true,
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            min: min - 10 < 0 ? 0 : min - 10,
+                            max: max + 10
                         },
                         gridLines: {
                             display: true,
