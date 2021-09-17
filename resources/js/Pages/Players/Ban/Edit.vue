@@ -8,7 +8,7 @@
                     {{ local.title }}
                 </h2>
                 <h3>
-                    {{ t('players.ban.banned_for', banTime) }}
+                    {{ local.time }}
                 </h3>
             </template>
 
@@ -35,7 +35,7 @@
 
                     <!-- Reason -->
                     <div>
-                        <label class="italic font-semibold" for="reason">
+                        <label class="italic font-semibold">
                             {{ t('players.ban.reason') }}
                         </label>
                         <textarea class="block w-full p-5 bg-gray-200 dark:bg-gray-600 rounded shadow" id="reason" name="reason" rows="5" :placeholder="player.playerName + ' did a big oopsie.'" v-model="form.reason"></textarea>
@@ -79,9 +79,12 @@ export default {
         },
     },
     data() {
+        const banTime = this.ban.expireAt ? this.$options.filters.humanizeSeconds(this.$moment(this.ban.expireAt).unix() - this.$moment(this.ban.timestamp).unix()) : null;
+
         return {
             local: {
-                title: this.t('players.ban.banned_by', this.player.playerName, this.ban.issuer)
+                title: this.t('players.ban.banned_by', this.player.playerName, this.ban.issuer),
+                time: this.ban.expireAt ? this.t('players.ban.banned_for', banTime) : this.t('players.ban.banned_forever')
             },
             form: {
                 reason: this.ban.reason,

@@ -366,6 +366,7 @@
             "do_ban": "Ban player",
             "update_ban": "Update Ban",
             "banned_for": "Banned for about {0}",
+            "banned_forever": "Banned indefinitely",
             "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
             "forever": "<i>{0}</i> indefinitely banned this player",
             "forever_edit": "forever",
