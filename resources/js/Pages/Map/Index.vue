@@ -768,7 +768,7 @@ export default {
                     }
 
                     // Try reconnecting if the socket was active for more than 30 seconds
-                    if (Date.now() - _this.socketStart > 30 * 60 * 1000) {
+                    if (Date.now() - _this.socketStart > 30 * 1000) {
                         _this.data += ' ' + _this.t('map.try_reconnect');
 
                         setTimeout(function() {
