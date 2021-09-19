@@ -100,6 +100,7 @@
         "closed_expected": "Data connection for {0} was closed after {1}.",
         "closed_unexpected": "Data connection for {0} was closed unexpectedly after {1}.",
         "data": "Currently {0} online players.",
+        "data_stats": "Police: {0}, EMS: {1}, Staff: {2}, Unloaded: {3}",
         "play": "Continue update",
         "pause": "Pause update",
         "track": "Track character",
