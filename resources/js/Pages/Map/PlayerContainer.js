@@ -59,7 +59,7 @@ class PlayerContainer {
                 this.isTrackedPlayerVisible = true;
             }
 
-            if (this.players[id].afk.value) {
+            if (this.players[id].isAFK()) {
                 this.afk.push(this.getPlayerListInfo(this.players[id]));
             }
             if (this.players[id].invisible.value) {
@@ -95,6 +95,7 @@ class PlayerContainer {
             name: player.character ? player.character.name : 'N/A',
             steam: player.player.steam,
             afk: player.afk.time,
+            afk_title: player.getAFKTitle(),
             invisible: player.invisible.time,
             cid: player.character ? player.character.id : 0,
             source: player.player.source

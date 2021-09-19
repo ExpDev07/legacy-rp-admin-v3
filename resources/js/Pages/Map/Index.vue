@@ -318,7 +318,7 @@
                                 <td class="pr-2" :style="'color:' + player.color">
                                     ({{ player.source }})
                                 </td>
-                                <td class="pr-2">
+                                <td class="pr-2" :title="player.afk_title">
                                     {{ t('map.afk_move', formatSeconds(player.afk)) }}
                                 </td>
                                 <td>
