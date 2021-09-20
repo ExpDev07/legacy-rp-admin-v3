@@ -40,6 +40,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "browser-notification": "^3.0.0",
         "chart.js": "^2.9.4",
         "leaflet": "^1.7.1",
         "leaflet-fullscreen": "^1.0.2",
@@ -51,6 +52,7 @@
         "vue-chartjs-financial": "^1.0.1",
         "vue-linkify": "^1.0.1",
         "vue-speedometer": "^1.8.0",
+        "vue-toastification": "^1.7.11",
         "vue2-circle-progress": "^1.2.3"
     }
 }

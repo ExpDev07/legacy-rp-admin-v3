@@ -1,4 +1,5 @@
 import Player from './Player';
+import Notifier from './Notifier';
 import {getAFKColor} from './helper';
 
 class PlayerContainer {
@@ -13,6 +14,8 @@ class PlayerContainer {
         this.resetStats();
 
         this.isTrackedPlayerVisible = false;
+
+        this.notifier = new Notifier();
     }
 
     resetStats() {
@@ -26,7 +29,7 @@ class PlayerContainer {
         };
     }
 
-    updatePlayers(rawData) {
+    updatePlayers(rawData, vue) {
         this.resetStats();
 
         this.vehicles = {};
@@ -43,6 +46,8 @@ class PlayerContainer {
 
         this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
         this.afk.sort((b, a) => (a.afk > b.afk) ? 1 : ((b.afk > a.afk) ? -1 : 0));
+
+        this.notifier.checkPlayers(this, vue);
     }
 
     updatePlayer(rawPlayer, onDutyList) {

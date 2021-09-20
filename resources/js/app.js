@@ -13,6 +13,8 @@ import 'leaflet/dist/leaflet.css';
 import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 const momentDuration = require("moment-duration-format");
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 // Directives.
 Vue.directive('linkified', linkify);
@@ -22,6 +24,11 @@ Vue.use(InertiaApp);
 Vue.use(PortalVue);
 Vue.use(Localization);
 Vue.use(Copy);
+Vue.use(Toast, {
+    transition: "Vue-Toastification__slideBlurred",
+    maxToasts: 10,
+    newestOnTop: true
+});
 
 momentDuration(moment);
 
