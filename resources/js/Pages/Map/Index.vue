@@ -609,9 +609,9 @@ export default {
         stopNotify(e, steam, type) {
             e.preventDefault();
 
-            if (type === 'onload') {
+            if (type === 'load') {
                 this.container.notifier.removeNotifyOnLoad(this.form.notify_steam);
-            } else if (type === 'onunload') {
+            } else if (type === 'unload') {
                 this.container.notifier.removeNotifyOnUnload(this.form.notify_steam);
             }
         },
