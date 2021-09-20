@@ -9,7 +9,7 @@
                     <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
                 </select>
             </h1>
-            <p>
+            <p v-html="data">
                 {{ data }}
             </p>
         </portal>
@@ -318,7 +318,7 @@
                                 <td class="pr-2" :style="'color:' + player.color">
                                     ({{ player.source }})
                                 </td>
-                                <td class="pr-2">
+                                <td class="pr-2" :title="player.afk_title">
                                     {{ t('map.afk_move', formatSeconds(player.afk)) }}
                                 </td>
                                 <td>
@@ -768,7 +768,7 @@ export default {
                     }
 
                     // Try reconnecting if the socket was active for more than 30 seconds
-                    if (Date.now() - _this.socketStart > 30 * 60 * 1000) {
+                    if (Date.now() - _this.socketStart > 30 * 1000) {
                         _this.data += ' ' + _this.t('map.try_reconnect');
 
                         setTimeout(function() {
@@ -910,7 +910,16 @@ export default {
                     this.afkPeople = this.container.afk;
                     this.invisiblePeople = this.container.invisible;
 
-                    this.data = this.t('map.data', Object.keys(this.markers).length);
+                    this.data = this.t(
+                        'map.data',
+                        Object.keys(this.markers).length
+                    ) + '<span class="block text-xs leading-3">' + this.t(
+                        'map.data_stats',
+                        this.container.stats.police,
+                        this.container.stats.ems,
+                        this.container.stats.staff,
+                        this.container.stats.unloaded
+                    ) + '</span>';
 
                     if (!foundTracked) {
                         window.location.hash = '';

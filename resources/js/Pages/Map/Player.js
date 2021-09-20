@@ -37,9 +37,14 @@ class Player {
             time: rawData.invisible_since,
             value: rawData.invisible && !shouldIgnoreInvisible(staffMembers, rawData)
         };
+
+        // Player is afk if they either haven't moved for 45 minutes
+        // Or haven't moved for 30 minutes and are inside their apartment
         this.afk = {
             time: rawData.afk,
-            value: rawData.afk > 30 * 60 && !this.player.isStaff
+            apartment: rawData.afk > 30 * 60 && this.location.z < -10,
+            normal: rawData.afk > 45 * 60,
+            staff: this.player.isStaff
         };
 
         this.onDuty = 'none';
@@ -66,6 +71,19 @@ class Player {
             this.onDuty === 'police' ? 'on duty (police)' : null,
             this.onDuty === 'ems' ? 'on duty (ems)' : null,
         ].filter(a => !!a);
+    }
+
+    isAFK() {
+        return !this.afk.staff && (this.afk.apartment || this.afk.normal);
+    }
+
+    getAFKTitle() {
+        if (this.afk.apartment) {
+            return 'Player has not moved for more than 30 minutes while inside an apartment.';
+        } else if (this.afk.normal) {
+            return 'Player has not moved for more than 45 minutes.'
+        }
+        return 'Player is not considered afk.';
     }
 
     getID() {

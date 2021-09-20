@@ -138,9 +138,14 @@
                         <th class="px-6 py-4">{{ t('logs.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('logs.action') }}</th>
                         <th class="px-6 py-4">{{ t('logs.details') }}</th>
-                        <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
+                        <th class="px-6 py-4">
+                            {{ t('logs.timestamp') }}
+                            <a href="#" :title="t('logs.toggle_diff')" @click="$event.preventDefault();showLogTimeDifference = !showLogTimeDifference">
+                                <i class="fas fa-stopwatch"></i>
+                            </a>
+                        </th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="log in logs"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="(log, index) in logs"
                         :key="log.id">
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link
@@ -162,7 +167,14 @@
                         <td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)">
                             {{ parseLog(log.details) }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block" v-if="showLogTimeDifference" :title="t('logs.diff_label')">
+                            <span v-if="index+1 < logs.length">
+                                {{ formatSecondDiff(stamp(log.timestamp) - stamp(logs[index+1].timestamp)) }}
+                                <i class="fas fa-arrow-down"></i>
+                            </span>
+                            <span v-else>Start</span>
+                        </td>
+                        <td class="px-6 py-3 border-t mobile:block" v-else>{{ log.timestamp | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
@@ -234,6 +246,7 @@ import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Pagination from './../../Components/Pagination';
 import Modal from './../../Components/Modal';
+import moment from "moment";
 
 export default {
     layout: Layout,
@@ -280,10 +293,17 @@ export default {
                 user: '',
                 reason: '',
                 description: ''
-            }
+            },
+            showLogTimeDifference: false
         };
     },
     methods: {
+        formatSecondDiff(sec) {
+            return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
+        },
+        stamp(time) {
+            return this.$moment.utc(time).unix();
+        },
         refresh: async function () {
             if (this.isLoading) {
                 return;

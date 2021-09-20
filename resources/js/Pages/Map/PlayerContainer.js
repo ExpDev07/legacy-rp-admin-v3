@@ -10,11 +10,25 @@ class PlayerContainer {
 
         this.invisible = [];
         this.afk = [];
+        this.resetStats();
 
         this.isTrackedPlayerVisible = false;
     }
 
+    resetStats() {
+        this.stats = {
+            police: 0,
+            ems: 0,
+            staff: 0,
+            loaded: 0,
+            unloaded: 0,
+            total: 0
+        };
+    }
+
     updatePlayers(rawData) {
+        this.resetStats();
+
         this.vehicles = {};
         this.activePlayerIDs = [];
 
@@ -59,13 +73,28 @@ class PlayerContainer {
                 this.isTrackedPlayerVisible = true;
             }
 
-            if (this.players[id].afk.value) {
+            if (this.players[id].isAFK()) {
                 this.afk.push(this.getPlayerListInfo(this.players[id]));
             }
             if (this.players[id].invisible.value) {
                 this.invisible.push(this.getPlayerListInfo(this.players[id]));
             }
+
+            this.stats.loaded++;
+        } else {
+            this.stats.unloaded++;
         }
+
+        if (this.players[id].player.isStaff) {
+            this.stats.staff++;
+        }
+        if (this.players[id].onDuty === 'police') {
+            this.stats.police++;
+        } else if (this.players[id].onDuty === 'ems') {
+            this.stats.ems++;
+        }
+
+        this.stats.total++;
     }
 
     isActive(id) {
@@ -95,6 +124,7 @@ class PlayerContainer {
             name: player.character ? player.character.name : 'N/A',
             steam: player.player.steam,
             afk: player.afk.time,
+            afk_title: player.getAFKTitle(),
             invisible: player.invisible.time,
             cid: player.character ? player.character.id : 0,
             source: player.player.source

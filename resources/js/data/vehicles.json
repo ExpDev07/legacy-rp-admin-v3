@@ -2,8 +2,8 @@
     "helicopter": {
         "size": 28,
         "models": [
-            "906515397",
-            "1346171487",
+            "mh6",
+            "as350",
             "990116733",
             "polmav",
             "akula",
@@ -33,7 +33,7 @@
             "seasparrow2",
             "seasparrow3",
             "thruster",
-            "-1470089635"
+            "newsmav"
         ]
     },
     "boat": {
@@ -85,7 +85,8 @@
             "stunt",
             "velum",
             "velum2",
-            "vestra"
+            "vestra",
+            "spitfire"
         ]
     },
     "medium_plane": {
@@ -186,7 +187,8 @@
             "slamtruck",
             "utillitruck",
             "utillitruck2",
-            "scrap"
+            "scrap",
+            "journey2"
         ]
     },
     "bearcat": {
@@ -201,7 +203,9 @@
         "models": [
             "flatbed",
             "towtruck",
-            "towtruck2"
+            "towtruck2",
+            "towcustom",
+            "20ramrbc"
         ]
     },
     "ems_car": {

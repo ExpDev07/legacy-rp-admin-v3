@@ -100,6 +100,7 @@
         "closed_expected": "Data connection for {0} was closed after {1}.",
         "closed_unexpected": "Data connection for {0} was closed unexpectedly after {1}.",
         "data": "Currently {0} online players.",
+        "data_stats": "Police: {0}, EMS: {1}, Staff: {2}, Unloaded: {3}",
         "play": "Continue update",
         "pause": "Pause update",
         "track": "Track character",
@@ -198,6 +199,22 @@
             "stocks_balance": "Stocks"
         },
         "no_logs": "No entries found"
+    },
+    "serials": {
+        "title": "Serial Number Lookup",
+        "description": "Lookup gun serial numbers, registered or not.",
+        "serial": "Serial Number",
+        "result": "Lookup Result",
+        "table": {
+            "item": "Weapon type",
+            "inventory": "Current Inventory",
+            "character": "Character"
+        },
+        "no_character": "No Character information found",
+        "no_result": "Serial number could not be traced back to a weapon.",
+        "search": "Search for serial",
+        "registered": "(Registered)",
+        "un_registered": "(Un-Registered)"
     },
     "advanced": {
         "title": "Advanced Search",
@@ -366,6 +383,7 @@
             "do_ban": "Ban player",
             "update_ban": "Update Ban",
             "banned_for": "Banned for about {0}",
+            "banned_forever": "Banned indefinitely",
             "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
             "forever": "<i>{0}</i> indefinitely banned this player",
             "forever_edit": "forever",
@@ -521,6 +539,8 @@
         "details": "Details",
         "player": "Player",
         "timestamp": "Timestamp",
+        "toggle_diff": "Toggle time difference view",
+        "diff_label": "Passed time since log entry below",
         "before-date": "Before Date",
         "after-date": "After Date",
         "before-time": "Before Time",
