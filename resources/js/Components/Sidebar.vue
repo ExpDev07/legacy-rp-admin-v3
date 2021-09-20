@@ -161,6 +161,11 @@ export default {
                     url: '/servers',
                 },
                 {
+                    label: this.t('sidebar.serials'),
+                    icon: 'fingerprint',
+                    url: '/serials',
+                },
+                {
                     label: this.t('sidebar.advanced'),
                     icon: 'cogs',
                     private: true,
