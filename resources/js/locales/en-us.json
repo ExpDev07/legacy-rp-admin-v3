@@ -200,6 +200,22 @@
         },
         "no_logs": "No entries found"
     },
+    "serials": {
+        "title": "Serial Number Lookup",
+        "description": "Lookup gun serial numbers, registered or not.",
+        "serial": "Serial Number",
+        "result": "Lookup Result",
+        "table": {
+            "item": "Weapon type",
+            "inventory": "Current Inventory",
+            "character": "Character"
+        },
+        "no_character": "No Character information found",
+        "no_result": "Serial number could not be traced back to a weapon.",
+        "search": "Search for serial",
+        "registered": "(Registered)",
+        "un_registered": "(Un-Registered)"
+    },
     "advanced": {
         "title": "Advanced Search",
         "description": "Advanced search for different tables",
