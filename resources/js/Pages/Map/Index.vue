@@ -610,9 +610,9 @@ export default {
             e.preventDefault();
 
             if (type === 'load') {
-                this.container.notifier.removeNotifyOnLoad(this.form.notify_steam);
+                this.container.notifier.removeNotifyOnLoad(steam);
             } else if (type === 'unload') {
-                this.container.notifier.removeNotifyOnUnload(this.form.notify_steam);
+                this.container.notifier.removeNotifyOnUnload(steam);
             }
         },
         confirmNotification() {
