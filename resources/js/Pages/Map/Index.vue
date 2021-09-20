@@ -116,6 +116,47 @@
             </div>
         </div>
 
+        <!-- Notify Add -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isNotification">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                <h3 class="mb-2">
+                    {{ t('map.notify_add') }}
+                </h3>
+
+                <!-- Steam Identifier -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="notify_steam">
+                        {{ t('map.notify_steam') }}
+                    </label>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_steam" v-model="form.notify_steam" />
+                </div>
+
+                <!-- Type -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold">
+                        {{ t('map.notify_type') }}
+                    </label>
+                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_type" v-model="form.notify_type">
+                        <option value="onload">{{ t('map.notify_load') }}</option>
+                        <option value="onunload">{{ t('map.notify_unload') }}</option>
+                    </select>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex items-center mt-2">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded mr-2"
+                            @click="confirmNotification">
+                        <i class="mr-1 fas fa-plus"></i>
+                        {{ t('global.confirm') }}
+                    </button>
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            @click="isNotification = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <template>
             <div class="-mt-12" id="map-wrapper">
                 <div class="flex flex-wrap justify-between mb-2 w-map max-w-full">
@@ -142,6 +183,11 @@
                         </button>
                     </div>
                     <div class="flex flex-wrap">
+                        <button
+                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                            @click="isNotification = true">
+                            {{ t('map.notify_add') }}
+                        </button>
                         <button
                             class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
                             @click="addArea">
@@ -328,6 +374,35 @@
                             </tr>
                         </table>
                     </div>
+                    <div v-if="Object.keys(container.notifier.notifications.onload).length > 0 || Object.keys(container.notifier.notifications.onunload).length > 0" class="pt-4 mr-4">
+                        <h3 class="mb-2">{{ t('map.notify') }}</h3>
+                        <table class="text-sm font-mono">
+                            <tr v-for="(player, steam) in container.notifier.notifications.onload" :key="'load_' + steam">
+                                <td class="pr-2">
+                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.notify_load') }}
+                                </td>
+                                <td>
+                                    <a class="dark:text-red-400 text-red-600" href="#" @click="stopNotify($event, steam, 'load')">[{{ t('global.remove') }}]</a>
+                                </td>
+                            </tr>
+                            <tr v-for="(player, steam) in container.notifier.notifications.onunload" :key="'unload_' + steam">
+                                <td class="pr-2">
+                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.notify_unload') }}
+                                </td>
+                                <td>
+                                    <a class="dark:text-red-400 text-red-600" href="#" @click="stopNotify($event, steam, 'unload')">[{{ t('global.remove') }}]</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                     <div v-if="invisiblePeople.length > 0" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.invisible_title') }}</h3>
                         <table class="text-sm font-mono">
@@ -434,12 +509,15 @@ export default {
             data: this.t('map.loading'),
             connection: null,
             isPaused: false,
+            isNotification: false,
             firstRefresh: true,
             clickedCoords: '',
             rawClickedCoords: null,
             coordsCommand: '',
             afkPeople: [],
             invisiblePeople: [],
+            notifyLoad: {},
+            notifyUnload: {},
             openPopup: null,
             isDragging: false,
             isAddingDetectionArea: false,
@@ -456,7 +534,10 @@ export default {
                     x: 0,
                     y: 0
                 },
-                filters: []
+                filters: [],
+
+                notify_steam: '',
+                notify_type: 'onload'
             },
             layers: {
                 "Players": L.layerGroup(),
@@ -524,6 +605,27 @@ export default {
             delete this.highlightedPeople[steam];
 
             this.rightClickedPlayer.id = null;
+        },
+        stopNotify(e, steam, type) {
+            e.preventDefault();
+
+            if (type === 'onload') {
+                this.container.notifier.removeNotifyOnLoad(this.form.notify_steam);
+            } else if (type === 'onunload') {
+                this.container.notifier.removeNotifyOnUnload(this.form.notify_steam);
+            }
+        },
+        confirmNotification() {
+            if (this.form.notify_type === 'onload') {
+                this.container.notifier.notifyOnLoad(this.form.notify_steam);
+            } else if (this.form.notify_type === 'onunload') {
+                this.container.notifier.notifyOnUnload(this.form.notify_steam);
+            }
+
+            this.form.notify_steam = '';
+            this.form.notify_type = 'onload';
+
+            this.isNotification = false;
         },
         confirmArea() {
             if (this.form.area_radius < 1 || this.form.area_radius > 5000) {
@@ -829,7 +931,7 @@ export default {
                 if (this.map) {
                     const _this = this;
 
-                    this.container.updatePlayers(data);
+                    this.container.updatePlayers(data, this);
 
                     let unknownCharacters = [],
                         foundTracked = false;
