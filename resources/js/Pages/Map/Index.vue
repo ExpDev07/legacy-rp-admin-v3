@@ -16,6 +16,14 @@
 
         <portal to="actions">
             <div class="mb-2">
+                <!-- Toggle On-Duty List -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isShowingOnDutyList = !isShowingOnDutyList">
+                    <i class="fas fa-gavel"></i>
+                    {{ t('map.toggle_duty_list') }}
+                </button>
+
                 <!-- Play/Pause -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -374,6 +382,29 @@
                             </tr>
                         </table>
                     </div>
+                    <div v-if="isShowingOnDutyList" class="pt-4 mr-4">
+                        <h3 class="mb-2">{{ t('map.duty_list') }}</h3>
+                        <table class="text-sm font-mono">
+                            <tr v-for="(player, x) in container.on_duty" :key="x">
+                                <td class="pr-2">
+                                    <a target="_blank" :href="'/players/' + player.steam" :class="player.onDutyClass">{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2" :class="player.onDutyClass">
+                                    ({{ player.source }})
+                                </td>
+                                <td class="pr-2" v-if="player.onDuty === 'police'">
+                                    {{ t('map.duty_police') }}
+                                </td>
+                                <td class="pr-2" v-else-if="player.onDuty === 'ems'">
+                                    {{ t('map.duty_ems') }}
+                                </td>
+                                <td>
+                                    <a :class="'track-cid ' + player.onDutyClass" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
+                                    <a :class="'highlight-cid ' + player.onDutyClass" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                     <div v-if="Object.keys(container.notifier.notifications.onload).length > 0 || Object.keys(container.notifier.notifications.onunload).length > 0" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.notify') }}</h3>
                         <table class="text-sm font-mono">
@@ -510,6 +541,7 @@ export default {
             connection: null,
             isPaused: false,
             isNotification: false,
+            isShowingOnDutyList: false,
             firstRefresh: true,
             clickedCoords: '',
             rawClickedCoords: null,
@@ -952,7 +984,7 @@ export default {
                         if (!(id in _this.markers)) {
                             _this.markers[id] = Player.newMarker();
                         }
-                        _this.markers[id] = player.updateMarker(_this.markers[id], _this.highlightedPeople);
+                        _this.markers[id] = player.updateMarker(_this.markers[id], _this.highlightedPeople, _this.container.vehicles);
 
                         _this.addToLayer(_this.markers[id], _this.getLayer(player));
                         _this.markers[id]._icon.dataset.playerId = id;

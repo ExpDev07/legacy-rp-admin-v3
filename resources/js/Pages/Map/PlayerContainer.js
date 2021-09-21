@@ -1,6 +1,6 @@
 import Player from './Player';
 import Notifier from './Notifier';
-import {getAFKColor} from './helper';
+import {getAFKColor, getOnDutyClass} from './helper';
 
 class PlayerContainer {
     constructor(staffMembers) {
@@ -11,6 +11,7 @@ class PlayerContainer {
 
         this.invisible = [];
         this.afk = [];
+        this.on_duty = [];
         this.resetStats();
 
         this.isTrackedPlayerVisible = false;
@@ -37,6 +38,7 @@ class PlayerContainer {
 
         this.invisible = [];
         this.afk = [];
+        this.on_duty = [];
 
         this.isTrackedPlayerVisible = false;
 
@@ -46,6 +48,7 @@ class PlayerContainer {
 
         this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
         this.afk.sort((b, a) => (a.afk > b.afk) ? 1 : ((b.afk > a.afk) ? -1 : 0));
+        this.on_duty.sort((a, b) => (a.source > b.source) ? 1 : ((b.source > a.source) ? -1 : 0));
 
         this.notifier.checkPlayers(this, vue);
     }
@@ -68,7 +71,18 @@ class PlayerContainer {
 
         const vehicle = this.players[id].getVehicleID();
         if (vehicle) {
-            this.vehicles[vehicle] = this.players[id].character.name;
+            if (!(vehicle in this.vehicles)) {
+                this.vehicles[vehicle] = {
+                    driver: null,
+                    passengers: []
+                };
+            }
+
+            if (this.players[id].character.isDriving) {
+                this.vehicles[vehicle].driver = this.players[id].character.name;
+            } else {
+                this.vehicles[vehicle].passengers.push(this.players[id].character.name);
+            }
         }
 
         if (this.players[id].character) {
@@ -95,8 +109,12 @@ class PlayerContainer {
         }
         if (this.players[id].onDuty === 'police') {
             this.stats.police++;
+
+            this.on_duty.push(this.getPlayerListInfo(this.players[id]));
         } else if (this.players[id].onDuty === 'ems') {
             this.stats.ems++;
+
+            this.on_duty.push(this.getPlayerListInfo(this.players[id]));
         }
 
         this.stats.total++;
@@ -124,7 +142,7 @@ class PlayerContainer {
 
     getPlayerListInfo(player) {
         return {
-            color: getAFKColor(player.afk.time, player.player.isStaff),
+            color: player.isAFK() ? getAFKColor(player.afk.time, player.player.isStaff) : '',
             is_staff: player.player.isStaff,
             name: player.character ? player.character.name : 'N/A',
             steam: player.player.steam,
@@ -132,7 +150,9 @@ class PlayerContainer {
             afk_title: player.getAFKTitle(),
             invisible: player.invisible.time,
             cid: player.character ? player.character.id : 0,
-            source: player.player.source
+            source: player.player.source,
+            onDuty: player.onDuty,
+            onDutyClass: getOnDutyClass(player.onDuty)
         };
     }
 }
