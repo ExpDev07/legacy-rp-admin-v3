@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Character;
+use App\Helpers\CacheHelper;
 use App\Helpers\OPFWHelper;
 use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\CharacterResource;
@@ -126,11 +127,12 @@ class PlayerCharacterController extends Controller
     /**
      * Display the specified resource for editing.
      *
+     * @param Request $request
      * @param Player $player
      * @param Character $character
      * @return Response
      */
-    public function edit(Player $player, Character $character): Response
+    public function edit(Request $request, Player $player, Character $character): Response
     {
         $resetCoords = json_decode(file_get_contents(__DIR__ . '/../../../helpers/coords_reset.json'), true);
         $motels = Motel::query()->where('cid', $character->character_id)->get()->sortBy(['motel', 'room_id']);
@@ -139,6 +141,7 @@ class PlayerCharacterController extends Controller
             'player'      => new PlayerResource($player),
             'character'   => new CharacterResource($character),
             'motels'      => $motels->toArray(),
+            'vehicleMap'  => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
             'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
         ]);
     }
@@ -355,6 +358,77 @@ class PlayerCharacterController extends Controller
     }
 
     /**
+     * Adds the specified vehicle.
+     *
+     * @param Request $request
+     * @param Character $character
+     * @param string $model
+     * @return RedirectResponse
+     */
+    public function addVehicle(Request $request, Player $player, Character $character, string $model): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can add vehicles.');
+        }
+
+        $genPlate = function () {
+            $a_z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            // For example: 28ULD493.
+            return Str::upper(
+                rand(0, 9) .
+                rand(0, 9) .
+                $a_z[rand(0, 25)] .
+                $a_z[rand(0, 25)] .
+                $a_z[rand(0, 25)] .
+                rand(0, 9) .
+                rand(0, 9) .
+                rand(0, 9)
+            );
+        };
+
+        $map = CacheHelper::getVehicleMap();
+        if (!isset($map[$model])) {
+            return back()->with('error', 'Unknown model name "' . $model . '".');
+        }
+
+        $plate = $genPlate();
+        $tries = 0;
+        while ($tries < 100) {
+            $tries++;
+
+            $exists = Vehicle::query()->where('plate', '=', $plate)->count(['vehicle_id']) > 0;
+            if (!$exists) {
+                break;
+            }
+
+            $plate = $genPlate();
+        }
+
+        DB::table('character_vehicles')->insert([
+            [
+                'owner_cid'                => $character->character_id,
+                'model_name'               => $model,
+                'plate'                    => $plate,
+                'mileage'                  => 0,
+                'modifications'            => null,
+                'data'                     => null,
+                'garage_identifier'        => '*',
+                'garage_state'             => 1,
+                'garage_impound'           => 0,
+                'deprecated_damage'        => '',
+                'deprecated_modifications' => '',
+                'deprecated_fuel'          => 100,
+                'deprecated_supporter'     => 0,
+                'vehicle_deleted'          => 0,
+            ],
+        ]);
+
+        return back()->with('success', 'Vehicle was successfully added (Model: ' . $model . ', Plate: ' . $plate . ').');
+    }
+
+    /**
      * Edits the specified vehicle.
      *
      * @param Request $request
@@ -393,17 +467,17 @@ class PlayerCharacterController extends Controller
         $ids = $request->post('ids', []);
         if (empty($ids) || !is_array($ids)) {
             return (new \Illuminate\Http\Response([
-                'status'  => false
+                'status' => false,
             ], 200))->header('Content-Type', 'application/json');
         }
 
         $characters = Character::query()->whereIn('character_id', $ids)->select([
-            'character_id', 'gender'
+            'character_id', 'gender',
         ])->get()->toArray();
 
         return (new \Illuminate\Http\Response([
-            'status'  => true,
-            'data' => $characters,
+            'status' => true,
+            'data'   => $characters,
         ], 200))->header('Content-Type', 'application/json');
     }
 

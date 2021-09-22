@@ -271,11 +271,44 @@
             </div>
         </div>
 
+        <!-- Vehicle Adding -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isVehicleAdd">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.characters.vehicle.add') }}</h3>
+                <div class="w-full p-3 flex justify-between">
+                    <label class="mr-4 block w-1/3 text-center pt-2 font-bold">
+                        {{ t('players.characters.vehicle.model') }}
+                    </label>
+                    <model-select
+                        class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                        :options="vehicleList"
+                        v-model="vehicleAdd" />
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isVehicleAdd = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="addVehicle">
+                        {{ t('players.characters.vehicle.add') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Vehicles -->
         <v-section>
             <template #header>
                 <h2>
                     {{ t('players.vehicles.vehicles') }}
+
+                    <!-- Add Vehicle -->
+                    <button class="px-3 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success text-base ml-5"
+                            @click="isVehicleAdd = true"
+                            v-if="$page.auth.player.isSuperAdmin"
+                    >
+                        <i class="fas fa-car"></i>
+                        {{ t('players.characters.vehicle.add') }}
+                    </button>
                 </h2>
             </template>
 
@@ -288,7 +321,7 @@
                     >
                         <template #header>
                             <h3 class="mb-2">
-                                {{ vehicle.model_name }}
+                                {{ vehicle.model_name in vehicleMap ? vehicleMap[vehicle.model_name] : vehicle.model_name }}
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.vehicles.plate') }}:</span> {{ vehicle.plate }}
@@ -440,6 +473,7 @@ import Card from './../../../Components/Card';
 import Badge from './../../../Components/Badge';
 import Modal from "../../../Components/Modal";
 import Jobs from "../../../data/jobs.json";
+import {ModelSelect} from 'vue-search-select';
 
 export default {
     layout: Layout,
@@ -448,6 +482,7 @@ export default {
         Card,
         Badge,
         Modal,
+        ModelSelect,
     },
     props: {
         player: {
@@ -455,6 +490,10 @@ export default {
             required: true,
         },
         character: {
+            type: Object,
+            required: true,
+        },
+        vehicleMap: {
             type: Object,
             required: true,
         },
@@ -509,6 +548,13 @@ export default {
             }
         }
 
+        const sortedVehicles = Object.entries(this.vehicleMap).sort((a, b) => a[1].localeCompare(b[1])).map(m => {
+            return {
+                value: m[0],
+                text: m[1] + ' (' + m[0] + ')'
+            };
+        });
+
         return {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
@@ -531,6 +577,11 @@ export default {
                 department_name: this.character.departmentName,
                 position_name: this.character.positionName,
             },
+            vehicleList: sortedVehicles,
+            vehicleAdd: {
+                value: '',
+                text: ''
+            },
             location: window.location.href,
             vehicleForm: {
                 id: 0,
@@ -545,6 +596,7 @@ export default {
             jobs: jobs,
             paychecks: paychecks,
             isVehicleEdit: false,
+            isVehicleAdd: false,
             isEditingBalance: false,
         };
     },
@@ -661,6 +713,18 @@ export default {
 
             // Reset.
             this.isVehicleEdit = false;
+        },
+        async addVehicle() {
+            if (!(this.vehicleAdd.value in this.vehicleMap)) {
+                alert('Unknown vehicle model "' + this.vehicleAdd.value + '"');
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addVehicle/' + this.vehicleAdd.value);
+
+            // Reset.
+            this.isVehicleAdd = false;
         },
         async editBalance() {
             // Send request.

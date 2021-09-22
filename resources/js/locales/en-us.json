@@ -522,7 +522,9 @@
             "vehicle": {
                 "edit": "Edit Vehicle",
                 "owner": "Owner CID",
-                "confirm": "Edit Vehicle"
+                "confirm": "Edit Vehicle",
+                "add": "Add Vehicle",
+                "model": "Model Name"
             }
         },
         "edit": {

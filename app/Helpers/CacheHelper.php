@@ -51,6 +51,23 @@ class CacheHelper
     }
 
     /**
+     * Get model -> display name map
+     *
+     * @return array
+     */
+    public static function getVehicleMap(): array
+    {
+        $map = self::read('vehicle_map', null);
+        if (!$map) {
+            $map = json_decode(GeneralHelper::get('https://raw.githubusercontent.com/milan60/legacyrp-admin-panel-sockets/master/display-map.json'), true) ?? [];
+
+            self::write('vehicle_map', $map, self::DAY);
+        }
+
+        return $map;
+    }
+
+    /**
      * Write something to the cache
      *
      * @param string $key
