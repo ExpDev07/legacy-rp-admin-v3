@@ -88,7 +88,7 @@
         "lucky_wheel": "Lucky Wheel Spins",
         "titles": {
             "bans_move": "Bans over time",
-            "economy": "Economy (cash + bank + stocks)",
+            "economy": "Economy (cash + bank + stocks + company balances + PDM & State funds)",
             "ban_warn": "Bans & Warnings",
             "character": "Character creations & deletions",
             "lucky_wheel": "Lucky Wheel Spins"
