@@ -28,6 +28,10 @@ class PlayerCharacterController extends Controller
         'all', 'head', 'left_arm', 'right_arm', 'torso', 'left_leg', 'right_leg',
     ];
 
+    const Licenses = [
+        "heli", "fw", "cfi", "hw", "perf", "management", "military"
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -361,12 +365,14 @@ class PlayerCharacterController extends Controller
      * Adds the specified vehicle.
      *
      * @param Request $request
+     * @param Player $player
      * @param Character $character
-     * @param string $model
      * @return RedirectResponse
      */
-    public function addVehicle(Request $request, Player $player, Character $character, string $model): RedirectResponse
+    public function addVehicle(Request $request, Player $player, Character $character): RedirectResponse
     {
+        $model = $request->post('model');
+
         $user = $request->user();
         if (!$user->player->is_super_admin) {
             return back()->with('error', 'Only super admins can add vehicles.');
@@ -426,6 +432,48 @@ class PlayerCharacterController extends Controller
         ]);
 
         return back()->with('success', 'Vehicle was successfully added (Model: ' . $model . ', Plate: ' . $plate . ').');
+    }
+
+    /**
+     * Adds the specified license.
+     *
+     * @param Request $request
+     * @param Player $player
+     * @param Character $character
+     * @return RedirectResponse
+     */
+    public function addLicense(Request $request, Player $player, Character $character): RedirectResponse
+    {
+        $license = $request->post('license');
+
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can add licenses.');
+        }
+
+        if (!in_array($license, self::Licenses) && $license !== 'remove') {
+            return back()->with('error', 'Invalid license "' . $license . '".');
+        }
+
+        $json = json_decode($character->character_data, true) ?? [];
+        if (!isset($json['licenses']) || $license === 'remove') {
+            $json['licenses'] = [];
+        }
+
+        if ($license !== 'remove') {
+            $json['licenses'][] = $license;
+            $json['licenses'] = array_values(array_unique($json['licenses']));
+        }
+
+        $character->update([
+            'character_data' => json_encode($json)
+        ]);
+
+        if ($license === 'remove') {
+            return back()->with('success', 'All Licenses were successfully removed.');
+        }
+
+        return back()->with('success', 'License was successfully added (License: ' . $license . ').');
     }
 
     /**

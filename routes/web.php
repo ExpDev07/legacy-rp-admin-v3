@@ -103,7 +103,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/characters/{character}/removeTattoos', [PlayerCharacterController::class, 'removeTattoos']);
     Route::post('/players/{player}/characters/{character}/resetSpawn', [PlayerCharacterController::class, 'resetSpawn']);
     Route::put('/players/{player}/characters/{character}/editBalance', [PlayerCharacterController::class, 'editBalance']);
-    Route::post('/players/{player}/characters/{character}/addVehicle/{model}', [PlayerCharacterController::class, 'addVehicle']);
+    Route::post('/players/{player}/characters/{character}/addVehicle', [PlayerCharacterController::class, 'addVehicle']);
+    Route::post('/players/{player}/characters/{character}/addLicense', [PlayerCharacterController::class, 'addLicense']);
 
     // Servers.
     Route::resource('servers', ServerController::class);

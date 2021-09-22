@@ -43,13 +43,21 @@
                     <i class="fas fa-eraser"></i>
                     {{ t('players.characters.remove_tattoo') }}
                 </a>
+                <!-- Add License -->
+                <a href="#"
+                   class="px-5 py-2 font-semibold text-white rounded bg-primary mr-3 dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isLicenceAdd = true}"
+                   v-if="$page.auth.player.isSuperAdmin"
+                >
+                    <i class="fas fa-id-badge"></i>
+                    {{ t('players.characters.license.add') }}
+                </a>
                 <!-- Reset Spawn-point -->
                 <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isResetSpawn = true}">
                     <i class="fas fa-heartbeat"></i>
                     {{ t('players.characters.reset_spawn') }}
                 </a>
                 <!-- Back -->
-                <a class="px-5 py-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3" :href="'/players/' + player.steamIdentifier">
+                <a class="px-5 py-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mb-3" :href="'/players/' + player.steamIdentifier">
                     <i class="fas fa-backward"></i>
                     {{ t('global.back') }}
                 </a>
@@ -151,7 +159,7 @@
 
             <template>
                 <form @submit.prevent="submit(false)">
-                    <!-- Name -->
+                    <!-- Name & Phone -->
                     <div class="flex flex-wrap mb-4">
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="first_name">
@@ -173,25 +181,39 @@
                         </div>
                     </div>
                     <div class="px-3 mb-6">
-                        <label class="block mb-3" for="backstory">
+                        <label class="block mb-3">
                             {{ t('players.edit.backstory') }}
                         </label>
                         <textarea class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="backstory" v-model="form.backstory"></textarea>
                     </div>
-                    <div class="px-3 mb-6">
-                        <label class="block mb-3" for="dob">
-                            {{ t('players.edit.dob') }}
-                        </label>
-                        <input class="block w-56 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="dob" v-model="form.date_of_birth">
+                    <div class="flex flex-wrap mb-4">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-2" for="dob">
+                                {{ t('players.edit.dob') }}
+                            </label>
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="dob" v-model="form.date_of_birth">
+                        </div>
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-2">
+                                {{ t('players.edit.gender') }}
+                            </label>
+                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="gender" v-model="form.gender">
+                                <option value="0">{{ t('global.male') }}</option>
+                                <option value="1">{{ t('global.female') }}</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div class="px-3 mb-6">
-                        <label class="block mb-3" for="gender">
-                            {{ t('players.edit.gender') }}
+                        <label class="block">
+                            {{ t('players.characters.license.licenses') }}
                         </label>
-                        <select class="block w-56 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="gender" v-model="form.gender">
-                            <option value="0">{{ t('global.male') }}</option>
-                            <option value="1">{{ t('global.female') }}</option>
-                        </select>
+                        <ul v-if="character.licenses.length > 0" class="text-sm">
+                            <li v-for="license in character.licenses" :key="license" class="ml-3 pl-2 list-dash">{{ t('players.characters.license.' + license) }}</li>
+                        </ul>
+                        <ul v-else class="text-sm">
+                            <li class="ml-3 pl-2 list-dash">{{ t('global.none') }}</li>
+                        </ul>
                     </div>
 
                     <!-- Submit -->
@@ -290,6 +312,38 @@
                     </button>
                     <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="addVehicle">
                         {{ t('players.characters.vehicle.add') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add License -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isLicenceAdd">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.characters.license.add') }}</h3>
+                <div class="w-full p-3 flex justify-between">
+                    <label class="mr-4 block w-1/3 text-center pt-2 font-bold">
+                        {{ t('players.characters.license.license') }}
+                    </label>
+                    <select class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" v-model="licenseForm.license">
+                        <option value="heli">{{ t('players.characters.license.heli') }}</option>
+                        <option value="fw">{{ t('players.characters.license.fw') }}</option>
+                        <option value="cfi">{{ t('players.characters.license.cfi') }}</option>
+                        <option value="hw">{{ t('players.characters.license.hw') }}</option>
+                        <option value="perf">{{ t('players.characters.license.perf') }}</option>
+                        <option value="management">{{ t('players.characters.license.management') }}</option>
+                        <option value="military">{{ t('players.characters.license.military') }}</option>
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isLicenceAdd = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="removeLicenses">
+                        {{ t('players.characters.license.remove') }}
+                    </button>
+                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="addLicense">
+                        {{ t('players.characters.license.add') }}
                     </button>
                 </div>
             </div>
@@ -587,6 +641,9 @@ export default {
                 id: 0,
                 owner: 0
             },
+            licenseForm: {
+                license: 'fw'
+            },
             balanceForm: {
                 cash: this.character.cash,
                 bank: this.character.bank
@@ -597,6 +654,7 @@ export default {
             paychecks: paychecks,
             isVehicleEdit: false,
             isVehicleAdd: false,
+            isLicenceAdd: false,
             isEditingBalance: false,
         };
     },
@@ -721,10 +779,35 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addVehicle/' + this.vehicleAdd.value);
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addVehicle', {
+                model: this.vehicleAdd.value
+            });
 
             // Reset.
             this.isVehicleAdd = false;
+        },
+        async addLicense() {
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addLicense', {
+                license: this.licenseForm.license
+            });
+
+            // Reset.
+            this.isLicenceAdd = false;
+        },
+        async removeLicenses() {
+            if (!confirm(this.t('players.characters.license.confirm'))) {
+                this.isLicenceAdd = false;
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addLicense', {
+                license: 'remove'
+            });
+
+            // Reset.
+            this.isLicenceAdd = false;
         },
         async editBalance() {
             // Send request.

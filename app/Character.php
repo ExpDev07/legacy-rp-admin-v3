@@ -60,6 +60,7 @@ class Character extends Model
 
         'tattoos_data',
         'coords',
+        'character_data'
     ];
 
     /**
@@ -144,6 +145,22 @@ class Character extends Model
     public function properties(): HasMany
     {
         return $this->hasMany(Property::class, 'property_renter_cid');
+    }
+
+    /**
+     * Returns all licenses
+     *
+     * @return array
+     */
+    public function getLicenses(): array
+    {
+        $json = json_decode($this->character_data, true) ?? [];
+
+        if (!isset($json['licenses']) || !is_array($json['licenses'])) {
+            return [];
+        }
+
+        return $json['licenses'];
     }
 
     /**
