@@ -32,6 +32,15 @@
             </div>
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
+                <FinancialChart
+                    :data="[economy.data]"
+                    :data-labels="economy.labels"
+                    :title="t('statistics.titles.economy')"
+                    class="w-full"
+                ></FinancialChart>
+            </div>
+
+            <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
                     :data="[creations.data, deletions.data]"
                     :data-labels="creations.labels"
@@ -74,6 +83,10 @@ export default {
             required: true,
         },
         banMove: {
+            type: Object,
+            required: true,
+        },
+        economy: {
             type: Object,
             required: true,
         },
