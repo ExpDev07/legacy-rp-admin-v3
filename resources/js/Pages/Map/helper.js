@@ -5,6 +5,18 @@ const rainbow = new Rainbow();
 rainbow.setNumberRange(30 * 60, 3 * 60 * 60);
 rainbow.setSpectrum('#d9ff00', '#ffbf00', '#ff6600', '#ff0000');
 
+// Some custom colors i define here as they are added dynamically
+// And tailwind doesn't notice that so it ignores them in the build
+const colorClasses = [
+    '.dark .police-color {color: #7469FF} .police-color {color: #3625FF}',
+    '.dark .ems-color {color: #FF5959} .ems-color {color: #FF192E}'
+];
+function ensureCustomColors() {
+    if ($('#custom-colors').length === 0) {
+        $('head').append('<style id="custom-colors">' + colorClasses.join('') + '</style>');
+    }
+}
+
 module.exports = {
     mapNumber(val, in_min, in_max, out_min, out_max) {
         return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
@@ -68,5 +80,17 @@ module.exports = {
         let pcs = source.split(what);
         let lastPc = pcs.pop();
         return pcs.join(what) + replacement + lastPc;
+    },
+    getOnDutyClass(duty) {
+        ensureCustomColors();
+
+        switch (duty) {
+            case 'police':
+                return 'police-color';
+            case 'ems':
+                return 'ems-color';
+            default:
+                return '';
+        }
     }
 };

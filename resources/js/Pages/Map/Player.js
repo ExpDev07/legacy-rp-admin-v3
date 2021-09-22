@@ -104,7 +104,7 @@ class Player {
     }
 
     getVehicleID() {
-        if (this.character && this.vehicle && this.character.isDriving) {
+        if (this.character && this.vehicle) {
             return this.vehicle.id;
         }
         return null;
@@ -217,18 +217,26 @@ class Player {
         return marker;
     }
 
-    updateMarker(marker, highlightedPeople) {
+    updateMarker(marker, highlightedPeople, vehicles) {
         marker.setIcon(this.getIcon(highlightedPeople));
         marker.setLatLng(this.location.toMap());
         marker.setRotationAngle(this.heading);
 
         const attributes = this.attributes.map(a => '<span class="text-xxs italic block leading-3">- is ' + a + '</span>');
 
+        let vehicleInfo = '';
+        const vehicle = this.getVehicleID();
+        if (vehicle && vehicle in vehicles) {
+            vehicleInfo = '<span class="block mt-1 text-xxs leading-3"><b>Driver:</b> ' + (vehicles[vehicle].driver ? vehicles[vehicle].driver : 'N/A') + '</span>' +
+                '<span class="block text-xxs leading-3"><b>Passengers:</b> ' + (vehicles[vehicle].passengers.length > 0 ? vehicles[vehicle].passengers.join(', ') : 'N/A') + '</span>';
+        }
+
         const popup = [
             '<a href="/players/' + this.player.steam + '" target="_blank" class="font-bold block border-b border-gray-700 mb-1">' + this.getTitle(true) + '</a>',
             '<span class="block"><b>Altitude:</b> ' + this.location.z + 'm</span>',
             '<span class="block mb-1"><b>Speed:</b> ' + this.speed + 'mph</span>',
-            attributes.join('')
+            attributes.join(''),
+            vehicleInfo
         ].join('');
 
         marker._popup.setContent(popup);
