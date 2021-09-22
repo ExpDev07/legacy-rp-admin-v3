@@ -26,6 +26,7 @@
                 <FinancialChart
                     :data="[banMove.data]"
                     :data-labels="banMove.labels"
+                    :format-as-money="false"
                     :title="t('statistics.titles.bans_move')"
                     class="w-full"
                 ></FinancialChart>
@@ -35,6 +36,7 @@
                 <FinancialChart
                     :data="[economy.data]"
                     :data-labels="economy.labels"
+                    :format-as-money="true"
                     :title="t('statistics.titles.economy')"
                     class="w-full"
                 ></FinancialChart>
