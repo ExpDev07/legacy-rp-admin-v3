@@ -218,7 +218,7 @@
                         <label class="block mb-3" for="job">
                             {{ t('players.job.name') }}
                         </label>
-                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" v-model="form.job_name">
+                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" v-model="form.job_name" @change="setPayCheck">
                             <option :value="job.name" v-for="job in jobs">{{ job.name || t('global.none') }}</option>
                         </select>
                     </div>
@@ -226,7 +226,7 @@
                         <label class="block mb-3" for="department">
                             {{ t('players.job.department') }}
                         </label>
-                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="department" v-model="form.department_name">
+                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="department" v-model="form.department_name" @change="setPayCheck">
                             <option :value="department.name" v-for="department in job.departments">{{ department.name || t('global.none') }}</option>
                         </select>
                     </div>
@@ -235,7 +235,7 @@
                             <label class="block mb-3" for="position">
                                 {{ t('players.job.position') }}
                             </label>
-                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="position" v-model="form.position_name">
+                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="position" v-model="form.position_name" @change="setPayCheck">
                                 <option :value="position" v-for="position in department.positions">{{ position || t('global.none') }}</option>
                             </select>
                         </div>
@@ -243,7 +243,7 @@
                     <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                         <label class="block mb-3">&nbsp;</label>
                         <button class="block w-full px-4 py-3 mb-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="updateJob">
-                            {{ t('players.job.set') }}
+                            {{ t('players.job.set') }} (${{ paycheck }})
                         </button>
                     </div>
                 </div>
@@ -468,9 +468,9 @@ export default {
         },
     },
     data() {
-        let jobs = Jobs.sort((a, b) => {
+        let jobs = JSON.parse(JSON.stringify(Jobs.sort((a, b) => {
             return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-        });
+        })));
 
         for (let x = 0; x < jobs.length; x++) {
             let departments = jobs[x].departments.sort((a, b) => {
@@ -478,23 +478,36 @@ export default {
             });
 
             for (let y = 0; y < departments.length; y++) {
-                departments[y].positions = departments[y].positions.reverse();
+                departments[y].positions = Object.keys(departments[y].positions).reverse();
             }
 
             jobs[x].departments = departments;
         }
 
         jobs.unshift({
-            name: null,
+            name: '',
             departments: [
                 {
-                    name: null,
-                    positions: [
-                        null
-                    ]
+                    name: '',
+                    positions: {
+                        '': 0
+                    }
                 }
             ]
         });
+
+        let paychecks = {};
+        for(let x=0;x<Jobs.length;x++) {
+            const j = Jobs[x];
+
+            paychecks[j.name] = {};
+
+            for(let y=0;y<j.departments.length;y++) {
+                const d = j.departments[y];
+
+                paychecks[j.name][d.name] = d.positions;
+            }
+        }
 
         return {
             local: {
@@ -505,8 +518,9 @@ export default {
                     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.cash),
                     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.bank)
                 ),
-                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance)),
+                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance))
             },
+            paycheck: 0,
             form: {
                 first_name: this.character.firstName,
                 last_name: this.character.lastName,
@@ -529,11 +543,30 @@ export default {
             isTattooRemoval: false,
             isResetSpawn: false,
             jobs: jobs,
+            paychecks: paychecks,
             isVehicleEdit: false,
             isEditingBalance: false,
         };
     },
     methods: {
+        setPayCheck() {
+            for(let x=0;x<Jobs.length;x++) {
+                const j = Jobs[x];
+
+                if (j.name === this.form.job_name) {
+                    for(let y=0;y<j.departments.length;y++) {
+                        const d = j.departments[y];
+
+                        if (d.name === this.form.department_name && this.form.position_name in d.positions) {
+                            this.paycheck = d.positions[this.form.position_name];
+                            return;
+                        }
+                    }
+                }
+            }
+
+            this.paycheck = 0;
+        },
         submit(isJobUpdate) {
             let form = this.form,
                 query = '';
@@ -639,5 +672,8 @@ export default {
             this.isEditingBalance = false;
         },
     },
+    mounted() {
+        this.setPayCheck();
+    }
 }
 </script>
