@@ -4,36 +4,40 @@
         "departments": [
             {
                 "name": "SASP",
-                "positions": [
-                    "Cadet",
-                    "Trooper",
-                    "Trooper First Class",
-                    "Senior Trooper",
-                    "Corporal",
-                    "Sergeant",
-                    "Sergeant First Class",
-                    "Lieutenant",
-                    "Captain",
-                    "Assistant Commissioner",
-                    "Senior Assistant Commissioner",
-                    "Deputy Commissioner",
-                    "Commissioner"
-                ]
+                "positions": {
+                    "Cadet": 55,
+                    "Trooper": 70,
+                    "Trooper First Class": 82,
+                    "Senior Trooper": 96,
+                    "Corporal": 102,
+                    "Sergeant": 110,
+                    "Sergeant First Class": 118,
+                    "Lieutenant": 126,
+                    "Captain": 134,
+                    "Assistant Commissioner": 138,
+                    "Senior Assistant Commissioner": 142,
+                    "Deputy Commissioner": 146,
+                    "Commissioner": 152
+                }
             },
             {
                 "name": "Bolingbroke Penitentiary",
-                "positions": [
-                    "Guard"
-                ]
+                "positions": {
+                    "Correctional Officer": 78,
+                    "Senior Correctional Officer": 96,
+                    "Captain": 112,
+                    "Deputy Warden": 126,
+                    "Warden": 134
+                }
             },
             {
                 "name": "Park Rangers",
-                "positions": [
-                    "Trainee",
-                    "Ranger",
-                    "Supervisor",
-                    "Director"
-                ]
+                "positions": {
+                    "Trainee": 24,
+                    "Ranger": 42,
+                    "Supervisor": 66,
+                    "Director": 92
+                }
             }
         ]
     },
@@ -42,17 +46,17 @@
         "departments": [
             {
                 "name": "Los Santos Medical Center",
-                "positions": [
-                    "EMT",
-                    "Paramedic",
-                    "Specialist",
-                    "Sergeant",
-                    "Lieutenant",
-                    "Captain",
-                    "Assistant Director",
-                    "Deputy Director",
-                    "Director"
-                ]
+                "positions": {
+                    "EMT": 50,
+                    "Paramedic": 70,
+                    "Specialist": 92,
+                    "Sergeant": 102,
+                    "Lieutenant": 116,
+                    "Captain": 124,
+                    "Assistant Director": 134,
+                    "Deputy Director": 144,
+                    "Director": 154
+                }
             }
         ]
     },
@@ -61,31 +65,31 @@
         "departments": [
             {
                 "name": "Waste Collector",
-                "positions": [
-                    "Employee"
-                ]
+                "positions": {
+                    "Employee": 20
+                }
             },
             {
                 "name": "State",
-                "positions": [
-                    "Assistant",
-                    "Advisor",
-                    "Employee",
-                    "Manager",
-                    "Deputy Mayor",
-                    "Mayor"
-                ]
+                "positions": {
+                    "Assistant": 62,
+                    "Advisor": 76,
+                    "Employee": 76,
+                    "Manager": 122,
+                    "Deputy Mayor": 148,
+                    "Mayor": 172
+                }
             },
             {
                 "name": "Law",
-                "positions": [
-                    "Legal Assistant",
-                    "Paralegal",
-                    "Attorney",
-                    "Assistant District Attorney",
-                    "District Attorney",
-                    "Judge"
-                ]
+                "positions": {
+                    "Legal Assistant": 44,
+                    "Paralegal": 60,
+                    "Attorney": 98,
+                    "Assistant District Attorney": 108,
+                    "District Attorney": 126,
+                    "Judge": 172
+                }
             }
         ]
     },
@@ -94,15 +98,15 @@
         "departments": [
             {
                 "name": "Trucker",
-                "positions": [
-                    "Amateur"
-                ]
+                "positions": {
+                    "Amateur": 16
+                }
             },
             {
                 "name": "GoPostal",
-                "positions": [
-                    "Amateur"
-                ]
+                "positions": {
+                    "Amateur": 16
+                }
             }
         ]
     },
@@ -111,15 +115,15 @@
         "departments": [
             {
                 "name": "Downtown Cab Co.",
-                "positions": [
-                    "Amateur"
-                ]
+                "positions": {
+                    "Amateur": 24
+                }
             },
             {
                 "name": "Uber",
-                "positions": [
-                    "Amateur"
-                ]
+                "positions": {
+                    "Amateur": 0
+                }
             }
         ]
     },
@@ -128,19 +132,19 @@
         "departments": [
             {
                 "name": "Weazel News",
-                "positions": [
-                    "Reporter",
-                    "Camera Man",
-                    "Manager"
-                ]
+                "positions": {
+                    "Reporter": 20,
+                    "Camera Man": 30,
+                    "Manager": 40
+                }
             },
             {
                 "name": "Los Santos Meteor",
-                "positions": [
-                    "Reporter",
-                    "Camera Man",
-                    "Manager"
-                ]
+                "positions": {
+                    "Reporter": 20,
+                    "Camera Man": 30,
+                    "Manager": 40
+                }
             }
         ]
     },
@@ -149,13 +153,13 @@
         "departments": [
             {
                 "name": "Premium Deluxe Motorsport",
-                "positions": [
-                    "Apprentice",
-                    "Salesman",
-                    "Senior Salesman",
-                    "Assistant Manager",
-                    "Boss"
-                ]
+                "positions": {
+                    "Apprentice": 32,
+                    "Salesman": 44,
+                    "Senior Salesman": 56,
+                    "Assistant Manager": 82,
+                    "Boss": 112
+                }
             }
         ]
     },
@@ -164,15 +168,15 @@
         "departments": [
             {
                 "name": "Los Santos Customs",
-                "positions": [
-                    "Tow Driver",
-                    "Intern Mechanic",
-                    "Lead Mechanic",
-                    "Adept Mechanic",
-                    "Expert Mechanic",
-                    "Veteran Mechanic",
-                    "Boss"
-                ]
+                "positions": {
+                    "Tow Driver": 20,
+                    "Intern Mechanic": 30,
+                    "Lead Mechanic": 34,
+                    "Adept Mechanic": 38,
+                    "Expert Mechanic": 42,
+                    "Veteran Mechanic": 46,
+                    "Boss": 50
+                }
             }
         ]
     },
@@ -181,10 +185,10 @@
         "departments": [
             {
                 "name": "Dynasty 8",
-                "positions": [
-                    "Salesperson",
-                    "Boss"
-                ]
+                "positions": {
+                    "Salesperson": 0,
+                    "Boss": 0
+                }
             }
         ]
     },
@@ -193,48 +197,48 @@
         "departments": [
             {
                 "name": "Los Santos Aviation",
-                "positions": [
-                    "Pilot",
-                    "Instructor",
-                    "Manager"
-                ]
+                "positions": {
+                    "Pilot": 20,
+                    "Instructor": 30,
+                    "Manager": 40
+                }
             },
             {
                 "name": "Merryweather Security",
-                "positions": [
-                    "Guard"
-                ]
+                "positions": {
+                    "Guard": 0
+                }
             },
             {
                 "name": "Vanilla Unicorn",
-                "positions": [
-                    "Bartender",
-                    "Dancer",
-                    "Manager"
-                ]
+                "positions": {
+                    "Bartender": 20,
+                    "Dancer": 30,
+                    "Manager": 40
+                }
             },
             {
                 "name": "Tequi-la-la",
-                "positions": [
-                    "Bartender",
-                    "Singer",
-                    "Manager"
-                ]
+                "positions": {
+                    "Bartender": 20,
+                    "Singer": 30,
+                    "Manager": 40
+                }
             },
             {
                 "name": "Bahama Mamas",
-                "positions": [
-                    "Bartender",
-                    "DJ",
-                    "Manager"
-                ]
+                "positions": {
+                    "Bartender": 20,
+                    "DJ": 30,
+                    "Manager": 40
+                }
             },
             {
                 "name": "Yellow Jack Inn",
-                "positions": [
-                    "Bartender",
-                    "Manager"
-                ]
+                "positions": {
+                    "Bartender": 25,
+                    "Manager": 40
+                }
             }
         ]
     },
@@ -243,44 +247,44 @@
         "departments": [
             {
                 "name": "Hippies",
-                "positions": [
-                    "Weed Smoker"
-                ]
+                "positions": {
+                    "Weed Smoker": 0
+                }
             },
             {
                 "name": "Madrazo Cartel",
-                "positions": [
-                    "Halc\u00f3n",
-                    "Sicario",
-                    "Teniente",
-                    "Capit\u00e1n",
-                    "Capo"
-                ]
+                "positions": {
+                    "Halcón": 20,
+                    "Sicario": 25,
+                    "Teniente": 30,
+                    "Capitán": 35,
+                    "Capo": 40
+                }
             },
             {
-                "name": "\\\"Neil Brothers",
-                "positions": [
-                    "Weed Smoker"
-                ]
+                "name": "\"Neil Brothers",
+                "positions": {
+                    "Weed Smoker": 0
+                }
             },
             {
                 "name": "Rednecks",
-                "positions": [
-                    "Weed Smoker"
-                ]
+                "positions": {
+                    "Weed Smoker": 0
+                }
             },
             {
                 "name": "The Lost MC",
-                "positions": [
-                    "Biker",
-                    "Leader"
-                ]
+                "positions": {
+                    "Biker": 0,
+                    "Leader": 0
+                }
             },
             {
                 "name": "Peaky Blinders",
-                "positions": [
-                    "Family"
-                ]
+                "positions": {
+                    "Family": 25
+                }
             }
         ]
     },
@@ -289,12 +293,12 @@
         "departments": [
             {
                 "name": "Bar Jobs",
-                "positions": [
-                    "Bartender",
-                    "Bar Security",
-                    "Bar Manager",
-                    "Bar Owner"
-                ]
+                "positions": {
+                    "Bartender": 35,
+                    "Bar Security": 45,
+                    "Bar Manager": 54,
+                    "Bar Owner": 70
+                }
             }
         ]
     },
@@ -303,12 +307,12 @@
         "departments": [
             {
                 "name": "Casino Jobs",
-                "positions": [
-                    "Casino Dealer",
-                    "Casino Security",
-                    "Casino Manager",
-                    "Casino Owner"
-                ]
+                "positions": {
+                    "Casino Dealer": 40,
+                    "Casino Security": 45,
+                    "Casino Manager": 54,
+                    "Casino Owner": 70
+                }
             }
         ]
     },
@@ -317,11 +321,11 @@
         "departments": [
             {
                 "name": "Burger Shot",
-                "positions": [
-                    "Employee",
-                    "Manager",
-                    "Boss"
-                ]
+                "positions": {
+                    "Employee": 32,
+                    "Manager": 48,
+                    "Boss": 64
+                }
             }
         ]
     },
@@ -330,11 +334,11 @@
         "departments": [
             {
                 "name": "Vintner",
-                "positions": [
-                    "Employee",
-                    "Manager",
-                    "Boss"
-                ]
+                "positions": {
+                    "Employee": 20,
+                    "Manager": 30,
+                    "Boss": 40
+                }
             }
         ]
     },
@@ -343,12 +347,12 @@
         "departments": [
             {
                 "name": "Restaurant",
-                "positions": [
-                    "Waiter",
-                    "Bartender",
-                    "Manager",
-                    "Owner"
-                ]
+                "positions": {
+                    "Waiter": 20,
+                    "Bartender": 25,
+                    "Manager": 35,
+                    "Owner": 50
+                }
             }
         ]
     },
@@ -357,12 +361,12 @@
         "departments": [
             {
                 "name": "Club",
-                "positions": [
-                    "Waiter",
-                    "Bartender",
-                    "Manager",
-                    "Owner"
-                ]
+                "positions": {
+                    "Waiter": 20,
+                    "Bartender": 25,
+                    "Manager": 35,
+                    "Owner": 50
+                }
             }
         ]
     },
@@ -371,13 +375,57 @@
         "departments": [
             {
                 "name": "Bar",
-                "positions": [
-                    "Waiter",
-                    "Bartender",
-                    "Croupier",
-                    "Manager",
-                    "Owner"
-                ]
+                "positions": {
+                    "Waiter": 20,
+                    "Bartender": 25,
+                    "Croupier": 30,
+                    "Manager": 40,
+                    "Owner": 50
+                }
+            }
+        ]
+    },
+    {
+        "name": "The Cartel",
+        "departments": [
+            {
+                "name": "Cartel",
+                "positions": {
+                    "Member": 20,
+                    "Family": 30,
+                    "Underboss": 40,
+                    "Boss": 50
+                }
+            }
+        ]
+    },
+    {
+        "name": "Rockford Records Studio",
+        "departments": [
+            {
+                "name": "Record Label",
+                "positions": {
+                    "Artist": 20,
+                    "Security": 25,
+                    "Bartender": 30,
+                    "Event Manager": 35,
+                    "Producer": 40,
+                    "Manager": 45,
+                    "Owner": 50
+                }
+            }
+        ]
+    },
+    {
+        "name": "Green Wonderland",
+        "departments": [
+            {
+                "name": "Shop",
+                "positions": {
+                    "Salesman": 25,
+                    "Manager": 35,
+                    "Owner": 50
+                }
             }
         ]
     }

@@ -265,8 +265,7 @@ class SuspiciousChecker
     public static function findSuspiciousCharacters(): array
     {
         return Character::query()
-            ->where(DB::raw('`cash`+`bank`'), '>=', 1000000)
-            ->orWhere('stocks_balance', '>=', 500000)
+            ->where(DB::raw('`cash`+`bank`+`stocks_balance`'), '>=', 700000)
             ->select(['steam_identifier', 'character_id', 'cash', 'bank', 'stocks_balance', 'first_name', 'last_name'])
             ->get()->toArray();
     }
