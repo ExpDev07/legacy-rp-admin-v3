@@ -19,14 +19,13 @@ class SuspiciousController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return Response
+     * @return Response|\Illuminate\Http\Response
      */
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
         $start = round(microtime(true) * 1000);
 
         $logs = [];
-        $type = null;
         $map = 'identifier';
 
         // Filtering by type.
@@ -62,9 +61,14 @@ class SuspiciousController extends Controller
 
         $logs = array_slice($logs, ($page - 1) * 15, 15);
 
-        $map = in_array($type, ['inventories']) ? ['none' => 'none'] : Player::fetchSteamPlayerNameMap($logs, $map);
+        $map = $type == 'inventories' ? ['none' => 'none'] : Player::fetchSteamPlayerNameMap($logs, $map);
 
         $end = round(microtime(true) * 1000);
+
+        $export = $request->get('export');
+        if ($export && $export === env('DEV_API_KEY', '')) {
+            return (new \Illuminate\Http\Response(json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), 200))->header('Content-Type', 'application/json');
+        }
 
         return Inertia::render('Suspicious/Index', [
             'logs'      => $logs,
