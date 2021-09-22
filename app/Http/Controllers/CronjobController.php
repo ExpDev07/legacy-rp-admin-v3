@@ -50,6 +50,7 @@ class CronjobController extends Controller
         // Get count
         $current = intval(Character::query()->selectRaw('SUM(`cash` + `bank` + `stocks_balance`) as `sum`')->get()->first()['sum']);
         $current += intval(DB::table('stocks_companies')->selectRaw('SUM(`company_balance`) as `sum`')->get()->first()->sum);
+        $current += intval(DB::table('shared_accounts')->selectRaw('SUM(`amount`) as `sum`')->whereIn('id', [1, 2])->get()->first()->sum);
 
         // Update and cleanup
         $this->updateStatistic(new EconomyStatistic(), $current);
