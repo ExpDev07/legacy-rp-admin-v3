@@ -10,6 +10,7 @@ use App\Statistics\EconomyStatistic;
 use App\Statistics\Statistic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class CronjobController extends Controller
 {
@@ -48,6 +49,7 @@ class CronjobController extends Controller
 
         // Get count
         $current = intval(Character::query()->selectRaw('SUM(`cash` + `bank` + `stocks_balance`) as sum')->get()->first()['sum']);
+        $current .= intval(DB::table('stocks_companies')->selectRaw('SUM(`company_balance`) as as sum')->get()->first()['sum']);
 
         // Update and cleanup
         $this->updateStatistic(new EconomyStatistic(), $current);
