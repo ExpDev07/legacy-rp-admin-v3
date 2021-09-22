@@ -15,7 +15,7 @@ class updateWebpanelEconomyStatisticsTable extends Migration
     public function up()
     {
         // Delete everything before Wed Sep 22 2021 20:10:00 GMT+0000 cause scuff
-        DB::table('webpanel_economy_statistics')->where('last_updated', '<', 1632336600)->delete();
+        DB::table('webpanel_economy_statistics')->where('last_updated', '<', 1632343800)->delete();
     }
 
     /**
