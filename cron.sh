@@ -4,7 +4,8 @@
 # $2 is the dev-token
 runCronJobs() {
     echo -n "Running jobs for $1..."
-    echo $(curl -s https://$1.legacy-roleplay.com/cron/bans?token=$2)
+    echo -n $(curl -s https://$1.legacy-roleplay.com/cron/bans?token=$2)"..."
+    echo $(curl -s https://$1.legacy-roleplay.com/cron/economy?token=$2)
 }
 
 # For each of your instances copy this
