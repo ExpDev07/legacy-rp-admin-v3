@@ -3,8 +3,9 @@
 namespace App\Helpers;
 
 use App\Ban;
-use App\BanStatistic;
 use App\Character;
+use App\Statistics\BanStatistic;
+use App\Statistics\EconomyStatistic;
 use App\Warning;
 use DateTime;
 use DateTimeZone;
@@ -58,26 +59,30 @@ class StatisticsHelper
             'day', 'opening', 'closing', 'high', 'low',
         ])->get()->toArray();
 
-        $data = [
-            'labels' => [],
-            'data'   => [],
-        ];
-        foreach ($stats as $row) {
-            $data['labels'][] = $row['day'];
-            $d = DateTime::createFromFormat(
-                'Y-m-d',
-                $row['day'],
-                new DateTimeZone('UTC')
-            );
+        $data = self::formatFinanceStatistics($stats);
 
-            $data['data'][] = [
-                'x' => $d->getTimestamp() * 1000,
-                'o' => $row['opening'],
-                'h' => $row['high'],
-                'l' => $row['low'],
-                'c' => $row['closing'],
-            ];
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
+
+        return $data;
+    }
+
+    /**
+     * Returns Economy statistics
+     *
+     * @return array
+     */
+    public static function getEconomyStats(): array
+    {
+        $key = 'economy_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
         }
+
+        $stats = EconomyStatistic::query()->select([
+            'day', 'opening', 'closing', 'high', 'low',
+        ])->get()->toArray();
+
+        $data = self::formatFinanceStatistics($stats);
 
         CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
@@ -221,6 +226,32 @@ class StatisticsHelper
         foreach ($complete as $label => $value) {
             $data['labels'][] = $label;
             $data['data'][] = $value;
+        }
+
+        return $data;
+    }
+
+    private static function formatFinanceStatistics(array $stats): array
+    {
+        $data = [
+            'labels' => [],
+            'data'   => [],
+        ];
+        foreach ($stats as $row) {
+            $data['labels'][] = $row['day'];
+            $d = DateTime::createFromFormat(
+                'Y-m-d',
+                $row['day'],
+                new DateTimeZone('UTC')
+            );
+
+            $data['data'][] = [
+                'x' => $d->getTimestamp() * 1000,
+                'o' => $row['opening'],
+                'h' => $row['high'],
+                'l' => $row['low'],
+                'c' => $row['closing'],
+            ];
         }
 
         return $data;
