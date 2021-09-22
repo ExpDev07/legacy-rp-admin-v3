@@ -51,6 +51,7 @@
         "rainbowvis.js": "^1.0.1",
         "vue-chartjs-financial": "^1.0.1",
         "vue-linkify": "^1.0.1",
+        "vue-search-select": "^2.9.4",
         "vue-speedometer": "^1.8.0",
         "vue-toastification": "^1.7.11",
         "vue2-circle-progress": "^1.2.3"

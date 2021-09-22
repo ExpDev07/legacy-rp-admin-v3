@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Character;
+use App\Helpers\CacheHelper;
 use App\Helpers\OPFWHelper;
 use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\CharacterResource;
@@ -25,6 +26,10 @@ class PlayerCharacterController extends Controller
 {
     const ValidTattooZones = [
         'all', 'head', 'left_arm', 'right_arm', 'torso', 'left_leg', 'right_leg',
+    ];
+
+    const Licenses = [
+        "heli", "fw", "cfi", "hw", "perf", "management", "military"
     ];
 
     /**
@@ -126,11 +131,12 @@ class PlayerCharacterController extends Controller
     /**
      * Display the specified resource for editing.
      *
+     * @param Request $request
      * @param Player $player
      * @param Character $character
      * @return Response
      */
-    public function edit(Player $player, Character $character): Response
+    public function edit(Request $request, Player $player, Character $character): Response
     {
         $resetCoords = json_decode(file_get_contents(__DIR__ . '/../../../helpers/coords_reset.json'), true);
         $motels = Motel::query()->where('cid', $character->character_id)->get()->sortBy(['motel', 'room_id']);
@@ -139,6 +145,7 @@ class PlayerCharacterController extends Controller
             'player'      => new PlayerResource($player),
             'character'   => new CharacterResource($character),
             'motels'      => $motels->toArray(),
+            'vehicleMap'  => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
             'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
         ]);
     }
@@ -355,6 +362,121 @@ class PlayerCharacterController extends Controller
     }
 
     /**
+     * Adds the specified vehicle.
+     *
+     * @param Request $request
+     * @param Player $player
+     * @param Character $character
+     * @return RedirectResponse
+     */
+    public function addVehicle(Request $request, Player $player, Character $character): RedirectResponse
+    {
+        $model = $request->post('model');
+
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can add vehicles.');
+        }
+
+        $genPlate = function () {
+            $a_z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            // For example: 28ULD493.
+            return Str::upper(
+                rand(0, 9) .
+                rand(0, 9) .
+                $a_z[rand(0, 25)] .
+                $a_z[rand(0, 25)] .
+                $a_z[rand(0, 25)] .
+                rand(0, 9) .
+                rand(0, 9) .
+                rand(0, 9)
+            );
+        };
+
+        $map = CacheHelper::getVehicleMap();
+        if (!isset($map[$model])) {
+            return back()->with('error', 'Unknown model name "' . $model . '".');
+        }
+
+        $plate = $genPlate();
+        $tries = 0;
+        while ($tries < 100) {
+            $tries++;
+
+            $exists = Vehicle::query()->where('plate', '=', $plate)->count(['vehicle_id']) > 0;
+            if (!$exists) {
+                break;
+            }
+
+            $plate = $genPlate();
+        }
+
+        DB::table('character_vehicles')->insert([
+            [
+                'owner_cid'                => $character->character_id,
+                'model_name'               => $model,
+                'plate'                    => $plate,
+                'mileage'                  => 0,
+                'modifications'            => null,
+                'data'                     => null,
+                'garage_identifier'        => '*',
+                'garage_state'             => 1,
+                'garage_impound'           => 0,
+                'deprecated_damage'        => null,
+                'deprecated_modifications' => null,
+                'deprecated_fuel'          => 100,
+                'deprecated_supporter'     => 0,
+                'vehicle_deleted'          => 0,
+            ],
+        ]);
+
+        return back()->with('success', 'Vehicle was successfully added (Model: ' . $model . ', Plate: ' . $plate . ').');
+    }
+
+    /**
+     * Adds the specified license.
+     *
+     * @param Request $request
+     * @param Player $player
+     * @param Character $character
+     * @return RedirectResponse
+     */
+    public function addLicense(Request $request, Player $player, Character $character): RedirectResponse
+    {
+        $license = $request->post('license');
+
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can add licenses.');
+        }
+
+        if (!in_array($license, self::Licenses) && $license !== 'remove') {
+            return back()->with('error', 'Invalid license "' . $license . '".');
+        }
+
+        $json = json_decode($character->character_data, true) ?? [];
+        if (!isset($json['licenses']) || $license === 'remove') {
+            $json['licenses'] = [];
+        }
+
+        if ($license !== 'remove') {
+            $json['licenses'][] = $license;
+            $json['licenses'] = array_values(array_unique($json['licenses']));
+        }
+
+        $character->update([
+            'character_data' => json_encode($json)
+        ]);
+
+        if ($license === 'remove') {
+            return back()->with('success', 'All Licenses were successfully removed.');
+        }
+
+        return back()->with('success', 'License was successfully added (License: ' . $license . ').');
+    }
+
+    /**
      * Edits the specified vehicle.
      *
      * @param Request $request
@@ -393,17 +515,17 @@ class PlayerCharacterController extends Controller
         $ids = $request->post('ids', []);
         if (empty($ids) || !is_array($ids)) {
             return (new \Illuminate\Http\Response([
-                'status'  => false
+                'status' => false,
             ], 200))->header('Content-Type', 'application/json');
         }
 
         $characters = Character::query()->whereIn('character_id', $ids)->select([
-            'character_id', 'gender'
+            'character_id', 'gender',
         ])->get()->toArray();
 
         return (new \Illuminate\Http\Response([
-            'status'  => true,
-            'data' => $characters,
+            'status' => true,
+            'data'   => $characters,
         ], 200))->header('Content-Type', 'application/json');
     }
 

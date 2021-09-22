@@ -14,7 +14,8 @@ import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 const momentDuration = require("moment-duration-format");
 import Toast from "vue-toastification";
-import "vue-toastification/dist/index.css";
+import 'vue-toastification/dist/index.css';
+import 'vue-search-select/dist/VueSearchSelect.css';
 
 // Directives.
 Vue.directive('linkified', linkify);

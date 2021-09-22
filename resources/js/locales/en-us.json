@@ -522,7 +522,23 @@
             "vehicle": {
                 "edit": "Edit Vehicle",
                 "owner": "Owner CID",
-                "confirm": "Edit Vehicle"
+                "confirm": "Edit Vehicle",
+                "add": "Add Vehicle",
+                "model": "Model Name"
+            },
+            "license": {
+                "license": "License",
+                "licenses": "Licenses",
+                "add": "Add License",
+                "remove": "Remove all",
+                "heli": "Helicopter",
+                "fw": "Fixed Wing",
+                "cfi": "CFI",
+                "hw": "Heavyweight",
+                "perf": "Performance",
+                "management": "Management",
+                "military": "Military",
+                "confirm": "Are you sure you want to remove all licenses?"
             }
         },
         "edit": {
