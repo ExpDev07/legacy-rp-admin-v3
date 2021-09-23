@@ -115,8 +115,12 @@ class LogController extends Controller
         ]);
     }
 
-    private function multiValues(string $val): array
+    private function multiValues(?string $val): ?array
     {
+        if (!$val) {
+            return null;
+        }
+
         return array_values(array_map(function ($v) {
             return trim($v);
         }, explode(',', $val)));
