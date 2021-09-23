@@ -60,7 +60,7 @@ class PlayerBanController extends Controller
             ? 'I banned this person with the reason: `' . $request->input('reason') . '`'
             : 'I banned this person without a reason';
 
-        $reason .= ($ban['expire'] ? ' for ' . $this->formatSeconds(intval($ban['expire'])) : 'indefinitely') . '.';
+        $reason .= ($ban['expire'] ? ' for ' . $this->formatSeconds(intval($ban['expire'])) : ' indefinitely') . '.';
 
         // Automatically log the ban as a warning.
         $player->warnings()->create([
