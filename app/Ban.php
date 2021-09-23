@@ -161,16 +161,16 @@ class Ban extends Model
             return $ban ? $ban->toArray() : null;
         }
 
-        return isset(self::$bans[$steamIdentifier]) ? self::$bans[$steamIdentifier] : null;
+        return self::$bans[$steamIdentifier] ?? null;
     }
 
-    public static function getAllBans(bool $returnOnlyIdentifiers, array $filterByIdentifiers = []): array
+    public static function getAllBans(bool $returnOnlyIdentifiers, ?array $filterByIdentifiers = null): array
     {
         if (empty(self::$bans)) {
             $query = Ban::query()
                 ->select(['id', 'ban_hash', 'identifier', 'creator_name', 'reason', 'timestamp', 'expire', 'creator_identifier']);
 
-            if (empty($filterByIdentifiers)) {
+            if ($filterByIdentifiers === null) {
                 $query->where('identifier', 'LIKE', 'steam:%');
             } else {
                 $query->whereIn('identifier', $filterByIdentifiers);
@@ -186,7 +186,7 @@ class Ban extends Model
         }
 
         $bans = self::$bans;
-        if (!empty($filterByIdentifiers)) {
+        if ($filterByIdentifiers !== null) {
             $bans = array_filter($bans, function ($ban) use ($filterByIdentifiers) {
                 return in_array($ban['identifier'], $filterByIdentifiers);
             });
