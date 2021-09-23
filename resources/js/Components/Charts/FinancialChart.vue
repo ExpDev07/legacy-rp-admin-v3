@@ -22,6 +22,12 @@ export default {
                 d.l
             ]);
         }));
+        const formatter = this.formatAsMoney ? new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        }) : new Intl.NumberFormat();
 
         return {
             options: {
@@ -69,10 +75,10 @@ export default {
                         label: function (tooltipItem, data) {
                             const value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                             return [
-                                'Opening: ' + value.o,
-                                'Highest: ' + value.h,
-                                'Lowest:  ' + value.l,
-                                'Closing: ' + value.c,
+                                'Opening: ' + formatter.format(value.o),
+                                'Highest: ' + formatter.format(value.h),
+                                'Lowest:  ' + formatter.format(value.l),
+                                'Closing: ' + formatter.format(value.c),
                             ];
                         }
                     }
@@ -110,6 +116,10 @@ export default {
         data: {
             type: Array,
             required: true,
+        },
+        formatAsMoney: {
+            type: Boolean,
+            default: false,
         }
     }
 }

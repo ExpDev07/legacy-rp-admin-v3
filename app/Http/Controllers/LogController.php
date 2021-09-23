@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\LogResource;
 use App\Log;
 use App\Player;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -28,8 +29,15 @@ class LogController extends Controller
         $query = Log::query()->orderByDesc('timestamp');
 
         // Filtering by identifier.
-        if ($identifier = $request->input('identifier')) {
-            $query->where('identifier', $identifier);
+        if ($identifier = $this->multiValues($request->input('identifier'))) {
+            /**
+             * @var $q Builder
+             */
+            $query->where(function ($q) use ($identifier) {
+                foreach ($identifier as $i) {
+                    $q->where('identifier', $i);
+                }
+            });
         }
 
         // Filtering by before.
@@ -43,21 +51,32 @@ class LogController extends Controller
         }
 
         // Filtering by server.
-        if ($server = $request->input('server')) {
-            // This aint workin
-            // $query->where('metadata->serverId', $server);
-
-            $query->where('details', 'LIKE', '% [' . intval($server) . '] %');
+        if ($server = $this->multiValues($request->input('server'))) {
+            /**
+             * @var $q Builder
+             */
+            $query->where(function ($q) use ($server) {
+                foreach ($server as $s) {
+                    $q->orWhere('details', 'LIKE', '% [' . intval($s) . '] %');
+                }
+            });
         }
 
         // Filtering by action.
-        if ($action = $request->input('action')) {
-            if (Str::startsWith($action, '=')) {
-                $action = Str::substr($action, 1);
-                $query->where('action', $action);
-            } else {
-                $query->where('action', 'like', "%{$action}%");
-            }
+        if ($action = $this->multiValues($request->input('action'))) {
+            /**
+             * @var $q Builder
+             */
+            $query->where(function ($q) use ($action) {
+                foreach ($action as $a) {
+                    if (Str::startsWith($a, '=')) {
+                        $a = Str::substr($a, 1);
+                        $q->where('action', $a);
+                    } else {
+                        $q->where('action', 'like', "%{$a}%");
+                    }
+                }
+            });
         }
 
         // Filtering by details.
@@ -94,6 +113,13 @@ class LogController extends Controller
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
             'page'      => $page,
         ]);
+    }
+
+    private function multiValues(string $val): array
+    {
+        return array_values(array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $val)));
     }
 
 }
