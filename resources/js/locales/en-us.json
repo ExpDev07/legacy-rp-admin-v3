@@ -37,6 +37,7 @@
         "search": {
             "like": "Returns all rows where this field contains your query.",
             "exact": "Returns all rows where this field exactly matches your query.",
+            "comma": "You can search for multiple values by separating them with a comma.",
             "like_prepend": "If you put \"=\" in front of your query, it will search for an exact match which is faster in some occasions.",
             "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field."
         },
