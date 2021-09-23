@@ -51,7 +51,7 @@
                                 {{ t('logs.server_id') }} <sup class="text-muted dark:text-dark-muted">*, C</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
-                                   id="server" placeholder="3" type="number" v-model="filters.server">
+                                   id="server" placeholder="3" v-model="filters.server">
                         </div>
                         <!-- Details -->
                         <div class="w-1/3 px-3">
@@ -265,7 +265,7 @@ export default {
         filters: {
             identifier: String,
             action: String,
-            server: Number,
+            server: String,
             details: String,
             before: Number,
             after: Number,
