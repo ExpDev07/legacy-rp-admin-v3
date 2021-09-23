@@ -35,7 +35,7 @@ class LogController extends Controller
              */
             $query->where(function ($q) use ($identifier) {
                 foreach ($identifier as $i) {
-                    $q->where('identifier', $i);
+                    $q->orWhere('identifier', $i);
                 }
             });
         }
@@ -71,9 +71,9 @@ class LogController extends Controller
                 foreach ($action as $a) {
                     if (Str::startsWith($a, '=')) {
                         $a = Str::substr($a, 1);
-                        $q->where('action', $a);
+                        $q->orWhere('action', $a);
                     } else {
-                        $q->where('action', 'like', "%{$a}%");
+                        $q->orWhere('action', 'like', "%{$a}%");
                     }
                 }
             });
