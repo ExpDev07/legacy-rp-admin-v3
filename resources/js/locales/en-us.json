@@ -20,8 +20,10 @@
         "view_map": "View on Live-Map",
         "yes": "Yes",
         "no": "No",
+        "result": "Result",
         "enabled": "Enabled",
         "disabled": "Disabled",
+        "filter": "Filter",
         "do_search": "Search",
         "status": {
             "online": "Online",
@@ -78,6 +80,17 @@
         "staff_locations": "Staff locations",
         "staff_description": "Locations for staff to chill at without being seen by other players.",
         "no_player_count": "Player count is not available at this time"
+    },
+    "blacklist": {
+        "title": "Blacklist",
+        "description": "Blacklisted Identifiers. These will automatically be banned if they attempt to connect.",
+        "creator": "Creator",
+        "identifier": "Identifier",
+        "reason": "Reason",
+        "timestamp": "Created at",
+        "none": "No identifiers found.",
+        "add": "Add Identifier",
+        "confirm_remove": "Are you sure you want to remove this identifier?"
     },
     "statistics": {
         "title": "Statistics",

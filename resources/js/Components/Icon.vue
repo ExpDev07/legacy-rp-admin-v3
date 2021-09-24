@@ -56,6 +56,7 @@
     <i class="fas fa-chart-line" v-else-if="name === 'statistics'"></i>
     <i class="fas fa-pallet" v-else-if="name === 'pallet'"></i>
     <i class="fas fa-fingerprint" v-else-if="name === 'fingerprint'"></i>
+    <i class="fas fa-shield-alt" v-else-if="name === 'shield'"></i>
 </template>
 
 <script>

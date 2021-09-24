@@ -3,7 +3,7 @@
         <!-- General stuff -->
         <nav>
             <ul v-if="!isMobile()">
-                <li v-for="link in links" :key="link.label" v-if="!('private' in link && link.private) || $page.auth.player.isSuperAdmin">
+                <li v-for="link in links" :key="link.label" v-if="!link.private || $page.auth.player.isSuperAdmin">
                     <inertia-link
                         class="flex items-center px-5 py-2 mb-3 rounded hover:bg-gray-900 hover:text-white"
                         :class="isUrl(link.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
@@ -16,16 +16,16 @@
                     <a
                         href="#"
                         class="flex flex-wrap items-center px-5 py-2 mb-3 -mt-1 rounded hover:bg-indigo-700 hover:text-white overflow-hidden"
-                        :class="len(link.sub.length)"
+                        :class="len(link.sub, $page.auth.player.isSuperAdmin)"
+                        v-if="link.sub"
                         @click="$event.preventDefault()"
-                        v-else-if="$page.auth.player.isSuperAdmin"
                     >
                         <span class="block w-full mb-2">
                             <icon class="w-4 h-4 mr-3 fill-current" :name="link.icon"></icon>
                             {{ link.label }}
                         </span>
                         <ul class="w-full">
-                            <li v-for="sub in link.sub" :key="sub.label">
+                            <li v-for="sub in link.sub" :key="sub.label" v-if="!sub.private || $page.auth.player.isSuperAdmin">
                                 <inertia-link
                                     class="flex items-center px-5 py-2 mt-1 rounded hover:bg-gray-900 hover:text-white"
                                     :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
@@ -37,17 +37,6 @@
                             </li>
                         </ul>
                     </a>
-                    <inertia-link
-                        class="flex items-center px-5 py-2 mb-3 rounded hover:bg-gray-900 hover:text-white"
-                        :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
-                        :href="sub.url"
-                        v-if="'sub' in link && !$page.auth.player.isSuperAdmin"
-                        v-for="sub in link.sub"
-                        :key="sub.label"
-                    >
-                        <icon class="w-4 h-4 mr-3 fill-current" :name="sub.icon"></icon>
-                        {{ sub.label }}
-                    </inertia-link>
                 </li>
             </ul>
             <ul v-else class="mobile:flex mobile:flex-wrap mobile:justify-between">
@@ -56,7 +45,7 @@
                         class="flex items-center px-5 py-2 mb-3 rounded hover:bg-gray-900 hover:text-white text-sm"
                         :class="isUrl(link.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
                         :href="link.url"
-                        v-if="!('sub' in link) && (!('private' in link && link.private) || $page.auth.player.isSuperAdmin)"
+                        v-if="!('sub' in link) && (!link.private || $page.auth.player.isSuperAdmin)"
                     >
                         {{ link.label }}
                     </inertia-link>
@@ -66,7 +55,7 @@
                         :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
                         :href="sub.url"
                         :key="sub.label"
-                        v-if="'sub' in link && (!('private' in link && link.private) || $page.auth.player.isSuperAdmin)"
+                        v-if="'sub' in link && (!link.private || $page.auth.player.isSuperAdmin)"
                     >
                         {{ sub.label }}
                     </inertia-link>
@@ -115,6 +104,12 @@ export default {
                             label: this.t('characters.title'),
                             icon: 'book',
                             url: '/characters',
+                        },
+                        {
+                            label: this.t('blacklist.title'),
+                            icon: 'shield',
+                            private: true,
+                            url: '/blocked',
                         }
                     ]
                 },
@@ -201,7 +196,9 @@ export default {
             if (this.url.substring(1) === '' || url.substring(1) === '') return false;
             return this.url.startsWith(url);
         },
-        len(length) {
+        len(sub, isSuperAdmin) {
+            const length = sub.filter(l => !l.private || isSuperAdmin).length;
+
             switch(length) {
                 case 2:
                     return 'h-side-close hover:h-side-open-two';
