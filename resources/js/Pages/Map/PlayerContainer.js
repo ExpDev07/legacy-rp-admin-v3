@@ -78,10 +78,15 @@ class PlayerContainer {
                 };
             }
 
+            const info = {
+                steam: this.players[id].player.steam,
+                name: this.players[id].character.name
+            };
+
             if (this.players[id].character.isDriving) {
-                this.vehicles[vehicle].driver = this.players[id].character.name;
+                this.vehicles[vehicle].driver = info;
             } else {
-                this.vehicles[vehicle].passengers.push(this.players[id].character.name);
+                this.vehicles[vehicle].passengers.push(info);
             }
         }
 
