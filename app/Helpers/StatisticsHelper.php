@@ -36,7 +36,7 @@ class StatisticsHelper
             'date',
         ])->groupBy('date')->get()->toArray();
 
-        $data = self::parseHistoricData($stats);
+        $data = self::parseHistoricData($stats, true);
 
         CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
@@ -110,7 +110,35 @@ class StatisticsHelper
             'date',
         ])->groupBy('date')->get()->toArray();
 
-        $data = self::parseHistoricData($stats);
+        $data = self::parseHistoricData($stats, true);
+
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+
+        return $data;
+    }
+
+    /**
+     * Returns Notes statistics
+     *
+     * @return array
+     */
+    public static function getNoteStats(): array
+    {
+        $key = 'note_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
+        }
+
+        $stats = Warning::query()->fromSub(function ($query) {
+            $query->from('warnings')->select([
+                DB::raw('FROM_UNIXTIME(UNIX_TIMESTAMP(`created_at`), \'%Y-%m-%d\') AS `date`'),
+            ])->where('warning_type', '=', Warning::TypeNote)->orderByDesc('created_at');
+        }, 'warnings')->select([
+            DB::raw('COUNT(`date`) as `count`'),
+            'date',
+        ])->groupBy('date')->get()->toArray();
+
+        $data = self::parseHistoricData($stats, true);
 
         CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
@@ -201,21 +229,53 @@ class StatisticsHelper
         return $data;
     }
 
-    private static function parseHistoricData(array $stats): array
+    private static function parseHistoricData(array $stats, bool $doAverage = false): array
     {
         $map = [];
+        $earliest = time();
         foreach ($stats as $row) {
             $row = (array)$row;
             $map[$row['date']] = $row['count'];
+
+            $time = strtotime($row['date']);
+            if ($time < $earliest) {
+                $earliest = $time;
+            }
         }
 
+        $days = ceil((time() - $earliest) / 86400);
+
         $complete = [];
-        for ($x = 30; $x >= 0; $x--) {
-            $t = date('Y-m-d', strtotime('-' . $x . ' day'));
-            if (!isset($map[$t])) {
-                $complete[$t] = 0;
-            } else {
-                $complete[$t] = $map[$t];
+        if ($doAverage) {
+            for ($x = $days; $x >= 0; $x--) {
+                $day = date('Y-m-d', strtotime('-' . $x . ' day'));
+                $t = date('M Y', strtotime('-' . $x . ' day'));
+
+                if (!isset($complete[$t])) {
+                    $complete[$t] = [
+                        'value' => 0,
+                        'count' => 0,
+                    ];
+                }
+
+                if (isset($map[$day])) {
+                    $complete[$t]['value'] += $map[$day];
+                }
+
+                $complete[$t]['count']++;
+            }
+
+            foreach($complete as &$item) {
+                $item = round($item['value'] / $item['count']);
+            }
+        } else {
+            for ($x = 30; $x >= 0; $x--) {
+                $t = date('Y-m-d', strtotime('-' . $x . ' day'));
+                if (!isset($map[$t])) {
+                    $complete[$t] = 0;
+                } else {
+                    $complete[$t] = $map[$t];
+                }
             }
         }
 

@@ -49,6 +49,10 @@ export default {
     mounted() {
         let datasets = [];
         for (let x = 0; x < this.data.length; x++) {
+            while (this.data[x].length < this.data[0].length) {
+                this.data[x].unshift(null);
+            }
+
             datasets.push({
                 label: this.labels[x],
                 data: this.data[x],

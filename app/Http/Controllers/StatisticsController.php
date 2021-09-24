@@ -30,6 +30,7 @@ class StatisticsController extends Controller
             'banMove'    => StatisticsHelper::getBanMoveStats(),
             'economy'    => StatisticsHelper::getEconomyStats(),
             'warnings'   => StatisticsHelper::getWarningStats(),
+            'notes'      => StatisticsHelper::getNoteStats(),
             'creations'  => StatisticsHelper::getCharacterCreationStats(),
             'deletions'  => StatisticsHelper::getCharacterDeletionStats(),
             'luckyWheel' => StatisticsHelper::getLuckyWheelStats(),
