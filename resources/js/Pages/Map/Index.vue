@@ -9,8 +9,9 @@
                     <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
                 </select>
             </h1>
-            <p v-html="data">
-                {{ data }}
+            <p>
+                <span v-html="data" class="block">{{ data }}</span>
+                <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">{{ lastConnectionError }}</span>
             </p>
         </portal>
 
@@ -594,6 +595,7 @@ export default {
                 }
             },
             lastConnectionError: null,
+            lastSocketMessage: null,
             socketStart: 0,
             characters: {},
             highlightedPeople: {},
@@ -874,30 +876,42 @@ export default {
             try {
                 const token = await this.getOTToken();
 
+                this.lastSocketMessage = null;
+                this.lastConnectionError = null;
                 this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server) + "&cluster=" + this.cluster);
-                _this.socketStart = Date.now();
+                this.socketStart = Date.now();
 
                 this.connection.onmessage = async function (event) {
+                    _this.lastSocketMessage = event.data;
+
                     try {
                         const unzipped = await DataCompressor.GUnZIP(event.data),
                             data = JSON.parse(unzipped);
 
                         _this.firstRefresh = false;
 
-                        if ('status' in data && 'message' in data) {
-                            _this.lastConnectionError = data.status + ' - ' + data.message;
-                            console.info('WebSocket:', _this.lastError);
-                        } else {
-                            _this.lastConnectionError = null;
-                            await _this.renderMapData(data);
-                        }
+                        await _this.renderMapData(data);
                     } catch (e) {
                         console.error('Failed to parse socket message ', e)
                     }
                 }
 
-                this.connection.onclose = function () {
+                this.connection.onclose = async function () {
                     let connectionTime = _this.$moment.duration(Date.now() - _this.socketStart, 'milliseconds').format('h[h] m[m] s[s]');
+
+                    if (_this.lastSocketMessage) {
+                        try {
+                            const unzipped = await DataCompressor.GUnZIP(_this.lastSocketMessage),
+                                data = JSON.parse(unzipped);
+
+                            if ('status' in data && 'message' in data) {
+                                _this.lastConnectionError = data.status + ' - ' + data.message;
+                                console.info('WebSocket:', _this.lastConnectionError);
+                                console.info('WebSocket (RAW):', data);
+                            }
+                        } catch (e) {
+                        }
+                    }
 
                     if (_this.lastConnectionError) {
                         _this.data = _this.t('map.closed_expected', server, connectionTime);
