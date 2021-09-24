@@ -531,6 +531,10 @@ export default {
             type: String,
             required: true
         },
+        cluster: {
+            type: String,
+            required: true
+        },
     },
     data() {
         return {
@@ -851,7 +855,7 @@ export default {
             const _this = this;
 
             return new Promise(function(resolve, reject) {
-                $.get(_this.hostname(false) + '/token?token=' + _this.token, function(data) {
+                $.get(_this.hostname(false) + '/token?token=' + _this.token + '&cluster=' + _this.cluster, function(data) {
                     if (data.status) {
                         resolve(data.token);
                     } else {
@@ -870,7 +874,7 @@ export default {
             try {
                 const token = await this.getOTToken();
 
-                this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server));
+                this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server) + "&cluster=" + this.cluster);
                 _this.socketStart = Date.now();
 
                 this.connection.onmessage = async function (event) {
@@ -911,7 +915,7 @@ export default {
                     }
                 };
             } catch (e) {
-                this.data = this.t('map.closed_unexpected', $('#server option:selected').text(), '1 second');
+                this.data = this.t('map.closed_unexpected', server, '1 second');
 
                 console.error('Failed to connect to socket', e);
             }

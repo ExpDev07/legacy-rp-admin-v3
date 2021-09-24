@@ -38,6 +38,7 @@ class MapController extends Controller
             }, $staff) : [],
             'blips'   => GeneralHelper::parseMapFile(__DIR__ . '/../../../helpers/markers.map') ?? [],
             'token'   => SessionHelper::getInstance()->getSessionKey(),
+            'cluster' => CLUSTER,
         ]);
     }
 
