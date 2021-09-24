@@ -15,6 +15,7 @@ use App\Http\Controllers\AdvancedSearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
+use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\CronjobController;
 use App\Http\Controllers\HomeController;
@@ -78,6 +79,13 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Advanced search.
     Route::get('/advanced', [AdvancedSearchController::class, 'index']);
+
+    Route::group(['middleware' => ['super-admin']], function () {
+        // Blacklisted Identifiers.
+        Route::get('/blacklist', [BlacklistController::class, 'index']);
+        Route::post('/blacklist', [BlacklistController::class, 'store']);
+        Route::delete('/blacklist/{identifier}', [BlacklistController::class, 'destroy']);
+    });
 
     // Suspicious.
     Route::get('/suspicious', [SuspiciousController::class, 'index']);

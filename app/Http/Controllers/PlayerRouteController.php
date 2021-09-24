@@ -100,7 +100,7 @@ class PlayerRouteController extends Controller
 
             if (!isset($linked['linked'][$identifier])) {
                 $linked['linked'][$identifier] = [
-                    'label'    => Player::getIdentifierLabel($identifier),
+                    'label'    => Player::getIdentifierLabel($identifier) ?? 'Unknown Identifier',
                     'accounts' => [],
                 ];
             }

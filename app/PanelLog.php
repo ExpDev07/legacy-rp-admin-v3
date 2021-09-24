@@ -78,19 +78,19 @@ class PanelLog extends Model
      *
      * @param string $fromIdentifier
      * @param string $toIdentifier
-     * @param string $characterId
+     * @param string $character
      * @param array $changedFields
      */
-    public static function logCharacterEdit(string $fromIdentifier, string $toIdentifier, string $characterId, array $changedFields)
+    public static function logCharacterEdit(string $fromIdentifier, string $toIdentifier, string $character, array $changedFields)
     {
         if (empty($changedFields)) {
             return;
         }
 
         $from = self::resolvePlayerLogName($fromIdentifier);
-        $to = self::resolvePlayerLogName($toIdentifier);
+        $to = self::resolvePlayerCharacterLogName($toIdentifier, $character);
 
-        $log = $from . ' edited character ' . $characterId . ' of ' . $to . '. Fields changed: `' . implode(', ', $changedFields) . '`';
+        $log = $from . ' edited ' . $to . '. Fields changed: `' . implode(', ', $changedFields) . '`';
         self::createLog($fromIdentifier, $toIdentifier, $log, 'Character Edit');
     }
 
@@ -99,16 +99,16 @@ class PanelLog extends Model
      *
      * @param string $fromIdentifier
      * @param string $toIdentifier
-     * @param string $characterId
+     * @param string $character
      * @param string $zone
      */
-    public static function logTattooRemoval(string $fromIdentifier, string $toIdentifier, string $characterId, string $zone)
+    public static function logTattooRemoval(string $fromIdentifier, string $toIdentifier, string $character, string $zone)
     {
         $from = self::resolvePlayerLogName($fromIdentifier);
-        $to = self::resolvePlayerLogName($toIdentifier);
+        $to = self::resolvePlayerCharacterLogName($toIdentifier, $character);
 
-        $log = $from . ' removed all tattoos (zone: ' . $zone . ') character ' . $characterId . ' of ' . $to;
-        self::createLog($fromIdentifier, $toIdentifier, $log, 'Tattoo removal');
+        $log = $from . ' removed all tattoos of ' . $to . ' in the zone `' . $zone . '`';
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Tattoo Removal');
     }
 
     /**
@@ -116,16 +116,16 @@ class PanelLog extends Model
      *
      * @param string $fromIdentifier
      * @param string $toIdentifier
-     * @param string $characterId
+     * @param string $character
      * @param string $spawn
      */
-    public static function logSpawnReset(string $fromIdentifier, string $toIdentifier, string $characterId, string $spawn)
+    public static function logSpawnReset(string $fromIdentifier, string $toIdentifier, string $character, string $spawn)
     {
         $from = self::resolvePlayerLogName($fromIdentifier);
-        $to = self::resolvePlayerLogName($toIdentifier);
+        $to = self::resolvePlayerCharacterLogName($toIdentifier, $character);
 
-        $log = $from . ' reset spawn point (spawn: ' . $spawn . ') character ' . $characterId . ' of ' . $to;
-        self::createLog($fromIdentifier, $toIdentifier, $log, 'Spawn reset');
+        $log = $from . ' set the spawn point of ' . $to . ' to `' . $spawn . '`';
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Spawn Reset');
     }
 
     /**
@@ -161,6 +161,39 @@ class PanelLog extends Model
     }
 
     /**
+     * Logs a license add from the panel
+     *
+     * @param string $fromIdentifier
+     * @param string $toIdentifier
+     * @param string $character
+     * @param string $license
+     */
+    public static function logLicenseAdd(string $fromIdentifier, string $toIdentifier, string $character, string $license)
+    {
+        $from = self::resolvePlayerLogName($fromIdentifier);
+        $to = self::resolvePlayerCharacterLogName($toIdentifier, $character);
+
+        $log = $from . ' added the license `' . $license . '` to ' . $to;
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Added License');
+    }
+
+    /**
+     * Logs a license remove from the panel
+     *
+     * @param string $fromIdentifier
+     * @param string $toIdentifier
+     * @param string $character
+     */
+    public static function logLicenseRemove(string $fromIdentifier, string $toIdentifier, string $character)
+    {
+        $from = self::resolvePlayerLogName($fromIdentifier);
+        $to = self::resolvePlayerCharacterLogName($toIdentifier, $character);
+
+        $log = $from . ' removed all licenses from ' . $to;
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Removed Licenses');
+    }
+
+    /**
      * Logs a character unload from the panel
      *
      * @param string $fromIdentifier
@@ -170,18 +203,36 @@ class PanelLog extends Model
     public static function logUnload(string $fromIdentifier, string $toIdentifier, string $character)
     {
         $from = self::resolvePlayerLogName($fromIdentifier);
-        $to = self::resolvePlayerLogName($toIdentifier);
+        $to = self::resolvePlayerCharacterLogName($toIdentifier, $character);
 
-        $log = $from . ' unloaded ' . $to . '\'s character (#' . $character . ')';
+        $log = $from . ' unloaded ' . $to;
         self::createLog($fromIdentifier, $toIdentifier, $log, 'Unloaded Character');
     }
 
+    /**
+     * Returns "Twoot (steam:11000010d322da9)"
+     *
+     * @param string $identifier
+     * @return string
+     */
     private static function resolvePlayerLogName(string $identifier): string
     {
         $player = Player::query()->where('steam_identifier', $identifier)->first();
         $playerName = $player ? $player->player_name : 'Unknown';
 
         return $playerName . ' (' . $identifier . ')';
+    }
+
+    /**
+     * Returns "Twoot (steam:11000010d322da9)'s character (#739)"
+     *
+     * @param string $identifier
+     * @param string $character
+     * @return string
+     */
+    private static function resolvePlayerCharacterLogName(string $identifier, string $character): string
+    {
+        return self::resolvePlayerLogName($identifier) . '\'s character (#' . $character . ')';
     }
 
     /**

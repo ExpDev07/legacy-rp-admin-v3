@@ -417,7 +417,7 @@ class Player extends Model
         return $playerMap;
     }
 
-    public static function getIdentifierLabel(string $identifier): string
+    public static function getIdentifierLabel(string $identifier): ?string
     {
         $type = explode(':', $identifier)[0];
 
@@ -438,8 +438,13 @@ class Player extends Model
             case 'xbl':
                 return 'XBox Live';
             default:
-                return 'Unknown Identifier';
+                return null;
         }
+    }
+
+    public static function isValidIdentifier(string $identifier): bool
+    {
+        return sizeof(explode(':', $identifier)) === 2 && self::getIdentifierLabel($identifier) !== null;
     }
 }
 
