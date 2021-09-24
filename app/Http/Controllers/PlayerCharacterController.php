@@ -29,7 +29,7 @@ class PlayerCharacterController extends Controller
     ];
 
     const Licenses = [
-        "heli", "fw", "cfi", "hw", "perf", "management", "military"
+        "heli", "fw", "cfi", "hw", "perf", "management", "military",
     ];
 
     /**
@@ -446,33 +446,40 @@ class PlayerCharacterController extends Controller
     {
         $license = $request->post('license');
 
-        $user = $request->user();
-        if (!$user->player->is_super_admin) {
-            return back()->with('error', 'Only super admins can add licenses.');
-        }
-
         if (!in_array($license, self::Licenses) && $license !== 'remove') {
             return back()->with('error', 'Invalid license "' . $license . '".');
         }
 
         $json = json_decode($character->character_data, true) ?? [];
-        if (!isset($json['licenses']) || $license === 'remove') {
+        if (!isset($json['licenses'])) {
             $json['licenses'] = [];
+        }
+
+        if (in_array($license, $json['licenses'])) {
+            return back()->with('error', 'Character already has license "' . $license . '".');
         }
 
         if ($license !== 'remove') {
             $json['licenses'][] = $license;
             $json['licenses'] = array_values(array_unique($json['licenses']));
+        } else if (empty($json['licenses'])) {
+            return back()->with('error', 'Character already has no licenses.');
+        } else {
+            $json['licenses'] = [];
         }
 
         $character->update([
-            'character_data' => json_encode($json)
+            'character_data' => json_encode($json),
         ]);
 
+        $user = $request->user();
+
         if ($license === 'remove') {
+            PanelLog::logLicenseRemove($user->player->steam_identifier, $player->steam_identifier, $character->character_id);
             return back()->with('success', 'All Licenses were successfully removed.');
         }
 
+        PanelLog::logLicenseAdd($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $license);
         return back()->with('success', 'License was successfully added (License: ' . $license . ').');
     }
 

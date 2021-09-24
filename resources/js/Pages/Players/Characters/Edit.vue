@@ -46,7 +46,6 @@
                 <!-- Add License -->
                 <a href="#"
                    class="px-5 py-2 font-semibold text-white rounded bg-primary mr-3 dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isLicenceAdd = true}"
-                   v-if="$page.auth.player.isSuperAdmin"
                 >
                     <i class="fas fa-id-badge"></i>
                     {{ t('players.characters.license.add') }}
@@ -69,7 +68,7 @@
             <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.sure_tattoos') }}</h3>
                 <div class="w-full p-3 flex justify-between">
-                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="zone">
+                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold">
                         {{ t('players.characters.tattoo_zone') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="zone">
@@ -128,7 +127,7 @@
             <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.sure_spawn') }}</h3>
                 <div class="w-full p-3 flex justify-between">
-                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="spawn">
+                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold">
                         {{ t('players.characters.spawn_point') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="spawn">
@@ -237,7 +236,7 @@
             <template>
                 <div class="flex flex-wrap mb-4">
                     <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
-                        <label class="block mb-3" for="job">
+                        <label class="block mb-3">
                             {{ t('players.job.name') }}
                         </label>
                         <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" v-model="form.job_name" @change="setPayCheck">
@@ -245,7 +244,7 @@
                         </select>
                     </div>
                     <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.job_name === job.name" v-for="job in jobs">
-                        <label class="block mb-3" for="department">
+                        <label class="block mb-3">
                             {{ t('players.job.department') }}
                         </label>
                         <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="department" v-model="form.department_name" @change="setPayCheck">
@@ -254,7 +253,7 @@
                     </div>
                     <template v-if="form.job_name === job.name" v-for="job in jobs">
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.department_name === department.name" v-for="department in job.departments">
-                            <label class="block mb-3" for="position">
+                            <label class="block mb-3">
                                 {{ t('players.job.position') }}
                             </label>
                             <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="position" v-model="form.position_name" @change="setPayCheck">
