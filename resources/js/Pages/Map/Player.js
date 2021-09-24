@@ -227,8 +227,14 @@ class Player {
         let vehicleInfo = '';
         const vehicle = this.getVehicleID();
         if (vehicle && vehicle in vehicles) {
-            vehicleInfo = '<span class="block mt-1 text-xxs leading-3"><b>Driver:</b> ' + (vehicles[vehicle].driver ? vehicles[vehicle].driver : 'N/A') + '</span>' +
-                '<span class="block text-xxs leading-3"><b>Passengers:</b> ' + (vehicles[vehicle].passengers.length > 0 ? vehicles[vehicle].passengers.join(', ') : 'N/A') + '</span>';
+            const formatInfo = info => '<a href="/players/' + info.steam + '" target="_blank">' + info.name + '</a>';
+
+            vehicleInfo = '<span class="block mt-1 text-xxs leading-3"><b>Driver:</b> ' + (vehicles[vehicle].driver ? formatInfo(vehicles[vehicle].driver) : 'N/A') + '</span>' +
+                '<span class="block text-xxs leading-3"><b>Passengers:</b> ' + (
+                    vehicles[vehicle].passengers.length > 0 ?
+                        vehicles[vehicle].passengers.map(i => formatInfo(i)).join(', ') :
+                        'N/A'
+                ) + '</span>';
         }
 
         const popup = [

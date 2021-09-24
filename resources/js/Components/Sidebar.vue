@@ -109,7 +109,7 @@ export default {
                             label: this.t('blacklist.title'),
                             icon: 'shield',
                             private: true,
-                            url: '/blocked',
+                            url: '/blacklist',
                         }
                     ]
                 },

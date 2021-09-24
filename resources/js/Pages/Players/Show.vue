@@ -35,7 +35,7 @@
                         <span class="font-semibold">{{ t('global.status.' + player.status.status) }}</span>
                     </badge>
 
-                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" :title="player.playTime | formatTime(true)" v-html="local.played">
+                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" :title="formatSecondDiff(player.playTime)" v-html="local.played">
                         {{ local.played }}
                     </badge>
                 </div>
@@ -729,6 +729,9 @@ export default {
         }
     },
     methods: {
+        formatSecondDiff(sec) {
+            return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
+        },
         async showLinked() {
             this.isShowingLinkedLoading = true;
             this.isShowingLinked = true;
