@@ -1,4 +1,5 @@
 const custom_icons = require("../../data/vehicles.json");
+const blip_map = require("../../data/blip-map.json");
 const L = require("leaflet");
 
 class Character {
@@ -49,6 +50,15 @@ class Vehicle {
     }
 
     getIcon() {
+        if (this.model in blip_map) {
+            return new L.Icon(
+                {
+                    iconUrl: '/images/icons/gta/Blip_' + blip_map[this.model] + '.png',
+                    iconSize: [28, 28]
+                }
+            );
+        }
+
         return new L.Icon(
             {
                 iconUrl: '/images/icons/' + this.icon.type + '.png',

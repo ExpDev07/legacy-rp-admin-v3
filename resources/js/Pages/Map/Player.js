@@ -65,7 +65,7 @@ class Player {
             this.icon.invisible ? 'invisible' : null,
             this.icon.dead ? 'dead' : null,
             this.player.isStaff ? 'staff' : null,
-            this.icon.driving ? 'driving (' + this.vehicle.icon.type + ')' : null,
+            this.icon.driving ? 'driving (' + this.vehicle.model + ')' : null,
             this.icon.passenger ? 'passenger' : null,
             !this.icon.passenger && !this.icon.driving ? 'on foot' : null,
             this.onDuty === 'police' ? 'on duty (police)' : null,

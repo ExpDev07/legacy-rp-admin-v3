@@ -10,10 +10,6 @@
             "annihilator",
             "buzzard",
             "buzzard2",
-            "cargobob",
-            "cargobob2",
-            "cargobob3",
-            "cargobob4",
             "frogger",
             "frogger2",
             "havok",
@@ -34,6 +30,15 @@
             "seasparrow3",
             "thruster",
             "newsmav"
+        ]
+    },
+    "cargobob": {
+        "size": 34,
+        "models": [
+            "cargobob",
+            "cargobob2",
+            "cargobob3",
+            "cargobob4"
         ]
     },
     "boat": {
