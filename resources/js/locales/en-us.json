@@ -97,13 +97,14 @@
         "description": "Some general statistics",
         "bans": "Active Bans",
         "warnings": "Warnings",
+        "notes": "Notes",
         "creations": "Character creations",
         "deletions": "Character deletions",
         "lucky_wheel": "Lucky Wheel Spins",
         "titles": {
             "bans_move": "Bans over time",
             "economy": "Economy (cash + bank + stocks + company balances + PDM & State funds)",
-            "ban_warn": "Bans & Warnings",
+            "ban_warn": "30-Day average of Bans, Warnings & Notes",
             "character": "Character creations & deletions",
             "lucky_wheel": "Lucky Wheel Spins"
         }

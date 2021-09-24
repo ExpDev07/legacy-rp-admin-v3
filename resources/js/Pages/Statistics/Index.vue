@@ -13,9 +13,9 @@
         <template>
             <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map -mt-7 dark:bg-gray-300">
                 <LineChart
-                    :data="[bans.data, warnings.data]"
+                    :data="[bans.data, warnings.data, notes.data]"
                     :data-labels="bans.labels"
-                    :labels="[t('statistics.bans'), t('statistics.warnings')]"
+                    :labels="[t('statistics.bans'), t('statistics.warnings'), t('statistics.notes')]"
                     :colors="['235, 54, 54', '235, 145, 55']"
                     :title="t('statistics.titles.ban_warn')"
                     class="w-full"
@@ -93,6 +93,10 @@ export default {
             required: true,
         },
         warnings: {
+            type: Object,
+            required: true,
+        },
+        notes: {
             type: Object,
             required: true,
         },
