@@ -78,8 +78,6 @@ class StaffMiddleware
                     );
                 }
             }
-
-            GeneralHelper::updateSocketSession();
         }
 
         return $next($request);
