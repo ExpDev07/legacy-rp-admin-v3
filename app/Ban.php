@@ -164,7 +164,25 @@ class Ban extends Model
         return self::$bans[$steamIdentifier] ?? null;
     }
 
-    public static function getAllBans(bool $returnOnlyIdentifiers, ?array $filterByIdentifiers = null): array
+    /**
+     * Returns all banned Steam Identifiers which were banned by a certain person
+     *
+     * @param string $creatorName
+     * @param string $creatorIdentifier
+     * @return array
+     */
+    public static function getAllBannedIdentifiersByCreator(string $creatorName, string $creatorIdentifier): array
+    {
+        $bans = self::getAllBans(false);
+
+        return array_values(array_map(function ($ban) {
+            return $ban['identifier'];
+        }, array_filter($bans, function ($ban) use ($creatorName, $creatorIdentifier) {
+            return $ban['creator_name'] === $creatorName || $ban['creator_identifier'] === $creatorIdentifier;
+        })));
+    }
+
+    public static function getAllBans(bool $returnOnlyIdentifiers, ?array $filterByIdentifiers = null, bool $forceObject = false): array
     {
         if (empty(self::$bans)) {
             $query = Ban::query()
@@ -195,6 +213,11 @@ class Ban extends Model
         if ($returnOnlyIdentifiers) {
             return array_keys($bans);
         }
+
+        if ($forceObject && empty($bans)) {
+            return ['empty' => 'object'];
+        }
+
         return $bans;
     }
 }

@@ -55,7 +55,7 @@ class PlayerController extends Controller
 
         // Filtering isBanned.
         if ($banned = $request->input('banned')) {
-            if ($banned === 'yes' || $banned === 'no') {
+            if (in_array($banned, ['yes', 'no', 'mine'])) {
                 $ids = Ban::getAllBans(true);
 
                 if ($banned === 'yes') {
@@ -63,6 +63,11 @@ class PlayerController extends Controller
                     $isOrdered = true;
                 } else if ($banned === 'no') {
                     $query->whereNotIn('steam_identifier', $ids);
+                } else if ($banned === 'mine') {
+                    $player = $request->user()->player;
+                    $ids = Ban::getAllBannedIdentifiersByCreator($player->player_name, $player->steam_identifier);
+
+                    $query->whereIn('steam_identifier', $ids);
                 }
             }
         }
@@ -100,7 +105,7 @@ class PlayerController extends Controller
 
         return Inertia::render('Players/Index', [
             'players' => PlayerIndexResource::collection($players),
-            'banMap'  => Ban::getAllBans(false, $identifiers),
+            'banMap'  => Ban::getAllBans(false, $identifiers, true),
             'filters' => [
                 'name'    => $request->input('name'),
                 'steam'   => $request->input('steam'),

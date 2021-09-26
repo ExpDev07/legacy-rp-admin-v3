@@ -44,13 +44,14 @@
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-4 font-semibold" for="banned">
+                            <label class="block mb-4 font-semibold">
                                 {{ t('players.is_banned') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <select class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="banned" name="banned" v-model="filters.banned">
+                            <select class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="banned" v-model="filters.banned">
                                 <option value="all">{{ t('global.all') }}</option>
                                 <option value="yes">{{ t('global.banned') }}</option>
                                 <option value="no">{{ t('global.not_banned') }}</option>
+                                <option value="mine">{{ t('players.my_bans') }}</option>
                             </select>
                         </div>
                     </div>
