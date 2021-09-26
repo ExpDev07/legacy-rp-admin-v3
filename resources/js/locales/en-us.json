@@ -130,6 +130,7 @@
         "stop_highlight": "Stop highlighting",
         "afk_title": "AFK Players",
         "notify": "Notifications",
+        "notify_invisible": "Notify on Invisible",
         "notify_load": "Notify on Load",
         "notify_unload": "Notify on Unload",
         "notify_add": "Add Notify",

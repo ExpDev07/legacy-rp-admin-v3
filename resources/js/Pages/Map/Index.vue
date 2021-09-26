@@ -146,8 +146,9 @@
                         {{ t('map.notify_type') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_type" v-model="form.notify_type">
-                        <option value="onload">{{ t('map.notify_load') }}</option>
-                        <option value="onunload">{{ t('map.notify_unload') }}</option>
+                        <option value="invisible">{{ t('map.notify_invisible') }}</option>
+                        <option value="load">{{ t('map.notify_load') }}</option>
+                        <option value="unload">{{ t('map.notify_unload') }}</option>
                     </select>
                 </div>
 
@@ -406,10 +407,22 @@
                             </tr>
                         </table>
                     </div>
-                    <div v-if="Object.keys(container.notifier.notifications.onload).length > 0 || Object.keys(container.notifier.notifications.onunload).length > 0" class="pt-4 mr-4">
+                    <div v-if="!container.notifier.isEmpty()" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.notify') }}</h3>
                         <table class="text-sm font-mono">
-                            <tr v-for="(player, steam) in container.notifier.notifications.onload" :key="'load_' + steam">
+                            <tr v-for="(player, steam) in container.notifier.notifications.invisible" :key="'invisible_' + steam">
+                                <td class="pr-2">
+                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.notify_invisible') }}
+                                </td>
+                                <td>
+                                    <a class="dark:text-red-400 text-red-600" href="#" @click="stopNotify($event, steam, 'invisible')">[{{ t('global.remove') }}]</a>
+                                </td>
+                            </tr>
+                            <tr v-for="(player, steam) in container.notifier.notifications.load" :key="'load_' + steam">
                                 <td class="pr-2">
                                     <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
                                     <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
@@ -421,7 +434,7 @@
                                     <a class="dark:text-red-400 text-red-600" href="#" @click="stopNotify($event, steam, 'load')">[{{ t('global.remove') }}]</a>
                                 </td>
                             </tr>
-                            <tr v-for="(player, steam) in container.notifier.notifications.onunload" :key="'unload_' + steam">
+                            <tr v-for="(player, steam) in container.notifier.notifications.unload" :key="'unload_' + steam">
                                 <td class="pr-2">
                                     <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
                                     <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
@@ -574,7 +587,7 @@ export default {
                 filters: [],
 
                 notify_steam: '',
-                notify_type: 'onload'
+                notify_type: 'load'
             },
             layers: {
                 "Players": L.layerGroup(),
@@ -648,20 +661,16 @@ export default {
             e.preventDefault();
 
             if (type === 'load') {
-                this.container.notifier.removeNotifyOnLoad(steam);
+                this.container.notifier.removeNotify('load', steam);
             } else if (type === 'unload') {
-                this.container.notifier.removeNotifyOnUnload(steam);
+                this.container.notifier.removeNotify('unload', steam);
             }
         },
         confirmNotification() {
-            if (this.form.notify_type === 'onload') {
-                this.container.notifier.notifyOnLoad(this.form.notify_steam);
-            } else if (this.form.notify_type === 'onunload') {
-                this.container.notifier.notifyOnUnload(this.form.notify_steam);
-            }
+            this.container.notifier.on(this.form.notify_type, this.form.notify_steam);
 
             this.form.notify_steam = '';
-            this.form.notify_type = 'onload';
+            this.form.notify_type = 'load';
 
             this.isNotification = false;
         },
