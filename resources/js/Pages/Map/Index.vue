@@ -11,7 +11,9 @@
             </h1>
             <p>
                 <span v-html="data" class="block">{{ data }}</span>
-                <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">{{ lastConnectionError }}</span>
+                <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">{{
+                        lastConnectionError
+                    }}</span>
             </p>
         </portal>
 
@@ -43,7 +45,8 @@
 
         <!-- Area Add -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isAddingDetectionArea">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
                 <h3 class="mb-2">
                     {{ t('map.area_title') }}
                 </h3>
@@ -53,7 +56,8 @@
                     <label class="mr-4 block w-1/4 pt-2 font-bold" for="area_radius">
                         {{ t('map.area_radius') }}
                     </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="5000" id="area_radius" value="5" v-model="form.area_radius" />
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" min="1" max="5000"
+                           id="area_radius" value="5" v-model="form.area_radius"/>
                 </div>
 
                 <!-- Type -->
@@ -61,7 +65,8 @@
                     <label class="mr-4 block w-1/4 pt-2 font-bold">
                         {{ t('map.area_type.title') }}
                     </label>
-                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="area_type" v-model="form.area_type">
+                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="area_type"
+                            v-model="form.area_type">
                         <option value="normal">{{ t('map.area_type.normal') }}</option>
                         <option value="persistent">{{ t('map.area_type.persistent') }}</option>
                     </select>
@@ -72,7 +77,8 @@
                 <h4 class="my-2">
                     {{ t('map.area_filter') }}
                     <sup>
-                        <a href="#" class="text-success dark:text-dark-success font-bold text-lg" @click="addFilter($event)">+</a>
+                        <a href="#" class="text-success dark:text-dark-success font-bold text-lg"
+                           @click="addFilter($event)">+</a>
                     </sup>
                 </h4>
 
@@ -80,14 +86,17 @@
                 <div class="w-full flex justify-between mb-2" v-if="form.filters.length === 0">
                     {{ t('map.filter_none') }}
                 </div>
-                <div class="w-full flex justify-between mb-2" v-for="(filter, index) in form.filters" :key="index" v-else>
+                <div class="w-full flex justify-between mb-2" v-for="(filter, index) in form.filters" :key="index"
+                     v-else>
                     <label class="mr-4 block w-1/4 pt-2 font-bold">
                         {{ t('map.area_filters.title') }} #{{ index }}
                         <sup>
-                            <a href="#" class="text-red-500 font-bold" @click="removeFilter($event, index)">&#x1F5D9;</a>
+                            <a href="#" class="text-red-500 font-bold"
+                               @click="removeFilter($event, index)">&#x1F5D9;</a>
                         </sup>
                     </label>
-                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" v-model="form.filters[index]">
+                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
+                            v-model="form.filters[index]">
                         <option value="is_vehicle">{{ t('map.area_filters.is_vehicle') }}</option>
                         <option value="is_not_vehicle">{{ t('map.area_filters.is_not_vehicle') }}</option>
                         <option value="is_dead">{{ t('map.area_filters.is_dead') }}</option>
@@ -106,8 +115,10 @@
                 <hr>
 
                 <p class="my-2">
-                    <span class="font-bold">{{ t('map.area_type.normal') }}</span>: {{ t('map.area_type.normal_description') }}<br>
-                    <span class="font-bold">{{ t('map.area_type.persistent') }}</span>: {{ t('map.area_type.persistent_description') }}
+                    <span class="font-bold">{{ t('map.area_type.normal') }}</span>:
+                    {{ t('map.area_type.normal_description') }}<br>
+                    <span class="font-bold">{{ t('map.area_type.persistent') }}</span>:
+                    {{ t('map.area_type.persistent_description') }}
                 </p>
 
                 <!-- Buttons -->
@@ -127,7 +138,8 @@
 
         <!-- Notify Add -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isNotification">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
                 <h3 class="mb-2">
                     {{ t('map.notify_add') }}
                 </h3>
@@ -137,7 +149,8 @@
                     <label class="mr-4 block w-1/4 pt-2 font-bold" for="notify_steam">
                         {{ t('map.notify_steam') }}
                     </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_steam" v-model="form.notify_steam" />
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_steam"
+                           v-model="form.notify_steam"/>
                 </div>
 
                 <!-- Type -->
@@ -145,9 +158,11 @@
                     <label class="mr-4 block w-1/4 pt-2 font-bold">
                         {{ t('map.notify_type') }}
                     </label>
-                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_type" v-model="form.notify_type">
-                        <option value="onload">{{ t('map.notify_load') }}</option>
-                        <option value="onunload">{{ t('map.notify_unload') }}</option>
+                    <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_type"
+                            v-model="form.notify_type">
+                        <option value="invisible">{{ t('map.notify_invisible') }}</option>
+                        <option value="load">{{ t('map.notify_load') }}</option>
+                        <option value="unload">{{ t('map.notify_unload') }}</option>
                     </select>
                 </div>
 
@@ -227,7 +242,7 @@
                         :class="{'hidden' : !advancedTracking || !container.isTrackedPlayerVisible}"
                     >
                         <div class="relative w-map-other-gauge">
-                            <img src="/images/height-indicator.png" style="height: 90px" alt="Height indicator" />
+                            <img src="/images/height-indicator.png" style="height: 90px" alt="Height indicator"/>
                             <div
                                 class="font-bold absolute border-b-2 border-gray-700 left-8 text-gray-700 w-map-height-ind text-right text-xxs leading-3"
                                 :style="'bottom: ' + tracking.data.alt + '%;'"
@@ -253,12 +268,15 @@
                         />
                     </div>
 
-                    <div v-if="rightClickedPlayer.id" class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
-                        <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
+                    <div v-if="rightClickedPlayer.id"
+                         class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
+                        <div
+                            class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
                             <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name">{{ rightClickedPlayer.name }}</h2>
                             <p class="text-muted dark:text-dark-muted mb-1">
                                 <span class="font-semibold">{{ t('players.steam') }}:</span>
-                                <a :href="'/players/' + rightClickedPlayer.id" target="_blank" class="text-blue-600 dark:text-blue-400 italic">{{ rightClickedPlayer.id }}</a>
+                                <a :href="'/players/' + rightClickedPlayer.id" target="_blank"
+                                   class="text-blue-600 dark:text-blue-400 italic">{{ rightClickedPlayer.id }}</a>
                             </p>
                             <p class="text-muted dark:text-dark-muted mb-3">
                                 <span class="font-semibold">{{ t('players.name') }}:</span>
@@ -291,7 +309,9 @@
                                     {{ t('map.stop_highlight') }}
                                 </button>
 
-                                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500" @click="rightClickedPlayer.id = null">
+                                <button type="button"
+                                        class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                                        @click="rightClickedPlayer.id = null">
                                     {{ t('global.close') }}
                                 </button>
                             </div>
@@ -300,31 +320,31 @@
                 </div>
                 <div class="my-2 flex flex-wrap -mx-2 justify-between text-xs w-map max-w-full">
                     <div class="mx-2">
-                        <img src="/images/icons/circle.png" class="w-map-icon inline-block" alt="on foot" />
+                        <img src="/images/icons/circle.png" class="w-map-icon inline-block" alt="on foot"/>
                         <span class="leading-map-icon">Someone is on foot</span>
                     </div>
                     <div class="mx-2">
-                        <img src="/images/icons/circle_green.png" class="w-map-icon inline-block" alt="invisible" />
+                        <img src="/images/icons/circle_green.png" class="w-map-icon inline-block" alt="invisible"/>
                         <span class="leading-map-icon">Someone is invisible</span>
                     </div>
                     <div class="mx-2">
-                        <img src="/images/icons/circle_red.png" class="w-map-icon inline-block" alt="passenger" />
+                        <img src="/images/icons/circle_red.png" class="w-map-icon inline-block" alt="passenger"/>
                         <span class="leading-map-icon">Someone is a passenger</span>
                     </div>
                     <div class="mx-2">
-                        <img src="/images/icons/skull.png" class="w-map-icon inline-block" alt="dead" />
+                        <img src="/images/icons/skull.png" class="w-map-icon inline-block" alt="dead"/>
                         <span class="leading-map-icon">Someone is dead</span>
                     </div>
                     <div class="mx-2">
-                        <img src="/images/icons/skull_red.png" class="w-map-icon inline-block" alt="dead passenger" />
+                        <img src="/images/icons/skull_red.png" class="w-map-icon inline-block" alt="dead passenger"/>
                         <span class="leading-map-icon">Someone is dead and a passenger</span>
                     </div>
                     <div class="mx-2">
-                        <img src="/images/icons/circle_police.png" class="w-map-icon inline-block" alt="police" />
+                        <img src="/images/icons/circle_police.png" class="w-map-icon inline-block" alt="police"/>
                         <span class="leading-map-icon">Someone is on duty as police</span>
                     </div>
                     <div class="mx-2">
-                        <img src="/images/icons/circle_ems.png" class="w-map-icon inline-block" alt="ems" />
+                        <img src="/images/icons/circle_ems.png" class="w-map-icon inline-block" alt="ems"/>
                         <span class="leading-map-icon">Someone is on duty as ems</span>
                     </div>
                 </div>
@@ -333,30 +353,36 @@
                         <h3 class="mb-2">
                             {{ t('map.area_label', index + 1) }}
                             <sup>
-                                ({{ area.people.length }})
-                                <a href="#" class="text-red-500 font-bold" @click="removeArea($event, index)" :title="t('global.remove')">&#x1F5D9;</a>
+                                ({{ Object.keys(area.players).length }})
+                                <a href="#" class="text-red-500 font-bold" @click="removeArea($event, index)"
+                                   :title="t('global.remove')">&#x1F5D9;</a>
                             </sup>
                         </h3>
                         <table class="text-xs font-mono">
-                            <tr v-if="area.people.length === 0">
+                            <tr v-if="Object.keys(area.players).length === 0">
                                 {{ t('map.area_none') }}
                             </tr>
-                            <tr v-for="(player, x) in area.people" :key="x" v-else>
+                            <tr v-for="(player, steam) in area.players" :key="steam" v-else>
                                 <td class="pr-2">
-                                    <a class="text-yellow-500" target="_blank" :href="'/players/' + player.steam">{{ player.name }}</a>
+                                    <a class="text-yellow-500" target="_blank"
+                                       :href="'/players/' + player.steam">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2 text-yellow-500">
                                     ({{ player.source }})
                                 </td>
-                                <td class="pr-2" v-if="player.exited_at" :title="t('map.area_time', humanizeMilliseconds(player.exited_at - player.entered_at))">
-                                    {{ t('map.area_exit', $moment(player.exited_at).fromNow()) }}
-                                </td>
-                                <td class="pr-2" v-else>
+                                <td class="pr-2" v-if="player.inside">
                                     {{ t('map.area_inside') }}
                                 </td>
+                                <td class="pr-2" v-else>
+                                    {{ t('map.area_not_inside') }}
+                                </td>
                                 <td>
-                                    <a class="track-cid text-yellow-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
-                                    <a class="highlight-cid text-yellow-600" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
+                                    <a class="track-cid text-yellow-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">
+                                        [{{ t('map.do_track') }}]
+                                    </a>
+                                    <a class="highlight-cid text-yellow-600" href="#" :data-steam="player.steam">
+                                        [{{ t('map.do_highlight') }}]
+                                    </a>
                                 </td>
                             </tr>
                         </table>
@@ -366,9 +392,11 @@
                     <div v-if="afkPeople.length > 0" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
                         <table class="text-sm font-mono">
-                            <tr v-for="(player, x) in afkPeople" :key="x" :title="player.is_staff ? t('map.is_staff') : ''">
+                            <tr v-for="(player, x) in afkPeople" :key="x"
+                                :title="player.is_staff ? t('map.is_staff') : ''">
                                 <td class="pr-2">
-                                    <a :style="'color:' + player.color" target="_blank" :href="'/players/' + player.steam">{{ player.name }}</a>
+                                    <a :style="'color:' + player.color" target="_blank"
+                                       :href="'/players/' + player.steam">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2" :style="'color:' + player.color">
                                     ({{ player.source }})
@@ -377,8 +405,12 @@
                                     {{ t('map.afk_move', formatSeconds(player.afk)) }}
                                 </td>
                                 <td>
-                                    <a class="track-cid" :style="'color:' + player.color" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
-                                    <a class="highlight-cid" :style="'color:' + player.color" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
+                                    <a class="track-cid" :style="'color:' + player.color" href="#"
+                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
+                                            t('map.do_track')
+                                        }}]</a>
+                                    <a class="highlight-cid" :style="'color:' + player.color" href="#"
+                                       :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
                         </table>
@@ -388,7 +420,8 @@
                         <table class="text-sm font-mono">
                             <tr v-for="(player, x) in container.on_duty" :key="x">
                                 <td class="pr-2">
-                                    <a target="_blank" :href="'/players/' + player.steam" :class="player.onDutyClass">{{ player.name }}</a>
+                                    <a target="_blank" :href="'/players/' + player.steam"
+                                       :class="player.onDutyClass">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2" :class="player.onDutyClass">
                                     ({{ player.source }})
@@ -400,37 +433,64 @@
                                     {{ t('map.duty_ems') }}
                                 </td>
                                 <td>
-                                    <a :class="'track-cid ' + player.onDutyClass" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
-                                    <a :class="'highlight-cid ' + player.onDutyClass" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
+                                    <a :class="'track-cid ' + player.onDutyClass" href="#"
+                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
+                                            t('map.do_track')
+                                        }}]</a>
+                                    <a :class="'highlight-cid ' + player.onDutyClass" href="#"
+                                       :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <div v-if="Object.keys(container.notifier.notifications.onload).length > 0 || Object.keys(container.notifier.notifications.onunload).length > 0" class="pt-4 mr-4">
+                    <div v-if="!container.notifier.isEmpty()" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.notify') }}</h3>
                         <table class="text-sm font-mono">
-                            <tr v-for="(player, steam) in container.notifier.notifications.onload" :key="'load_' + steam">
+                            <tr v-for="(player, steam) in container.notifier.notifications.invisible"
+                                :key="'invisible_' + steam">
                                 <td class="pr-2">
-                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
-                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
+                                    <a target="_blank" :href="'/players/' + steam"
+                                       class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                    <a target="_blank" :href="'/players/' + steam"
+                                       class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.notify_invisible') }}
+                                </td>
+                                <td>
+                                    <a class="dark:text-red-400 text-red-600" href="#"
+                                       @click="stopNotify($event, steam, 'invisible')">[{{ t('global.remove') }}]</a>
+                                </td>
+                            </tr>
+                            <tr v-for="(player, steam) in container.notifier.notifications.load" :key="'load_' + steam">
+                                <td class="pr-2">
+                                    <a target="_blank" :href="'/players/' + steam"
+                                       class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                    <a target="_blank" :href="'/players/' + steam"
+                                       class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2">
                                     {{ t('map.notify_load') }}
                                 </td>
                                 <td>
-                                    <a class="dark:text-red-400 text-red-600" href="#" @click="stopNotify($event, steam, 'load')">[{{ t('global.remove') }}]</a>
+                                    <a class="dark:text-red-400 text-red-600" href="#"
+                                       @click="stopNotify($event, steam, 'load')">[{{ t('global.remove') }}]</a>
                                 </td>
                             </tr>
-                            <tr v-for="(player, steam) in container.notifier.notifications.onunload" :key="'unload_' + steam">
+                            <tr v-for="(player, steam) in container.notifier.notifications.unload"
+                                :key="'unload_' + steam">
                                 <td class="pr-2">
-                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
-                                    <a target="_blank" :href="'/players/' + steam" class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
+                                    <a target="_blank" :href="'/players/' + steam"
+                                       class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                    <a target="_blank" :href="'/players/' + steam"
+                                       class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2">
                                     {{ t('map.notify_unload') }}
                                 </td>
                                 <td>
-                                    <a class="dark:text-red-400 text-red-600" href="#" @click="stopNotify($event, steam, 'unload')">[{{ t('global.remove') }}]</a>
+                                    <a class="dark:text-red-400 text-red-600" href="#"
+                                       @click="stopNotify($event, steam, 'unload')">[{{ t('global.remove') }}]</a>
                                 </td>
                             </tr>
                         </table>
@@ -440,7 +500,8 @@
                         <table class="text-sm font-mono">
                             <tr v-for="(player, x) in invisiblePeople" :key="x">
                                 <td class="pr-2">
-                                    <a class="dark:text-red-400 text-red-600" target="_blank" :href="'/players/' + player.steam">{{ player.name }}</a>
+                                    <a class="dark:text-red-400 text-red-600" target="_blank"
+                                       :href="'/players/' + player.steam">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2 dark:text-red-400 text-red-600">
                                     ({{ player.source }})
@@ -449,8 +510,12 @@
                                     {{ t('map.invisible') }}
                                 </td>
                                 <td>
-                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
-                                    <a class="highlight-cid dark:text-red-400 text-red-600" href="#" :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
+                                    <a class="track-cid dark:text-red-400 text-red-600" href="#"
+                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
+                                            t('map.do_track')
+                                        }}]</a>
+                                    <a class="highlight-cid dark:text-red-400 text-red-600" href="#"
+                                       :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
                                 </td>
                             </tr>
                         </table>
@@ -460,7 +525,8 @@
                         <table class="text-sm font-mono">
                             <tr v-for="(player, steam) in highlightedPeople" :key="steam" v-if="player !== true">
                                 <td class="pr-2">
-                                    <a class="dark:text-red-400 text-red-600" target="_blank" :href="'/players/' + steam">{{ player.name }}</a>
+                                    <a class="dark:text-red-400 text-red-600" target="_blank"
+                                       :href="'/players/' + steam">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2 dark:text-red-400 text-red-600">
                                     ({{ player.source }})
@@ -469,8 +535,12 @@
                                     {{ t('map.highlighted') }}
                                 </td>
                                 <td>
-                                    <a class="track-cid dark:text-red-400 text-red-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">[{{ t('map.do_track') }}]</a>
-                                    <a class="dark:text-red-400 text-red-600" href="#" @click="stopHighlight($event, steam)">[{{ t('global.remove') }}]</a>
+                                    <a class="track-cid dark:text-red-400 text-red-600" href="#"
+                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
+                                            t('map.do_track')
+                                        }}]</a>
+                                    <a class="dark:text-red-400 text-red-600" href="#"
+                                       @click="stopHighlight($event, steam)">[{{ t('global.remove') }}]</a>
                                 </td>
                             </tr>
                         </table>
@@ -496,6 +566,7 @@ import Player from './Player';
 import Vector3 from "./Vector3";
 import Bounds from './map.config';
 import DataCompressor from "./DataCompressor";
+import DetectionArea from "./DetectionArea";
 
 (function (global) {
     let MarkerMixin = {
@@ -574,7 +645,7 @@ export default {
                 filters: [],
 
                 notify_steam: '',
-                notify_type: 'onload'
+                notify_type: 'load'
             },
             layers: {
                 "Players": L.layerGroup(),
@@ -648,20 +719,16 @@ export default {
             e.preventDefault();
 
             if (type === 'load') {
-                this.container.notifier.removeNotifyOnLoad(steam);
+                this.container.notifier.removeNotify('load', steam);
             } else if (type === 'unload') {
-                this.container.notifier.removeNotifyOnUnload(steam);
+                this.container.notifier.removeNotify('unload', steam);
             }
         },
         confirmNotification() {
-            if (this.form.notify_type === 'onload') {
-                this.container.notifier.notifyOnLoad(this.form.notify_steam);
-            } else if (this.form.notify_type === 'onunload') {
-                this.container.notifier.notifyOnUnload(this.form.notify_steam);
-            }
+            this.container.notifier.on(this.form.notify_type, this.form.notify_steam);
 
             this.form.notify_steam = '';
-            this.form.notify_type = 'onload';
+            this.form.notify_type = 'load';
 
             this.isNotification = false;
         },
@@ -670,56 +737,21 @@ export default {
                 return alert(this.t('map.area_inv_radius'));
             }
 
-            const convertDistance = d => {
-                const a = Vector3.fromGameCoords(0, 0),
-                    b = Vector3.fromGameCoords(d, d);
-
-                return Math.abs(b.toMap().lat - a.toMap().lat);
-            };
-
             this.isAddingDetectionArea = false;
-            const _this = this,
-                area = {
-                    x: parseInt(this.form.area_location.x),
-                    y: parseInt(this.form.area_location.y),
-                    radius: parseInt(this.form.area_radius),
-                    type: this.form.area_type + '',
-                    people: [],
-                    filters: [...new Set(this.form.filters)],
 
-                    _timestamp: Date.now()
-                },
-                coords = Vector3.fromGameCoords(this.form.area_location.x, this.form.area_location.y),
-                formattedFilters = area.filters.map(f => _this.t('map.area_filters.' + f));
-
-            area.marker = L.marker(coords.toMap(),
-                {
-                    icon: new L.Icon(
-                        {
-                            iconUrl: '/images/icons/area.png',
-                            iconSize: [16, 16]
-                        }
-                    ),
-                    forceZIndex: 300
-                }
+            const area = new DetectionArea(
+                this.detectionAreas.length + 1,
+                Vector3.fromGameCoords(parseInt(this.form.area_location.x), parseInt(this.form.area_location.y), 0),
+                parseInt(this.form.area_radius),
+                [...new Set(this.form.filters)],
+                this.form.area_type === 'persistent'
             );
-            area.marker.bindPopup(this.t('map.area_label', this.detectionAreas.length + 1) +
-                '<br><span class="italic">' + area.x + ' ' + area.y + ' (' + area.radius + 'm)</span>' +
-                '<br>' + this.t('map.area_type.title') + ': <span class="italic">' + this.t('map.area_type.' + area.type) + '</span>' +
-                '<br>' + (formattedFilters.length > 0 ? this.t('map.area_filter') + ': <span class="italic">' + formattedFilters.join(', ') + '</span>' : this.t('map.filter_none')), {
-                autoPan: false
-            });
-            area.marker.addTo(this.map);
 
-            area.circle = L.circle(coords.toMap(), {
-                radius: convertDistance(area.radius),
-                color: '#FFBF00',
-                fillColor: '#FFBF00',
-                weight: 2,
-                opacity: 0.85,
-                fill: true
-            });
-            area.circle.addTo(this.map);
+            const marker = area.getMarker(this);
+            marker.addTo(this.map);
+
+            const circle = area.getCircle();
+            circle.addTo(this.map);
 
             this.detectionAreas.push(area);
 
@@ -745,9 +777,12 @@ export default {
             this.map.removeLayer(this.detectionAreas[index].circle);
 
             let areas = [];
-            for (let x=0;x<this.detectionAreas.length;x++) {
+            for (let x = 0; x < this.detectionAreas.length; x++) {
                 if (x !== index) {
-                    areas.push(this.detectionAreas[x]);
+                    const area = this.detectionAreas[x];
+                    area.id = areas.length + 1;
+
+                    areas.push(area);
                 }
             }
 
@@ -757,92 +792,6 @@ export default {
             const sec = Math.round(ms / 1000);
 
             return this.$options.filters.humanizeSeconds(sec) + ' (' + sec + 's)';
-        },
-        checkAreaFilter(filters, player) {
-            const character = player.character.id in this.characters ? this.characters[player.character.id] : null,
-                _this = this,
-                check = filter => {
-                    switch (filter) {
-                        case 'is_vehicle':
-                            return !!player.vehicle;
-                        case 'is_not_vehicle':
-                            return !player.vehicle;
-                        case 'is_staff':
-                            return _this.staff.includes(player.player.steam);
-                        case 'is_not_staff':
-                            return !_this.staff.includes(player.player.steam);
-                        case 'is_dead':
-                            return player.character && player.icon.dead;
-                        case 'is_not_dead':
-                            return player.character && !player.icon.dead;
-                        case 'is_invisible':
-                            return player.invisible.raw;
-                        case 'is_not_invisible':
-                            return !player.invisible.raw;
-                        case 'is_highlighted':
-                            return player.player.steam in _this.highlightedPeople;
-                        case 'is_not_highlighted':
-                            return !(player.player.steam in _this.highlightedPeople);
-                        case 'is_male':
-                            return character && character.gender === 0;
-                        case 'is_female':
-                            return character && character.gender === 1;
-                    }
-
-                    return true;
-                };
-
-            for (let x = 0; x < filters.length; x++) {
-                if (!check(filters[x])) {
-                    return false;
-                }
-            }
-            return true;
-        },
-        updateDetectionAreas(player) {
-            const _this = this,
-                coords = player.location.toGame();
-
-            $.each(this.detectionAreas, function (index, area) {
-                const dist = Math.sqrt((coords.x - area.x) ** 2 + (coords.y - area.y) ** 2);
-
-                if (area.people.length >= 800) {
-                    return;
-                }
-
-                if (dist > area.radius || !_this.checkAreaFilter(area.filters, player)) {
-                    area.people = area.people.filter((p, x) => {
-                        if (p.exited_at) {
-                            return true;
-                        } else if (p.steam === player.player.steam) {
-                            if (area.type === 'persistent') {
-                                area.people[x].exited_at = Date.now();
-                                return true;
-                            }
-                            return false;
-                        }
-                        return true;
-                    });
-                } else {
-                    const addToList = area.people.filter(p => {
-                        return p.steam === player.player.steam && !p.exited_at;
-                    }).length === 0;
-
-                    if (addToList) {
-                        area.people.push({
-                            steam: player.player.steam,
-                            cid: player.character.id,
-                            source: player.player.source,
-                            name: player.character.name,
-                            entered_at: Date.now(),
-                            exited_at: null
-                        });
-                    }
-                }
-
-                _this.detectionAreas[index].people = area.people;
-                _this.detectionAreas[index]._timestamp = Date.now();
-            });
         },
         hostname(isSocket) {
             const isDev = window.location.hostname === 'localhost';
@@ -856,8 +805,8 @@ export default {
         getOTToken() {
             const _this = this;
 
-            return new Promise(function(resolve, reject) {
-                $.get(_this.hostname(false) + '/token?token=' + _this.token + '&cluster=' + _this.cluster, function(data) {
+            return new Promise(function (resolve, reject) {
+                $.get(_this.hostname(false) + '/token?token=' + _this.token + '&cluster=' + _this.cluster, function (data) {
                     if (data.status) {
                         resolve(data.token);
                     } else {
@@ -923,7 +872,7 @@ export default {
                     if (Date.now() - _this.socketStart > 30 * 1000) {
                         _this.data += ' ' + _this.t('map.try_reconnect');
 
-                        setTimeout(function() {
+                        setTimeout(function () {
                             _this.doMapRefresh(server);
                         }, 3000);
                     }
@@ -986,7 +935,7 @@ export default {
                     let unknownCharacters = [],
                         foundTracked = false;
 
-                    this.container.eachPlayer(function(id, player) {
+                    this.container.eachPlayer(function (id, player) {
                         if (!player.character) {
                             return;
                         }
@@ -996,8 +945,6 @@ export default {
                         if (characterID && !unknownCharacters.includes(characterID) && !(characterID in _this.characters)) {
                             unknownCharacters.push(characterID);
                         }
-
-                        _this.updateDetectionAreas(player);
 
                         if (!(id in _this.markers)) {
                             _this.markers[id] = Player.newMarker();
@@ -1047,6 +994,10 @@ export default {
                             _this.openPopup = null;
                         }
                     });
+
+                    for (let x=0;x<this.detectionAreas.length;x++) {
+                        this.detectionAreas[x].checkPlayers(Object.values(this.container.players), this.characters, this.highlightedPeople);
+                    }
 
                     for (const id in this.markers) {
                         if (!this.markers.hasOwnProperty(id) || this.container.isActive(id)) {
@@ -1195,7 +1146,7 @@ export default {
                 }, 500);
             });
 
-            $('#map').on('contextmenu', 'img.leaflet-marker-icon', function(e) {
+            $('#map').on('contextmenu', 'img.leaflet-marker-icon', function (e) {
                 e.preventDefault();
 
                 const id = $(this).data('playerId');

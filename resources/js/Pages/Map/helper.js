@@ -11,6 +11,7 @@ const colorClasses = [
     '.dark .police-color {color: #7469FF} .police-color {color: #3625FF}',
     '.dark .ems-color {color: #FF5959} .ems-color {color: #FF192E}'
 ];
+
 function ensureCustomColors() {
     if ($('#custom-colors').length === 0) {
         $('head').append('<style id="custom-colors">' + colorClasses.join('') + '</style>');
@@ -92,5 +93,8 @@ module.exports = {
             default:
                 return '';
         }
+    },
+    dist(pointA, pointB) {
+        return Math.sqrt((pointA.x - pointB.x) ** 2 + (pointA.y - pointB.y) ** 2);
     }
 };

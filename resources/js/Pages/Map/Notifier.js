@@ -1,7 +1,5 @@
 import {initNotifications, notify} from 'browser-notification';
-
-const StateUnloaded = 0,
-    StateLoaded = 1;
+import PlayerState from './PlayerState';
 
 class Notifier {
     constructor() {
@@ -10,9 +8,14 @@ class Notifier {
 
         this.playerMap = {};
         this.notifications = {
-            onload: {},
-            onunload: {}
+            load: {},
+            unload: {},
+            invisible: {}
         };
+    }
+
+    isEmpty() {
+        return Object.entries(this.notifications).map(a => Object.keys(a[1]).length).reduce((part, a) => part + a, 0) === 0;
     }
 
     init() {
@@ -21,98 +24,88 @@ class Notifier {
         });
     }
 
-    notifyOnLoad(steam) {
-        this.notifications.onload[steam] = true;
-        this.init();
+    on(target, steam) {
+        if (target in this.notifications) {
+            this.notifications[target][steam] = true;
+        }
     }
 
-    notifyOnUnload(steam) {
-        this.notifications.onunload[steam] = true;
-        this.init();
-    }
-
-    removeNotifyOnLoad(steam) {
-        delete this.notifications.onload[steam];
-    }
-
-    removeNotifyOnUnload(steam) {
-        delete this.notifications.onunload[steam];
+    removeNotify(target, steam) {
+        if (target in this.notifications) {
+            delete this.notifications[target][steam];
+        }
     }
 
     checkPlayers(container, vue) {
         const _this = this;
 
+        // Set current states
         container.eachPlayer(function (id, player) {
             _this.checkPlayer(id, player);
         });
 
-        for (const id in this.lastPlayerState) {
-            if (!this.lastPlayerState.hasOwnProperty(id)) continue;
-
-            const last = this.lastPlayerState[id],
-                now = id in this.currentPlayerState ? this.currentPlayerState[id] : StateUnloaded;
-
-            if (last === StateLoaded && now === StateUnloaded) {
-                this.onUnload(id, this.playerMap[id], vue);
-            }
-        }
-
+        // Set default states for new players and check for state changes
         for (const id in this.currentPlayerState) {
             if (!this.currentPlayerState.hasOwnProperty(id)) continue;
-            if (!(id in this.lastPlayerState)) {
-                this.lastPlayerState[id] = StateUnloaded;
+
+            const lastState = id in this.lastPlayerState ? this.lastPlayerState[id] : PlayerState.defaultState(),
+                currentState = this.currentPlayerState[id];
+
+            // Check if connection state changed
+            if (lastState.loaded && !currentState.loaded) {
+                this.trigger('unload', id, this.playerMap[id], vue);
+            } else if (!lastState.loaded && currentState.loaded) {
+                this.trigger('load', id, this.playerMap[id], vue);
             }
 
-            const last = this.lastPlayerState[id],
-                now = this.currentPlayerState[id];
-
-            if (last === StateUnloaded && now === StateLoaded) {
-                this.onLoad(id, this.playerMap[id], vue);
+            // Check if player just went invisible
+            if (!lastState.invisible && currentState.invisible) {
+                this.trigger('invisible', id, this.playerMap[id], vue);
             }
         }
 
-
+        // Advance states
         this.lastPlayerState = this.currentPlayerState;
         this.currentPlayerState = {};
 
+        // Update Player map
+        for (const target in this.notifications) {
+            if (!this.notifications.hasOwnProperty(target)) continue;
 
-        for (const id in this.notifications.onload) {
-            if (!this.notifications.onload.hasOwnProperty(id)) continue;
+            for (const id in this.notifications[target]) {
+                if (!this.notifications[target].hasOwnProperty(id)) continue;
 
-            if (id in this.playerMap) {
-                this.notifications.onload[id] = this.playerMap[id];
-            }
-        }
-        for (const id in this.notifications.onunload) {
-            if (!this.notifications.onunload.hasOwnProperty(id)) continue;
-
-            if (id in this.playerMap) {
-                this.notifications.onunload[id] = this.playerMap[id];
+                if (id in this.playerMap) {
+                    this.notifications[target][id] = this.playerMap[id];
+                }
             }
         }
     }
 
     checkPlayer(id, player) {
-        if (player.character) {
-            this.currentPlayerState[id] = StateLoaded;
-        } else {
-            this.currentPlayerState[id] = StateUnloaded;
-        }
-
+        this.currentPlayerState[id] = new PlayerState(
+            !!player.character,
+            player.invisible.value
+        );
         this.playerMap[id] = player.player;
     }
 
-    onUnload(id, player, vue) {
-        if (id in this.notifications.onunload) {
-            this.playSound('player-left');
-            this.notification('Unloaded ' + player.name, player.name + ' (' + player.steam + ') unloaded or left the server.', vue);
-        }
-    }
-
-    onLoad(id, player, vue) {
-        if (id in this.notifications.onload) {
-            this.playSound('player-joined');
-            this.notification('Loaded ' + player.name, player.name + ' (' + player.steam + ') has loaded into a character.', vue);
+    trigger(target, id, player, vue) {
+        if (target in this.notifications && id in this.notifications[target]) {
+            switch (target) {
+                case 'load':
+                    this.playSound('player-joined');
+                    this.notification('Loaded ' + player.name, player.name + ' (' + player.steam + ') has loaded into a character.', vue);
+                    break;
+                case 'unload':
+                    this.playSound('player-left');
+                    this.notification('Unloaded ' + player.name, player.name + ' (' + player.steam + ') unloaded or left the server.', vue);
+                    break;
+                case 'invisible':
+                    this.playSound('player-invisible');
+                    this.notification(player.name + ' just went invisible', player.name + ' (' + player.steam + ') just went invisible.', vue);
+                    break;
+            }
         }
     }
 

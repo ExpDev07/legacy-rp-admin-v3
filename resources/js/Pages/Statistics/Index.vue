@@ -16,7 +16,7 @@
                     :data="[bans.data, warnings.data, notes.data]"
                     :data-labels="bans.labels"
                     :labels="[t('statistics.bans'), t('statistics.warnings'), t('statistics.notes')]"
-                    :colors="['235, 54, 54', '235, 145, 55']"
+                    :colors="['235, 54, 54', '235, 145, 55', '255, 235, 55']"
                     :title="t('statistics.titles.ban_warn')"
                     class="w-full"
                 ></LineChart>

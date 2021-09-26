@@ -130,6 +130,7 @@
         "stop_highlight": "Stop highlighting",
         "afk_title": "AFK Players",
         "notify": "Notifications",
+        "notify_invisible": "Notify on Invisible",
         "notify_load": "Notify on Load",
         "notify_unload": "Notify on Unload",
         "notify_add": "Add Notify",
@@ -182,8 +183,7 @@
             "persistent_description": "Show everyone who has entered the area at any point in time"
         },
         "area_inside": "is inside area",
-        "area_exit": "exited {0}",
-        "area_time": "Time spent inside area: {0}",
+        "area_not_inside": "is not inside area",
         "advanced_track": "Advanced Track",
         "kick_reason": "You were afk for more than {0}, consider leaving the server or going to the character selection screen when you have to be afk for longer periods of time"
     },
@@ -402,6 +402,7 @@
         "none": "No players was found.",
         "search_btn": "Search players",
         "is_banned": "Is Banned",
+        "my_bans": "Banned by me",
         "discord_description": "How do i get someones Discord ID",
         "ban": {
             "issuing": "Issuing ban",
