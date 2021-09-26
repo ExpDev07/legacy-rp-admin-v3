@@ -183,8 +183,7 @@
             "persistent_description": "Show everyone who has entered the area at any point in time"
         },
         "area_inside": "is inside area",
-        "area_exit": "exited {0}",
-        "area_time": "Time spent inside area: {0}",
+        "area_not_inside": "is not inside area",
         "advanced_track": "Advanced Track",
         "kick_reason": "You were afk for more than {0}, consider leaving the server or going to the character selection screen when you have to be afk for longer periods of time"
     },
