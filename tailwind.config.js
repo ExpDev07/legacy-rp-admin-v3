@@ -80,6 +80,12 @@ module.exports = {
                 'light': defaultTheme.colors.white,
                 'dark':  defaultTheme.colors.gray['900'],
 
+                // Map colors
+                'map-staff':     '#46A54B',
+                'map-police':    '#7469FF',
+                'map-ems':       '#FF5959',
+                'map-highlight': '#FF6400',
+
                 // Theme colors.
                 'primary':   defaultTheme.colors.indigo['600'],
                 'secondary': defaultTheme.colors.gray['100'],

@@ -582,7 +582,7 @@ export default {
                 {
                     name: '',
                     positions: {
-                        '': 0
+                        '': ''
                     }
                 }
             ]

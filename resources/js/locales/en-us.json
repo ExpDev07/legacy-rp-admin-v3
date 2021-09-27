@@ -121,9 +121,9 @@
         "data_stats": "Police: {0}, EMS: {1}, Staff: {2}, Unloaded: {3}",
         "play": "Continue update",
         "toggle_duty_list": "Toggle On-Duty List",
-        "duty_list": "On-Duty List",
-        "duty_ems": "is on-duty EMS",
-        "duty_police": "is on-duty Police",
+        "duty_list_pd": "PD On-Duty",
+        "duty_list_ems": "EMS On-Duty",
+        "staff_online": "Staff Online",
         "pause": "Pause update",
         "track": "Track character",
         "stop_track": "Stop Track",
@@ -160,6 +160,11 @@
         "area_none": "Nobody inside the area",
         "filter_none": "No filters",
         "area_filter": "Filters",
+        "short": {
+            "remove": "[R]",
+            "track": "[T]",
+            "highlight": "[H]"
+        },
         "area_filters": {
             "title": "Filter",
             "is_vehicle": "Is in a vehicle",

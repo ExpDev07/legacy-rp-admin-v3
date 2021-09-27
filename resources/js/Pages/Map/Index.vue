@@ -318,6 +318,8 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Map Legend -->
                 <div class="my-2 flex flex-wrap -mx-2 justify-between text-xs w-map max-w-full">
                     <div class="mx-2">
                         <img src="/images/icons/circle.png" class="w-map-icon inline-block" alt="on foot"/>
@@ -348,6 +350,8 @@
                         <span class="leading-map-icon">Someone is on duty as ems</span>
                     </div>
                 </div>
+
+                <!-- Detection Areas -->
                 <div class="flex flex-wrap" v-if="detectionAreas.length > 0">
                     <div class="pt-4 mr-4" v-for="(area, index) in detectionAreas" :key="index">
                         <h3 class="mb-2">
@@ -358,7 +362,7 @@
                                    :title="t('global.remove')">&#x1F5D9;</a>
                             </sup>
                         </h3>
-                        <table class="text-xs font-mono">
+                        <table class="text-xs font-mono font-medium">
                             <tr v-if="Object.keys(area.players).length === 0">
                                 {{ t('map.area_none') }}
                             </tr>
@@ -378,18 +382,71 @@
                                 </td>
                                 <td>
                                     <a class="track-cid text-yellow-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">
-                                        [{{ t('map.do_track') }}]
+                                        {{ t('map.short.track') }}
                                     </a>
                                     <a class="highlight-cid text-yellow-600" href="#" :data-steam="player.steam">
-                                        [{{ t('map.do_highlight') }}]
+                                        {{ t('map.short.highlight') }}
                                     </a>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
+
                 <div class="flex flex-wrap">
-                    <div v-if="afkPeople.length > 0" class="pt-4 mr-4">
+                    <!-- Invisible Players -->
+                    <div v-if="invisiblePeople.length > 0" class="pt-4 mr-4 font-medium">
+                        <h3 class="mb-2">{{ t('map.invisible_title') }}</h3>
+                        <table class="text-sm font-mono">
+                            <tr v-for="(player, x) in invisiblePeople" :key="x">
+                                <td class="pr-2">
+                                    <a class="dark:text-red-400 text-red-600" target="_blank"
+                                       :href="'/players/' + player.steam">{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2 dark:text-red-400 text-red-600">
+                                    ({{ player.source }})
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.invisible') }}
+                                </td>
+                                <td>
+                                    <a class="track-cid dark:text-red-400 text-red-600" href="#"
+                                       :data-trackid="'server_' + player.source" data-popup="true">
+                                        {{ t('map.short.track') }}
+                                    </a>
+                                    <a class="highlight-cid dark:text-red-400 text-red-600" href="#"
+                                       :data-steam="player.steam">{{ t('map.short.highlight') }}</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Highlighted Players -->
+                    <div v-if="Object.keys(highlightedPeople).length > 0" class="pt-4 mr-4">
+                        <h3 class="mb-2">{{ t('map.highlighted_title') }}</h3>
+                        <table class="text-sm font-mono text-map-highlight font-medium">
+                            <tr v-for="(player, steam) in highlightedPeople" :key="steam" v-if="player !== true">
+                                <td class="pr-2">
+                                    <a target="_blank" :href="'/players/' + steam">{{ player.name }}</a>
+                                </td>
+                                <td class="pr-2">
+                                    ({{ player.source }})
+                                </td>
+                                <td class="pr-2">
+                                    {{ t('map.highlighted') }}
+                                </td>
+                                <td>
+                                    <a class="track-cid" href="#" :data-trackid="'server_' + player.source" data-popup="true">
+                                        {{ t('map.short.track') }}
+                                    </a>
+                                    <a href="#" @click="stopHighlight($event, steam)">{{ t('map.short.remove') }}</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- AFK Players -->
+                    <div v-if="afkPeople.length > 0" class="pt-4 mr-4 font-medium">
                         <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
                         <table class="text-sm font-mono">
                             <tr v-for="(player, x) in afkPeople" :key="x"
@@ -406,46 +463,20 @@
                                 </td>
                                 <td>
                                     <a class="track-cid" :style="'color:' + player.color" href="#"
-                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
-                                            t('map.do_track')
-                                        }}]</a>
+                                       :data-trackid="'server_' + player.source" data-popup="true">{{
+                                            t('map.short.track')
+                                        }}</a>
                                     <a class="highlight-cid" :style="'color:' + player.color" href="#"
-                                       :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
+                                       :data-steam="player.steam">{{ t('map.short.highlight') }}</a>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <div v-if="isShowingOnDutyList" class="pt-4 mr-4">
-                        <h3 class="mb-2">{{ t('map.duty_list') }}</h3>
-                        <table class="text-sm font-mono">
-                            <tr v-for="(player, x) in container.on_duty" :key="x">
-                                <td class="pr-2">
-                                    <a target="_blank" :href="'/players/' + player.steam"
-                                       :class="player.onDutyClass">{{ player.name }}</a>
-                                </td>
-                                <td class="pr-2" :class="player.onDutyClass">
-                                    ({{ player.source }})
-                                </td>
-                                <td class="pr-2" v-if="player.onDuty === 'police'">
-                                    {{ t('map.duty_police') }}
-                                </td>
-                                <td class="pr-2" v-else-if="player.onDuty === 'ems'">
-                                    {{ t('map.duty_ems') }}
-                                </td>
-                                <td>
-                                    <a :class="'track-cid ' + player.onDutyClass" href="#"
-                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
-                                            t('map.do_track')
-                                        }}]</a>
-                                    <a :class="'highlight-cid ' + player.onDutyClass" href="#"
-                                       :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div v-if="!container.notifier.isEmpty()" class="pt-4 mr-4">
+
+                    <!-- Notifications -->
+                    <div v-if="!container.notifier.isEmpty()" class="pt-4">
                         <h3 class="mb-2">{{ t('map.notify') }}</h3>
-                        <table class="text-sm font-mono">
+                        <table class="text-sm font-mono font-medium">
                             <tr v-for="(player, steam) in container.notifier.notifications.invisible"
                                 :key="'invisible_' + steam">
                                 <td class="pr-2">
@@ -459,7 +490,7 @@
                                 </td>
                                 <td>
                                     <a class="dark:text-red-400 text-red-600" href="#"
-                                       @click="stopNotify($event, steam, 'invisible')">[{{ t('global.remove') }}]</a>
+                                       @click="stopNotify($event, steam, 'invisible')">{{ t('map.short.remove') }}</a>
                                 </td>
                             </tr>
                             <tr v-for="(player, steam) in container.notifier.notifications.load" :key="'load_' + steam">
@@ -474,7 +505,7 @@
                                 </td>
                                 <td>
                                     <a class="dark:text-red-400 text-red-600" href="#"
-                                       @click="stopNotify($event, steam, 'load')">[{{ t('global.remove') }}]</a>
+                                       @click="stopNotify($event, steam, 'load')">{{ t('map.short.remove') }}</a>
                                 </td>
                             </tr>
                             <tr v-for="(player, steam) in container.notifier.notifications.unload"
@@ -490,61 +521,34 @@
                                 </td>
                                 <td>
                                     <a class="dark:text-red-400 text-red-600" href="#"
-                                       @click="stopNotify($event, steam, 'unload')">[{{ t('global.remove') }}]</a>
+                                       @click="stopNotify($event, steam, 'unload')">{{ t('map.short.remove') }}</a>
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    <div v-if="invisiblePeople.length > 0" class="pt-4 mr-4">
-                        <h3 class="mb-2">{{ t('map.invisible_title') }}</h3>
-                        <table class="text-sm font-mono">
-                            <tr v-for="(player, x) in invisiblePeople" :key="x">
-                                <td class="pr-2">
-                                    <a class="dark:text-red-400 text-red-600" target="_blank"
-                                       :href="'/players/' + player.steam">{{ player.name }}</a>
-                                </td>
-                                <td class="pr-2 dark:text-red-400 text-red-600">
-                                    ({{ player.source }})
-                                </td>
-                                <td class="pr-2">
-                                    {{ t('map.invisible') }}
-                                </td>
-                                <td>
-                                    <a class="track-cid dark:text-red-400 text-red-600" href="#"
-                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
-                                            t('map.do_track')
-                                        }}]</a>
-                                    <a class="highlight-cid dark:text-red-400 text-red-600" href="#"
-                                       :data-steam="player.steam">[{{ t('map.do_highlight') }}]</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div v-if="Object.keys(highlightedPeople).length > 0" class="pt-4">
-                        <h3 class="mb-2">{{ t('map.highlighted_title') }}</h3>
-                        <table class="text-sm font-mono">
-                            <tr v-for="(player, steam) in highlightedPeople" :key="steam" v-if="player !== true">
-                                <td class="pr-2">
-                                    <a class="dark:text-red-400 text-red-600" target="_blank"
-                                       :href="'/players/' + steam">{{ player.name }}</a>
-                                </td>
-                                <td class="pr-2 dark:text-red-400 text-red-600">
-                                    ({{ player.source }})
-                                </td>
-                                <td class="pr-2">
-                                    {{ t('map.highlighted') }}
-                                </td>
-                                <td>
-                                    <a class="track-cid dark:text-red-400 text-red-600" href="#"
-                                       :data-trackid="'server_' + player.source" data-popup="true">[{{
-                                            t('map.do_track')
-                                        }}]</a>
-                                    <a class="dark:text-red-400 text-red-600" href="#"
-                                       @click="stopHighlight($event, steam)">[{{ t('global.remove') }}]</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                </div>
+
+                <div class="flex flex-wrap">
+                    <simple-player-list
+                        v-if="isShowingOnDutyList"
+                        :title="t('map.duty_list_pd')"
+                        :players="container.on_duty.pd"
+                        color="text-map-police"
+                    ></simple-player-list>
+
+                    <simple-player-list
+                        v-if="isShowingOnDutyList"
+                        :title="t('map.duty_list_ems')"
+                        :players="container.on_duty.ems"
+                        color="text-map-ems"
+                    ></simple-player-list>
+
+                    <simple-player-list
+                        :title="t('map.staff_online')"
+                        :players="container.staff"
+                        color="text-map-staff"
+                        :usePlayerName="true"
+                    ></simple-player-list>
                 </div>
             </div>
         </template>
@@ -555,6 +559,7 @@
 <script>
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
+import SimplePlayerList from './../../Components/Map/SimplePlayerList';
 import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
@@ -585,6 +590,7 @@ export default {
     components: {
         VSection,
         VueSpeedometer,
+        SimplePlayerList,
     },
     props: {
         servers: {
