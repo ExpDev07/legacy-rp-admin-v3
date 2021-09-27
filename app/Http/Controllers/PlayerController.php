@@ -67,7 +67,8 @@ class PlayerController extends Controller
                     $player = $request->user()->player;
                     $ids = Ban::getAllBannedIdentifiersByCreator($player->player_name, $player->steam_identifier);
 
-                    $query->whereIn('steam_identifier', $ids);
+                    $query->whereIn('steam_identifier', $ids)->orderByRaw("FIELD(steam_identifier, '" . implode("','", $ids) . "') DESC");
+                    $isOrdered = true;
                 }
             }
         }

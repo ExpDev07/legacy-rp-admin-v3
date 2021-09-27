@@ -11,7 +11,11 @@ class PlayerContainer {
 
         this.invisible = [];
         this.afk = [];
-        this.on_duty = [];
+        this.on_duty = {
+            pd: [],
+            ems: []
+        };
+        this.staff = [];
         this.resetStats();
 
         this.isTrackedPlayerVisible = false;
@@ -38,7 +42,11 @@ class PlayerContainer {
 
         this.invisible = [];
         this.afk = [];
-        this.on_duty = [];
+        this.on_duty = {
+            pd: [],
+            ems: []
+        };
+        this.staff = [];
 
         this.isTrackedPlayerVisible = false;
 
@@ -48,7 +56,8 @@ class PlayerContainer {
 
         this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
         this.afk.sort((b, a) => (a.afk > b.afk) ? 1 : ((b.afk > a.afk) ? -1 : 0));
-        this.on_duty.sort((a, b) => (a.source > b.source) ? 1 : ((b.source > a.source) ? -1 : 0));
+        this.on_duty.pd.sort((a, b) => (a.source > b.source) ? 1 : ((b.source > a.source) ? -1 : 0));
+        this.on_duty.ems.sort((a, b) => (a.source > b.source) ? 1 : ((b.source > a.source) ? -1 : 0));
 
         this.notifier.checkPlayers(this, vue);
     }
@@ -111,15 +120,17 @@ class PlayerContainer {
 
         if (this.players[id].player.isStaff) {
             this.stats.staff++;
+
+            this.staff.push(this.getPlayerListInfo(this.players[id]));
         }
         if (this.players[id].onDuty === 'police') {
             this.stats.police++;
 
-            this.on_duty.push(this.getPlayerListInfo(this.players[id]));
+            this.on_duty.pd.push(this.getPlayerListInfo(this.players[id]));
         } else if (this.players[id].onDuty === 'ems') {
             this.stats.ems++;
 
-            this.on_duty.push(this.getPlayerListInfo(this.players[id]));
+            this.on_duty.ems.push(this.getPlayerListInfo(this.players[id]));
         }
 
         this.stats.total++;
@@ -150,14 +161,14 @@ class PlayerContainer {
             color: player.isAFK() ? getAFKColor(player.afk.time, player.player.isStaff) : '',
             is_staff: player.player.isStaff,
             name: player.character ? player.character.name : 'N/A',
+            playerName: player.player.name,
             steam: player.player.steam,
             afk: player.afk.time,
             afk_title: player.getAFKTitle(),
             invisible: player.invisible.time,
             cid: player.character ? player.character.id : 0,
             source: player.player.source,
-            onDuty: player.onDuty,
-            onDutyClass: getOnDutyClass(player.onDuty)
+            onDuty: player.onDuty
         };
     }
 }
