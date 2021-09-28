@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Ban;
-use App\Character;
 use App\Http\Requests\BanStoreRequest;
 use App\Http\Requests\BanUpdateRequest;
-use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\BanResource;
-use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,7 +24,7 @@ class PlayerBanController extends Controller
      * @param BanStoreRequest $request
      * @return RedirectResponse
      */
-    public function store(Player $player, BanStoreRequest $request)
+    public function store(Player $player, BanStoreRequest $request): RedirectResponse
     {
         if ($player->isBanned()) {
             return back()->with('error', 'Player is already banned');
@@ -76,11 +73,20 @@ class PlayerBanController extends Controller
      *
      * @param Player $player
      * @param Ban $ban
+     * @param Request $request
      * @return RedirectResponse
      */
-    public function destroy(Player $player, Ban $ban): RedirectResponse
+    public function destroy(Player $player, Ban $ban, Request $request): RedirectResponse
     {
         $player->bans()->forceDelete();
+        $user = $request->user();
+
+        // Automatically log the ban update as a warning.
+        $player->warnings()->create([
+            'issuer_id' => $user->player->user_id,
+            'message'   => 'I removed this players ban.',
+        ]);
+
         return back()->with('success', 'The player has successfully been unbanned.');
     }
 

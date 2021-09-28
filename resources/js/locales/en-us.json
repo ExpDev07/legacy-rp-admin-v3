@@ -98,7 +98,7 @@
         "title": "Statistics",
         "description": "Some general statistics",
         "bans": "Active Bans",
-        "warnings": "Warnings",
+        "warnings": "Warnings/Strikes",
         "notes": "Notes",
         "creations": "Character creations",
         "deletions": "Character deletions",
@@ -106,7 +106,7 @@
         "titles": {
             "bans_move": "Bans over time",
             "economy": "Economy (cash + bank + stocks + company balances + PDM & State funds)",
-            "ban_warn": "30-Day average of Bans, Warnings & Notes",
+            "ban_warn": "30-Day average of Bans, Warnings/Strikes & Notes",
             "character": "Character creations & deletions",
             "lucky_wheel": "Lucky Wheel Spins"
         }
@@ -473,20 +473,23 @@
             "warning_edited_title": "Edited on {0}",
             "warning_type": {
                 "warning": "Warning",
-                "note": "Note"
+                "note": "Note",
+                "strike": "Strike",
+                "system": "System"
             },
-            "warnings": "Warnings/Notes"
+            "warnings": "Strikes/Warnings/Notes/System"
         },
         "form": {
             "identifier": "Identifier",
             "name": "Name",
             "playtime": "Playtime",
-            "warnings": "Warnings",
+            "warnings": "Warnings/Strikes",
             "banned": "Banned"
         },
         "warning": {
             "give": "Add warning/note",
             "placeholder": "{0} did an oopsie.",
+            "do_strike": "Add as strike",
             "do_warn": "Add as warning",
             "do_note": "Add as note"
         },
