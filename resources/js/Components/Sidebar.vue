@@ -1,5 +1,6 @@
 <template>
-    <div class="flex flex-col w-56 px-3 py-10 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4">
+    <div
+        class="flex flex-col w-56 px-3 py-10 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4">
         <!-- General stuff -->
         <nav>
             <ul v-if="!isMobile()">
@@ -25,7 +26,8 @@
                             {{ link.label }}
                         </span>
                         <ul class="w-full">
-                            <li v-for="sub in link.sub" :key="sub.label" v-if="!sub.private || $page.auth.player.isSuperAdmin">
+                            <li v-for="sub in link.sub" :key="sub.label"
+                                v-if="!sub.private || $page.auth.player.isSuperAdmin">
                                 <inertia-link
                                     class="flex items-center px-5 py-2 mt-1 rounded hover:bg-gray-900 hover:text-white"
                                     :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
@@ -142,23 +144,24 @@ export default {
                             label: this.t('statistics.title'),
                             icon: 'statistics',
                             url: '/statistics',
+                        },
+                        {
+                            label: this.t('twitter.title'),
+                            icon: 'twitter',
+                            url: '/twitter',
                         }
                     ]
                 },
                 {
-                    label: this.t('twitter.title'),
-                    icon: 'twitter',
-                    url: '/twitter',
-                },
-                {
-                    label: this.t('servers.title'),
-                    icon: 'office',
-                    url: '/servers',
-                },
-                {
-                    label: this.t('sidebar.serials'),
-                    icon: 'fingerprint',
-                    url: '/serials',
+                    label: this.t('sidebar.csi'),
+                    icon: 'prints',
+                    sub: [
+                        {
+                            label: this.t('sidebar.serials'),
+                            icon: 'fingerprint',
+                            url: '/serials',
+                        }
+                    ]
                 },
                 {
                     label: this.t('sidebar.advanced'),
@@ -182,6 +185,11 @@ export default {
                         }
                     ]
                 },
+                {
+                    label: this.t('servers.title'),
+                    icon: 'office',
+                    url: '/servers',
+                }
             ],
         };
     },
@@ -191,7 +199,7 @@ export default {
         }
     },
     methods: {
-        isUrl (url) {
+        isUrl(url) {
             if (this.url === url) return true;
             if (this.url.substring(1) === '' || url.substring(1) === '') return false;
             return this.url.startsWith(url);
@@ -199,7 +207,7 @@ export default {
         len(sub, isSuperAdmin) {
             const length = sub.filter(l => !l.private || isSuperAdmin).length;
 
-            switch(length) {
+            switch (length) {
                 case 2:
                     return 'h-side-close hover:h-side-open-two';
                 case 3:

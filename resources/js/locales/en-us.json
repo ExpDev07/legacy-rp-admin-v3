@@ -54,7 +54,8 @@
         "advanced_search": "Search",
         "suspicious": "Suspicious",
         "data": "Data",
-        "serials": "Serial Lookup"
+        "serials": "Serial Lookup",
+        "csi": "CSI Tools"
     },
     "changelog": {
         "title": "Recent Updates",
