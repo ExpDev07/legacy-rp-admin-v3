@@ -22,6 +22,7 @@ class DetectionArea {
         this.circle = null;
 
         this.players = {};
+        this.previousPlayers = {};
         this.lastCheck = null;
     }
 
@@ -68,6 +69,7 @@ class DetectionArea {
 
     checkPlayers(players, characters, highlightedPeople) {
         if (!this.isPersistent) {
+            this.previousPlayers = this.players;
             this.players = {};
         } else {
             for (const id in this.players) {
@@ -93,7 +95,10 @@ class DetectionArea {
             isInArea = dist(coords, this.location) <= this.radius && this.matchesFilters(player, characters, highlightedPeople);
 
         if (isInArea) {
-            const beforeInvTime = player.player.steam in this.players ? this.players[player.player.steam].invisible_time : 0;
+            const beforeInvTime = player.player.steam in this.players
+                ? this.players[player.player.steam].invisible_time
+                : player.player.steam in this.previousPlayers
+                    ? this.previousPlayers[player.player.steam].invisible_time : 0;
 
             this.players[player.player.steam] = {
                 steam: player.player.steam,
