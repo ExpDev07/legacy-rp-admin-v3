@@ -100,7 +100,7 @@ class DetectionArea {
                 cid: player.character.id,
                 source: player.player.source,
                 name: player.character.name,
-                invisible_time: beforeInvTime + (player.invisible.value ? Date.now() - this.lastCheck : 0),
+                invisible_time: beforeInvTime + (player.invisible.raw ? Date.now() - this.lastCheck : 0),
                 inside: true
             };
         }
