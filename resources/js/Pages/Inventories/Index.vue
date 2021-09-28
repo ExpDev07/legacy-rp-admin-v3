@@ -3,10 +3,10 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                {{ t('inventories.character.title') }}
+                {{ t('inventories.logs.title') }}
             </h1>
             <p>
-                {{ t('inventories.character.description') }}
+                {{ t('inventories.logs.description') }}
             </p>
         </portal>
 

@@ -140,11 +140,13 @@ class PlayerCharacterController extends Controller
     {
         $resetCoords = json_decode(file_get_contents(__DIR__ . '/../../../helpers/coords_reset.json'), true);
         $motels = Motel::query()->where('cid', $character->character_id)->get()->sortBy(['motel', 'room_id']);
+        $motelMap = json_decode(file_get_contents(__DIR__ . '/../../../helpers/motels.json'), true);
 
         return Inertia::render('Players/Characters/Edit', [
             'player'      => new PlayerResource($player),
             'character'   => new CharacterResource($character),
             'motels'      => $motels->toArray(),
+            'motelMap'    => $motelMap,
             'vehicleMap'  => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
             'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
         ]);
