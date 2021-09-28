@@ -508,8 +508,10 @@
                     <select class="inline-block ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
                             id="warningFilter" @change="filterWarnings">
                         <option value="all" selected>{{ t('global.all') }}</option>
+                        <option value="strike">{{ t('players.show.warning_type.strike') }}</option>
                         <option value="warning">{{ t('players.show.warning_type.warning') }}</option>
                         <option value="note">{{ t('players.show.warning_type.note') }}</option>
+                        <option value="system">{{ t('players.show.warning_type.system') }}</option>
                     </select>
                 </h2>
             </template>
@@ -601,7 +603,11 @@
                     >
                     </textarea>
 
-                    <button class="px-5 py-2 font-semibold text-white bg-red-500 dark:bg-red-500 rounded" @click="form.warning.warning_type = 'warning'" type="submit">
+                    <button class="px-5 py-2 font-semibold text-white bg-red-500 dark:bg-red-500 rounded" @click="form.warning.warning_type = 'strike'" type="submit">
+                        <i class="mr-1 fas fa-bolt"></i>
+                        {{ t('players.warning.do_strike') }}
+                    </button>
+                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-yellow-600 rounded" @click="form.warning.warning_type = 'warning'" type="submit">
                         <i class="mr-1 fas fa-exclamation-triangle"></i>
                         {{ t('players.warning.do_warn') }}
                     </button>
@@ -755,10 +761,14 @@ export default {
             const label = this.t('players.show.warning_type.' + type);
 
             switch (type) {
+                case 'strike':
+                    return '<span class="italic text-red-500"><i class="fas fa-bolt"></i> ' + label + '</span>';
                 case 'warning':
-                    return '<span class="italic text-red-500"><i class="fas fa-exclamation-triangle"></i> ' + label + '</span>';
+                    return '<span class="italic text-yellow-600"><i class="fas fa-exclamation-triangle"></i> ' + label + '</span>';
                 case 'note':
                     return '<span class="italic text-yellow-400"><i class="fas fa-sticky-note"></i> ' + label + '</span>';
+                case 'system':
+                    return '<span class="italic text-blue-500"><i class="fas fa-robot"></i> ' + label + '</span>';
             }
 
             return '';

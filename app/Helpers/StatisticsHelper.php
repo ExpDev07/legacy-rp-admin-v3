@@ -104,7 +104,7 @@ class StatisticsHelper
         $stats = Warning::query()->fromSub(function ($query) {
             $query->from('warnings')->select([
                 DB::raw('FROM_UNIXTIME(UNIX_TIMESTAMP(`created_at`), \'%Y-%m-%d\') AS `date`'),
-            ])->where('warning_type', '=', Warning::TypeWarning)->orderByDesc('created_at');
+            ])->whereIn('warning_type', [Warning::TypeWarning, Warning::TypeStrike])->orderByDesc('created_at');
         }, 'warnings')->select([
             DB::raw('COUNT(`date`) as `count`'),
             'date',
@@ -265,7 +265,7 @@ class StatisticsHelper
                 $complete[$t]['count']++;
             }
 
-            foreach($complete as &$item) {
+            foreach ($complete as &$item) {
                 $item = round($item['value'] / $item['count']);
             }
         } else {

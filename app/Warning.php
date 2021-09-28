@@ -15,10 +15,14 @@ class Warning extends Model
     const ValidTypes = [
         self::TypeNote,
         self::TypeWarning,
+        self::TypeStrike,
+        self::TypeSystem,
     ];
 
     const TypeNote    = 'note';
     const TypeWarning = 'warning';
+    const TypeStrike  = 'strike';
+    const TypeSystem  = 'system';
 
     /**
      * The attributes that are mass assignable.
