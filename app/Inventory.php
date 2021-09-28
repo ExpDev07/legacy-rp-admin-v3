@@ -244,6 +244,15 @@ class Inventory
                 }
 
                 return $this;
+            case 'motel':
+                $query = Motel::query()->where('id', $this->id);
+                $motel = $query->first();
+
+                if ($motel) {
+                    $this->character = Character::query()->where('character_id', $motel->cid)->first();
+                }
+
+                return $this;
             case 'trunk':
             case 'glovebox':
                 $query = Vehicle::query();

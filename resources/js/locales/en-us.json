@@ -319,6 +319,7 @@
         "show_inv": "Show inventory",
         "show_trunk": "Show trunk inventory",
         "show_glovebox": "Show glovebox inventory",
+        "show_motel": "Show motel dresser inventory",
         "search": {
             "title": "Search Inventories",
             "label": "Inventories",
@@ -358,6 +359,7 @@
             "owner": "Vehicle Owner",
             "property": "Property",
             "prop_owner": "Property Owner",
+            "motel_owner": "Motel Owner",
             "prop_description": "The property is owned by {0} (#{1})",
             "unknown_prop": "Unknown Property",
             "character": "Character",
@@ -374,12 +376,14 @@
             "empty_title": "Empty slot {0}",
             "empty_confirm": "Are you sure you want to empty slot {0} in this inventory?"
         },
-        "character": {
+        "logs": {
             "title": "Inventory Logs",
+            "description": "Inventory logs related to a certain inventory"
+        },
+        "character": {
             "movement": "Movement",
             "item": "Moved Item",
-            "unknown": "Unknown",
-            "description": "Inventory logs related to a character"
+            "unknown": "Unknown"
         }
     },
     "twitter": {

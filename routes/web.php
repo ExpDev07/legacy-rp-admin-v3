@@ -70,6 +70,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
     Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);
     Route::get('/inventories/property/{property}', [InventoryController::class, 'property']);
+    Route::get('/inventories/motel/{motel}', [InventoryController::class, 'motel']);
+    Route::get('/inventories/raw/{identifier}', [InventoryController::class, 'raw']);
     Route::get('/inventory/{inventory}', [InventoryController::class, 'show']);
     Route::post('/inventory/{inventory}/createSnapshot', [InventoryController::class, 'createSnapshot']);
     Route::get('/inventory/snapshot/{snapshot}', [InventoryController::class, 'showSnapshot']);

@@ -416,19 +416,15 @@
 
                             <inertia-link
                                 class="block px-2 py-1 text-center text-white absolute top-1 right-10 bg-blue-600 dark:bg-blue-400 rounded"
-                                @click="findInventory($event)"
                                 :href="'/inventory_find/trunk/' + vehicle.id"
                                 :title="t('inventories.show_trunk')"
-                                v-if="$page.auth.player.isSuperAdmin"
                             >
                                 <i class="fas fa-car-side"></i>
                             </inertia-link>
                             <inertia-link
                                 class="block px-2 py-1 text-center text-white absolute top-1 right-1 bg-blue-600 dark:bg-blue-400 rounded"
-                                @click="findInventory($event)"
                                 :href="'/inventory_find/glovebox/' + vehicle.id"
                                 :title="t('inventories.show_glovebox')"
-                                v-if="$page.auth.player.isSuperAdmin"
                             >
                                 <i class="fas fa-car"></i>
                             </inertia-link>
@@ -499,6 +495,7 @@
                         :key="motel.id"
                         v-for="(motel) in motels"
                         :no_body="true"
+                        class="relative"
                     >
                         <template #header>
                             <h3 class="mb-2">
@@ -507,6 +504,23 @@
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.motels.expires') }}:</span> {{ motel.expire | formatTime(true) }}
                             </h4>
+                        </template>
+                        <template #footer>
+                            <inertia-link
+                                class="block px-2 py-1 text-center text-white absolute top-1 right-1 bg-blue-600 dark:bg-blue-400 rounded"
+                                v-if="motel.motel in motelMap"
+                                :href="'/inventory/motel-' + motelMap[motel.motel] + '-' + motel.room_id + ':1'"
+                                :title="t('inventories.show_motel')"
+                            >
+                                <i class="fas fa-archive"></i>
+                            </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 mt-3 text-center text-white bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/motel/' + motel.id"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
                         </template>
                     </card>
                 </div>
@@ -547,6 +561,10 @@ export default {
             required: true,
         },
         vehicleMap: {
+            type: Object,
+            required: true,
+        },
+        motelMap: {
             type: Object,
             required: true,
         },
@@ -703,21 +721,6 @@ export default {
 
             // Send request.
             await this.$inertia.post('/vehicles/delete/' + vehicleId);
-        },
-        async findInventory(e) {
-            e.preventDefault();
-
-            try {
-                const url = $(e.target).attr('href') + '?json=yes'
-                const data = await axios.get(url);
-
-                if (data.data && 'error' in data.data && data.data.error) {
-                    alert(data.data.error);
-                } else if (data.data && 'redirect' in data.data && data.data.redirect) {
-                    window.location.href = data.data.redirect;
-                }
-            } catch (e) {
-            }
         },
         sortJobs(array, type) {
             switch(type) {

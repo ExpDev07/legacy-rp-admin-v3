@@ -471,7 +471,6 @@
                                     class="block px-2 py-1 text-center text-white absolute top-1 right-1 bg-blue-600 dark:bg-blue-400 rounded"
                                     :href="'/inventory/character-' + character.id + ':1'"
                                     :title="t('inventories.show_inv')"
-                                    v-if="$page.auth.player.isSuperAdmin"
                                 >
                                     <i class="fas fa-box"></i>
                                 </inertia-link>

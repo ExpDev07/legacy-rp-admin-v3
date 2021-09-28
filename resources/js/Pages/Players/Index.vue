@@ -236,7 +236,7 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'players', 'time', 'banMap' ],
+                    only: [ 'players', 'time', 'banMap', 'links', 'page' ],
                 });
             } catch(e) {}
 

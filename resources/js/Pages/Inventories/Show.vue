@@ -3,7 +3,7 @@
 
         <portal to="title">
             <h1 class="dark:text-white" v-if="inventory">
-                {{ t('inventories.show.title') }} {{ inventory.title }}
+                {{ t('inventories.show.title') }} {{ inventory.title }} ({{ inventory.type }})
             </h1>
             <h1 class="dark:text-white" v-else>
                 {{ t('inventories.show.error') }}
@@ -29,6 +29,13 @@
                 <button class="block px-2 py-1 text-center text-white absolute top-1 right-1 bg-blue-600 dark:bg-blue-400 rounded" :title="t('inventories.show.snapshot')" @click="createSnapshot" v-if="!snapshot && !snapshotUrl">
                     <i class="fas fa-camera"></i>
                 </button>
+                <inertia-link
+                    class="block px-2 py-1 text-center text-white absolute top-1 right-10 bg-blue-600 dark:bg-blue-400 rounded"
+                    :href="'/inventories/raw/' + inventory.title"
+                    :title="t('inventories.view')"
+                >
+                    <i class="fas fa-briefcase"></i>
+                </inertia-link>
             </template>
 
             <template>
@@ -257,6 +264,55 @@
                         <template #header>
                             <h3 class="mb-2">
                                 {{ t('inventories.show.prop_owner') }}
+                            </h3>
+                            <h4>
+                                {{ inventory.character.first_name }} {{ inventory.character.last_name }}
+                                (#{{ inventory.character.character_id }})
+                            </h4>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.edit.dob') }}:</span>
+                                {{ $moment(inventory.character.date_of_birth).format('l') }}
+                            </h4>
+                            <h4 class="text-red-700 dark:text-red-300" v-if="inventory.character.character_deleted">
+                                <span>{{ t('players.edit.deleted') }}:</span>
+                                {{ $moment(inventory.character.character_deletion_timestamp).format('l') }}
+                            </h4>
+                        </template>
+
+                        <template>
+                            <p>
+                                {{ inventory.character.backstory }}
+                            </p>
+                        </template>
+
+                        <template #footer>
+                            <inertia-link
+                                class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                                {{ t('inventories.show.view_character') }}
+                            </inertia-link>
+                            <inertia-link
+                                class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
+                                :href="'/players/' + inventory.character.steam_identifier">
+                                {{ t('inventories.show.view_player') }}
+                            </inertia-link>
+                            <inertia-link
+                                class="block px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/character/' + inventory.character.character_id"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
+                        </template>
+                    </card>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-9 max-w-screen-lg"
+                     v-else-if="inventory.type === 'motel'">
+                    <card v-if="inventory.character">
+                        <template #header>
+                            <h3 class="mb-2">
+                                {{ t('inventories.show.motel_owner') }}
                             </h3>
                             <h4>
                                 {{ inventory.character.first_name }} {{ inventory.character.last_name }}

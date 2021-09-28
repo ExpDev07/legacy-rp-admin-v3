@@ -22,7 +22,7 @@ use Inertia\Response;
 class InventoryController extends Controller
 {
     /**
-     * Display a inventory logs related to a character.
+     * Display inventory logs related to a character.
      *
      * @param Character $character
      * @param Request $request
@@ -41,7 +41,7 @@ class InventoryController extends Controller
     }
 
     /**
-     * Display a inventory logs related to a vehicle.
+     * Display inventory logs related to a vehicle.
      *
      * @param Vehicle $vehicle
      * @param Request $request
@@ -62,7 +62,7 @@ class InventoryController extends Controller
     }
 
     /**
-     * Display a inventory logs related to a property.
+     * Display inventory logs related to a property.
      *
      * @param Property $property
      * @param Request $request
@@ -72,6 +72,42 @@ class InventoryController extends Controller
     {
         $inventories = [
             'property-' . $property->property_id . '-%',
+        ];
+
+        return $this->searchInventories($request, $inventories, 'LIKE');
+    }
+
+    /**
+     * Display inventory logs related to a motel.
+     *
+     * @param Motel $motel
+     * @param Request $request
+     * @return Response
+     */
+    public function motel(Motel $motel, Request $request): Response
+    {
+        $motelMap = json_decode(file_get_contents(__DIR__ . '/../../../helpers/motels.json'), true);
+
+        $inventories = [
+            'motel-' . $motelMap[$motel->motel] . '-' . $motel->room_id,
+        ];
+
+        return $this->searchInventories($request, $inventories, 'LIKE');
+    }
+
+    /**
+     * Display inventory logs related to a raw inventory identifier.
+     *
+     * @param string $identifier
+     * @param Request $request
+     * @return Response
+     */
+    public function raw(string $identifier, Request $request): Response
+    {
+        $inventory = Inventory::parseDescriptor($identifier);
+
+        $inventories = [
+            $inventory->title
         ];
 
         return $this->searchInventories($request, $inventories, 'LIKE');
@@ -217,13 +253,12 @@ class InventoryController extends Controller
      * @param string $type
      * @param string $id
      * @param Request $request
-     * @return RedirectResponse|\Illuminate\Http\Response
+     * @return RedirectResponse|void
      */
     public function find(string $type, string $id, Request $request)
     {
         if (!is_numeric($id)) {
-            return (new \Illuminate\Http\Response(json_encode(['error' => 'Invalid inventory id']), 200))
-                ->header('Content-Type', 'application/json');
+            abort(404);
         }
 
         $inv = null;
@@ -245,14 +280,9 @@ class InventoryController extends Controller
         if ($inv) {
             $url = '/inventory/' . $inv->inventory_name . ':1';
 
-            if ($request->query('json')) {
-                return (new \Illuminate\Http\Response(json_encode(['redirect' => $url]), 200))
-                    ->header('Content-Type', 'application/json');
-            }
             return redirect($url);
         } else {
-            return (new \Illuminate\Http\Response(json_encode(['error' => 'Inventory not found']), 200))
-                ->header('Content-Type', 'application/json');
+            abort(404);
         }
     }
 
