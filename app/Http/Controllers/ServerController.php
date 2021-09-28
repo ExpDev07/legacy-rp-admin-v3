@@ -36,6 +36,11 @@ class ServerController extends Controller
      */
     public function store(ServerStoreRequest $request): RedirectResponse
     {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can add servers.');
+        }
+
         Server::query()->create($request->validated());
         return back()->with('success', 'The server was successfully added. The server panel will now track it!');
     }
@@ -44,10 +49,16 @@ class ServerController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Server $server
+     * @param Request $request
      * @return RedirectResponse
      */
-    public function destroy(Server $server): RedirectResponse
+    public function destroy(Server $server, Request $request): RedirectResponse
     {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can delete servers.');
+        }
+
         $server->forceDelete();
         return redirect('/servers')->with('success', 'The server was successfully removed from tracking.');
     }

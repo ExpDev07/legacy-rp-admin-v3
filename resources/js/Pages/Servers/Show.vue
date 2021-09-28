@@ -15,7 +15,7 @@
 
         <portal to="actions">
             <div>
-                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger" method="DELETE" v-bind:href="'/servers/' + server.id">
+                <inertia-link class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger" method="DELETE" v-bind:href="'/servers/' + server.id" v-if="$page.auth.player.isSuperAdmin">
                     <i class="mr-1 fas fa-trash-alt"></i>
                     {{ t('servers.show.delete') }}
                 </inertia-link>
