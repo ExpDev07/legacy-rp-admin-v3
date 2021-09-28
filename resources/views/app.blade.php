@@ -22,6 +22,10 @@
     <!-- Styling -->
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 
+    <!-- Remote Debugging -->
+    <script>var REMOTE_DEBUG = {{ REMOTE_DEBUG ? 'true' : 'false' }};</script>
+    <script src="/debugging.js"></script>
+
     <!-- Scripts -->
     <script defer type="application/javascript" src="{{ mix('js/app.js') }}"></script>
     <script defer type="application/javascript" src="https://kit.fontawesome.com/0074643143.js" crossorigin="anonymous"></script>
