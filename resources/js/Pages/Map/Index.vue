@@ -203,7 +203,7 @@
                         <button
                             class="px-5 py-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                             @click="stopTracking()" v-if="container.isTrackedPlayerVisible">
-                            {{ t('map.stop_track') }}
+                            {{ t('global.stop') }}
                         </button>
                     </div>
                     <div class="flex flex-wrap">
@@ -216,6 +216,13 @@
                             class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
                             @click="addArea">
                             {{ t('map.area_add') }}
+                        </button>
+                        <button
+                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                            @click="addArea(true)"
+                            :title="t('map.quick_area_title')"
+                        >
+                            {{ t('map.quick_area') }}
                         </button>
                         <button
                             class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
@@ -612,6 +619,10 @@ export default {
             type: String,
             required: true
         },
+        myself: {
+            type: String,
+            required: true
+        },
         cluster: {
             type: String,
             required: true
@@ -638,6 +649,7 @@ export default {
             openPopup: null,
             isDragging: false,
             isAddingDetectionArea: false,
+            whereAmI: null,
             rightClickedPlayer: {
                 id: null,
                 name: null,
@@ -772,7 +784,20 @@ export default {
             this.form.area_radius = 5;
             this.form.filters = [];
         },
-        addArea() {
+        addArea(quick) {
+            if (quick) {
+                if (!this.whereAmI) {
+                    return alert(this.t('map.area_no_whereami'));
+                }
+
+                this.form.area_location = this.whereAmI;
+                this.form.area_radius = 50;
+                this.form.area_type = 'persistent';
+
+                this.confirmArea();
+                return;
+            }
+
             if (!this.rawClickedCoords) {
                 return alert(this.t('map.area_no_location'));
             }
@@ -947,6 +972,10 @@ export default {
                     this.container.eachPlayer(function (id, player) {
                         if (!player.character) {
                             return;
+                        }
+
+                        if (player.player.steam === _this.myself) {
+                            _this.whereAmI = player.location.toGame();
                         }
 
                         const characterID = player.getCharacterID();

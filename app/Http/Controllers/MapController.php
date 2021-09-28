@@ -39,6 +39,7 @@ class MapController extends Controller
             'blips'   => GeneralHelper::parseMapFile(__DIR__ . '/../../../helpers/markers.map') ?? [],
             'token'   => SessionHelper::getInstance()->getSessionKey(),
             'cluster' => CLUSTER,
+            'myself'  => $request->user()->player->steam_identifier,
         ]);
     }
 
