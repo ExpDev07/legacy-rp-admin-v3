@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-col w-56 px-3 py-10 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4">
+        class="flex flex-col w-60 px-3 py-10 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4">
         <!-- General stuff -->
         <nav>
             <ul v-if="!isMobile()">
@@ -208,6 +208,8 @@ export default {
             const length = sub.filter(l => !l.private || isSuperAdmin).length;
 
             switch (length) {
+                case 1:
+                    return 'h-side-close hover:h-side-open-one';
                 case 2:
                     return 'h-side-close hover:h-side-open-two';
                 case 3:

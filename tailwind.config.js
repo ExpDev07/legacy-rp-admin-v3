@@ -56,6 +56,7 @@ module.exports = {
             },
             height: {
                 'side-close':      '40px',
+                'side-open-one':   '116px',
                 'side-open-two':   '134px',
                 'side-open-three': '180px',
                 'max':             'calc(100vh - (210px + 120px))',
