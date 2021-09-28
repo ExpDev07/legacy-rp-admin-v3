@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Player;
+use App\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -33,7 +34,7 @@ class PlayerResource extends JsonResource
             'isStaff'         => $this->isStaff(),
             'isSuperAdmin'    => $this->isSuperAdmin(),
             'isBanned'        => $this->isBanned(),
-            'warnings'        => $this->warnings()->count(),
+            'warnings'        => $this->warnings()->whereIn('warning_type', [Warning::TypeStrike, Warning::TypeWarning])->count(),
             'ban'             => new BanResource($this->getActiveBan()),
             'status'          => $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null,
         ];
