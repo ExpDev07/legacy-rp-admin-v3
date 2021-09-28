@@ -17,6 +17,7 @@
         "delete": "Delete",
         "remove": "Remove",
         "confirm": "Confirm",
+        "stop": "Stop",
         "view_map": "View on Live-Map",
         "yes": "Yes",
         "no": "No",
@@ -54,7 +55,8 @@
         "advanced_search": "Search",
         "suspicious": "Suspicious",
         "data": "Data",
-        "serials": "Serial Lookup"
+        "serials": "Serial Lookup",
+        "csi": "CSI Tools"
     },
     "changelog": {
         "title": "Recent Updates",
@@ -139,6 +141,7 @@
         "no_notify": "No notifications",
         "invisible_title": "Invisible Players",
         "command": "Copy /tp",
+        "invisible_time": "Was invisible for {0}",
         "spy_satellite": "FIB Spy Satellite Map",
         "track_placeholder": "Track ID",
         "track_server": "Server ID",
@@ -152,9 +155,12 @@
         "do_highlight": "Highlight",
         "highlighted_title": "Highlighted People",
         "area_add": "Add Area",
+        "quick_area": "Quick Area",
+        "quick_area_title": "Add a persistent detection area with radius 50 at your current position.",
         "area_radius": "Area Radius (m)",
         "area_title": "Add new Detection Area",
         "area_no_location": "You need to click the location you want to place the detection area at first.",
+        "area_no_whereami": "Unable to find your location.",
         "area_inv_radius": "Invalid detection area radius. (1 < x > 5000)",
         "area_label": "Detection Area #{0}",
         "area_none": "Nobody inside the area",

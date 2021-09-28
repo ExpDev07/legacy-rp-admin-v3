@@ -57,6 +57,7 @@
     <i class="fas fa-pallet" v-else-if="name === 'pallet'"></i>
     <i class="fas fa-fingerprint" v-else-if="name === 'fingerprint'"></i>
     <i class="fas fa-shield-alt" v-else-if="name === 'shield'"></i>
+    <i class="fas fa-shoe-prints" v-else-if="name === 'prints'"></i>
 </template>
 
 <script>

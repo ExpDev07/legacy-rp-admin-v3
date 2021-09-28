@@ -22,6 +22,8 @@ class DetectionArea {
         this.circle = null;
 
         this.players = {};
+        this.previousPlayers = {};
+        this.lastCheck = null;
     }
 
     getMarker(vue) {
@@ -67,6 +69,7 @@ class DetectionArea {
 
     checkPlayers(players, characters, highlightedPeople) {
         if (!this.isPersistent) {
+            this.previousPlayers = this.players;
             this.players = {};
         } else {
             for (const id in this.players) {
@@ -76,9 +79,15 @@ class DetectionArea {
             }
         }
 
+        if (!this.lastCheck) {
+            this.lastCheck = Date.now();
+        }
+
         for (let x = 0; x < players.length; x++) {
             this.checkPlayer(players[x], characters, highlightedPeople);
         }
+
+        this.lastCheck = Date.now();
     }
 
     checkPlayer(player, characters, highlightedPeople) {
@@ -86,11 +95,17 @@ class DetectionArea {
             isInArea = dist(coords, this.location) <= this.radius && this.matchesFilters(player, characters, highlightedPeople);
 
         if (isInArea) {
+            const beforeInvTime = player.player.steam in this.players
+                ? this.players[player.player.steam].invisible_time
+                : player.player.steam in this.previousPlayers
+                    ? this.previousPlayers[player.player.steam].invisible_time : 0;
+
             this.players[player.player.steam] = {
                 steam: player.player.steam,
                 cid: player.character.id,
                 source: player.player.source,
                 name: player.character.name,
+                invisible_time: beforeInvTime + (player.invisible.raw ? Date.now() - this.lastCheck : 0),
                 inside: true
             };
         }
