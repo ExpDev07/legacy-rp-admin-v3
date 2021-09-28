@@ -139,6 +139,7 @@
         "no_notify": "No notifications",
         "invisible_title": "Invisible Players",
         "command": "Copy /tp",
+        "invisible_time": "Was invisible for {0}",
         "spy_satellite": "FIB Spy Satellite Map",
         "track_placeholder": "Track ID",
         "track_server": "Server ID",

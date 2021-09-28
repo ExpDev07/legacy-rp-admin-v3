@@ -381,6 +381,9 @@
                                     {{ t('map.area_not_inside') }}
                                 </td>
                                 <td>
+                                    <span class="text-yellow-600" :title="t('map.invisible_time', formatSeconds(Math.round(player.invisible_time / 1000)))" v-if="player.invisible_time > 0">
+                                        [I]
+                                    </span>
                                     <a class="track-cid text-yellow-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">
                                         {{ t('map.short.track') }}
                                     </a>
@@ -688,6 +691,9 @@ export default {
 
             this.copyToClipboard(text);
         },
+        formatSeconds(sec) {
+            return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
+        },
         stopTracking() {
             window.location.hash = '';
 
@@ -888,9 +894,6 @@ export default {
 
                 console.error('Failed to connect to socket', e);
             }
-        },
-        formatSeconds(seconds) {
-            return this.$moment.utc(seconds * 1000).format('HH:mm:ss');
         },
         addToLayer(marker, layer) {
             const _this = this;
