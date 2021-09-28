@@ -11,6 +11,7 @@
 |
 */
 
+use App\Helpers\SessionHelper;
 use App\Http\Controllers\AdvancedSearchController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\SuspiciousController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TwitterController;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
@@ -144,6 +146,36 @@ Route::group(['prefix' => 'cron'], function () {
 
     // economy statistics cronjob
     Route::get('economy', [CronjobController::class, 'updateEconomyStatistics']);
+});
+
+Route::group(['prefix' => 'debug'], function () {
+    // log frontend errors
+    Route::post('log', function (Request $request) {
+        if (!defined('REMOTE_DEBUG') || !REMOTE_DEBUG) {
+            abort(401);
+        }
+
+        $session = SessionHelper::getInstance();
+
+        $user = $session->get('user') ?? abort(401);
+        $username = $user && !empty($user['player']) ? $user['player']['player_name'] : 'N/A';
+
+        $error = $request->json('entry');
+        $href = $request->json('href');
+        if (!$error || !is_string($error) || !$href || !is_string($href)) {
+            abort(400);
+        }
+
+        $href = substr($href, 0, 150);
+        $error = substr($error, 0, 500);
+        $key = $session->getSessionKey();
+
+        $entry = '[' . $key . ' - ' . $username . '] ' . $href . ' - ' . $error;
+        $file = storage_path('logs/' . CLUSTER . '_frontend.log');
+
+        file_put_contents($file, $entry . PHP_EOL, FILE_APPEND);
+        abort(200);
+    });
 });
 
 // Used to get logs.
