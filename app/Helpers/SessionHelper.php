@@ -207,28 +207,7 @@ class SessionHelper
             self::$instance = $helper;
         }
 
-        self::cleanup(self::$instance->storage);
-
         return self::$instance;
-    }
-
-    /**
-     * Deletes all outdated sessions
-     *
-     * @param string $storage
-     */
-    private static function cleanup(string $storage)
-    {
-        $files = scandir($storage);
-
-        foreach ($files as $file) {
-            $path = $storage . $file;
-
-            if (is_file($path) && Str::endsWith($file, '.session') && time() - filemtime($path) > self::Lifetime) {
-                unlink($path);
-                LoggingHelper::log(str_replace('.session', '', $file), 'Deleting session file as its out of date');
-            }
-        }
     }
 
     /**
