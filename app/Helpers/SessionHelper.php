@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class SessionHelper
 {
-    const Cookie   = 'op_fw_session_store_';
+    const Cookie   = '_op_fw_session_store';
     const Alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
     const Lifetime = 60 * 60 * 24 * 2;
 
@@ -159,8 +159,6 @@ class SessionHelper
     public static function updateCookie(string $sessionKey)
     {
         $cookie = CLUSTER . self::Cookie;
-
-        $_COOKIE[$cookie] = $sessionKey;
 
         setcookie($cookie, $sessionKey, [
             'expires' => time() + self::Lifetime,

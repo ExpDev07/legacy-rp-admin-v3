@@ -125,7 +125,6 @@ class StaffMiddleware
         return [
             'ua'   => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
             'db'   => DB::connection()->getDatabaseName(),
-            'host' => $_SERVER['HTTP_HOST'],
         ];
     }
 
