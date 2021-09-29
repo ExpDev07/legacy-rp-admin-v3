@@ -142,13 +142,31 @@ class SessionHelper
     }
 
     /**
-     * Saves the sessions data to its file
+     * Saves the session's data to its file
      */
     private function store()
     {
         if (!file_put_contents($this->getSessionFile(), json_encode($this->value))) {
             LoggingHelper::log($this->sessionKey, 'Failed to write session file while storing data');
         }
+    }
+
+    /**
+     * Overrides the session cookie
+     *
+     * @param string $sessionKey
+     */
+    public static function updateCookie(string $sessionKey)
+    {
+        $cookie = CLUSTER . self::Cookie;
+
+        $_COOKIE[$cookie] = $sessionKey;
+
+        setcookie($cookie, $sessionKey, [
+            'expires' => time() + self::Lifetime,
+            'secure'  => true,
+            'path'    => '/',
+        ]);
     }
 
     /**
@@ -179,28 +197,11 @@ class SessionHelper
                 LoggingHelper::log($helper->sessionKey, $log);
             }
 
-            $uri = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-            $extraDomains = [
-                parse_url($uri, PHP_URL_HOST) . ':8080',
-                parse_url($uri, PHP_URL_HOST) . ':8443',
-            ];
-
             setcookie($cookie, $helper->sessionKey, [
                 'expires' => time() + self::Lifetime,
-                'secure'  => (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443,
+                'secure'  => true,
                 'path'    => '/',
-                'domain'  => parse_url($uri, PHP_URL_HOST),
             ]);
-
-            foreach ($extraDomains as $domain) {
-                setcookie($cookie, $helper->sessionKey, [
-                    'expires' => time() + self::Lifetime,
-                    'secure'  => true,
-                    'path'    => '/',
-                    'domain'  => $domain,
-                ]);
-            }
 
             $helper->load();
             $helper->store();
