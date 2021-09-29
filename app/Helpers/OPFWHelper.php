@@ -229,9 +229,13 @@ class OPFWHelper
                 $response = $t->getMessage();
             }
 
+            $log = json_encode($response);
+            if (strlen($log) > 300) {
+                $log = substr($log, 0, 300) . '...';
+            }
             LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Executed route "' . $route . '"');
             LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Data: ' . json_encode($data));
-            LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Result: ' . json_encode($response));
+            LoggingHelper::log(SessionHelper::getInstance()->getSessionKey(), 'Result: ' . $log);
 
             $result = self::parseResponse($response);
             if (!$result->status) {
@@ -268,7 +272,7 @@ class OPFWHelper
 
             switch ($category) {
                 case 2: // All 200 status codes
-                    return new OPFWResponse(true, !empty($json['message']) ? 'Success: ' . $json['message'] : 'Successfully executed route', isset($json['data']) ? $json['data'] : null);
+                    return new OPFWResponse(true, !empty($json['message']) ? 'Success: ' . $json['message'] : 'Successfully executed route', $json['data'] ?? null);
             }
         }
 
