@@ -5,8 +5,12 @@
                 <h1 class="dark:text-white">
                     {{ player.playerName }}
                 </h1>
-                <div
-                    class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
+                <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
+                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copyShare">
+                        <i class="fas fa-share-square mr-1"></i>
+                        <span>{{ t('global.copy_link') }}</span>
+                    </badge>
+
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
@@ -914,6 +918,20 @@ export default {
             } else {
                 $('.card-deleted').addClass('hidden');
             }
+        },
+        copyShare(e) {
+            const cluster = window.location.host.split('.')[0],
+                button = $(e.target).closest('.badge'),
+                _this = this,
+                url = 'https://' + cluster + '.opfw.net/p/' + this.player.steam36;
+
+            this.copyToClipboard(url);
+
+            $('span', button).text(this.t('global.copied'));
+
+            setTimeout(function () {
+                $('span', button).text(_this.t('global.copy_link'));
+            }, 1500);
         },
         copyText(e, text) {
             e.preventDefault();

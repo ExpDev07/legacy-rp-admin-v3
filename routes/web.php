@@ -38,6 +38,7 @@ use App\Http\Controllers\TwitterController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
 // Authentication methods.
@@ -49,6 +50,24 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['namespace' => 'Auth'], function () {
     Route::name('login')->get('/login', [LoginController::class, 'render']);
     Route::name('logout')->post('/logout', [LogoutController::class, 'logout']);
+});
+
+// Shortened redirects.
+Route::group([], function () {
+    Route::get('/p/{steam}', function(string $steam) {
+        $steam = preg_replace('/[^\w]+/mi', '', $steam);
+        $steam = base_convert($steam, 36, 16);
+
+        if (!$steam) {
+            abort(400);
+        }
+
+        if (!Str::startsWith($steam, 'steam:')) {
+            $steam = 'steam:' . $steam;
+        }
+
+        return redirect('/players/' . $steam);
+    });
 });
 
 // Routes requiring being logged in as a staff member.
