@@ -8,6 +8,7 @@ use App\Http\Middleware\StaffMiddleware;
 use App\Player;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\Http\Controllers\AbstractSteamLoginController;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
 
@@ -55,6 +56,8 @@ class SteamController extends AbstractSteamLoginController
             $user['avatar'] = '/images/op-logo.png';
         }
 
+        $redirect = '/';
+
         if ($player && !empty($user['avatar'])) {
             $user['player'] = $player->toArray();
             $user['player']['avatar'] = $user['avatar'];
@@ -70,7 +73,7 @@ class SteamController extends AbstractSteamLoginController
             StaffMiddleware::updateSessionLock();
 
             if ($session->exists('returnTo')) {
-                return redirect($session->get('returnTo'));
+                $redirect = $session->get('returnTo');
             }
         } else {
             LoggingHelper::log($session->getSessionKey(), 'Failed to create login session {player:' . json_encode(!!$player) . ', user->avatar:' . json_encode(!empty($user['avatar'])) . '}');
@@ -86,7 +89,20 @@ class SteamController extends AbstractSteamLoginController
             return redirect('/login')->with('error', 'Failed to get information from steam, please contact a developer.');
         }
 
-        return redirect('/');
+        $host = $_SERVER['HTTP_HOST'];
+        switch ($host) {
+            case CLUSTER . '.legacy-roleplay.com':
+                $redirect = 'https://' . CLUSTER . '.opfw.net/s/' . $session->getSessionKey() . '?back=' . urlencode('https://' . $host . $redirect);
+                break;
+            case CLUSTER . '.opfw.net':
+                $redirect = 'https://' . CLUSTER . '.legacy-roleplay.com/s/' . $session->getSessionKey() . '?back=' . urlencode('https://' . $host . $redirect);
+                break;
+            case 'localhost':
+                $redirect = 'http://localhost/s/' . $session->getSessionKey() . '?back=' . urlencode('http://localhost' . $redirect);
+                break;
+        }
+
+        return redirect($redirect);
     }
 
 }

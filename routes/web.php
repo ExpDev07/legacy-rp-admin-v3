@@ -54,7 +54,7 @@ Route::group(['namespace' => 'Auth'], function () {
 
 // Shortened redirects.
 Route::group([], function () {
-    Route::get('/p/{steam}', function(string $steam) {
+    Route::get('/p/{steam}', function (string $steam) {
         $steam = preg_replace('/[^\w]+/mi', '', $steam);
         $steam = base_convert($steam, 36, 16);
 
@@ -67,6 +67,26 @@ Route::group([], function () {
         }
 
         return redirect('/players/' . $steam);
+    });
+
+    Route::get('/s/{session}', function (string $session, Request $request) {
+        $session = preg_replace('/[^\w]+/mi', '', $session);
+        if (!$session) {
+            abort(400);
+        }
+
+        $back = $request->query('back');
+        if (
+            !Str::startsWith($back, "https://" . CLUSTER . '.legacy-roleplay.com') &&
+            !Str::startsWith($back, "https://" . CLUSTER . '.opfw.net') &&
+            !Str::startsWith($back, 'http://localhost/')
+        ) {
+            abort(400);
+        }
+
+        SessionHelper::updateCookie($session);
+
+        return redirect($back);
     });
 });
 
