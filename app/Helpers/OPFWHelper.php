@@ -50,6 +50,8 @@ class OPFWHelper
     /**
      * Kicks a player from the server
      *
+     * @param string $staffSteamIdentifier
+     * @param string $staffPlayerName
      * @param Player $player
      * @param string $reason
      * @return OPFWResponse
