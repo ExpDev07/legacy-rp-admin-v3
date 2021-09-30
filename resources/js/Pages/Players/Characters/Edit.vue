@@ -325,13 +325,7 @@
                         {{ t('players.characters.license.license') }}
                     </label>
                     <select class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" v-model="licenseForm.license">
-                        <option value="heli">{{ t('players.characters.license.heli') }}</option>
-                        <option value="fw">{{ t('players.characters.license.fw') }}</option>
-                        <option value="cfi">{{ t('players.characters.license.cfi') }}</option>
-                        <option value="hw">{{ t('players.characters.license.hw') }}</option>
-                        <option value="perf">{{ t('players.characters.license.perf') }}</option>
-                        <option value="management">{{ t('players.characters.license.management') }}</option>
-                        <option value="military">{{ t('players.characters.license.military') }}</option>
+                        <option :value="license" v-for="license in licenses">{{ t('players.characters.license.' + license) }}</option>
                     </select>
                 </div>
                 <div class="flex justify-end">
@@ -665,6 +659,7 @@ export default {
                 cash: this.character.cash,
                 bank: this.character.bank
             },
+            licenses: this.getAvailableLicenses(),
             isTattooRemoval: false,
             isResetSpawn: false,
             jobs: jobs,
@@ -676,6 +671,9 @@ export default {
         };
     },
     methods: {
+        getAvailableLicenses() {
+            return ["heli", "fw", "cfi", "hw", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
+        },
         setPayCheck() {
             for(let x=0;x<Jobs.length;x++) {
                 const j = Jobs[x];
@@ -796,6 +794,8 @@ export default {
 
             // Reset.
             this.isLicenceAdd = false;
+
+            this.licenses = this.getAvailableLicenses();
         },
         async removeLicenses() {
             if (!confirm(this.t('players.characters.license.confirm'))) {
@@ -810,6 +810,8 @@ export default {
 
             // Reset.
             this.isLicenceAdd = false;
+
+            this.licenses = this.getAvailableLicenses();
         },
         async editBalance() {
             // Send request.
