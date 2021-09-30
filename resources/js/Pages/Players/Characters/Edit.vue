@@ -375,6 +375,7 @@
                         <template #header>
                             <h3 class="mb-2">
                                 {{ vehicle.model_name in vehicleMap ? vehicleMap[vehicle.model_name] : vehicle.model_name }}
+                                <sup>{{ vehicle.model_name }}</sup>
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.vehicles.plate') }}:</span> {{ vehicle.plate }}
