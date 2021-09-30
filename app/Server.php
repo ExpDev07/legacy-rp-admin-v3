@@ -30,6 +30,7 @@ class Server extends Model
      */
     protected $fillable = [
         'url',
+        'name',
     ];
 
     /**
