@@ -15,7 +15,8 @@ class ServerStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'url' => ['required', 'url'],
+            'url'  => ['required', 'url'],
+            'name' => ['required', 'string'],
         ];
     }
 

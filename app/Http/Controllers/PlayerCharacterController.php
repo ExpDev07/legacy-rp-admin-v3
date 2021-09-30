@@ -13,6 +13,7 @@ use App\Motel;
 use App\PanelLog;
 use App\Player;
 use App\Property;
+use App\Statistics\EconomyStatistic;
 use App\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -142,6 +143,8 @@ class PlayerCharacterController extends Controller
         $motels = Motel::query()->where('cid', $character->character_id)->get()->sortBy(['motel', 'room_id']);
         $motelMap = json_decode(file_get_contents(__DIR__ . '/../../../helpers/motels.json'), true);
 
+        $economy = EconomyStatistic::query()->orderByDesc('last_updated')->select(['last_updated', 'closing'])->limit(1)->first();
+
         return Inertia::render('Players/Characters/Edit', [
             'player'      => new PlayerResource($player),
             'character'   => new CharacterResource($character),
@@ -149,6 +152,7 @@ class PlayerCharacterController extends Controller
             'motelMap'    => $motelMap,
             'vehicleMap'  => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
             'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
+            'economy'     => $economy ? $economy->closing : 0,
         ]);
     }
 

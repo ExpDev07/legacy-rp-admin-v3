@@ -16,7 +16,13 @@
                     <label class="block mb-3" for="url">
                         {{ t('servers.add.url') }}
                     </label>
-                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="url" placeholder="https://c3s1.op-framework.com/op-framework" v-model="form.url" required>
+                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="url" id="url" placeholder="https://c2s1.op-framework.com/op-framework" v-model="form.url" required>
+                </div>
+                <div>
+                    <label class="block mb-3" for="name">
+                        {{ t('servers.add.name') }}
+                    </label>
+                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="name" placeholder="Test Server" v-model="form.name" required>
                 </div>
             </template>
 
@@ -59,7 +65,10 @@
                     :key="server.id"
                 >
                     <template #header>
-                        <h3 class="mb-2">
+                        <h3 class="mb-2" v-if="server.name">
+                            {{ server.name }}
+                        </h3>
+                        <h3 class="mb-2" v-else>
                             {{ t('servers.list.server') }} #{{ server.id }}
                         </h3>
                         <h4 class="italic text-primary dark:text-dark-primary" v-if="server.information !== null">
@@ -126,6 +135,7 @@ export default {
             isAdding: false,
             form: {
                 url: '',
+                name: '',
             },
         }
     },

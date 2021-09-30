@@ -75,7 +75,9 @@ class PlayerRouteController extends Controller
             return back()->with('error', 'Character ID cannot be empty');
         }
 
-        return OPFWHelper::unloadCharacter($user->player->steam_identifier, $player, $character)->redirect();
+        $message = trim($request->input('message'));
+
+        return OPFWHelper::unloadCharacter($user->player->steam_identifier, $player, $character, $message)->redirect();
     }
 
     /**

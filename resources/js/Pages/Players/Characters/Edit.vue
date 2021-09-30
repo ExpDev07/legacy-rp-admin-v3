@@ -18,11 +18,17 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="character.characterDeleted">
                         <span class="font-semibold">{{ t('players.edit.deleted') }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
                     </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary relative">
+                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary relative flex">
                         <span v-html="local.cash" :title="local.cashTitle">{{ local.cash }}</span>
 
+                        <span
+                            class="block p-0.5 text-center text-black dark:text-white text-xs absolute top-0 right-1 bg-transparent rounded"
+                            :title="local.influence"
+                        >
+                            <i class="fas fa-info"></i>
+                        </span>
                         <button
-                            class="block px-1 py-1 text-center text-black dark:text-white text-xs absolute top-0 right-0 bg-transparent rounded"
+                            class="ml-2 text-warning dark:text-dark-warning"
                             @click="isEditingBalance = true"
                             v-if="$page.auth.player.isSuperAdmin"
                         >
@@ -325,13 +331,7 @@
                         {{ t('players.characters.license.license') }}
                     </label>
                     <select class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" v-model="licenseForm.license">
-                        <option value="heli">{{ t('players.characters.license.heli') }}</option>
-                        <option value="fw">{{ t('players.characters.license.fw') }}</option>
-                        <option value="cfi">{{ t('players.characters.license.cfi') }}</option>
-                        <option value="hw">{{ t('players.characters.license.hw') }}</option>
-                        <option value="perf">{{ t('players.characters.license.perf') }}</option>
-                        <option value="management">{{ t('players.characters.license.management') }}</option>
-                        <option value="military">{{ t('players.characters.license.military') }}</option>
+                        <option :value="license" v-for="license in licenses">{{ t('players.characters.license.' + license) }}</option>
                     </select>
                 </div>
                 <div class="flex justify-end">
@@ -375,6 +375,7 @@
                         <template #header>
                             <h3 class="mb-2">
                                 {{ vehicle.model_name in vehicleMap ? vehicleMap[vehicle.model_name] : vehicle.model_name }}
+                                <sup>{{ vehicle.model_name }}</sup>
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.vehicles.plate') }}:</span> {{ vehicle.plate }}
@@ -576,6 +577,10 @@ export default {
             type: Array,
             required: true,
         },
+        economy: {
+            type: Number,
+            required: true,
+        }
     },
     data() {
         let jobs = JSON.parse(JSON.stringify(Jobs.sort((a, b) => {
@@ -626,6 +631,9 @@ export default {
             };
         });
 
+        const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance,
+            influence = this.economy > 0 && totalMoney > 0 ? (totalMoney / this.economy) * 100 : 0;
+
         return {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
@@ -635,7 +643,8 @@ export default {
                     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.cash),
                     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.bank)
                 ),
-                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance))
+                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance)),
+                influence: this.t('players.characters.economy', new Intl.NumberFormat('en-US').format(influence))
             },
             paycheck: 0,
             form: {
@@ -665,6 +674,7 @@ export default {
                 cash: this.character.cash,
                 bank: this.character.bank
             },
+            licenses: this.getAvailableLicenses(),
             isTattooRemoval: false,
             isResetSpawn: false,
             jobs: jobs,
@@ -676,6 +686,9 @@ export default {
         };
     },
     methods: {
+        getAvailableLicenses() {
+            return ["heli", "fw", "cfi", "hw", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
+        },
         setPayCheck() {
             for(let x=0;x<Jobs.length;x++) {
                 const j = Jobs[x];
@@ -796,6 +809,8 @@ export default {
 
             // Reset.
             this.isLicenceAdd = false;
+
+            this.licenses = this.getAvailableLicenses();
         },
         async removeLicenses() {
             if (!confirm(this.t('players.characters.license.confirm'))) {
@@ -810,6 +825,8 @@ export default {
 
             // Reset.
             this.isLicenceAdd = false;
+
+            this.licenses = this.getAvailableLicenses();
         },
         async editBalance() {
             // Send request.

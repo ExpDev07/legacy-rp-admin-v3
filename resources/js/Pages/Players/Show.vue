@@ -149,6 +149,91 @@
             </div>
         </div>
 
+        <!-- Unloading -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isUnloading">
+            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.unload') }}</h3>
+                <form class="space-y-6" @submit.prevent="unloadCharacter">
+                    <!-- Message -->
+                    <div class="w-full p-3 flex justify-between">
+                        <label class="mr-4 block w-1/4 text-center pt-2 font-bold">
+                            {{ t('players.show.unload_msg') }}
+                        </label>
+                        <textarea class="block bg-gray-200 dark:bg-gray-600 rounded w-3/4 px-4 py-2" id="unload_message"
+                                  v-model="form.unload.message"></textarea>
+                    </div>
+
+                    <p>
+                        {{ t('players.show.unload_confirm') }}
+                    </p>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-3">
+                        <button class="px-5 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600"
+                                type="submit">
+                            <i class="fas fa-bolt mr-1"></i>
+                            {{ t('players.show.unload_do') }}
+                        </button>
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                                type="button" @click="isUnloading = false">
+                            {{ t('global.cancel') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Linked Accounts -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
+            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.linked_title') }}</h3>
+                <div v-if="isShowingLinkedLoading">
+                    <div class="flex justify-center items-center my-6 mt-12">
+                        <div>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked" :key="identifier">
+                        <div class="p-3 w-1/2 relative">
+                            <b class="block">{{ link.label }}</b>
+                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{ identifier }}</pre>
+
+                            <button
+                                class="p-1 absolute top-0 right-0 text-xs font-semibold bg-transparent text-red-600 dark:text-red-400 rounded"
+                                @click="removeIdentifier(identifier)"
+                                :title="t('global.remove')"
+                                v-if="$page.auth.player.isSuperAdmin"
+                            >
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="p-3 w-1/2" v-if="link.accounts.length > 0">
+                            <a
+                                class="px-5 py-1 mb-2 border-2 rounded block w-full border-blue-200 bg-primary-pale dark:bg-dark-primary-pale"
+                                :href="'/players/' + account.steam_identifier"
+                                target="_blank"
+                                v-for="account in link.accounts"
+                                :key="account.steam_identifier"
+                            >
+                                <span class="font-semibold">{{ account.player_name }}</span>
+                            </a>
+                        </div>
+                        <div class="p-3 w-1/2" v-else>
+                            <span class="italic text-sm">{{ t('players.show.no_link') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isShowingLinked = false">
+                        {{ t('global.close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- StaffPM -->
         <div>
             <!-- Issuing -->
@@ -458,7 +543,7 @@
                             <div class="flex justify-between flex-wrap">
                                 <button
                                     class="block w-full px-4 py-3 2xl:w-split text-center text-white mt-3 bg-warning dark:bg-dark-warning rounded"
-                                    v-if="player.status.status === 'online'" @click="unloadCharacter(character.id)">
+                                    v-if="player.status.status === 'online'" @click="form.unload.character = character.id; isUnloading = true">
                                     <i class="fas fa-bolt mr-1"></i>
                                     {{ t('players.show.unload') }}
                                 </button>
@@ -727,8 +812,13 @@ export default {
                     message: null,
                     warning_type: null,
                 },
+                unload: {
+                    message: this.t('players.show.unload_default'),
+                    character: null
+                }
             },
             isShowingDeletedCharacters: false,
+            isUnloading: false,
             isShowingLinked: false,
             isShowingLinkedLoading: false,
             linkedAccounts: {
@@ -814,15 +904,17 @@ export default {
             this.isKicking = false;
             this.form.kick.reason = null;
         },
-        async unloadCharacter(character) {
+        async unloadCharacter() {
             if (!confirm(this.t('players.show.unload_confirm'))) {
                 return;
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/unloadCharacter', {
-                character: character
-            });
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/unloadCharacter', this.form.unload);
+
+            this.form.unload.message = this.t('players.show.unload_default');
+            this.form.unload.character = null;
+            this.isUnloading = false;
         },
         async deleteCharacter(e, characterId) {
             e.preventDefault();

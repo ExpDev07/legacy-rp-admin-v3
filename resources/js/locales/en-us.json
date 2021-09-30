@@ -416,6 +416,7 @@
         "name": "Player Name",
         "steam": "Steam Identifier",
         "discord": "Discord ID",
+        "server_id": "Current Server ID",
         "none": "No players was found.",
         "search_btn": "Search players",
         "is_banned": "Is Banned",
@@ -470,6 +471,8 @@
             "panel_logs": "Latest 10 Panel Logs",
             "delete_character": "Are you sure you want to delete this character?",
             "unload": "Unload Players Character",
+            "unload_msg": "Unload Message",
+            "unload_msg_description": "This message will be displayed on the character selection screen.",
             "unload_confirm": "Are you sure you want to unload this players character? This will send them to the character selection screen.",
             "warning_edited": "Edited",
             "warning_edited_title": "Edited on {0}",
@@ -479,7 +482,9 @@
                 "strike": "Strike",
                 "system": "System"
             },
-            "warnings": "Strikes/Warnings/Notes/System"
+            "warnings": "Strikes/Warnings/Notes/System",
+            "unload_do": "Unload",
+            "unload_default": "You have been AFK for an extended period of time, consider going to the character selection screen next time."
         },
         "form": {
             "identifier": "Identifier",
@@ -532,6 +537,7 @@
             "tattoo_do": "Remove tattoos",
             "tattoo_zone": "Tattoo Body-Part",
             "delete": "Delete this character",
+            "economy": "Economic Influence: {0}%",
             "zone": {
                 "all": "All",
                 "head": "Head",
@@ -666,10 +672,14 @@
             "loading": "Loading",
             "retrieved": "Retrieved from {0}"
         },
+        "edit": {
+            "edit": "Edit Server"
+        },
         "add": {
             "add": "Add server",
             "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
             "url": "URL",
+            "name": "Name",
             "do": "Add"
         },
         "show": {

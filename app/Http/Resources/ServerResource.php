@@ -17,8 +17,9 @@ class ServerResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'url' => $this->url,
+            'id'          => $this->id,
+            'url'         => $this->url,
+            'name'        => $this->name,
             'information' => $this->resource->fetchApi(),
         ];
     }
