@@ -18,11 +18,17 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="character.characterDeleted">
                         <span class="font-semibold">{{ t('players.edit.deleted') }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
                     </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary relative">
+                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary relative flex">
                         <span v-html="local.cash" :title="local.cashTitle">{{ local.cash }}</span>
 
+                        <span
+                            class="block p-0.5 text-center text-black dark:text-white text-xs absolute top-0 right-1 bg-transparent rounded"
+                            :title="local.influence"
+                        >
+                            <i class="fas fa-info"></i>
+                        </span>
                         <button
-                            class="block px-1 py-1 text-center text-black dark:text-white text-xs absolute top-0 right-0 bg-transparent rounded"
+                            class="ml-2 text-warning dark:text-dark-warning"
                             @click="isEditingBalance = true"
                             v-if="$page.auth.player.isSuperAdmin"
                         >
@@ -570,6 +576,10 @@ export default {
             type: Array,
             required: true,
         },
+        economy: {
+            type: Number,
+            required: true,
+        }
     },
     data() {
         let jobs = JSON.parse(JSON.stringify(Jobs.sort((a, b) => {
@@ -620,6 +630,9 @@ export default {
             };
         });
 
+        const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance,
+            influence = this.economy > 0 && totalMoney > 0 ? (totalMoney / this.economy) * 100 : 0;
+
         return {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
@@ -629,7 +642,8 @@ export default {
                     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.cash),
                     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.bank)
                 ),
-                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance))
+                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance)),
+                influence: this.t('players.characters.economy', new Intl.NumberFormat('en-US').format(influence))
             },
             paycheck: 0,
             form: {
