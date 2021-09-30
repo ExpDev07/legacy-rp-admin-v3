@@ -9,6 +9,7 @@ use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
+use App\Server;
 use App\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -51,6 +52,15 @@ class PlayerController extends Controller
         // Filtering by discord.
         if ($discord = $request->input('discord')) {
             $query->where('identifiers', 'LIKE', '%discord:' . $discord . '%');
+        }
+
+        // Filtering by serer-id.
+        if ($server = $request->input('server')) {
+            $online = array_keys(array_filter(Player::getAllOnlinePlayers(true), function($player) use ($server) {
+                return $player['id'] === intval($server);
+            }));
+
+            $query->whereIn('steam_identifier', $online);
         }
 
         // Filtering isBanned.
@@ -111,6 +121,7 @@ class PlayerController extends Controller
                 'name'    => $request->input('name'),
                 'steam'   => $request->input('steam'),
                 'discord' => $request->input('discord'),
+                'server' => $request->input('server'),
                 'banned'  => $request->input('banned') ?: 'all',
             ],
             'links'   => $this->getPageUrls($page),
