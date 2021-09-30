@@ -416,6 +416,7 @@
         "name": "Player Name",
         "steam": "Steam Identifier",
         "discord": "Discord ID",
+        "server_id": "Current Server ID",
         "none": "No players was found.",
         "search_btn": "Search players",
         "is_banned": "Is Banned",
