@@ -49,16 +49,14 @@ class InventoryController extends Controller
      */
     public function vehicle(Vehicle $vehicle, Request $request): Response
     {
-        $type = $vehicle->vehicleType();
-
         $inventories = [
-            'trunk-' . $type . '-' . $vehicle->plate,
-            'trunk-' . $type . '-' . $vehicle->vehicle_id,
-            'glovebox-' . $type . '-' . $vehicle->plate,
-            'glovebox-' . $type . '-' . $vehicle->vehicle_id,
+            'trunk-%-' . $vehicle->plate,
+            'trunk-%-' . $vehicle->vehicle_id,
+            'glovebox-' . $vehicle->plate,
+            'glovebox-' . $vehicle->vehicle_id,
         ];
 
-        return $this->searchInventories($request, $inventories);
+        return $this->searchInventories($request, $inventories, true);
     }
 
     /**
