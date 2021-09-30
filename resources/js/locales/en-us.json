@@ -666,10 +666,14 @@
             "loading": "Loading",
             "retrieved": "Retrieved from {0}"
         },
+        "edit": {
+            "edit": "Edit Server"
+        },
         "add": {
             "add": "Add server",
             "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
             "url": "URL",
+            "name": "Name",
             "do": "Add"
         },
         "show": {

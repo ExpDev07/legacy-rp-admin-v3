@@ -46,6 +46,25 @@ class ServerController extends Controller
     }
 
     /**
+     * Updates the specified resource.
+     *
+     * @param Server $server
+     * @param ServerStoreRequest $request
+     * @return RedirectResponse
+     */
+    public function update(Server $server, ServerStoreRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can edit servers.');
+        }
+
+        $server->update($request->validated());
+
+        return back()->with('success', 'The server was successfully edited.');
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param Server $server
