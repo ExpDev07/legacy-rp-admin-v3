@@ -135,13 +135,15 @@ class OPFWHelper
     }
 
     /**
-     * Unloads someones character
+     * Unloads someone's character
      *
+     * @param string $staffSteamIdentifier
      * @param Player $player
      * @param string $character_id
+     * @param string $message
      * @return OPFWResponse
      */
-    public static function unloadCharacter(string $staffSteamIdentifier, Player $player, string $character_id): OPFWResponse
+    public static function unloadCharacter(string $staffSteamIdentifier, Player $player, string $character_id, string $message): OPFWResponse
     {
         $steam = $player->steam_identifier;
 
@@ -153,6 +155,7 @@ class OPFWHelper
         $response = self::executeRoute($status->serverIp . 'execute/unloadCharacter', [
             'steamIdentifier' => $steam,
             'characterId'     => $character_id,
+            'message'         => $message,
         ]);
 
         if ($response->status) {
