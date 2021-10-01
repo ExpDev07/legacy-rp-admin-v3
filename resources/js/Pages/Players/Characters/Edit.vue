@@ -458,10 +458,10 @@
                                 {{ property.property_address }}
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.properties.cost') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(property.property_cost) }}
+                                <span>{{ t('players.properties.cost') }}:</span> {{ numberFormat(property.property_cost, 0, true) }}
                             </h4>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.properties.rent') }}:</span> {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(property.property_income) }}
+                                <span>{{ t('players.properties.rent') }}:</span> {{ numberFormat(property.property_income, 0, true) }}
                             </h4>
                         </template>
 
@@ -637,14 +637,14 @@ export default {
         return {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
-                cash: this.t("players.edit.cash", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.money)),
+                cash: this.t("players.edit.cash", this.numberFormat(this.character.money, 0, true)),
                 cashTitle: this.t(
                     "players.edit.cash_title",
-                    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.cash),
-                    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.bank)
+                    this.numberFormat(this.character.cash, 0, true),
+                    this.numberFormat(this.character.bank, 0, true)
                 ),
-                stocks: this.t("players.edit.stocks", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.stocksBalance)),
-                influence: this.t('players.characters.economy', new Intl.NumberFormat('en-US').format(influence))
+                stocks: this.t("players.edit.stocks", this.numberFormat(this.character.stocksBalance, 0, true)),
+                influence: this.t('players.characters.economy', this.numberFormat(influence, 3))
             },
             paycheck: 0,
             form: {
@@ -832,7 +832,7 @@ export default {
             // Send request.
             await this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/editBalance', this.balanceForm);
 
-            this.local.cash = this.t("players.edit.cash", new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(this.character.money));
+            this.local.cash = this.t("players.edit.cash", this.numberFormat(this.character.money, 0, true));
 
             // Reset.
             this.isEditingBalance = false;

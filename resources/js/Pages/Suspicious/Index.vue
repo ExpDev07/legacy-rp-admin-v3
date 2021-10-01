@@ -124,13 +124,13 @@
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">
-                            {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(log.cash) }}
+                            {{ numberFormat(log.cash, 0, true) }}
                         </td>
                         <td class="px-6 py-3 border-t">
-                            {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(log.bank) }}
+                            {{ numberFormat(log.bank, 0, true) }}
                         </td>
                         <td class="px-6 py-3 border-t">
-                            {{ new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(log.stocks_balance) }}
+                            {{ numberFormat(log.stocks_balance, 0, true) }}
                         </td>
                     </tr>
 

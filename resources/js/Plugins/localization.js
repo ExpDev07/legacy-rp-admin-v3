@@ -15,23 +15,23 @@ const Localization = {
             return current in object ? searchObject(object[current], path.join('.')) : null;
         }
 
-        Vue.prototype.loadLocale = function(locale) {
+        Vue.prototype.loadLocale = function (locale) {
             try {
                 console.info('Loading locale ' + locale);
                 lang = require('../locales/' + locale + '.json');
-            } catch(e) {
+            } catch (e) {
                 console.error('Failed to load locale "' + locale + '", falling back to "en-us"');
 
                 try {
                     lang = require('../locales/en-us.json');
-                } catch(e) {
+                } catch (e) {
                     console.error('Failed to load fallback locale "en-us"');
                 }
             }
 
             try {
                 Vue.prototype.$moment.locale(locale);
-            } catch(e) {
+            } catch (e) {
                 console.error('Failed to load moment locale "' + locale + '"', e);
             }
         };
@@ -49,6 +49,20 @@ const Localization = {
                 console.debug('Loaded locale:', lang);
                 return 'MISSING_LOCALE';
             })();
+        };
+        Vue.prototype.numberFormat = function (number, decimals, asCurrency) {
+            let options = {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: decimals && Number.isInteger(decimals) ? decimals : 2
+            };
+            if (asCurrency) {
+                options['style'] = 'currency';
+                options['currency'] = 'USD';
+            }
+
+            const formatter = new Intl.NumberFormat(this.t('locale'), options);
+
+            return formatter.format(number);
         };
     },
 }
