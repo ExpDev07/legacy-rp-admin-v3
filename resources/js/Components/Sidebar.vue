@@ -57,7 +57,7 @@
                         :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
                         :href="sub.url"
                         :key="sub.label"
-                        v-if="'sub' in link && (!link.private || $page.auth.player.isSuperAdmin)"
+                        v-if="'sub' in link && (!(sub.private || link.private) || $page.auth.player.isSuperAdmin)"
                     >
                         {{ sub.label }}
                     </inertia-link>
