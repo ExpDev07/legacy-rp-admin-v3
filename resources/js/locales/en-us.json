@@ -550,6 +550,7 @@
             },
             "edit_cash": "Cash balance",
             "edit_bank": "Bank balance",
+            "edit_stocks": "Stocks balance",
             "balance_do": "Update balance",
             "reset_spawn": "Reset Spawn-Point",
             "sure_spawn": "Are you sure you want to reset this characters spawn-point?",
@@ -573,6 +574,7 @@
                 "license": "License",
                 "licenses": "Licenses",
                 "add": "Add License",
+                "all": "Character already has all licenses.",
                 "remove": "Remove all",
                 "heli": "Helicopter",
                 "fw": "Fixed Wing",
@@ -581,7 +583,7 @@
                 "perf": "Performance",
                 "management": "Management",
                 "military": "Military",
-                "confirm": "Are you sure you want to remove all licenses?"
+                "confirm": "Are you sure you want to remove all of this characters licenses?"
             }
         },
         "edit": {

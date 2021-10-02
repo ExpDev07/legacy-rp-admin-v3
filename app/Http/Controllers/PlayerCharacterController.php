@@ -332,6 +332,7 @@ class PlayerCharacterController extends Controller
     {
         $cash = intval($request->post("cash"));
         $bank = intval($request->post("bank"));
+        $stocks = intval($request->post("stocks"));
 
         $user = $request->user();
         if (!$user->player->is_super_admin) {
@@ -339,8 +340,9 @@ class PlayerCharacterController extends Controller
         }
 
         $character->update([
-            'cash' => $cash,
-            'bank' => $bank,
+            'cash'           => $cash,
+            'bank'           => $bank,
+            'stocks_balance' => $stocks,
         ]);
 
         return back()->with('success', 'Balance has been updated successfully.');

@@ -7,36 +7,8 @@
                     {{ character.name }} #{{ character.id }}
                 </h1>
                 <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary">
-                        <span class="font-semibold">
-                            {{ character.gender | formatGender(t) }}
-                        </span>
-                    </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.birth">
-                        {{ local.birth }}
-                    </badge>
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="character.characterDeleted">
                         <span class="font-semibold">{{ t('players.edit.deleted') }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
-                    </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary relative flex">
-                        <span v-html="local.cash" :title="local.cashTitle">{{ local.cash }}</span>
-
-                        <span
-                            class="block p-0.5 text-center text-black dark:text-white text-xs absolute top-0 right-1 bg-transparent rounded"
-                            :title="local.influence"
-                        >
-                            <i class="fas fa-info"></i>
-                        </span>
-                        <button
-                            class="ml-2 text-warning dark:text-dark-warning"
-                            @click="isEditingBalance = true"
-                            v-if="$page.auth.player.isSuperAdmin"
-                        >
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </badge>
-                    <badge class="bg-gray-100 border-gray-200 dark:bg-dark-secondary" v-html="local.stocks">
-                        {{ local.stocks }}
                     </badge>
                 </div>
             </div>
@@ -48,13 +20,6 @@
                 <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isTattooRemoval = true}">
                     <i class="fas fa-eraser"></i>
                     {{ t('players.characters.remove_tattoo') }}
-                </a>
-                <!-- Add License -->
-                <a href="#"
-                   class="px-5 py-2 font-semibold text-white rounded bg-primary mr-3 dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isLicenceAdd = true}"
-                >
-                    <i class="fas fa-id-badge"></i>
-                    {{ t('players.characters.license.add') }}
                 </a>
                 <!-- Reset Spawn-point -->
                 <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isResetSpawn = true}">
@@ -101,33 +66,6 @@
             </div>
         </div>
 
-        <!-- Edit Balance -->
-        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isEditingBalance">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
-                <h3 class="mb-2">{{ t('players.characters.sure_tattoos') }}</h3>
-                <div class="w-full p-3 flex justify-between">
-                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="cash">
-                        {{ t('players.characters.edit_cash') }}
-                    </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="cash" type="number" min="-1000000000" max="1000000000" v-model="balanceForm.cash" />
-                </div>
-                <div class="w-full p-3 flex justify-between">
-                    <label class="mr-4 block w-1/4 text-center pt-2 font-bold" for="bank">
-                        {{ t('players.characters.edit_bank') }}
-                    </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="bank" type="number" min="-1000000000" max="1000000000" v-model="balanceForm.bank" />
-                </div>
-                <div class="flex justify-end mt-2">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isEditingBalance = false">
-                        {{ t('global.cancel') }}
-                    </button>
-                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="editBalance">
-                        {{ t('players.characters.balance_do') }}
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Reset spawn -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isResetSpawn">
             <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
@@ -166,39 +104,25 @@
                 <form @submit.prevent="submit(false)">
                     <!-- Name & Phone -->
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="first_name">
                                 {{ t('players.edit.prename') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="first_name" v-model="form.first_name">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="last_name">
                                 {{ t('players.edit.surname') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="last_name" v-model="form.last_name">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-2">
-                                {{ t('players.edit.phone') }}
-                            </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600 text-gray-400" :value="character.phoneNumber" disabled readonly />
-                        </div>
-                    </div>
-                    <div class="px-3 mb-6">
-                        <label class="block mb-3">
-                            {{ t('players.edit.backstory') }}
-                        </label>
-                        <textarea class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="backstory" v-model="form.backstory"></textarea>
-                    </div>
-                    <div class="flex flex-wrap mb-4">
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="dob">
                                 {{ t('players.edit.dob') }}
                             </label>
                             <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="dob" v-model="form.date_of_birth">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2">
                                 {{ t('players.edit.gender') }}
                             </label>
@@ -208,22 +132,100 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="px-3 mb-6">
-                        <label class="block">
-                            {{ t('players.characters.license.licenses') }}
+                        <label class="block mb-3">
+                            {{ t('players.edit.backstory') }}
                         </label>
-                        <ul v-if="character.licenses.length > 0" class="text-sm">
-                            <li v-for="license in character.licenses" :key="license" class="ml-3 pl-2 list-dash">{{ t('players.characters.license.' + license) }}</li>
-                        </ul>
-                        <ul v-else class="text-sm">
-                            <li class="ml-3 pl-2 list-dash">{{ t('global.none') }}</li>
-                        </ul>
+                        <textarea class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="backstory" v-model="form.backstory"></textarea>
                     </div>
 
+                    <hr class="border-gray-200 dark:border-gray-600">
+
+                    <div class="flex flex-wrap mb-6 mt-6">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block font-semibold">
+                                {{ t('players.characters.license.licenses') }}
+                            </label>
+                            <ul v-if="character.licenses.length > 0" class="text-sm">
+                                <li v-for="license in character.licenses" :key="license" class="ml-3 pl-2 list-dash">{{ t('players.characters.license.' + license) }}</li>
+                            </ul>
+                            <ul v-else class="text-sm">
+                                <li class="ml-3 pl-2 list-dash">{{ t('global.none') }}</li>
+                            </ul>
+
+                            <!-- Add License -->
+                            <button type="button" class="block w-full px-5 py-2 mt-6 hover:shadow-xl font-semibold text-white rounded bg-primary mr-3 dark:bg-dark-primary" @click="isLicenceAdd = true">
+                                {{ t('players.characters.license.add') }}
+                            </button>
+                        </div>
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                            <table class="text-left w-full">
+                                <tr>
+                                    <th class="font-semibold p-2">{{ t('players.edit.phone') }}</th>
+                                    <td class="p-2">
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2">{{ character.phoneNumber }}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3 relative">
+                            <span
+                                class="absolute top-0 right-0 block p-0.5 text-center text-black dark:text-white text-xs absolute top-0 right-3 bg-transparent rounded"
+                                :title="local.influence"
+                            >
+                                <i class="fas fa-info"></i>
+                            </span>
+
+                            <table class="text-left w-full">
+                                <tr>
+                                    <th class="p-2">
+                                        <label class="block font-semibold">
+                                            {{ t('players.characters.edit_cash') }}
+                                        </label>
+                                    </th>
+                                    <td class="p-2">
+                                        <input type="number" class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="balanceForm.cash" v-if="$page.auth.player.isSuperAdmin" />
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2" v-else>{{ numberFormat(balanceForm.cash, 0, true) }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="p-2">
+                                        <label class="block font-semibold">
+                                            {{ t('players.characters.edit_bank') }}
+                                        </label>
+                                    </th>
+                                    <td class="p-2">
+                                        <input type="number" class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="balanceForm.bank" v-if="$page.auth.player.isSuperAdmin" />
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2" v-else>{{ numberFormat(balanceForm.bank, 0, true) }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="p-2">
+                                        <label class="block font-semibold">
+                                            {{ t('players.characters.edit_stocks') }}
+                                        </label>
+                                    </th>
+                                    <td class="p-2">
+                                        <input type="number" class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="balanceForm.stocks" v-if="$page.auth.player.isSuperAdmin" />
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2" v-else>{{ numberFormat(balanceForm.stocks, 0, true) }}</span>
+                                    </td>
+                                </tr>
+                                <tr v-if="$page.auth.player.isSuperAdmin">
+                                    <td class="p-2" colspan="2">
+                                        <button type="button" class="block w-full px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning" @click="editBalance">
+                                            {{ t('players.characters.balance_do') }}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200 dark:border-gray-600">
+
                     <!-- Submit -->
-                    <div class="px-3">
-                        <button class="px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" type="submit">
+                    <div class="px-3 mt-6">
+                        <button class="px-5 py-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400 w-1/4" type="submit">
                             {{ t('players.edit.update') }}
                         </button>
                     </div>
@@ -326,7 +328,7 @@
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isLicenceAdd">
             <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.license.add') }}</h3>
-                <div class="w-full p-3 flex justify-between">
+                <div class="w-full p-3 flex justify-between" v-if="licenses.length > 0">
                     <label class="mr-4 block w-1/3 text-center pt-2 font-bold">
                         {{ t('players.characters.license.license') }}
                     </label>
@@ -334,6 +336,7 @@
                         <option :value="license" v-for="license in licenses">{{ t('players.characters.license.' + license) }}</option>
                     </select>
                 </div>
+                <p v-else>{{ t('players.characters.license.all') }}</p>
                 <div class="flex justify-end">
                     <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isLicenceAdd = false">
                         {{ t('global.cancel') }}
@@ -341,7 +344,7 @@
                     <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="removeLicenses">
                         {{ t('players.characters.license.remove') }}
                     </button>
-                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="addLicense">
+                    <button type="button" v-if="licenses.length > 0" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="addLicense">
                         {{ t('players.characters.license.add') }}
                     </button>
                 </div>
@@ -631,20 +634,15 @@ export default {
             };
         });
 
-        const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance,
-            influence = this.economy > 0 && totalMoney > 0 ? (totalMoney / this.economy) * 100 : 0;
+        const money = this.getMoneyLocals();
 
         return {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
-                cash: this.t("players.edit.cash", this.numberFormat(this.character.money, 0, true)),
-                cashTitle: this.t(
-                    "players.edit.cash_title",
-                    this.numberFormat(this.character.cash, 0, true),
-                    this.numberFormat(this.character.bank, 0, true)
-                ),
-                stocks: this.t("players.edit.stocks", this.numberFormat(this.character.stocksBalance, 0, true)),
-                influence: this.t('players.characters.economy', this.numberFormat(influence, 3))
+                cash: money.cash,
+                cashTitle: money.cashTitle,
+                stocks: money.stocks,
+                influence: money.influence
             },
             paycheck: 0,
             form: {
@@ -672,7 +670,8 @@ export default {
             },
             balanceForm: {
                 cash: this.character.cash,
-                bank: this.character.bank
+                bank: this.character.bank,
+                stocks: this.character.stocksBalance
             },
             licenses: this.getAvailableLicenses(),
             isTattooRemoval: false,
@@ -681,11 +680,25 @@ export default {
             paychecks: paychecks,
             isVehicleEdit: false,
             isVehicleAdd: false,
-            isLicenceAdd: false,
-            isEditingBalance: false,
+            isLicenceAdd: false
         };
     },
     methods: {
+        getMoneyLocals() {
+            const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance,
+                influence = this.economy > 0 && totalMoney > 0 ? (totalMoney / this.economy) * 100 : 0;
+
+            return {
+                cash: this.t("players.edit.cash", this.numberFormat(this.character.money, 0, true)),
+                cashTitle: this.t(
+                    "players.edit.cash_title",
+                    this.numberFormat(this.character.cash, 0, true),
+                    this.numberFormat(this.character.bank, 0, true)
+                ),
+                stocks: this.t("players.edit.stocks", this.numberFormat(this.character.stocksBalance, 0, true)),
+                influence: this.t('players.characters.economy', this.numberFormat(influence, 3))
+            };
+        },
         getAvailableLicenses() {
             return ["heli", "fw", "cfi", "hw", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
         },
@@ -832,10 +845,16 @@ export default {
             // Send request.
             await this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/editBalance', this.balanceForm);
 
-            this.local.cash = this.t("players.edit.cash", this.numberFormat(this.character.money, 0, true));
+            const money = this.getMoneyLocals();
 
-            // Reset.
-            this.isEditingBalance = false;
+            this.local.cash = money.cash;
+            this.local.cashTitle = money.cashTitle;
+            this.local.stocks = money.stocks;
+            this.local.influence = money.influence;
+
+            this.balanceForm.cash = this.character.cash;
+            this.balanceForm.bank = this.character.bank;
+            this.balanceForm.stocks = this.character.stocksBalance;
         },
     },
     mounted() {
