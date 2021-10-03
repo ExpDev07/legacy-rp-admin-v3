@@ -199,13 +199,16 @@ class PanelLog extends Model
      * @param string $fromIdentifier
      * @param string $toIdentifier
      * @param string $character
+     * @param string $reason
      */
-    public static function logUnload(string $fromIdentifier, string $toIdentifier, string $character)
+    public static function logUnload(string $fromIdentifier, string $toIdentifier, string $character, string $reason)
     {
         $from = self::resolvePlayerLogName($fromIdentifier);
         $to = self::resolvePlayerCharacterLogName($toIdentifier, $character);
 
-        $log = $from . ' unloaded ' . $to;
+        $reason = $reason ? ' with the reason `' . $reason . '`' : ' with no reason';
+
+        $log = $from . ' unloaded ' . $to . $reason;
         self::createLog($fromIdentifier, $toIdentifier, $log, 'Unloaded Character');
     }
 

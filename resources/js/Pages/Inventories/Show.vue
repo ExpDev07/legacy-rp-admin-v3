@@ -202,18 +202,12 @@
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.properties.cost') }}:</span> {{
-                                    new Intl.NumberFormat('en-US', {
-                                        style: 'currency',
-                                        currency: 'USD'
-                                    }).format(inventory.property.property_cost)
+                                    numberFormat(inventory.property.property_cost, 0, true)
                                 }}
                             </h4>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.properties.rent') }}:</span> {{
-                                    new Intl.NumberFormat('en-US', {
-                                        style: 'currency',
-                                        currency: 'USD'
-                                    }).format(inventory.property.property_income)
+                                    numberFormat(inventory.property.property_income, 0, true)
                                 }}
                             </h4>
                         </template>

@@ -163,7 +163,7 @@ class OPFWHelper
         if ($response->status) {
             $response->message = 'Unloaded players character.';
 
-            PanelLog::logUnload($staffSteamIdentifier, $player->steam_identifier, $character_id);
+            PanelLog::logUnload($staffSteamIdentifier, $player->steam_identifier, $character_id, $message);
         }
 
         return $response;
