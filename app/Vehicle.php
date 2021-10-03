@@ -106,20 +106,23 @@ class Vehicle extends Model
         $color = function (int $r, int $g, int $b): string {
             return sprintf("#%02x%02x%02x", $r, $g, $b);
         };
+        $isColor = function(array $json, string $key): bool {
+            return isset($json[$key]) && is_array($json[$key]) && !empty($json[$key]) && isset($json[$key]['r']) && isset($json[$key]['g']) && isset($json[$key]['b']);
+        };
 
         $json = json_decode($this->deprecated_modifications, true) ?? [];
         $default = '#ffffff';
 
         return [
             'xenon_headlights' => isset($json['modXenon']) && intval($json['modXenon']) === 1,
-            'tire_smoke'       => isset($json['tireSmokeColor']) && is_array($json['tireSmokeColor']) && !empty($json['tireSmokeColor'])
+            'tire_smoke'       => $isColor($json, 'tireSmokeColor')
                 ? $color($json['tireSmokeColor']['r'], $json['tireSmokeColor']['g'], $json['tireSmokeColor']['b'])
                 : $default,
             'neon_enabled'     => isset($json['neonEnabled']) && sizeof($json['neonEnabled']) === 4 && $json['neonEnabled'][0] && $json['neonEnabled'][1] && $json['neonEnabled'][2] && $json['neonEnabled'][3],
             'engine'           => isset($json['modEngine']) && is_numeric($json['modEngine']) ? intval($json['modEngine']) + 1 : 0,
             'transmission'     => isset($json['modTransmission']) && is_numeric($json['modTransmission']) ? intval($json['modTransmission']) + 1 : 0,
             'breaks'           => isset($json['modBrakes']) && is_numeric($json['modBrakes']) ? intval($json['modBrakes']) + 1 : 0,
-            'neon'             => isset($json['neonColor']) && is_array($json['neonColor']) && !empty($json['neonColor'])
+            'neon'             => $isColor($json, 'neonColor')
                 ? $color($json['neonColor']['r'], $json['neonColor']['g'], $json['neonColor']['b'])
                 : $default,
             'turbo'            => isset($json['modTurbo']) && intval($json['modTurbo']) === 1,
