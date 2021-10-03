@@ -283,11 +283,154 @@
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isVehicleEdit">
             <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.vehicle.edit') }}</h3>
-                <div class="w-full p-3 flex justify-between">
-                    <label class="mr-4 block w-1/3 text-center pt-2 font-bold" for="vehicleOwner">
-                        {{ t('players.characters.vehicle.owner') }}
-                    </label>
-                    <input class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="number" min="1" max="99999" id="vehicleOwner" v-model="vehicleForm.owner">
+                <div class="w-full mb-6">
+                    <table class="text-left w-full">
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.owner') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" v-model="vehicleForm.owner_cid" />
+                            </td>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.plate') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" minlength="8" maxlength="8" v-model="vehicleForm.plate" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.repair') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.repair">
+                                    <option :value="true">{{ t('global.yes') }}</option>
+                                    <option :value="false">{{ t('global.no') }}</option>
+                                </select>
+                            </td>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.fuel') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="100" step="0.1" v-model="vehicleForm.fuel" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <hr>
+                <div class="w-full mb-6">
+                    <table class="text-left w-full">
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.neon_enabled') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.neon_enabled">
+                                    <option :value="true">{{ t('global.yes') }}</option>
+                                    <option :value="false">{{ t('global.no') }}</option>
+                                </select>
+                            </td>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.xenon_headlights') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.xenon_headlights">
+                                    <option :value="true">{{ t('global.yes') }}</option>
+                                    <option :value="false">{{ t('global.no') }}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.tire_smoke') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" type="color" v-model="vehicleForm.modifications.tire_smoke" />
+                            </td>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.neon') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" type="color" v-model="vehicleForm.modifications.neon" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.turbo') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.turbo">
+                                    <option :value="true">{{ t('global.yes') }}</option>
+                                    <option :value="false">{{ t('global.no') }}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.engine') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="3" v-model="vehicleForm.modifications.engine" />
+                            </td>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.transmission') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="3" v-model="vehicleForm.modifications.transmission" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.breaks') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="3" v-model="vehicleForm.modifications.breaks" />
+                            </td>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.suspension') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="4" v-model="vehicleForm.modifications.suspension" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.armor') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="5" v-model="vehicleForm.modifications.armor" />
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="flex justify-end">
                     <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isVehicleEdit = false">
@@ -663,7 +806,22 @@ export default {
             location: window.location.href,
             vehicleForm: {
                 id: 0,
-                owner: 0
+                owner_cid: 0,
+                fuel: 0.0,
+                plate: '',
+                modifications: {
+                    xenon_headlights: false,
+                    tire_smoke: '#ffffff',
+                    neon_enabled: false,
+                    engine: -1,
+                    transmission: -1,
+                    breaks: -1,
+                    neon: '#ffffff',
+                    turbo: false,
+                    suspension: -1,
+                    armor: -1
+                },
+                repair: false
             },
             licenseForm: {
                 license: 'fw'
@@ -771,8 +929,8 @@ export default {
         startEditVehicle(e, vehicle) {
             e.preventDefault();
 
-            this.vehicleForm.id = vehicle.id;
-            this.vehicleForm.owner = vehicle.owner_cid;
+            this.vehicleForm = vehicle;
+            this.vehicleForm.repair = false;
             this.isVehicleEdit = true;
         },
         async removeTattoos() {

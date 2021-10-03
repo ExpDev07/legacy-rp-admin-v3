@@ -505,15 +505,39 @@ class PlayerCharacterController extends Controller
             return back()->with('error', 'Only super admins can edit vehicles.');
         }
 
-        $owner = $request->post('owner');
+        $plate = trim(strtoupper($request->post('plate')));
+        if (strlen($plate) !== 8 || preg_match('/[^\w]/mi', $plate)) {
+            return back()->with('error', 'Plate has to be 8 characters long and only contain alphanumeric characters (A-Z and 0-9).');
+        }
+
+        $exists = Vehicle::query()->where('plate', '=', $plate)->where('vehicle_id', '<>', $vehicle->vehicle_id)->count(['vehicle_id']) > 0;
+        if ($exists) {
+            return back()->with('error', 'Plate "' . $plate . '" is already taken.');
+        }
+
+        $fuel = floatval($request->post('fuel'));
+        if ($fuel < 0 || $fuel > 100) {
+            return back()->with('error', 'Invalid fuel value.');
+        }
+
+        $owner = $request->post('owner_cid');
 
         $character = Character::query()->where('character_id', '=', $owner)->first(['character_id', 'steam_identifier']);
         if (!$character) {
             return back()->with('error', 'Invalid character id.');
         }
 
+        $invalidMod = $vehicle->parseModifications($request->post('modifications', []));
+        if ($invalidMod !== null) {
+            return back()->with('error', 'Invalid modifications ("' . $invalidMod . '") submitted, please try again.');
+        }
+
         $vehicle->update([
-            'owner_cid' => $character->character_id,
+            'owner_cid'                => $character->character_id,
+            'plate'                    => $plate,
+            'deprecated_modifications' => $vehicle->deprecated_modifications,
+            'deprecated_damage'        => $request->post('repair') ? null : $vehicle->deprecated_damage,
+            'deprecated_fuel'          => $fuel,
         ]);
 
         return redirect('/players/' . $character->steam_identifier . '/characters/' . $character->character_id . '/edit')->with('success', 'Vehicle was successfully edited.');

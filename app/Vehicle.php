@@ -42,6 +42,9 @@ class Vehicle extends Model
         'model_name',
         'plate',
         'vehicle_deleted',
+        'deprecated_damage',
+        'deprecated_modifications',
+        'deprecated_fuel',
     ];
 
     /**
@@ -91,6 +94,95 @@ class Vehicle extends Model
         }
 
         return $this->garage_identifier;
+    }
+
+    /**
+     * Get deprecated_modifications as a formatted array for the frontend
+     *
+     * @return array
+     */
+    public function getModifications(): array
+    {
+        $color = function (int $r, int $g, int $b): string {
+            return sprintf("#%02x%02x%02x", $r, $g, $b);
+        };
+
+        $json = json_decode($this->deprecated_modifications, true) ?? [];
+        $default = '#ffffff';
+
+        return [
+            'xenon_headlights' => isset($json['modXenon']) && intval($json['modXenon']) === 1,
+            'tire_smoke'       => isset($json['tireSmokeColor']) && is_array($json['tireSmokeColor']) && !empty($json['tireSmokeColor'])
+                ? $color($json['tireSmokeColor']['r'], $json['tireSmokeColor']['g'], $json['tireSmokeColor']['b'])
+                : $default,
+            'neon_enabled'     => isset($json['neonEnabled']) && sizeof($json['neonEnabled']) === 4 && $json['neonEnabled'][0] && $json['neonEnabled'][1] && $json['neonEnabled'][2] && $json['neonEnabled'][3],
+            'engine'           => isset($json['modEngine']) && is_numeric($json['modEngine']) ? intval($json['modEngine']) + 1 : 0,
+            'transmission'     => isset($json['modTransmission']) && is_numeric($json['modTransmission']) ? intval($json['modTransmission']) + 1 : 0,
+            'breaks'           => isset($json['modBrakes']) && is_numeric($json['modBrakes']) ? intval($json['modBrakes']) + 1 : 0,
+            'neon'             => isset($json['neonColor']) && is_array($json['neonColor']) && !empty($json['neonColor'])
+                ? $color($json['neonColor']['r'], $json['neonColor']['g'], $json['neonColor']['b'])
+                : $default,
+            'turbo'            => isset($json['modTurbo']) && intval($json['modTurbo']) === 1,
+            'suspension'       => isset($json['modSuspension']) && is_numeric($json['modSuspension']) ? intval($json['modSuspension']) + 1 : 0,
+            'armor'            => isset($json['modArmor']) && is_numeric($json['modArmor']) ? intval($json['modArmor']) + 1 : 0,
+        ];
+    }
+
+    /**
+     * Sets the vehicles deprecated_modifications based on an array from the frontend.
+     * Returns the invalid key if there is one.
+     *
+     * @param array $mods
+     * @return string|null
+     */
+    public function parseModifications(array $mods): ?string
+    {
+        $mods = array_map(function($m) {
+            return is_numeric($m) ? intval($m) : $m;
+        }, $mods);
+
+        $validate = [
+            'tire_smoke'       => !isset($mods['tire_smoke']) || !preg_match('/^#[0-9a-f]{6}$/mi', $mods['tire_smoke']),
+            'neon'             => !isset($mods['neon']) || !preg_match('/^#[0-9a-f]{6}$/mi', $mods['neon']),
+            'xenon_headlights' => !isset($mods['xenon_headlights']) || !is_bool($mods['xenon_headlights']),
+            'neon_enabled'     => !isset($mods['neon_enabled']) || !is_bool($mods['neon_enabled']),
+            'turbo'            => !isset($mods['turbo']) || !is_bool($mods['turbo']),
+            'engine'           => !isset($mods['engine']) || !is_integer($mods['engine']) || $mods['engine'] < 0 || $mods['engine'] > 3,
+            'transmission'     => !isset($mods['transmission']) || !is_integer($mods['transmission']) || $mods['transmission'] < 0 || $mods['transmission'] > 3,
+            'breaks'           => !isset($mods['breaks']) || !is_integer($mods['breaks']) || $mods['breaks'] < 0 || $mods['breaks'] > 3,
+            'suspension'       => !isset($mods['suspension']) || !is_integer($mods['suspension']) || $mods['suspension'] < 0 || $mods['suspension'] > 4,
+            'armor'            => !isset($mods['armor']) || !is_integer($mods['armor']) || $mods['armor'] < 0 || $mods['armor'] > 5,
+        ];
+
+        foreach ($validate as $key => $invalid) {
+            if ($invalid) {
+                return $key;
+            }
+        }
+
+        $color = function (string $hex): array {
+            return [
+                'r' => hexdec(substr($hex, 1, 2)),
+                'g' => hexdec(substr($hex, 3, 2)),
+                'b' => hexdec(substr($hex, 5, 2)),
+            ];
+        };
+        $json = json_decode($this->deprecated_modifications, true) ?? [];
+
+        $json['modXenon'] = $mods['xenon_headlights'] ? 1 : false;
+        $json['tireSmokeColor'] = $color($mods['tire_smoke']);
+        $json['neonEnabled'] = $mods['neon_enabled'] ? [1, 1, 1, 1] : [false, false, false, false];
+        $json['modEngine'] = $mods['engine'] - 1;
+        $json['modTransmission'] = $mods['transmission'] - 1;
+        $json['modBrakes'] = $mods['breaks'] - 1;
+        $json['neonColor'] = $color($mods['neon']);
+        $json['modTurbo'] = $mods['turbo'] ? 1 : false;
+        $json['modSuspension'] = $mods['suspension'] - 1;
+        $json['modArmor'] = $mods['armor'] - 1;
+
+        $this->deprecated_modifications = json_encode($json);
+
+        return null;
     }
 
 }

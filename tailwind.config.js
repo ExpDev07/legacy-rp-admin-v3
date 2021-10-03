@@ -39,6 +39,7 @@ module.exports = {
             width: {
                 'inventory':          '220px',
                 'alert':              '650px',
+                'big-alert':          '650px',
                 'character_advanced': '550px',
                 '90':                 '90px',
                 'map':                '1160px',

@@ -566,9 +566,22 @@
             "vehicle": {
                 "edit": "Edit Vehicle",
                 "owner": "Owner CID",
+                "plate": "Plate",
                 "confirm": "Edit Vehicle",
                 "add": "Add Vehicle",
-                "model": "Model Name"
+                "model": "Model Name",
+                "xenon_headlights": "Xenon Headlights",
+                "tire_smoke": "Tire Smoke Color",
+                "turbo": "Turbo",
+                "neon_enabled": "Underglow Enabled",
+                "neon": "Underglow Color",
+                "engine": "Engine (0 - 3)",
+                "transmission": "Transmission (0 - 3)",
+                "breaks": "Breaks (0 - 3)",
+                "suspension": "Suspension (0 - 4)",
+                "armor": "Armor (0 - 5)",
+                "repair": "Repair Vehicle?",
+                "fuel": "Fuel Level (0 - 100)"
             },
             "license": {
                 "license": "License",
