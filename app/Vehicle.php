@@ -106,7 +106,7 @@ class Vehicle extends Model
         $color = function (int $r, int $g, int $b): string {
             return sprintf("#%02x%02x%02x", $r, $g, $b);
         };
-        $isColor = function(array $json, string $key): bool {
+        $isColor = function (array $json, string $key): bool {
             return isset($json[$key]) && is_array($json[$key]) && !empty($json[$key]) && isset($json[$key]['r']) && isset($json[$key]['g']) && isset($json[$key]['b']);
         };
 
@@ -128,6 +128,8 @@ class Vehicle extends Model
             'turbo'            => isset($json['modTurbo']) && intval($json['modTurbo']) === 1,
             'suspension'       => isset($json['modSuspension']) && is_numeric($json['modSuspension']) ? intval($json['modSuspension']) + 1 : 0,
             'armor'            => isset($json['modArmor']) && is_numeric($json['modArmor']) ? intval($json['modArmor']) + 1 : 0,
+            'tint'             => isset($json['windowTint']) && is_numeric($json['windowTint']) ? intval($json['windowTint']) : 0,
+            'plate_type'       => isset($json['plateIndex']) && is_numeric($json['plateIndex']) ? intval($json['plateIndex']) : 0,
         ];
     }
 
@@ -140,7 +142,7 @@ class Vehicle extends Model
      */
     public function parseModifications(array $mods): ?string
     {
-        $mods = array_map(function($m) {
+        $mods = array_map(function ($m) {
             return is_numeric($m) ? intval($m) : $m;
         }, $mods);
 
@@ -155,6 +157,8 @@ class Vehicle extends Model
             'breaks'           => !isset($mods['breaks']) || !is_integer($mods['breaks']) || $mods['breaks'] < 0 || $mods['breaks'] > 3,
             'suspension'       => !isset($mods['suspension']) || !is_integer($mods['suspension']) || $mods['suspension'] < 0 || $mods['suspension'] > 4,
             'armor'            => !isset($mods['armor']) || !is_integer($mods['armor']) || $mods['armor'] < 0 || $mods['armor'] > 5,
+            'tint'             => !isset($mods['tint']) || !is_integer($mods['tint']) || $mods['tint'] < 0 || $mods['tint'] > 5,
+            'plate_type'       => !isset($mods['plate_type']) || !is_integer($mods['plate_type']) || $mods['plate_type'] < 0 || $mods['plate_type'] > 4,
         ];
 
         foreach ($validate as $key => $invalid) {
@@ -182,6 +186,8 @@ class Vehicle extends Model
         $json['modTurbo'] = $mods['turbo'] ? 1 : false;
         $json['modSuspension'] = $mods['suspension'] - 1;
         $json['modArmor'] = $mods['armor'] - 1;
+        $json['windowTint'] = $mods['tint'];
+        $json['plateIndex'] = $mods['plate_type'];
 
         $this->deprecated_modifications = json_encode($json);
 

@@ -581,7 +581,24 @@
                 "suspension": "Suspension (0 - 4)",
                 "armor": "Armor (0 - 5)",
                 "repair": "Repair Vehicle?",
-                "fuel": "Fuel Level (0 - 100)"
+                "fuel": "Fuel Level (0 - 100)",
+                "tint": "Window Tint",
+                "tints": {
+                    "0": "None",
+                    "1": "Pure Black",
+                    "2": "Darksmoke",
+                    "3": "Lightsmoke",
+                    "4": "Limo",
+                    "5": "Green"
+                },
+                "plate_type": "Plate Type",
+                "plates": {
+                    "0": "Blue on White 1",
+                    "1": "Yellow on Black",
+                    "2": "Yellow on Blue",
+                    "3": "Blue on White 2",
+                    "4": "Blue on White 3"
+                }
             },
             "license": {
                 "license": "License",
