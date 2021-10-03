@@ -438,12 +438,12 @@
                             </th>
                             <td class="p-2">
                                 <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.tint">
-                                    <option :value="0">{{ t('players.characters.vehicle.plates.0') }}</option>
-                                    <option :value="1">{{ t('players.characters.vehicle.plates.1') }}</option>
-                                    <option :value="2">{{ t('players.characters.vehicle.plates.2') }}</option>
-                                    <option :value="3">{{ t('players.characters.vehicle.plates.3') }}</option>
-                                    <option :value="4">{{ t('players.characters.vehicle.plates.4') }}</option>
-                                    <option :value="5">{{ t('players.characters.vehicle.plates.5') }}</option>
+                                    <option :value="0">{{ t('players.characters.vehicle.tints.0') }}</option>
+                                    <option :value="1">{{ t('players.characters.vehicle.tints.1') }}</option>
+                                    <option :value="2">{{ t('players.characters.vehicle.tints.2') }}</option>
+                                    <option :value="3">{{ t('players.characters.vehicle.tints.3') }}</option>
+                                    <option :value="4">{{ t('players.characters.vehicle.tints.4') }}</option>
+                                    <option :value="5">{{ t('players.characters.vehicle.tints.5') }}</option>
                                 </select>
                             </td>
                             <th class="p-2">
