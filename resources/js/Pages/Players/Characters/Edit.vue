@@ -6,9 +6,13 @@
                 <h1 class="dark:text-white">
                     {{ character.name }} #{{ character.id }}
                 </h1>
-                <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
-                    <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="character.characterDeleted">
-                        <span class="font-semibold">{{ t('players.edit.deleted') }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
+                <div
+                    class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
+                    <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale"
+                           v-if="character.characterDeleted">
+                        <span class="font-semibold">{{
+                                t('players.edit.deleted')
+                            }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
                     </badge>
                 </div>
             </div>
@@ -17,17 +21,22 @@
         <portal to="actions">
             <div>
                 <!-- Remove Tattoos -->
-                <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isTattooRemoval = true}">
+                <a href="#"
+                   class="px-5 py-2 font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                   @click="function(e) {e.preventDefault(); isTattooRemoval = true}">
                     <i class="fas fa-eraser"></i>
                     {{ t('players.characters.remove_tattoo') }}
                 </a>
                 <!-- Reset Spawn-point -->
-                <a href="#" class="px-5 py-2 font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning mobile:block mobile:w-full mobile:m-0 mobile:mb-3" @click="function(e) {e.preventDefault(); isResetSpawn = true}">
+                <a href="#"
+                   class="px-5 py-2 font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                   @click="function(e) {e.preventDefault(); isResetSpawn = true}">
                     <i class="fas fa-heartbeat"></i>
                     {{ t('players.characters.reset_spawn') }}
                 </a>
                 <!-- Back -->
-                <a class="px-5 py-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mb-3" :href="'/players/' + player.steamIdentifier">
+                <a class="px-5 py-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                   :href="'/players/' + player.steamIdentifier">
                     <i class="fas fa-backward"></i>
                     {{ t('global.back') }}
                 </a>
@@ -36,7 +45,8 @@
 
         <!-- Remove Tattoos -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isTattooRemoval">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.sure_tattoos') }}</h3>
                 <div class="w-full p-3 flex justify-between">
                     <label class="mr-4 block w-1/4 text-center pt-2 font-bold">
@@ -56,10 +66,14 @@
                     {{ t('players.characters.tattoo_no_undo') }}
                 </p>
                 <div class="flex justify-end mt-2">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isTattooRemoval = false">
+                    <button type="button"
+                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isTattooRemoval = false">
                         {{ t('global.cancel') }}
                     </button>
-                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="removeTattoos">
+                    <button type="button"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger"
+                            @click="removeTattoos">
                         {{ t('players.characters.tattoo_do') }}
                     </button>
                 </div>
@@ -68,24 +82,31 @@
 
         <!-- Reset spawn -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isResetSpawn">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.sure_spawn') }}</h3>
                 <div class="w-full p-3 flex justify-between">
                     <label class="mr-4 block w-1/4 text-center pt-2 font-bold">
                         {{ t('players.characters.spawn_point') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="spawn">
-                        <option v-for="coords in resetCoords" :key="coords" :value="coords">{{ t('players.characters.spawn.' + coords) }}</option>
+                        <option v-for="coords in resetCoords" :key="coords" :value="coords">
+                            {{ t('players.characters.spawn.' + coords) }}
+                        </option>
                     </select>
                 </div>
                 <p v-html="t('players.characters.spawn_no_undo')">
                     {{ t('players.characters.spawn_no_undo') }}
                 </p>
                 <div class="flex justify-end mt-2">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isResetSpawn = false">
+                    <button type="button"
+                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isResetSpawn = false">
                         {{ t('global.cancel') }}
                     </button>
-                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="resetSpawn">
+                    <button type="button"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger"
+                            @click="resetSpawn">
                         {{ t('players.characters.spawn_do') }}
                     </button>
                 </div>
@@ -108,25 +129,29 @@
                             <label class="block mb-2" for="first_name">
                                 {{ t('players.edit.prename') }}
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="first_name" v-model="form.first_name">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                   id="first_name" v-model="form.first_name">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="last_name">
                                 {{ t('players.edit.surname') }}
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="last_name" v-model="form.last_name">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                   id="last_name" v-model="form.last_name">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="dob">
                                 {{ t('players.edit.dob') }}
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="dob" v-model="form.date_of_birth">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                   id="dob" v-model="form.date_of_birth">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2">
                                 {{ t('players.edit.gender') }}
                             </label>
-                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="gender" v-model="form.gender">
+                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                    id="gender" v-model="form.gender">
                                 <option value="0">{{ t('global.male') }}</option>
                                 <option value="1">{{ t('global.female') }}</option>
                             </select>
@@ -136,7 +161,8 @@
                         <label class="block mb-3">
                             {{ t('players.edit.backstory') }}
                         </label>
-                        <textarea class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="backstory" v-model="form.backstory"></textarea>
+                        <textarea class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                  id="backstory" v-model="form.backstory"></textarea>
                     </div>
 
                     <hr class="border-gray-200 dark:border-gray-600">
@@ -147,14 +173,18 @@
                                 {{ t('players.characters.license.licenses') }}
                             </label>
                             <ul v-if="character.licenses.length > 0" class="text-sm">
-                                <li v-for="license in character.licenses" :key="license" class="ml-3 pl-2 list-dash">{{ t('players.characters.license.' + license) }}</li>
+                                <li v-for="license in character.licenses" :key="license" class="ml-3 pl-2 list-dash">
+                                    {{ t('players.characters.license.' + license) }}
+                                </li>
                             </ul>
                             <ul v-else class="text-sm">
                                 <li class="ml-3 pl-2 list-dash">{{ t('global.none') }}</li>
                             </ul>
 
                             <!-- Add License -->
-                            <button type="button" class="block w-full px-5 py-2 mt-6 hover:shadow-xl font-semibold text-white rounded bg-primary mr-3 dark:bg-dark-primary" @click="isLicenceAdd = true">
+                            <button type="button"
+                                    class="block w-full px-5 py-2 mt-6 hover:shadow-xl font-semibold text-white rounded bg-primary mr-3 dark:bg-dark-primary"
+                                    @click="isLicenceAdd = true">
                                 {{ t('players.characters.license.add') }}
                             </button>
                         </div>
@@ -163,7 +193,9 @@
                                 <tr>
                                     <th class="font-semibold p-2">{{ t('players.edit.phone') }}</th>
                                     <td class="p-2">
-                                        <span class="block border-gray-500 border-b-2 px-3 py-2">{{ character.phoneNumber }}</span>
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2">{{
+                                                character.phoneNumber
+                                            }}</span>
                                     </td>
                                 </tr>
                             </table>
@@ -184,8 +216,11 @@
                                         </label>
                                     </th>
                                     <td class="p-2">
-                                        <input type="number" class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="balanceForm.cash" v-if="$page.auth.player.isSuperAdmin" />
-                                        <span class="block border-gray-500 border-b-2 px-3 py-2" v-else>{{ numberFormat(balanceForm.cash, 0, true) }}</span>
+                                        <input type="number"
+                                               class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                               v-model="balanceForm.cash" v-if="$page.auth.player.isSuperAdmin"/>
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2"
+                                              v-else>{{ numberFormat(balanceForm.cash, 0, true) }}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -195,8 +230,11 @@
                                         </label>
                                     </th>
                                     <td class="p-2">
-                                        <input type="number" class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="balanceForm.bank" v-if="$page.auth.player.isSuperAdmin" />
-                                        <span class="block border-gray-500 border-b-2 px-3 py-2" v-else>{{ numberFormat(balanceForm.bank, 0, true) }}</span>
+                                        <input type="number"
+                                               class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                               v-model="balanceForm.bank" v-if="$page.auth.player.isSuperAdmin"/>
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2"
+                                              v-else>{{ numberFormat(balanceForm.bank, 0, true) }}</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -206,13 +244,18 @@
                                         </label>
                                     </th>
                                     <td class="p-2">
-                                        <input type="number" class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="balanceForm.stocks" v-if="$page.auth.player.isSuperAdmin" />
-                                        <span class="block border-gray-500 border-b-2 px-3 py-2" v-else>{{ numberFormat(balanceForm.stocks, 0, true) }}</span>
+                                        <input type="number"
+                                               class="block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                               v-model="balanceForm.stocks" v-if="$page.auth.player.isSuperAdmin"/>
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2"
+                                              v-else>{{ numberFormat(balanceForm.stocks, 0, true) }}</span>
                                     </td>
                                 </tr>
                                 <tr v-if="$page.auth.player.isSuperAdmin">
                                     <td class="p-2" colspan="2">
-                                        <button type="button" class="block w-full px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning" @click="editBalance">
+                                        <button type="button"
+                                                class="block w-full px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning"
+                                                @click="editBalance">
                                             {{ t('players.characters.balance_do') }}
                                         </button>
                                     </td>
@@ -225,7 +268,9 @@
 
                     <!-- Submit -->
                     <div class="px-3 mt-6">
-                        <button class="px-5 py-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400 w-1/4" type="submit">
+                        <button
+                            class="px-5 py-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400 w-1/4"
+                            type="submit">
                             {{ t('players.edit.update') }}
                         </button>
                     </div>
@@ -247,31 +292,42 @@
                         <label class="block mb-3">
                             {{ t('players.job.name') }}
                         </label>
-                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" v-model="form.job_name" @change="setPayCheck">
+                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job"
+                                v-model="form.job_name" @change="setPayCheck">
                             <option :value="job.name" v-for="job in jobs">{{ job.name || t('global.none') }}</option>
                         </select>
                     </div>
-                    <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.job_name === job.name" v-for="job in jobs">
+                    <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.job_name === job.name"
+                         v-for="job in jobs">
                         <label class="block mb-3">
                             {{ t('players.job.department') }}
                         </label>
-                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="department" v-model="form.department_name" @change="setPayCheck">
-                            <option :value="department.name" v-for="department in job.departments">{{ department.name || t('global.none') }}</option>
+                        <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                id="department" v-model="form.department_name" @change="setPayCheck">
+                            <option :value="department.name" v-for="department in job.departments">
+                                {{ department.name || t('global.none') }}
+                            </option>
                         </select>
                     </div>
                     <template v-if="form.job_name === job.name" v-for="job in jobs">
-                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.department_name === department.name" v-for="department in job.departments">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3"
+                             v-if="form.department_name === department.name" v-for="department in job.departments">
                             <label class="block mb-3">
                                 {{ t('players.job.position') }}
                             </label>
-                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="position" v-model="form.position_name" @change="setPayCheck">
-                                <option :value="position" v-for="position in department.positions">{{ position || t('global.none') }}</option>
+                            <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                    id="position" v-model="form.position_name" @change="setPayCheck">
+                                <option :value="position" v-for="position in department.positions">
+                                    {{ position || t('global.none') }}
+                                </option>
                             </select>
                         </div>
                     </template>
                     <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                         <label class="block mb-3">&nbsp;</label>
-                        <button class="block w-full px-4 py-3 mb-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="updateJob">
+                        <button
+                            class="block w-full px-4 py-3 mb-3 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                            @click="updateJob">
                             {{ t('players.job.set') }} (${{ paycheck }})
                         </button>
                     </div>
@@ -281,8 +337,10 @@
 
         <!-- Vehicle Editing -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isVehicleEdit">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.vehicle.edit') }}</h3>
+                <p class="text-danger dark:text-dark-danger font-semibold mt-2 mb-2" v-if="vehicleEditError" id="vehicleEditError">{{ vehicleEditError }}</p>
                 <div class="w-full mb-6">
                     <table class="text-left w-full">
                         <tr>
@@ -292,7 +350,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" v-model="vehicleForm.owner_cid" />
+                                <input
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                    min="0" v-model="vehicleForm.owner_cid"/>
                             </td>
                             <th class="p-2">
                                 <label class="block font-semibold">
@@ -300,7 +360,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" minlength="8" maxlength="8" v-model="vehicleForm.plate" />
+                                <input
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                    minlength="3" maxlength="8" v-model="vehicleForm.plate"/>
                             </td>
                         </tr>
                         <tr>
@@ -310,7 +372,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.repair">
+                                <select
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
+                                    v-model="vehicleForm.repair">
                                     <option :value="true">{{ t('global.yes') }}</option>
                                     <option :value="false">{{ t('global.no') }}</option>
                                 </select>
@@ -321,7 +385,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="100" step="0.1" v-model="vehicleForm.fuel" />
+                                <input type="number"
+                                       class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                       min="0" max="100" step="0.1" v-model="vehicleForm.fuel"/>
                             </td>
                         </tr>
                     </table>
@@ -336,7 +402,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.neon_enabled">
+                                <select
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
+                                    v-model="vehicleForm.modifications.neon_enabled">
                                     <option :value="true">{{ t('global.yes') }}</option>
                                     <option :value="false">{{ t('global.no') }}</option>
                                 </select>
@@ -347,7 +415,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.xenon_headlights">
+                                <select
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
+                                    v-model="vehicleForm.modifications.xenon_headlights">
                                     <option :value="true">{{ t('global.yes') }}</option>
                                     <option :value="false">{{ t('global.no') }}</option>
                                 </select>
@@ -360,7 +430,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" type="color" v-model="vehicleForm.modifications.tire_smoke" />
+                                <input
+                                    class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                    type="color" v-model="vehicleForm.modifications.tire_smoke"/>
                             </td>
                             <th class="p-2">
                                 <label class="block font-semibold">
@@ -368,7 +440,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" type="color" v-model="vehicleForm.modifications.neon" />
+                                <input
+                                    class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                    type="color" v-model="vehicleForm.modifications.neon"/>
                             </td>
                         </tr>
                         <tr>
@@ -378,9 +452,25 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.turbo">
+                                <select
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
+                                    v-model="vehicleForm.modifications.turbo">
                                     <option :value="true">{{ t('global.yes') }}</option>
                                     <option :value="false">{{ t('global.no') }}</option>
+                                </select>
+                            </td>
+                            <th class="p-2">
+                                <label class="block font-semibold">
+                                    {{ t('players.characters.vehicle.horn') }}
+                                </label>
+                            </th>
+                            <td class="p-2">
+                                <select
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
+                                    v-model="vehicleForm.modifications.horn">
+                                    <optgroup :label="group" v-for="(hornList, group) in horns">
+                                        <option :value="horn.index" v-for="horn in hornList">{{ horn.label }}</option>
+                                    </optgroup>
                                 </select>
                             </td>
                         </tr>
@@ -391,7 +481,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="3" v-model="vehicleForm.modifications.engine" />
+                                <input type="number"
+                                       class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                       min="0" max="3" v-model="vehicleForm.modifications.engine"/>
                             </td>
                             <th class="p-2">
                                 <label class="block font-semibold">
@@ -399,7 +491,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="3" v-model="vehicleForm.modifications.transmission" />
+                                <input type="number"
+                                       class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                       min="0" max="3" v-model="vehicleForm.modifications.transmission"/>
                             </td>
                         </tr>
                         <tr>
@@ -409,7 +503,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="3" v-model="vehicleForm.modifications.breaks" />
+                                <input type="number"
+                                       class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                       min="0" max="3" v-model="vehicleForm.modifications.breaks"/>
                             </td>
                             <th class="p-2">
                                 <label class="block font-semibold">
@@ -417,7 +513,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="4" v-model="vehicleForm.modifications.suspension" />
+                                <input type="number"
+                                       class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                       min="0" max="4" v-model="vehicleForm.modifications.suspension"/>
                             </td>
                         </tr>
                         <tr>
@@ -427,7 +525,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <input type="number" class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" min="0" max="5" v-model="vehicleForm.modifications.armor" />
+                                <input type="number"
+                                       class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
+                                       min="0" max="5" v-model="vehicleForm.modifications.armor"/>
                             </td>
                         </tr>
                         <tr>
@@ -437,7 +537,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.tint">
+                                <select
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
+                                    v-model="vehicleForm.modifications.tint">
                                     <option :value="0">{{ t('players.characters.vehicle.tints.0') }}</option>
                                     <option :value="1">{{ t('players.characters.vehicle.tints.1') }}</option>
                                     <option :value="2">{{ t('players.characters.vehicle.tints.2') }}</option>
@@ -452,7 +554,9 @@
                                 </label>
                             </th>
                             <td class="p-2">
-                                <select class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent" v-model="vehicleForm.modifications.plate_type">
+                                <select
+                                    class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
+                                    v-model="vehicleForm.modifications.plate_type">
                                     <option :value="0">{{ t('players.characters.vehicle.plates.0') }}</option>
                                     <option :value="3">{{ t('players.characters.vehicle.plates.3') }}</option>
                                     <option :value="4">{{ t('players.characters.vehicle.plates.4') }}</option>
@@ -464,11 +568,21 @@
                     </table>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isVehicleEdit = false">
+                    <button type="button"
+                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isVehicleEdit = false">
                         {{ t('global.cancel') }}
                     </button>
-                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="editVehicle">
-                        {{ t('players.characters.vehicle.confirm') }}
+                    <button type="button"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success"
+                            @click="editVehicle">
+                        <span v-if="!isVehicleLoading">
+                            {{ t('players.characters.vehicle.confirm') }}
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </span>
                     </button>
                 </div>
             </div>
@@ -476,7 +590,8 @@
 
         <!-- Vehicle Adding -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isVehicleAdd">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.vehicle.add') }}</h3>
                 <div class="w-full p-3 flex justify-between">
                     <label class="mr-4 block w-1/3 text-center pt-2 font-bold">
@@ -485,13 +600,17 @@
                     <model-select
                         class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
                         :options="vehicleList"
-                        v-model="vehicleAdd" />
+                        v-model="vehicleAdd"/>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isVehicleAdd = false">
+                    <button type="button"
+                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isVehicleAdd = false">
                         {{ t('global.cancel') }}
                     </button>
-                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="addVehicle">
+                    <button type="button"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success"
+                            @click="addVehicle">
                         {{ t('players.characters.vehicle.add') }}
                     </button>
                 </div>
@@ -500,25 +619,35 @@
 
         <!-- Add License -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isLicenceAdd">
-            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.characters.license.add') }}</h3>
                 <div class="w-full p-3 flex justify-between" v-if="licenses.length > 0">
                     <label class="mr-4 block w-1/3 text-center pt-2 font-bold">
                         {{ t('players.characters.license.license') }}
                     </label>
-                    <select class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" v-model="licenseForm.license">
-                        <option :value="license" v-for="license in licenses">{{ t('players.characters.license.' + license) }}</option>
+                    <select class="block w-2/3 px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
+                            v-model="licenseForm.license">
+                        <option :value="license" v-for="license in licenses">
+                            {{ t('players.characters.license.' + license) }}
+                        </option>
                     </select>
                 </div>
                 <p v-else>{{ t('players.characters.license.all') }}</p>
                 <div class="flex justify-end">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isLicenceAdd = false">
+                    <button type="button"
+                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isLicenceAdd = false">
                         {{ t('global.cancel') }}
                     </button>
-                    <button type="button" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger" @click="removeLicenses">
+                    <button type="button"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger"
+                            @click="removeLicenses">
                         {{ t('players.characters.license.remove') }}
                     </button>
-                    <button type="button" v-if="licenses.length > 0" class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success" @click="addLicense">
+                    <button type="button" v-if="licenses.length > 0"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-success mr-3 dark:bg-dark-success"
+                            @click="addLicense">
                         {{ t('players.characters.license.add') }}
                     </button>
                 </div>
@@ -532,9 +661,10 @@
                     {{ t('players.vehicles.vehicles') }}
 
                     <!-- Add Vehicle -->
-                    <button class="px-3 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success text-base ml-5"
-                            @click="isVehicleAdd = true"
-                            v-if="$page.auth.player.isSuperAdmin"
+                    <button
+                        class="px-3 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success text-base ml-5"
+                        @click="isVehicleAdd = true"
+                        v-if="$page.auth.player.isSuperAdmin"
                     >
                         <i class="fas fa-car"></i>
                         {{ t('players.characters.vehicle.add') }}
@@ -551,7 +681,9 @@
                     >
                         <template #header>
                             <h3 class="mb-2">
-                                {{ vehicle.model_name in vehicleMap ? vehicleMap[vehicle.model_name] : vehicle.model_name }}
+                                {{
+                                    vehicle.model_name in vehicleMap ? vehicleMap[vehicle.model_name] : vehicle.model_name
+                                }}
                                 <sup>{{ vehicle.model_name }}</sup>
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
@@ -635,10 +767,12 @@
                                 {{ property.property_address }}
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.properties.cost') }}:</span> {{ numberFormat(property.property_cost, 0, true) }}
+                                <span>{{ t('players.properties.cost') }}:</span>
+                                {{ numberFormat(property.property_cost, 0, true) }}
                             </h4>
                             <h4 class="text-primary dark:text-dark-primary">
-                                <span>{{ t('players.properties.rent') }}:</span> {{ numberFormat(property.property_income, 0, true) }}
+                                <span>{{ t('players.properties.rent') }}:</span>
+                                {{ numberFormat(property.property_income, 0, true) }}
                             </h4>
                         </template>
 
@@ -719,6 +853,7 @@ import Badge from './../../../Components/Badge';
 import Modal from "../../../Components/Modal";
 import Jobs from "../../../data/jobs.json";
 import {ModelSelect} from 'vue-search-select';
+import axios from 'axios';
 
 export default {
     layout: Layout,
@@ -739,6 +874,10 @@ export default {
             required: true,
         },
         vehicleMap: {
+            type: Object,
+            required: true,
+        },
+        horns: {
             type: Object,
             required: true,
         },
@@ -789,12 +928,12 @@ export default {
         });
 
         let paychecks = {};
-        for(let x=0;x<Jobs.length;x++) {
+        for (let x = 0; x < Jobs.length; x++) {
             const j = Jobs[x];
 
             paychecks[j.name] = {};
 
-            for(let y=0;y<j.departments.length;y++) {
+            for (let y = 0; y < j.departments.length; y++) {
                 const d = j.departments[y];
 
                 paychecks[j.name][d.name] = d.positions;
@@ -853,6 +992,7 @@ export default {
                     armor: -1,
                     plate_type: 0,
                     tint: 0,
+                    horn: -1,
                 },
                 repair: false
             },
@@ -869,7 +1009,9 @@ export default {
             isResetSpawn: false,
             jobs: jobs,
             paychecks: paychecks,
+            isVehicleLoading: false,
             isVehicleEdit: false,
+            vehicleEditError: null,
             isVehicleAdd: false,
             isLicenceAdd: false
         };
@@ -894,11 +1036,11 @@ export default {
             return ["heli", "fw", "cfi", "hw", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
         },
         setPayCheck() {
-            for(let x=0;x<Jobs.length;x++) {
+            for (let x = 0; x < Jobs.length; x++) {
                 const j = Jobs[x];
 
                 if (j.name === this.form.job_name) {
-                    for(let y=0;y<j.departments.length;y++) {
+                    for (let y = 0; y < j.departments.length; y++) {
                         const d = j.departments[y];
 
                         if (d.name === this.form.department_name && this.form.position_name in d.positions) {
@@ -940,7 +1082,7 @@ export default {
             await this.$inertia.post('/vehicles/delete/' + vehicleId);
         },
         sortJobs(array, type) {
-            switch(type) {
+            switch (type) {
                 case 'job':
                 case 'department':
                     array.sort((a, b) => {
@@ -985,10 +1127,29 @@ export default {
             this.isResetSpawn = false;
         },
         async editVehicle() {
-            // Send request.
-            await this.$inertia.post('/vehicles/edit/' + this.vehicleForm.id, this.vehicleForm);
+            if (this.isVehicleLoading) {
+                return;
+            }
+            this.isVehicleLoading = true;
 
-            // Reset.
+            this.vehicleForm.plate = this.vehicleForm.plate.toUpperCase().trim();
+
+            try {
+                const response = (await axios.post('/vehicles/edit/' + this.vehicleForm.id, this.vehicleForm)).data;
+
+                if (response.status) {
+                    $('.overflow-y-auto').scrollTop(0);
+                    window.location.reload();
+                } else {
+                    this.vehicleEditError = response.message;
+
+                    this.isVehicleLoading = false;
+                    return;
+                }
+            } catch (e) {
+            }
+
+            this.isVehicleLoading = false;
             this.isVehicleEdit = false;
         },
         async addVehicle() {
