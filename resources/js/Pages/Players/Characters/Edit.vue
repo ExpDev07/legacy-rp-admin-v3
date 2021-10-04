@@ -462,6 +462,9 @@
                             <th class="p-2">
                                 <label class="block font-semibold">
                                     {{ t('players.characters.vehicle.horn') }}
+                                    <sup>
+                                        <a class="dark:text-blue-300 text-blue-500" href="https://gta.fandom.com/wiki/Los_Santos_Customs/Horns" :title="t('players.characters.vehicle.horn_title')" target="_blank">[?]</a>
+                                    </sup>
                                 </label>
                             </th>
                             <td class="p-2">
