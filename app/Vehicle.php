@@ -130,6 +130,7 @@ class Vehicle extends Model
             'armor'            => isset($json['modArmor']) && is_numeric($json['modArmor']) ? intval($json['modArmor']) + 1 : 0,
             'tint'             => isset($json['windowTint']) && is_numeric($json['windowTint']) ? intval($json['windowTint']) : 0,
             'plate_type'       => isset($json['plateIndex']) && is_numeric($json['plateIndex']) ? intval($json['plateIndex']) : 0,
+            'horn'             => isset($json['modHorns']) && is_numeric($json['modHorns']) ? intval($json['modHorns']) : -1,
         ];
     }
 
@@ -142,6 +143,7 @@ class Vehicle extends Model
      */
     public function parseModifications(array $mods): ?string
     {
+        $hornMap = self::getHornMap(true);
         $mods = array_map(function ($m) {
             return is_numeric($m) ? intval($m) : $m;
         }, $mods);
@@ -159,6 +161,7 @@ class Vehicle extends Model
             'armor'            => !isset($mods['armor']) || !is_integer($mods['armor']) || $mods['armor'] < 0 || $mods['armor'] > 5,
             'tint'             => !isset($mods['tint']) || !is_integer($mods['tint']) || $mods['tint'] < 0 || $mods['tint'] > 5,
             'plate_type'       => !isset($mods['plate_type']) || !is_integer($mods['plate_type']) || $mods['plate_type'] < 0 || $mods['plate_type'] > 4,
+            'horn'             => !isset($mods['horn']) || !is_integer($mods['horn']) || !isset($hornMap[$mods['horn']]),
         ];
 
         foreach ($validate as $key => $invalid) {
@@ -188,10 +191,44 @@ class Vehicle extends Model
         $json['modArmor'] = $mods['armor'] - 1;
         $json['windowTint'] = $mods['tint'];
         $json['plateIndex'] = $mods['plate_type'];
+        $json['modHorns'] = $mods['horn'];
 
         $this->deprecated_modifications = json_encode($json);
 
         return null;
+    }
+
+    /**
+     * Returns a map of all available vehicle horns
+     *
+     * @param bool $validationMap
+     * @return array
+     */
+    public static function getHornMap(bool $validationMap = false): array
+    {
+        $hornMaps = json_decode(file_get_contents(__DIR__ . '/../helpers/vehicle-horns.json'), true);
+        $horns = [];
+
+        if ($validationMap) {
+            foreach ($hornMaps as $map) {
+                foreach ($map as $key => $horn) {
+                    $horns[$key] = $horn;
+                }
+            }
+        } else {
+            foreach ($hornMaps as $group => $map) {
+                $horns[$group] = [];
+
+                foreach ($map as $key => $horn) {
+                    $horns[$group][] = [
+                        'index' => $key,
+                        'label' => $horn,
+                    ];
+                }
+            }
+        }
+
+        return $horns;
     }
 
 }

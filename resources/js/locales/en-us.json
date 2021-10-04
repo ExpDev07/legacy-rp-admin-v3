@@ -582,6 +582,7 @@
                 "armor": "Armor (0 - 5)",
                 "repair": "Repair Vehicle?",
                 "fuel": "Fuel Level (0 - 100)",
+                "horn": "Horn",
                 "tint": "Window Tint",
                 "tints": {
                     "0": "None",

@@ -1,0 +1,52 @@
+{
+    "Standard": {
+        "-1": "Default Horn",
+        "0": "Truck Horn",
+        "1": "Police Horn",
+        "2": "Clown Horn"
+    },
+    "Musical": {
+        "24": "Jazz Horn 1",
+        "25": "Jazz Horn 2",
+        "26": "Jazz Horn 3",
+        "3": "Musical Horn 1",
+        "4": "Musical Horn 2",
+        "5": "Musical Horn 3",
+        "6": "Musical Horn 4",
+        "7": "Musical Horn 5",
+        "8": "Sad Trombone",
+        "9": "Classical Horn 1",
+        "10": "Classical Horn 2",
+        "11": "Classical Horn 3",
+        "12": "Classical Horn 4",
+        "13": "Classical Horn 5",
+        "14": "Classical Horn 6",
+        "15": "Classical Horn 7",
+        "36": "Classical Horn 8",
+        "33": "Classical Horn 8 (Extended)",
+        "16": "Scale - Do",
+        "17": "Scale - Re",
+        "18": "Scale - Mi",
+        "19": "Scale - Fa",
+        "20": "Scale - Sol",
+        "21": "Scale - La",
+        "22": "Scale - Ti",
+        "23": "Scale - Do (high)"
+    },
+    "Loops": {
+        "27": "Jazz Horn Loop",
+        "32": "Classical Horn Loop 1",
+        "34": "Classical Horn Loop 2",
+        "43": "San Andreas Loop",
+        "44": "Liberty City Loop"
+    },
+    "Special": {
+        "28": "Star Spangled Banner 1",
+        "29": "Star Spangled Banner 2",
+        "30": "Star Spangled Banner 3",
+        "31": "Star Spangled Banner 4",
+        "38": "Halloween Loop 1",
+        "40": "Halloween Loop 2",
+        "41": "Halloween Loop 2 (speed up)"
+    }
+}

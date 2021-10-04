@@ -19,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -143,6 +144,8 @@ class PlayerCharacterController extends Controller
         $motels = Motel::query()->where('cid', $character->character_id)->get()->sortBy(['motel', 'room_id']);
         $motelMap = json_decode(file_get_contents(__DIR__ . '/../../../helpers/motels.json'), true);
 
+        $horns = Vehicle::getHornMap(false);
+
         $economy = EconomyStatistic::query()->orderByDesc('last_updated')->select(['last_updated', 'closing'])->limit(1)->first();
 
         return Inertia::render('Players/Characters/Edit', [
@@ -150,6 +153,7 @@ class PlayerCharacterController extends Controller
             'character'   => new CharacterResource($character),
             'motels'      => $motels->toArray(),
             'motelMap'    => $motelMap,
+            'horns'       => $horns,
             'vehicleMap'  => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
             'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
             'economy'     => $economy ? $economy->closing : 0,
@@ -496,40 +500,40 @@ class PlayerCharacterController extends Controller
      *
      * @param Request $request
      * @param Vehicle $vehicle
-     * @return RedirectResponse
+     * @return \Illuminate\Http\Response
      */
-    public function editVehicle(Request $request, Vehicle $vehicle): RedirectResponse
+    public function editVehicle(Request $request, Vehicle $vehicle): \Illuminate\Http\Response
     {
         $user = $request->user();
         if (!$user->player->is_super_admin) {
-            return back()->with('error', 'Only super admins can edit vehicles.');
+            return self::json(false, null, 'Only super admins can edit vehicles.');
         }
 
         $plate = trim(strtoupper($request->post('plate')));
-        if (strlen($plate) !== 8 || preg_match('/[^\w]/mi', $plate)) {
-            return back()->with('error', 'Plate has to be 8 characters long and only contain alphanumeric characters (A-Z and 0-9).');
+        if (strlen($plate) < 3 || strlen($plate) > 8 || preg_match('/[^\w ]/mi', $plate)) {
+            return self::json(false, null,'Plate has to be between 3 and 8 characters long and only contain alphanumeric characters and spaces (A-Z and 0-9, cannot start or end with space).');
         }
 
         $exists = Vehicle::query()->where('plate', '=', $plate)->where('vehicle_id', '<>', $vehicle->vehicle_id)->count(['vehicle_id']) > 0;
         if ($exists) {
-            return back()->with('error', 'Plate "' . $plate . '" is already taken.');
+            return self::json(false, null,'Plate "' . $plate . '" is already taken.');
         }
 
         $fuel = floatval($request->post('fuel'));
         if ($fuel < 0 || $fuel > 100) {
-            return back()->with('error', 'Invalid fuel value.');
+            return self::json(false, null,'Invalid fuel value.');
         }
 
         $owner = $request->post('owner_cid');
 
         $character = Character::query()->where('character_id', '=', $owner)->first(['character_id', 'steam_identifier']);
         if (!$character) {
-            return back()->with('error', 'Invalid character id.');
+            return self::json(false, null,'Invalid character id.');
         }
 
         $invalidMod = $vehicle->parseModifications($request->post('modifications', []));
         if ($invalidMod !== null) {
-            return back()->with('error', 'Invalid modifications ("' . $invalidMod . '") submitted, please try again.');
+            return self::json(false, null,'Invalid modifications ("' . $invalidMod . '") submitted, please try again.');
         }
 
         $vehicle->update([
@@ -540,7 +544,8 @@ class PlayerCharacterController extends Controller
             'deprecated_fuel'          => $fuel,
         ]);
 
-        return redirect('/players/' . $character->steam_identifier . '/characters/' . $character->character_id . '/edit')->with('success', 'Vehicle was successfully edited.');
+        Session::flash('success', 'Vehicle was successfully edited');
+        return self::json(true);
     }
 
     /**
