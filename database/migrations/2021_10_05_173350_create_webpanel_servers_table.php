@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class updateWebpanelServersTable2 extends Migration
+class CreateWebpanelServersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,12 @@ class updateWebpanelServersTable2 extends Migration
      */
     public function up()
     {
-        if (!Schema::hasColumn("webpanel_servers", "name")) {
-            Schema::table('webpanel_servers', function (Blueprint $table) {
+        if (!Schema::hasTable("webpanel_servers")) {
+            Schema::create('webpanel_servers', function (Blueprint $table) {
+                $table->id();
+                $table->string('url');
                 $table->string('name')->nullable(true);
+                $table->timestamps();
             });
         }
     }
@@ -28,8 +31,6 @@ class updateWebpanelServersTable2 extends Migration
      */
     public function down()
     {
-        Schema::table('webpanel_servers', function (Blueprint $table) {
-            $table->dropColumn('name');
-        });
+        Schema::drop('webpanel_servers');
     }
 }
