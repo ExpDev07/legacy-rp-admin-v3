@@ -564,7 +564,7 @@
             "spawn_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to be logged out (soft-napping) for the changes to take effect.</b>",
             "spawn_do": "Reset Spawn-Point",
             "vehicle": {
-                "edit": "Edit Vehicle",
+                "edit": "Pimp my Ride™",
                 "owner": "Owner CID",
                 "plate": "Plate",
                 "confirm": "Edit Vehicle",
@@ -583,6 +583,7 @@
                 "repair": "Repair Vehicle?",
                 "fuel": "Fuel Level (0 - 100)",
                 "horn": "Horn",
+                "horn_title": "List of all available horns on the GTA-Wiki",
                 "tint": "Window Tint",
                 "tints": {
                     "0": "None",
