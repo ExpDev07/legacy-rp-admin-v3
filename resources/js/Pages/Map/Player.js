@@ -235,7 +235,7 @@ class Player {
         }
 
         // Check if we have a last heading otherwise just set the rotation
-        if (this.lastHeading !== null) {
+        if (this.lastHeading !== null && marker._icon) {
             // Calculate the difference between the last and the new heading
             const headingDiff = this.lastHeading - this.heading;
 

@@ -620,6 +620,13 @@
             </div>
         </template>
 
+        <div v-if="loadingScreenStatus" class="fixed top-0 left-0 right-0 bottom-0 z-2k bg-black bg-opacity-75">
+            <div class="text-2xl text-white absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <i class="fas fa-cog animate-spin mr-1"></i>
+                {{ loadingScreenStatus }}
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -631,6 +638,7 @@ import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import 'leaflet-fullscreen';
+import 'leaflet.heat';
 import VueSpeedometer from "vue-speedometer";
 
 import PlayerContainer from './PlayerContainer';
@@ -651,6 +659,8 @@ import DetectionArea from "./DetectionArea";
     };
     if (global) global.include(MarkerMixin);
 })(L.Marker);
+
+window.instance = null;
 
 export default {
     layout: Layout,
@@ -729,7 +739,6 @@ export default {
             },
             layers: {
                 "Players": L.layerGroup(),
-                "Dead Players": L.layerGroup(),
                 "Emergency Vehicles": L.layerGroup(),
                 "Vehicles": L.layerGroup(),
                 "Blips": L.layerGroup(),
@@ -756,7 +765,10 @@ export default {
             isScreenshot: false,
             isScreenshotLoading: false,
             screenshotImage: null,
-            screenshotError: null
+            screenshotError: null,
+
+            heatmapLayer: null,
+            loadingScreenStatus: null
         };
     },
     methods: {
@@ -927,6 +939,72 @@ export default {
                 this.screenshotError = this.t('map.screenshot_failed');
             }
         },
+        async renderHeatMap(date) {
+            if (this.loadingScreenStatus) {
+                return;
+            }
+            this.loadingScreenStatus = this.t('map.heatmap_fetch');
+
+            const server = $('#server').val(),
+                heatmap = await this.loadHeatMap(server, date);
+
+            this.loadingScreenStatus = this.t('map.heatmap_render');
+
+            if (this.heatmapLayer) {
+                this.map.removeLayer(this.heatmapLayer);
+                this.heatmapLayer = null;
+            }
+
+            if (heatmap) {
+                $('.leaflet-control-layers-selector').each(function() {
+                    if ($(this).prop('checked')) {
+                        $(this).trigger('click');
+                    }
+                });
+
+                this.heatmapLayer = L.heatLayer(heatmap, {
+                    radius: 10,
+                    minOpacity: 0.65,
+                    maxZoom: 7
+                });
+
+                this.heatmapLayer.addTo(this.map);
+            }
+
+            this.loadingScreenStatus = null;
+        },
+        async loadHeatMap(server, date) {
+            this.loadingScreenStatus = this.t('map.heatmap_fetch');
+            try {
+                const result = await axios.get(this.hostname(false) + '/history/heatmap/' + server + '/' + date + '?token=' + this.token + '&cluster=' + this.cluster);
+
+                this.loadingScreenStatus = this.t('map.heatmap_parse');
+                if (result.data && result.data.status) {
+                    const max = Math.max(...Object.values(result.data.data));
+
+                    let heatmap = [];
+                    for (const coords in result.data.data) {
+                        if (Object.hasOwnProperty(coords)) continue;
+                        const tmp = coords.split('/'),
+                            location = Vector3.fromGameCoords(parseInt(tmp[0]), parseInt(tmp[1]), 0).toMap();
+
+                        heatmap.push([
+                            location.lat,
+                            location.lng,
+                            result.data.data[coords] / max
+                        ]);
+                    }
+
+                    return heatmap;
+                } else if (result.data && !result.data.status) {
+                    console.error(result.data.error);
+                }
+            } catch(e) {
+                console.error(e);
+            }
+
+            return null;
+        },
         getOTToken() {
             const _this = this;
 
@@ -1027,8 +1105,6 @@ export default {
             }
             if (vehicle) {
                 return "Vehicles";
-            } else if (player.icon.dead) {
-                return "Dead Players";
             } else {
                 return "Players";
             }
@@ -1072,14 +1148,6 @@ export default {
                             unknownCharacters.push(characterID);
                         }
 
-                        if (!(id in _this.markers)) {
-                            _this.markers[id] = Player.newMarker();
-                        }
-                        _this.markers[id] = player.updateMarker(_this.markers[id], _this.highlightedPeople, _this.container.vehicles);
-
-                        _this.addToLayer(_this.markers[id], _this.getLayer(player));
-                        _this.markers[id]._icon.dataset.playerId = id;
-
                         if (player.isTracked()) {
                             _this.map.setView(player.location.toMap(), _this.firstRefresh ? 7 : _this.map.getZoom(), {
                                 duration: 0.1
@@ -1117,6 +1185,17 @@ export default {
                                 source: player.player.source,
                                 cid: player.character.id
                             };
+                        }
+
+                        if (!(id in _this.markers)) {
+                            _this.markers[id] = Player.newMarker();
+                        }
+                        _this.markers[id] = player.updateMarker(_this.markers[id], _this.highlightedPeople, _this.container.vehicles);
+
+                        _this.addToLayer(_this.markers[id], _this.getLayer(player));
+
+                        if (_this.markers[id]._icon) {
+                            _this.markers[id]._icon.dataset.playerId = id;
                         }
 
                         if (_this.openPopup === id) {
@@ -1337,6 +1416,8 @@ export default {
                 $('#map_title').text(_this.t('map.spy_satellite'));
             });
         }
+
+        instance = this;
     }
 };
 </script>
