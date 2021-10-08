@@ -28,6 +28,12 @@ class Player {
         this.character = Character.fromRaw(rawData);
         this.vehicle = Vehicle.fromRaw(rawData);
 
+        if (this.heading) {
+            this.lastHeading = this.heading;
+        } else {
+            this.lastHeading = null;
+        }
+
         this.location = Vector3.fromGameCoords(rawData.coords.x, rawData.coords.y, rawData.coords.z);
         this.heading = mapNumber(-rawData.heading, -180, 180, 0, 360) - 180;
         this.speed = Math.round(rawData.speed * 2.236936); // Convert to mph
@@ -218,9 +224,42 @@ class Player {
     }
 
     updateMarker(marker, highlightedPeople, vehicles) {
+        const _this = this;
+
         marker.setIcon(this.getIcon(highlightedPeople));
         marker.setLatLng(this.location.toMap());
-        marker.setRotationAngle(this.heading);
+
+        // Reset transition for icon
+        if (marker._icon) {
+            marker._icon.style.transition = 'inherit';
+        }
+
+        // Check if we have a last heading otherwise just set the rotation
+        if (this.lastHeading !== null) {
+            // Calculate the difference between the last and the new heading
+            const headingDiff = this.lastHeading - this.heading;
+
+            // Are we doing a 360?
+            if (Math.abs(headingDiff) >= 180) {
+                // Calculate how the heading should be relative to the old one and set it
+                const newHeading = headingDiff > 0 ? this.heading + 360 : this.heading - 360;
+                marker.setRotationAngle(newHeading);
+
+                // Wait for the animation to finish (300ms)
+                setTimeout(function () {
+                    // Set the transition to 0s so we dont see a 360
+                    marker._icon.style.transition = '0s';
+
+                    // Update the icons rotation with the actual heading while we still have no transition
+                    marker._icon.style.transform = marker._icon.style.transform.replace(/(?<=rotateZ\().+?(?=\))/gm, _this.heading + 'deg');
+                }, 300);
+            } else {
+                // We are not doing a 360 so no fancy stuff needed
+                marker.setRotationAngle(this.heading);
+            }
+        } else {
+            marker.setRotationAngle(this.heading);
+        }
 
         const attributes = this.attributes.map(a => '<span class="text-xxs italic block leading-3">- is ' + a + '</span>');
 
