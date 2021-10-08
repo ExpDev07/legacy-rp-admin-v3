@@ -22,6 +22,14 @@
                 <!-- Toggle On-Duty List -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isScreenshot = true">
+                    <i class="fas fa-camera"></i>
+                    {{ t('map.screenshot') }}
+                </button>
+
+                <!-- Toggle On-Duty List -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="isShowingOnDutyList = !isShowingOnDutyList">
                     <i class="fas fa-gavel"></i>
                     {{ t('map.toggle_duty_list') }}
@@ -176,6 +184,55 @@
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                             @click="isNotification = false">
                         {{ t('global.cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshot -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isScreenshot">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                <h3 class="mb-2">
+                    {{ t('map.screenshot') }}
+                </h3>
+
+                <p v-if="screenshotError" class="text-danger dark:text-dark-danger font-semibold mb-3">
+                    {{ screenshotError }}
+                </p>
+
+                <a v-if="screenshotImage" class="w-full" :href="screenshotImage" target="_blank">
+                    <img :src="screenshotImage" alt="Screenshot" class="w-full" />
+                </a>
+                <p v-if="screenshotImage" class="mt-3 text-sm">
+                    {{ t('map.screenshot_description') }}
+                </p>
+
+                <!-- Steam Identifier -->
+                <div class="w-full p-3 flex justify-between px-0" v-else>
+                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="screenshot_id">
+                        {{ t('map.screenshot_id') }}
+                    </label>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="screenshot_id"
+                           v-model="form.screenshotId"/>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end mt-2">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded mr-2"
+                            @click="createScreenshot" v-if="!screenshotImage">
+                        <span v-if="!isScreenshotLoading">
+                            <i class="fas fa-camera mr-1"></i>
+                            {{ t('map.screenshot_create') }}
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-cog animate-spin mr-1"></i>
+                            {{ t('global.loading') }}
+                        </span>
+                    </button>
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null">
+                        {{ t('global.close') }}
                     </button>
                 </div>
             </div>
@@ -666,7 +723,9 @@ export default {
                 filters: [],
 
                 notify_steam: '',
-                notify_type: 'load'
+                notify_type: 'load',
+
+                screenshotId: 0
             },
             layers: {
                 "Players": L.layerGroup(),
@@ -692,7 +751,12 @@ export default {
             characters: {},
             highlightedPeople: {},
             advancedTracking: false,
-            cayoCalibrationMode: false // Set this to true to recalibrate the cayo perico map
+            cayoCalibrationMode: false, // Set this to true to recalibrate the cayo perico map
+
+            isScreenshot: false,
+            isScreenshotLoading: false,
+            screenshotImage: null,
+            screenshotError: null
         };
     },
     methods: {
@@ -839,6 +903,30 @@ export default {
                 return isDev ? 'http://localhost:9999' : 'https://map.legacy-roleplay.com';
             }
         },
+        async createScreenshot() {
+            if (this.isScreenshotLoading) {
+                return;
+            }
+            this.isScreenshotLoading = true;
+            this.screenshotError = null;
+
+            try {
+                const result = await axios.post('/api/screenshot/' + $('#server').val() + '/' + this.form.screenshotId);
+                this.isScreenshotLoading = false;
+
+                if (result.data) {
+                    if (result.data.status) {
+                        console.info('Screenshot of ID ' + this.form.screenshotId, result.data.data.url);
+
+                        this.screenshotImage = result.data.data.url;
+                    } else {
+                        this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
+                    }
+                }
+            } catch(e) {
+                this.screenshotError = this.t('map.screenshot_failed');
+            }
+        },
         getOTToken() {
             const _this = this;
 
@@ -874,9 +962,9 @@ export default {
                         const unzipped = await DataCompressor.GUnZIP(event.data),
                             data = JSON.parse(unzipped);
 
-                        _this.firstRefresh = false;
-
                         await _this.renderMapData(data);
+
+                        _this.firstRefresh = false;
                     } catch (e) {
                         console.error('Failed to parse socket message ', e)
                     }
@@ -1016,6 +1104,10 @@ export default {
                                 _this.openPopup = id;
                             }
 
+                            if (!_this.isScreenshot) {
+                                _this.form.screenshotId = player.player.source;
+                            }
+
                             foundTracked = true;
                         }
 
@@ -1086,23 +1178,6 @@ export default {
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
-        },
-        __debugLocations(locations) {
-            const _this = this;
-
-            $.each(locations, function (k, coords) {
-                L.marker(_this.convertCoords(coords),
-                    {
-                        icon: new L.Icon(
-                            {
-                                iconUrl: '/images/icons/circle_red.png',
-                                iconSize: [25, 25]
-                            }
-                        ),
-                        forceZIndex: 300
-                    }
-                ).addTo(_this.map);
-            });
         },
         async buildMap() {
             if (this.map) {
@@ -1211,6 +1286,7 @@ export default {
                     window.location.hash = '';
                 } else {
                     window.location.hash = track;
+                    _this.firstRefresh = true;
 
                     _this.map.closePopup();
 

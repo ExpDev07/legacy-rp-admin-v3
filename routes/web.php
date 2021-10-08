@@ -177,6 +177,9 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
 
     // Character info api
     Route::post('characters', [PlayerCharacterController::class, 'getCharacters']);
+
+    // Screenshot api
+    Route::post('screenshot/{server}/{id}', [PlayerRouteController::class, 'screenshot']);
 });
 
 Route::group(['prefix' => 'cron'], function () {

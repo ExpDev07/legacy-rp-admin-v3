@@ -95,6 +95,19 @@ class Server extends Model
         return preg_match('/^\d+\.\d+\.\d+\.\d+(:\d+)?$/m', $host) ? $host : explode('.', $host)[0];
     }
 
+    public static function isServerIDValid(int $id): bool
+    {
+        $players = Player::getAllOnlinePlayers(false);
+
+        foreach ($players as $player) {
+            if (intval($player['id']) === $id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Returns an associative array (steamIdentifier -> serverId)
      *
@@ -118,7 +131,6 @@ class Server extends Model
         if (!isset(self::$onlineMap[$cacheKey]) || empty(self::$onlineMap[$cacheKey])) {
             $serverIp = self::fixApiUrl($serverIp);
 
-            $json = null;
             try {
                 $json = OPFWHelper::getWorldJSON($serverIp);
 
@@ -147,6 +159,26 @@ class Server extends Model
         CacheHelper::write($cacheKey, self::$onlineMap[$cacheKey], 5 * CacheHelper::MINUTE);
 
         return self::$onlineMap[$cacheKey];
+    }
+
+    /**
+     * Resolves the server api url from its name
+     *
+     * @param string $name
+     * @return string|null
+     */
+    public static function getServerApiURLFromName(string $name): ?string
+    {
+        $rawServerIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        foreach ($rawServerIps as $rawServerIp) {
+            $n = Server::getServerName($rawServerIp);
+            if ($n === $name) {
+                return self::fixApiUrl($rawServerIp);
+            }
+        }
+
+        return null;
     }
 
     /**

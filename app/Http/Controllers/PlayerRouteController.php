@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\OPFWHelper;
 use App\Player;
+use App\Server;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -158,6 +159,35 @@ class PlayerRouteController extends Controller
         ]);
 
         return back()->with('success', 'Identifier has been removed successfully.');
+    }
+
+    /**
+     * Takes a screenshot
+     *
+     * @param string $server
+     * @param int $id
+     * @return Response
+     */
+    public function screenshot(string $server, int $id): Response
+    {
+        $api = Server::getServerApiURLFromName($server);
+        if (!$api) {
+            return self::json(false, null, 'Invalid server');
+        }
+
+        if (!Server::isServerIDValid($id)) {
+            return self::json(false, null, 'Invalid server id (User is offline?)');
+        }
+
+        $data = OPFWHelper::createScreenshot($api, $id);
+
+        if ($data->status) {
+            return self::json(true, [
+                'url' => $data->data['screenshotURL']
+            ]);
+        } else {
+            return self::json(false, null, 'Failed to create screenshot');
+        }
     }
 
 }
