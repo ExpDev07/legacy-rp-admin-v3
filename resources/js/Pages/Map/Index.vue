@@ -965,7 +965,8 @@ export default {
                 this.heatmapLayer = L.heatLayer(heatmap, {
                     radius: 10,
                     minOpacity: 0.65,
-                    maxZoom: 7
+                    maxZoom: 6,
+                    max: 100
                 });
 
                 this.heatmapLayer.addTo(this.map);
@@ -980,8 +981,6 @@ export default {
 
                 this.loadingScreenStatus = this.t('map.heatmap_parse');
                 if (result.data && result.data.status) {
-                    const max = Math.max(...Object.values(result.data.data));
-
                     let heatmap = [];
                     for (const coords in result.data.data) {
                         if (Object.hasOwnProperty(coords)) continue;
@@ -991,7 +990,7 @@ export default {
                         heatmap.push([
                             location.lat,
                             location.lng,
-                            result.data.data[coords] / max
+                            result.data.data[coords]
                         ]);
                     }
 

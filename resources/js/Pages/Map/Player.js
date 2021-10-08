@@ -247,6 +247,10 @@ class Player {
 
                 // Wait for the animation to finish (300ms)
                 setTimeout(function () {
+                    if (!marker._icon) {
+                        return;
+                    }
+
                     // Set the transition to 0s so we dont see a 360
                     marker._icon.style.transition = '0s';
 
