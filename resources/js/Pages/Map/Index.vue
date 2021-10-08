@@ -874,9 +874,9 @@ export default {
                         const unzipped = await DataCompressor.GUnZIP(event.data),
                             data = JSON.parse(unzipped);
 
-                        _this.firstRefresh = false;
-
                         await _this.renderMapData(data);
+
+                        _this.firstRefresh = false;
                     } catch (e) {
                         console.error('Failed to parse socket message ', e)
                     }
@@ -1087,23 +1087,6 @@ export default {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
         },
-        __debugLocations(locations) {
-            const _this = this;
-
-            $.each(locations, function (k, coords) {
-                L.marker(_this.convertCoords(coords),
-                    {
-                        icon: new L.Icon(
-                            {
-                                iconUrl: '/images/icons/circle_red.png',
-                                iconSize: [25, 25]
-                            }
-                        ),
-                        forceZIndex: 300
-                    }
-                ).addTo(_this.map);
-            });
-        },
         async buildMap() {
             if (this.map) {
                 return;
@@ -1211,6 +1194,7 @@ export default {
                     window.location.hash = '';
                 } else {
                     window.location.hash = track;
+                    _this.firstRefresh = true;
 
                     _this.map.closePopup();
 
