@@ -235,7 +235,7 @@ class Player {
         }
 
         // Check if we have a last heading otherwise just set the rotation
-        if (this.lastHeading !== null) {
+        if (this.lastHeading !== null && marker._icon) {
             // Calculate the difference between the last and the new heading
             const headingDiff = this.lastHeading - this.heading;
 
@@ -247,6 +247,10 @@ class Player {
 
                 // Wait for the animation to finish (300ms)
                 setTimeout(function () {
+                    if (!marker._icon) {
+                        return;
+                    }
+
                     // Set the transition to 0s so we dont see a 360
                     marker._icon.style.transition = '0s';
 
