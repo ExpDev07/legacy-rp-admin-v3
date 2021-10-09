@@ -271,7 +271,7 @@
                         </button>
                         <button
                             class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                            @click="addArea">
+                            @click="addArea(false)">
                             {{ t('map.area_add') }}
                         </button>
                         <button
