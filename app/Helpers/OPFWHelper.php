@@ -82,6 +82,33 @@ class OPFWHelper
     }
 
     /**
+     * Revives a player in the server
+     *
+     * @param string $staffSteamIdentifier
+     * @param string $steamIdentifier
+     * @return OPFWResponse
+     */
+    public static function revivePlayer(string $staffSteamIdentifier, string $steamIdentifier): OPFWResponse
+    {
+        $status = Player::getOnlineStatus($steamIdentifier, false);
+        if (!$status->isOnline()) {
+            return new OPFWResponse(false, 'Player is offline.');
+        }
+
+        $response = self::executeRoute($status->serverIp . 'execute/revivePlayer', [
+            'targetSource' => $status->serverId,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Revived player.';
+
+            PanelLog::logRevive($staffSteamIdentifier, $steamIdentifier);
+        }
+
+        return $response;
+    }
+
+    /**
      * Updates tattoo data for a player
      *
      * @param Player $player

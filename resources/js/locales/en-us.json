@@ -480,6 +480,7 @@
             "edit_ban": "Edit Ban",
             "kick": "Kick Player",
             "staffpm": "StaffPM Player",
+            "revive": "Revive Player",
             "kick_confirm": "Are you sure you want to kick this player from the server?",
             "kick_reason": "Reason",
             "pm_message": "Message",
@@ -490,6 +491,7 @@
             "unload_msg": "Unload Message",
             "unload_msg_description": "This message will be displayed on the character selection screen.",
             "unload_confirm": "Are you sure you want to unload this players character? This will send them to the character selection screen.",
+            "revive_confirm": "Are you sure you want to revive this player?",
             "warning_edited": "Edited",
             "warning_edited_title": "Edited on {0}",
             "warning_type": {

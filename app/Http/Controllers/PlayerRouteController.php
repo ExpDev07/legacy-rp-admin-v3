@@ -125,6 +125,20 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Revives the player
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function revivePlayer(Player $player, Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        return OPFWHelper::revivePlayer($user->player->steam_identifier, $player->steam_identifier)->redirect();
+    }
+
+    /**
      * Removes a certain identifier
      *
      * @param Player $player
