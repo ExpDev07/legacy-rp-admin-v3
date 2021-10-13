@@ -182,10 +182,16 @@ class PlayerRouteController extends Controller
      *
      * @param string $server
      * @param int $id
+     * @param Request $request
      * @return Response
      */
-    public function screenshot(string $server, int $id): Response
+    public function screenshot(string $server, int $id, Request $request): Response
     {
+        $user = $request->user();
+        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+            return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
+        }
+
         $api = Server::getServerApiURLFromName($server);
         if (!$api) {
             return self::json(false, null, 'Invalid server');
@@ -215,6 +221,11 @@ class PlayerRouteController extends Controller
      */
     public function attachScreenshot(Player $player, Request $request): Response
     {
+        $user = $request->user();
+        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+            return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
+        }
+
         $screenshotUrl = trim($request->input('url')) ?? '';
 
         $re = '/^https:\/\/api\.op-framework\.com\/files\/public\/\d{1,2}-\d{2}-\d{4}-\w+\.jpg$/m';

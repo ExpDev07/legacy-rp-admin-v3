@@ -19,10 +19,11 @@
 
         <portal to="actions">
             <div class="mb-2">
-                <!-- Toggle On-Duty List -->
+                <!-- Show Screenshot -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isScreenshot = true">
+                    @click="isScreenshot = true"
+                    v-if="$page.auth.player.isPanelTrusted">
                     <i class="fas fa-camera"></i>
                     {{ t('map.screenshot') }}
                 </button>
@@ -190,7 +191,7 @@
         </div>
 
         <!-- Screenshot -->
-        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isScreenshot">
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isScreenshot && $page.auth.player.isPanelTrusted">
             <div
                 class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
                 <h3 class="mb-2">
