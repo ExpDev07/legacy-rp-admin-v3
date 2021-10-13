@@ -182,6 +182,18 @@ class Server extends Model
     }
 
     /**
+     * Returns the first server found
+     *
+     * @return string|null
+     */
+    public static function getFirstServer(): ?string
+    {
+        $rawServerIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        return empty($rawServerIps) ? null : self::fixApiUrl($rawServerIps[0]);
+    }
+
+    /**
      * Collects all the /api.json data from all servers
      *
      * @return array|null

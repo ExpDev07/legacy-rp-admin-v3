@@ -294,11 +294,11 @@
                         </label>
                         <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job"
                                 v-model="form.job_name" @change="setPayCheck">
-                            <option :value="job.name" v-for="job in jobs">{{ job.name || t('global.none') }}</option>
+                            <option :value="job.name" v-for="job in formattedJobs">{{ job.name || t('global.none') }}</option>
                         </select>
                     </div>
                     <div class="w-1/4 px-3 mobile:w-full mobile:mb-3" v-if="form.job_name === job.name"
-                         v-for="job in jobs">
+                         v-for="job in formattedJobs">
                         <label class="block mb-3">
                             {{ t('players.job.department') }}
                         </label>
@@ -309,7 +309,7 @@
                             </option>
                         </select>
                     </div>
-                    <template v-if="form.job_name === job.name" v-for="job in jobs">
+                    <template v-if="form.job_name === job.name" v-for="job in formattedJobs">
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3"
                              v-if="form.department_name === department.name" v-for="department in job.departments">
                             <label class="block mb-3">
@@ -854,9 +854,10 @@ import VSection from './../../../Components/Section';
 import Card from './../../../Components/Card';
 import Badge from './../../../Components/Badge';
 import Modal from "../../../Components/Modal";
-import Jobs from "../../../data/jobs.json";
 import {ModelSelect} from 'vue-search-select';
 import axios from 'axios';
+
+let jobsObject = [];
 
 export default {
     layout: Layout,
@@ -884,6 +885,10 @@ export default {
             type: Object,
             required: true,
         },
+        jobs: {
+            type: Object,
+            required: true,
+        },
         motelMap: {
             type: Object,
             required: true,
@@ -902,7 +907,35 @@ export default {
         }
     },
     data() {
-        let jobs = JSON.parse(JSON.stringify(Jobs.sort((a, b) => {
+        for (const job in this.jobs) {
+            if (Object.hasOwnProperty(job)) continue;
+
+            let jobObject = {
+                name: job,
+                departments: []
+            };
+
+            for (const department in this.jobs[job]) {
+                if (Object.hasOwnProperty(department)) continue;
+
+                let departmentObject = {
+                    name: department,
+                    positions: {}
+                };
+
+                for (const position in this.jobs[job][department]) {
+                    if (Object.hasOwnProperty(position)) continue;
+
+                    departmentObject.positions[position] = this.jobs[job][department][position].salary;
+                }
+
+                jobObject.departments.push(departmentObject)
+            }
+
+            jobsObject.push(jobObject);
+        }
+
+        let jobs = JSON.parse(JSON.stringify(jobsObject.sort((a, b) => {
             return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
         })));
 
@@ -931,8 +964,8 @@ export default {
         });
 
         let paychecks = {};
-        for (let x = 0; x < Jobs.length; x++) {
-            const j = Jobs[x];
+        for (let x = 0; x < jobsObject.length; x++) {
+            const j = jobsObject[x];
 
             paychecks[j.name] = {};
 
@@ -1010,7 +1043,7 @@ export default {
             licenses: this.getAvailableLicenses(),
             isTattooRemoval: false,
             isResetSpawn: false,
-            jobs: jobs,
+            formattedJobs: jobs,
             paychecks: paychecks,
             isVehicleLoading: false,
             isVehicleEdit: false,
@@ -1039,8 +1072,8 @@ export default {
             return ["heli", "fw", "cfi", "hw", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
         },
         setPayCheck() {
-            for (let x = 0; x < Jobs.length; x++) {
-                const j = Jobs[x];
+            for (let x = 0; x < jobsObject.length; x++) {
+                const j = jobsObject[x];
 
                 if (j.name === this.form.job_name) {
                     for (let y = 0; y < j.departments.length; y++) {

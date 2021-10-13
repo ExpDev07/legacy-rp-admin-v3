@@ -13,6 +13,7 @@ use App\Motel;
 use App\PanelLog;
 use App\Player;
 use App\Property;
+use App\Server;
 use App\Statistics\EconomyStatistic;
 use App\Vehicle;
 use Illuminate\Http\RedirectResponse;
@@ -148,6 +149,8 @@ class PlayerCharacterController extends Controller
 
         $economy = EconomyStatistic::query()->orderByDesc('last_updated')->select(['last_updated', 'closing'])->limit(1)->first();
 
+        $jobs = OPFWHelper::getJobsJSON(Server::getFirstServer() ?? '');
+
         return Inertia::render('Players/Characters/Edit', [
             'player'      => new PlayerResource($player),
             'character'   => new CharacterResource($character),
@@ -155,6 +158,7 @@ class PlayerCharacterController extends Controller
             'motelMap'    => $motelMap,
             'horns'       => $horns,
             'vehicleMap'  => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
+            'jobs'        => $jobs ? $jobs['jobs'] : [],
             'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
             'economy'     => $economy ? $economy->closing : 0,
         ]);
@@ -511,29 +515,29 @@ class PlayerCharacterController extends Controller
 
         $plate = trim(strtoupper($request->post('plate')));
         if (strlen($plate) < 3 || strlen($plate) > 8 || preg_match('/[^\w ]/mi', $plate)) {
-            return self::json(false, null,'Plate has to be between 3 and 8 characters long and only contain alphanumeric characters and spaces (A-Z and 0-9, cannot start or end with space).');
+            return self::json(false, null, 'Plate has to be between 3 and 8 characters long and only contain alphanumeric characters and spaces (A-Z and 0-9, cannot start or end with space).');
         }
 
         $exists = Vehicle::query()->where('plate', '=', $plate)->where('vehicle_id', '<>', $vehicle->vehicle_id)->count(['vehicle_id']) > 0;
         if ($exists) {
-            return self::json(false, null,'Plate "' . $plate . '" is already taken.');
+            return self::json(false, null, 'Plate "' . $plate . '" is already taken.');
         }
 
         $fuel = floatval($request->post('fuel'));
         if ($fuel < 0 || $fuel > 100) {
-            return self::json(false, null,'Invalid fuel value.');
+            return self::json(false, null, 'Invalid fuel value.');
         }
 
         $owner = $request->post('owner_cid');
 
         $character = Character::query()->where('character_id', '=', $owner)->first(['character_id', 'steam_identifier']);
         if (!$character) {
-            return self::json(false, null,'Invalid character id.');
+            return self::json(false, null, 'Invalid character id.');
         }
 
         $invalidMod = $vehicle->parseModifications($request->post('modifications', []));
         if ($invalidMod !== null) {
-            return self::json(false, null,'Invalid modifications ("' . $invalidMod . '") submitted, please try again.');
+            return self::json(false, null, 'Invalid modifications ("' . $invalidMod . '") submitted, please try again.');
         }
 
         $vehicle->update([
