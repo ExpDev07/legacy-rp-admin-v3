@@ -105,6 +105,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/kick', [PlayerRouteController::class, 'kick']);
     Route::post('/players/{player}/staffPM', [PlayerRouteController::class, 'staffPM']);
     Route::post('/players/{player}/unloadCharacter', [PlayerRouteController::class, 'unloadCharacter']);
+    Route::post('/players/{player}/revivePlayer', [PlayerRouteController::class, 'revivePlayer']);
     Route::get('/players/{player}/linked', [PlayerRouteController::class, 'linkedAccounts']);
     Route::delete('/players/{player}/removeIdentifier/{identifier}', [PlayerRouteController::class, 'removeIdentifier']);
 
@@ -173,6 +174,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Testing.
     Route::post('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
+
+    // Exports.
+    Route::get('/export/character/{character}', [PlayerCharacterController::class, 'export']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

@@ -161,6 +161,21 @@ class PanelLog extends Model
     }
 
     /**
+     * Logs a revive from the panel
+     *
+     * @param string $fromIdentifier
+     * @param string $toIdentifier
+     */
+    public static function logRevive(string $fromIdentifier, string $toIdentifier)
+    {
+        $from = self::resolvePlayerLogName($fromIdentifier);
+        $to = self::resolvePlayerLogName($toIdentifier);
+
+        $log = $from . ' revived ' . $to;
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Revived Player');
+    }
+
+    /**
      * Logs a license add from the panel
      *
      * @param string $fromIdentifier

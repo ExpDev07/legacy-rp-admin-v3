@@ -86,9 +86,9 @@ class Player extends Model
     /**
      * Gets the route key name.
      *
-     * @return string|mixed
+     * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'steam_identifier';
     }
@@ -106,7 +106,7 @@ class Player extends Model
     }
 
     /**
-     * Returns the discord user info (username, avatar, etc)
+     * Returns the discord user info (username, avatar, etc.)
      *
      * @return array|null
      */

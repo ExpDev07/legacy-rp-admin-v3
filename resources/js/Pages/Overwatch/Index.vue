@@ -38,7 +38,7 @@
                         <span class="font-semibold">{{ t('overwatch.server', screenshot.server) }}</span>
                     </badge>
                 </div>
-                
+
                 <img :src="screenshot.url" alt="Screenshot" class="mt-3 block" />
             </div>
             <p v-if="screenshotError" class="font-semibold text-danger dark:text-dark-danger">{{ screenshotError }}</p>
@@ -81,7 +81,7 @@ export default {
                     this.screenshotError = null;
                 } else {
                     this.screenshot = null;
-                    this.screenshotError = data.data.error;
+                    this.screenshotError = data.data.message;
                 }
             } catch(e) {}
 

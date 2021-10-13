@@ -8,6 +8,7 @@ use App\Player;
 use App\Server;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class OPFWHelper
 {
@@ -32,7 +33,7 @@ class OPFWHelper
             return new OPFWResponse(false, 'Player is offline.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/staffMessage', [
+        $response = self::executeRoute($status->serverIp . 'execute/staffPrivateMessage', [
             'steamIdentifier' => $staffSteamIdentifier,
             'targetSource'    => $status->serverId,
             'message'         => $message,
@@ -60,7 +61,7 @@ class OPFWHelper
     {
         $steam = $player->steam_identifier;
 
-        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        $status = Player::getOnlineStatus($steam, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(false, 'Player is offline.');
         }
@@ -74,7 +75,34 @@ class OPFWHelper
         if ($response->status) {
             $response->message = 'Kicked player from the server.';
 
-            PanelLog::logKick($staffSteamIdentifier, $player->steam_identifier, $reason);
+            PanelLog::logKick($staffSteamIdentifier, $steam, $reason);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Revives a player in the server
+     *
+     * @param string $staffSteamIdentifier
+     * @param string $steamIdentifier
+     * @return OPFWResponse
+     */
+    public static function revivePlayer(string $staffSteamIdentifier, string $steamIdentifier): OPFWResponse
+    {
+        $status = Player::getOnlineStatus($steamIdentifier, false);
+        if (!$status->isOnline()) {
+            return new OPFWResponse(false, 'Player is offline.');
+        }
+
+        $response = self::executeRoute($status->serverIp . 'execute/revivePlayer', [
+            'targetSource' => $status->serverId,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Revived player.';
+
+            PanelLog::logRevive($staffSteamIdentifier, $steamIdentifier);
         }
 
         return $response;
@@ -91,7 +119,7 @@ class OPFWHelper
     {
         $steam = $player->steam_identifier;
 
-        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        $status = Player::getOnlineStatus($steam, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(true, 'Player is offline, no refresh needed.');
         }
@@ -119,7 +147,7 @@ class OPFWHelper
     {
         $steam = $player->steam_identifier;
 
-        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        $status = Player::getOnlineStatus($steam, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(true, 'Player is offline, no refresh needed.');
         }
@@ -149,7 +177,7 @@ class OPFWHelper
     {
         $steam = $player->steam_identifier;
 
-        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        $status = Player::getOnlineStatus($steam, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(true, 'Player is offline, no unload needede.');
         }
@@ -163,7 +191,7 @@ class OPFWHelper
         if ($response->status) {
             $response->message = 'Unloaded players character.';
 
-            PanelLog::logUnload($staffSteamIdentifier, $player->steam_identifier, $character_id, $message);
+            PanelLog::logUnload($staffSteamIdentifier, $steam, $character_id, $message);
         }
 
         return $response;
@@ -187,6 +215,32 @@ class OPFWHelper
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 10);
+            } else if (!$data->status) {
+                CacheHelper::write($cache, [], 10);
+            }
+
+            return $data->data;
+        }
+    }
+
+    /**
+     * Gets the jobs.json
+     *
+     * @param string $serverIp
+     * @return array|null
+     */
+    public static function getJobsJSON(string $serverIp): ?array
+    {
+        $serverIp = Server::fixApiUrl($serverIp);
+        $cache = 'jobs_json_' . md5($serverIp);
+
+        if (CacheHelper::exists($cache)) {
+            return CacheHelper::read($cache, []);
+        } else {
+            $data = self::executeRoute($serverIp . 'jobs.json', [], false, 3);
+
+            if ($data->data) {
+                CacheHelper::write($cache, $data->data, 12 * CacheHelper::HOUR);
             } else if (!$data->status) {
                 CacheHelper::write($cache, [], 10);
             }
@@ -247,7 +301,7 @@ class OPFWHelper
                 ]);
 
                 $response = $res->getBody()->getContents();
-            } catch (\Throwable $t) {
+            } catch (Throwable $t) {
                 $response = $t->getMessage();
             }
 

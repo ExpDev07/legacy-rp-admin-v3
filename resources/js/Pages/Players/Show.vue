@@ -49,54 +49,62 @@
             </p>
         </portal>
 
-        <portal to="actions">
-            <div>
-                <!-- View on Map -->
-                <inertia-link
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    :href="'/map#' + player.steamIdentifier" v-if="player.status.status === 'online'">
-                    <i class="fas fa-envelope-open-text"></i>
-                    {{ t('global.view_map') }}
-                </inertia-link>
-                <!-- StaffPM -->
-                <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isStaffPM = true" v-if="player.status.status === 'online'">
-                    <i class="fas fa-envelope-open-text"></i>
-                    {{ t('players.show.staffpm') }}
-                </button>
-                <!-- Kicking -->
-                <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isKicking = true" v-if="player.status.status === 'online'">
-                    <i class="fas fa-user-minus"></i>
-                    {{ t('players.show.kick') }}
-                </button>
-                <!-- Edit Ban -->
-                <inertia-link
-                    class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'"
-                    v-if="player.isBanned">
-                    <i class="mr-1 fas fa-edit"></i>
-                    {{ t('players.show.edit_ban') }}
-                </inertia-link>
-                <!-- Unbanning -->
-                <inertia-link
-                    class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id"
-                    v-if="player.isBanned">
-                    <i class="mr-1 fas fa-lock-open"></i>
-                    {{ t('players.show.unban') }}
-                </inertia-link>
-                <!-- Banning -->
-                <button
-                    class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isBanning = true" v-else>
-                    <i class="mr-1 fas fa-gavel"></i>
-                    {{ t('players.show.issue') }}
-                </button>
-            </div>
-        </portal>
+        <div class="flex flex-wrap justify-end mb-6">
+            <!-- View on Map -->
+            <a
+                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                :href="'/map#' + player.steamIdentifier"
+                v-if="player.status.status === 'online'"
+                target="_blank"
+            >
+                <i class="fas fa-map"></i>
+                {{ t('global.view_map') }}
+            </a>
+            <!-- Kicking -->
+            <button
+                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                @click="revivePlayer()" v-if="player.status.status === 'online'">
+                <i class="fas fa-heartbeat"></i>
+                {{ t('players.show.revive') }}
+            </button>
+            <!-- StaffPM -->
+            <button
+                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                @click="isStaffPM = true" v-if="player.status.status === 'online'">
+                <i class="fas fa-envelope-open-text"></i>
+                {{ t('players.show.staffpm') }}
+            </button>
+            <!-- Kicking -->
+            <button
+                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                @click="isKicking = true" v-if="player.status.status === 'online'">
+                <i class="fas fa-user-minus"></i>
+                {{ t('players.show.kick') }}
+            </button>
+            <!-- Edit Ban -->
+            <inertia-link
+                class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'"
+                v-if="player.isBanned">
+                <i class="mr-1 fas fa-edit"></i>
+                {{ t('players.show.edit_ban') }}
+            </inertia-link>
+            <!-- Unbanning -->
+            <inertia-link
+                class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id"
+                v-if="player.isBanned">
+                <i class="mr-1 fas fa-lock-open"></i>
+                {{ t('players.show.unban') }}
+            </inertia-link>
+            <!-- Banning -->
+            <button
+                class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                @click="isBanning = true" v-else>
+                <i class="mr-1 fas fa-gavel"></i>
+                {{ t('players.show.issue') }}
+            </button>
+        </div>
 
         <!-- Linked Accounts -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
@@ -903,6 +911,14 @@ export default {
             // Reset.
             this.isKicking = false;
             this.form.kick.reason = null;
+        },
+        async revivePlayer() {
+            if (!confirm(this.t('players.show.revive_confirm'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/revivePlayer');
         },
         async unloadCharacter() {
             if (!confirm(this.t('players.show.unload_confirm'))) {

@@ -58,4 +58,14 @@ class Controller extends BaseController
 
         return (new Response($resp, 200))->header('Content-Type', 'application/json');
     }
+
+    /**
+     * @param int $status
+     * @param string $text
+     * @return Response
+     */
+    protected static function text(int $status, string $text): Response
+    {
+        return (new Response($text, $status))->header('Content-Type', 'text/plain');
+    }
 }
