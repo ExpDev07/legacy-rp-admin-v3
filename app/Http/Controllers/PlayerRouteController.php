@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Helpers\OPFWHelper;
 use App\Player;
+use App\Screenshot;
 use App\Server;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerRouteController extends Controller
 {
@@ -189,7 +191,8 @@ class PlayerRouteController extends Controller
             return self::json(false, null, 'Invalid server');
         }
 
-        if (!Server::isServerIDValid($id)) {
+        $steam = Server::isServerIDValid($id);
+        if (!$steam) {
             return self::json(false, null, 'Invalid server id (User is offline?)');
         }
 
@@ -197,11 +200,80 @@ class PlayerRouteController extends Controller
 
         if ($data->status) {
             return self::json(true, [
-                'url' => $data->data['screenshotURL']
+                'url'   => $data->data['screenshotURL'],
+                'steam' => $steam,
             ]);
         } else {
             return self::json(false, null, 'Failed to create screenshot');
         }
+    }
+
+    /**
+     * @param Player $player
+     * @param Request $request
+     * @return Response
+     */
+    public function attachScreenshot(Player $player, Request $request): Response
+    {
+        $screenshotUrl = trim($request->input('url')) ?? '';
+
+        $re = '/^https:\/\/api\.op-framework\.com\/files\/public\/\d{1,2}-\d{2}-\d{4}-\w+\.jpg$/m';
+        if (!preg_match($re, $screenshotUrl)) {
+            return self::json(false, null, 'Invalid screenshot url');
+        }
+
+        $note = trim($request->input('note')) ?? '';
+        if (strlen($note) > 500) {
+            return self::json(false, null, 'Note cannot be longer than 500 characters');
+        }
+
+        $fileName = md5($screenshotUrl) . '.jpg';
+
+        $exists = !!Screenshot::query()->where('filename', '=', $fileName)->first();
+        if ($exists) {
+            return self::json(false, null, 'Screenshot already exists');
+        }
+
+        $dir = storage_path('screenshots');
+
+        if (!file_exists($dir)) {
+            mkdir($dir);
+        }
+
+        $screenshot = file_get_contents($screenshotUrl);
+        if (!$screenshot) {
+            return self::json(false, null, 'Failed to download screenshot');
+        }
+
+        if (!file_put_contents($dir . '/' . $fileName, $screenshot)) {
+            return self::json(false, null, 'Failed to store screenshot');
+        }
+
+        Screenshot::query()->create([
+            'steam_identifier' => $player->steam_identifier,
+            'filename'         => $fileName,
+            'note'             => $note ?? '',
+            'created_at'       => time(),
+        ]);
+
+        return self::json(true, 'Screenshot was attached to players profile successfully');
+    }
+
+    /**
+     * @param string $screenshot
+     * @return BinaryFileResponse
+     */
+    public function exportScreenshot(string $screenshot): BinaryFileResponse
+    {
+        if (!preg_match('/^\w{32}\.jpg$/m', $screenshot)) {
+            abort(400);
+        }
+
+        $path = storage_path('screenshots') . '/' . $screenshot;
+
+        return response()->file($path, [
+            'Content-type: image/jpeg'
+        ]);
     }
 
 }

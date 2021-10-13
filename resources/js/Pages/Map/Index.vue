@@ -230,13 +230,20 @@
                             {{ t('global.loading') }}
                         </span>
                     </button>
+                    <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
+                            @click="isAttachingScreenshot = true"
+                            v-if="screenshotImage && screenshotSteam">
+                        {{ t('screenshot.title') }}
+                    </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
-                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null">
+                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotSteam = null">
                         {{ t('global.close') }}
                     </button>
                 </div>
             </div>
         </div>
+
+        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage" v-if="isAttachingScreenshot" />
 
         <template>
             <div class="-mt-12" id="map-wrapper">
@@ -634,6 +641,7 @@
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import SimplePlayerList from './../../Components/Map/SimplePlayerList';
+import ScreenshotAttacher from './../../Components/ScreenshotAttacher';
 import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
@@ -668,6 +676,7 @@ export default {
         VSection,
         VueSpeedometer,
         SimplePlayerList,
+        ScreenshotAttacher,
     },
     props: {
         servers: {
@@ -765,13 +774,27 @@ export default {
             isScreenshot: false,
             isScreenshotLoading: false,
             screenshotImage: null,
+            screenshotSteam: null,
             screenshotError: null,
+            isAttachingScreenshot: false,
 
             heatmapLayer: null,
             loadingScreenStatus: null
         };
     },
     methods: {
+        screenshotAttached(status, message) {
+            this.isAttachingScreenshot = false;
+
+            alert(message);
+
+            if (status) {
+                this.isScreenshot = false;
+                this.screenshotImage = null;
+                this.screenshotError = null;
+                this.screenshotSteam = null;
+            }
+        },
         copyText(e, text) {
             if (e !== null) {
                 e.preventDefault();
@@ -922,15 +945,19 @@ export default {
             this.isScreenshotLoading = true;
             this.screenshotError = null;
 
+            this.screenshotImage = null;
+            this.screenshotSteam = null;
+
             try {
                 const result = await axios.post('/api/screenshot/' + $('#server').val() + '/' + this.form.screenshotId);
                 this.isScreenshotLoading = false;
 
                 if (result.data) {
                     if (result.data.status) {
-                        console.info('Screenshot of ID ' + this.form.screenshotId, result.data.data.url);
+                        console.info('Screenshot of ID ' + this.form.screenshotId, result.data.data.url, result.data.data.steam);
 
                         this.screenshotImage = result.data.data.url;
+                        this.screenshotSteam = result.data.data.steam;
                     } else {
                         this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
                     }
