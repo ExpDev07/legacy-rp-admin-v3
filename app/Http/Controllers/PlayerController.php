@@ -9,6 +9,7 @@ use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\WarningResource;
 use App\Player;
+use App\Screenshot;
 use App\Server;
 use App\Warning;
 use Illuminate\Http\Request;
@@ -56,7 +57,7 @@ class PlayerController extends Controller
 
         // Filtering by serer-id.
         if ($server = $request->input('server')) {
-            $online = array_keys(array_filter(Player::getAllOnlinePlayers(true), function($player) use ($server) {
+            $online = array_keys(array_filter(Player::getAllOnlinePlayers(true), function ($player) use ($server) {
                 return $player['id'] === intval($server);
             }));
 
@@ -121,7 +122,7 @@ class PlayerController extends Controller
                 'name'    => $request->input('name'),
                 'steam'   => $request->input('steam'),
                 'discord' => $request->input('discord'),
-                'server' => $request->input('server'),
+                'server'  => $request->input('server'),
                 'banned'  => $request->input('banned') ?: 'all',
             ],
             'links'   => $this->getPageUrls($page),
@@ -140,12 +141,13 @@ class PlayerController extends Controller
     public function show(Request $request, Player $player): Response
     {
         return Inertia::render('Players/Show', [
-            'player'     => new PlayerResource($player),
-            'characters' => CharacterResource::collection($player->characters),
-            'warnings'   => WarningResource::collection($player->warnings()->oldest()->get()),
-            'panelLogs'  => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
-            'discord'    => $player->getDiscordInfo(),
-            'kickReason' => trim($request->query('kick')) ?? '',
+            'player'      => new PlayerResource($player),
+            'characters'  => CharacterResource::collection($player->characters),
+            'warnings'    => WarningResource::collection($player->warnings()->oldest()->get()),
+            'panelLogs'   => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
+            'discord'     => $player->getDiscordInfo(),
+            'kickReason'  => trim($request->query('kick')) ?? '',
+            'screenshots' => Screenshot::getAllScreenshotsForPlayer($player->steam_identifier),
         ]);
     }
 

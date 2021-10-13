@@ -716,6 +716,39 @@
             </template>
         </v-section>
 
+        <!-- Screenshots -->
+        <v-section>
+            <template #header>
+                <h2>
+                    {{ t('screenshot.screenshots') }}
+                </h2>
+            </template>
+
+            <template>
+                <table class="w-full whitespace-no-wrap">
+                    <tr class="font-semibold text-left mobile:hidden">
+                        <th class="px-6 py-4">{{ t('screenshot.screenshot') }}</th>
+                        <th class="px-6 py-4">{{ t('screenshot.note') }}</th>
+                        <th class="px-6 py-4">{{ t('screenshot.created_at') }}</th>
+                    </tr>
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in screenshots"
+                        :key="screenshot.id">
+                        <td class="px-6 py-3 border-t mobile:block">
+                            <a :href="'/export/screenshot/' + screenshot.filename" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
+                        </td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ screenshot.note || 'N/A' }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ screenshot.created_at * 1000 | formatTime(true) }}</td>
+                    </tr>
+                    <tr v-if="screenshots.length === 0">
+                        <td class="px-4 py-6 text-center border-t" colspan="100%">
+                            {{ t('screenshot.no_screenshots') }}
+                        </td>
+                    </tr>
+                </table>
+            </template>
+
+        </v-section>
+
         <!-- Panel Logs -->
         <v-section>
             <template #header>
@@ -771,6 +804,10 @@ export default {
             required: true,
         },
         characters: {
+            type: Array,
+            required: true,
+        },
+        screenshots: {
             type: Array,
             required: true,
         },

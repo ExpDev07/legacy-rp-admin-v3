@@ -95,13 +95,17 @@ class Server extends Model
         return preg_match('/^\d+\.\d+\.\d+\.\d+(:\d+)?$/m', $host) ? $host : explode('.', $host)[0];
     }
 
-    public static function isServerIDValid(int $id): bool
+    /**
+     * @param int $id
+     * @return bool|string
+     */
+    public static function isServerIDValid(int $id)
     {
         $players = Player::getAllOnlinePlayers(false);
 
-        foreach ($players as $player) {
+        foreach ($players as $steam => $player) {
             if (intval($player['id']) === $id) {
-                return true;
+                return $steam;
             }
         }
 

@@ -108,6 +108,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/revivePlayer', [PlayerRouteController::class, 'revivePlayer']);
     Route::get('/players/{player}/linked', [PlayerRouteController::class, 'linkedAccounts']);
     Route::delete('/players/{player}/removeIdentifier/{identifier}', [PlayerRouteController::class, 'removeIdentifier']);
+    Route::post('/players/{player}/attachScreenshot', [PlayerRouteController::class, 'attachScreenshot']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
@@ -177,6 +178,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Exports.
     Route::get('/export/character/{character}', [PlayerCharacterController::class, 'export']);
+    Route::get('/export/screenshot/{screenshot}', [PlayerRouteController::class, 'exportScreenshot']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

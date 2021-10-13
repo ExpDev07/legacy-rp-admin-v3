@@ -68,6 +68,16 @@
         "profile": "Server ID: {0}",
         "server": "Server: {0}"
     },
+    "screenshot": {
+        "title": "Attach screenshot to Player",
+        "attach": "Attach",
+        "note": "Note",
+        "screenshot": "Screenshot",
+        "created_at": "Created at",
+        "screenshots": "Attached Screenshots",
+        "no_screenshots": "No screenshots attached",
+        "view": "View screenshot"
+    },
     "changelog": {
         "title": "Recent Updates",
         "description": "Listing of the most recent updates to the panel",
