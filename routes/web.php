@@ -174,6 +174,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Testing.
     Route::post('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
+
+    // Exports.
+    Route::get('/export/character/{character}', [PlayerCharacterController::class, 'export']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

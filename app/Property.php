@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
@@ -19,6 +20,11 @@ use SteamID;
 class Property extends Model
 {
     use HasFactory;
+
+    /**
+     * @var array
+     */
+    private static $companyNameMap = [];
 
     /**
      * The table associated with the model.
@@ -54,6 +60,7 @@ class Property extends Model
         'property_renter_cid',
         'property_income',
         'shared_keys',
+        'company_id'
     ];
 
     /**
@@ -66,4 +73,17 @@ class Property extends Model
         'property_income'     => 'integer',
         'property_renter_cid' => 'integer',
     ];
+
+    public function companyName(): string
+    {
+        $id = $this->company_id;
+
+        if (!isset(self::$companyNameMap[$id])) {
+            $company = DB::table('stocks_companies')->where('company_id', '=', $id)->select(['company_name'])->first();
+
+            self::$companyNameMap[$id] = $company ? $company->company_name : 'Unknown';
+        }
+
+        return self::$companyNameMap[$id];
+    }
 }

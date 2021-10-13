@@ -39,6 +39,8 @@ class Vehicle extends Model
     protected $fillable = [
         'owner_cid',
         'garage_identifier',
+        'garage_state',
+        'garage_impound',
         'model_name',
         'plate',
         'vehicle_deleted',
@@ -64,6 +66,12 @@ class Vehicle extends Model
      */
     public function garage(): string
     {
+        if (intval($this->garage_impound) === 1) {
+            return 'Impound Lot';
+        } else if (intval($this->garage_state) === 0) {
+            return 'Out';
+        }
+
         $this->garage_identifier = trim($this->garage_identifier);
 
         if (is_numeric($this->garage_identifier)) {

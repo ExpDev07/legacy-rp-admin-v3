@@ -577,4 +577,46 @@ class PlayerCharacterController extends Controller
         ], 200))->header('Content-Type', 'application/json');
     }
 
+    public function export(Character $character, Request $request): \Illuminate\Http\Response
+    {
+        $export = [
+            $character->first_name . ' ' . $character->last_name,
+            'DOB: - ' . $character->date_of_birth,
+            'CID: - ' . $character->character_id,
+            'Phone Number: - ' . $character->phone_number,
+            'Gender: - ' . (intval($character->gender) === 1 ? 'Female' : 'Male'),
+        ];
+
+        $player = $character->player()->first();
+
+        $discords = [];
+        foreach($player->getIdentifiers() as $identifier) {
+            if (Str::startsWith($identifier, 'discord:')) {
+                $discords[] = '<@' . str_replace('discord:', '', $identifier) . '>';
+            }
+        }
+        $export[] = 'Email(s): - ' . ($discords ? implode(', ', $discords) : 'N/A');
+        $export[] = '';
+
+        // Export Vehicles
+        $export[] = 'Vehicles';
+
+        $vehicles = $character->vehicles()->get();
+        foreach ($vehicles as $vehicle) {
+            $export[] = $vehicle->model_name . ' - ' . $vehicle->plate . ' - ' . $vehicle->garage();
+        }
+
+        $export[] = '';
+
+        // Export Properties
+        $export[] = 'Houses';
+
+        $properties = $character->properties()->get();
+        foreach ($properties as $property) {
+            $export[] = $property->property_address . ' - ' . $property->companyName();
+        }
+
+        return self::text(200, implode(PHP_EOL, $export));
+    }
+
 }
