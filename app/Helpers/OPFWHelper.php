@@ -33,7 +33,7 @@ class OPFWHelper
             return new OPFWResponse(false, 'Player is offline.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/staffMessage', [
+        $response = self::executeRoute($status->serverIp . 'execute/staffPrivateMessage', [
             'steamIdentifier' => $staffSteamIdentifier,
             'targetSource'    => $status->serverId,
             'message'         => $message,
