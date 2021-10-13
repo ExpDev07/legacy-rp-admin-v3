@@ -36,8 +36,7 @@ class OverwatchController extends Controller
      */
     public function getRandomScreenshot(): \Illuminate\Http\Response
     {
-        // Cache this in the future!
-        $players = Player::getAllOnlinePlayers(false);
+        $players = Player::getAllOnlinePlayers(true);
 
         if (!empty($players)) {
             $steam = array_rand($players);
