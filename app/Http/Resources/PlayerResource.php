@@ -32,6 +32,7 @@ class PlayerResource extends JsonResource
             'lastConnection'  => $this->last_connection,
             'steamProfileUrl' => $this->getSteamProfileUrl(),
             'isTrusted'       => $this->is_trusted,
+            'isPanelTrusted'  => $this->isPanelTrusted(),
             'isStaff'         => $this->isStaff(),
             'isSuperAdmin'    => $this->isSuperAdmin(),
             'isBanned'        => $this->isBanned(),

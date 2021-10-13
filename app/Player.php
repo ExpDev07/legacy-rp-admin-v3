@@ -59,6 +59,7 @@ class Player extends Model
         'is_staff',
         'is_super_admin',
         'is_trusted',
+        'is_panel_trusted',
         'is_soft_banned',
         'playtime',
         'total_joins',
@@ -72,15 +73,16 @@ class Player extends Model
      * @var array
      */
     protected $casts = [
-        'identifiers'     => 'array',
-        'last_connection' => 'datetime',
-        'is_trusted'      => 'boolean',
-        'is_staff'        => 'boolean',
-        'is_super_admin'  => 'boolean',
-        'is_soft_banned'  => 'boolean',
-        'playtime'        => 'integer',
-        'total_joins'     => 'integer',
-        'priority_level'  => 'integer',
+        'identifiers'      => 'array',
+        'last_connection'  => 'datetime',
+        'is_trusted'       => 'boolean',
+        'is_staff'         => 'boolean',
+        'is_super_admin'   => 'boolean',
+        'is_panel_trusted' => 'boolean',
+        'is_soft_banned'   => 'boolean',
+        'playtime'         => 'integer',
+        'total_joins'      => 'integer',
+        'priority_level'   => 'integer',
     ];
 
     /**
@@ -205,6 +207,16 @@ class Player extends Model
     public function isSuperAdmin(): bool
     {
         return $this->is_super_admin ?? false;
+    }
+
+    /**
+     * Checks whether this player is a trusted panel user.
+     *
+     * @return bool
+     */
+    public function isPanelTrusted(): bool
+    {
+        return $this->isSuperAdmin() || $this->is_panel_trusted;
     }
 
     /**

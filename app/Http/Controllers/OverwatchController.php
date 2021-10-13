@@ -26,16 +26,27 @@ class OverwatchController extends Controller
      */
     public function index(Request $request): Response
     {
+        $user = $request->user();
+        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+            abort(401);
+        }
+
         return Inertia::render('Overwatch/Index');
     }
 
     /**
      * Get a screenshot and some data belonging to it from a random player.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getRandomScreenshot(): \Illuminate\Http\Response
+    public function getRandomScreenshot(Request $request): \Illuminate\Http\Response
     {
+        $user = $request->user();
+        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+            return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
+        }
+
         $players = Player::getAllOnlinePlayers(true);
 
         if (!empty($players)) {
