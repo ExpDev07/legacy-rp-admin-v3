@@ -51,12 +51,15 @@
 
         <div class="flex flex-wrap justify-end mb-6">
             <!-- View on Map -->
-            <inertia-link
+            <a
                 class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                :href="'/map#' + player.steamIdentifier" v-if="player.status.status === 'online'">
-                <i class="fas fa-envelope-open-text"></i>
+                :href="'/map#' + player.steamIdentifier"
+                v-if="player.status.status === 'online'"
+                target="_blank"
+            >
+                <i class="fas fa-map"></i>
                 {{ t('global.view_map') }}
-            </inertia-link>
+            </a>
             <!-- Kicking -->
             <button
                 class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
