@@ -160,6 +160,11 @@ export default {
                             label: this.t('sidebar.serials'),
                             icon: 'fingerprint',
                             url: '/serials',
+                        },
+                        {
+                            label: this.t('sidebar.overwatch'),
+                            icon: 'camera',
+                            url: '/overwatch',
                         }
                     ]
                 },

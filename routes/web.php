@@ -23,6 +23,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\OverwatchController;
 use App\Http\Controllers\PanelLogController;
 use App\Http\Controllers\PlayerBanController;
 use App\Http\Controllers\PlayerCharacterController;
@@ -167,6 +168,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Statistics.
     Route::get('/statistics', [StatisticsController::class, 'render']);
 
+    // Overwatch.
+    Route::get('/overwatch', [OverwatchController::class, 'index']);
+
     // Testing.
     Route::post('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
 });
@@ -180,6 +184,9 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
 
     // Screenshot api
     Route::post('screenshot/{server}/{id}', [PlayerRouteController::class, 'screenshot']);
+
+    // Overwatch.
+    Route::get('randomScreenshot', [OverwatchController::class, 'getRandomScreenshot']);
 });
 
 Route::group(['prefix' => 'cron'], function () {
