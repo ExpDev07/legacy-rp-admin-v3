@@ -49,61 +49,79 @@
             </p>
         </portal>
 
-        <div class="flex flex-wrap justify-end mb-6">
-            <!-- View on Map -->
-            <a
-                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                :href="'/map#' + player.steamIdentifier"
-                v-if="player.status.status === 'online'"
-                target="_blank"
-            >
-                <i class="fas fa-map"></i>
-                {{ t('global.view_map') }}
-            </a>
-            <!-- Kicking -->
-            <button
-                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                @click="revivePlayer()" v-if="player.status.status === 'online'">
-                <i class="fas fa-heartbeat"></i>
-                {{ t('players.show.revive') }}
-            </button>
-            <!-- StaffPM -->
-            <button
-                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                @click="isStaffPM = true" v-if="player.status.status === 'online'">
-                <i class="fas fa-envelope-open-text"></i>
-                {{ t('players.show.staffpm') }}
-            </button>
-            <!-- Kicking -->
-            <button
-                class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                @click="isKicking = true" v-if="player.status.status === 'online'">
-                <i class="fas fa-user-minus"></i>
-                {{ t('players.show.kick') }}
-            </button>
-            <!-- Edit Ban -->
-            <inertia-link
-                class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'"
-                v-if="player.isBanned">
-                <i class="mr-1 fas fa-edit"></i>
-                {{ t('players.show.edit_ban') }}
-            </inertia-link>
-            <!-- Unbanning -->
-            <inertia-link
-                class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id"
-                v-if="player.isBanned">
-                <i class="mr-1 fas fa-lock-open"></i>
-                {{ t('players.show.unban') }}
-            </inertia-link>
-            <!-- Banning -->
-            <button
-                class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                @click="isBanning = true" v-else>
-                <i class="mr-1 fas fa-gavel"></i>
-                {{ t('players.show.issue') }}
-            </button>
+        <div class="flex flex-wrap justify-between mb-6">
+            <div>
+                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
+                    <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
+                    <a href="#" @click="removeTrustedPanel($event)" class="ml-1 text-white" :title="t('players.show.remove_panel_trusted')" v-if="!player.isSuperAdmin">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </badge>
+
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="addTrustedPanel()" v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && player.isStaff">
+                    <i class="fas fa-glass-cheers"></i>
+                    {{ t('players.show.add_panel_trusted') }}
+                </button>
+            </div>
+
+            <div class="flex flex-wrap justify-end">
+                <!-- View on Map -->
+                <a
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    :href="'/map#' + player.steamIdentifier"
+                    v-if="player.status.status === 'online'"
+                    target="_blank"
+                >
+                    <i class="fas fa-map"></i>
+                    {{ t('global.view_map') }}
+                </a>
+                <!-- Kicking -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="revivePlayer()" v-if="player.status.status === 'online'">
+                    <i class="fas fa-heartbeat"></i>
+                    {{ t('players.show.revive') }}
+                </button>
+                <!-- StaffPM -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isStaffPM = true" v-if="player.status.status === 'online'">
+                    <i class="fas fa-envelope-open-text"></i>
+                    {{ t('players.show.staffpm') }}
+                </button>
+                <!-- Kicking -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isKicking = true" v-if="player.status.status === 'online'">
+                    <i class="fas fa-user-minus"></i>
+                    {{ t('players.show.kick') }}
+                </button>
+                <!-- Edit Ban -->
+                <inertia-link
+                    class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'"
+                    v-if="player.isBanned">
+                    <i class="mr-1 fas fa-edit"></i>
+                    {{ t('players.show.edit_ban') }}
+                </inertia-link>
+                <!-- Unbanning -->
+                <inertia-link
+                    class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id"
+                    v-if="player.isBanned">
+                    <i class="mr-1 fas fa-lock-open"></i>
+                    {{ t('players.show.unban') }}
+                </inertia-link>
+                <!-- Banning -->
+                <button
+                    class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isBanning = true" v-else>
+                    <i class="mr-1 fas fa-gavel"></i>
+                    {{ t('players.show.issue') }}
+                </button>
+            </div>
         </div>
 
         <!-- Linked Accounts -->
@@ -935,6 +953,22 @@ export default {
             // Reset.
             this.isStaffPM = false;
             this.form.pm.message = null;
+        },
+        async removeTrustedPanel() {
+            if (!confirm(this.t('players.show.panel_trusted_confirm'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTrustedPanelStatus/0');
+        },
+        async addTrustedPanel() {
+            if (!confirm(this.t('players.show.panel_trusted_confirm'))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTrustedPanelStatus/1');
         },
         async kickPlayer() {
             if (!confirm(this.t('players.show.kick_confirm'))) {

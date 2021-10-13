@@ -178,6 +178,34 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Sets the trusted panel permission
+     *
+     * @param Player $player
+     * @param int $status
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateTrustedPanelStatus(Player $player, int $status, Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return back()->with('error', 'Only super admins can update this permission.');
+        }
+
+        $status = $status ? 1 : 0;
+
+        if (!$player->isStaff()) {
+            return back()->with('error', 'You cannot modify this permission on non-staff players.');
+        }
+
+        $player->update([
+            'is_panel_trusted' => $status,
+        ]);
+
+        return back()->with('success', 'Panel trusted permission has been updated successfully.');
+    }
+
+    /**
      * Takes a screenshot
      *
      * @param string $server
