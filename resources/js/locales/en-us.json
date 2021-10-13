@@ -59,7 +59,14 @@
         "suspicious": "Suspicious",
         "data": "Data",
         "serials": "Serial Lookup",
-        "csi": "CSI Tools"
+        "csi": "CSI Tools",
+        "overwatch": "Overwatch"
+    },
+    "overwatch": {
+        "title": "Overwatch",
+        "description": "Look through random players' game renders to see if you can find anything out of the ordinary",
+        "profile": "Server ID: {0}",
+        "server": "Server: {0}"
     },
     "changelog": {
         "title": "Recent Updates",
