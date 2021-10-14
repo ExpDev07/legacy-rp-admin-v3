@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LoggingHelper;
 use App\Helpers\OPFWHelper;
 use App\Helpers\PermissionHelper;
 use App\Player;
 use App\Screenshot;
 use App\Server;
+use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -278,7 +280,22 @@ class PlayerRouteController extends Controller
             mkdir($dir);
         }
 
-        $screenshot = file_get_contents($screenshotUrl);
+        $screenshot = null;
+        try {
+            $client = new Client(
+                [
+                    'verify' => false,
+                ]
+            );
+
+            $res = $client->request('GET', $screenshotUrl);
+
+            $screenshot = $res->getBody()->getContents();
+        } catch (\Throwable $t) {
+            LoggingHelper::quickLog("Failed to download screenshot from " . $screenshotUrl);
+            LoggingHelper::quickLog(get_class($t) . ': ' . $t->getMessage());
+        }
+
         if (!$screenshot) {
             return self::json(false, null, 'Failed to download screenshot');
         }

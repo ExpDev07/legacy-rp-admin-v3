@@ -787,7 +787,9 @@ export default {
         screenshotAttached(status, message) {
             this.isAttachingScreenshot = false;
 
-            alert(message);
+            if (message) {
+                alert(message);
+            }
 
             if (status) {
                 this.isScreenshot = false;

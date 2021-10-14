@@ -102,7 +102,9 @@ export default {
         screenshotAttached(status, message) {
             this.isAttaching = false;
 
-            alert(message);
+            if (message) {
+                alert(message);
+            }
         }
     },
     mounted() {
