@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PermissionHelper;
 use App\Http\Resources\LogResource;
 use App\Log;
 use App\Player;
@@ -26,8 +27,7 @@ class OverwatchController extends Controller
      */
     public function index(Request $request): Response
     {
-        $user = $request->user();
-        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
             abort(401);
         }
 
@@ -42,8 +42,7 @@ class OverwatchController extends Controller
      */
     public function getRandomScreenshot(Request $request): \Illuminate\Http\Response
     {
-        $user = $request->user();
-        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
             return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
         }
 

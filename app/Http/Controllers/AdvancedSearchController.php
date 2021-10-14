@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Character;
 use App\Helpers\OPFWHelper;
+use App\Helpers\PermissionHelper;
 use App\Http\Requests\CharacterUpdateRequest;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\CharacterIndexResource;
@@ -97,6 +98,10 @@ class AdvancedSearchController extends Controller
      */
     public function index(Request $request): Response
     {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_ADVANCED)) {
+            abort(401);
+        }
+
         $start = round(microtime(true) * 1000);
 
         $page = Paginator::resolveCurrentPage('page');
