@@ -57,6 +57,7 @@ class GeneralHelper
      *
      * @param array $array
      * @param array $lastElement
+     * @param string $compareKey
      * @return array
      */
     public static function randomElement(array $array, array $lastElement, string $compareKey): array
