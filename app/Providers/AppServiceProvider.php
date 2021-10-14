@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\PermissionHelper;
 use App\Helpers\SessionHelper;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\UserResource;
@@ -46,27 +47,28 @@ class AppServiceProvider extends ServiceProvider
         // Shared inertia data.
         Inertia::share([
             // Current and previous url.
-            'url' => Str::start(str_replace(url('/'), '', URL::current()), '/'),
-            'back' => Str::start(str_replace(url('/'), '', URL::previous('/')), '/'),
+            'url'   => Str::start(str_replace(url('/'), '', URL::current()), '/'),
+            'back'  => Str::start(str_replace(url('/'), '', URL::previous('/')), '/'),
 
             // Flash messages.
             'flash' => function () {
                 return [
                     'success' => session('success'),
-                    'error' => session('error'),
+                    'error'   => session('error'),
                 ];
             },
 
             // Authentication.
-            'auth' => function () {
+            'auth'  => function () {
                 $session = SessionHelper::getInstance();
 
                 $user = $session->get('user') ?: null;
-                $player = isset($user['player']) ? $user['player'] : null;
+                $player = $user['player'] ?? null;
 
                 return [
-                    'user' => $user ? new UserResource(new User($user)) : null,
-                    'player' => $player ? new PlayerResource(new Player($player)) : null,
+                    'user'        => $user ? new UserResource(new User($user)) : null,
+                    'player'      => $player ? new PlayerResource(new Player($player)) : null,
+                    'permissions' => PermissionHelper::getFrontendPermissions(),
                 ];
             },
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\OPFWHelper;
+use App\Helpers\PermissionHelper;
 use App\Player;
 use App\Screenshot;
 use App\Server;
@@ -215,8 +216,7 @@ class PlayerRouteController extends Controller
      */
     public function screenshot(string $server, int $id, Request $request): Response
     {
-        $user = $request->user();
-        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
             return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
         }
 
@@ -249,8 +249,7 @@ class PlayerRouteController extends Controller
      */
     public function attachScreenshot(Player $player, Request $request): Response
     {
-        $user = $request->user();
-        if (!$user->player->is_panel_trusted && !$user->player->is_super_admin) {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
             return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
         }
 

@@ -4,7 +4,7 @@
         <!-- General stuff -->
         <nav>
             <ul v-if="!isMobile()">
-                <li v-for="link in links" :key="link.label" v-if="(!link.private || $page.auth.player.isSuperAdmin) && (!link.trusted || $page.auth.player.isPanelTrusted)">
+                <li v-for="link in links" :key="link.label" v-if="(!link.private || $page.auth.player.isSuperAdmin) && !link.hidden">
                     <inertia-link
                         class="flex items-center px-5 py-2 mb-3 rounded hover:bg-gray-900 hover:text-white"
                         :class="isUrl(link.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
@@ -17,8 +17,8 @@
                     <a
                         href="#"
                         class="flex flex-wrap items-center px-5 py-2 mb-3 -mt-1 rounded hover:bg-indigo-700 hover:text-white overflow-hidden"
-                        :class="len(link.sub, $page.auth.player.isSuperAdmin, $page.auth.player.isPanelTrusted)"
-                        v-if="link.sub"
+                        :class="len(link.sub, $page.auth.player.isSuperAdmin)"
+                        v-if="link.sub && len(link.sub, $page.auth.player.isSuperAdmin)"
                         @click="$event.preventDefault()"
                     >
                         <span class="block w-full mb-2">
@@ -27,7 +27,7 @@
                         </span>
                         <ul class="w-full">
                             <li v-for="sub in link.sub" :key="sub.label"
-                                v-if="(!sub.private || $page.auth.player.isSuperAdmin) && (!sub.trusted || $page.auth.player.isPanelTrusted)">
+                                v-if="(!sub.private || $page.auth.player.isSuperAdmin) && !sub.hidden">
                                 <inertia-link
                                     class="flex items-center px-5 py-2 mt-1 rounded hover:bg-gray-900 hover:text-white"
                                     :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
@@ -47,7 +47,7 @@
                         class="flex items-center px-5 py-2 mb-3 rounded hover:bg-gray-900 hover:text-white text-sm"
                         :class="isUrl(link.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
                         :href="link.url"
-                        v-if="!('sub' in link) && (!link.private || $page.auth.player.isSuperAdmin) && (!link.trusted || $page.auth.player.isPanelTrusted)"
+                        v-if="!('sub' in link) && (!link.private || $page.auth.player.isSuperAdmin) && !link.hidden"
                     >
                         {{ link.label }}
                     </inertia-link>
@@ -57,7 +57,7 @@
                         :class="isUrl(sub.url) ? [ 'bg-gray-900', 'text-white' ] : ''"
                         :href="sub.url"
                         :key="sub.label"
-                        v-if="'sub' in link && (!(sub.private || link.private) || $page.auth.player.isSuperAdmin) && (!(sub.trusted || link.trusted) || $page.auth.player.isPanelTrusted)"
+                        v-if="'sub' in link && (!(sub.private || link.private) || $page.auth.player.isSuperAdmin) && !(sub.hidden || link.hidden)"
                     >
                         {{ sub.label }}
                     </inertia-link>
@@ -165,29 +165,31 @@ export default {
                             label: this.t('sidebar.overwatch'),
                             icon: 'camera',
                             url: '/overwatch',
-                            trusted: true,
+                            hidden: !this.perm.check(this.perm.PERM_SCREENSHOT),
                         }
                     ]
                 },
                 {
                     label: this.t('sidebar.advanced'),
                     icon: 'cogs',
-                    private: true,
                     sub: [
                         {
                             label: this.t('sidebar.advanced_search'),
                             icon: 'search',
                             url: '/advanced',
+                            hidden: !this.perm.check(this.perm.PERM_ADVANCED),
                         },
                         {
                             label: this.t('sidebar.suspicious'),
                             icon: 'heart',
                             url: '/suspicious',
+                            hidden: !this.perm.check(this.perm.PERM_SUSPICIOUS),
                         },
                         {
                             label: this.t('inventories.search.label'),
                             icon: 'pallet',
                             url: '/search_inventory',
+                            private: true,
                         }
                     ]
                 },
@@ -210,8 +212,8 @@ export default {
             if (this.url.substring(1) === '' || url.substring(1) === '') return false;
             return this.url.startsWith(url);
         },
-        len(sub, isSuperAdmin, isPanelTrusted) {
-            const length = sub.filter(l => (!l.private || isSuperAdmin) && (!l.trusted || isPanelTrusted)).length;
+        len(sub, isSuperAdmin) {
+            const length = sub.filter(l => (!l.private || isSuperAdmin) && !l.hidden).length;
 
             switch (length) {
                 case 1:

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PermissionHelper;
 use App\Helpers\SuspiciousChecker;
 use App\Http\Resources\LogResource;
 use App\Log;
@@ -23,6 +24,10 @@ class SuspiciousController extends Controller
      */
     public function index(Request $request)
     {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SUSPICIOUS)) {
+            abort(401);
+        }
+
         $start = round(microtime(true) * 1000);
 
         $logs = [];
