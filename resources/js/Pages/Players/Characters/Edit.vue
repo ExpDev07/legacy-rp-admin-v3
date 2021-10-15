@@ -907,6 +907,8 @@ export default {
         }
     },
     data() {
+        jobsObject = [];
+
         for (const job in this.jobs) {
             if (Object.hasOwnProperty(job)) continue;
 
