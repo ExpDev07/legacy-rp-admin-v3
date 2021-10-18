@@ -83,6 +83,7 @@
                         <th class="px-6 py-4">{{ t('errors.player') }}</th>
                         <th class="px-6 py-4">{{ t('errors.location') }}</th>
                         <th class="px-6 py-4">{{ t('errors.trace') }}</th>
+                        <th class="px-6 py-4">{{ t('errors.occurrences') }}</th>
                         <th class="px-6 py-4">{{ t('errors.timestamp') }}</th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="error in errors"
@@ -98,6 +99,7 @@
                         <td class="px-6 py-3 border-t mobile:block font-mono text-sm cursor-pointer" @click="showError(error)" v-html="formatChatColors(trim(error.error_trace, 200))">
                             {{ formatChatColors(trim(error.error_trace, 200)) }}
                         </td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ error.occurrences }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ error.timestamp * 1000 | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="errors.length === 0">
@@ -144,13 +146,24 @@
             <template #header>
                 <h1 class="dark:text-white">
                     {{ t('errors.detail') }}
+                    <sup :title="t('errors.occurrences')">{{ errorDetail.occurrences }}</sup>
                 </h1>
             </template>
 
             <template #default>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line" v-if="errorDetail.error_location.length < 40">{{ errorDetail.error_location }}</pre>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>{{ errorDetail.error_location }}</pre>
-                <pre class="text-lg block mb-2 text-sm whitespace-pre-line break-words" v-html="formatChatColors(errorDetail.error_trace)">{{ formatChatColors(errorDetail.error_trace) }}</pre>
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line" v-if="errorDetail.error_location.length < 40">
+                    {{ errorDetail.error_location }}
+                </pre>
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>
+                    {{ errorDetail.error_location }}
+                </pre>
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-html="formatChatColors(errorDetail.error_trace)">
+                    {{ formatChatColors(errorDetail.error_trace) }}
+                </pre>
+                <p class="m-0 mb-2 font-bold">{{ t('errors.feedback') }}:</p>
+                <pre class="text-lg block mb-4 text-sm whitespace-pre-line break-words">
+                    {{ errorDetail.error_feedback || "N/A" }}
+                </pre>
             </template>
 
             <template #actions>

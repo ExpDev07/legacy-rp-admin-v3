@@ -86,7 +86,9 @@
         "timestamp": "Timestamp",
         "errors": "Errors",
         "search": "Search",
-        "detail": "Detailed Error Report"
+        "detail": "Detailed Error Report",
+        "feedback": "User Feedback",
+        "occurrences": "Occurrences"
     },
     "screenshot": {
         "title": "Attach screenshot to Player",
