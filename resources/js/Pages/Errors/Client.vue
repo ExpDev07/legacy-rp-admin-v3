@@ -148,9 +148,19 @@
             </template>
 
             <template #default>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line" v-if="errorDetail.error_location.length < 40">{{ errorDetail.error_location }}</pre>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>{{ errorDetail.error_location }}</pre>
-                <pre class="text-lg block mb-2 text-sm whitespace-pre-line break-words" v-html="formatChatColors(errorDetail.error_trace)">{{ formatChatColors(errorDetail.error_trace) }}</pre>
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line" v-if="errorDetail.error_location.length < 40">
+                    {{ errorDetail.error_location }}
+                </pre>
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>
+                    {{ errorDetail.error_location }}
+                </pre>
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-html="formatChatColors(errorDetail.error_trace)">
+                    {{ formatChatColors(errorDetail.error_trace) }}
+                </pre>
+                <p class="m-0 mb-2 font-bold">{{ t('errors.feedback') }}:</p>
+                <pre class="text-lg block mb-4 text-sm whitespace-pre-line break-words">
+                    {{ errorDetail.error_feedback || "N/A" }}
+                </pre>
             </template>
 
             <template #actions>
