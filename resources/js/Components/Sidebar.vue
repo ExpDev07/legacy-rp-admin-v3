@@ -170,6 +170,23 @@ export default {
                     ]
                 },
                 {
+                    label: this.t('sidebar.errors'),
+                    icon: 'bug',
+                    hidden: !this.$page.auth.player.isDebugger,
+                    sub: [
+                        {
+                            label: this.t('errors.client.title'),
+                            icon: 'spider',
+                            url: '/errors/client',
+                        },
+                        {
+                            label: this.t('errors.server.title'),
+                            icon: 'virus',
+                            url: '/errors/server'
+                        }
+                    ]
+                },
+                {
                     label: this.t('sidebar.advanced'),
                     icon: 'cogs',
                     sub: [

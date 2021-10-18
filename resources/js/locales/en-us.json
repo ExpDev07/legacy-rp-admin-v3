@@ -61,13 +61,32 @@
         "data": "Data",
         "serials": "Serial Lookup",
         "csi": "CSI Tools",
-        "overwatch": "Overwatch"
+        "overwatch": "Overwatch",
+        "errors": "Errors"
     },
     "overwatch": {
         "title": "Overwatch",
         "description": "Look through random players' game renders to see if you can find anything out of the ordinary",
         "profile": "Server ID: {0}",
         "server": "Server: {0}"
+    },
+    "errors": {
+        "client": {
+            "title": "Client Errors",
+            "description": "Logged FiveM error reports from clients."
+        },
+        "server": {
+            "title": "Server Errors",
+            "description": "Logged FiveM error reports from the server."
+        },
+        "no_errors": "No logged errors found.",
+        "player": "Player",
+        "location": "Location",
+        "trace": "Error Trace",
+        "timestamp": "Timestamp",
+        "errors": "Errors",
+        "search": "Search",
+        "detail": "Detailed Error Report"
     },
     "screenshot": {
         "title": "Attach screenshot to Player",
