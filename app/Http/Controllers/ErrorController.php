@@ -42,7 +42,9 @@ class ErrorController extends Controller
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $query->select(['error_id', 'steam_identifier', 'error_location', 'error_trace', 'error_feedback', 'player_ping', 'server_id', 'timestamp']);
+        $query->groupByRaw('CONCAT(error_location, error_trace, FLOOR(timestamp / 300))');
+
+        $query->selectRaw('error_id, steam_identifier, error_location, error_trace, error_feedback, player_ping, server_id, timestamp, COUNT(error_id) as `occurrences`');
         $query->limit(15)->offset(($page - 1) * 15);
 
         $errors = $query->get()->toArray();

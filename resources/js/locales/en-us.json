@@ -87,7 +87,8 @@
         "errors": "Errors",
         "search": "Search",
         "detail": "Detailed Error Report",
-        "feedback": "User Feedback"
+        "feedback": "User Feedback",
+        "occurrences": "Occurrences"
     },
     "screenshot": {
         "title": "Attach screenshot to Player",
