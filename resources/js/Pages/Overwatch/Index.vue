@@ -13,23 +13,24 @@
         <ScreenshotAttacher :close="screenshotAttached" :steam="screenshot.steam" :url="screenshot.url" v-if="isAttaching" />
 
         <v-section class="-mt-10 max-w-screen-lg">
-            <div v-if="screenshot" class="-mt-8">
+            <div class="-mt-8">
                 <div class="flex justify-between">
                     <div class="flex">
                         <inertia-link
                             class="px-5 py-2 font-semibold text-white mr-3 rounded bg-blue-600 dark:bg-blue-500"
-                            :href="'/players/' + screenshot.steam">
+                            :href="'/players/' + screenshot.steam"
+                            v-if="screenshot">
                             <i class="fas fa-user"></i>
                             {{ t("overwatch.profile", screenshot.id) }}
                         </inertia-link>
 
-                        <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700">
+                        <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700" v-if="screenshot">
                             <span class="font-semibold">{{ t('overwatch.server', screenshot.server) }}</span>
                         </badge>
                     </div>
 
                     <div class="flex">
-                        <button class="px-5 py-2 font-semibold text-white bg-primary rounded dark:bg-dark-primary mr-3" @click="isAttaching = true">
+                        <button class="px-5 py-2 font-semibold text-white bg-primary rounded dark:bg-dark-primary mr-3" @click="isAttaching = true" v-if="screenshot">
                             <i class="fas fa-paper-plane mr-1"></i>
                             {{ t('screenshot.title') }}
                         </button>
@@ -48,11 +49,12 @@
                     </div>
                 </div>
 
-                <a :href="screenshot.url" class="mt-5 block" target="_blank">
+                <a :href="screenshot.url" class="mt-5 block" target="_blank" v-if="screenshot">
                     <img :src="screenshot.url" alt="Screenshot" class="block" />
                 </a>
             </div>
-            <p v-if="screenshotError" class="font-semibold text-danger dark:text-dark-danger">{{ screenshotError }}</p>
+
+            <p v-if="screenshotError" class="font-semibold text-danger dark:text-dark-danger m-0">{{ screenshotError }}</p>
         </v-section>
 
     </div>
