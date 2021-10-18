@@ -59,6 +59,9 @@
     <i class="fas fa-shield-alt" v-else-if="name === 'shield'"></i>
     <i class="fas fa-shoe-prints" v-else-if="name === 'prints'"></i>
     <i class="fas fa-camera" v-else-if="name === 'camera'"></i>
+    <i class="fas fa-bug" v-else-if="name === 'bug'"></i>
+    <i class="fas fa-spider" v-else-if="name === 'spider'"></i>
+    <i class="fas fa-viruses" v-else-if="name === 'virus'"></i>
 </template>
 
 <script>

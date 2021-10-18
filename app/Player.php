@@ -60,6 +60,7 @@ class Player extends Model
         'is_super_admin',
         'is_trusted',
         'is_panel_trusted',
+        'is_debugger',
         'is_soft_banned',
         'playtime',
         'total_joins',
@@ -79,6 +80,7 @@ class Player extends Model
         'is_staff'         => 'boolean',
         'is_super_admin'   => 'boolean',
         'is_panel_trusted' => 'boolean',
+        'is_debugger'      => 'boolean',
         'is_soft_banned'   => 'boolean',
         'playtime'         => 'integer',
         'total_joins'      => 'integer',
@@ -217,6 +219,16 @@ class Player extends Model
     public function isPanelTrusted(): bool
     {
         return $this->isSuperAdmin() || $this->is_panel_trusted;
+    }
+
+    /**
+     * Checks whether this player is a debugger.
+     *
+     * @return bool
+     */
+    public function isDebugger(): bool
+    {
+        return $this->isSuperAdmin() || $this->is_debugger;
     }
 
     /**

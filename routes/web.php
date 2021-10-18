@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\CronjobController;
+use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
@@ -176,6 +177,10 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Testing.
     Route::post('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
+
+    // Errors.
+    Route::get('/errors/client', [ErrorController::class, 'client']);
+    Route::get('/errors/server', [ErrorController::class, 'server']);
 
     // Exports.
     Route::get('/export/character/{character}', [PlayerCharacterController::class, 'export']);

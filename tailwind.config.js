@@ -61,14 +61,15 @@ module.exports = {
                 'side-open-two':   '134px',
                 'side-open-three': '180px',
                 'max':             'calc(100vh - (210px + 120px))',
-                'inventory_slot':  '100px',
+                'inventory_slot':  '100px'
             },
             minWidth: {
                 'input': '200px',
             },
             maxHeight: {
-                'max': 'calc(100% - 60px)',
-                'img': '500px'
+                'max':       'calc(100% - 60px)',
+                'img':       '500px',
+                'modal-max': 'calc(100% - 10rem)'
             },
             listStyleType: {
                 'dash': "'-'"

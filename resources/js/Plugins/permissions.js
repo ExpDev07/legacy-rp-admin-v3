@@ -29,8 +29,6 @@ const Permissions = {
                     return true;
                 }
 
-                console.log(permissions);
-
                 return permissions[permission] <= permissionLevel;
             }
         };
