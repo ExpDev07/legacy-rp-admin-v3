@@ -686,6 +686,34 @@
             "gender": "Gender"
         }
     },
+    "casino": {
+        "title": "Casino Logs",
+        "description": "On this page you can view and filter the casino logs.",
+        "logs": "Logs",
+        "refresh": "Refresh",
+        "filter": "Filter Logs",
+        "player": "Player",
+        "identifier": "Steam Identifier",
+        "character_id": "CID",
+        "game": "Game",
+        "details": "Details",
+        "result": "Result",
+        "bet": "Bet Placed",
+        "money_return": "Total Money Return",
+        "timestamp": "Timestamp",
+        "search": "Search",
+        "no_logs": "No casino logs found.",
+        "games": {
+            "blackjack": "Blackjack",
+            "slots": "Slots",
+            "tracks": "Tracks"
+        },
+        "results": {
+            "win": "Win",
+            "loss": "Loss",
+            "draw": "Draw"
+        }
+    },
     "logs": {
         "title": "Server Logs",
         "description": "On this page you can view and filter the server logs.",

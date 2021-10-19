@@ -125,6 +125,11 @@ export default {
                             url: '/logs',
                         },
                         {
+                            label: this.t('casino.title'),
+                            icon: 'poker',
+                            url: '/casino',
+                        },
+                        {
                             label: this.t('panel_logs.title'),
                             icon: 'paperstack',
                             url: '/panel_logs',
