@@ -148,7 +148,10 @@
         "min_money_return": "Min. Return",
         "max_money_return": "Max. Return",
         "avg_bet_placed": "Avg. Bet",
-        "avg_money_return": "Avg. Return",
+        "avg_money_return": "Avg. Win",
+        "best_players": "Best 5 Players in the last 2 days",
+        "worst_players": "Worst 5 Players in the last 2 days",
+        "return_rate": "Return Rate",
         "titles": {
             "bans_move": "Bans over time",
             "economy": "Economy (vehicles + cash + bank + stocks + company balances + PDM & State funds)",
