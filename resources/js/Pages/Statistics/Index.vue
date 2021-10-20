@@ -59,10 +59,10 @@
 
             <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
-                    :data="[blackjack.spent, blackjack.earned]"
+                    :data="[blackjack.average_spent, blackjack.min_earned, blackjack.max_earned, blackjack.average_earned]"
                     :data-labels="blackjack.labels"
-                    :labels="[t('statistics.avg_bet_placed'), t('statistics.avg_money_return')]"
-                    :colors="['87, 235, 54', '235, 54, 54']"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return')]"
+                    :colors="['55, 55, 235', '87, 235, 54', '255, 230, 0', '255, 42, 0']"
                     :title="t('statistics.titles.blackjack')"
                     :format-as-money="true"
                     class="w-full"
@@ -71,10 +71,10 @@
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
-                    :data="[slots.spent, slots.earned]"
+                    :data="[slots.average_spent, slots.min_earned, slots.max_earned, slots.average_earned]"
                     :data-labels="slots.labels"
-                    :labels="[t('statistics.avg_bet_placed'), t('statistics.avg_money_return')]"
-                    :colors="['87, 235, 54', '235, 54, 54']"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return')]"
+                    :colors="['55, 55, 235', '87, 235, 54', '255, 230, 0', '255, 42, 0']"
                     :title="t('statistics.titles.slots')"
                     :format-as-money="true"
                     class="w-full"
@@ -83,10 +83,10 @@
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
-                    :data="[tracks.spent, tracks.earned]"
+                    :data="[tracks.average_spent, tracks.min_earned, tracks.max_earned, tracks.average_earned]"
                     :data-labels="tracks.labels"
-                    :labels="[t('statistics.avg_bet_placed'), t('statistics.avg_money_return')]"
-                    :colors="['87, 235, 54', '235, 54, 54']"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return')]"
+                    :colors="['55, 55, 235', '87, 235, 54', '255, 230, 0', '255, 42, 0']"
                     :title="t('statistics.titles.tracks')"
                     :format-as-money="true"
                     class="w-full"

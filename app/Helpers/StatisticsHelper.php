@@ -242,14 +242,7 @@ class StatisticsHelper
             return CacheHelper::read($key, []);
         }
 
-        $stats = DB::table('casino_logs')
-            ->where('game', '=', CasinoLog::GameBlackJack)
-            ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
-            ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
-            ->orderByDesc('timestamp')
-            ->get()->toArray();
-
-        $data = self::parseCasinoData($stats);
+        $data = self::casinoStatsForGame(CasinoLog::GameBlackJack);
 
         CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
@@ -268,14 +261,7 @@ class StatisticsHelper
             return CacheHelper::read($key, []);
         }
 
-        $stats = DB::table('casino_logs')
-            ->where('game', '=', CasinoLog::GameSlots)
-            ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
-            ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
-            ->orderByDesc('timestamp')
-            ->get()->toArray();
-
-        $data = self::parseCasinoData($stats);
+        $data = self::casinoStatsForGame(CasinoLog::GameSlots);
 
         CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
@@ -294,32 +280,47 @@ class StatisticsHelper
             return CacheHelper::read($key, []);
         }
 
-        $stats = DB::table('casino_logs')
-            ->where('game', '=', CasinoLog::GameTracks)
-            ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
-            ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
-            ->orderByDesc('timestamp')
-            ->get()->toArray();
-
-        $data = self::parseCasinoData($stats);
+        $data = self::casinoStatsForGame(CasinoLog::GameTracks);
 
         CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
 
         return $data;
     }
 
+    private static function casinoStatsForGame(string $game): array
+    {
+        $stats = DB::table('casino_logs')
+            ->where('game', '=', CasinoLog::GameTracks)
+            ->selectRaw(
+                'MIN(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `min_earned`, ' .
+                'MAX(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `max_earned`, ' .
+                'SUM(`money_spent`) / COUNT(`money_spent`) as `average_spent`, ' .
+                'SUM(`money_earned`) / COUNT(`money_earned`) as `average_earned`, ' .
+                'DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`'
+            )
+            ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
+            ->orderByDesc('timestamp')
+            ->get()->toArray();
+
+        return self::parseCasinoData($stats);
+    }
+
     private static function parseCasinoData(array $stats): array
     {
         $data = [
             'labels' => [],
-            'spent'  => [],
-            'earned' => [],
+            'min_earned'  => [],
+            'max_earned' => [],
+            'average_spent' => [],
+            'average_earned' => [],
         ];
 
         foreach ($stats as $row) {
             $data['labels'][] = $row->day;
-            $data['spent'][] = floatval($row->spent);
-            $data['earned'][] = floatval($row->earned);
+            $data['min_earned'][] = floatval($row->min_earned);
+            $data['max_earned'][] = floatval($row->max_earned);
+            $data['average_spent'][] = floatval($row->average_spent);
+            $data['average_earned'][] = floatval($row->average_earned);
         }
 
         return $data;
