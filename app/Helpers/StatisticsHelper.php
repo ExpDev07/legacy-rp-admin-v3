@@ -290,7 +290,7 @@ class StatisticsHelper
     private static function casinoStatsForGame(string $game): array
     {
         $stats = DB::table('casino_logs')
-            ->where('game', '=', CasinoLog::GameTracks)
+            ->where('game', '=', $game)
             ->selectRaw(
                 'MIN(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `min_earned`, ' .
                 'MAX(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `max_earned`, ' .
