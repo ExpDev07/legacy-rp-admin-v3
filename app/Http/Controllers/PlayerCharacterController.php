@@ -152,15 +152,16 @@ class PlayerCharacterController extends Controller
         $jobs = OPFWHelper::getJobsJSON(Server::getFirstServer() ?? '');
 
         return Inertia::render('Players/Characters/Edit', [
-            'player'      => new PlayerResource($player),
-            'character'   => new CharacterResource($character),
-            'motels'      => $motels->toArray(),
-            'motelMap'    => $motelMap,
-            'horns'       => $horns,
-            'vehicleMap'  => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
-            'jobs'        => $jobs ? $jobs['jobs'] : [],
-            'resetCoords' => $resetCoords ? array_keys($resetCoords) : [],
-            'economy'     => $economy ? $economy->closing : 0,
+            'player'       => new PlayerResource($player),
+            'character'    => new CharacterResource($character),
+            'motels'       => $motels->toArray(),
+            'motelMap'     => $motelMap,
+            'horns'        => $horns,
+            'vehicleMap'   => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
+            'jobs'         => $jobs ? $jobs['jobs'] : [],
+            'resetCoords'  => $resetCoords ? array_keys($resetCoords) : [],
+            'economy'      => $economy ? $economy->closing : 0,
+            'vehicleValue' => Vehicle::getTotalVehicleValue($character->character_id),
         ]);
     }
 
@@ -590,7 +591,7 @@ class PlayerCharacterController extends Controller
         $player = $character->player()->first();
 
         $discords = [];
-        foreach($player->getIdentifiers() as $identifier) {
+        foreach ($player->getIdentifiers() as $identifier) {
             if (Str::startsWith($identifier, 'discord:')) {
                 $discords[] = '<@' . str_replace('discord:', '', $identifier) . '>';
             }

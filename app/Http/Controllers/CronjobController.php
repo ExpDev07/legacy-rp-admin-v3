@@ -8,6 +8,7 @@ use App\Helpers\CacheHelper;
 use App\Statistics\BanStatistic;
 use App\Statistics\EconomyStatistic;
 use App\Statistics\Statistic;
+use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,7 @@ class CronjobController extends Controller
         $current = intval(Character::query()->selectRaw('SUM(`cash` + `bank` + `stocks_balance`) as `sum`')->get()->first()['sum']);
         $current += intval(DB::table('stocks_companies')->selectRaw('SUM(`company_balance`) as `sum`')->get()->first()->sum);
         $current += intval(DB::table('shared_accounts')->selectRaw('SUM(`amount`) as `sum`')->whereIn('id', [1, 2])->get()->first()->sum);
+        $current += Vehicle::getTotalVehicleValue(null);
 
         // Update and cleanup
         $this->updateStatistic(new EconomyStatistic(), $current);
