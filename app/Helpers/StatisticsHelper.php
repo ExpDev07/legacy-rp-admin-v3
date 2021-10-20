@@ -299,7 +299,7 @@ class StatisticsHelper
                 'DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`'
             )
             ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
-            ->orderByDesc('timestamp')
+            ->orderBy('timestamp')
             ->get()->toArray();
 
         return self::parseCasinoData($stats);
