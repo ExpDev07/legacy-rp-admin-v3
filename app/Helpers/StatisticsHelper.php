@@ -245,7 +245,7 @@ class StatisticsHelper
 
         $data = self::casinoStatsForGame(CasinoLog::GameBlackJack);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -264,7 +264,7 @@ class StatisticsHelper
 
         $data = self::casinoStatsForGame(CasinoLog::GameSlots);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -283,7 +283,7 @@ class StatisticsHelper
 
         $data = self::casinoStatsForGame(CasinoLog::GameTracks);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -297,31 +297,37 @@ class StatisticsHelper
                 'MAX(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `max_earned`, ' .
                 'SUM(`money_spent`) / COUNT(`money_spent`) as `average_spent`, ' .
                 'SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) / COUNT(`money_earned`) as `average_earned`, ' .
-                'SUM(`money_spent`) / SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `return_rate`, ' .
+                'SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) / SUM(`money_spent`) as `return_rate`, ' .
                 'DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`'
             )
             ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
             ->orderBy('timestamp')
             ->get()->toArray();
 
-        $best = DB::table('casino_logs')
-            ->where('game', '=', $game)
-            ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-            ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`, `player_name`')
+        $best = DB::table('casino_logs')->fromSub(function ($q) use ($game) {
+            $q->from('casino_logs')
+                ->where('game', '=', $game)
+                ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
+                ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`')
+                ->groupBy('steam_identifier')
+                ->orderByDesc('win')
+                ->limit(5);
+        }, 'casino_logs')
             ->leftJoin('users', 'casino_logs.steam_identifier', 'users.steam_identifier')
-            ->groupBy('steam_identifier')
             ->orderByDesc('win')
-            ->limit(5)
             ->get()->toArray();
 
-        $worst = DB::table('casino_logs')
-            ->where('game', '=', $game)
-            ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-            ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`, `player_name`')
+        $worst = DB::table('casino_logs')->fromSub(function ($q) use ($game) {
+            $q->from('casino_logs')
+                ->where('game', '=', $game)
+                ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
+                ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`')
+                ->groupBy('steam_identifier')
+                ->orderBy('win')
+                ->limit(5);
+        }, 'casino_logs')
             ->leftJoin('users', 'casino_logs.steam_identifier', 'users.steam_identifier')
-            ->groupBy('steam_identifier')
             ->orderBy('win')
-            ->limit(5)
             ->get()->toArray();
 
         return self::parseCasinoData($stats, $best, $worst);
