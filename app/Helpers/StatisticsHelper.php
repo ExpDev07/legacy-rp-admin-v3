@@ -245,7 +245,7 @@ class StatisticsHelper
 
         $data = self::casinoStatsForGame(CasinoLog::GameBlackJack);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -264,7 +264,7 @@ class StatisticsHelper
 
         $data = self::casinoStatsForGame(CasinoLog::GameSlots);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
         return $data;
     }
@@ -283,7 +283,7 @@ class StatisticsHelper
 
         $data = self::casinoStatsForGame(CasinoLog::GameTracks);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
         return $data;
     }
