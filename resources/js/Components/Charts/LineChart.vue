@@ -46,10 +46,18 @@ export default {
             },
         };
 
-        if (this.formatAsMoney) {
+        if (this.isCasinoChart) {
             options.tooltips.callbacks = {
                 label: function(tooltipItem, data) {
-                    return _this.labels[tooltipItem.datasetIndex] + ': ' + _this.numberFormat(tooltipItem.yLabel, 2, true);
+                    const label = _this.labels[tooltipItem.datasetIndex];
+
+                    if (tooltipItem.datasetIndex === 4) {
+                        tooltipItem.yLabel = _this.numberFormat(tooltipItem.yLabel, 2, false) + '%';
+                    } else {
+                        tooltipItem.yLabel = _this.numberFormat(tooltipItem.yLabel, 2, true);
+                    }
+
+                    return label + ': ' + tooltipItem.yLabel;
                 }
             };
         }
@@ -65,12 +73,22 @@ export default {
                 this.data[x].unshift(null);
             }
 
+            let bg, fg;
+
+            if (x >= this.colors.length || !this.colors[x]) {
+                bg = 'rgba(0, 0, 0, 0)';
+                fg = 'rgba(0, 0, 0, 0)';
+            } else {
+                bg = 'rgba(' + this.colors[x] + ', 0.3)';
+                fg = 'rgba(' + this.colors[x] + ', 1)';
+            }
+
             datasets.push({
                 label: this.labels[x],
                 data: this.data[x],
-                backgroundColor: 'rgba(' + this.colors[x] + ', 0.3)',
+                backgroundColor: bg,
                 fill: true,
-                borderColor: 'rgba(' + this.colors[x] + ', 1)',
+                borderColor: fg,
                 borderWidth: 1
             });
         }
@@ -101,7 +119,7 @@ export default {
             type: Array,
             required: true,
         },
-        formatAsMoney: {
+        isCasinoChart: {
             type: Boolean,
             default: false,
         }

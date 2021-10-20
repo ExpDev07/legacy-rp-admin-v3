@@ -11,6 +11,7 @@ use App\Warning;
 use DateTime;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -295,24 +296,49 @@ class StatisticsHelper
                 'MIN(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `min_earned`, ' .
                 'MAX(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `max_earned`, ' .
                 'SUM(`money_spent`) / COUNT(`money_spent`) as `average_spent`, ' .
-                'SUM(`money_earned`) / COUNT(`money_earned`) as `average_earned`, ' .
+                'SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) / COUNT(`money_earned`) as `average_earned`, ' .
+                'SUM(`money_spent`) / SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `return_rate`, ' .
                 'DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`'
             )
             ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
             ->orderBy('timestamp')
             ->get()->toArray();
 
-        return self::parseCasinoData($stats);
+        $best = DB::table('casino_logs')
+            ->where('game', '=', $game)
+            ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
+            ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`, `player_name`')
+            ->leftJoin('users', 'casino_logs.steam_identifier', 'users.steam_identifier')
+            ->groupBy('steam_identifier')
+            ->orderByDesc('win')
+            ->limit(5)
+            ->get()->toArray();
+
+        $worst = DB::table('casino_logs')
+            ->where('game', '=', $game)
+            ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
+            ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`, `player_name`')
+            ->leftJoin('users', 'casino_logs.steam_identifier', 'users.steam_identifier')
+            ->groupBy('steam_identifier')
+            ->orderBy('win')
+            ->limit(5)
+            ->get()->toArray();
+
+        return self::parseCasinoData($stats, $best, $worst);
     }
 
-    private static function parseCasinoData(array $stats): array
+    private static function parseCasinoData(array $stats, array $best, array $worst): array
     {
         $data = [
-            'labels' => [],
-            'min_earned'  => [],
-            'max_earned' => [],
-            'average_spent' => [],
+            'labels'         => [],
+            'min_earned'     => [],
+            'max_earned'     => [],
+            'average_spent'  => [],
             'average_earned' => [],
+            'return_rate'    => [],
+
+            'best_players'  => $best,
+            'worst_players' => $worst,
         ];
 
         foreach ($stats as $row) {
@@ -321,6 +347,7 @@ class StatisticsHelper
             $data['max_earned'][] = floatval($row->max_earned);
             $data['average_spent'][] = floatval($row->average_spent);
             $data['average_earned'][] = floatval($row->average_earned);
+            $data['return_rate'][] = floatval($row->return_rate) * 100;
         }
 
         return $data;

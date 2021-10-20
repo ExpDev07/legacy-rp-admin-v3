@@ -49,7 +49,7 @@
                 <FinancialChart
                     :data="[economy.data]"
                     :data-labels="economy.labels"
-                    :format-as-money="true"
+                    :is-casino-chart="true"
                     :title="t('statistics.titles.economy')"
                     class="w-full"
                 ></FinancialChart>
@@ -59,38 +59,98 @@
 
             <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
-                    :data="[blackjack.average_spent, blackjack.min_earned, blackjack.max_earned, blackjack.average_earned]"
+                    :data="[blackjack.average_spent, blackjack.min_earned, blackjack.max_earned, blackjack.average_earned, blackjack.return_rate]"
                     :data-labels="blackjack.labels"
-                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return')]"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return'), t('statistics.return_rate')]"
                     :colors="['55, 55, 235', '87, 235, 54', '255, 230, 0', '255, 42, 0']"
                     :title="t('statistics.titles.blackjack')"
-                    :format-as-money="true"
+                    :is-casino-chart="true"
                     class="w-full"
                 ></LineChart>
+
+                <div class="flex">
+                    <div class="text-xs mt-3 text-gray-800">
+                        <span class="text-sm font-semibold mb-1 block">{{ t('statistics.best_players') }}</span>
+                        <span v-for="(player, index) in blackjack.best_players" :key="index" class="flex font-mono">
+                            <span class="mr-1">{{ index + 1 }}.</span>
+                            <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + player.steam_identifier">{{ player.player_name || player.steam_identifier }}</a>
+                            <span :class="player.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(player.win, 0, true) }}</span>
+                        </span>
+                    </div>
+
+                    <div class="text-xs mt-3 text-gray-800 ml-6">
+                        <span class="text-sm font-semibold mb-1 block">{{ t('statistics.worst_players') }}</span>
+                        <span v-for="(player, index) in blackjack.worst_players" :key="index" class="flex font-mono">
+                            <span class="mr-1">{{ index + 1 }}.</span>
+                            <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + player.steam_identifier">{{ player.player_name || player.steam_identifier }}</a>
+                            <span :class="player.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(player.win, 0, true) }}</span>
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
-                    :data="[slots.average_spent, slots.min_earned, slots.max_earned, slots.average_earned]"
+                    :data="[slots.average_spent, slots.min_earned, slots.max_earned, slots.average_earned, slots.return_rate]"
                     :data-labels="slots.labels"
-                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return')]"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return'), t('statistics.return_rate')]"
                     :colors="['55, 55, 235', '87, 235, 54', '255, 230, 0', '255, 42, 0']"
                     :title="t('statistics.titles.slots')"
-                    :format-as-money="true"
+                    :is-casino-chart="true"
                     class="w-full"
                 ></LineChart>
+
+                <div class="flex">
+                    <div class="text-xs mt-3 text-gray-800">
+                        <span class="text-sm font-semibold mb-1 block">{{ t('statistics.best_players') }}</span>
+                        <span v-for="(player, index) in slots.best_players" :key="index" class="flex font-mono">
+                            <span class="mr-1">{{ index + 1 }}.</span>
+                            <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + player.steam_identifier">{{ player.player_name || player.steam_identifier }}</a>
+                            <span :class="player.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(player.win, 0, true) }}</span>
+                        </span>
+                    </div>
+
+                    <div class="text-xs mt-3 text-gray-800 ml-6">
+                        <span class="text-sm font-semibold mb-1 block">{{ t('statistics.worst_players') }}</span>
+                        <span v-for="(player, index) in slots.worst_players" :key="index" class="flex font-mono">
+                            <span class="mr-1">{{ index + 1 }}.</span>
+                            <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + player.steam_identifier">{{ player.player_name || player.steam_identifier }}</a>
+                            <span :class="player.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(player.win, 0, true) }}</span>
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
-                    :data="[tracks.average_spent, tracks.min_earned, tracks.max_earned, tracks.average_earned]"
+                    :data="[tracks.average_spent, tracks.min_earned, tracks.max_earned, tracks.average_earned, tracks.return_rate]"
                     :data-labels="tracks.labels"
-                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return')]"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.min_money_return'), t('statistics.max_money_return'), t('statistics.avg_money_return'), t('statistics.return_rate')]"
                     :colors="['55, 55, 235', '87, 235, 54', '255, 230, 0', '255, 42, 0']"
                     :title="t('statistics.titles.tracks')"
-                    :format-as-money="true"
+                    :is-casino-chart="true"
                     class="w-full"
                 ></LineChart>
+
+                <div class="flex">
+                    <div class="text-xs mt-3 text-gray-800">
+                        <span class="text-sm font-semibold mb-1 block">{{ t('statistics.best_players') }}</span>
+                        <span v-for="(player, index) in tracks.best_players" :key="index" class="flex font-mono">
+                            <span class="mr-1">{{ index + 1 }}.</span>
+                            <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + player.steam_identifier">{{ player.player_name || player.steam_identifier }}</a>
+                            <span :class="player.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(player.win, 0, true) }}</span>
+                        </span>
+                    </div>
+
+                    <div class="text-xs mt-3 text-gray-800 ml-6">
+                        <span class="text-sm font-semibold mb-1 block">{{ t('statistics.worst_players') }}</span>
+                        <span v-for="(player, index) in tracks.worst_players" :key="index" class="flex font-mono">
+                            <span class="mr-1">{{ index + 1 }}.</span>
+                            <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + player.steam_identifier">{{ player.player_name || player.steam_identifier }}</a>
+                            <span :class="player.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(player.win, 0, true) }}</span>
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
