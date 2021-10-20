@@ -34,6 +34,9 @@ class StatisticsController extends Controller
             'creations'  => StatisticsHelper::getCharacterCreationStats(),
             'deletions'  => StatisticsHelper::getCharacterDeletionStats(),
             'luckyWheel' => StatisticsHelper::getLuckyWheelStats(),
+            'blackjack'  => StatisticsHelper::getBlackjackStats(),
+            'tracks'     => StatisticsHelper::getTracksStats(),
+            'slots'      => StatisticsHelper::getSlotsStats(),
         ]);
     }
 

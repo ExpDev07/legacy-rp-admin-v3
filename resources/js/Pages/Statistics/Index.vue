@@ -33,6 +33,19 @@
             </div>
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
+                <LineChart
+                    :data="[creations.data, deletions.data]"
+                    :data-labels="creations.labels"
+                    :labels="[t('statistics.creations'), t('statistics.deletions')]"
+                    :colors="['87, 235, 54', '235, 54, 54']"
+                    :title="t('statistics.titles.character')"
+                    class="w-full"
+                ></LineChart>
+            </div>
+
+            <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
+
+            <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <FinancialChart
                     :data="[economy.data]"
                     :data-labels="economy.labels"
@@ -42,13 +55,40 @@
                 ></FinancialChart>
             </div>
 
+            <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
+
+            <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
+                <LineChart
+                    :data="[blackjack.spent, blackjack.earned]"
+                    :data-labels="blackjack.labels"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.avg_money_return')]"
+                    :colors="['87, 235, 54', '235, 54, 54']"
+                    :title="t('statistics.titles.blackjack')"
+                    :format-as-money="true"
+                    class="w-full"
+                ></LineChart>
+            </div>
+
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
-                    :data="[creations.data, deletions.data]"
-                    :data-labels="creations.labels"
-                    :labels="[t('statistics.creations'), t('statistics.deletions')]"
+                    :data="[slots.spent, slots.earned]"
+                    :data-labels="slots.labels"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.avg_money_return')]"
                     :colors="['87, 235, 54', '235, 54, 54']"
-                    :title="t('statistics.titles.character')"
+                    :title="t('statistics.titles.slots')"
+                    :format-as-money="true"
+                    class="w-full"
+                ></LineChart>
+            </div>
+
+            <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
+                <LineChart
+                    :data="[tracks.spent, tracks.earned]"
+                    :data-labels="tracks.labels"
+                    :labels="[t('statistics.avg_bet_placed'), t('statistics.avg_money_return')]"
+                    :colors="['87, 235, 54', '235, 54, 54']"
+                    :title="t('statistics.titles.tracks')"
+                    :format-as-money="true"
                     class="w-full"
                 ></LineChart>
             </div>
@@ -112,6 +152,19 @@ export default {
             type: Object,
             required: true,
         },
-    }
+
+        blackjack: {
+            type: Object,
+            required: true,
+        },
+        tracks: {
+            type: Object,
+            required: true,
+        },
+        slots: {
+            type: Object,
+            required: true,
+        },
+    },
 }
 </script>

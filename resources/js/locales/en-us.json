@@ -145,12 +145,17 @@
         "creations": "Character creations",
         "deletions": "Character deletions",
         "lucky_wheel": "Lucky Wheel Spins",
+        "avg_bet_placed": "Avg. Bet",
+        "avg_money_return": "Avg. Return",
         "titles": {
             "bans_move": "Bans over time",
             "economy": "Economy (cash + bank + stocks + company balances + PDM & State funds)",
             "ban_warn": "30-Day average of Bans, Warnings/Strikes & Notes",
             "character": "Character creations & deletions",
-            "lucky_wheel": "Lucky Wheel Spins"
+            "lucky_wheel": "Lucky Wheel Spins",
+            "blackjack": "Blackjack Bets vs. Returns",
+            "slots": "Slots Bets vs. Returns",
+            "tracks": "Tracks Bets vs. Returns"
         }
     },
     "map": {
