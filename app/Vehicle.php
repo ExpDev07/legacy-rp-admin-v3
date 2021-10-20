@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\OPFWHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -237,6 +238,55 @@ class Vehicle extends Model
         }
 
         return $horns;
+    }
+
+    public static function getVehiclePrices(): array
+    {
+        $vehicles = OPFWHelper::getVehiclesJSON(Server::getFirstServer() ?? '');
+
+        $prices = [];
+
+        if (isset($vehicles['pdm'])) {
+            foreach ($vehicles['pdm'] as $vehicle) {
+                $prices[$vehicle['modelName']] = intval($vehicle['price']);
+            }
+        }
+
+        if (isset($vehicles['edm'])) {
+            foreach ($vehicles['edm'] as $vehicle) {
+                $prices[$vehicle['modelName']] = intval($vehicle['price']);
+            }
+        }
+
+        return $prices;
+    }
+
+    public static function getTotalVehicleValue(?int $characterId = null): int
+    {
+        $prices = Vehicle::getVehiclePrices();
+
+        $query = Vehicle::query()
+            ->where('vehicle_deleted', '=', '0');
+
+        if ($characterId) {
+            $query->where('owner_cid', '=', $characterId);
+        }
+
+        $vehicles = $query->selectRaw('model_name, COUNT(vehicle_id) as `amount`')
+            ->groupBy('model_name')
+            ->get()->toArray();
+
+        $total = 0;
+
+        foreach ($vehicles as $vehicle) {
+            $model = $vehicle['model_name'];
+
+            if (isset($prices[$model])) {
+                $total += $prices[$model] * intval($vehicle['amount']);
+            }
+        }
+
+        return $total;
     }
 
 }

@@ -904,6 +904,10 @@ export default {
         economy: {
             type: Number,
             required: true,
+        },
+        vehicleValue: {
+            type: Number,
+            required: true,
         }
     },
     data() {
@@ -1056,7 +1060,7 @@ export default {
     },
     methods: {
         getMoneyLocals() {
-            const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance,
+            const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance + this.vehicleValue,
                 influence = this.economy > 0 && totalMoney > 0 ? (totalMoney / this.economy) * 100 : 0;
 
             return {

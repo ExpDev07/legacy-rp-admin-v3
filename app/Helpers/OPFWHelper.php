@@ -250,6 +250,32 @@ class OPFWHelper
     }
 
     /**
+     * Gets the vehicles.json
+     *
+     * @param string $serverIp
+     * @return array|null
+     */
+    public static function getVehiclesJSON(string $serverIp): ?array
+    {
+        $serverIp = Server::fixApiUrl($serverIp);
+        $cache = 'vehicles_json_' . md5($serverIp);
+
+        if (CacheHelper::exists($cache)) {
+            return CacheHelper::read($cache, []);
+        } else {
+            $data = self::executeRoute($serverIp . 'vehicles.json', [], false, 3);
+
+            if ($data->data) {
+                CacheHelper::write($cache, $data->data, 12 * CacheHelper::HOUR);
+            } else if (!$data->status) {
+                CacheHelper::write($cache, [], 10);
+            }
+
+            return $data->data;
+        }
+    }
+
+    /**
      * Creates a screenshot
      *
      * @param string $serverIp
