@@ -45,6 +45,10 @@
             </g>
         </g>
     </svg>
+    <svg v-else-if="name === 'poker'" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 512 512" style="width:20px;height:20px;position:relative;left:-3px">
+        <path d="m367 448 10-21h-20zM145 64l-10 21h20z"/>
+        <path d="M418 0H94C80 0 68 11 68 26v460c0 15 12 26 26 26h324c14 0 26-11 26-26V26c0-15-12-26-26-26zM205 34h196c5 0 9 4 9 9v290a9 9 0 1 1-17 0V51H205a9 9 0 1 1 0-17zm11 108c14-12 34-17 53-13a63 63 0 0 1 45 87c10 1 20 4 30 10 19 12 30 30 32 49a66 66 0 0 1-65 67c-7 0-13-1-19-3l5 14 6 12c2 4 2 9 0 13-3 4-7 6-11 6h-72c-4 0-8-2-11-6-2-4-2-9 0-13l6-12 5-14a66 66 0 0 1-67-18 61 61 0 0 1-16-46c1-19 12-37 31-49 10-6 20-9 30-10a63 63 0 0 1 18-74zm-113-26 34-77a9 9 0 0 1 16 0l34 77a9 9 0 0 1-16 7l-9-21h-34l-9 21a9 9 0 0 1-16-7zm204 362H111c-5 0-9-4-9-9V179a9 9 0 1 1 17 0v282h188a9 9 0 1 1 0 17zm102-82-34 77a9 9 0 0 1-16 0l-34-77a9 9 0 1 1 16-7l9 21h34l9-21a9 9 0 0 1 16 7z"/>
+    </svg>
     <i class="fas fa-clipboard-list text-lg" v-else-if="name === 'paperstack'"></i>
     <i class="fas fa-boxes" v-else-if="name === 'boxes'"></i>
     <i class="fas fa-users" v-else-if="name === 'users'"></i>

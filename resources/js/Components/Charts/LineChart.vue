@@ -4,46 +4,58 @@ import {Line} from 'vue-chartjs';
 export default {
     extends: Line,
     data() {
-        return {
-            options: {
-                devicePixelRatio: 2,
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    yAxes: [{
-                        display: true,
-                        ticks: {
-                            beginAtZero: true
-                        },
-                        gridLines: {
-                            display: true,
-                            color: "rgba(128, 128, 128, 0.3)"
-                        }
-                    }],
-                    xAxes: [{
-                        display: false,
-                        gridLines: {
-                            display: false
-                        }
-                    }]
-                },
-                legend: {
-                    display: false
-                },
-                title: {
+        const _this = this;
+
+        let options = {
+            devicePixelRatio: 2,
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
                     display: true,
-                    text: this.title,
-                    fontSize: 13
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-            }
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: "rgba(128, 128, 128, 0.3)"
+                    }
+                }],
+                xAxes: [{
+                    display: false,
+                    gridLines: {
+                        display: false
+                    }
+                }]
+            },
+            legend: {
+                display: false
+            },
+            title: {
+                display: true,
+                text: this.title,
+                fontSize: 13
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+        };
+
+        if (this.formatAsMoney) {
+            options.tooltips.callbacks = {
+                label: function(tooltipItem, data) {
+                    return _this.labels[tooltipItem.datasetIndex] + ': ' + _this.numberFormat(tooltipItem.yLabel, 2, true);
+                }
+            };
+        }
+
+        return {
+            options: options
         };
     },
     mounted() {
@@ -88,6 +100,10 @@ export default {
         data: {
             type: Array,
             required: true,
+        },
+        formatAsMoney: {
+            type: Boolean,
+            default: false,
         }
     }
 }

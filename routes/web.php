@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\BlacklistController;
+use App\Http\Controllers\CasinoLogController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\CronjobController;
 use App\Http\Controllers\ErrorController;
@@ -148,6 +149,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Logs.
     Route::resource('logs', LogController::class);
+
+    // Casino Logs.
+    Route::resource('casino', CasinoLogController::class);
 
     // Panel Logs.
     Route::resource('panel_logs', PanelLogController::class);

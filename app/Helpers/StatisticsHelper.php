@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Ban;
+use App\CasinoLog;
 use App\Character;
 use App\Statistics\BanStatistic;
 use App\Statistics\EconomyStatistic;
@@ -229,6 +230,101 @@ class StatisticsHelper
         return $data;
     }
 
+    /**
+     * Returns Blackjack statistics
+     *
+     * @return array
+     */
+    public static function getBlackjackStats(): array
+    {
+        $key = 'blackjack_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
+        }
+
+        $stats = DB::table('casino_logs')
+            ->where('game', '=', CasinoLog::GameBlackJack)
+            ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
+            ->groupByRaw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\')')
+            ->orderByDesc('timestamp')
+            ->get()->toArray();
+
+        $data = self::parseCasinoData($stats);
+
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+
+        return $data;
+    }
+
+    /**
+     * Returns Slots statistics
+     *
+     * @return array
+     */
+    public static function getSlotsStats(): array
+    {
+        $key = 'slots_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
+        }
+
+        $stats = DB::table('casino_logs')
+            ->where('game', '=', CasinoLog::GameSlots)
+            ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
+            ->groupByRaw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\')')
+            ->orderByDesc('timestamp')
+            ->get()->toArray();
+
+        $data = self::parseCasinoData($stats);
+
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+
+        return $data;
+    }
+
+    /**
+     * Returns Tracks statistics
+     *
+     * @return array
+     */
+    public static function getTracksStats(): array
+    {
+        $key = 'tracks_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
+        }
+
+        $stats = DB::table('casino_logs')
+            ->where('game', '=', CasinoLog::GameTracks)
+            ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
+            ->groupByRaw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\')')
+            ->orderByDesc('timestamp')
+            ->get()->toArray();
+
+        $data = self::parseCasinoData($stats);
+
+        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+
+        return $data;
+    }
+
+    private static function parseCasinoData(array $stats): array
+    {
+        $data = [
+            'labels' => [],
+            'spent'  => [],
+            'earned' => [],
+        ];
+
+        foreach ($stats as $row) {
+            $data['labels'][] = $row->day;
+            $data['spent'][] = floatval($row->spent);
+            $data['earned'][] = floatval($row->earned);
+        }
+
+        return $data;
+    }
+
     private static function parseHistoricData(array $stats, bool $doAverage = false): array
     {
         $map = [];
@@ -304,6 +400,9 @@ class StatisticsHelper
                 $row['day'],
                 new DateTimeZone('UTC')
             );
+
+            if (!$d)
+                var_dump($row);
 
             $data['data'][] = [
                 'x' => $d->getTimestamp() * 1000,
