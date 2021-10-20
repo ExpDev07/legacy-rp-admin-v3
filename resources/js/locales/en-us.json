@@ -145,6 +145,8 @@
         "creations": "Character creations",
         "deletions": "Character deletions",
         "lucky_wheel": "Lucky Wheel Spins",
+        "min_money_return": "Min. Return",
+        "max_money_return": "Max. Return",
         "avg_bet_placed": "Avg. Bet",
         "avg_money_return": "Avg. Return",
         "titles": {
