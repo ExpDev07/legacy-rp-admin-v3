@@ -245,7 +245,7 @@ class StatisticsHelper
         $stats = DB::table('casino_logs')
             ->where('game', '=', CasinoLog::GameBlackJack)
             ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
-            ->groupByRaw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\')')
+            ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
             ->orderByDesc('timestamp')
             ->get()->toArray();
 
@@ -271,7 +271,7 @@ class StatisticsHelper
         $stats = DB::table('casino_logs')
             ->where('game', '=', CasinoLog::GameSlots)
             ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
-            ->groupByRaw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\')')
+            ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
             ->orderByDesc('timestamp')
             ->get()->toArray();
 
@@ -297,7 +297,7 @@ class StatisticsHelper
         $stats = DB::table('casino_logs')
             ->where('game', '=', CasinoLog::GameTracks)
             ->selectRaw('SUM(`money_spent`) / COUNT(`money_spent`) as `spent`, SUM(`money_earned`) / COUNT(`money_earned`) as `earned`, DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`')
-            ->groupByRaw('FROM_UNIXTIME(`timestamp`, \'%Y-%m-%d\')')
+            ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
             ->orderByDesc('timestamp')
             ->get()->toArray();
 
