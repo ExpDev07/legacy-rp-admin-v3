@@ -297,7 +297,7 @@ class StatisticsHelper
                 'MAX(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `max_earned`, ' .
                 'SUM(`money_spent`) / COUNT(`money_spent`) as `average_spent`, ' .
                 'SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) / COUNT(`money_earned`) as `average_earned`, ' .
-                'SUM(`money_spent`) / SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `return_rate`, ' .
+                'SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) / SUM(`money_spent`) as `return_rate`, ' .
                 'DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`'
             )
             ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
