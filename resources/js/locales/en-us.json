@@ -581,7 +581,8 @@
             "properties": "Properties",
             "none": "This character does not have access to any properties.",
             "cost": "Maintenance Cost",
-            "rent": "Rent"
+            "rent": "Rent",
+            "expires": "Expires"
         },
         "motels": {
             "motels": "Motels",
