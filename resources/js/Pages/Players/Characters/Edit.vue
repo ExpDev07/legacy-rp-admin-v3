@@ -777,6 +777,10 @@
                                 <span>{{ t('players.properties.rent') }}:</span>
                                 {{ numberFormat(property.property_income, 0, true) }}
                             </h4>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.properties.expires') }}:</span>
+                                {{ (property.property_last_pay + (7 * 24 * 60 * 60)) * 1000 | formatTime(true) }}
+                            </h4>
                         </template>
 
                         <template #footer>

@@ -59,6 +59,7 @@ class Property extends Model
         'property_renter',
         'property_renter_cid',
         'property_income',
+        'property_last_pay',
         'shared_keys',
         'company_id'
     ];
