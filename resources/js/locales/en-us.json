@@ -64,6 +64,11 @@
         "overwatch": "Overwatch",
         "errors": "Errors"
     },
+    "staff_chat": {
+        "toggle": "Toggle staff-chat",
+        "failed": "Failed to connect!",
+        "connecting": "Connecting.."
+    },
     "overwatch": {
         "title": "Overwatch",
         "description": "Look through random players' game renders to see if you can find anything out of the ordinary",
