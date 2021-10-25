@@ -758,8 +758,7 @@
                             <a :href="'/export/screenshot/' + screenshot.filename" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <i class="fas fa-cogs mr-1" v-if="screenshot.system"
-                            ></i>
+                            <i class="fas fa-cogs mr-1" v-if="screenshot.system"></i>
                             {{ screenshot.note || 'N/A' }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">{{ screenshot.created_at * 1000 | formatTime(true) }}</td>
