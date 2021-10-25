@@ -59,9 +59,10 @@ export default {
             const token = this.$page.auth.token,
                 cluster = this.$page.auth.cluster,
                 server = this.$page.auth.server,
-                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com';
+                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com',
+                steam = this.$page.auth.player.steamIdentifier;
 
-            let socket = new WebSocket(socketUrl + "/staff-chat?token=" + token + "&cluster=" + cluster + "&server=" + server);
+            let socket = new WebSocket(socketUrl + "/staff-chat?token=" + token + "&cluster=" + cluster + "&server=" + server + "&steam=" + steam);
 
             socket.onmessage = async function (event) {
                 _this.isLoading = false;
