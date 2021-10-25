@@ -799,7 +799,7 @@ export default {
                 return '-';
             }
 
-            return this.activeViewers.sort().map(v => this.getStaffName(v)).join(', ');
+            return this.activeViewers.map(v => this.getStaffName(v)).join(', ');
         },
         getStaffName(steam) {
             let player_name = steam;
@@ -1316,7 +1316,7 @@ export default {
                     }
                 }
 
-                this.activeViewers = [...new Set(data.staff)];
+                this.activeViewers = [...new Set(data.staff)].sort();
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
