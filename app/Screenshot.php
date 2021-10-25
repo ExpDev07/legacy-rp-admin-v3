@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Screenshot extends Model
 {
@@ -53,11 +54,53 @@ class Screenshot extends Model
 
     public static function getAllScreenshotsForPlayer(string $steam): array
     {
-        return self::query()
+        $characters = array_map(
+            function ($character) {
+                return $character->character_id;
+            },
+            Character::query()
+                ->where('steam_identifier', '=', $steam)
+                ->select(['character_id'])
+                ->get()->toArray()
+        );
+
+        $attached = self::query()
             ->where('steam_identifier', '=', $steam)
             ->orderByDesc('created_at')
             ->get()
             ->toArray();
+
+        if (!empty($characters)) {
+            $system = DB::table('system_screenshots')
+                ->whereIn('character_id', $characters)
+                ->orderByDesc('id')
+                ->select(['url', 'details'])
+                ->get()->toArray();
+
+            foreach ($system as &$entry) {
+                $re = '/public\/(\d+-\d+-\d+)/m';
+                preg_match($re, $entry->url, $match);
+
+                $entry->system = true;
+                $entry->note = $entry->details;
+
+                unset($entry->details);
+
+                if (sizeof($match) === 2) {
+                    $entry->created_at = strtotime($match[1]);
+                } else {
+                    $entry->created_at = 0;
+                }
+            }
+
+            $attached = array_merge($attached, $system);
+
+            usort($attached, function($a, $b) {
+                return $b->created_at - $a->created_at;
+            });
+        }
+
+        return $attached;
     }
 
 }
