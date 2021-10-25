@@ -156,6 +156,7 @@
         "avg_money_return": "Avg. Win",
         "best_players": "Best 5 Players in the last 2 days",
         "worst_players": "Worst 5 Players in the last 2 days",
+        "your_spot": "Your Ranking",
         "return_rate": "Return Rate",
         "titles": {
             "bans_move": "Bans over time",
