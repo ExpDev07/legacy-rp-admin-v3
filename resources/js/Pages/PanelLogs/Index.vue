@@ -30,10 +30,13 @@
                     <div class="flex flex-wrap mb-4">
                         <!-- Source -->
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-2" for="source">
+                            <label class="block mb-2">
                                 {{ t('panel_logs.source') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="source" placeholder="steam:11000010df22c8b" v-model="filters.source">
+                            <select class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="source" v-model="filters.source">
+                                <option value="">{{ t('global.all') }}</option>
+                                <option :value="source.source_identifier" v-for="source in sources">{{ playerName(source.source_identifier) }}</option>
+                            </select>
                         </div>
                         <!-- Target -->
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
@@ -173,6 +176,10 @@ export default {
             type: Array,
             required: true,
         },
+        sources: {
+            type: Array,
+            required: true,
+        },
         filters: {
             source: String,
             target: String,
@@ -213,7 +220,7 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'logs', 'playerMap', 'time', 'links', 'page' ],
+                    only: [ 'logs', 'sources', 'playerMap', 'time', 'links', 'page' ],
                 });
             } catch(e) {}
 
