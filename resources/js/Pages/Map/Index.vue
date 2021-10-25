@@ -11,9 +11,13 @@
             </h1>
             <p>
                 <span v-html="data" class="block">{{ data }}</span>
-                <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">{{
-                        lastConnectionError
-                    }}</span>
+                <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">
+                    {{ lastConnectionError }}
+                </span>
+                <span class="block text-xs text-muted dark:text-dark-muted leading-3 mt-2">
+                    <b>{{ t('map.current_viewers') }}: </b>
+                    <span v-html="formatViewers()">{{ formatViewers() }}</span>
+                </span>
             </p>
         </portal>
 
@@ -688,6 +692,10 @@ export default {
             type: Array,
             required: true
         },
+        staffMap: {
+            type: Array,
+            required: true
+        },
         blips: {
             type: Array,
             required: true
@@ -780,10 +788,33 @@ export default {
             isAttachingScreenshot: false,
 
             heatmapLayer: null,
-            loadingScreenStatus: null
+            loadingScreenStatus: null,
+
+            activeViewers: []
         };
     },
     methods: {
+        formatViewers() {
+            if (!this.activeViewers || this.activeViewers.length === 0) {
+                return '-';
+            }
+
+            return this.activeViewers.map(v => this.getStaffName(v)).join(', ');
+        },
+        getStaffName(steam) {
+            let player_name = steam;
+
+            for (let x = 0; x < this.staffMap.length; x++) {
+                const staff = this.staffMap[x];
+
+                if (staff.steam_identifier === steam) {
+                    player_name = staff.player_name;
+                    break;
+                }
+            }
+
+            return '<a href="/players/' + steam + '" target="_blank" class="!no-underline dark:text-blue-300 text-blue-500">' + player_name + '</a>';
+        },
         screenshotAttached(status, message) {
             this.isAttachingScreenshot = false;
 
@@ -1056,10 +1087,11 @@ export default {
 
             try {
                 const token = await this.getOTToken();
+                const steam = this.$page.auth.player.steamIdentifier;
 
                 this.lastSocketMessage = null;
                 this.lastConnectionError = null;
-                this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server) + "&cluster=" + this.cluster);
+                this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server) + "&cluster=" + this.cluster + "&steam=" + steam);
                 this.socketStart = Date.now();
 
                 this.connection.onmessage = async function (event) {
@@ -1283,6 +1315,8 @@ export default {
                         });
                     }
                 }
+
+                this.activeViewers = [...new Set(data.staff)];
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
@@ -1446,7 +1480,7 @@ export default {
             });
         }
 
-        instance = this;
+        window.instance = this;
     }
 };
 </script>

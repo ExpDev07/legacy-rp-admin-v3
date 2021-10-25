@@ -183,6 +183,7 @@
         "duty_list_pd": "PD On-Duty",
         "duty_list_ems": "EMS On-Duty",
         "staff_online": "Staff Online",
+        "current_viewers": "Current Viewers",
         "pause": "Pause update",
         "track": "Track character",
         "stop_track": "Stop Track",
