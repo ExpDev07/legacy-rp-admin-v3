@@ -324,6 +324,8 @@ class StatisticsHelper
 
         $myPlace = null;
         foreach ($allBest as $place => $entry) {
+            $entry = (array)$entry;
+
             if ($entry['steam_identifier'] === $staffSteamIdentifier) {
                 $entry['place'] = $place + 1;
 
