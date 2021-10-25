@@ -19,6 +19,7 @@
         "delete": "Delete",
         "remove": "Remove",
         "confirm": "Confirm",
+        "unknown": "Unknown",
         "stop": "Stop",
         "view_map": "View on Live-Map",
         "yes": "Yes",
