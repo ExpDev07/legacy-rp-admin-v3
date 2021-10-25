@@ -56,7 +56,7 @@ class Screenshot extends Model
     {
         $characters = array_map(
             function ($character) {
-                return $character->character_id;
+                return $character['character_id'];
             },
             Character::query()
                 ->where('steam_identifier', '=', $steam)
@@ -74,29 +74,24 @@ class Screenshot extends Model
             $system = DB::table('system_screenshots')
                 ->whereIn('character_id', $characters)
                 ->orderByDesc('id')
-                ->select(['url', 'details'])
+                ->select(['url', 'details', 'created_at'])
                 ->get()->toArray();
 
             foreach ($system as &$entry) {
-                $re = '/public\/(\d+-\d+-\d+)/m';
-                preg_match($re, $entry->url, $match);
-
                 $entry->system = true;
                 $entry->note = $entry->details;
 
                 unset($entry->details);
 
-                if (sizeof($match) === 2) {
-                    $entry->created_at = strtotime($match[1]);
-                } else {
-                    $entry->created_at = 0;
+                if (!isset($entry->created_at) || !$entry->created_at) {
+                    $entry->created_at = null;
                 }
             }
 
             $attached = array_merge($attached, $system);
 
             usort($attached, function($a, $b) {
-                return $b->created_at - $a->created_at;
+                return ($b->created_at ?? 0) - ($a->created_at ?? 0);
             });
         }
 
