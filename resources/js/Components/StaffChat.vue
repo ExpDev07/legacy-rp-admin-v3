@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed bottom-0 left-60 p-2 h-9 overflow-hidden text-black bg-yellow-400 w-full max-w-xs" id="staff_chat">
+    <div class="fixed bottom-0 left-60 p-2 h-9 overflow-hidden text-black bg-yellow-400 w-full max-w-xs z-2k" id="staff_chat">
         <a href="#" @click="toggleChat($event)" class="block text-center text-sm font-semibold">
             <i class="fas fa-comments mr-1"></i>
             {{ t('staff_chat.toggle') }}
@@ -59,9 +59,10 @@ export default {
             const token = this.$page.auth.token,
                 cluster = this.$page.auth.cluster,
                 server = this.$page.auth.server,
-                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com';
+                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com',
+                steam = this.$page.auth.player.steamIdentifier;
 
-            let socket = new WebSocket(socketUrl + "/staff-chat?token=" + token + "&cluster=" + cluster + "&server=" + server);
+            let socket = new WebSocket(socketUrl + "/staff-chat?token=" + token + "&cluster=" + cluster + "&server=" + server + "&steam=" + steam);
 
             socket.onmessage = async function (event) {
                 _this.isLoading = false;

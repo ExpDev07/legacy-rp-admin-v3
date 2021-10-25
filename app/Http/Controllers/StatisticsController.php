@@ -25,6 +25,8 @@ class StatisticsController extends Controller
      */
     public function render(Request $request): Response
     {
+        $steam = $request->user()->player->steam_identifier;
+
         return Inertia::render('Statistics/Index', [
             'bans'       => StatisticsHelper::getBanStats(),
             'banMove'    => StatisticsHelper::getBanMoveStats(),
@@ -34,9 +36,9 @@ class StatisticsController extends Controller
             'creations'  => StatisticsHelper::getCharacterCreationStats(),
             'deletions'  => StatisticsHelper::getCharacterDeletionStats(),
             'luckyWheel' => StatisticsHelper::getLuckyWheelStats(),
-            'blackjack'  => StatisticsHelper::getBlackjackStats(),
-            'tracks'     => StatisticsHelper::getTracksStats(),
-            'slots'      => StatisticsHelper::getSlotsStats(),
+            'blackjack'  => StatisticsHelper::getBlackjackStats($steam),
+            'tracks'     => StatisticsHelper::getTracksStats($steam),
+            'slots'      => StatisticsHelper::getSlotsStats($steam),
         ]);
     }
 

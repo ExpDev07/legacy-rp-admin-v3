@@ -234,18 +234,26 @@ class StatisticsHelper
     /**
      * Returns Blackjack statistics
      *
+     * @param string $steam
      * @return array
      */
-    public static function getBlackjackStats(): array
+    public static function getBlackjackStats(string $steam): array
     {
         $key = 'blackjack_statistics';
+
+        $myPlace = self::getMyPlace(CasinoLog::GameBlackJack, $steam);
         if (CacheHelper::exists($key)) {
-            return CacheHelper::read($key, []);
+            $data = CacheHelper::read($key, []);
+            $data['my_place'] = $myPlace;
+
+            return $data;
         }
 
         $data = self::casinoStatsForGame(CasinoLog::GameBlackJack);
 
         CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
+
+        $data['my_place'] = $myPlace;
 
         return $data;
     }
@@ -253,18 +261,26 @@ class StatisticsHelper
     /**
      * Returns Slots statistics
      *
+     * @param string $steam
      * @return array
      */
-    public static function getSlotsStats(): array
+    public static function getSlotsStats(string $steam): array
     {
         $key = 'slots_statistics';
+
+        $myPlace = self::getMyPlace(CasinoLog::GameSlots, $steam);
         if (CacheHelper::exists($key)) {
-            return CacheHelper::read($key, []);
+            $data = CacheHelper::read($key, []);
+            $data['my_place'] = $myPlace;
+
+            return $data;
         }
 
         $data = self::casinoStatsForGame(CasinoLog::GameSlots);
 
         CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
+
+        $data['my_place'] = $myPlace;
 
         return $data;
     }
@@ -272,20 +288,51 @@ class StatisticsHelper
     /**
      * Returns Tracks statistics
      *
+     * @param string $steam
      * @return array
      */
-    public static function getTracksStats(): array
+    public static function getTracksStats(string $steam): array
     {
         $key = 'tracks_statistics';
+
+        $myPlace = self::getMyPlace(CasinoLog::GameSlots, $steam);
         if (CacheHelper::exists($key)) {
-            return CacheHelper::read($key, []);
+            $data = CacheHelper::read($key, []);
+            $data['my_place'] = $myPlace;
+
+            return $data;
         }
 
         $data = self::casinoStatsForGame(CasinoLog::GameTracks);
 
         CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
+        $data['my_place'] = $myPlace;
+
         return $data;
+    }
+
+    private static function getMyPlace(string $game, string $staffSteamIdentifier): ?array
+    {
+        $allBest = DB::table('casino_logs')
+            ->where('game', '=', $game)
+            ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
+            ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`')
+            ->groupBy('steam_identifier')
+            ->orderByDesc('win')
+            ->get()->toArray();
+
+        $myPlace = null;
+        foreach ($allBest as $place => $entry) {
+            if ($entry['steam_identifier'] === $staffSteamIdentifier) {
+                $entry['place'] = $place + 1;
+
+                $myPlace = $entry;
+                break;
+            }
+        }
+
+        return $myPlace;
     }
 
     private static function casinoStatsForGame(string $game): array

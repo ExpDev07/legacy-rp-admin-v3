@@ -156,6 +156,7 @@
         "avg_money_return": "Avg. Win",
         "best_players": "Best 5 Players in the last 2 days",
         "worst_players": "Worst 5 Players in the last 2 days",
+        "your_spot": "Your Ranking",
         "return_rate": "Return Rate",
         "titles": {
             "bans_move": "Bans over time",
@@ -184,6 +185,8 @@
         "duty_list_ems": "EMS On-Duty",
         "staff_online": "Staff Online",
         "current_viewers": "Current Viewers",
+        "viewer_in_server": "Viewer is currently connected to the server.",
+        "viewer_not_server": "Viewer is not connected to the server.",
         "pause": "Pause update",
         "track": "Track character",
         "stop_track": "Stop Track",

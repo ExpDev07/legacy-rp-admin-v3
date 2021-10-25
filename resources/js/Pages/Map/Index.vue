@@ -813,7 +813,10 @@ export default {
                 }
             }
 
-            return '<a href="/players/' + steam + '" target="_blank" class="!no-underline dark:text-blue-300 text-blue-500">' + player_name + '</a>';
+            const cls = this.container.players && steam in this.container.players ? 'dark:text-green-300 text-green-500' : 'dark:text-blue-300 text-blue-500',
+                title = this.container.players && steam in this.container.players ? this.t('map.viewer_in_server') : this.t('map.viewer_not_server');
+
+            return '<a href="/players/' + steam + '" target="_blank" title="' + title + '" class="!no-underline ' + cls + '">' + player_name + '</a>';
         },
         screenshotAttached(status, message) {
             this.isAttachingScreenshot = false;
@@ -1316,7 +1319,7 @@ export default {
                     }
                 }
 
-                this.activeViewers = [...new Set(data.staff)];
+                this.activeViewers = [...new Set(data.staff)].sort();
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
