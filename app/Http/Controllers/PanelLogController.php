@@ -64,19 +64,34 @@ class PanelLogController extends Controller
 
         $logs = $query->get()->toArray();
 
+        $sources = PanelLog::query()
+            ->select(['source_identifier'])
+            ->groupBy('source_identifier')
+            ->get()->toArray();
+
         $end = round(microtime(true) * 1000);
+
+        $identifiers = $sources;
+        foreach ($logs as $log) {
+            $steam = $log['target_identifier'];
+
+            $identifiers[] = [
+                'source_identifier' => $steam,
+            ];
+        }
 
         return Inertia::render('PanelLogs/Index', [
             'logs'      => $logs,
-            'filters'   => $request->all(
-                'source',
-                'target',
-                'action',
-                'log'
-            ),
+            'sources'   => $sources,
+            'filters'   => [
+                'source' => $request->input('source') ?? '',
+                'target' => $request->input('target'),
+                'action' => $request->input('action'),
+                'log'    => $request->input('log'),
+            ],
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
-            'playerMap' => Player::fetchSteamPlayerNameMap($logs, ['source_identifier', 'target_identifier']),
+            'playerMap' => Player::fetchSteamPlayerNameMap($identifiers, ['source_identifier']),
             'page'      => $page,
         ]);
     }

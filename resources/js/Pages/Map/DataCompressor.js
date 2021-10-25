@@ -10,12 +10,13 @@ class DataCompressor {
     }
 
     static decompressData(data) {
-        if (data && 'p' in data && 'd' in data && Array.isArray(data.p) && typeof data.d === 'object') {
+        if (data && 'p' in data && 'd' in data && 's' in data && Array.isArray(data.p) && Array.isArray(data.s) && typeof data.d === 'object') {
             const decompressor = new DataCompressor();
 
             return {
                 players: decompressor.decompressPlayers(data.p),
-                on_duty: decompressor.decompressOnDuty(data.d)
+                on_duty: decompressor.decompressOnDuty(data.d),
+                staff: data.s
             };
         }
 
@@ -23,7 +24,7 @@ class DataCompressor {
     }
 
     static isValid(data) {
-        return 'players' in data && 'on_duty' in data && Array.isArray(data.players) && typeof data.on_duty === 'object';
+        return 'players' in data && 'on_duty' in data && 'staff' in data && Array.isArray(data.players) && Array.isArray(data.staff) && typeof data.on_duty === 'object';
     }
 
     decompressOnDuty(onDuty) {

@@ -6,6 +6,9 @@
 /public/mix-manifest.json
 /public/images/vendor/
 
+# env
+.env
+
 # IDE specific
 /.idea
 

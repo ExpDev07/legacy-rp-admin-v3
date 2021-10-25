@@ -29,17 +29,18 @@ class MapController extends Controller
             ];
         }
 
-        $staff = Player::query()->where('is_staff', '=', true)->select(['steam_identifier'])->get()->toArray();
+        $staff = Player::query()->where('is_staff', '=', true)->select(['steam_identifier', 'player_name'])->get()->toArray();
 
         return Inertia::render('Map/Index', [
-            'servers' => $serverIps,
-            'staff'   => $staff ? array_map(function ($player) {
+            'servers'  => $serverIps,
+            'staff'    => $staff ? array_map(function ($player) {
                 return $player['steam_identifier'];
             }, $staff) : [],
-            'blips'   => GeneralHelper::parseMapFile(__DIR__ . '/../../../helpers/markers.map') ?? [],
-            'token'   => SessionHelper::getInstance()->getSessionKey(),
-            'cluster' => CLUSTER,
-            'myself'  => $request->user()->player->steam_identifier,
+            'staffMap' => $staff,
+            'blips'    => GeneralHelper::parseMapFile(__DIR__ . '/../../../helpers/markers.map') ?? [],
+            'token'    => SessionHelper::getInstance()->getSessionKey(),
+            'cluster'  => CLUSTER,
+            'myself'   => $request->user()->player->steam_identifier,
         ]);
     }
 
