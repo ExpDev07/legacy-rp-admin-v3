@@ -799,7 +799,7 @@ export default {
                 return '-';
             }
 
-            return this.activeViewers.map(v => this.getStaffName(v)).join(', ');
+            return this.activeViewers.sort().map(v => this.getStaffName(v)).join(', ');
         },
         getStaffName(steam) {
             let player_name = steam;
