@@ -254,7 +254,7 @@
 
             <template #default>
                 <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.details') }}:</p>
-                <pre class="block mb-2 text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{ parseLogMetadata(logMetadata) }}</pre>
+                <pre class="block mb-2 text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{ parseLogMetadata(logMetadata) || 'N/A' }}</pre>
 
                 <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.raw') }}:</p>
                 <pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded" v-html="logMetadataJSON">{{ logMetadataJSON }}</pre>
