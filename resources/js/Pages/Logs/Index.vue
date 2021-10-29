@@ -165,7 +165,12 @@
                                 {{ t('global.status.' + log.status.status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ log.action }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">
+                            {{ log.action }}
+                            <a href="#" @click="detailedAction($event, log)" class="block text-xs leading-1 text-blue-600 dark:text-blue-400 whitespace-nowrap" v-if="log.metadata">
+                                {{ t('logs.metadata.show') }}
+                            </a>
+                        </td>
                         <td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)">
                             {{ parseLog(log.details) }}
                         </td>
@@ -240,6 +245,28 @@
             </template>
         </modal>
 
+        <modal :show.sync="showLogMetadata">
+            <template #header>
+                <h1 class="dark:text-white">
+                    {{ t('logs.metadata.title') }}
+                </h1>
+            </template>
+
+            <template #default>
+                <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.details') }}:</p>
+                <pre class="block mb-2 text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{ parseLogMetadata(logMetadata) || 'N/A' }}</pre>
+
+                <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.raw') }}:</p>
+                <pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded" v-html="logMetadataJSON">{{ logMetadataJSON }}</pre>
+            </template>
+
+            <template #actions>
+                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="showLogMetadata = false; logMetadata = null">
+                    {{ t('global.close') }}
+                </button>
+            </template>
+        </modal>
+
     </div>
 </template>
 
@@ -248,14 +275,20 @@ import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Pagination from './../../Components/Pagination';
 import Modal from './../../Components/Modal';
-import moment from "moment";
+
+import hljs from 'highlight.js';
+
+import json from 'highlight.js/lib/languages/json';
+hljs.registerLanguage('json', json);
+
+import 'highlight.js/styles/github-dark-dimmed.css';
 
 export default {
     layout: Layout,
     components: {
         Pagination,
         Modal,
-        VSection,
+        VSection
     },
     props: {
         logs: {
@@ -296,7 +329,10 @@ export default {
                 reason: '',
                 description: ''
             },
-            showLogTimeDifference: false
+            showLogTimeDifference: false,
+            logMetadata: null,
+            showLogMetadata: false,
+            logMetadataJSON: ''
         };
     },
     methods: {
@@ -305,6 +341,39 @@ export default {
         },
         stamp(time) {
             return this.$moment.utc(time).unix();
+        },
+        detailedAction(e, log) {
+            e.preventDefault();
+
+            const metadata = log.metadata;
+
+            if (metadata) {
+                this.logMetadata = metadata;
+                this.logMetadataJSON = hljs.highlight(JSON.stringify(metadata, null, 4), {language: 'json'}).value;
+                this.showLogMetadata = true;
+            }
+        },
+        parseLogMetadata(metadata) {
+            if (metadata && metadata.secondaryCause) {
+                const source = metadata.secondaryCause.source ? metadata.secondaryCause.source : '/';
+
+                switch (metadata.secondaryCause.label) {
+                    case 'Unknown':
+                        return this.t('logs.metadata.secondary_unknown');
+                    case 'Player':
+                        return this.t('logs.metadata.secondary_player', source);
+                    case 'NPC':
+                        return this.t('logs.metadata.secondary_npc');
+                    case 'Vehicle':
+                        return this.t('logs.metadata.secondary_vehicle', source);
+                    case 'Touching Vehicle':
+                        const vehicles = metadata.secondaryCause.source ? Object.entries(metadata.secondaryCause.source).map(e => e[0] + " [" + (e[1] ? e[1] : '/') + "]").join(', ') : 'N/A';
+
+                        return this.t('logs.metadata.secondary_touching', vehicles);
+                }
+            }
+
+            return null;
         },
         refresh: async function () {
             if (this.isLoading) {

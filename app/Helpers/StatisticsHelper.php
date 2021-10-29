@@ -328,6 +328,7 @@ class StatisticsHelper
 
             if ($entry['steam_identifier'] === $staffSteamIdentifier) {
                 $entry['place'] = $place + 1;
+                $entry['total'] = sizeof($allBest);
 
                 $myPlace = $entry;
                 break;

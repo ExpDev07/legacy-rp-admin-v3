@@ -757,6 +757,18 @@
         "placeholder_action": "Death",
         "placeholder_details": "Marius killed jax with an AK-47",
         "search": "Search in logs",
+        "metadata": {
+            "show": "Show metadata",
+            "secondary": "Secondary: {0}",
+            "title": "Log-Entry metadata",
+            "secondary_unknown": "The secondary death reason is unknown.",
+            "secondary_player": "The player was killed by another player with the server-id {0}.",
+            "secondary_npc": "The player was killed by an NPC.",
+            "secondary_vehicle": "The player was killed by a Vehicle. Server-ID of driver: {0}.",
+            "secondary_touching": "At the time of death the player was touching these vehicles: {0}.",
+            "details": "Details",
+            "raw": "Raw metadata"
+        },
         "detail": {
             "title": "Detailed disconnect reason",
             "description": "This will explain in more detail how user '{0}' left the game.",

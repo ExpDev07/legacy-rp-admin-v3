@@ -204,11 +204,11 @@ export default {
 
             this.isLoading = true;
             try {
-                await this.$inertia.replace('/errors/client', {
+                await this.$inertia.replace('/errors/server', {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: ['errors', 'playerMap', 'time', 'links', 'page'],
+                    only: ['errors', 'time', 'links', 'page'],
                 });
             } catch (e) {
             }
