@@ -32,6 +32,7 @@ use App\Http\Controllers\PlayerCharacterController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
+use App\Http\Controllers\ScreenshotController;
 use App\Http\Controllers\SerialsController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\StatisticsController;
@@ -180,7 +181,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/overwatch', [OverwatchController::class, 'index']);
 
     // Testing.
-    Route::post('test/{token}/set_tattoos/{character}/{zone}', [TestController::class, 'setTattoos']);
+    Route::get('/screenshots', [ScreenshotController::class, 'render']);
 
     // Errors.
     Route::get('/errors/client', [ErrorController::class, 'client']);
