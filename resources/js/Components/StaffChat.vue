@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed bottom-0 left-60 p-2 h-9 overflow-hidden text-black bg-yellow-400 w-full max-w-xs z-2k" id="staff_chat">
+    <div class="fixed bottom-0 right-0 p-2 h-9 overflow-hidden text-black bg-yellow-400 w-full max-w-xs z-2k" id="staff_chat">
         <a href="#" @click="toggleChat($event)" class="block text-center text-sm font-semibold">
             <i class="fas fa-comments mr-1"></i>
             {{ t('staff_chat.toggle') }}
