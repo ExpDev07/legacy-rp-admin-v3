@@ -90,7 +90,7 @@
                     <div class="text-xs mt-3 text-gray-800 ml-6" v-if="blackjack.my_place">
                         <span class="text-sm font-semibold mb-1 block">{{ t('statistics.your_spot') }}</span>
                         <span class="flex font-mono">
-                            <span class="mr-1">{{ blackjack.my_place.total }}} / {{ blackjack.my_place.place }}.</span>
+                            <span class="mr-1">{{ blackjack.my_place.total }} / {{ blackjack.my_place.place }}.</span>
                             <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + blackjack.my_place.steam_identifier">{{ $page.auth.player.playerName }}</a>
                             <span :class="blackjack.my_place.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(blackjack.my_place.win, 0, true) }}</span>
                         </span>
@@ -131,7 +131,7 @@
                     <div class="text-xs mt-3 text-gray-800 ml-6" v-if="slots.my_place">
                         <span class="text-sm font-semibold mb-1 block">{{ t('statistics.your_spot') }}</span>
                         <span class="flex font-mono">
-                            <span class="mr-1">{{ slots.my_place.total }}} / {{ slots.my_place.place }}.</span>
+                            <span class="mr-1">{{ slots.my_place.total }} / {{ slots.my_place.place }}.</span>
                             <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + slots.my_place.steam_identifier">{{ $page.auth.player.playerName }}</a>
                             <span :class="slots.my_place.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(slots.my_place.win, 0, true) }}</span>
                         </span>
@@ -172,7 +172,7 @@
                     <div class="text-xs mt-3 text-gray-800 ml-6" v-if="tracks.my_place">
                         <span class="text-sm font-semibold mb-1 block">{{ t('statistics.your_spot') }}</span>
                         <span class="flex font-mono">
-                            <span class="mr-1">{{ tracks.my_place.total }}} / {{ tracks.my_place.place }}.</span>
+                            <span class="mr-1">{{ tracks.my_place.total }} / {{ tracks.my_place.place }}.</span>
                             <a class="text-blue-700 mr-1 inline-block w-xs-steam overflow-hidden overflow-ellipsis" :href="'/players/' + tracks.my_place.steam_identifier">{{ $page.auth.player.playerName }}</a>
                             <span :class="tracks.my_place.win > 0 ? 'text-green-600' : 'text-red-600'">{{ numberFormat(tracks.my_place.win, 0, true) }}</span>
                         </span>
