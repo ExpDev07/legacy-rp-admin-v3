@@ -104,7 +104,10 @@
         "created_at": "Created at",
         "screenshots": "Attached Screenshots",
         "no_screenshots": "No screenshots attached",
-        "view": "View screenshot"
+        "view": "View screenshot",
+        "description": "Recently attached screenshots.",
+        "player": "Player",
+        "label": "Screenshots"
     },
     "changelog": {
         "title": "Recent Updates",

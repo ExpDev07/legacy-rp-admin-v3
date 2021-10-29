@@ -154,6 +154,11 @@ export default {
                             label: this.t('twitter.title'),
                             icon: 'twitter',
                             url: '/twitter',
+                        },
+                        {
+                            label: this.t('screenshot.label'),
+                            icon: 'images',
+                            url: '/screenshots',
                         }
                     ]
                 },
@@ -244,6 +249,8 @@ export default {
                     return 'h-side-close hover:h-side-open-two';
                 case 3:
                     return 'h-side-close hover:h-side-open-three';
+                case 4:
+                    return 'h-side-close hover:h-side-open-four';
                 default:
                     return '';
             }
