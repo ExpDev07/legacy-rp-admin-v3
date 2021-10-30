@@ -42,7 +42,7 @@
 
 See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
-**Urgent? Write to me on Discord: Marius Big Ounce#2997.**
+**Urgent? Write to Twoot on Discord: Twootinger#2222.**
 
 ## Note
 
@@ -66,7 +66,7 @@ Please refer to [LICENSE.md](https://github.com/ExpDev07/legacy-rp-admin-v3/blob
 ## Contributors
 This list only contains some of the most notable contributors. For the full list, refer to [GitHub's contributors graph](https://github.com/ExpDev07/legacy-rp-admin-v3/graphs/contributors).
 * [ExpDev07](https://github.com/ExpDev07) (Marius) - creator and maintainer of both frontend and backend.
-* [milan60](https://github.com/milan60) (Twoot) - maintainer of both frontend and backend.
+* [twooot](https://github.com/twooot) (Twoot) - maintainer of both frontend and backend.
 
 ## Pictures
 (more will be posted soon once some design decisions are finalized).
