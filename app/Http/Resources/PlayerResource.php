@@ -36,6 +36,7 @@ class PlayerResource extends JsonResource
             'isPanelTrusted'  => $this->isPanelTrusted(),
             'isStaff'         => $this->isStaff(),
             'isSuperAdmin'    => $this->isSuperAdmin(),
+            'isRoot'          => $this->isRoot(),
             'isBanned'        => $this->isBanned(),
             'warnings'        => $this->warnings()->whereIn('warning_type', [Warning::TypeStrike, Warning::TypeWarning])->count(),
             'ban'             => new BanResource($this->getActiveBan()),
