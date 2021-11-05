@@ -15,7 +15,7 @@
         <nav class="flex items-center justify-between w-full px-12 py-4 text-white bg-gray-900 shadow">
             <!-- Left side -->
             <p class="italic">
-                <span class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-yellow-700 bg-warning rounded dark:bg-dark-warning text-sm float-right">
+                <span class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-yellow-700 bg-warning rounded dark:bg-dark-warning text-sm float-right" v-if="$page.auth.player.isRoot">
                     <i class="fas fa-tools"></i>
                     {{ t('global.root') }}
                 </span>
