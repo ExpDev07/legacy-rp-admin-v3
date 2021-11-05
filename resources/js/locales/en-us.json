@@ -30,6 +30,7 @@
         "enabled": "Enabled",
         "disabled": "Disabled",
         "filter": "Filter",
+        "root": "Root",
         "do_search": "Search",
         "status": {
             "online": "Online",
