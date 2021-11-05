@@ -14,7 +14,7 @@ class UpdateSystemScreenshotsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasColumn('system_screenshots', 'is_panel_trusted')) {
+        if (!Schema::hasColumn('system_screenshots', 'created_at')) {
             Schema::table('system_screenshots', function (Blueprint $table) {
                 $table->integer('created_at')->nullable(false)->default(0);
             });
