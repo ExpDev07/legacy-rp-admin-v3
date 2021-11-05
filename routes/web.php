@@ -185,7 +185,10 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Errors.
     Route::get('/errors/client', [ErrorController::class, 'client']);
+    Route::post('/errors/client/cycle', [ErrorController::class, 'clientCycle']);
+
     Route::get('/errors/server', [ErrorController::class, 'server']);
+    Route::post('/errors/server/cycle', [ErrorController::class, 'serverCycle']);
 
     // Exports.
     Route::get('/export/character/{character}', [PlayerCharacterController::class, 'export']);

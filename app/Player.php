@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Helpers\CacheHelper;
+use App\Helpers\GeneralHelper;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -208,7 +209,17 @@ class Player extends Model
      */
     public function isSuperAdmin(): bool
     {
-        return $this->is_super_admin ?? false;
+        return ($this->is_super_admin ?? false) || $this->isRoot();
+    }
+
+    /**
+     * Checks whether this player has root access to the panel.
+     *
+     * @return bool
+     */
+    public function isRoot(): bool
+    {
+        return GeneralHelper::isUserRoot($this->steam_identifier);
     }
 
     /**

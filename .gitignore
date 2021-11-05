@@ -32,3 +32,5 @@ tiles
 npm.log
 cron.sh
 /storage/screenshots/
+
+envs/root-config.json

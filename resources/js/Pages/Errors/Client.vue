@@ -11,6 +11,18 @@
         </portal>
 
         <portal to="actions">
+            <button class="px-4 py-2 text-sm font-semibold text-white bg-warning rounded dark:bg-dark-warning mr-1"
+                    type="button" @click="createCycle" v-if="$page.auth.player.isRoot">
+                <span v-if="isCreatingCycle">
+                    <i class="mr-1 fas fa-recycle animate-spin"></i>
+                    {{ t('global.loading') }}
+                </span>
+                <span v-else>
+                    <i class="mr-1 fas fa-recycle"></i>
+                    {{ t('errors.create_cycle') }}
+                </span>
+            </button>
+
             <button class="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
                     type="button" @click="refresh">
                 <i class="mr-1 fa fa-refresh"></i>
@@ -30,12 +42,23 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
                         <!-- Details -->
-                        <div class="w-full px-3">
+                        <div class="w-1/2 px-3">
                             <label class="block mb-3 mt-3" for="trace">
                                 {{ t('errors.trace') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
                                    id="trace" placeholder="attempted to index a nil value" v-model="filters.trace">
+                        </div>
+
+                        <!-- Cycle -->
+                        <div class="w-1/2 px-3">
+                            <label class="block mb-3 mt-3">
+                                {{ t('errors.cycle') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                            </label>
+                            <select v-model="filters.cycle" class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600">
+                                <option value="0">{{ t('errors.newest_cycle') }}</option>
+                                <option :value="cycle.cycle_number" v-for="cycle in cycles">#{{ cycle.cycle_number }} - {{ cycle.first_occurence * 1000 | formatTime(true) }}</option>
+                            </select>
                         </div>
                     </div>
                     <!-- Description -->
@@ -194,8 +217,13 @@ export default {
             type: Array,
             required: true,
         },
+        cycles: {
+            type: Array,
+            required: true,
+        },
         filters: {
             trace: String,
+            cycle: Number,
         },
         playerMap: {
             type: Object,
@@ -217,6 +245,7 @@ export default {
     data() {
         return {
             isLoading: false,
+            isCreatingCycle: false,
             showErrorDetail: false,
             errorDetail: null
         };
@@ -233,12 +262,27 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: ['errors', 'playerMap', 'time', 'links', 'page'],
+                    only: ['errors', 'cycles', 'playerMap', 'time', 'links', 'page'],
                 });
             } catch (e) {
             }
 
             this.isLoading = false;
+        },
+        async createCycle() {
+            if (this.isCreatingCycle || !confirm(this.t('errors.confirm_cycle'))) {
+                return;
+            }
+            this.isCreatingCycle = true;
+
+            try {
+                await axios.post('/errors/server/cycle');
+
+                window.location.href = '?cycle=0';
+            } catch (e) {
+            }
+
+            this.isCreatingCycle = false;
         },
         showError(error) {
             this.showErrorDetail = true;

@@ -15,6 +15,11 @@
         <nav class="flex items-center justify-between w-full px-12 py-4 text-white bg-gray-900 shadow">
             <!-- Left side -->
             <p class="italic">
+                <span class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-yellow-700 bg-warning rounded dark:bg-dark-warning text-sm float-right">
+                    <i class="fas fa-tools"></i>
+                    {{ t('global.root') }}
+                </span>
+
                 <!-- Toggle Dark mode -->
                 <button class="px-4 py-1 focus:outline-none font-semibold text-white text-sm rounded bg-gray-700 hover:bg-gray-600 text-base float-right" @click="toggleTheme" v-if="theme === 'light'">
                     <i class="fas fa-moon"></i>

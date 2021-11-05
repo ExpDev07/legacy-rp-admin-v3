@@ -91,6 +91,10 @@ class DetectionArea {
     }
 
     checkPlayer(player, characters, highlightedPeople) {
+        if (!player.character) {
+            return;
+        }
+
         const coords = player.location.toGame(),
             isInArea = dist(coords, this.location) <= this.radius && this.matchesFilters(player, characters, highlightedPeople);
 

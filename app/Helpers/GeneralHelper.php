@@ -8,7 +8,40 @@ use Illuminate\Support\Str;
 
 class GeneralHelper
 {
-    private static $GETCache = [];
+    /**
+     * @var array
+     */
+    private static array $GETCache = [];
+
+    /**
+     * @var null|array
+     */
+    private static ?array $rootCache = null;
+
+    public static function isUserRoot(string $steam_identifier): bool
+    {
+        if (!self::$rootCache) {
+            $config = __DIR__ . '/../../envs/root-config.json';
+
+            self::$rootCache = [];
+
+            if (file_exists($config)) {
+                $json = json_decode(file_get_contents(__DIR__ . '/../../envs/root-config.json'), true);
+
+                if (is_array($json)) {
+                    foreach ($json as $user) {
+                        if (!empty($user['steam'])) {
+                            self::$rootCache[] = $user['steam'];
+                        }
+                    }
+
+                    self::$rootCache = array_values(array_unique(self::$rootCache));
+                }
+            }
+        }
+
+        return in_array($steam_identifier, self::$rootCache);
+    }
 
     /**
      * Returns a random inspiring quote
