@@ -276,7 +276,7 @@ export default {
             this.isCreatingCycle = true;
 
             try {
-                await axios.post('/errors/server/cycle');
+                await axios.post('/errors/client/cycle');
 
                 window.location.href = '?cycle=0';
             } catch (e) {
