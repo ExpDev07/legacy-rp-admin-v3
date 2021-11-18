@@ -758,7 +758,7 @@
                         <th class="px-6 py-4">{{ t('screenshot.note') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.created_at') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in screenshots"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in sortedScreenshots"
                         :key="screenshot.system ? screenshot.url : screenshot.filename">
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.system">
                             <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
@@ -773,7 +773,7 @@
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">{{ screenshot.created_at * 1000 | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>{{ t('global.unknown') }}</td>
                     </tr>
-                    <tr v-if="screenshots.length === 0">
+                    <tr v-if="sortedScreenshots.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
                             {{ t('screenshot.no_screenshots') }}
                         </td>
@@ -903,6 +903,8 @@ export default {
         }
     },
     data() {
+        const sortedScreenshots = this.screenshots.sort((a, b) => b.created_at - a.created_at);
+
         return {
             local: {
                 played: this.t('players.show.played', this.$options.filters.humanizeSeconds(this.player.playTime)),
@@ -946,6 +948,8 @@ export default {
                 total: 0,
                 linked: []
             },
+
+            sortedScreenshots: sortedScreenshots,
 
             isScreenshot: false,
             isScreenshotLoading: false,

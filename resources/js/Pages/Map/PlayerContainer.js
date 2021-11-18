@@ -72,6 +72,10 @@ class PlayerContainer {
             onDutyList.ems = [];
         }
 
+        if (rawPlayer.fakeDisconnected) {
+            return;
+        }
+
         if (id in this.players) {
             this.players[id].update(rawPlayer, this.staffMembers, onDutyList);
         } else {
