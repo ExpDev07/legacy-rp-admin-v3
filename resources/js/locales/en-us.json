@@ -693,6 +693,7 @@
                 "fw": "Fixed Wing",
                 "cfi": "CFI",
                 "hw": "Heavyweight",
+                "hwh": "Heavyweight Helicopter",
                 "perf": "Performance",
                 "management": "Management",
                 "military": "Military",

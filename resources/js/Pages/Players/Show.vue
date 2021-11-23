@@ -67,6 +67,15 @@
             </div>
 
             <div class="flex flex-wrap justify-end">
+                <!-- Create screenshot -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isScreenshot = true; createScreenshot()"
+                    v-if="player.status.status === 'online' && this.perm.check(this.perm.PERM_SCREENSHOT)"
+                >
+                    <i class="fas fa-camera"></i>
+                    {{ t('screenshot.screenshot') }}
+                </button>
                 <!-- View on Map -->
                 <a
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -749,7 +758,7 @@
                         <th class="px-6 py-4">{{ t('screenshot.note') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.created_at') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in screenshots"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in sortedScreenshots"
                         :key="screenshot.system ? screenshot.url : screenshot.filename">
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.system">
                             <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
@@ -764,7 +773,7 @@
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">{{ screenshot.created_at * 1000 | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>{{ t('global.unknown') }}</td>
                     </tr>
-                    <tr v-if="screenshots.length === 0">
+                    <tr v-if="sortedScreenshots.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
                             {{ t('screenshot.no_screenshots') }}
                         </td>
@@ -803,6 +812,46 @@
 
         </v-section>
 
+        <!-- Screenshot -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isScreenshot && this.perm.check(this.perm.PERM_SCREENSHOT)">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                <h3 class="mb-2">
+                    {{ t('map.screenshot') }}
+                </h3>
+
+                <p v-if="screenshotError" class="text-danger dark:text-dark-danger font-semibold mb-3">
+                    {{ screenshotError }}
+                </p>
+
+                <a v-if="screenshotImage" class="w-full" :href="screenshotImage" target="_blank">
+                    <img :src="screenshotImage" alt="Screenshot" class="w-full" />
+                </a>
+                <p v-if="screenshotImage" class="mt-3 text-sm">
+                    {{ t('map.screenshot_description') }}
+                </p>
+
+                <div class="flex justify-center" v-if="isScreenshotLoading">
+                    <i class="fas fa-cog animate-spin text-xl"></i>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end mt-2">
+                    <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
+                            @click="isAttachingScreenshot = true"
+                            v-if="screenshotImage && screenshotSteam">
+                        {{ t('screenshot.title') }}
+                    </button>
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotSteam = null">
+                        {{ t('global.close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage" v-if="isAttachingScreenshot" />
+
     </div>
 </template>
 
@@ -813,6 +862,7 @@ import Badge from './../../Components/Badge';
 import Alert from './../../Components/Alert';
 import Card from './../../Components/Card';
 import Avatar from './../../Components/Avatar';
+import ScreenshotAttacher from './../../Components/ScreenshotAttacher';
 
 export default {
     layout: Layout,
@@ -822,6 +872,7 @@ export default {
         Alert,
         Card,
         Avatar,
+        ScreenshotAttacher,
     },
     props: {
         player: {
@@ -852,6 +903,8 @@ export default {
         }
     },
     data() {
+        const sortedScreenshots = this.screenshots.sort((a, b) => b.created_at - a.created_at);
+
         return {
             local: {
                 played: this.t('players.show.played', this.$options.filters.humanizeSeconds(this.player.playTime)),
@@ -894,12 +947,63 @@ export default {
             linkedAccounts: {
                 total: 0,
                 linked: []
-            }
+            },
+
+            sortedScreenshots: sortedScreenshots,
+
+            isScreenshot: false,
+            isScreenshotLoading: false,
+            screenshotImage: null,
+            screenshotSteam: null,
+            screenshotError: null,
+            isAttachingScreenshot: false
         }
     },
     methods: {
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
+        },
+        async createScreenshot() {
+            if (this.isScreenshotLoading) {
+                return;
+            }
+            this.isScreenshotLoading = true;
+            this.screenshotError = null;
+
+            this.screenshotImage = null;
+            this.screenshotSteam = null;
+
+            try {
+                const result = await axios.post('/api/screenshot/' + this.player.status.serverName + '/' + this.player.status.serverId);
+                this.isScreenshotLoading = false;
+
+                if (result.data) {
+                    if (result.data.status) {
+                        console.info('Screenshot of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.steam);
+
+                        this.screenshotImage = result.data.data.url;
+                        this.screenshotSteam = result.data.data.steam;
+                    } else {
+                        this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
+                    }
+                }
+            } catch(e) {
+                this.screenshotError = this.t('map.screenshot_failed');
+            }
+        },
+        screenshotAttached(status, message) {
+            this.isAttachingScreenshot = false;
+
+            if (message) {
+                alert(message);
+            }
+
+            if (status) {
+                this.isScreenshot = false;
+                this.screenshotImage = null;
+                this.screenshotError = null;
+                this.screenshotSteam = null;
+            }
         },
         async showLinked() {
             this.isShowingLinkedLoading = true;

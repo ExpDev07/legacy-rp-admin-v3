@@ -10,9 +10,10 @@
                     class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale"
                            v-if="character.characterDeleted">
-                        <span class="font-semibold">{{
-                                t('players.edit.deleted')
-                            }}: {{ $moment(character.characterDeletionTimestamp).format('l') }}</span>
+                        <span class="font-semibold">
+                            {{ t('players.edit.deleted') }}:
+                            {{ $moment(character.characterDeletionTimestamp).format('l') }}
+                        </span>
                     </badge>
                 </div>
             </div>
@@ -193,9 +194,9 @@
                                 <tr>
                                     <th class="font-semibold p-2">{{ t('players.edit.phone') }}</th>
                                     <td class="p-2">
-                                        <span class="block border-gray-500 border-b-2 px-3 py-2">{{
-                                                character.phoneNumber
-                                            }}</span>
+                                        <span class="block border-gray-500 border-b-2 px-3 py-2">
+                                            {{ character.phoneNumber }}
+                                        </span>
                                     </td>
                                 </tr>
                             </table>
@@ -1079,7 +1080,7 @@ export default {
             };
         },
         getAvailableLicenses() {
-            return ["heli", "fw", "cfi", "hw", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
+            return ["heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
         },
         setPayCheck() {
             for (let x = 0; x < jobsObject.length; x++) {

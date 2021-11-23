@@ -78,6 +78,7 @@ class DataCompressor {
             speed: coordsArray.length >= 5 ? parseFloat(coordsArray[4]) : 0.0,
             steamIdentifier: this.get('h', ''),
             vehicle: vehicle,
+            fakeDisconnected: this.get('j', false),
         };
     }
 
