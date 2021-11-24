@@ -2,7 +2,7 @@
     <div>
 
         <portal to="title">
-            <h1 class="dark:text-white">
+            <h1 class="dark:text-white" id="queueTitle">
                 {{ t('queue.title') }}
             </h1>
             <p>
@@ -137,7 +137,7 @@ export default {
                 }
 
                 this.$nextTick(async () => {
-                    $('#responseLabel')[0].scrollIntoView();
+                    $('#queueTitle')[0].scrollIntoView();
 
                     await this.refresh();
 
