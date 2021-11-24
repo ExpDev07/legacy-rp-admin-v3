@@ -32,6 +32,7 @@ use App\Http\Controllers\PlayerCharacterController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
+use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ScreenshotController;
 use App\Http\Controllers\SerialsController;
 use App\Http\Controllers\ServerController;
@@ -193,6 +194,11 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Exports.
     Route::get('/export/character/{character}', [PlayerCharacterController::class, 'export']);
     Route::get('/export/screenshot/{screenshot}', [PlayerRouteController::class, 'exportScreenshot']);
+
+    // Queue.
+    Route::get('/queue/{server}', [QueueController::class, 'render']);
+    Route::post('/skip_queue/{server}/{steamIdentifier}', [QueueController::class, 'skip']);
+    Route::get('/api/queue/{server}', [QueueController::class, 'api']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

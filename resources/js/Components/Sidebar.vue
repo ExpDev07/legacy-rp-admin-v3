@@ -85,7 +85,7 @@ export default {
         Icon,
     },
     data() {
-        return {
+        let data = {
             url: this.$page.url,
             links: [
                 {
@@ -227,6 +227,30 @@ export default {
                 }
             ],
         };
+
+        const servers = this.$page.auth.servers;
+
+        if (servers) {
+            let queue = {
+                label: this.t('queue.title'),
+                icon: 'subway',
+                private: true,
+                sub: []
+            };
+
+            $.each(servers, function(key, name) {
+                queue.sub.push({
+                    label: name.toUpperCase(),
+                    icon: 'subway',
+                    url: '/queue/' + name,
+                    private: true,
+                });
+            });
+
+            data.links.push(queue);
+        }
+
+        return data;
     },
     watch: {
         '$page.url': function (url) {

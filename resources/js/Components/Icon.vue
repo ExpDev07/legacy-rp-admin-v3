@@ -67,6 +67,7 @@
     <i class="fas fa-spider" v-else-if="name === 'spider'"></i>
     <i class="fas fa-viruses" v-else-if="name === 'virus'"></i>
     <i class="fas fa-images" v-else-if="name === 'images'"></i>
+    <i class="fas fa-subway" v-else-if="name === 'subway'"></i>
 </template>
 
 <script>

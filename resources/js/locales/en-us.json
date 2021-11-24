@@ -66,6 +66,18 @@
         "overwatch": "Overwatch",
         "errors": "Errors"
     },
+    "queue": {
+        "title": "Queue",
+        "description": "List all players currently in the queue.",
+        "queuePosition": "Pos",
+        "steamIdentifier": "Player",
+        "consoleName": "Console name",
+        "priorityName": "Priority type",
+        "none": "Nobody in queue.",
+        "skip": "Make player skip queue",
+        "skip_confirm": "Are you sure you want to make this player skip the queue?",
+        "no_prio": "No priority"
+    },
     "staff_chat": {
         "toggle": "Toggle staff-chat",
         "failed": "Failed to connect!",
