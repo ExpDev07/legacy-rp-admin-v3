@@ -198,6 +198,22 @@ class OPFWHelper
     }
 
     /**
+     * Updates someones queue position
+     *
+     * @param string $serverIp
+     * @param string $steamIdentifier
+     * @param int $targetPosition
+     * @return OPFWResponse
+     */
+    public static function updateQueuePosition(string $serverIp, string $steamIdentifier, int $targetPosition): OPFWResponse
+    {
+        return self::executeRoute($serverIp . 'execute/setQueuePosition', [
+            'steamIdentifier' => $steamIdentifier,
+            'targetPosition'  => $targetPosition,
+        ], 'PATCH');
+    }
+
+    /**
      * Gets the world.json
      *
      * @param string $serverIp
@@ -211,12 +227,39 @@ class OPFWHelper
         if (CacheHelper::exists($cache)) {
             return CacheHelper::read($cache, []);
         } else {
-            $data = self::executeRoute($serverIp . 'world.json', [], false, 3);
+            $data = self::executeRoute($serverIp . 'world.json', [], 'GET', 3);
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 10);
             } else if (!$data->status) {
                 CacheHelper::write($cache, [], 10);
+            }
+
+            return $data->data;
+        }
+    }
+
+    /**
+     * Gets the queue.json
+     *
+     * @param string $serverIp
+     * @param bool $forceRefresh
+     * @return array|null
+     */
+    public static function getQueueJSON(string $serverIp, bool $forceRefresh = false): ?array
+    {
+        $serverIp = Server::fixApiUrl($serverIp);
+        $cache = 'queue_json_' . md5($serverIp);
+
+        if (CacheHelper::exists($cache) && !$forceRefresh) {
+            return CacheHelper::read($cache, []);
+        } else {
+            $data = self::executeRoute($serverIp . 'queue.json', [], 'GET', 3);
+
+            if ($data->data) {
+                CacheHelper::write($cache, $data->data, 3);
+            } else if (!$data->status) {
+                CacheHelper::write($cache, [], 3);
             }
 
             return $data->data;
@@ -237,7 +280,7 @@ class OPFWHelper
         if (CacheHelper::exists($cache)) {
             return CacheHelper::read($cache, []);
         } else {
-            $data = self::executeRoute($serverIp . 'jobs.json', [], false, 3);
+            $data = self::executeRoute($serverIp . 'jobs.json', [], 'GET', 3);
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 12 * CacheHelper::HOUR);
@@ -263,7 +306,7 @@ class OPFWHelper
         if (CacheHelper::exists($cache)) {
             return CacheHelper::read($cache, []);
         } else {
-            $data = self::executeRoute($serverIp . 'vehicles.json', [], false, 3);
+            $data = self::executeRoute($serverIp . 'vehicles.json', [], 'GET', 3);
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 12 * CacheHelper::HOUR);
@@ -297,11 +340,11 @@ class OPFWHelper
      *
      * @param string $route
      * @param array $data
-     * @param bool $isPost
+     * @param string $requestType
      * @param int $timeout
      * @return OPFWResponse
      */
-    private static function executeRoute(string $route, array $data, bool $isPost = true, int $timeout = 10): OPFWResponse
+    private static function executeRoute(string $route, array $data, string $requestType = 'POST', int $timeout = 10): OPFWResponse
     {
         $token = env('OP_FW_TOKEN');
 
@@ -318,7 +361,7 @@ class OPFWHelper
         );
         for ($x = 0; $x < self::RetryAttempts; $x++) {
             try {
-                $res = $client->request($isPost ? 'POST' : 'GET', $route, [
+                $res = $client->request($requestType, $route, [
                     'query'   => $data,
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token,

@@ -186,6 +186,23 @@ class Server extends Model
     }
 
     /**
+     * Returns all server names
+     *
+     * @return array
+     */
+    public static function getAllServerNames(): array
+    {
+        $rawServerIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        $serverNames = [];
+        foreach ($rawServerIps as $rawServerIp) {
+            $serverNames[] = Server::getServerName($rawServerIp);
+        }
+
+        return $serverNames;
+    }
+
+    /**
      * Returns the first server found
      *
      * @return string|null

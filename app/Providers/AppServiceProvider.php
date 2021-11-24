@@ -73,6 +73,7 @@ class AppServiceProvider extends ServiceProvider
                     'token'       => SessionHelper::getInstance()->getSessionKey(),
                     'cluster'     => CLUSTER,
                     'server'      => Server::getServerName(Server::getFirstServer()),
+                    'servers'     => Server::getAllServerNames(),
                 ];
             },
 
