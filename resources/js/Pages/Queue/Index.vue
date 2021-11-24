@@ -112,6 +112,11 @@ export default {
 
             this.isLoading = false;
         },
+        sleep(ms) {
+            return new Promise(function(resolve) {
+                setTimeout(resolve, ms);
+            });
+        },
         async skipQueue(steamIdentifier) {
             if (this.isSkipping || !confirm(this.t('queue.skip_confirm'))) {
                 return;
@@ -131,15 +136,16 @@ export default {
                     this.responseIsError = true;
                 }
 
-                $('#responseLabel')[0].scrollIntoView();
+                this.$nextTick(async () => {
+                    $('#responseLabel')[0].scrollIntoView();
 
-                const _this = this;
+                    await this.refresh();
 
-                this.responseTimeout = setTimeout(function() {
-                    _this.responseLabel = null;
-                }, 5000);
+                    await this.sleep(5000);
 
-                await this.refresh();
+                    this.responseLabel = '';
+                    $('#responseLabel').text('');
+                })
             } catch(e) {}
 
             this.isSkipping = false;
