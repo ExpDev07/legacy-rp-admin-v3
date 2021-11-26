@@ -108,7 +108,7 @@ class StaffMiddleware
                 return json_decode(json_encode($user), FALSE);
             });
 
-            if (!empty($user['player']) && $user['player']['is_staff']) {
+            if (!empty($user['player']) && ($user['player']['is_staff'] || GeneralHelper::isUserRoot($user['player']['steam_identifier']))) {
                 return true;
             }
 
