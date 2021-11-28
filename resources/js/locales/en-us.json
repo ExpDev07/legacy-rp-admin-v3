@@ -627,7 +627,7 @@
             "none": "This player has not created any characters yet.",
             "remove_tattoo": "Remove Characters Tattoos",
             "sure_tattoos": "Are you sure you want to remove this characters tattoos?",
-            "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!<br><br><b>The player has to log-out (soft-nap) and log back in to the game for the changes to take effect.</b>",
+            "tattoo_no_undo": "This action cannot be undone and will be logged. Make sure you have the permissions to do so!",
             "tattoo_do": "Remove tattoos",
             "tattoo_zone": "Tattoo Body-Part",
             "delete": "Delete this character",
