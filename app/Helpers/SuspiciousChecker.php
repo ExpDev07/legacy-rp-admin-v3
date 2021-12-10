@@ -128,30 +128,34 @@ class SuspiciousChecker
      * Non stackable items that cannot be obtained naturally
      */
     const SingleUnusualItems = [
-        'Fist',
-        'Flare Gun',
-        'Up-n-Atomizer',
-        'Ceramic Pistol',
-        'Navy Revolver',
-        'Unholy Hellbringer',
-        'MG',
-        'Combat MG',
-        'Combat MG Mk II',
-        'RPG',
-        'Grenade Launcher',
-        'Grenade Launcher Smoke',
-        'Minigun',
-        'Firework Launcher',
-        'Railgun',
-        'Homing Launcher',
-        'Compact Grenade',
-        'Widowmaker',
-        'Molotov Cocktail',
-        'Sticky Bomb',
-        'Proximity Mines',
-        'Pipe Bombs',
-        'Tear Gas',
-        'Flare',
+        'weapon_unarmed',
+        'weapon_flaregun',
+        'weapon_raypistol',
+        'weapon_raycarbine',
+        'weapon_mg',
+        'weapon_combatmg',
+        'weapon_combatmg_mk2',
+        'weapon_gusenberg',
+        'weapon_sniperrifle',
+        'weapon_heavysniper',
+        'weapon_heavysniper_mk2',
+        'weapon_marksmanrifle',
+        'weapon_marksmanrifle_mk2',
+        'weapon_rpg',
+        'weapon_grenadelauncher',
+        'weapon_grenadelauncher_smoke',
+        'weapon_minigun',
+        'weapon_firework',
+        'weapon_railgun',
+        'weapon_hominglauncher',
+        'weapon_compactlauncher',
+        'weapon_rayminigun',
+        'weapon_grenade',
+        'weapon_molotov',
+        'weapon_stickybomb',
+        'weapon_proxmine',
+        'weapon_pipebomb',
+        'weapon_flare',
     ];
 
     /**
@@ -162,13 +166,14 @@ class SuspiciousChecker
     public static function findInvalidItems(): array
     {
         $items = self::SingleUnusualItems;
-        $key = 'unusual_items_' . md5(json_encode($items));
+
+        $key = 'illegal_items_' . md5(json_encode($items));
 
         if (CacheHelper::exists($key)) {
             return CacheHelper::read($key, []);
         }
 
-        $sql = "SELECT `identifier`, `details`, `timestamp` FROM `user_logs` WHERE action = 'Item Moved' AND SUBSTRING_INDEX(SUBSTRING_INDEX(details, ' moved ', -1), ' to ', 1) IN ('1x " . implode('\', \'1x ', $items) . "')";
+        $sql = "SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as amount FROM `inventories` WHERE item_name IN ('" . implode('\', \'', $items) . "') GROUP BY () ORDER BY id DESC";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 

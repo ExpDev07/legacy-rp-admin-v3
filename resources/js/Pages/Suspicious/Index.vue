@@ -26,7 +26,8 @@
                             <label class="block mb-2" for="logType">
                                 {{ t('suspicious.type') }}
                             </label>
-                            <select class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="logType" v-model="filters.logType">
+                            <select class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="logType"
+                                    v-model="filters.logType">
                                 <option value="" disabled>{{ t('suspicious.types.none') }}</option>
                                 <option value="items">{{ t('suspicious.types.items') }}</option>
                                 <option value="characters">{{ t('suspicious.types.characters') }}</option>
@@ -39,12 +40,14 @@
                         <!-- Search button -->
                         <div class="w-1/3 px-3">
                             <label class="block mb-2">&nbsp;</label>
-                            <button class="px-5 block py-2 w-full font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
+                            <button
+                                class="px-5 block py-2 w-full font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg"
+                                @click="refresh">
                                 <span v-if="!isLoading">
                                     <i class="fas fa-search"></i>
                                     {{ t('suspicious.search') }}
                                 </span>
-                                    <span v-else>
+                                <span v-else>
                                     <i class="fas fa-cog animate-spin"></i>
                                     {{ t('global.loading') }}
                                 </span>
@@ -61,7 +64,8 @@
                 <h2>
                     {{ t('logs.logs') }}
                 </h2>
-                <p class="mb-2 text-sm" v-if="logType === 'items' || logType === 'pawn' || logType === 'warehouse' || logType === 'unusual' || logType === 'inventories'">
+                <p class="mb-2 text-sm"
+                   v-if="logType === 'pawn' || logType === 'items' || logType === 'warehouse' || logType === 'unusual' || logType === 'inventories'">
                     {{ t('suspicious.cached') }}
                 </p>
                 <p class="text-muted dark:text-dark-muted text-xs">
@@ -78,7 +82,7 @@
                         <th class="px-6 py-4">{{ t('suspicious.characters.bank') }}</th>
                         <th class="px-6 py-4">{{ t('suspicious.characters.stocks_balance') }}</th>
                     </tr>
-                    <tr class="font-semibold text-left" v-else-if="logType === 'inventories'">
+                    <tr class="font-semibold text-left" v-else-if="logType === 'inventories' || logType === 'items'">
                         <th class="px-6 py-4 w-3/4">{{ t('suspicious.items.item') }}</th>
                         <th class="px-6 py-4 w-1/4">{{ t('suspicious.items.inventory') }}</th>
                     </tr>
@@ -91,35 +95,46 @@
                     <!-- Items -->
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="logType === 'items'">
                         <td class="px-6 py-3 border-t">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.identifier">
-                                {{ playerName(log.identifier) }}
+                            <pre class="whitespace-pre-wrap text-xs">{{ log.item_name }}</pre>
+                        </td>
+                        <td class="px-6 py-3 border-t">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/inventory/' + log.inventory_name">
+                                {{ log.inventory_name }}
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t" v-html="parseLog(log.details)">{{ parseLog(log.details) }}</td>
-                        <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
                     </tr>
 
                     <!-- Inventories -->
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="logType === 'inventories'">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs"
+                        v-if="logType === 'inventories'">
                         <td class="px-6 py-3 border-t w-3/4">
-                            <pre class="whitespace-pre-wrap text-xs">{{ log.items }}</pre>
+                            <pre class="whitespace-pre-wrap text-xs">{{ log.amount }}x {{ log.items }}</pre>
                         </td>
                         <td class="px-6 py-3 border-t w-1/4">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/inventory/' + log.inventory">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/inventory/' + log.inventory">
                                 {{ log.inventory }}
                             </inertia-link>
                         </td>
                     </tr>
 
                     <!-- Characters -->
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="logType === 'characters'">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs"
+                        v-if="logType === 'characters'">
                         <td class="px-6 py-3 border-t">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steam_identifier">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/players/' + log.steam_identifier">
                                 {{ playerName(log.steam_identifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.steam_identifier + '/characters/' + log.character_id + '/edit'">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/players/' + log.steam_identifier + '/characters/' + log.character_id + '/edit'">
                                 {{ log.first_name + ' ' + log.last_name }}
                             </inertia-link>
                         </td>
@@ -135,9 +150,12 @@
                     </tr>
 
                     <!-- Default -->
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs" v-if="['pawn', 'warehouse', 'unusual'].includes(logType)">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs"
+                        v-if="['pawn', 'warehouse', 'unusual'].includes(logType)">
                         <td class="px-6 py-3 border-t">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + log.identifier">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/players/' + log.identifier">
                                 {{ playerName(log.identifier) }}
                             </inertia-link>
                         </td>
@@ -250,9 +268,10 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'logs', 'time', 'links', 'page', 'total', 'logType', 'playerMap' ],
+                    only: ['logs', 'time', 'links', 'page', 'total', 'logType', 'playerMap'],
                 });
-            } catch(e) {}
+            } catch (e) {
+            }
 
             this.isLoading = false;
         },
