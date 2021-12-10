@@ -173,7 +173,7 @@ class SuspiciousChecker
             return CacheHelper::read($key, []);
         }
 
-        $sql = "SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as amount FROM `inventories` WHERE item_name IN ('" . implode('\', \'', $items) . "') GROUP BY () ORDER BY id DESC";
+        $sql = "SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as amount FROM `inventories` WHERE item_name IN ('" . implode('\', \'', $items) . "') GROUP BY CONCAT(inventory_name, item_name) ORDER BY id DESC";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
