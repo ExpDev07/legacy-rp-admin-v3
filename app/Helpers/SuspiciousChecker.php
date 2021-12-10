@@ -135,7 +135,6 @@ class SuspiciousChecker
         'weapon_mg',
         'weapon_combatmg',
         'weapon_combatmg_mk2',
-        'weapon_gusenberg',
         'weapon_sniperrifle',
         'weapon_heavysniper',
         'weapon_heavysniper_mk2',
