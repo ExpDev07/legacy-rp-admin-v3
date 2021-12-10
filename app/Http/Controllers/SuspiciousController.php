@@ -66,7 +66,7 @@ class SuspiciousController extends Controller
 
         $logs = array_slice($logs, ($page - 1) * 15, 15);
 
-        $map = $type == 'inventories' ? ['none' => 'none'] : Player::fetchSteamPlayerNameMap($logs, $map);
+        $map = $type == 'inventories' || $type == 'items' ? ['none' => 'none'] : Player::fetchSteamPlayerNameMap($logs, $map);
 
         $end = round(microtime(true) * 1000);
 
