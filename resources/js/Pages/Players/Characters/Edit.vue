@@ -566,6 +566,7 @@
                                     <option :value="4">{{ t('players.characters.vehicle.plates.4') }}</option>
                                     <option :value="2">{{ t('players.characters.vehicle.plates.2') }}</option>
                                     <option :value="1">{{ t('players.characters.vehicle.plates.1') }}</option>
+                                    <option :value="5">{{ t('players.characters.vehicle.plates.5') }}</option>
                                 </select>
                             </td>
                         </tr>
