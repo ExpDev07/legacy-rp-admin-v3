@@ -17,8 +17,13 @@ class Vector3 {
     static fromMapCoords(lng, lat, alt) {
         let v = new Vector3();
 
-        v.x = mapNumber(lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x);
-        v.y = mapNumber(lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y);
+        if (lng > conf.cayo.minMap.x && lat < conf.cayo.minMap.y) {
+            v.x = mapNumber(lng, conf.cayo.map.bounds.min.x, conf.cayo.map.bounds.max.x, conf.cayo.game.bounds.min.x, conf.cayo.game.bounds.max.x);
+            v.y = mapNumber(lat, conf.cayo.map.bounds.min.y, conf.cayo.map.bounds.max.y, conf.cayo.game.bounds.min.y, conf.cayo.game.bounds.max.y);
+        } else {
+            v.x = mapNumber(lng, conf.map.bounds.min.x, conf.map.bounds.max.x, conf.game.bounds.min.x, conf.game.bounds.max.x);
+            v.y = mapNumber(lat, conf.map.bounds.min.y, conf.map.bounds.max.y, conf.game.bounds.min.y, conf.game.bounds.max.y);
+        }
         v.z = Math.round(alt);
 
         return v;
