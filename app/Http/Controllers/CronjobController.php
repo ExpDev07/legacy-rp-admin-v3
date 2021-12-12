@@ -63,7 +63,7 @@ class CronjobController extends Controller
     private function updateStatistic(Statistic $statistic, int $current)
     {
         $date = date('Y-m-d');
-        $statistic::query()->where('last_updated', '<', time() - CacheHelper::MONTH)->forceDelete();
+        $statistic::query()->where('last_updated', '<', time() - 12 * CacheHelper::MONTH)->forceDelete();
 
         /**
          * @var $today Statistic|null
