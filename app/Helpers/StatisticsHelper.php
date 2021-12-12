@@ -343,11 +343,11 @@ class StatisticsHelper
         $stats = DB::table('casino_logs')
             ->where('game', '=', $game)
             ->selectRaw(
-                'MIN(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `min_earned`, ' .
-                'MAX(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `max_earned`, ' .
-                'SUM(`money_spent`) / COUNT(`money_spent`) as `average_spent`, ' .
-                'SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) / COUNT(`money_earned`) as `average_earned`, ' .
-                'SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) / SUM(`money_spent`) as `return_rate`, ' .
+                'MIN(`money_won`) as `min_earned`, ' .
+                'MAX(`money_won`) as `max_earned`, ' .
+                'SUM(`bet_placed`) / COUNT(`bet_placed`) as `average_spent`, ' .
+                'SUM(`money_won`) / COUNT(`money_won`) as `average_earned`, ' .
+                'SUM(`money_won`) / SUM(`bet_placed`) as `return_rate`, ' .
                 'DATE_FORMAT(`timestamp`, \'%Y-%m-%d\') AS `day`'
             )
             ->groupByRaw('DATE_FORMAT(`timestamp`, \'%Y-%m-%d\')')
@@ -358,7 +358,7 @@ class StatisticsHelper
             $q->from('casino_logs')
                 ->where('game', '=', $game)
                 ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-                ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`')
+                ->selectRaw('SUM(`money_won`) as `win`, `casino_logs`.`steam_identifier`')
                 ->groupBy('steam_identifier')
                 ->orderByDesc('win')
                 ->limit(5);
@@ -371,7 +371,7 @@ class StatisticsHelper
             $q->from('casino_logs')
                 ->where('game', '=', $game)
                 ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-                ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`')
+                ->selectRaw('SUM(`money_won`) as `win`, `casino_logs`.`steam_identifier`')
                 ->groupBy('steam_identifier')
                 ->orderBy('win')
                 ->limit(5);
