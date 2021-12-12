@@ -14,7 +14,7 @@ class UpdateCasinoLogsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasColumn('casino_logs', 'cycle_number')) {
+        if (!Schema::hasColumn('casino_logs', 'money_won')) {
             Schema::table('casino_logs', function (Blueprint $table) {
                 $table->integer('money_won')->nullable(false)->default(0);
                 $table->integer('bet_placed')->nullable(false)->default(0);
