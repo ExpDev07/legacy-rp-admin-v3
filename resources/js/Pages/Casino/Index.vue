@@ -133,8 +133,8 @@
                             {{ log.character_id }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">{{ log.game }}</td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ numberFormat(log.money_spent, 0, true) }}</td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ numberFormat(log.money_earned, 0, true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ numberFormat(log.bet_placed, 0, true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ numberFormat(log.money_won, 0, true) }}</td>
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ log.details }}
                         </td>

@@ -43,20 +43,20 @@ class CasinoLogController extends Controller
         if ($result = $request->input('result')) {
             switch ($result) {
                 case 'win':
-                    $query->whereRaw('money_spent < money_earned');
+                    $query->whereRaw('money_won > 0');
                     break;
                 case 'loss':
-                    $query->whereRaw('money_earned < money_spent');
+                    $query->whereRaw('money_won < 0');
                     break;
                 case 'draw':
-                    $query->whereRaw('money_spent = money_earned');
+                    $query->whereRaw('money_won = 0');
                     break;
             }
         }
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $query->select(['id', 'steam_identifier', 'character_id', 'game', 'money_spent', 'money_earned', 'details', 'timestamp']);
+        $query->select(['id', 'steam_identifier', 'character_id', 'game', 'money_won', 'bet_placed', 'details', 'timestamp']);
         $query->limit(15)->offset(($page - 1) * 15);
 
         $logs = $query->get()->toArray();
