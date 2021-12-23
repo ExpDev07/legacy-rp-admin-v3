@@ -38,8 +38,8 @@ class CasinoLog extends Model
         'steam_identifier',
         'character_id',
         'game',
-        'money_spent',
-        'money_earned',
+        'money_won',
+        'bet_placed',
         'details',
         'timestamp',
     ];
