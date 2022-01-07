@@ -127,7 +127,7 @@ class Player {
             'server_' + this.player.source,
             this.player.steam.toLowerCase(),
             this.character ? 'player_' + this.character.id : null,
-            this.vehicle ? 'plate_' + this.vehicle.plate.toLowerCase() : null
+            this.vehicle && this.vehicle.plate ? 'plate_' + this.vehicle.plate.toLowerCase() : null
         ].includes(track);
 
         if (isTracked && track !== this.player.steam) {
