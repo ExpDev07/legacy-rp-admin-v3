@@ -257,7 +257,7 @@ class PlayerRouteController extends Controller
 
         $screenshotUrl = trim($request->input('url')) ?? '';
 
-        $re = '/^https:\/\/api\.op-framework\.com\/files\/public\/\d{1,2}-\d{2}-\d{4}-\w+\.jpg$/m';
+        $re = '/^https:\/\/api\.op-framework\.com\/files\/public\/\d{1,2}-\d{1,2}-\d{4}-\w+\.jpg$/m';
         if (!preg_match($re, $screenshotUrl)) {
             return self::json(false, null, 'Invalid screenshot url');
         }
