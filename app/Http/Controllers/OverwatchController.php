@@ -48,6 +48,10 @@ class OverwatchController extends Controller
 
         $players = Player::getAllOnlinePlayers(true);
 
+        $players = array_filter($players, function($player) {
+            return $player && $player['character'];
+        });
+
         if (!empty($players)) {
             $steam = array_rand($players);
             $player = $players[$steam];
