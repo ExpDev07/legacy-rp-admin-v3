@@ -121,12 +121,13 @@ class Player {
     }
 
     isTracked() {
-        const track = window.location.hash.substr(1);
+        const track = window.location.hash.substr(1).toLowerCase();
 
         const isTracked = [
             'server_' + this.player.source,
-            this.player.steam,
-            this.character ? 'player_' + this.character.id : null
+            this.player.steam.toLowerCase(),
+            this.character ? 'player_' + this.character.id : null,
+            this.vehicle && this.vehicle.plate ? 'plate_' + this.vehicle.plate.toLowerCase() : null
         ].includes(track);
 
         if (isTracked && track !== this.player.steam) {
