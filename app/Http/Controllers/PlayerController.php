@@ -94,8 +94,18 @@ class PlayerController extends Controller
                 return DB::connection()->getPdo()->quote($player);
             }, $players);
 
+            $orderField = $request->input('order') ?? null;
+            $orderDirection = $request->input('desc') ? 'DESC' : 'ASC';
+
+            if (!$orderField || !in_array($orderField, ['last_connection', 'playtime', 'player_name'])) {
+                $orderField = 'last_connection';
+                $orderDirection = 'DESC';
+            }
+
             if (!empty($players)) {
-                $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, last_connection DESC');
+                $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
+            } else {
+                $query->orderByDesc($orderField);
             }
         }
 
