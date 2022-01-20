@@ -91,20 +91,24 @@ class Notifier {
     }
 
     trigger(target, id, player, vue) {
-        if (target in this.notifications && id in this.notifications[target]) {
-            switch (target) {
-                case 'load':
-                    this.playSound('player-joined');
-                    this.notification('Loaded ' + player.name, player.name + ' (' + player.steam + ') has loaded into a character.', vue);
-                    break;
-                case 'unload':
-                    this.playSound('player-left');
-                    this.notification('Unloaded ' + player.name, player.name + ' (' + player.steam + ') unloaded or left the server.', vue);
-                    break;
-                case 'invisible':
-                    this.playSound('player-invisible');
-                    this.notification(player.name + ' just went invisible', player.name + ' (' + player.steam + ') just went invisible.', vue);
-                    break;
+        if (target in this.notifications) {
+            const hasGlob = Object.keys(this.notifications[target]).some(entry => entry === '*');
+
+            if (id in this.notifications[target] || hasGlob) {
+                switch (target) {
+                    case 'load':
+                        this.playSound('player-joined');
+                        this.notification('Loaded ' + player.name, player.name + ' (' + player.steam + ') has loaded into a character.', vue);
+                        break;
+                    case 'unload':
+                        this.playSound('player-left');
+                        this.notification('Unloaded ' + player.name, player.name + ' (' + player.steam + ') unloaded or left the server.', vue);
+                        break;
+                    case 'invisible':
+                        this.playSound('player-invisible');
+                        this.notification(player.name + ' just went invisible', player.name + ' (' + player.steam + ') just went invisible.', vue);
+                        break;
+                }
             }
         }
     }

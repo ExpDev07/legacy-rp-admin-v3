@@ -559,8 +559,9 @@
                             <tr v-for="(player, steam) in container.notifier.notifications.invisible"
                                 :key="'invisible_' + steam">
                                 <td class="pr-2">
+                                    <span class="dark:text-yellow-500 text-yellow-600" v-if="steam === '*'">* (any)</span>
                                     <a target="_blank" :href="'/players/' + steam"
-                                       class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{ steam }}</a>
                                     <a target="_blank" :href="'/players/' + steam"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
@@ -574,8 +575,9 @@
                             </tr>
                             <tr v-for="(player, steam) in container.notifier.notifications.load" :key="'load_' + steam">
                                 <td class="pr-2">
+                                    <span class="dark:text-yellow-500 text-yellow-600" v-if="steam === '*'">* (any)</span>
                                     <a target="_blank" :href="'/players/' + steam"
-                                       class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{ steam }}</a>
                                     <a target="_blank" :href="'/players/' + steam"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
@@ -590,8 +592,9 @@
                             <tr v-for="(player, steam) in container.notifier.notifications.unload"
                                 :key="'unload_' + steam">
                                 <td class="pr-2">
+                                    <span class="dark:text-yellow-500 text-yellow-600" v-if="steam === '*'">* (any)</span>
                                     <a target="_blank" :href="'/players/' + steam"
-                                       class="dark:text-green-400 text-green-600" v-if="player === true">{{ steam }}</a>
+                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{ steam }}</a>
                                     <a target="_blank" :href="'/players/' + steam"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
