@@ -24,7 +24,7 @@
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.whitelisted">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="whitelisted">
                         <span class="font-semibold">{{ t('global.whitelisted') }}</span>
                     </badge>
 
@@ -904,6 +904,9 @@ export default {
         },
         kickReason: {
             type: String
+        },
+        whitelisted: {
+            type: Boolean
         }
     },
     data() {
