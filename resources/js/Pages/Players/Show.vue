@@ -24,6 +24,10 @@
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.whitelisted">
+                        <span class="font-semibold">{{ t('global.whitelisted') }}</span>
+                    </badge>
+
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
                            v-if="player.status.status === 'online'">
                         <span class="font-semibold">{{ t('global.status.online') }}

@@ -150,6 +150,11 @@ class PlayerController extends Controller
      */
     public function show(Request $request, Player $player): Response
     {
+        $whitelisted = DB::table('user_whitelist')
+            ->select(['steam_identifier'])
+            ->where('steam_identifier', '=', $player->steam_identifier)
+            ->first();
+
         return Inertia::render('Players/Show', [
             'player'      => new PlayerResource($player),
             'characters'  => CharacterResource::collection($player->characters),
@@ -158,6 +163,7 @@ class PlayerController extends Controller
             'discord'     => $player->getDiscordInfo(),
             'kickReason'  => trim($request->query('kick')) ?? '',
             'screenshots' => Screenshot::getAllScreenshotsForPlayer($player->steam_identifier),
+            'whitelisted' => !!$whitelisted,
         ]);
     }
 
