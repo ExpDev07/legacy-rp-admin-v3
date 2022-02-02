@@ -1034,8 +1034,9 @@ export default {
                 this.heatmapLayer = L.heatLayer(heatmap, {
                     radius: 10,
                     minOpacity: 0.65,
-                    maxZoom: 6,
-                    max: 100
+                    maxZoom: 5,
+                    max: 100,
+                    blur: 15
                 });
 
                 this.heatmapLayer.addTo(this.map);
@@ -1491,6 +1492,10 @@ export default {
                 $('#map_title').text(_this.t('map.spy_satellite'));
             });
         }
+
+        window.renderHeatMap = (date) => {
+            this.renderHeatMap(date);
+        };
 
         window.instance = this;
     }
