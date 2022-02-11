@@ -75,3 +75,29 @@ h4 {
 *::-webkit-scrollbar-thumb {
     background-color: #666666;
 }
+
+/*
+ * Range sliders
+ */
+
+.range::-moz-range-thumb {
+    background-color: hsl(217.2, 91.2%, 59.8%);
+    border-style: none;
+    height: 1.25rem;
+    position: relative;
+    width: 1.25rem;
+    -moz-transition-property: all;
+    transition-property: all;
+    transition-duration: .15s;
+    transition-duration: .3s;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    border-radius: 1rem;
+    top: 50%;
+}
+
+.range::-moz-range-track {
+    height: .5rem;
+    width: 100%;
+    border-radius: 1rem;
+    background-color: hsl(215, 13.8%, 34.1%);
+}
