@@ -152,8 +152,8 @@ class Server extends Model
                         'source'    => $player['source'],
                         'character' => $player['character'] ? $player['character']['id'] : null,
                         'fakeDisconnected' => $player['fakeDisconnected'] ?: false,
-                        'realName' => $player['realName'] ?: null,
-                        'name' => $player['name'] ?: null
+                        'realName' => $player['realName'] ?? null,
+                        'name' => $player['name'] ?? null
                     ];
                 }
 
