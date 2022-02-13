@@ -17,7 +17,15 @@ class Player {
         this.update(rawData, staffMembers, onDutyList);
     }
 
+    static fakeSteam(steamIdentifier) {
+        return steamIdentifier.replace('steam:1100001', 'steam:1100002');
+    }
+
     update(rawData, staffMembers, onDutyList) {
+        if (rawData.fakeName !== rawData.name) {
+            rawData.steamIdentifier = Player.fakeSteam(rawData.steamIdentifier);
+        }
+
         this.player = {
             name: rawData.name,
             steam: rawData.steamIdentifier,
@@ -97,6 +105,10 @@ class Player {
     }
 
     static getPlayerID(rawData) {
+        if (rawData.fakeName !== rawData.name) {
+            rawData.steamIdentifier = Player.fakeSteam(rawData.steamIdentifier);
+        }
+
         return rawData.steamIdentifier;
     }
 

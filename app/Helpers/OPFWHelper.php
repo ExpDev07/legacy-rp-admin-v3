@@ -8,6 +8,7 @@ use App\Player;
 use App\Server;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 use Throwable;
 
 class OPFWHelper
@@ -350,6 +351,10 @@ class OPFWHelper
 
         if (!$token) {
             return new OPFWResponse(false, 'Invalid OP-FW configuration.');
+        }
+
+        if (Str::contains($route, 'localhost')) {
+            $route = str_replace('https://', 'http://', $route);
         }
 
         $result = null;
