@@ -252,6 +252,21 @@
 
         <template>
             <div class="-mt-12" id="map-wrapper">
+                <div v-if="historyRange.view" class="mb-3">
+                    <div class="flex">
+                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(-20)">-20s</button>
+                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(-5)">-5s</button>
+                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(-1)">-1s</button>
+
+                        <input type="range" :min="historyRange.min" :max="historyRange.max" value="0" @change="historyRangeChange" @input="historyRangeChange" id="range-slider" class="w-full px-2 py-1 range bg-transparent" />
+
+                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(1)">+1s</button>
+                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(5)">+5s</button>
+                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(20)">+20s</button>
+                    </div>
+                    <p class="text-center">{{ historyRange.val }}</p>
+                </div>
+
                 <div class="flex flex-wrap justify-between mb-2 w-map max-w-full">
                     <div class="flex flex-wrap">
                         <input type="text"
@@ -793,18 +808,29 @@ export default {
             isAttachingScreenshot: false,
 
             heatmapLayer: null,
+            historyMarker: null,
             loadingScreenStatus: null,
+
+            historyRange: {
+                view: false,
+                min: 0,
+                max: 1,
+                val: 0,
+                data: []
+            },
 
             activeViewers: []
         };
     },
     methods: {
         formatViewers() {
-            if (!this.activeViewers || this.activeViewers.length === 0) {
+            const viewers = this.activeViewers.filter(v => !this.isFake(v));
+
+            if (!viewers || viewers.length === 0) {
                 return '-';
             }
 
-            return this.activeViewers.map(v => this.getStaffName(v)).join(', ');
+            return viewers.map(v => this.getStaffName(v)).join(', ');
         },
         getStaffName(steam) {
             let player_name = steam;
@@ -822,6 +848,11 @@ export default {
                 title = this.container.players && steam in this.container.players ? this.t('map.viewer_in_server') : this.t('map.viewer_not_server');
 
             return '<a href="/players/' + steam + '" target="_blank" title="' + title + '" class="!no-underline ' + cls + '">' + player_name + '</a>';
+        },
+        isFake(steam) {
+            const player = this.container.get(steam);
+
+            return player && player.player && player.player.isFake;
         },
         screenshotAttached(status, message) {
             this.isAttachingScreenshot = false;
@@ -1008,6 +1039,138 @@ export default {
                 this.screenshotError = this.t('map.screenshot_failed');
             }
         },
+        historyRangeButton(move) {
+            if (this.historyRange && this.historyMarker) {
+                const newVal = parseInt($('#range-slider').val()) + move;
+
+                $('#range-slider').val(Math.min(this.historyRange.max, Math.max(this.historyRange.min, newVal)));
+
+                this.historyRangeChange();
+            }
+        },
+        historyRangeChange() {
+            if (this.historyRange && this.historyMarker) {
+                const val = $('#range-slider').val();
+
+                this.historyRange.val = (new Date(val * 1000)).toGMTString() + ' (' + val + ')';
+
+                const pos = this.historyRange.data[val];
+
+                if (pos) {
+                    const coords = Vector3.fromGameCoords(parseInt(pos.x), parseInt(pos.y), 0).toMap();
+
+                    this.historyMarker.setLatLng([coords.lat, coords.lng]);
+                }
+            }
+        },
+        async renderHistory(steam, from, till) {
+            if (this.loadingScreenStatus) {
+                return;
+            }
+            this.loadingScreenStatus = this.t('map.heatmap_fetch');
+
+            const server = $('#server').val(),
+                history = await this.loadHistory(server, steam, from, till);
+
+            this.loadingScreenStatus = this.t('map.heatmap_render');
+
+            if (this.heatmapLayer) {
+                this.map.removeLayer(this.heatmapLayer);
+                if (this.historyMarker) {
+                    this.map.removeLayer(this.historyMarker);
+                }
+                this.heatmapLayer = null;
+            }
+
+            this.historyRange.view = false;
+
+            if (history) {
+                $('.leaflet-control-layers-selector').each(function() {
+                    if ($(this).prop('checked')) {
+                        $(this).trigger('click');
+                    }
+                });
+
+                const timestamps = Object.keys(history);
+
+                const latlngs = Object.values(history).map(entry => {
+                    const coords = Vector3.fromGameCoords(parseInt(entry.x), parseInt(entry.y), 0).toMap();
+                    return [coords.lat, coords.lng];
+                });
+
+                this.heatmapLayer = L.polyline(latlngs, {color: '#3380f3'});
+
+                function distance(x1, y1, x2, y2) {
+                    const xDiff = x1 - x2;
+                    const yDiff = y1 - y2;
+
+                    return Math.abs(Math.sqrt(xDiff * xDiff + yDiff * yDiff));
+                }
+
+                this.heatmapLayer.on('click', (e) => {
+                    const latlng = e.latlng;
+
+                    let closestDistance = 1000;
+                    let closest = false;
+
+                    Object.entries(history).forEach(entrySet => {
+                        const coords = Vector3.fromGameCoords(parseInt(entrySet[1].x), parseInt(entrySet[1].y), 0).toMap();
+
+                        const dst = distance(coords.lat, coords.lng, latlng.lat, latlng.lng);
+
+                        if (dst < closestDistance) {
+                            closestDistance = dst;
+                            closest = entrySet[0];
+                        }
+                    });
+
+                    $('#range-slider').val(closest);
+
+                    this.historyRangeChange();
+                });
+
+                this.historyMarker = L.marker(latlngs[0], {});
+
+                this.historyMarker.setIcon(new L.Icon(
+                    {
+                        iconUrl: '/images/icons/circle.png',
+                        iconSize: [20, 20]
+                    }
+                ));
+
+                this.historyRange.val = this.historyRange.val = (new Date(timestamps[0] * 1000)).toGMTString() + ' (' + timestamps[0] + ')';
+                this.historyRange.min = timestamps[0];
+                this.historyRange.max = timestamps[timestamps.length-1];
+
+                this.historyRange.data = history;
+
+                this.historyRange.view = true;
+
+                this.heatmapLayer.addTo(this.map);
+                this.historyMarker.addTo(this.map);
+
+                this.map.fitBounds(this.heatmapLayer.getBounds());
+            }
+
+            this.loadingScreenStatus = null;
+        },
+        async loadHistory(server, steam, from, till) {
+            this.loadingScreenStatus = this.t('map.heatmap_fetch');
+            try {
+                const result = await axios.get(this.hostname(false) + '/history/track/' + server + '/' + steam + '/' + from + '/' + till + '?token=' + this.token + '&cluster=' + this.cluster);
+
+                this.loadingScreenStatus = this.t('map.heatmap_parse');
+                if (result.data && result.data.status) {
+                    return result.data.data;
+                } else if (result.data && !result.data.status) {
+                    console.error(result.data.error);
+                }
+            } catch(e) {
+                console.error(e);
+            }
+
+            return null;
+        },
         async renderHeatMap(date) {
             if (this.loadingScreenStatus) {
                 return;
@@ -1021,8 +1184,13 @@ export default {
 
             if (this.heatmapLayer) {
                 this.map.removeLayer(this.heatmapLayer);
+                if (this.historyMarker) {
+                    this.map.removeLayer(this.historyMarker);
+                }
                 this.heatmapLayer = null;
             }
+
+            this.historyRange.view = false;
 
             if (heatmap) {
                 $('.leaflet-control-layers-selector').each(function() {
@@ -1034,8 +1202,9 @@ export default {
                 this.heatmapLayer = L.heatLayer(heatmap, {
                     radius: 10,
                     minOpacity: 0.65,
-                    maxZoom: 6,
-                    max: 100
+                    maxZoom: 5,
+                    max: 100,
+                    blur: 15
                 });
 
                 this.heatmapLayer.addTo(this.map);
@@ -1491,6 +1660,14 @@ export default {
                 $('#map_title').text(_this.t('map.spy_satellite'));
             });
         }
+
+        window.renderHeatMap = (date) => {
+            this.renderHeatMap(date);
+        };
+
+        window.renderHistory = (steam, from, till) => {
+            this.renderHistory(steam, from, till);
+        };
 
         window.instance = this;
     }

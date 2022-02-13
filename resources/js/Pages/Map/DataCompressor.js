@@ -79,6 +79,7 @@ class DataCompressor {
             steamIdentifier: this.get('h', ''),
             vehicle: vehicle,
             fakeDisconnected: this.get('j', false),
+            fakeName: this.get('k', ''),
         };
     }
 

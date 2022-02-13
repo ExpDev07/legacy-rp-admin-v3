@@ -21,6 +21,8 @@ class PlayerResource extends JsonResource
         $path = explode('/', $request->path());
         $loadStatus = sizeof($path) === 2 && $path[0] = 'players';
 
+        $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null;
+
         return [
             'id'              => $this->user_id,
             'avatar'          => $this->avatar,
@@ -40,7 +42,8 @@ class PlayerResource extends JsonResource
             'isBanned'        => $this->isBanned(),
             'warnings'        => $this->warnings()->whereIn('warning_type', [Warning::TypeStrike, Warning::TypeWarning])->count(),
             'ban'             => new BanResource($this->getActiveBan()),
-            'status'          => $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null,
+            'status'          => $status,
+            'fakeName'        => $status ? $status->fakeName : false,
         ];
     }
 

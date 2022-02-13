@@ -3,7 +3,7 @@
         <portal to="title">
             <div class="flex items-start space-x-10 mobile:flex-wrap">
                 <h1 class="dark:text-white">
-                    {{ player.playerName }}
+                    {{ player.fakeName || player.playerName }}
                 </h1>
                 <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copyShare">
@@ -14,17 +14,17 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
-                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="player.isTrusted">
+                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="!player.fakeName && player.isTrusted">
                         <span class="font-semibold">{{ t('global.trusted') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="!player.fakeName && player.isStaff">
                         <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="!player.fakeName && player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.whitelisted">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="!player.fakeName && whitelisted">
                         <span class="font-semibold">{{ t('global.whitelisted') }}</span>
                     </badge>
 
@@ -55,7 +55,7 @@
 
         <div class="flex flex-wrap justify-between mb-6">
             <div>
-                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
+                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && (!player.fakeName && player.isStaff)">
                     <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
                     <a href="#" @click="removeTrustedPanel($event)" class="ml-1 text-white" :title="t('players.show.remove_panel_trusted')" v-if="!player.isSuperAdmin">
                         <i class="fas fa-times"></i>
@@ -64,7 +64,7 @@
 
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="addTrustedPanel()" v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && player.isStaff">
+                    @click="addTrustedPanel()" v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && (!player.fakeName && player.isStaff)">
                     <i class="fas fa-glass-cheers"></i>
                     {{ t('players.show.add_panel_trusted') }}
                 </button>
@@ -476,8 +476,7 @@
                 </a>
 
             </div>
-            <div class="flex flex-wrap items-center text-center">
-
+            <div class="flex flex-wrap items-center text-center" v-if="!player.fakeName">
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     v-if="discord"
@@ -551,6 +550,7 @@
                         v-bind:deleted="character.characterDeleted"
                         class="relative"
                         :class="{ 'shadow-lg' : player.status.character === character.id }"
+                        v-if="!player.fakeName || player.status.character === character.id"
                     >
                         <template #header>
                             <h3 class="mb-2">
@@ -904,6 +904,9 @@ export default {
         },
         kickReason: {
             type: String
+        },
+        whitelisted: {
+            type: Boolean
         }
     },
     data() {

@@ -302,8 +302,8 @@ class Player extends Model
         }
     }
 
-    /***
-     * Gets the characters relationship.
+    /**
+     * Gets the characters' relationship.
      *
      * @return HasMany
      */
@@ -313,7 +313,7 @@ class Player extends Model
     }
 
     /**
-     * Gets the logs relationship.
+     * Gets the logs' relationship.
      *
      * @return HasMany
      */
@@ -323,7 +323,7 @@ class Player extends Model
     }
 
     /**
-     * Gets the warnings relationship.
+     * Gets the warnings' relationship.
      *
      * @return HasMany
      */
@@ -378,9 +378,11 @@ class Player extends Model
                 foreach ($steamIdentifiers as $key => $player) {
                     if (!isset($result[$key])) {
                         $result[$key] = [
-                            'id'        => intval($player['source']),
-                            'character' => $player['character'],
-                            'server'    => $serverIp,
+                            'id'               => intval($player['source']),
+                            'character'        => $player['character'],
+                            'server'           => $serverIp,
+                            'fakeDisconnected' => $player['fakeDisconnected'],
+                            'fakeName'         => $player['name'] !== $player['realName'] ? $player['name'] : null,
                         ];
                     }
                 }
@@ -413,7 +415,12 @@ class Player extends Model
 
         if (isset($players[$steamIdentifier])) {
             $player = $players[$steamIdentifier];
-            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id'], $player['character']);
+
+            if ($player['fakeDisconnected']) {
+                return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
+            }
+
+            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id'], $player['character'], $player['fakeName']);
         }
 
         return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);

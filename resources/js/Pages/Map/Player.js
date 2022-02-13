@@ -18,11 +18,14 @@ class Player {
     }
 
     update(rawData, staffMembers, onDutyList) {
+        const isFake = rawData.fakeName !== rawData.name;
+
         this.player = {
             name: rawData.name,
             steam: rawData.steamIdentifier,
             source: rawData.source,
-            isStaff: staffMembers.includes(rawData.steamIdentifier)
+            isStaff: !isFake && staffMembers.includes(rawData.steamIdentifier),
+            isFake: isFake
         };
 
         this.character = Character.fromRaw(rawData);
@@ -90,10 +93,6 @@ class Player {
             return 'Player has not moved for more than 45 minutes.'
         }
         return 'Player is not considered afk.';
-    }
-
-    getID() {
-        return this.player.steam;
     }
 
     static getPlayerID(rawData) {
