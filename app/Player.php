@@ -382,7 +382,7 @@ class Player extends Model
                             'character'        => $player['character'],
                             'server'           => $serverIp,
                             'fakeDisconnected' => $player['fakeDisconnected'],
-                            'fakeName'         => $player['name'] !== $player['realName'],
+                            'fakeName'         => $player['name'] !== $player['realName'] ? $player['name'] : null,
                         ];
                     }
                 }
@@ -416,11 +416,11 @@ class Player extends Model
         if (isset($players[$steamIdentifier])) {
             $player = $players[$steamIdentifier];
 
-            if ($player['fakeDisconnected'] || $player['fakeName']) {
+            if ($player['fakeDisconnected']) {
                 return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
             }
 
-            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id'], $player['character']);
+            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id'], $player['character'], $player['fakeName']);
         }
 
         return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);

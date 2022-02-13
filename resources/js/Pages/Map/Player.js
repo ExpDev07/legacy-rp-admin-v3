@@ -17,20 +17,15 @@ class Player {
         this.update(rawData, staffMembers, onDutyList);
     }
 
-    static fakeSteam(steamIdentifier) {
-        return steamIdentifier.replace('steam:1100001', 'steam:1100002');
-    }
-
     update(rawData, staffMembers, onDutyList) {
-        if (rawData.fakeName !== rawData.name) {
-            rawData.steamIdentifier = Player.fakeSteam(rawData.steamIdentifier);
-        }
+        const isFake = rawData.fakeName !== rawData.name;
 
         this.player = {
             name: rawData.name,
             steam: rawData.steamIdentifier,
             source: rawData.source,
-            isStaff: staffMembers.includes(rawData.steamIdentifier)
+            isStaff: !isFake && staffMembers.includes(rawData.steamIdentifier),
+            isFake: isFake
         };
 
         this.character = Character.fromRaw(rawData);
@@ -100,15 +95,7 @@ class Player {
         return 'Player is not considered afk.';
     }
 
-    getID() {
-        return this.player.steam;
-    }
-
     static getPlayerID(rawData) {
-        if (rawData.fakeName !== rawData.name) {
-            rawData.steamIdentifier = Player.fakeSteam(rawData.steamIdentifier);
-        }
-
         return rawData.steamIdentifier;
     }
 

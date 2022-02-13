@@ -824,11 +824,13 @@ export default {
     },
     methods: {
         formatViewers() {
-            if (!this.activeViewers || this.activeViewers.length === 0) {
+            const viewers = this.activeViewers.filter(v => !this.isFake(v));
+
+            if (!viewers || viewers.length === 0) {
                 return '-';
             }
 
-            return this.activeViewers.map(v => this.getStaffName(v)).join(', ');
+            return viewers.map(v => this.getStaffName(v)).join(', ');
         },
         getStaffName(steam) {
             let player_name = steam;
@@ -846,6 +848,11 @@ export default {
                 title = this.container.players && steam in this.container.players ? this.t('map.viewer_in_server') : this.t('map.viewer_not_server');
 
             return '<a href="/players/' + steam + '" target="_blank" title="' + title + '" class="!no-underline ' + cls + '">' + player_name + '</a>';
+        },
+        isFake(steam) {
+            const player = this.container.get(steam);
+
+            return player && player.player && player.player.isFake;
         },
         screenshotAttached(status, message) {
             this.isAttachingScreenshot = false;

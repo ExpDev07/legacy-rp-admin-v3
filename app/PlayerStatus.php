@@ -54,12 +54,20 @@ class PlayerStatus
      */
     public string $serverName = '';
 
-    public function __construct(string $status, string $serverIp, int $serverId, ?int $character = null)
+    /**
+     * The fake name of the player
+     *
+     * @var string|null
+     */
+    public ?string $fakeName = null;
+
+    public function __construct(string $status, string $serverIp, int $serverId, ?int $character = null, ?string $fakeName = null)
     {
         $this->status = $status;
         $this->serverIp = Server::fixApiUrl($serverIp);
         $this->serverId = $serverId;
         $this->character = $character;
+        $this->fakeName = $fakeName;
 
         $this->serverName = Server::getServerName($serverIp);
     }
