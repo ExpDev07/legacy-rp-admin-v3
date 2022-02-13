@@ -18,7 +18,7 @@ class Player {
     }
 
     update(rawData, staffMembers, onDutyList) {
-        const isFake = rawData.fakeName !== rawData.name;
+        const isFake = rawData.realName && rawData.realName !== rawData.name;
 
         this.player = {
             name: rawData.name,
