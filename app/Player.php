@@ -382,7 +382,7 @@ class Player extends Model
                             'character'        => $player['character'],
                             'server'           => $serverIp,
                             'fakeDisconnected' => $player['fakeDisconnected'],
-                            'fakeName'         => $player['name'] !== $player['realName'] ? $player['name'] : null,
+                            'fakeName'         => preg_replace('/[^\w]+/m', '', $player['name']) !== preg_replace('/[^\w]+/m', '', $player['realName']) ? $player['name'] : null,
                         ];
                     }
                 }
