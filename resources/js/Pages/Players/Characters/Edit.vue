@@ -37,7 +37,7 @@
                 </a>
                 <!-- Back -->
                 <a class="px-5 py-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                   :href="'/players/' + player.steamIdentifier">
+                   :href="'/players/' + returnTo">
                     <i class="fas fa-backward"></i>
                     {{ t('global.back') }}
                 </a>
@@ -913,6 +913,10 @@ export default {
         },
         vehicleValue: {
             type: Number,
+            required: true,
+        },
+        returnTo: {
+            type: String,
             required: true,
         }
     },

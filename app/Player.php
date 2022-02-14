@@ -4,11 +4,17 @@ namespace App;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\GeneralHelper;
+use App\Http\Resources\BanResource;
+use App\Http\Resources\CharacterResource;
+use App\Http\Resources\PanelLogResource;
+use App\Http\Resources\PlayerResource;
+use App\Http\Resources\WarningResource;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -87,6 +93,92 @@ class Player extends Model
         'total_joins'      => 'integer',
         'priority_level'   => 'integer',
     ];
+
+    /**
+     * @param string $player
+     * @param Request $request
+     * @return Player|array|null
+     */
+    public static function resolvePlayer(string $player, Request $request)
+    {
+        if (Str::startsWith($player, 'steam:1100002')) {
+            $steam = str_replace('steam:1100002', 'steam:1100001', $player);
+
+            $key = 'fake_' . $steam;
+
+            $status = Player::getOnlineStatus($steam, false);
+
+            if ($status && $status->fakeName && $status->character) {
+                $resolved = Player::query()->select()->where('steam_identifier', '=', $steam)->first();
+
+                if ($resolved) {
+                    $characters = Character::query()->select()->where('character_id', '=', $status->character)->get();
+
+                    $res = [
+                        'id'              => $resolved->user_id,
+                        'avatar'          => null,
+                        'discord'         => null,
+                        'steamIdentifier' => $player,
+                        'overrideSteam'   => $steam,
+                        'steam36'         => base_convert(str_replace('steam:', '', $player), 16, 36),
+                        'playerName'      => $status->fakeName,
+                        'playTime'        => $resolved->playtime,
+                        'lastConnection'  => $resolved->last_connection,
+                        'steamProfileUrl' => $resolved->getSteamProfileUrl() . 'f',
+                        'isTrusted'       => false,
+                        'isDebugger'      => false,
+                        'isPanelTrusted'  => false,
+                        'isStaff'         => false,
+                        'isSuperAdmin'    => false,
+                        'isRoot'          => false,
+                        'isBanned'        => false,
+                        'warnings'        => 0,
+                        'ban'             => null,
+                        'status'          => [
+                            'status'     => PlayerStatus::STATUS_ONLINE,
+                            'serverIp'   => $status->serverIp,
+                            'serverId'   => $status->serverId,
+                            'serverName' => $status->serverName,
+                            'character'  => $status->character,
+                            'fakeName'   => null,
+                        ],
+                    ];
+
+                    $data = [
+                        'player'      => $res,
+                        'characters'  => CharacterResource::collection($characters),
+                        'warnings'    => [],
+                        'panelLogs'   => [],
+                        'discord'     => null,
+                        'kickReason'  => '',
+                        'screenshots' => [],
+                        'whitelisted' => false,
+                    ];
+
+                    CacheHelper::write($key, $data, 3 * CacheHelper::MONTH);
+                } else {
+                    return null;
+                }
+            } else if (CacheHelper::exists($key)) {
+                $data = CacheHelper::read($key);
+
+                $data['player']['status']['status'] = PlayerStatus::STATUS_OFFLINE;
+                $data['player']['status']['character'] = 0;
+
+                CacheHelper::write($key, $data, 3 * CacheHelper::MONTH);
+            }
+
+            return CacheHelper::read($key);
+        }
+
+        $resolved = Player::query()->select()->where('steam_identifier', '=', $player)->first();
+
+        if ($resolved and $resolved instanceof Player) {
+            return $resolved;
+        }
+
+        return null;
+    }
 
     /**
      * Gets the route key name.

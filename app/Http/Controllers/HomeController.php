@@ -40,6 +40,9 @@ class HomeController extends Controller
             ->limit(8)->get())->toArray($request);
 
         $playerList = Player::getAllOnlinePlayers(true) ?? [];
+        $playerList = array_filter($playerList, function($player) {
+            return !$player['fakeName'] && !$player['fakeDisconnected'];
+        });
         $players = array_keys($playerList);
         usort($players, function ($a, $b) use ($playerList) {
             return $playerList[$a]['id'] <=> $playerList[$b]['id'];

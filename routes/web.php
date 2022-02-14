@@ -102,7 +102,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/changelog', [ChangelogController::class, 'render']);
 
     // Players.
-    Route::resource('players', PlayerController::class);
+    Route::get('/players', [PlayerController::class, 'index']);
+    Route::get('/players/{player}', [PlayerController::class, 'show']);
     Route::resource('players.characters', PlayerCharacterController::class);
     Route::resource('players.bans', PlayerBanController::class);
     Route::resource('players.warnings', PlayerWarningController::class);

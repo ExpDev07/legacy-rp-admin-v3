@@ -51,6 +51,8 @@ class PlayerContainer {
         this.isTrackedPlayerVisible = false;
 
         for (let x = 0; x < rawData.players.length; x++) {
+            rawData.players[x] = Player.fixData(rawData.players[x]);
+
             this.updatePlayer(rawData.players[x], rawData.on_duty);
         }
 

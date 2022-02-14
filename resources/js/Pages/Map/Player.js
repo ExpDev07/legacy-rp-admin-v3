@@ -17,15 +17,20 @@ class Player {
         this.update(rawData, staffMembers, onDutyList);
     }
 
-    update(rawData, staffMembers, onDutyList) {
-        const isFake = rawData.realName && rawData.realName !== rawData.name;
+    static fixData(rawData) {
+        if (rawData.identityOverride) {
+            rawData.steamIdentifier = rawData.steamIdentifier.replace('steam:1100001', 'steam:1100002');
+        }
 
+        return rawData;
+    }
+
+    update(rawData, staffMembers, onDutyList) {
         this.player = {
             name: rawData.name,
             steam: rawData.steamIdentifier,
             source: rawData.source,
-            isStaff: !isFake && staffMembers.includes(rawData.steamIdentifier),
-            isFake: isFake
+            isStaff: staffMembers.includes(rawData.steamIdentifier),
         };
 
         this.character = Character.fromRaw(rawData);
