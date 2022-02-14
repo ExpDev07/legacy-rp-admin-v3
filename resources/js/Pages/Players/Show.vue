@@ -3,7 +3,7 @@
         <portal to="title">
             <div class="flex items-start space-x-10 mobile:flex-wrap">
                 <h1 class="dark:text-white">
-                    {{ player.fakeName || player.playerName }}
+                    {{ player.playerName }}
                 </h1>
                 <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copyShare">
@@ -14,17 +14,17 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
-                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="!player.fakeName && player.isTrusted">
+                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="player.isTrusted">
                         <span class="font-semibold">{{ t('global.trusted') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="!player.fakeName && player.isStaff">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff">
                         <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="!player.fakeName && player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="!player.fakeName && whitelisted">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="whitelisted">
                         <span class="font-semibold">{{ t('global.whitelisted') }}</span>
                     </badge>
 
@@ -55,7 +55,7 @@
 
         <div class="flex flex-wrap justify-between mb-6">
             <div>
-                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && (!player.fakeName && player.isStaff)">
+                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
                     <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
                     <a href="#" @click="removeTrustedPanel($event)" class="ml-1 text-white" :title="t('players.show.remove_panel_trusted')" v-if="!player.isSuperAdmin">
                         <i class="fas fa-times"></i>
@@ -64,7 +64,7 @@
 
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="addTrustedPanel()" v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && (!player.fakeName && player.isStaff)">
+                    @click="addTrustedPanel()" v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && player.isStaff">
                     <i class="fas fa-glass-cheers"></i>
                     {{ t('players.show.add_panel_trusted') }}
                 </button>
@@ -476,7 +476,7 @@
                 </a>
 
             </div>
-            <div class="flex flex-wrap items-center text-center" v-if="!player.fakeName">
+            <div class="flex flex-wrap items-center text-center">
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     v-if="discord"
@@ -512,6 +512,7 @@
                         class="mr-3"
                         :src="player.avatar"
                         :alt="player.playerName + ' Avatar'"
+                        v-if="player.avatar"
                     />
                     <span>
                         {{ t('players.show.linked') }}
@@ -550,7 +551,6 @@
                         v-bind:deleted="character.characterDeleted"
                         class="relative"
                         :class="{ 'shadow-lg' : player.status.character === character.id }"
-                        v-if="!player.fakeName || player.status.character === character.id"
                     >
                         <template #header>
                             <h3 class="mb-2">
@@ -576,7 +576,7 @@
                         <template #footer>
                             <inertia-link
                                 class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'">
+                                :href="'/players/' + (player.overrideSteam ? player.overrideSteam : player.steamIdentifier) + '/characters/' + character.id + '/edit?returnTo=' + player.steamIdentifier">
                                 {{ t('global.view') }}
                             </inertia-link>
                             <div class="flex justify-between flex-wrap">
@@ -1027,8 +1027,14 @@ export default {
 
                     this.linkedAccounts.total = linked.total;
                     this.linkedAccounts.linked = linked.linked;
+                } else {
+                    this.linkedAccounts.total = 0;
+                    this.linkedAccounts.linked = [];
                 }
-            } catch(e) {}
+            } catch(e) {
+                this.linkedAccounts.total = 0;
+                this.linkedAccounts.linked = [];
+            }
 
             this.isShowingLinkedLoading = false;
         },
@@ -1066,7 +1072,7 @@ export default {
         },
         async pmPlayer() {
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/staffPM', this.form.pm);
+            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/staffPM', this.form.pm);
 
             // Reset.
             this.isStaffPM = false;
@@ -1095,7 +1101,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/kick', this.form.kick);
+            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/kick', this.form.kick);
 
             // Reset.
             this.isKicking = false;
@@ -1107,7 +1113,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/revivePlayer');
+            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/revivePlayer');
         },
         async unloadCharacter() {
             if (!confirm(this.t('players.show.unload_confirm'))) {
@@ -1115,7 +1121,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/unloadCharacter', this.form.unload);
+            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/unloadCharacter', this.form.unload);
 
             this.form.unload.message = this.t('players.show.unload_default');
             this.form.unload.character = null;

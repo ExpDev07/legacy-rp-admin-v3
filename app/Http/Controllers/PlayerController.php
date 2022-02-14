@@ -145,26 +145,36 @@ class PlayerController extends Controller
      * Display the specified resource.
      *
      * @param Request $request
-     * @param Player $player
-     * @return Response
+     * @param string $player
+     * @return Response|void
      */
-    public function show(Request $request, Player $player): Response
+    public function show(Request $request, string $player)
     {
-        $whitelisted = DB::table('user_whitelist')
-            ->select(['steam_identifier'])
-            ->where('steam_identifier', '=', $player->steam_identifier)
-            ->first();
+        $resolved = Player::resolvePlayer($player, $request);
 
-        return Inertia::render('Players/Show', [
-            'player'      => new PlayerResource($player),
-            'characters'  => CharacterResource::collection($player->characters),
-            'warnings'    => WarningResource::collection($player->warnings()->oldest()->get()),
-            'panelLogs'   => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
-            'discord'     => $player->getDiscordInfo(),
-            'kickReason'  => trim($request->query('kick')) ?? '',
-            'screenshots' => Screenshot::getAllScreenshotsForPlayer($player->steam_identifier),
-            'whitelisted' => !!$whitelisted,
-        ]);
+        if ($resolved) {
+            if (is_array($resolved)) {
+                return Inertia::render('Players/Show', $resolved);
+            } else {
+                $whitelisted = DB::table('user_whitelist')
+                    ->select(['steam_identifier'])
+                    ->where('steam_identifier', '=', $resolved->steam_identifier)
+                    ->first();
+
+                return Inertia::render('Players/Show', [
+                    'player'      => new PlayerResource($resolved),
+                    'characters'  => CharacterResource::collection($resolved->characters),
+                    'warnings'    => WarningResource::collection($resolved->warnings()->oldest()->get()),
+                    'panelLogs'   => PanelLogResource::collection($resolved->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
+                    'discord'     => $resolved->getDiscordInfo(),
+                    'kickReason'  => trim($request->query('kick')) ?? '',
+                    'screenshots' => Screenshot::getAllScreenshotsForPlayer($resolved->steam_identifier),
+                    'whitelisted' => !!$whitelisted,
+                ]);
+            }
+        } else {
+            abort(404);
+        }
     }
 
 }

@@ -162,6 +162,7 @@ class PlayerCharacterController extends Controller
             'resetCoords'  => $resetCoords ? array_keys($resetCoords) : [],
             'economy'      => $economy ? $economy->closing : 0,
             'vehicleValue' => Vehicle::getTotalVehicleValue($character->character_id),
+            'returnTo'     => $_GET['returnTo'] ?? $player->steam_identifier,
         ]);
     }
 
