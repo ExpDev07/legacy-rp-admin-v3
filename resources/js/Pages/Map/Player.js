@@ -18,7 +18,7 @@ class Player {
     }
 
     update(rawData, staffMembers, onDutyList) {
-        const isFake = rawData.realName && rawData.realName !== rawData.name;
+        const isFake = rawData.identityOverride;
 
         this.player = {
             name: rawData.name,
