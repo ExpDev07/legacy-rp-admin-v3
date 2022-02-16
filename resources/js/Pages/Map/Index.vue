@@ -32,6 +32,15 @@
                     {{ t('map.screenshot') }}
                 </button>
 
+                <!-- Show Historic -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isHistoric = true"
+                    v-if="this.perm.check(this.perm.PERM_ADVANCED)">
+                    <i class="fas fa-map"></i>
+                    {{ t('map.historic_title') }}
+                </button>
+
                 <!-- Toggle On-Duty List -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -188,6 +197,63 @@
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                             @click="isNotification = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isHistoric">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                <h3 class="mb-2">
+                    {{ t('map.historic_title') }}
+                </h3>
+
+                <!-- Steam Identifier -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_steam">
+                        {{ t('map.historic_steam') }}
+                    </label>
+                    <input class="w-2/3 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="historic_steam"
+                           v-model="form.historic_steam"/>
+                </div>
+
+                <!-- From -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_date_from">
+                        {{ t('map.historic_from') }}
+                    </label>
+                    <input class="w-1/3 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" type="date" step="any" id="historic_date_from"
+                           v-model="form.historic_from_date"/>
+                    <input class="w-1/3 px-4 py-2 ml-1 bg-gray-200 dark:bg-gray-600 border rounded" type="time" step="any" id="historic_time_from"
+                           v-model="form.historic_from_time"/>
+                </div>
+
+                <!-- Till -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_date_till">
+                        {{ t('map.historic_till') }}
+                    </label>
+                    <input class="w-1/3 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" type="date" step="any" id="historic_date_till"
+                           v-model="form.historic_till_date"/>
+                    <input class="w-1/3 px-4 py-2 ml-1 bg-gray-200 dark:bg-gray-600 border rounded" type="time" step="any" id="historic_time_till"
+                           v-model="form.historic_till_time"/>
+                </div>
+
+                <p>
+                    {{ t('map.historic_note') }}
+                </p>
+
+                <!-- Buttons -->
+                <div class="flex items-center mt-2">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded mr-2"
+                            @click="showHistory">
+                        <i class="mr-1 fas fa-plus"></i>
+                        {{ t('global.confirm') }}
+                    </button>
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            @click="isHistoric = false">
                         {{ t('global.cancel') }}
                     </button>
                 </div>
@@ -773,7 +839,13 @@ export default {
                 notify_steam: '',
                 notify_type: 'load',
 
-                screenshotId: 0
+                screenshotId: 0,
+
+                historic_steam: '',
+                historic_from_date: '',
+                historic_from_time: '',
+                historic_till_date: '',
+                historic_till_time: ''
             },
             layers: {
                 "Players": L.layerGroup(),
@@ -810,6 +882,8 @@ export default {
             heatmapLayer: null,
             historyMarker: null,
             loadingScreenStatus: null,
+
+            isHistoric: false,
 
             historyRange: {
                 view: false,
@@ -1063,6 +1137,22 @@ export default {
                 }
             }
         },
+        async showHistory() {
+            const fromUnix = this.$moment(this.form.historic_from_date + ' ' + this.form.historic_from_time).unix();
+            const tillUnix = this.$moment(this.form.historic_till_date + ' ' + this.form.historic_till_time).unix();
+
+            if (fromUnix && tillUnix) {
+                if (this.form.historic_steam || !this.form.historic_steam.startsWith('steam:')) {
+                    this.isHistoric = false;
+
+                    await this.renderHistory(this.form.historic_steam.replace('steam:', ''), fromUnix, tillUnix);
+                } else {
+                    alert('Invalid steam identifier');
+                }
+            } else {
+                alert('Invalid from / till');
+            }
+        },
         async renderHistory(steam, from, till) {
             if (this.loadingScreenStatus) {
                 return;
@@ -1164,6 +1254,8 @@ export default {
                     return result.data.data;
                 } else if (result.data && !result.data.status) {
                     console.error(result.data.error);
+
+                    alert(result.data.error);
                 }
             } catch(e) {
                 console.error(e);
@@ -1663,10 +1755,6 @@ export default {
 
         window.renderHeatMap = (date) => {
             this.renderHeatMap(date);
-        };
-
-        window.renderHistory = (steam, from, till) => {
-            this.renderHistory(steam, from, till);
         };
 
         window.instance = this;
