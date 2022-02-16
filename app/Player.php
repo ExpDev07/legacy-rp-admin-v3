@@ -106,7 +106,7 @@ class Player extends Model
 
             $key = 'fake_' . $steam;
 
-            $status = Player::getOnlineStatus($steam, false);
+            $status = Player::getOnlineStatus($steam, false, true);
 
             if ($status && $status->fakeName && $status->character) {
                 $resolved = Player::query()->select()->where('steam_identifier', '=', $steam)->first();
@@ -491,7 +491,7 @@ class Player extends Model
      * @param bool $useCache
      * @return PlayerStatus
      */
-    public static function getOnlineStatus(string $steamIdentifier, bool $useCache): PlayerStatus
+    public static function getOnlineStatus(string $steamIdentifier, bool $useCache, bool $trueStatus = false): PlayerStatus
     {
         $serverIps = explode(',', env('OP_FW_SERVERS', ''));
 
@@ -508,7 +508,7 @@ class Player extends Model
         if (isset($players[$steamIdentifier])) {
             $player = $players[$steamIdentifier];
 
-            if ($player['fakeDisconnected']) {
+            if (!$trueStatus && ($player['fakeDisconnected'] || $player['fakeName'])) {
                 return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
             }
 
