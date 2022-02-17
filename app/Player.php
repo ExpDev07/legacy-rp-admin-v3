@@ -401,7 +401,7 @@ class Player extends Model
      */
     public function characters(): HasMany
     {
-        return $this->hasMany(Character::class, 'steam_identifier', 'steam_identifier');
+        return $this->hasMany(Character::class, 'steam_identifier', 'steam_identifier')->orderBy('character_slot');
     }
 
     /**
