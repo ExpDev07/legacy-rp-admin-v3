@@ -29,7 +29,8 @@
             "seasparrow2",
             "seasparrow3",
             "thruster",
-            "newsmav"
+            "newsmav",
+            "swathel"
         ]
     },
     "cargobob": {
@@ -66,7 +67,9 @@
             "kosatka",
             "longfin",
             "patrolboat",
-            "predator"
+            "predator",
+            "predator1",
+            "predator2"
         ]
     },
     "float_plane": {
@@ -228,6 +231,25 @@
     "police_car": {
         "size": 23,
         "models": [
+            "21tr14charg",
+            "21tr16fpiu",
+            "valor18ch",
+            "valor20ram",
+            "valorcap",
+            "21trcvpi",
+            "valorf250",
+            "21trfpis",
+            "valor18ta",
+            "pdblazer",
+            "gurkha",
+            "kawasaki",
+            "challenger18",
+            "sspres",
+            "polnspeedo",
+            "zr1rb",
+            "mustang",
+            "govburb",
+            "pbike",
             "newvic",
             "13capricenf",
             "14chargernf",
