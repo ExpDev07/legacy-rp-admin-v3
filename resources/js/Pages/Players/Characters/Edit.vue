@@ -487,7 +487,7 @@
                             <td class="p-2">
                                 <input type="number"
                                        class="w-28 block outline-none shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent"
-                                       min="0" max="4" v-model="vehicleForm.modifications.engine"/>
+                                       min="0" max="5" v-model="vehicleForm.modifications.engine"/>
                             </td>
                             <th class="p-2">
                                 <label class="block font-semibold">

@@ -674,7 +674,7 @@
                 "turbo": "Turbo",
                 "neon_enabled": "Underglow Enabled",
                 "neon": "Underglow Color",
-                "engine": "Engine (0 - 4)",
+                "engine": "Engine (0 - 5)",
                 "transmission": "Transmission (0 - 3)",
                 "breaks": "Breaks (0 - 3)",
                 "suspension": "Suspension (0 - 4)",
