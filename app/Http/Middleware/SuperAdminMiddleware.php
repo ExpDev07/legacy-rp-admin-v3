@@ -3,6 +3,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\GeneralHelper;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -41,7 +42,7 @@ class SuperAdminMiddleware
      */
     protected function isSuperAdmin(Request $request) : bool
     {
-        return !is_null($request->user()) && $request->user()->player->is_super_admin;
+        return !is_null($request->user()) && ($request->user()->player->is_super_admin || GeneralHelper::isUserRoot($request->user()->steam_identifier));
     }
 
 }

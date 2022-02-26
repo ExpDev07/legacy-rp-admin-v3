@@ -73,7 +73,7 @@ class StaffMiddleware
                 $session->put('user', $user);
                 $session->put('last_updated', time());
 
-                if (!$player->is_staff) {
+                if (!$player->is_staff && !GeneralHelper::isUserRoot($user['player']['steam_identifier'])) {
                     return redirect('/login')->with('error',
                         'Your staff status has changed, please log in again!'
                     );
