@@ -163,7 +163,7 @@ class Vehicle extends Model
             'xenon_headlights' => !isset($mods['xenon_headlights']) || !is_bool($mods['xenon_headlights']),
             'neon_enabled'     => !isset($mods['neon_enabled']) || !is_bool($mods['neon_enabled']),
             'turbo'            => !isset($mods['turbo']) || !is_bool($mods['turbo']),
-            'engine'           => !isset($mods['engine']) || !is_integer($mods['engine']) || $mods['engine'] < 0 || $mods['engine'] > 4,
+            'engine'           => !isset($mods['engine']) || !is_integer($mods['engine']) || $mods['engine'] < 0 || $mods['engine'] > 5,
             'transmission'     => !isset($mods['transmission']) || !is_integer($mods['transmission']) || $mods['transmission'] < 0 || $mods['transmission'] > 3,
             'breaks'           => !isset($mods['breaks']) || !is_integer($mods['breaks']) || $mods['breaks'] < 0 || $mods['breaks'] > 3,
             'suspension'       => !isset($mods['suspension']) || !is_integer($mods['suspension']) || $mods['suspension'] < 0 || $mods['suspension'] > 4,

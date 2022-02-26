@@ -53,8 +53,7 @@ export default {
             this.isInitialized = true;
             this.isLoading = true;
 
-            const isDev = window.location.hostname === 'localhost',
-                _this = this;
+            const isDev = window.location.hostname === 'localhost';
 
             const token = this.$page.auth.token,
                 cluster = this.$page.auth.cluster,
@@ -64,22 +63,27 @@ export default {
 
             let socket = new WebSocket(socketUrl + "/staff-chat?token=" + token + "&cluster=" + cluster + "&server=" + server + "&steam=" + steam);
 
-            socket.onmessage = async function (event) {
-                _this.isLoading = false;
+            socket.onmessage = async (event) => {
+                this.isLoading = false;
 
                 try {
                     const unzipped = await DataCompressor.GUnZIP(event.data);
 
-                    _this.staffMessages = JSON.parse(unzipped).reverse();
+                    this.staffMessages = JSON.parse(unzipped).reverse();
                 } catch (e) {
                     console.error('Failed to parse socket message ', e)
                 }
             };
 
-            socket.onclose = function () {
-                _this.isLoading = false;
+            socket.onclose = () => {
+                this.isLoading = false;
+                this.isInitialized = false;
 
-                _this.socketError = true;
+                this.socketError = true;
+
+                setTimeout(() => {
+                    this.initChat();
+                }, 5000);
             };
         }
     }
