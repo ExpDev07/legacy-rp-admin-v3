@@ -10,6 +10,10 @@
                         <i class="fas fa-share-square mr-1"></i>
                         <span>{{ t('global.copy_link') }}</span>
                     </badge>
+                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copySteam">
+                        <i class="fab fa-steam mr-1"></i>
+                        <span>{{ t('players.show.copy_steam') }}</span>
+                    </badge>
 
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
@@ -582,13 +586,13 @@
                             <div class="flex justify-between flex-wrap">
                                 <button
                                     class="block w-full px-4 py-3 2xl:w-split text-center text-white mt-3 bg-warning dark:bg-dark-warning rounded"
-                                    v-if="player.status.status === 'online'" @click="form.unload.character = character.id; isUnloading = true">
+                                    v-if="player.status.status === 'online' && player.status.character === character.id" @click="form.unload.character = character.id; isUnloading = true">
                                     <i class="fas fa-bolt mr-1"></i>
                                     {{ t('players.show.unload') }}
                                 </button>
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
-                                    :class="{ '2xl:w-split' : player.status.status === 'online' }"
+                                    :class="{ '2xl:w-split' : player.status.status === 'online' && player.status.character === character.id }"
                                     :href="'/inventories/character/' + character.id"
                                     v-if="!character.characterDeleted"
                                 >
@@ -1234,6 +1238,18 @@ export default {
 
             setTimeout(function () {
                 $('span', button).text(_this.t('global.copy_link'));
+            }, 1500);
+        },
+        copySteam(e) {
+            const _this = this,
+                button = $(e.target).closest('.badge');
+
+            this.copyToClipboard(this.player.steamIdentifier);
+
+            $('span', button).text(this.t('global.copied'));
+
+            setTimeout(function () {
+                $('span', button).text(_this.t('players.show.copy_steam'));
             }, 1500);
         },
         copyText(e, text) {

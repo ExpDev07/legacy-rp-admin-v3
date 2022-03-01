@@ -578,6 +578,7 @@
                 "strike": "Strike",
                 "system": "System"
             },
+            "copy_steam": "Copy Steam",
             "warnings": "Strikes/Warnings/Notes/System",
             "unload_do": "Unload",
             "unload_default": "You have been AFK for an extended period of time, consider going to the character selection screen next time.",
