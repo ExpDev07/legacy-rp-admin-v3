@@ -516,6 +516,10 @@
         "is_banned": "Is Banned",
         "my_bans": "Banned by me",
         "discord_description": "How do i get someones Discord ID",
+        "new": {
+            "title": "New Players",
+            "description": "Lists all new players with a playtime less than 1 day who are currently online."
+        },
         "ban": {
             "issuing": "Issuing ban",
             "ban_warning": "You are now issuing a ban for this player. Make sure you are <b>well within reason</b> to do this. It's never a bad idea to double check with an additional staff member!",

@@ -142,6 +142,29 @@ class PlayerController extends Controller
     }
 
     /**
+     * Display a listing of all online new players.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function newPlayers(Request $request): Response
+    {
+        $query = Player::query();
+
+        $playerList = Player::getAllOnlinePlayers(true) ?? [];
+        $players = array_keys($playerList);
+
+        $query->whereIn('steam_identifier', $players);
+        $query->where('playetime', '<=', 60 * 60 * 24);
+
+        $query->orderBy('playtime');
+
+        return Inertia::render('Players/NewPlayers', [
+            'players' => PlayerIndexResource::collection($players)
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param Request $request
