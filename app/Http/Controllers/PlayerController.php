@@ -159,6 +159,8 @@ class PlayerController extends Controller
 
         $query->orderBy('playtime');
 
+        $players = $query->get();
+
         return Inertia::render('Players/NewPlayers', [
             'players' => PlayerIndexResource::collection($players)
         ]);
