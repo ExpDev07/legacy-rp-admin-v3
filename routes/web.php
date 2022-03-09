@@ -116,6 +116,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/attachScreenshot', [PlayerRouteController::class, 'attachScreenshot']);
     Route::post('/players/{player}/updateTrustedPanelStatus/{status}', [PlayerRouteController::class, 'updateTrustedPanelStatus']);
 
+    Route::get('/new_players', [PlayerController::class, 'newPlayers']);
+
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
     Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);
