@@ -103,6 +103,11 @@ export default {
                             url: '/players',
                         },
                         {
+                            label: this.t('players.new.title'),
+                            icon: 'kiwi',
+                            url: '/new_players',
+                        },
+                        {
                             label: this.t('characters.title'),
                             icon: 'book',
                             url: '/characters',
