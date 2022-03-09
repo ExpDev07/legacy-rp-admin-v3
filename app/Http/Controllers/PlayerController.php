@@ -152,6 +152,9 @@ class PlayerController extends Controller
         $query = Player::query();
 
         $playerList = Player::getAllOnlinePlayers(true) ?? [];
+        $playerList = array_filter($playerList, function($player) {
+            return $player['character'];
+        });
         $players = array_keys($playerList);
 
         $query->whereIn('steam_identifier', $players);
