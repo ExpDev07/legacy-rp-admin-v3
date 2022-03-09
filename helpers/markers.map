@@ -8,6 +8,7 @@
 {x: -2029.582, y: -464.123} blips/garage.png Garage G
 {x: 1737.600, y: 3710.031} blips/garage.png Garage H
 {x: -150.949, y: 6350.954} blips/garage.png Garage I
+{x: -924, y: 2925} blips/lsia_garage.png LSIA Garage
 
 // Ammu Nation
 {x: 843.402, y: -1034.044} blips/ammu_nation.png Ammu Nation 1
@@ -80,10 +81,11 @@
 {x: 398.637, y: -1641.297} blips/impound.png Impound lot 1
 {x: 1613.657, y: 3782.110} blips/impound.png Impound lot 2
 {x: -279.653, y: 6130.602} blips/impound.png Impound lot 3
+{x: -191, y: 1168} blips/impound.png Impound lot 4
 
 // Medical
 {x: -247.358, y: 6331.569} blips/medical.png Paleto Bay Clinic
-{x: 299.196, y: -584.769} blips/medical.png Pillbox Hill Medical Center
+{x: -472, y: -336} blips/medical.png Mount Zonah Medical Center
 {x: 1150.602, y: -1530.250} blips/medical.png St. Fiacre Hospital
 {x: 1837, y: 3676} blips/medical.png Sandy Shores Medical Center
 
@@ -109,15 +111,13 @@
 {x: 1689.152, y: 2605.411} blips/prison.png Bolingbroke Penitentiary
 
 // Repair Shop
-{x: -26.413, y: -1672.127} blips/repair.png Repair Shop 1
-{x: 1233.402, y: -3235.583} blips/repair.png Repair Shop 2
-{x: 1769.710, y: 3330.343} blips/repair.png Repair Shop 3
-{x: 961.477, y: -106.233} blips/repair.png Repair Shop 4
-{x: -84.356, y: 6497.974} blips/repair.png Repair Shop 5
-{x: -1421.209, y: -439.978} blips/repair.png Repair Shop 6
-{x: -1145.710, y: -1990.906} blips/repair.png Repair Shop 7
-{x: 1178.624, y: 2644.365} blips/repair.png Repair Shop 8
-{x: 37.042, y: 6463.886} blips/repair.png Repair Shop 9
+{x: -26.413, y: -1672.127} blips/repair.png Mosley's Repair Shop
+{x: 1769.710, y: 3330.343} blips/repair.png Flywheels Repair Shop
+{x: 961.477, y: -106.233} blips/repair.png LostMC Repair Shop
+{x: -1421.209, y: -439.978} blips/repair.png Hayes Repair Shop
+{x: -1145.710, y: -1990.906} blips/repair.png Second Gear Repair Shop
+{x: 1178.624, y: 2644.365} blips/repair.png Harmony Repair Shop
+{x: 37.042, y: 6463.886} blips/repair.png SOL Repair Shop
 
 // Los Santos Customs
 {x: -337.398, y: -136.932} blips/customs.png Los Santos Customs 1
@@ -126,17 +126,19 @@
 {x: 1174.813, y: 2637.798} blips/customs.png Los Santos Customs 4
 {x: 108.831, y: 6628.444} blips/customs.png Los Santos Customs 5
 {x: -212.374, y: -1325.499} blips/customs.png Los Santos Customs 6
-{x: 933.310, y: -971.380} blips/customs.png Los Santos Customs 7
-{x: -34.549, y: -1053.152} blips/customs.png Los Santos Customs 8
+{x: -34.549, y: -1053.152} blips/customs.png Los Santos Customs 7
 
 // Premium Deluxe Motorsport
 {x: -32.374, y: -1114.879} blips/dealership.png Premium Deluxe Motorsport
 
 // Exclusive Dealership
-{x: -69.099, y: 63.481} blips/dealership.png Exclusive Dealership
+{x: -75, y: -819} blips/edm.png Exclusive Dealership
 
 // Jewelry Store
 {x: -630.501, y: -237.138} blips/jewelry.png Jewelry Store
 
 // Yoga
 {x: -1494.119, y: 829.398} blips/yoga.png Yoga
+
+//Midnight Tuner Shop
+{x: 933.310, y: -971.380} blips/mtc.png Midnight Tuner Club
