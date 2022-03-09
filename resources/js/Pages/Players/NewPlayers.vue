@@ -43,9 +43,10 @@
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playTime | humanizeSeconds }}</td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + player.steamIdentifier + '/characters/' + player.status.character + '/edit'">
+                            <inertia-link v-if="player.status.character" class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + player.steamIdentifier + '/characters/' + player.status.character + '/edit'">
                                 #{{ player.status.character }}
                             </inertia-link>
+                            <span v-else>{{ t('players.new.no_character') }}</span>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + player.steamIdentifier">

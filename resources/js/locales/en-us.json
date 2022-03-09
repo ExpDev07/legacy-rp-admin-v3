@@ -519,7 +519,8 @@
         "new": {
             "title": "New Players",
             "description": "Lists all new players with a playtime less than 1 day who are currently online.",
-            "character": "Loaded Character"
+            "character": "Loaded Character",
+            "no_character": "N/A"
         },
         "ban": {
             "issuing": "Issuing ban",
