@@ -137,6 +137,11 @@
         }
     },
     "staff": {
+        "Staff Hangout": {
+            "x": -77,
+            "y": -817,
+            "z": 320.8
+        },
         "Rockford Hills Building Roof": {
             "x": -769,
             "y": 312.5,
@@ -146,11 +151,6 @@
             "x": 125,
             "y": -650,
             "z": 262.3
-        },
-        "Maze Bank Roof": {
-            "x": -77,
-            "y": -825,
-            "z": 320.7
         },
         "Schlongberg Building Roof": {
             "x": -191.7,
@@ -163,8 +163,8 @@
             "z": 82.5
         },
         "Maze Bank Secret Garage": {
-            "x": -75,
-            "y": -821,
+            "x": -79,
+            "y": -827,
             "z": 284.5
         },
         "The Staff Box": {
