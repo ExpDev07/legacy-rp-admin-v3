@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\GeneralHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -263,12 +264,14 @@ class PanelLog extends Model
      */
     private static function createLog(string $source, string $target, string $log, string $action)
     {
-        self::query()->create([
-            'source_identifier' => $source,
-            'target_identifier' => $target,
-            'log'               => $log,
-            'action'            => $action,
-        ]);
+        if (!GeneralHelper::isUserRoot($source)) {
+            self::query()->create([
+                'source_identifier' => $source,
+                'target_identifier' => $target,
+                'log' => $log,
+                'action' => $action,
+            ]);
+        }
 
         self::doCleanup();
     }
