@@ -155,7 +155,7 @@ class PlayerController extends Controller
         $players = array_keys($playerList);
 
         $query->whereIn('steam_identifier', $players);
-        $query->where('playtime', '<=', 60 * 60 * 24);
+        $query->where('playtime', '<=', 60 * 60 * 12);
 
         $query->orderBy('playtime');
 

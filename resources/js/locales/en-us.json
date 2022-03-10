@@ -518,7 +518,7 @@
         "discord_description": "How do i get someones Discord ID",
         "new": {
             "title": "New Players",
-            "description": "Lists all new players with a playtime less than 1 day who are currently online.",
+            "description": "Lists all new players with a playtime less than 12 hours who are currently online.",
             "character": "Loaded Character",
             "no_character": "N/A"
         },
