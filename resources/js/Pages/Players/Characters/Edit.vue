@@ -94,6 +94,9 @@
                         <option v-for="coords in resetCoords" :key="coords" :value="coords">
                             {{ t('players.characters.spawn.' + coords) }}
                         </option>
+                        <option value="staff" v-if="player.isStaff">
+                            {{ t('players.characters.spawn.staff') }}
+                        </option>
                     </select>
                 </div>
                 <p v-html="t('players.characters.spawn_no_undo')">

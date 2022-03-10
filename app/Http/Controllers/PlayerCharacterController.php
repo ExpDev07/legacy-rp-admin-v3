@@ -316,12 +316,14 @@ class PlayerCharacterController extends Controller
             return back()->with('error', 'Failed to load spawn points');
         }
 
-        if (!$spawn || !isset($resetCoords[$spawn])) {
+        if (!$spawn || (!isset($resetCoords[$spawn]) && $spawn !== "staff")) {
             return back()->with('error', 'Invalid or no spawn provided');
         }
 
+        $coords = $spawn === "staff" ? '{"w":262.6,"x":-77.6,"y":-817.2,"z":321.285}' : json_encode($resetCoords[$spawn]);
+
         $character->update([
-            'coords' => json_encode($resetCoords[$spawn]),
+            'coords' => $coords,
         ]);
 
         $user = $request->user();
