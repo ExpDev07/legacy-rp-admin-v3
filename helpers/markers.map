@@ -80,7 +80,7 @@
 {x: 398.637, y: -1641.297} blips/impound.png Impound lot 1
 {x: 1613.657, y: 3782.110} blips/impound.png Impound lot 2
 {x: -279.653, y: 6130.602} blips/impound.png Impound lot 3
-{x: -191, y: 1168} blips/impound.png Impound lot 4
+{x: -191, y: -1168} blips/impound.png Impound lot 4
 
 // Medical
 {x: -247.358, y: 6331.569} blips/medical.png Paleto Bay Clinic
