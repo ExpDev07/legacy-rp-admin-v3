@@ -697,6 +697,9 @@
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.vehicles.plate') }}:</span> {{ vehicle.plate }}
                             </h4>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.vehicles.vehicle_id') }}:</span> {{ vehicle.id }}
+                            </h4>
                         </template>
 
                         <template>
