@@ -32,6 +32,7 @@ class TwitterUser extends Authenticatable
         'username',
         'password',
         'avatar_url',
+        'creator_cid',
     ];
 
     /**

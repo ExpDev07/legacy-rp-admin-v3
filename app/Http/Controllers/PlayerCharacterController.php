@@ -167,6 +167,24 @@ class PlayerCharacterController extends Controller
     }
 
     /**
+     * Find a character by their cid
+     *
+     * @param Request $request
+     * @param int $cid
+     * @return \Illuminate\Contracts\Foundation\Application|RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function find(Request $request, int $cid)
+    {
+        $character = Character::query()->select(['steam_identifier', 'character_id'])->where('character_id', '=', $cid)->get()->first();
+
+        if (!$character) {
+            abort(404);
+        }
+
+        return redirect('/players/' . $character->steam_identifier . '/characters/' . $character->character_id . '/edit');
+    }
+
+    /**
      * Updates the specified resource.
      *
      * @param Player $player

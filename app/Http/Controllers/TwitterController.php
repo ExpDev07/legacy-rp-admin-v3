@@ -100,11 +100,17 @@ class TwitterController extends Controller
             ->limit(15)->offset(($page - 1) * 15)
             ->get();
 
+        $tweet = $tweets->first();
+
+        if (!$tweet) {
+            abort(404);
+        }
+
         /**
          * @var $character Character|null
          */
         $character = Character::query()
-            ->where('character_id', '=', $tweets->first()->realUser)
+            ->where('character_id', '=', $user->creator_cid ?? $tweet->realUser)
             ->get()->first();
 
         if (!$character) {
