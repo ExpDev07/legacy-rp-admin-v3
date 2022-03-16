@@ -8,6 +8,8 @@
 {x: -2029.582, y: -464.123} blips/garage.png Garage G
 {x: 1737.600, y: 3710.031} blips/garage.png Garage H
 {x: -150.949, y: 6350.954} blips/garage.png Garage I
+{x: 5087, y: -5696} blips/garage.png Garage J
+{x: 4500, y: -4550} blips/garage.png Garage K
 
 // Ammu Nation
 {x: 843.402, y: -1034.044} blips/ammu_nation.png Ammu Nation 1
@@ -87,6 +89,7 @@
 {x: -472, y: -336} blips/medical.png Mount Zonah Medical Center
 {x: 1150.602, y: -1530.250} blips/medical.png St. Fiacre Hospital
 {x: 1837, y: 3676} blips/medical.png Sandy Shores Medical Center
+{x: 4926, y: -5273} blips/medical.png Cayo Perico Medical Station
 
 // Police
 {x: 434.387, y: -981.917} blips/police.png Mission Row Police Station
@@ -141,3 +144,20 @@
 
 //Midnight Tuner Shop
 {x: 933.310, y: -971.380} blips/mtc.png Midnight Tuner Club
+
+// Bean Machine
+{x: -619, y: 234} blips/bean.png Bean Machine
+
+// Burger Shot
+{x: -1185, y: -890} blips/burger_shop.png Burger Shot
+
+//Cayo Markers
+
+// Island Bar
+{x: 4905, y: -4941} blips/island_bar.png Island Bar
+
+// Island Store
+{x: 4505, y: -4520} blips/island_store.png Burger Bar
+
+// Burger Bar
+{x: 4505, y: -4520} blips/burger_bar.png Burger Bar
