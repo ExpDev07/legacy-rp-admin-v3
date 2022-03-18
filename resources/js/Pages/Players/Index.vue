@@ -21,19 +21,19 @@
             <template>
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="name">
                                 {{ t('players.name') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster" v-model="filters.name">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="steam">
                                 {{ t('players.steam') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="steam" name="steam" placeholder="steam:11000010df22c8b" v-model="filters.steam">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="discord">
                                 {{ t('players.discord') }}
                                 <sup class="text-muted dark:text-dark-muted">
@@ -43,23 +43,12 @@
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3 mt-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3 mt-3">
                             <label class="block mb-4 font-semibold" for="server_id">
                                 {{ t('players.server_id') }}
                                 <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="server_id" name="server" type="number" min="0" max="9999" placeholder="123" v-model="filters.server">
-                        </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3 mt-3">
-                            <label class="block mb-4 font-semibold">
-                                {{ t('players.is_banned') }} <sup class="text-muted dark:text-dark-muted">*</sup>
-                            </label>
-                            <select class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="banned" v-model="filters.banned">
-                                <option value="all">{{ t('global.all') }}</option>
-                                <option value="yes">{{ t('global.banned') }}</option>
-                                <option value="no">{{ t('global.not_banned') }}</option>
-                                <option value="mine">{{ t('players.my_bans') }}</option>
-                            </select>
                         </div>
                     </div>
                     <!-- Description -->
@@ -212,7 +201,6 @@ export default {
             steam: String,
             discord: String,
             server: Number,
-            banned: String,
         },
         time: {
             type: Number,

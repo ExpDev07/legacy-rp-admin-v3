@@ -31,8 +31,6 @@ class PlayerController extends Controller
     public function index(Request $request): Response
     {
         $start = round(microtime(true) * 1000);
-        $isOrdered = false;
-
         $query = Player::query();
 
         // Filtering by name.
@@ -64,49 +62,27 @@ class PlayerController extends Controller
             $query->whereIn('steam_identifier', $online);
         }
 
-        // Filtering isBanned.
-        if ($banned = $request->input('banned')) {
-            if (in_array($banned, ['yes', 'no', 'mine'])) {
-                $ids = Ban::getAllBans(true);
+        $playerList = Player::getAllOnlinePlayers(true) ?? [];
+        $players = array_keys($playerList);
+        usort($players, function ($a, $b) use ($playerList) {
+            return $playerList[$a]['id'] <=> $playerList[$b]['id'];
+        });
+        $players = array_map(function ($player) {
+            return DB::connection()->getPdo()->quote($player);
+        }, $players);
 
-                if ($banned === 'yes') {
-                    $query->whereIn('steam_identifier', $ids)->orderByRaw("FIELD(steam_identifier, '" . implode("','", $ids) . "') DESC");
-                    $isOrdered = true;
-                } else if ($banned === 'no') {
-                    $query->whereNotIn('steam_identifier', $ids);
-                } else if ($banned === 'mine') {
-                    $player = $request->user()->player;
-                    $ids = Ban::getAllBannedIdentifiersByCreator($player->player_name, $player->steam_identifier);
+        $orderField = $request->input('order') ?? null;
+        $orderDirection = $request->input('desc') ? 'DESC' : 'ASC';
 
-                    $query->whereIn('steam_identifier', $ids)->orderByRaw("FIELD(steam_identifier, '" . implode("','", $ids) . "') DESC");
-                    $isOrdered = true;
-                }
-            }
+        if (!$orderField || !in_array($orderField, ['last_connection', 'playtime', 'player_name'])) {
+            $orderField = 'last_connection';
+            $orderDirection = 'DESC';
         }
 
-        if (!$isOrdered) {
-            $playerList = Player::getAllOnlinePlayers(true) ?? [];
-            $players = array_keys($playerList);
-            usort($players, function ($a, $b) use ($playerList) {
-                return $playerList[$a]['id'] <=> $playerList[$b]['id'];
-            });
-            $players = array_map(function ($player) {
-                return DB::connection()->getPdo()->quote($player);
-            }, $players);
-
-            $orderField = $request->input('order') ?? null;
-            $orderDirection = $request->input('desc') ? 'DESC' : 'ASC';
-
-            if (!$orderField || !in_array($orderField, ['last_connection', 'playtime', 'player_name'])) {
-                $orderField = 'last_connection';
-                $orderDirection = 'DESC';
-            }
-
-            if (!empty($players)) {
-                $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
-            } else {
-                $query->orderByDesc($orderField);
-            }
+        if (!empty($players)) {
+            $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
+        } else {
+            $query->orderByDesc($orderField);
         }
 
         $query->select([
@@ -133,7 +109,6 @@ class PlayerController extends Controller
                 'steam'   => $request->input('steam'),
                 'discord' => $request->input('discord'),
                 'server'  => $request->input('server'),
-                'banned'  => $request->input('banned') ?: 'all',
             ],
             'links'   => $this->getPageUrls($page),
             'time'    => $end - $start,
