@@ -67,16 +67,16 @@ class Vehicle extends Model
      */
     public function garage(): string
     {
-        if (intval($this->garage_impound) === 1) {
+        if ((int)$this->garage_impound === 1) {
             return 'Impound Lot';
-        } else if (intval($this->garage_state) === 0) {
+        } else if ((int)$this->garage_state === 0) {
             return 'Out';
         }
 
         $this->garage_identifier = trim($this->garage_identifier);
 
         if (is_numeric($this->garage_identifier)) {
-            switch (intval($this->garage_identifier)) {
+            switch ((int)$this->garage_identifier) {
                 case 1:
                 case 2:
                 case 3:
@@ -84,7 +84,7 @@ class Vehicle extends Model
                 case 4:
                     return 'Garage A (near court house)';
                 case 5:
-                    return 'Garage B (near exclusive dealership)';
+                    return 'Garage B (near go postal)';
                 case 6:
                     return 'Garage C (the big red building)';
                 case 7:
@@ -99,6 +99,18 @@ class Vehicle extends Model
                     return 'Garage H (sandy shores garage)';
                 case 12:
                     return 'Garage I (paleto garage)';
+                case 14:
+                    return 'Garage J (cayo compound)';
+                case 15:
+                    return 'Garage K (cayo airfield)';
+                case 17:
+                    return 'LSIA';
+                case 18:
+                    return 'MRPD';
+                case 19:
+                    return 'Mount Zonah Medical Center';
+                case 21:
+                    return 'Luxury Autos';
             }
         }
 
