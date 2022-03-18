@@ -6,16 +6,50 @@ use App\Ban;
 use App\Http\Requests\BanStoreRequest;
 use App\Http\Requests\BanUpdateRequest;
 use App\Http\Resources\BanResource;
+use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PlayerBanController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = Player::query();
+
+        if ($request->input('mine')) {
+            $player = $request->user()->player;
+
+            $ids = Ban::getAllBannedIdentifiersByCreator($player->player_name, $player->steam_identifier);
+        } else {
+            $ids = Ban::getAllBans(true);
+        }
+
+        $query
+            ->whereIn('steam_identifier', $ids)
+            ->orderByRaw("FIELD(steam_identifier, '" . implode("','", $ids) . "') DESC");
+
+        $page = Paginator::resolveCurrentPage('page');
+        $query->limit(15)->offset(($page - 1) * 15);
+
+        $players = $query->get();
+
+        $identifiers = array_values(array_map(function ($player) {
+            return $player['steam_identifier'];
+        }, $players->toArray()));
+
+        return Inertia::render('Players/Bans', [
+            'players' => PlayerIndexResource::collection($players),
+            'banMap'  => Ban::getAllBans(false, $identifiers, true),
+            'links'   => $this->getPageUrls($page),
+            'page'    => $page
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.

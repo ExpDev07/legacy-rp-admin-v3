@@ -592,6 +592,7 @@
             "add_panel_trusted": "Make Trusted Panel User",
             "panel_trusted_confirm": "Are you sure you want to change this users panel trusted status?"
         },
+        "ban_reason": "Ban Reason",
         "form": {
             "identifier": "Identifier",
             "name": "Name",
