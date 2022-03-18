@@ -46,15 +46,8 @@ class PlayerBanController extends Controller
 
         $players = $query->get();
 
-        var_dump($players);
-
-        $identifiers = array_values(array_map(function ($player) {
-            return $player['steam_identifier'];
-        }, $players->toArray()));
-
         return Inertia::render('Players/Bans', [
-            'players' => PlayerIndexResource::collection($players),
-            'banMap'  => Ban::getAllBans(false, $identifiers, true),
+            'players' => $players->toArray(),
             'links'   => $this->getPageUrls($page),
             'page'    => $page
         ]);
