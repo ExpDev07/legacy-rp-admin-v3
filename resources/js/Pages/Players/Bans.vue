@@ -3,20 +3,14 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                {{ t('players.title') }}
+                {{ t('players.ban..title') }}
             </h1>
             <p>
-                {{ t('players.description') }}
+                {{ t('players.ban..description') }}
             </p>
         </portal>
 
         <v-section class="overflow-x-auto">
-            <template #header>
-                <h2>
-                    {{ t('players.title') }}
-                </h2>
-            </template>
-
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">

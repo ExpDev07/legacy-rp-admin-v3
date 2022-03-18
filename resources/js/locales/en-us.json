@@ -542,7 +542,10 @@
             "day": "Day(s)",
             "week": "Week(s)",
             "month": "Month(s)",
-            "no_reason": "This ban is missing a ban reason"
+            "no_reason": "This ban is missing a ban reason",
+
+            "title": "Bans",
+            "description": "Lists all bans."
         },
         "show": {
             "played": "<b>{0}</b> played",
