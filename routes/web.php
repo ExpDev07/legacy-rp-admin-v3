@@ -118,6 +118,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     Route::get('/new_players', [PlayerController::class, 'newPlayers']);
 
+    Route::get('/bans', [PlayerBanController::class, 'index']);
+
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
     Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);
