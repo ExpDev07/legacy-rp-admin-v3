@@ -3,10 +3,10 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                {{ t('players.ban..title') }}
+                {{ t('players.ban.title') }}
             </h1>
             <p>
-                {{ t('players.ban..description') }}
+                {{ t('players.ban.description') }}
             </p>
         </portal>
 
@@ -18,14 +18,14 @@
                         <th class="px-6 py-4">{{ t('players.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.playtime') }}</th>
                         <th class="px-6 py-4">{{ t('players.ban_reason') }}</th>
-                        <th class="w-64 px-6 py-4">{{ t('players.form.banned') }}?</th>
+                        <th class="w-64 px-6 py-4"></th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in players" v-bind:key="player.id">
                         <td class="px-6 py-3 border-t mobile:block">{{ player.steamIdentifier }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playTime | humanizeSeconds }}</td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ getBanInfo(player.steamIdentifier, 'reason') ? getBanInfo(player.steamIdentifier, 'reason') : t('players.ban.no_reason') }}</td>
+                        <td class="px-6 py-3 border-t mobile:block text-sm">{{ getBanInfo(player.steamIdentifier, 'reason') ? cutText(getBanInfo(player.steamIdentifier, 'reason')) : t('players.ban.no_reason') }}</td>
                         <td class="px-6 py-3 text-center border-t mobile:block">
                             <span
                                 class="block px-4 py-2 text-white rounded"
@@ -129,6 +129,18 @@ export default {
                 return ban && key in ban ? ban[key] : null;
             }
             return ban;
+        },
+        cutText(text) {
+            if (text.length > 120) {
+                return text.substring(0, 120) + '...';
+            }
+
+            return text;
+        },
+        localizeBan(ban) {
+            return ban.expire
+                ? this.t('players.show.ban', this.formatBanCreator(ban.creator_name), this.$options.filters.formatTime(ban.expire))
+                : this.t('players.ban.forever', this.formatBanCreator(ban.creator_name));
         },
         formatBanCreator(creator) {
             if (!creator) {

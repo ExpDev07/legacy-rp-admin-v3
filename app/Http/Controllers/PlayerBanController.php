@@ -22,6 +22,11 @@ class PlayerBanController extends Controller
     {
         $query = Player::query();
 
+        $query->select([
+            'steam_identifier', 'player_name', 'playtime', 'identifiers',
+            'reason', 'timestamp', 'expire', 'creator_name', 'creator_identifier'
+        ]);
+
         if ($request->input('mine')) {
             $player = $request->user()->player;
 
@@ -30,14 +35,18 @@ class PlayerBanController extends Controller
             $ids = Ban::getAllBans(true);
         }
 
+        $query->leftJoin('user_bans', 'identifier', '=', 'steam_identifier');
+
         $query
-            ->whereIn('steam_identifier', $ids)
-            ->orderByRaw("FIELD(steam_identifier, '" . implode("','", $ids) . "') DESC");
+            ->whereNotNull('reason')
+            ->orderByDesc('timestamp');
 
         $page = Paginator::resolveCurrentPage('page');
         $query->limit(15)->offset(($page - 1) * 15);
 
         $players = $query->get();
+
+        var_dump($players);
 
         $identifiers = array_values(array_map(function ($player) {
             return $player['steam_identifier'];

@@ -545,7 +545,7 @@
             "no_reason": "This ban is missing a ban reason",
 
             "title": "Bans",
-            "description": "Lists all bans."
+            "description": "List of all banned players."
         },
         "show": {
             "played": "<b>{0}</b> played",
