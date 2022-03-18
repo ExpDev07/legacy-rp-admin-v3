@@ -125,7 +125,7 @@
                             <span
                                 class="block px-4 py-2 text-white rounded"
                                 :class="getBanInfo(player.steamIdentifier, 'reason') ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
-                                :title="getBanInfo(player.steamIdentifier, 'reason') ? t('players.ban.no_reason') : ''"
+                                :title="getBanInfo(player.steamIdentifier, 'reason') ? getBanInfo(player.steamIdentifier, 'reason') : t('players.ban.no_reason')"
                                 v-if="player.isBanned"
                             >
                                 {{ t('global.banned') }}
