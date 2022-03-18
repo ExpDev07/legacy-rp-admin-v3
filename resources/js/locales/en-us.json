@@ -65,7 +65,10 @@
         "serials": "Serial Lookup",
         "csi": "CSI Tools",
         "overwatch": "Overwatch",
-        "errors": "Errors"
+        "errors": "Errors",
+        "bans": "Bans",
+        "all_bans": "All bans",
+        "my_bans": "My bans"
     },
     "queue": {
         "title": "Queue",
@@ -534,6 +537,7 @@
             "banned_forever": "Banned indefinitely",
             "banned_by": "<i>{0}</i> was banned by <i>{1}</i>",
             "forever": "<i>{0}</i> indefinitely banned this player",
+            "forever_text": "{0} indefinitely banned this player",
             "forever_edit": "forever",
             "temp-select": "Toggle date/time input",
             "temp-type": "Length Unit",
@@ -553,6 +557,8 @@
             "unban": "Unban",
             "issue": "Issue Ban",
             "ban": "Banned by <i>{0}</i> until <i>{1}</i>",
+            "ban_text": "Till {0}",
+            "ban_forever_text": "Indefinitely",
             "no_reason": "No reason.",
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
@@ -595,7 +601,9 @@
             "add_panel_trusted": "Make Trusted Panel User",
             "panel_trusted_confirm": "Are you sure you want to change this users panel trusted status?"
         },
-        "ban_reason": "Ban Reason",
+        "ban_reason": "Reason",
+        "ban_time": "Expires",
+        "ban_creator": "Creator",
         "form": {
             "identifier": "Identifier",
             "name": "Name",

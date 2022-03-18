@@ -18,24 +18,43 @@ use Inertia\Response;
 
 class PlayerBanController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function index(Request $request): Response
+    {
+        return $this->bans($request, false);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function indexMine(Request $request): Response
+    {
+        return $this->bans($request, true);
+    }
+
+    private function bans(Request $request, bool $showMine): Response
     {
         $query = Player::query();
 
         $query->select([
-            'steam_identifier', 'player_name', 'playtime', 'identifiers',
+            'steam_identifier', 'player_name',
             'reason', 'timestamp', 'expire', 'creator_name', 'creator_identifier'
         ]);
 
-        if ($request->input('mine')) {
+        $query->leftJoin('user_bans', 'identifier', '=', 'steam_identifier');
+
+        if ($showMine) {
             $player = $request->user()->player;
 
-            $ids = Ban::getAllBannedIdentifiersByCreator($player->player_name, $player->steam_identifier);
-        } else {
-            $ids = Ban::getAllBans(true);
+            $query->where(function ($query) use ($player) {
+                $query->orWhere('creator_identifier', '=', $player->steam_identifier);
+                $query->orWhere('creator_name', '=', $player->player_name);
+            });
         }
-
-        $query->leftJoin('user_bans', 'identifier', '=', 'steam_identifier');
 
         $query
             ->whereNotNull('reason')

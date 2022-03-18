@@ -69,6 +69,9 @@
     <i class="fas fa-images" v-else-if="name === 'images'"></i>
     <i class="fas fa-subway" v-else-if="name === 'subway'"></i>
     <i class="fas fa-kiwi-bird" v-else-if="name === 'kiwi'"></i>
+    <i class="fas fa-user-slash" v-else-if="name === 'user-slash'"></i>
+    <i class="fas fa-user-friends" v-else-if="name === 'friends'"></i>
+    <i class="fas fa-user" v-else-if="name === 'user'"></i>
 </template>
 
 <script>
