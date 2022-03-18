@@ -142,6 +142,22 @@ export default {
                     ]
                 },
                 {
+                    label: this.t('sidebar.bans'),
+                    icon: 'user-slash',
+                    sub: [
+                        {
+                            label: this.t('sidebar.all_bans'),
+                            icon: 'friends',
+                            url: '/bans',
+                        },
+                        {
+                            label: this.t('sidebar.my_bans'),
+                            icon: 'user',
+                            url: '/my_bans',
+                        }
+                    ]
+                },
+                {
                     label: this.t('sidebar.data'),
                     icon: 'server',
                     sub: [

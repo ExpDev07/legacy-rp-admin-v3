@@ -16,29 +16,20 @@
                     <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('players.form.identifier') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.name') }}</th>
-                        <th class="px-6 py-4">{{ t('players.form.playtime') }}</th>
+                        <th class="px-6 py-4">{{ t('players.ban_time') }}</th>
                         <th class="px-6 py-4">{{ t('players.ban_reason') }}</th>
-                        <th class="w-64 px-6 py-4"></th>
+                        <th class="px-6 py-4">{{ t('players.ban_creator') }}</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in players" v-bind:key="player.user_id">
                         <td class="px-6 py-3 border-t mobile:block">{{ player.steam_identifier }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.player_name }}</td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ player.playtime | humanizeSeconds }}</td>
-                        <td class="px-6 py-3 border-t mobile:block text-sm font-mono" :title="player.reason ? player.reason : t('players.ban.no_reason')">
+                        <td class="px-6 py-3 border-t mobile:block">{{ localizeBan(player) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block text-xs font-mono" :title="player.reason ? player.reason : t('players.ban.no_reason')">
                             {{ player.reason ? cutText(player.reason) : t('players.ban.no_reason') }}
                         </td>
-                        <td class="px-6 py-3 text-center border-t mobile:block">
-                            <span
-                                class="block px-4 py-2 text-white rounded"
-                                :class="player.expire ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
-                                :title="localizeBan(player)"
-                            >
-                                {{ t('global.banned') }}
-                                <span class="block text-xxs">
-                                    {{ t('global.by', formatBanCreator(player.creator_name, 'creator_name')) }}
-                                </span>
-                            </span>
+                        <td class="px-6 py-3 border-t mobile:block">
+                            {{ formatBanCreator(player.creator_name, 'creator_name') }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + player.steam_identifier">
@@ -123,15 +114,15 @@ export default {
     methods: {
         cutText(text) {
             if (text.length > 120) {
-                return text.substring(0, 120) + '...';
+                return text.substring(0, 90) + '...';
             }
 
             return text;
         },
         localizeBan(ban) {
             return ban.expire
-                ? this.t('players.show.ban', this.formatBanCreator(ban.creator_name), this.$options.filters.formatTime(ban.expire))
-                : this.t('players.ban.forever', this.formatBanCreator(ban.creator_name));
+                ? this.t('players.show.ban_text', this.$options.filters.formatTime((ban.timestamp + ban.expire) * 1000))
+                : this.t('players.show.ban_forever_text');
         },
         formatBanCreator(creator) {
             if (!creator) {
