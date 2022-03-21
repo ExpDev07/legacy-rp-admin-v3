@@ -52,7 +52,7 @@ class PlayerBanController extends Controller
 
             $query->where(function ($query) use ($player) {
                 $query->orWhere('creator_identifier', '=', $player->steam_identifier);
-                $query->orWhere('creator_name', '=', $player->player_name);
+                $query->orWhereIn('creator_name', $player->player_aliases);
             });
         }
 
