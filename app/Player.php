@@ -62,6 +62,7 @@ class Player extends Model
     protected $fillable = [
         'steam_identifier',
         'player_name',
+        'player_aliases',
         'identifiers',
         'is_staff',
         'is_super_admin',
@@ -82,6 +83,7 @@ class Player extends Model
      */
     protected $casts = [
         'identifiers'      => 'array',
+        'player_aliases'   => 'array',
         'last_connection'  => 'datetime',
         'is_trusted'       => 'boolean',
         'is_staff'         => 'boolean',

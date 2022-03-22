@@ -3,7 +3,8 @@
         <portal to="title">
             <div class="flex items-start space-x-10 mobile:flex-wrap">
                 <h1 class="dark:text-white">
-                    {{ player.playerName }}
+                    {{ player.playerName }}<br>
+                    <small>{{ player.playerAliases.join(", ") }}</small>
                 </h1>
                 <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copyShare">

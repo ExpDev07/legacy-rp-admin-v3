@@ -44,6 +44,9 @@ class PlayerResource extends JsonResource
             'ban'             => new BanResource($this->getActiveBan()),
             'status'          => $status,
             'fakeName'        => $status ? $status->fakeName : false,
+            'playerAliases'   => array_values(array_filter($this->player_aliases, function($e) {
+                return $e !== $this->player_name;
+            }))
         ];
     }
 

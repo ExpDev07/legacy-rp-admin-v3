@@ -43,7 +43,7 @@
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>
-                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3 mt-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="server_id">
                                 {{ t('players.server_id') }}
                                 <sup class="text-muted dark:text-dark-muted">*</sup>
