@@ -23,6 +23,8 @@ class PlayerResource extends JsonResource
 
         $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null;
 
+        $identifiers = json_decode($this->player_aliases, true);
+
         return [
             'id'              => $this->user_id,
             'avatar'          => $this->avatar,
@@ -44,9 +46,9 @@ class PlayerResource extends JsonResource
             'ban'             => new BanResource($this->getActiveBan()),
             'status'          => $status,
             'fakeName'        => $status ? $status->fakeName : false,
-            'playerAliases'   => array_values(array_filter(json_decode($this->player_aliases, true), function($e) {
+            'playerAliases'   => $identifiers ? array_values(array_filter($identifiers, function($e) {
                 return $e !== $this->player_name;
-            }))
+            })) : []
         ];
     }
 
