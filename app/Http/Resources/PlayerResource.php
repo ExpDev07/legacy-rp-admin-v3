@@ -23,7 +23,7 @@ class PlayerResource extends JsonResource
 
         $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null;
 
-        $identifiers = json_decode($this->player_aliases, true);
+        $identifiers = is_array($this->player_aliases) ? $this->player_aliases : json_decode($this->player_aliases, true);
 
         return [
             'id'              => $this->user_id,
