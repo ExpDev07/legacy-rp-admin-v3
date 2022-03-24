@@ -121,7 +121,6 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     Route::get('/bans', [PlayerBanController::class, 'index']);
     Route::get('/my_bans', [PlayerBanController::class, 'indexMine']);
-    Route::get('/evaders', [PlayerBanController::class, 'evaders']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
@@ -229,6 +228,8 @@ Route::group(['prefix' => 'cron'], function () {
 
     // economy statistics cronjob
     Route::get('economy', [CronjobController::class, 'updateEconomyStatistics']);
+
+    Route::get('/evaders', [CronjobController::class, 'evaders']);
 });
 
 Route::group(['prefix' => 'debug'], function () {

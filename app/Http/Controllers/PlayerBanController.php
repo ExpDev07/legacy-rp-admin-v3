@@ -222,35 +222,4 @@ class PlayerBanController extends Controller
         return back()->with('success', 'Ban was successfully updated, redirecting back to player page...');
     }
 
-    public function evaders(Request $request): \Illuminate\Http\Response
-    {
-        $bans = Ban::getAllBans(true);
-
-        $players = Player::query()->select(['steam_identifier', 'identifiers'])->whereIn('steam_identifier', $bans)->get();
-
-        $ips = [];
-
-        /**
-         * @var $player Player
-         */
-        foreach($players as $player) {
-            $identifiers = $player->getIdentifiers();
-
-            $ip = null;
-            foreach($identifiers as $identifier) {
-                if (Str::startsWith($identifier, 'ip:')) {
-                    $ip = $identifier;
-
-                    break;
-                }
-            }
-
-            if ($ip) {
-                $ips[$ip] = $player->steam_identifier;
-            }
-        }
-
-        return $this->text(200, json_encode($ips, JSON_PRETTY_PRINT));
-    }
-
 }

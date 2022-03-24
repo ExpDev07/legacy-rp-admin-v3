@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Ban;
 use App\Character;
 use App\Helpers\CacheHelper;
+use App\Player;
 use App\Statistics\BanStatistic;
 use App\Statistics\EconomyStatistic;
 use App\Statistics\Statistic;
@@ -12,6 +13,7 @@ use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CronjobController extends Controller
 {
@@ -91,6 +93,45 @@ class CronjobController extends Controller
 
             $today->update();
         }
+    }
+
+    public function evaders(Request $request): \Illuminate\Http\Response
+    {
+        if (!$this->validateRequest($request)) {
+            return $this->json(false, null, 'Invalid token');
+        }
+
+        $players = Player::query()
+            ->select([
+                'steam_identifier', 'timestamp', 'identifiers'
+            ])
+            ->leftJoin('user_bans', 'identifier', '=', 'steam_identifier')
+            ->whereNotNull('timestamp')->get();
+
+
+        $ips = [];
+
+        /**
+         * @var $player Player
+         */
+        foreach($players as $player) {
+            $identifiers = $player->getIdentifiers();
+
+            $ip = null;
+            foreach($identifiers as $identifier) {
+                if (Str::startsWith($identifier, 'ip:')) {
+                    $ip = $identifier;
+
+                    break;
+                }
+            }
+
+            if ($ip) {
+                $ips[$ip] = $player->steam_identifier;
+            }
+        }
+
+        return $this->json(true, $ips);
     }
 
     /**
