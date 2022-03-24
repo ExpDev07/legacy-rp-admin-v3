@@ -117,7 +117,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/updateTrustedPanelStatus/{status}', [PlayerRouteController::class, 'updateTrustedPanelStatus']);
 
     Route::get('/new_players', [PlayerController::class, 'newPlayers']);
-
+    Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
 
     Route::get('/bans', [PlayerBanController::class, 'index']);
     Route::get('/my_bans', [PlayerBanController::class, 'indexMine']);
