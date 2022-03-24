@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ban;
+use App\Helpers\PermissionHelper;
 use App\Http\Requests\BanStoreRequest;
 use App\Http\Requests\BanUpdateRequest;
 use App\Http\Resources\BanResource;
@@ -224,6 +225,10 @@ class PlayerBanController extends Controller
 
     public function linkedIPs(Request $request): \Illuminate\Http\Response
     {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SUSPICIOUS)) {
+            return $this->text(401, "You don't have the permissions to access this page.");
+        }
+
         $steam = $request->query("steam");
 
         if (!$steam || !Str::startsWith($steam, 'steam:')) {
