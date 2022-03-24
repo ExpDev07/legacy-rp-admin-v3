@@ -272,7 +272,7 @@ class PlayerBanController extends Controller
             }
         }
 
-        return $this->text(200, "Found: " . sizeof($linked) . "\nSteam: " . $steam . "\nIPs:   " . implode(", ", $list) . "\n\n" . implode("\n", $linked));
+        return $this->text(200, "Found: " . sizeof($linked) . "\nSteam: " . $steam . "\nIPs:   " . implode(", ", $list) . "\n\n" . (empty($linked) ? 'No linked accounts' : implode("\n", $linked)));
     }
 
 }
