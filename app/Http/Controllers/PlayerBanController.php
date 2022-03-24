@@ -237,12 +237,14 @@ class PlayerBanController extends Controller
         }
 
         $ips = [];
+        $list = [];
 
         $identifiers = $player->getIdentifiers();
 
         foreach($identifiers as $identifier) {
             if (Str::startsWith($identifier, 'ip:')) {
                 $ips[] = 'identifiers LIKE "%' . $identifier . '%"';
+                $list[] = $identifier;
             }
         }
 
@@ -270,7 +272,7 @@ class PlayerBanController extends Controller
             }
         }
 
-        return $this->text(200, "Found " . sizeof($linked) . " linked players for " . $steam . ":\n\n" . implode("\n", $linked));
+        return $this->text(200, "Found: " . sizeof($linked) . "\nSteam: " . $steam . "\nIPs:   " . implode(", ", $list) . "\n\n" . implode("\n", $linked));
     }
 
 }
