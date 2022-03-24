@@ -250,13 +250,23 @@ class PlayerBanController extends Controller
             return $this->text(404, "No IP identifiers found.");
         }
 
-        $players = Player::query()->select(['player_name', 'steam_identifier'])->whereRaw(implode(" OR ", $ips))->get()->toArray();
+        $players = Player::query()->select(['player_name', 'steam_identifier', 'identifiers'])->whereRaw(implode(" OR ", $ips))->get();
 
         $linked = [];
 
         foreach($players as $found) {
             if ($found->steam_identifier !== $steam) {
-                $linked[] = $found->player_name . ' (' . $found->steam_identifier . ')';
+                $ips = [];
+
+                $identifiers = $found->getIdentifiers();
+
+                foreach($identifiers as $identifier) {
+                    if (Str::startsWith($identifier, 'ip:')) {
+                        $ips[] = $identifier;
+                    }
+                }
+
+                $linked[] = $found->player_name . ' (' . $found->steam_identifier . ') - [' . implode(", ", $ips) . ']';
             }
         }
 
