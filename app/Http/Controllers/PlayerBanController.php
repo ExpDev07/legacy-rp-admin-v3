@@ -222,4 +222,45 @@ class PlayerBanController extends Controller
         return back()->with('success', 'Ban was successfully updated, redirecting back to player page...');
     }
 
+    public function linkedIPs(Request $request): \Illuminate\Http\Response
+    {
+        $steam = $request->query("steam");
+
+        if (!$steam || !Str::startsWith($steam, 'steam:')) {
+            return $this->text(400, "Invalid steam id.");
+        }
+
+        $player = Player::query()->select(['identifiers'])->where('steam_identifier', '=', $steam)->get()->first();
+
+        if (!$player) {
+            return $this->text(404, "Player not found.");
+        }
+
+        $ips = [];
+
+        $identifiers = $player->getIdentifiers();
+
+        foreach($identifiers as $identifier) {
+            if (Str::startsWith($identifier, 'ip:')) {
+                $ips[] = 'identifiers LIKE "%' . $identifier . '%"';
+            }
+        }
+
+        if (empty($ips)) {
+            return $this->text(404, "No IP identifiers found.");
+        }
+
+        $players = Player::query()->select(['player_name', 'steam_identifier'])->whereRaw(implode(" OR ", $ips))->get()->toArray();
+
+        $linked = [];
+
+        foreach($players as $found) {
+            if ($found->steam_identifier !== $steam) {
+                $linked[] = $found->player_name . ' (' . $found->steam_identifier . ')';
+            }
+        }
+
+        return $this->text(200, "Found " . sizeof($linked) . " linked players for " . $steam . ":\n\n" . implode("\n", $linked));
+    }
+
 }
