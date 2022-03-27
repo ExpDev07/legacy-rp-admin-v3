@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class GeneralHelper
@@ -43,6 +44,35 @@ class GeneralHelper
         return in_array($steam_identifier, self::$rootCache);
     }
 
+    public static function ipInfo(string $ip): ?array
+    {
+        DB::table('panel_ip_infos')->where('last_crawled', '<', time() - CacheHelper::DAY * 5)->delete();
+
+        $info = DB::table('panel_ip_infos')->where('ip', '=', $ip)->get()->first();
+
+        if (!$info) {
+            $info = json_decode(GeneralHelper::get("http://ip-api.com/json/" . $ip . "?fields=status,message,country,isp,proxy,hosting"), true) ?? [];
+            if (!$info || $info['status'] !== 'success') {
+                return null;
+            }
+
+            unset($info['status']);
+
+            $info = [
+                'ip' => $ip,
+                'country' => $info['country'] ?? 'N/A',
+                'isp' => $info['isp'] ?? 'N/A',
+                'proxy' => $info['proxy'] ? 1 : 0,
+                'hosting' => $info['hosting'] ? 1 : 0,
+                'last_crawled' => time()
+            ];
+
+            DB::table('panel_ip_infos')->insert($info);
+        }
+
+        return $info;
+    }
+
     /**
      * Returns a random inspiring quote
      *
@@ -61,8 +91,8 @@ class GeneralHelper
 
             if (!$quote || !isset($quote['expires'])) {
                 $quote = [
-                    'quote'   => null,
-                    'author'  => null,
+                    'quote' => null,
+                    'author' => null,
                     'expires' => null,
                 ];
             }
@@ -76,7 +106,7 @@ class GeneralHelper
                 CacheHelper::write($key, $quote);
             } else {
                 $quote = [
-                    'quote'  => 'Quote machine broke',
+                    'quote' => 'Quote machine broke',
                     'author' => 'Twoot',
                 ];
             }
@@ -138,8 +168,8 @@ class GeneralHelper
             $label = $matches[3];
 
             $result[] = [
-                'icon'   => $icon,
-                'label'  => $label,
+                'icon' => $icon,
+                'label' => $label,
                 'coords' => $obj,
             ];
         }
@@ -170,7 +200,7 @@ class GeneralHelper
             );
 
             $res = $client->request('GET', $url, [
-                'timeout'         => 3,
+                'timeout' => 3,
                 'connect_timeout' => 1,
             ]);
 
