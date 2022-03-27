@@ -249,31 +249,33 @@ class PlayerBanController extends Controller
                 $info = GeneralHelper::ipInfo(str_replace('ip:', '', $identifier));
 
                 $isProxy = false;
-                $additionalInfo = '';
+                $additionalInfo = '    - No info';
                 if ($info) {
-                    $additionalInfo = ' (' . $info['country'];
+                    $additionalInfo = '    - ' . $info['country'] . ' (' . $info['isp'] . ')';
 
                     if ($info['proxy']) {
-                        $additionalInfo .= ', proxy';
+                        $additionalInfo .= "\n    - Is Proxy";
                         $isProxy = true;
                     }
 
-                    $additionalInfo .= ')';
+                    if ($info['hosting']) {
+                        $additionalInfo .= "\n    - Is Hosting";
+                    }
                 }
 
                 if (!$isProxy) {
                     $ips[] = 'identifiers LIKE "%' . $identifier . '%"';
                 }
 
-                $list[] = $identifier . $additionalInfo;
+                $list[] = $identifier . "\n" . $additionalInfo;
             }
         }
 
-        if (empty($ips)) {
+        if (empty($ips) && empty($list)) {
             return $this->text(404, "No IP identifiers found.");
         }
 
-        $players = Player::query()->select(['player_name', 'steam_identifier', 'identifiers'])->whereRaw(implode(" OR ", $ips))->get();
+        $players = empty($ips) ? [] : Player::query()->select(['player_name', 'steam_identifier', 'identifiers'])->whereRaw(implode(" OR ", $ips))->get();
 
         $linked = [];
 
@@ -293,7 +295,7 @@ class PlayerBanController extends Controller
             }
         }
 
-        return $this->text(200, "Found: " . sizeof($linked) . "\nSteam: " . $steam . "\nIPs:   " . implode(", ", $list) . "\n\n" . (empty($linked) ? 'No linked accounts' : implode("\n", $linked)));
+        return $this->text(200, "Found: " . sizeof($linked) . " Accounts\nSteam: " . $steam . "\n\n" . implode("\n", $list) . "\n\n" . (empty($linked) ? 'No linked accounts (proxy ips not included)' : implode("\n", $linked)));
     }
 
 }

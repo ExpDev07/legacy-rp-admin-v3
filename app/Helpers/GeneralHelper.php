@@ -68,6 +68,8 @@ class GeneralHelper
             ];
 
             DB::table('panel_ip_infos')->insert($info);
+        } else {
+            $info = json_decode(json_encode($info), true);
         }
 
         return $info;
