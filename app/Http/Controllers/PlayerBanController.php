@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ban;
+use App\Helpers\GeneralHelper;
 use App\Http\Requests\BanStoreRequest;
 use App\Http\Requests\BanUpdateRequest;
 use App\Http\Resources\BanResource;
@@ -245,8 +246,26 @@ class PlayerBanController extends Controller
 
         foreach($identifiers as $identifier) {
             if (Str::startsWith($identifier, 'ip:')) {
-                $ips[] = 'identifiers LIKE "%' . $identifier . '%"';
-                $list[] = $identifier;
+                $info = GeneralHelper::ipInfo(str_replace('ip:', '', $identifier));
+
+                $isProxy = false;
+                $additionalInfo = '';
+                if ($info) {
+                    $additionalInfo = ' (' . $info['country'];
+
+                    if ($info['proxy']) {
+                        $additionalInfo .= ', proxy';
+                        $isProxy = true;
+                    }
+
+                    $additionalInfo .= ')';
+                }
+
+                if (!$isProxy) {
+                    $ips[] = 'identifiers LIKE "%' . $identifier . '%"';
+                }
+
+                $list[] = $identifier . $additionalInfo;
             }
         }
 
