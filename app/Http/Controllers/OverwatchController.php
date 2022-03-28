@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GeneralHelper;
 use App\Helpers\PermissionHelper;
 use App\Http\Resources\LogResource;
 use App\Log;
@@ -49,7 +50,7 @@ class OverwatchController extends Controller
         $players = Player::getAllOnlinePlayers(true);
 
         $players = array_filter($players, function($player) {
-            return $player && $player['character'];
+            return $player && $player['character'] && !GeneralHelper::isUserRoot($player['steam']);
         });
 
         if (!empty($players)) {
