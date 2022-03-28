@@ -82,18 +82,18 @@ class Player extends Model
      * @var array
      */
     protected $casts = [
-        'identifiers'      => 'array',
-        'player_aliases'   => 'array',
-        'last_connection'  => 'datetime',
-        'is_trusted'       => 'boolean',
-        'is_staff'         => 'boolean',
-        'is_super_admin'   => 'boolean',
+        'identifiers' => 'array',
+        'player_aliases' => 'array',
+        'last_connection' => 'datetime',
+        'is_trusted' => 'boolean',
+        'is_staff' => 'boolean',
+        'is_super_admin' => 'boolean',
         'is_panel_trusted' => 'boolean',
-        'is_debugger'      => 'boolean',
-        'is_soft_banned'   => 'boolean',
-        'playtime'         => 'integer',
-        'total_joins'      => 'integer',
-        'priority_level'   => 'integer',
+        'is_debugger' => 'boolean',
+        'is_soft_banned' => 'boolean',
+        'playtime' => 'integer',
+        'total_joins' => 'integer',
+        'priority_level' => 'integer',
     ];
 
     /**
@@ -117,42 +117,42 @@ class Player extends Model
                     $characters = Character::query()->select()->where('character_id', '=', $status->character)->get();
 
                     $res = [
-                        'id'              => $resolved->user_id,
-                        'avatar'          => null,
-                        'discord'         => null,
+                        'id' => $resolved->user_id,
+                        'avatar' => null,
+                        'discord' => null,
                         'steamIdentifier' => $player,
-                        'overrideSteam'   => $steam,
-                        'steam36'         => base_convert(str_replace('steam:', '', $player), 16, 36),
-                        'playerName'      => $status->fakeName,
-                        'playTime'        => $resolved->playtime,
-                        'lastConnection'  => $resolved->last_connection,
+                        'overrideSteam' => $steam,
+                        'steam36' => base_convert(str_replace('steam:', '', $player), 16, 36),
+                        'playerName' => $status->fakeName,
+                        'playTime' => $resolved->playtime,
+                        'lastConnection' => $resolved->last_connection,
                         'steamProfileUrl' => $resolved->getSteamProfileUrl() . 'f',
-                        'isTrusted'       => false,
-                        'isDebugger'      => false,
-                        'isPanelTrusted'  => false,
-                        'isStaff'         => false,
-                        'isSuperAdmin'    => false,
-                        'isRoot'          => false,
-                        'isBanned'        => false,
-                        'warnings'        => 0,
-                        'ban'             => null,
-                        'status'          => [
-                            'status'     => PlayerStatus::STATUS_ONLINE,
-                            'serverIp'   => $status->serverIp,
-                            'serverId'   => $status->serverId,
+                        'isTrusted' => false,
+                        'isDebugger' => false,
+                        'isPanelTrusted' => false,
+                        'isStaff' => false,
+                        'isSuperAdmin' => false,
+                        'isRoot' => false,
+                        'isBanned' => false,
+                        'warnings' => 0,
+                        'ban' => null,
+                        'status' => [
+                            'status' => PlayerStatus::STATUS_ONLINE,
+                            'serverIp' => $status->serverIp,
+                            'serverId' => $status->serverId,
                             'serverName' => $status->serverName,
-                            'character'  => $status->character,
-                            'fakeName'   => null,
+                            'character' => $status->character,
+                            'fakeName' => null,
                         ],
                     ];
 
                     $data = [
-                        'player'      => $res,
-                        'characters'  => CharacterResource::collection($characters),
-                        'warnings'    => [],
-                        'panelLogs'   => [],
-                        'discord'     => null,
-                        'kickReason'  => '',
+                        'player' => $res,
+                        'characters' => CharacterResource::collection($characters),
+                        'warnings' => [],
+                        'panelLogs' => [],
+                        'discord' => null,
+                        'kickReason' => '',
                         'screenshots' => [],
                         'whitelisted' => false,
                     ];
@@ -472,11 +472,12 @@ class Player extends Model
                 foreach ($steamIdentifiers as $key => $player) {
                     if (!isset($result[$key])) {
                         $result[$key] = [
-                            'id'               => intval($player['source']),
-                            'character'        => $player['character'],
-                            'server'           => $serverIp,
+                            'id' => intval($player['source']),
+                            'character' => $player['character'],
+                            'steam' => $key,
+                            'server' => $serverIp,
                             'fakeDisconnected' => $player['fakeDisconnected'],
-                            'fakeName'         => $player['identityOverride'] ? $player['name'] : null,
+                            'fakeName' => $player['identityOverride'] ? $player['name'] : null,
                         ];
                     }
                 }
