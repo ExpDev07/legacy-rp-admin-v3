@@ -614,6 +614,13 @@
                                 >
                                     <i class="fas fa-plug"></i>
                                 </button>
+                                <button
+                                    class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-red-500 dark:bg-red-400 rounded"
+                                    v-if="character.isDead"
+                                    :class="{'left-10' : player.status.character === character.id}"
+                                >
+                                    <i class="fas fa-skull-crossbones"></i>
+                                </button>
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
                                     href="#"
