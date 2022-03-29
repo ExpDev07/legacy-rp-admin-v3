@@ -414,6 +414,19 @@ export default {
 
             this.isLoading = false;
         },
+        parseOtherLog(details) {
+            const regex = /attempted to add a song with video ID `(.+?)` to boombox/gmi;
+            const matches = details.matchAll(regex).next();
+            const match = matches && matches.value ? matches.value[1] : null;
+
+            if (match) {
+                const html = `<a href="https://youtube.com/watch?v=${match}" target="_blank" class="text-blue-600 dark:text-blue-400">${match}</a>`;
+
+                return details.replace(match, html);
+            }
+
+            return details;
+        },
         parseDisconnectLog(details) {
             const regex = /(?<=\) has disconnected from the server .+? with reason: `)(.+?)(?=`\.)/gm;
             const matches = details.match(regex);
@@ -463,7 +476,7 @@ export default {
                 return details.replace(match, html);
             }
 
-            return details;
+            return this.parseOtherLog(details);
         },
         parseLog(details) {
             const regex = /(to|from) (inventory )?((trunk|glovebox|character|property|motel-\w+?|evidence|ground|locker-\w+?)-(\d+-)?\d+:\d+)/gmi;
