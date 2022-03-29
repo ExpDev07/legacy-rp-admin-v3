@@ -25,6 +25,7 @@ class CharacterResource extends JsonResource
             'name'                       => $this->name,
             'phoneNumber'                => $this->phone_number,
             'dateOfBirth'                => $this->date_of_birth,
+            'isDead'                     => $this->is_dead,
             'cash'                       => $this->cash,
             'bank'                       => $this->bank,
             'money'                      => $this->money,

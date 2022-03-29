@@ -45,6 +45,8 @@ class Character extends Model
         'blood_type',
         'backstory',
 
+        'is_dead',
+
         'cash',
         'bank',
         'stocks_balance',
