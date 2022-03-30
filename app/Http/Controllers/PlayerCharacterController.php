@@ -178,7 +178,7 @@ class PlayerCharacterController extends Controller
         $character = Character::query()->where('character_deleted', '=', '0')->orderByRaw('RAND()')->limit(1)->get()->first();
 
         if ($character) {
-            return $this->json(true, $character);
+            return $this->json(true, (new CharacterResource($character))->toArray($request));
         }
 
         return $this->json(false, null, 'Failed to get character');
