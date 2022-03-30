@@ -206,7 +206,7 @@ export default {
                     sub: [
                         {
                             label: this.t('backstories.title'),
-                            icon: 'cabinet',
+                            icon: 'box-open',
                             url: '/backstories',
                         }
                     ]
