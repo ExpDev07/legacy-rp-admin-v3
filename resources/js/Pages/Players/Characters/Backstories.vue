@@ -24,6 +24,7 @@
                     </span>
                     <inertia-link :href="'/players/' + character.steamIdentifier + '/characters/' + character.id + '/edit'" class="text-indigo-600 text-xs !no-underline dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">
                         - {{ character.firstName }} {{ character.lastName }}
+                        <i class="ml-1 fas fa-skull-crossbones text-red-700 dark:text-red-500 font-semibold" v-if="character.characterDeleted"></i>
                     </inertia-link>
                 </div>
                 <div v-else class="text-danger dark:text-dark-danger font-semibold">
@@ -66,8 +67,8 @@ export default {
             try {
                 const data = await axios.get('/api/backstories');
 
-                if (data.data) {
-                    this.character = data.data;
+                if (data.data && data.data.data) {
+                    this.character = data.data.data;
                 } else {
                     this.character = null;
                 }
