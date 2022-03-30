@@ -66,8 +66,8 @@ export default {
             try {
                 const data = await axios.get('/api/backstories');
 
-                if (data.data) {
-                    this.character = data.data;
+                if (data.data && data.data.data) {
+                    this.character = data.data.data;
                 } else {
                     this.character = null;
                 }
