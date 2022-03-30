@@ -18,6 +18,7 @@ class CharacterResource extends JsonResource
     {
         return [
             'id'                         => $this->character_id,
+            'steamIdentifier'            => $this->steam_identifier,
             'slot'                       => $this->character_slot,
             'gender'                     => $this->gender,
             'firstName'                  => $this->first_name,
