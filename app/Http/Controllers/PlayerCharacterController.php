@@ -175,7 +175,7 @@ class PlayerCharacterController extends Controller
 
     public function backstoriesApi(Request $request): \Illuminate\Http\Response
     {
-        $character = Character::query()->where('character_deleted', '=', '0')->orderByRaw('RAND()')->limit(1)->get()->first();
+        $character = Character::query()->orderByRaw('RAND()')->limit(1)->get()->first();
 
         if ($character) {
             return $this->json(true, (new CharacterResource($character))->toArray($request));
