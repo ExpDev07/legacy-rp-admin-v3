@@ -72,6 +72,8 @@
     <i class="fas fa-user-slash" v-else-if="name === 'user-slash'"></i>
     <i class="fas fa-user-friends" v-else-if="name === 'friends'"></i>
     <i class="fas fa-user" v-else-if="name === 'user'"></i>
+    <i class="fas fa-random" v-else-if="name === 'random'"></i>
+    <i class="fas fa-cabinet-filing" v-else-if="name === 'cabinet'"></i>
 </template>
 
 <script>

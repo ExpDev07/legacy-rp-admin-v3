@@ -73,7 +73,8 @@
         "errors": "Errors",
         "bans": "Bans",
         "all_bans": "All bans",
-        "my_bans": "My bans"
+        "my_bans": "My bans",
+        "random": "Random Stuff"
     },
     "queue": {
         "title": "Queue",
