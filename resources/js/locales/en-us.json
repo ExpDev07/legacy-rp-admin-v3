@@ -55,6 +55,10 @@
         "entries": "Showing {0} total entries on {1} page(s).",
         "loading": "Loading..."
     },
+    "backstories": {
+        "title": "Backstories",
+        "description": "Random character backstories."
+    },
     "sidebar": {
         "logs": "Logs",
         "management": "Management",
