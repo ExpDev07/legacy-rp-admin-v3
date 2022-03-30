@@ -170,9 +170,18 @@ class PlayerCharacterController extends Controller
     {
         $character = Character::query()->where('character_deleted', '=', '0')->orderByRaw('RAND()')->limit(1)->get()->first();
 
-        return Inertia::render('Players/Characters/Backstories', [
-            'character' => new CharacterResource($character)
-        ]);
+        return Inertia::render('Players/Characters/Backstories');
+    }
+
+    public function backstoriesApi(Request $request): \Illuminate\Http\Response
+    {
+        $character = Character::query()->where('character_deleted', '=', '0')->orderByRaw('RAND()')->limit(1)->get()->first();
+
+        if ($character) {
+            return $this->json(true, $character);
+        }
+
+        return $this->json(false, null, 'Failed to get character');
     }
 
     /**

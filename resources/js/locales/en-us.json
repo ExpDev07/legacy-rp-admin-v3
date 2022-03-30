@@ -57,7 +57,8 @@
     },
     "backstories": {
         "title": "Backstories",
-        "description": "Random character backstories."
+        "description": "Random character backstories.",
+        "failed": "Failed to load backstory."
     },
     "sidebar": {
         "logs": "Logs",
