@@ -1674,6 +1674,8 @@ export default {
                 });
 
                 marker.addTo(this.map);
+
+                this.map.setView(location.toMap(), 6);
             }
 
             //this.__debugLocations(require('../../data/tp_locations.json'));
