@@ -24,6 +24,7 @@ class PlayerResource extends JsonResource
         $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null;
 
         $identifiers = is_array($this->player_aliases) ? $this->player_aliases : json_decode($this->player_aliases, true);
+        $enabledCommands = is_array($this->enabled_commands) ? $this->enabled_commands : json_decode($this->enabled_commands, true);
 
         return [
             'id'              => $this->user_id,
@@ -48,7 +49,8 @@ class PlayerResource extends JsonResource
             'fakeName'        => $status ? $status->fakeName : false,
             'playerAliases'   => $identifiers ? array_values(array_unique(array_filter($identifiers, function($e) {
                 return $e !== $this->player_name && str_replace('?', '', $e) !== '';
-            }))) : []
+            }))) : [],
+            'enabledCommands' => $enabledCommands ?? []
         ];
     }
 

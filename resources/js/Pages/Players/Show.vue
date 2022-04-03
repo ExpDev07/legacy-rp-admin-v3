@@ -53,7 +53,14 @@
                 </div>
             </div>
             <div class="text-sm italic">
-                {{ player.playerAliases.join(", ") }}
+                <span class="block mb-1" v-if="player.playerAliases && player.playerAliases.length > 0">
+                    <span class="font-semibold">{{ t('players.show.aliases') }}:</span>
+                    {{ player.playerAliases.join(", ") }}
+                </span>
+                <span class="block" v-if="player.enabledCommands && player.enabledCommands.length > 0">
+                    <span class="font-semibold">{{ t('players.show.enabled_commands') }}:</span>
+                    {{ player.enabledCommands.map(e => '/' + e).join(", ") }}
+                </span>
             </div>
             <p class="dark:text-dark-muted">
                 {{ t('players.show.description') }}
