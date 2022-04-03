@@ -31,6 +31,20 @@ class MapController extends Controller
 
         $staff = Player::query()->where('is_staff', '=', true)->select(['steam_identifier', 'player_name'])->get()->toArray();
 
+        $marker = $request->query('m') ?? null;
+        if ($marker) {
+            $xy = explode(',', $marker);
+
+            if (sizeof($xy) == 2 && is_numeric($xy[0]) && is_numeric($xy[1])) {
+                $marker = [
+                    floatval($xy[0]),
+                    floatval($xy[1])
+                ];
+            } else {
+                $marker = null;
+            }
+        }
+
         return Inertia::render('Map/Index', [
             'servers'  => $serverIps,
             'staff'    => $staff ? array_map(function ($player) {
@@ -41,6 +55,7 @@ class MapController extends Controller
             'token'    => SessionHelper::getInstance()->getSessionKey(),
             'cluster'  => CLUSTER,
             'myself'   => $request->user()->player->steam_identifier,
+            'marker'   => $marker
         ]);
     }
 

@@ -786,6 +786,9 @@ export default {
             type: Array,
             required: true
         },
+        marker: {
+            type: Array
+        },
         token: {
             type: String,
             required: true
@@ -1650,6 +1653,30 @@ export default {
 
                 _this.layers["Blips"].addLayer(marker);
             });
+
+            if (this.marker) {
+                const location = Vector3.fromGameCoords(this.marker[0], this.marker[1], 0);
+
+                let marker = L.marker(location.toMap(),
+                    {
+                        icon: new L.Icon(
+                            {
+                                iconUrl: '/images/icons/marker.png',
+                                iconSize: [13, 13]
+                            }
+                        ),
+                        forceZIndex: 99
+                    }
+                );
+
+                marker.bindPopup(this.t('map.marker'), {
+                    autoPan: false
+                });
+
+                marker.addTo(this.map);
+
+                this.map.setView(location.toMap(), 6);
+            }
 
             //this.__debugLocations(require('../../data/tp_locations.json'));
 
