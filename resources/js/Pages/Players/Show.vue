@@ -54,11 +54,11 @@
             </div>
             <div class="text-sm italic">
                 <span class="block mb-1" v-if="player.playerAliases && player.playerAliases.length > 0">
-                    <span class="font-semibold">{{ t('players.show.aliases') }}:</span>
+                    <span class="font-bold">{{ t('players.show.aliases') }}:</span>
                     {{ player.playerAliases.join(", ") }}
                 </span>
                 <span class="block" v-if="player.enabledCommands && player.enabledCommands.length > 0">
-                    <span class="font-semibold">{{ t('players.show.enabled_commands') }}:</span>
+                    <span class="font-bold">{{ t('players.show.enabled_commands') }}:</span>
                     {{ player.enabledCommands.map(e => '/' + e).join(", ") }}
                 </span>
             </div>
