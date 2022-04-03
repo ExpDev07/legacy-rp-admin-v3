@@ -201,6 +201,17 @@ export default {
                     ]
                 },
                 {
+                    label: this.t('sidebar.random'),
+                    icon: 'random',
+                    sub: [
+                        {
+                            label: this.t('backstories.title'),
+                            icon: 'box-open',
+                            url: '/backstories',
+                        }
+                    ]
+                },
+                {
                     label: this.t('sidebar.errors'),
                     icon: 'bug',
                     hidden: !this.$page.auth.player.isDebugger,

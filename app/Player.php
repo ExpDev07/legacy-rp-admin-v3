@@ -74,6 +74,7 @@ class Player extends Model
         'total_joins',
         'priority_level',
         'last_connection',
+        'enabled_commands',
     ];
 
     /**
@@ -84,6 +85,7 @@ class Player extends Model
     protected $casts = [
         'identifiers' => 'array',
         'player_aliases' => 'array',
+        'enabled_commands' => 'array',
         'last_connection' => 'datetime',
         'is_trusted' => 'boolean',
         'is_staff' => 'boolean',

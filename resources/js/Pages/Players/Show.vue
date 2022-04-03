@@ -3,8 +3,7 @@
         <portal to="title">
             <div class="flex items-start space-x-10 mobile:flex-wrap">
                 <h1 class="dark:text-white">
-                    {{ player.playerName }}<br>
-                    <small>{{ player.playerAliases.join(", ") }}</small>
+                    {{ player.playerName }}
                 </h1>
                 <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copyShare">
@@ -52,6 +51,16 @@
                         {{ local.played }}
                     </badge>
                 </div>
+            </div>
+            <div class="text-sm italic">
+                <span class="block mb-1" v-if="player.playerAliases && player.playerAliases.length > 0">
+                    <span class="font-semibold">{{ t('players.show.aliases') }}:</span>
+                    {{ player.playerAliases.join(", ") }}
+                </span>
+                <span class="block" v-if="player.enabledCommands && player.enabledCommands.length > 0">
+                    <span class="font-semibold">{{ t('players.show.enabled_commands') }}:</span>
+                    {{ player.enabledCommands.map(e => '/' + e).join(", ") }}
+                </span>
             </div>
             <p class="dark:text-dark-muted">
                 {{ t('players.show.description') }}
