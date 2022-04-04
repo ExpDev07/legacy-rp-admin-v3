@@ -1662,20 +1662,22 @@ export default {
                         icon: new L.Icon(
                             {
                                 iconUrl: '/images/icons/marker.png',
-                                iconSize: [13, 13]
+                                iconSize: [22, 22]
                             }
                         ),
                         forceZIndex: 99
                     }
                 );
 
-                marker.bindPopup(this.t('map.marker'), {
+                marker.bindPopup(this.t('map.marker', this.marker[0] + ", " + this.marker[1]), {
                     autoPan: false
                 });
 
                 marker.addTo(this.map);
 
-                this.map.setView(location.toMap(), 6);
+                this.map.setView(location.toMap(), 8);
+
+                marker.openPopup();
             }
 
             //this.__debugLocations(require('../../data/tp_locations.json'));

@@ -39,6 +39,7 @@ class CharacterResource extends JsonResource
             'properties'                 => PropertyResource::collection($this->properties),
             'characterDeleted'           => $this->character_deleted,
             'characterDeletionTimestamp' => $this->character_deletion_timestamp,
+            'characterCreationTimestamp' => $this->character_creation_timestamp,
             'licenses'                   => $this->getLicenses(),
         ];
     }

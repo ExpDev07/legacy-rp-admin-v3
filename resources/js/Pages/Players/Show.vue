@@ -570,7 +570,7 @@
                             <h3 class="mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h3>
-                            <h4 class="text-primary dark:text-dark-primary">
+                            <h4 class="text-primary dark:text-dark-primary" :title="t('players.character.created', $moment(character.characterCreationTimestamp).format('l'))">
                                 <span>{{ t('players.edit.dob') }}:</span> {{
                                     $moment(character.dateOfBirth).format('l')
                                 }}
