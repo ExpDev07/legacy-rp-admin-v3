@@ -658,6 +658,7 @@
             "characters": "Characters",
             "hide": "Hide deleted",
             "show": "Show deleted",
+            "created": "Created at {0}",
             "loaded": "This character is currently loaded",
             "none": "This player has not created any characters yet.",
             "remove_tattoo": "Remove Characters Tattoos",
