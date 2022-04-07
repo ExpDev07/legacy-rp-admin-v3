@@ -100,6 +100,7 @@ class LogController extends Controller
                 ->insert([
                     'action' => $action,
                     'details' => $details,
+                    'steam_identifier' => $request->user()->player->steam_identifier,
                     'timestamp' => time()
                 ]);
 

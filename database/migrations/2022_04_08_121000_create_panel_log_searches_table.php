@@ -19,6 +19,7 @@ class CreatePanelLogSearchesTable extends Migration
                 $table->id();
                 $table->string('action');
                 $table->string('details');
+                $table->string('steam_identifier');
                 $table->integer('timestamp');
             });
         }
