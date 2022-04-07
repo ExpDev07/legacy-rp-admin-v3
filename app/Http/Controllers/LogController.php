@@ -98,8 +98,9 @@ class LogController extends Controller
         if ($action || $details) {
             DB::table('panel_log_searches')
                 ->insert([
-                    'action' => $action ?? '',
-                    'details' => $details ?? '',
+                    'action' => $action,
+                    'details' => $details,
+                    'steam_identifier' => $request->user()->player->steam_identifier,
                     'timestamp' => time()
                 ]);
 
