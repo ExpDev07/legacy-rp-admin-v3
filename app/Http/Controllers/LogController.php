@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CacheHelper;
 use App\Http\Resources\LogResource;
 use App\Log;
 use App\Player;
@@ -89,6 +90,24 @@ class LogController extends Controller
             }
         }
 
+        $actionInput = $request->input('action');
+
+        $action = $actionInput ? trim($actionInput) : null;
+        $details = $details ? trim($details) : null;
+
+        if ($action || $details) {
+            DB::table('panel_log_searches')
+                ->insert([
+                    'action' => $action,
+                    'details' => $details,
+                    'timestamp' => time()
+                ]);
+
+            DB::table('panel_log_searches')
+                ->where('timestamp', '<', time() - CacheHelper::MONTH)
+                ->delete();
+        }
+
         $page = Paginator::resolveCurrentPage('page');
 
         $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
@@ -99,8 +118,8 @@ class LogController extends Controller
         $end = round(microtime(true) * 1000);
 
         return Inertia::render('Logs/Index', [
-            'logs'      => $logs,
-            'filters'   => $request->all(
+            'logs' => $logs,
+            'filters' => $request->all(
                 'identifier',
                 'server',
                 'action',
@@ -108,10 +127,10 @@ class LogController extends Controller
                 'after',
                 'before'
             ),
-            'links'     => $this->getPageUrls($page),
-            'time'      => $end - $start,
+            'links' => $this->getPageUrls($page),
+            'time' => $end - $start,
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
-            'page'      => $page,
+            'page' => $page,
         ]);
     }
 
