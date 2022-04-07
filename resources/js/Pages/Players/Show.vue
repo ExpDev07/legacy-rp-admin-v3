@@ -630,6 +630,12 @@
                                 >
                                     <i class="fas fa-skull-crossbones"></i>
                                 </button>
+                                <button
+                                    class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute font-bold top-1 right-10 bg-green-500 dark:bg-green-400 rounded"
+                                    v-if="!character.characterDeleted"
+                                >
+                                    {{ character.slot }}
+                                </button>
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
                                     href="#"
