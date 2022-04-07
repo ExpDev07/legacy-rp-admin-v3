@@ -14,15 +14,17 @@ class CreatePanelLogSearchesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable("panel_log_searches")) {
-            Schema::create('panel_log_searches', function (Blueprint $table) {
-                $table->id();
-                $table->string('action');
-                $table->string('details');
-                $table->string('steam_identifier');
-                $table->integer('timestamp');
-            });
+        if (Schema::hasTable("panel_log_searches")) {
+            Schema::dropIfExists('panel_log_searches');
         }
+
+        Schema::create('panel_log_searches', function (Blueprint $table) {
+            $table->id();
+            $table->string('action')->nullable(true);
+            $table->string('details')->nullable(true);
+            $table->string('steam_identifier');
+            $table->integer('timestamp');
+        });
     }
 
     /**
