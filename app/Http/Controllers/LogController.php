@@ -98,8 +98,8 @@ class LogController extends Controller
         if ($action || $details) {
             DB::table('panel_log_searches')
                 ->insert([
-                    'action' => $action,
-                    'details' => $details,
+                    'action' => $action ?? '',
+                    'details' => $details ?? '',
                     'timestamp' => time()
                 ]);
 
