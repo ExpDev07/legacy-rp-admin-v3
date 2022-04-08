@@ -78,7 +78,9 @@ class PlayerContainer {
             onDutyList.ems = [];
         }
 
-        if (rawPlayer.fakeDisconnected) {
+        const flags = Player.getPlayerFlags(rawPlayer);
+
+        if (flags.fakeDisconnected) {
             return;
         }
 
