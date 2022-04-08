@@ -26,14 +26,14 @@ class Player {
     }
 
     update(rawData, staffMembers, onDutyList) {
-        const playerFlags = this.getPlayerFlags(rawData);
-        const characterFlags = this.getCharacterFlags(rawData.character);
+        const flags = Player.getPlayerFlags(rawData);
 
         this.player = {
             name: rawData.name,
             steam: rawData.steamIdentifier,
             source: rawData.source,
             isStaff: staffMembers.includes(rawData.steamIdentifier),
+            isFake: flags.identityOverride
         };
 
         this.character = Character.fromRaw(rawData);
@@ -92,7 +92,7 @@ class Player {
         ].filter(a => !!a);
     }
 
-    getPlayerFlags(player) {
+    static getPlayerFlags(player) {
         let flags = player.flags ? player.flags : 0;
 
         const fakeDisconnected = flags / 2 >= 1

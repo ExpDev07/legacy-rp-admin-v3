@@ -46,10 +46,9 @@ class DataCompressor {
         this.player = player;
 
         const character = 'b' in this.player ? {
-            dead: this.get('a', false, this.player['b']),
+            flags: this.get('a', 0, this.player['b']),
             fullName: this.get('b', '', this.player['b']),
-            id: this.get('c', 0, this.player['b']),
-            inShell: this.get('d', false, this.player['b']),
+            id: this.get('c', 0, this.player['b'])
         } : false;
 
         const vehicle = 'i' in this.player ? {
@@ -71,15 +70,13 @@ class DataCompressor {
             character: character,
             coords: coords,
             heading: coordsArray.length >= 4 ? parseFloat(coordsArray[3]) : 0.0,
-            invisible: this.get('d', false),
+            flags: this.get('d', 0),
             invisible_since: this.get('e', 0),
             name: this.get('f', ''),
             source: this.get('g', 0),
             speed: coordsArray.length >= 5 ? parseFloat(coordsArray[4]) : 0.0,
             steamIdentifier: this.get('h', ''),
-            vehicle: vehicle,
-            fakeDisconnected: this.get('j', false),
-            identityOverride: this.get('k', false),
+            vehicle: vehicle
         };
     }
 
