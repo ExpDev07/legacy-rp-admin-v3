@@ -9,7 +9,7 @@ module.exports = {
     mapNumber(val, in_min, in_max, out_min, out_max) {
         return (val - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     },
-    shouldIgnoreInvisible(staffMembers, player) {
+    shouldIgnoreInvisible(staffMembers, player, character) {
         const parseSpot = spot => {
             const parts = spot.coords.split(' ');
 
@@ -31,7 +31,12 @@ module.exports = {
         }
 
         // If you are in a shell (interior)
-        if (player.character && 'inShell' in player.character && player.character.inShell) {
+        if (character && character.inShell) {
+            return true;
+        }
+
+        // If you are in a trunk
+        if (character && character.inTrunk) {
             return true;
         }
 

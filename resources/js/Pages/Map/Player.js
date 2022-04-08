@@ -26,6 +26,9 @@ class Player {
     }
 
     update(rawData, staffMembers, onDutyList) {
+        const playerFlags = this.getPlayerFlags(rawData);
+        const characterFlags = this.getCharacterFlags(rawData.character);
+
         this.player = {
             name: rawData.name,
             steam: rawData.steamIdentifier,
@@ -46,10 +49,12 @@ class Player {
         this.heading = mapNumber(-rawData.heading, -180, 180, 0, 360) - 180;
         this.speed = Math.round(rawData.speed * 2.236936); // Convert to mph
 
+        const invisible = this.character && this.character.invisible;
+
         this.invisible = {
-            raw: rawData.invisible,
+            raw: invisible,
             time: rawData.invisible_since,
-            value: rawData.invisible && !shouldIgnoreInvisible(staffMembers, rawData)
+            value: invisible && !shouldIgnoreInvisible(staffMembers, rawData, this.character)
         };
 
         // Player is afk if they either haven't moved for 45 minutes
@@ -85,6 +90,22 @@ class Player {
             this.onDuty === 'police' ? 'on duty (police)' : null,
             this.onDuty === 'ems' ? 'on duty (ems)' : null,
         ].filter(a => !!a);
+    }
+
+    getPlayerFlags(player) {
+        let flags = player.flags ? player.flags : 0;
+
+        const fakeDisconnected = flags / 2 >= 1
+        if (fakeDisconnected) {
+            flags -= 2
+        }
+
+        const identityOverride = flags !== 0
+
+        return {
+            identityOverride: identityOverride,
+            fakeDisconnected: fakeDisconnected
+        }
     }
 
     isAFK() {
