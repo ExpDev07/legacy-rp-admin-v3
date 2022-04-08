@@ -18,7 +18,9 @@ class Player {
     }
 
     static fixData(rawData) {
-        if (rawData.identityOverride) {
+        const flags = Player.getPlayerFlags(rawData);
+
+        if (flags.identityOverride) {
             rawData.steamIdentifier = rawData.steamIdentifier.replace('steam:1100001', 'steam:1100002');
         }
 
@@ -32,7 +34,7 @@ class Player {
             name: rawData.name,
             steam: rawData.steamIdentifier,
             source: rawData.source,
-            isStaff: staffMembers.includes(rawData.steamIdentifier),
+            isStaff: !flags.identityOverride && staffMembers.includes(rawData.steamIdentifier),
             isFake: flags.identityOverride
         };
 
