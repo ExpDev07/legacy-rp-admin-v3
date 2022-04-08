@@ -473,13 +473,20 @@ class Player extends Model
 
                 foreach ($steamIdentifiers as $key => $player) {
                     if (!isset($result[$key])) {
+                        $flags = $player['flags'];
+
+                        $fake = $flags / 2 >= 1;
+                        if ($fake) {
+                            $fake -= 2;
+                        }
+
                         $result[$key] = [
                             'id' => intval($player['source']),
                             'character' => $player['character'],
                             'steam' => $key,
                             'server' => $serverIp,
-                            'fakeDisconnected' => $player['fakeDisconnected'],
-                            'fakeName' => $player['identityOverride'] ? $player['name'] : null,
+                            'fakeDisconnected' => $fake,
+                            'fakeName' => $flags !== 0 ? $player['name'] : null,
                         ];
                     }
                 }

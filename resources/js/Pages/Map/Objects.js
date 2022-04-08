@@ -8,14 +8,56 @@ class Character {
             return null;
         }
 
+        const characterFlags = Character.getCharacterFlags(rawData.character);
+
         let c = new Character();
 
         c.id = rawData.character.id;
         c.name = rawData.character.fullName;
-        c.isDead = rawData.character.dead;
+        c.isDead = characterFlags.dead;
+        c.invisible = characterFlags.invisible;
+        c.inShell = characterFlags.shell;
+        c.inTrunk = characterFlags.trunk;
         c.isDriving = rawData.vehicle && rawData.vehicle.driving;
 
         return c;
+    }
+
+    static getCharacterFlags(character) {
+        if (character) {
+            let flags = character.flags ? character.flags : 0;
+
+            const invisible = flags / 8 >= 1
+            if (invisible) {
+                flags -= 8
+            }
+
+            const shell = flags / 4 >= 1
+            if (shell) {
+                flags -= 4
+            }
+
+            const trunk = flags / 2 >= 1
+            if (trunk) {
+                flags -= 2
+            }
+
+            const dead = flags !== 0
+
+            return {
+                invisible: invisible,
+                shell: shell,
+                trunk: trunk,
+                dead: dead
+            }
+        }
+
+        return {
+            invisible: false,
+            shell: false,
+            trunk: false,
+            dead: false
+        };
     }
 }
 
