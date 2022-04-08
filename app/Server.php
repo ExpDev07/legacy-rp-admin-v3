@@ -151,9 +151,8 @@ class Server extends Model
                     $assoc[$player['steamIdentifier']] = [
                         'source'    => $player['source'],
                         'character' => $player['character'] ? $player['character']['id'] : null,
-                        'fakeDisconnected' => $player['fakeDisconnected'] ?? false,
-                        'identityOverride' => $player['identityOverride'] ?? false,
-                        'name' => $player['name'] ?? null
+                        'flags'     => $player['flags'] ?? 0,
+                        'name'      => $player['name'] ?? null
                     ];
                 }
 
