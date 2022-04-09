@@ -24,7 +24,7 @@
         "jquery": "^3.2",
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.13",
-        "moment": "^2.29.1",
+        "moment": "^2.29.2",
         "nprogress": "^0.2.0",
         "popper.js": "^1.12",
         "portal-vue": "^2.1.7",
