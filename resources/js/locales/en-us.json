@@ -794,6 +794,11 @@
             "draw": "Draw"
         }
     },
+    "search_logs": {
+        "title": "Log Searches",
+        "description": "Who searched what in the server logs.",
+        "searches": "Search Query"
+    },
     "logs": {
         "title": "Server Logs",
         "description": "On this page you can view and filter the server logs.",

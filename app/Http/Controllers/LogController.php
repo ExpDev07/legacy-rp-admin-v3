@@ -156,6 +156,35 @@ class LogController extends Controller
             });
         }
 
+        // Filtering by search query.
+        if ($details = $this->multiValues($request->input('details'))) {
+            /**
+             * @var $q Builder
+             */
+            $query->where(function ($q) use ($details) {
+                foreach ($details as $a) {
+                    if (Str::startsWith($a, '=')) {
+                        $a = Str::substr($a, 1);
+                        $q->orWhere('action', $a);
+                        $q->orWhere('details', $a);
+                    } else {
+                        $q->orWhere('action', 'like', "%{$a}%");
+                        $q->orWhere('details', 'like', "%{$a}%");
+                    }
+                }
+            });
+        }
+
+        // Filtering by before.
+        if ($before = $request->input('before')) {
+            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '<', $before);
+        }
+
+        // Filtering by after.
+        if ($after = $request->input('after')) {
+            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', $after);
+        }
+
         $page = Paginator::resolveCurrentPage('page');
 
         $query->limit(15)->offset(($page - 1) * 15);

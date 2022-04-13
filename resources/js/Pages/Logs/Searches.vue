@@ -3,7 +3,7 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                {{ t('search_logs.logs') }}
+                {{ t('search_logs.title') }}
             </h1>
             <p>
                 {{ t('search_logs.description') }}
@@ -14,7 +14,7 @@
         <v-section>
             <template #header>
                 <h2>
-                    {{ t('search_logs.filter') }}
+                    {{ t('logs.filter') }}
                 </h2>
             </template>
 
@@ -31,8 +31,8 @@
                         </div>
                         <!-- Details -->
                         <div class="w-1/2 px-3">
-                            <label class="block mb-3 mt-3" for="details">
-                                {{ t('logs.details') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                            <label class="block mb-3" for="details">
+                                {{ t('search_logs.searches') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
                                    id="details" placeholder="Oxy runs kekw" v-model="filters.details">
@@ -117,9 +117,6 @@
                         <th class="px-6 py-4">{{ t('logs.details') }}</th>
                         <th class="px-6 py-4">
                             {{ t('logs.timestamp') }}
-                            <a href="#" :title="t('logs.toggle_diff')" @click="$event.preventDefault();showLogTimeDifference = !showLogTimeDifference">
-                                <i class="fas fa-stopwatch"></i>
-                            </a>
                         </th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="(log, index) in logs"
@@ -134,10 +131,10 @@
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ log.action }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)">
+                        <td class="px-6 py-3 border-t mobile:block">
                             {{ log.details }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp * 1000 | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
