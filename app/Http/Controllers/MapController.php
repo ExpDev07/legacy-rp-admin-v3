@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\GeneralHelper;
+use App\Helpers\PermissionHelper;
 use App\Player;
 use App\Server;
 use Illuminate\Http\Request;
@@ -21,6 +22,10 @@ class MapController extends Controller
      */
     public function index(Request $request): Response
     {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LIVEMAP)) {
+            abort(401);
+        }
+
         $rawServerIps = explode(',', env('OP_FW_SERVERS', ''));
         $serverIps = [];
         foreach ($rawServerIps as $index => $rawServerIp) {
