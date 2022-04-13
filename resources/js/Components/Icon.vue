@@ -74,6 +74,7 @@
     <i class="fas fa-user" v-else-if="name === 'user'"></i>
     <i class="fas fa-random" v-else-if="name === 'random'"></i>
     <i class="fas fa-box-open" v-else-if="name === 'box-open'"></i>
+    <i class="fas fa-binoculars" v-else-if="name === 'binoculars'"></i>
 </template>
 
 <script>

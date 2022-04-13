@@ -30,8 +30,8 @@
                                    id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
                         </div>
                         <!-- Details -->
-                        <div class="w-1/2 px-3">
-                            <label class="block mb-3" for="details">
+                        <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-2" for="details">
                                 {{ t('search_logs.searches') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
