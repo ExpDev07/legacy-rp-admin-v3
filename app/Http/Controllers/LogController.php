@@ -39,7 +39,9 @@ class LogController extends Controller
         $query = Log::query()->orderByDesc('timestamp');
 
         if (env('RESTRICT_DRUG_LOGS', false)) {
-            if (!$request->user()->player->panel_drug_department && !GeneralHelper::isUserRoot($request->user()->player->steam_identifier)) {
+            $player = $request->user()->player;
+
+            if ((!isset($player->panel_drug_department) || !$player->panel_drug_department) && !GeneralHelper::isUserRoot($player->steam_identifier)) {
                 $query->whereNotIn('action', self::DRUG_LOGS);
             }
         }
