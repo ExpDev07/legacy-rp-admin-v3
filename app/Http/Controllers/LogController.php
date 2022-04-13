@@ -177,12 +177,12 @@ class LogController extends Controller
 
         // Filtering by before.
         if ($before = $request->input('before')) {
-            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '<', $before);
+            $query->where('timestamp', '<', $before);
         }
 
         // Filtering by after.
         if ($after = $request->input('after')) {
-            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', $after);
+            $query->where('timestamp', '>', $after);
         }
 
         $page = Paginator::resolveCurrentPage('page');
