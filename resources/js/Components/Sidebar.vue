@@ -165,6 +165,7 @@ export default {
                             label: this.t('map.title'),
                             icon: 'map',
                             url: '/map',
+                            hidden: !this.perm.check(this.perm.PERM_LIVEMAP),
                         },
                         {
                             label: this.t('statistics.title'),

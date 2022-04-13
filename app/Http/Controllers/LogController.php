@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\CacheHelper;
+use App\Helpers\PermissionHelper;
 use App\Http\Resources\LogResource;
 use App\Log;
 use App\Player;
@@ -135,6 +136,43 @@ class LogController extends Controller
         ]);
     }
 
+    public function searches(Request $request): Response
+    {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_ADVANCED)) {
+            abort(401);
+        }
+
+        $query = DB::table('panel_log_searches')->select();
+
+        // Filtering by identifier.
+        if ($identifier = $this->multiValues($request->input('identifier'))) {
+            /**
+             * @var $q Builder
+             */
+            $query->where(function ($q) use ($identifier) {
+                foreach ($identifier as $i) {
+                    $q->orWhere('steam_identifier', $i);
+                }
+            });
+        }
+
+        $page = Paginator::resolveCurrentPage('page');
+
+        $query->limit(15)->offset(($page - 1) * 15);
+
+        $logs = $query->get();
+
+        return Inertia::render('Logs/Searches', [
+            'logs' => $logs,
+            'filters' => $request->all(
+                'identifier'
+            ),
+            'links' => $this->getPageUrls($page),
+            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steam_identifier'),
+            'page' => $page,
+        ]);
+    }
+
     private function multiValues(?string $val): ?array
     {
         if (!$val) {
@@ -145,5 +183,7 @@ class LogController extends Controller
             return trim($v);
         }, explode(',', $val)));
     }
+
+
 
 }
