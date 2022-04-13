@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\CacheHelper;
+use App\Helpers\GeneralHelper;
 use App\Helpers\PermissionHelper;
 use App\Http\Resources\LogResource;
 use App\Log;
@@ -17,6 +18,13 @@ use Inertia\Response;
 
 class LogController extends Controller
 {
+    const DRUG_LOGS = [
+        "Cayo Gun Run",
+        "Chop Shop",
+        "Cocaine Run",
+        "Gun Run",
+        "Oxy Run",
+    ];
 
     /**
      * Display a listing of the resource.
@@ -29,6 +37,12 @@ class LogController extends Controller
         $start = round(microtime(true) * 1000);
 
         $query = Log::query()->orderByDesc('timestamp');
+
+        if (env('RESTRICT_DRUG_LOGS', false)) {
+            if (!$request->user()->player->panel_drug_department && !GeneralHelper::isUserRoot($request->user()->player->steam_identifier)) {
+                $query->whereNotIn('action', self::DRUG_LOGS);
+            }
+        }
 
         // Filtering by identifier.
         if ($identifier = $this->multiValues($request->input('identifier'))) {
