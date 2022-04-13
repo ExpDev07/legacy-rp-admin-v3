@@ -547,8 +547,10 @@ class Player extends Model
         $identifiers = [];
         foreach ($source as $entry) {
             foreach ($sourceKey as $key) {
-                if (!in_array($entry[$key], $identifiers)) {
-                    $identifiers[] = $entry[$key];
+                $d = is_array($entry) ? $entry[$key] : $entry->$key;
+
+                if (!in_array($d, $identifiers)) {
+                    $identifiers[] = $d;
                 }
             }
         }
