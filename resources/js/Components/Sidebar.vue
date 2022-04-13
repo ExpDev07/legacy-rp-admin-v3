@@ -198,6 +198,12 @@ export default {
                             icon: 'camera',
                             url: '/overwatch',
                             hidden: !this.perm.check(this.perm.PERM_SCREENSHOT),
+                        },
+                        {
+                            label: this.t('search_logs.title'),
+                            icon: 'binoculars',
+                            url: '/searches',
+                            hidden: !this.perm.check(this.perm.PERM_ADVANCED),
                         }
                     ]
                 },

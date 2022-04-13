@@ -142,7 +142,7 @@ class LogController extends Controller
             abort(401);
         }
 
-        $query = DB::table('panel_log_searches')->select();
+        $query = DB::table('panel_log_searches')->orderByDesc('timestamp')->select();
 
         // Filtering by identifier.
         if ($identifier = $this->multiValues($request->input('identifier'))) {
