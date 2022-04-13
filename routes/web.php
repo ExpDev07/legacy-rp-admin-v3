@@ -160,6 +160,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Logs.
     Route::resource('logs', LogController::class);
+    Route::get('searches', [LogController::class, 'searches']);
 
     // Casino Logs.
     Route::resource('casino', CasinoLogController::class);
