@@ -82,6 +82,10 @@
                     <i class="fas fa-glass-cheers"></i>
                     {{ t('players.show.add_panel_trusted') }}
                 </button>
+
+                <badge class="border-green-200 bg-warning-pale dark:bg-dark-warning-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.panelDrugDepartment">
+                    <span class="font-semibold">{{ t('global.panel_drug_department') }}</span>
+                </badge>
             </div>
 
             <div class="flex flex-wrap justify-end">
