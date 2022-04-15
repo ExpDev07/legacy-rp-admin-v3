@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Ban;
 use App\Helpers\GeneralHelper;
+use App\Helpers\PermissionHelper;
 use App\Http\Requests\BanStoreRequest;
 use App\Http\Requests\BanUpdateRequest;
 use App\Http\Resources\BanResource;
@@ -136,6 +137,10 @@ class PlayerBanController extends Controller
      */
     public function destroy(Player $player, Ban $ban, Request $request): RedirectResponse
     {
+        if ($ban->locked && !PermissionHelper::hasPermission($request, PermissionHelper::PERM_LOCK_BAN)) {
+            abort(401);
+        }
+
         $player->bans()->forceDelete();
         $user = $request->user();
 
@@ -148,6 +153,32 @@ class PlayerBanController extends Controller
         return back()->with('success', 'The player has successfully been unbanned.');
     }
 
+    public function lockBan(Player $player, Ban $ban, Request $request): RedirectResponse
+    {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LOCK_BAN)) {
+            abort(401);
+        }
+
+        $ban->update([
+            'locked' => 1
+        ]);
+
+        return back()->with('success', 'The ban has been successfully locked.');
+    }
+
+    public function unlockBan(Player $player, Ban $ban, Request $request): RedirectResponse
+    {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LOCK_BAN)) {
+            abort(401);
+        }
+
+        $ban->update([
+            'locked' => 0
+        ]);
+
+        return back()->with('success', 'The ban has been successfully unlocked.');
+    }
+
     /**
      * Display the specified resource for editing.
      *
@@ -155,8 +186,12 @@ class PlayerBanController extends Controller
      * @param Ban $ban
      * @return Response
      */
-    public function edit(Player $player, Ban $ban): Response
+    public function edit(Request $request, Player $player, Ban $ban): Response
     {
+        if ($ban->locked && !PermissionHelper::hasPermission($request, PermissionHelper::PERM_LOCK_BAN)) {
+            abort(401);
+        }
+
         return Inertia::render('Players/Ban/Edit', [
             'player' => new PlayerResource($player),
             'ban'    => new BanResource($ban),
@@ -204,6 +239,10 @@ class PlayerBanController extends Controller
      */
     public function update(Player $player, Ban $ban, BanUpdateRequest $request): RedirectResponse
     {
+        if ($ban->locked && !PermissionHelper::hasPermission($request, PermissionHelper::PERM_LOCK_BAN)) {
+            abort(401);
+        }
+
         $expireBefore = $ban->getExpireTimeInSeconds() ? $this->formatSeconds($ban->getExpireTimeInSeconds()) : 'permanent';
         $expireAfter = $request->input('expire') ? $this->formatSeconds(intval($request->input('expire')) + (time() - $ban->getTimestamp())) : 'permanent';
 

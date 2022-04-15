@@ -25,6 +25,7 @@ class BanResource extends JsonResource
             'expireAt'   => $this->expireAt,
             'timestamp'  => $this->timestamp,
             'issuer'     => $this->creator_name ?? null,
+            'locked'     => $this->locked,
         ];
     }
 

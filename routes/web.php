@@ -116,6 +116,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/attachScreenshot', [PlayerRouteController::class, 'attachScreenshot']);
     Route::post('/players/{player}/updateTrustedPanelStatus/{status}', [PlayerRouteController::class, 'updateTrustedPanelStatus']);
 
+    Route::post('/players/{player}/bans/{ban}/lock', [PlayerBanController::class, 'lockBan']);
+    Route::post('/players/{player}/bans/{ban}/unlock', [PlayerBanController::class, 'unlockBan']);
+
     Route::get('/new_players', [PlayerController::class, 'newPlayers']);
     Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
     Route::get('/backstories', [PlayerCharacterController::class, 'backstories']);

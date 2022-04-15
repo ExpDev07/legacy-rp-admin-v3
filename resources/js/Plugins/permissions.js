@@ -20,10 +20,11 @@ const Permissions = {
         const permissionLevel = getPermissionLevel();
 
         Vue.prototype.perm = {
-            PERM_LIVEMAP: 'livemap',
+            PERM_LIVEMAP:    'livemap',
             PERM_SCREENSHOT: 'screenshot',
             PERM_SUSPICIOUS: 'suspicious',
             PERM_ADVANCED:   'advanced',
+            PERM_LOCK_BAN:   'lock_ban',
 
             check(permission) {
                 if (!(permission in permissions)) {
