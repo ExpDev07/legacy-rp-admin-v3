@@ -12,12 +12,14 @@ class PermissionHelper
         self::PERM_SUSPICIOUS => ['suspicious', self::LEVEL_TRUSTED],
         self::PERM_ADVANCED   => ['advanced', self::LEVEL_TRUSTED],
         self::PERM_LIVEMAP    => ['livemap', self::LEVEL_STAFF],
+        self::PERM_LOCK_BAN   => ['lock_ban', self::LEVEL_TRUSTED],
     ];
 
     const PERM_SCREENSHOT = 'P_SCREENSHOT';
     const PERM_SUSPICIOUS = 'P_SUSPICIOUS';
     const PERM_ADVANCED   = 'P_ADVANCED';
     const PERM_LIVEMAP    = 'P_LIVEMAP';
+    const PERM_LOCK_BAN   = 'P_LOCK_BAN';
 
     const LEVEL_STAFF      = 1;
     const LEVEL_TRUSTED    = 2;

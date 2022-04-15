@@ -60,6 +60,7 @@ class Ban extends Model
         'reason',
         'timestamp',
         'expire',
+        'locked',
     ];
 
     /**
@@ -68,6 +69,7 @@ class Ban extends Model
      * @var array
      */
     protected $casts = [
+        'locked' => 'boolean',
         'timestamp' => 'datetime',
     ];
 
@@ -156,7 +158,7 @@ class Ban extends Model
         if (empty(self::$bans)) {
             $ban = Ban::query()
                 ->where('identifier', '=', $steamIdentifier)
-                ->select(['id', 'ban_hash', 'identifier', 'creator_name', 'reason', 'timestamp', 'expire', 'creator_identifier'])
+                ->select(['id', 'ban_hash', 'identifier', 'creator_name', 'reason', 'timestamp', 'expire', 'creator_identifier', 'locked'])
                 ->first();
             return $ban ? $ban->toArray() : null;
         }

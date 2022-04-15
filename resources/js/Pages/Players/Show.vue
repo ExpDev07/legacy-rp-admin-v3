@@ -68,8 +68,8 @@
         </portal>
 
         <div class="flex flex-wrap justify-between mb-6">
-            <div>
-                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
+            <div class="flex flex-wrap">
+                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2 mr-3" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
                     <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
                     <a href="#" @click="removeTrustedPanel($event)" class="ml-1 text-white" :title="t('players.show.remove_panel_trusted')" v-if="!player.isSuperAdmin">
                         <i class="fas fa-times"></i>
@@ -83,7 +83,7 @@
                     {{ t('players.show.add_panel_trusted') }}
                 </button>
 
-                <badge class="border-green-200 bg-warning-pale dark:bg-dark-warning-pale py-2" v-if="$page.auth.player.isSuperAdmin && player.panelDrugDepartment">
+                <badge class="border-orange-200 bg-warning-pale dark:bg-dark-warning-pale py-2 mr-3" v-if="$page.auth.player.isSuperAdmin && player.panelDrugDepartment">
                     <span class="font-semibold">{{ t('global.panel_drug_department') }}</span>
                 </badge>
             </div>
@@ -133,7 +133,7 @@
                 <inertia-link
                     class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'"
-                    v-if="player.isBanned">
+                    v-if="player.isBanned && (!player.ban.locked || this.perm.check(this.perm.PERM_LOCK_BAN))">
                     <i class="mr-1 fas fa-edit"></i>
                     {{ t('players.show.edit_ban') }}
                 </inertia-link>
@@ -141,17 +141,33 @@
                 <inertia-link
                     class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id"
-                    v-if="player.isBanned">
+                    v-if="player.isBanned && (!player.ban.locked || this.perm.check(this.perm.PERM_LOCK_BAN))">
                     <i class="mr-1 fas fa-lock-open"></i>
                     {{ t('players.show.unban') }}
                 </inertia-link>
                 <!-- Banning -->
                 <button
                     class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isBanning = true" v-else>
+                    @click="isBanning = true" v-else-if="!player.isBanned">
                     <i class="mr-1 fas fa-gavel"></i>
                     {{ t('players.show.issue') }}
                 </button>
+                <!-- Lock ban -->
+                <inertia-link
+                    class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    method="POST" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/lock'"
+                    v-if="player.isBanned && !player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
+                    <i class="mr-1 fas fa-lock"></i>
+                    {{ t('players.show.lock_ban') }}
+                </inertia-link>
+                <!-- Lock ban -->
+                <inertia-link
+                    class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    method="POST" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/unlock'"
+                    v-if="player.isBanned && player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
+                    <i class="mr-1 fas fa-lock-open"></i>
+                    {{ t('players.show.unlock_ban') }}
+                </inertia-link>
             </div>
         </div>
 
@@ -373,6 +389,7 @@
                         {{ local.ban }}
                     </h2>
                     <div class="font-semibold">
+                        <i class="mr-1 fas fa-lock" v-if="player.ban.locked" :title="t('players.show.ban_locked')"></i>
                         {{ player.ban.timestamp | formatTime }}
                     </div>
                 </div>
