@@ -154,7 +154,7 @@
                 </button>
                 <!-- Lock ban -->
                 <inertia-link
-                    class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="px-5 py-2 ml-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     method="POST" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/lock'"
                     v-if="player.isBanned && !player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
                     <i class="mr-1 fas fa-lock"></i>
@@ -162,7 +162,7 @@
                 </inertia-link>
                 <!-- Lock ban -->
                 <inertia-link
-                    class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="px-5 py-2 ml-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     method="POST" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/unlock'"
                     v-if="player.isBanned && player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
                     <i class="mr-1 fas fa-lock-open"></i>

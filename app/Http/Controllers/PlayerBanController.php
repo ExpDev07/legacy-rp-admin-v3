@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Ban;
 use App\Helpers\GeneralHelper;
+use App\Helpers\OPFWHelper;
 use App\Helpers\PermissionHelper;
 use App\Http\Requests\BanStoreRequest;
 use App\Http\Requests\BanUpdateRequest;
@@ -123,6 +124,12 @@ class PlayerBanController extends Controller
             'issuer_id' => $user->player->user_id,
             'message'   => $reason . ' This warning was generated automatically as a result of banning someone.',
         ]);
+
+        $kickReason = $request->input('reason')
+            ? 'You have been banned by ' . $user->player->player_name . ' for reason `' . $request->input('reason') . '`.'
+            : 'You have been banned without a specified reason by ' . $user->player->player_name;
+
+        OPFWHelper::kickPlayer($user->player->steam_identifier, $user->player->player_name, $player, $kickReason);
 
         return back()->with('success', 'The player has successfully been banned.');
     }
