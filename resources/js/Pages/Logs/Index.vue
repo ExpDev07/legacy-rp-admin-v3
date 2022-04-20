@@ -352,7 +352,7 @@ export default {
     },
     methods: {
         showDrugLogs() {
-            this.filters.action = this.drugActions.join(',');
+            this.filters.action = this.drugActions.map(e => '=' + e).join(',');
 
             this.refresh();
         },
