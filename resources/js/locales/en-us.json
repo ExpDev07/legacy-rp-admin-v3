@@ -825,6 +825,7 @@
         "placeholder_action": "Death",
         "placeholder_details": "Marius killed jax with an AK-47",
         "search": "Search in logs",
+        "drug_search": "Search drug-logs",
         "metadata": {
             "show": "Show metadata",
             "secondary": "Secondary: {0}",
