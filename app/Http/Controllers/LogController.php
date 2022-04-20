@@ -38,11 +38,15 @@ class LogController extends Controller
 
         $query = Log::query()->orderByDesc('timestamp');
 
+        $canSearchDrugs = true;
+
         if (env('RESTRICT_DRUG_LOGS', false)) {
             $player = $request->user()->player;
 
             if ((!isset($player->panel_drug_department) || !$player->panel_drug_department) && !GeneralHelper::isUserRoot($player->steam_identifier)) {
                 $query->whereNotIn('action', self::DRUG_LOGS);
+
+                $canSearchDrugs = false;
             }
         }
 
@@ -149,6 +153,8 @@ class LogController extends Controller
             'time' => $end - $start,
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
             'page' => $page,
+            'drugActions' => self::DRUG_LOGS,
+            'canSearchDrugs' => $canSearchDrugs
         ]);
     }
 

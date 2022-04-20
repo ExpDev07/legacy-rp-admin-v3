@@ -117,6 +117,13 @@
                                 {{ t('global.loading') }}
                             </span>
                         </button>
+
+                        <button
+                            class="px-5 py-2 ml-5 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg"
+                            @click="showDrugLogs"
+                            v-if="canSearchDrugs">
+                            {{ t('logs.drug_search') }}
+                        </button>
                     </div>
                 </form>
             </template>
@@ -295,6 +302,10 @@ export default {
             type: Array,
             required: true,
         },
+        drugActions: {
+            type: Array,
+            required: true,
+        },
         filters: {
             identifier: String,
             action: String,
@@ -318,6 +329,10 @@ export default {
         time: {
             type: Number,
             required: true,
+        },
+        canSearchDrugs: {
+            type: Boolean,
+            required: true,
         }
     },
     data() {
@@ -336,6 +351,11 @@ export default {
         };
     },
     methods: {
+        showDrugLogs() {
+            this.filters.action = this.drugActions.join(',');
+
+            this.refresh();
+        },
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
         },
