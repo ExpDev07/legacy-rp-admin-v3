@@ -20,9 +20,8 @@ class LogController extends Controller
 {
     const DRUG_LOGS = [
         "Cayo Gun Run",
-        "Chop Shop",
-        "Cocaine Run",
         "Gun Run",
+        "Cocaine Run",
         "Oxy Run",
     ];
 
