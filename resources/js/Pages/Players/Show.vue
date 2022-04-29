@@ -294,7 +294,7 @@
                     <div class="flex">
                         <select class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 mr-1" v-model="tagCategory">
                             <option value="custom">{{ t('players.show.tag_custom') }}</option>
-                            <option :value="tag" :key="tag" v-for="tag in tags">{{ tag }}</option>
+                            <option :value="tag.panel_tag" :key="tag.panel_tag" v-for="tag in tags">{{ tag.panel_tag }}</option>
                         </select>
 
                         <input type="text" class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 ml-1" v-if="tagCategory === 'custom'" v-model="tagCustom" />
@@ -1231,7 +1231,10 @@ export default {
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateSoftBanStatus/1');
         },
         async removeTag() {
+            this.isTagging = false;
+
             // Send request.
+
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTag', {
                 tag: false
             });
@@ -1243,7 +1246,10 @@ export default {
                 return;
             }
 
+            this.isTagging = false;
+
             // Send request.
+
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTag', {
                 tag: tag
             });
