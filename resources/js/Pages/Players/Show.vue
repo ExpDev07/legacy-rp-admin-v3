@@ -309,7 +309,7 @@
                         </button>
                         <button class="px-5 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600"
                                 type="button" @click="removeTag">
-                            {{ t('global.remove_tag') }}
+                            {{ t('players.show.remove_tag') }}
                         </button>
                         <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                                 type="button" @click="isTagging = false">
