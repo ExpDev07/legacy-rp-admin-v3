@@ -69,6 +69,7 @@ class Player extends Model
         'is_trusted',
         'is_panel_trusted',
         'is_debugger',
+        'is_soft_banned',
         'panel_drug_department',
         'is_soft_banned',
         'playtime',

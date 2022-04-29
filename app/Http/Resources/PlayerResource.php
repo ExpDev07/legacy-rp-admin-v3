@@ -46,6 +46,7 @@ class PlayerResource extends JsonResource
             'isSuperAdmin'    => $this->isSuperAdmin(),
             'isRoot'          => $this->isRoot(),
             'isBanned'        => $this->isBanned(),
+            'isSoftBanned'    => $this->is_soft_banned,
             'warnings'        => $this->warnings()->whereIn('warning_type', [Warning::TypeStrike, Warning::TypeWarning])->count(),
             'ban'             => new BanResource($this->getActiveBan()),
             'status'          => $status,

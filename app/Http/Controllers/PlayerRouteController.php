@@ -209,6 +209,29 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Sets the soft ban status
+     *
+     * @param Player $player
+     * @param int $status
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateSoftBanStatus(Player $player, int $status, Request $request): RedirectResponse
+    {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SOFT_BAN)) {
+            return back()->with('error', 'You dont have permissions to do this.');
+        }
+
+        $status = $status ? 1 : 0;
+
+        $player->update([
+            'is_soft_banned' => $status,
+        ]);
+
+        return back()->with('success', 'Soft ban status has been updated successfully.');
+    }
+
+    /**
      * Takes a screenshot
      *
      * @param string $server

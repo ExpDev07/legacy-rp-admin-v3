@@ -13,6 +13,7 @@ class PermissionHelper
         self::PERM_ADVANCED   => ['advanced', self::LEVEL_TRUSTED],
         self::PERM_LIVEMAP    => ['livemap', self::LEVEL_STAFF],
         self::PERM_LOCK_BAN   => ['lock_ban', self::LEVEL_TRUSTED],
+        self::PERM_SOFT_BAN   => ['soft_ban', self::LEVEL_ROOT],
     ];
 
     const PERM_SCREENSHOT = 'P_SCREENSHOT';
@@ -20,10 +21,12 @@ class PermissionHelper
     const PERM_ADVANCED   = 'P_ADVANCED';
     const PERM_LIVEMAP    = 'P_LIVEMAP';
     const PERM_LOCK_BAN   = 'P_LOCK_BAN';
+    const PERM_SOFT_BAN   = 'P_SOFT_BAN';
 
     const LEVEL_STAFF      = 1;
     const LEVEL_TRUSTED    = 2;
     const LEVEL_SUPERADMIN = 3;
+    const LEVEL_ROOT       = 4;
 
     public static function getFrontendPermissions(): array
     {
@@ -41,6 +44,8 @@ class PermissionHelper
         $level = strtolower(env($key, null));
 
         switch ($level) {
+            case 'root':
+                return self::LEVEL_ROOT;
             case 'superadmin':
                 return self::LEVEL_SUPERADMIN;
             case 'trusted':
@@ -65,9 +70,14 @@ class PermissionHelper
             return true;
         }
 
-        $level = self::LEVEL_STAFF;
-        if ($player->is_super_admin) {
+        $level = 0;
+
+        if (GeneralHelper::isUserRoot($player->steam_identifier)) {
+            $level = self::LEVEL_ROOT;
+        } else if ($player->is_super_admin) {
             $level = self::LEVEL_SUPERADMIN;
+        } else if ($player->is_staff) {
+            $level = self::LEVEL_STAFF;
         } else if ($player->is_panel_trusted) {
             $level = self::LEVEL_TRUSTED;
         }
