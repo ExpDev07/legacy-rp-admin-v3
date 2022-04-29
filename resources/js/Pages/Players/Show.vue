@@ -68,7 +68,7 @@
         </portal>
 
         <div class="flex flex-wrap justify-between mb-6">
-            <div class="flex flex-wrap">
+            <div class="mb-3 flex flex-wrap">
                 <!-- Tusted Panel User -->
                 <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2 mr-3" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
                     <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
@@ -95,7 +95,7 @@
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="addSoftBan()" v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && !player.isSoftBanned">
-                    <i class="fas fa-wifi-slash"></i>
+                    <i class="fas fa-user-lock"></i>
                     {{ t('players.show.add_soft_ban') }}
                 </button>
 
