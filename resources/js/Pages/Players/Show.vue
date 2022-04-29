@@ -52,7 +52,7 @@
                     </badge>
 
                     <badge class="border-pink-300 bg-pink-200 dark:bg-pink-700" v-if="player.tag">
-                        {{ player.tag }}
+                        <span class="font-semibold">{{ player.tag }}</span>
                     </badge>
                 </div>
             </div>
