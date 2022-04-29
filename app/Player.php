@@ -77,6 +77,7 @@ class Player extends Model
         'priority_level',
         'last_connection',
         'enabled_commands',
+        'panel_tag',
     ];
 
     /**
@@ -100,6 +101,17 @@ class Player extends Model
         'total_joins' => 'integer',
         'priority_level' => 'integer',
     ];
+
+    public static function resolveTags(bool $refreshCache = false): array
+    {
+        if ($refreshCache || !CacheHelper::exists('tags')) {
+            $tags = self::query()->select(['panel_tag'])->whereNotNull('panel_tag')->groupBy('panel_tag')->get()->toArray();
+
+            CacheHelper::write('tags', $tags, CacheHelper::WEEK);
+        }
+
+        return CacheHelper::read('tags', []);
+    }
 
     /**
      * @param string $player
@@ -142,24 +154,25 @@ class Player extends Model
                         'warnings' => 0,
                         'ban' => null,
                         'status' => [
-                            'status' => PlayerStatus::STATUS_ONLINE,
-                            'serverIp' => $status->serverIp,
-                            'serverId' => $status->serverId,
+                            'status'     => PlayerStatus::STATUS_ONLINE,
+                            'serverIp'   => $status->serverIp,
+                            'serverId'   => $status->serverId,
                             'serverName' => $status->serverName,
-                            'character' => $status->character,
-                            'fakeName' => null,
+                            'character'  => $status->character,
+                            'fakeName'   => null,
                         ],
                     ];
 
                     $data = [
-                        'player' => $res,
-                        'characters' => CharacterResource::collection($characters),
-                        'warnings' => [],
-                        'panelLogs' => [],
-                        'discord' => null,
-                        'kickReason' => '',
+                        'player'      => $res,
+                        'characters'  => CharacterResource::collection($characters),
+                        'warnings'    => [],
+                        'panelLogs'   => [],
+                        'discord'     => null,
+                        'kickReason'  => '',
                         'screenshots' => [],
                         'whitelisted' => false,
+                        'tags'        => Player::resolveTags()
                     ];
 
                     CacheHelper::write($key, $data, 3 * CacheHelper::MONTH);

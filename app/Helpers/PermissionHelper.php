@@ -14,6 +14,7 @@ class PermissionHelper
         self::PERM_LIVEMAP    => ['livemap', self::LEVEL_STAFF],
         self::PERM_LOCK_BAN   => ['lock_ban', self::LEVEL_TRUSTED],
         self::PERM_SOFT_BAN   => ['soft_ban', self::LEVEL_ROOT],
+        self::PERM_EDIT_TAG   => ['edit_tag', self::LEVEL_ROOT],
     ];
 
     const PERM_SCREENSHOT = 'P_SCREENSHOT';
@@ -22,6 +23,7 @@ class PermissionHelper
     const PERM_LIVEMAP    = 'P_LIVEMAP';
     const PERM_LOCK_BAN   = 'P_LOCK_BAN';
     const PERM_SOFT_BAN   = 'P_SOFT_BAN';
+    const PERM_EDIT_TAG   = 'P_EDIT_TAG';
 
     const LEVEL_STAFF      = 1;
     const LEVEL_TRUSTED    = 2;

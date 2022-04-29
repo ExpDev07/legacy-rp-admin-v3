@@ -170,6 +170,7 @@ class PlayerController extends Controller
                     'kickReason'  => trim($request->query('kick')) ?? '',
                     'screenshots' => Screenshot::getAllScreenshotsForPlayer($resolved->steam_identifier),
                     'whitelisted' => !!$whitelisted,
+                    'tags'        => Player::resolveTags()
                 ]);
             }
         } else {

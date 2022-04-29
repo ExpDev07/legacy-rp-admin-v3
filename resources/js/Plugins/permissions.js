@@ -28,6 +28,7 @@ const Permissions = {
             PERM_SUSPICIOUS: 'suspicious',
             PERM_ADVANCED:   'advanced',
             PERM_LOCK_BAN:   'lock_ban',
+            PERM_EDIT_TAG:   'edit_tag',
 
             check(permission) {
                 if (!(permission in permissions)) {
