@@ -20,6 +20,7 @@ const Permissions = {
         const permissionLevel = getPermissionLevel();
 
         Vue.prototype.perm = {
+            PERM_SOFT_BAN:   'soft_ban',
             PERM_LIVEMAP:    'livemap',
             PERM_SCREENSHOT: 'screenshot',
             PERM_SUSPICIOUS: 'suspicious',

@@ -115,6 +115,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::delete('/players/{player}/removeIdentifier/{identifier}', [PlayerRouteController::class, 'removeIdentifier']);
     Route::post('/players/{player}/attachScreenshot', [PlayerRouteController::class, 'attachScreenshot']);
     Route::post('/players/{player}/updateTrustedPanelStatus/{status}', [PlayerRouteController::class, 'updateTrustedPanelStatus']);
+    Route::post('/players/{player}/updateSoftBanStatus/{status}', [PlayerRouteController::class, 'updateSoftBanStatus']);
 
     Route::post('/players/{player}/bans/{ban}/lock', [PlayerBanController::class, 'lockBan']);
     Route::post('/players/{player}/bans/{ban}/unlock', [PlayerBanController::class, 'unlockBan']);
