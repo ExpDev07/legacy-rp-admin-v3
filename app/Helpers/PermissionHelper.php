@@ -76,10 +76,10 @@ class PermissionHelper
             $level = self::LEVEL_ROOT;
         } else if ($player->is_super_admin) {
             $level = self::LEVEL_SUPERADMIN;
-        } else if ($player->is_staff) {
-            $level = self::LEVEL_STAFF;
         } else if ($player->is_panel_trusted) {
             $level = self::LEVEL_TRUSTED;
+        } else if ($player->is_staff) {
+            $level = self::LEVEL_STAFF;
         }
 
         return self::getPermissionLevel($key) <= $level;
