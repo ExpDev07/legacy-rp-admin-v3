@@ -250,6 +250,8 @@ class PlayerRouteController extends Controller
             'panel_tag' => $tag,
         ]);
 
+        Player::resolveTags(true);
+
         return back()->with('success', 'Tag has been updated successfully.');
     }
 
