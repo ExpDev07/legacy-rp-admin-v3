@@ -99,6 +99,18 @@ class Vehicle extends Model
                     return 'Garage H (sandy shores garage)';
                 case 12:
                     return 'Garage I (paleto garage)';
+                case 14:
+                    return 'Garage J (cayo compound)';
+                case 15:
+                    return 'Garage K (cayo airfield)';
+                case 17:
+                    return 'LSIA';
+                case 18:
+                    return 'MRPD';
+                case 19:
+                    return 'Mount Zonah Medical Center';
+                case 21:
+                    return 'Luxury Autos';
             }
         }
 
