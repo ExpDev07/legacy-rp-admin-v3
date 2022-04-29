@@ -1076,7 +1076,7 @@ export default {
 
             isTagging: false,
             tagCategory: 'custom',
-            tagCustom: '',
+            tagCustom: this.player.tag ? this.player.tag : 'custom',
 
             isScreenshot: false,
             isScreenshotLoading: false,
