@@ -95,7 +95,7 @@
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="addSoftBan()" v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && !player.isSoftBanned">
-                    <i class="fas fa-glass-cheers"></i>
+                    <i class="fas fa-wifi-slash"></i>
                     {{ t('players.show.add_soft_ban') }}
                 </button>
 
