@@ -68,7 +68,7 @@
         </portal>
 
         <div class="flex flex-wrap justify-between mb-6">
-            <div class="flex flex-wrap">
+            <div class="mb-3 flex flex-wrap">
                 <!-- Tusted Panel User -->
                 <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2 mr-3" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
                     <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
@@ -86,7 +86,7 @@
 
                 <!-- Soft Ban -->
                 <badge class="border-green-200 bg-danger-pale dark:bg-dark-danger-pale py-2 mr-3" v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && player.isSoftBanned">
-                    <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
+                    <span class="font-semibold">{{ t('global.soft_banned') }}</span>
                     <a href="#" @click="removeSoftBan($event)" class="ml-1 text-white" :title="t('players.show.remove_soft_ban')">
                         <i class="fas fa-times"></i>
                     </a>
@@ -95,7 +95,7 @@
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="addSoftBan()" v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && !player.isSoftBanned">
-                    <i class="fas fa-glass-cheers"></i>
+                    <i class="fas fa-user-lock"></i>
                     {{ t('players.show.add_soft_ban') }}
                 </button>
 
@@ -105,7 +105,7 @@
                 </badge>
             </div>
 
-            <div class="flex flex-wrap justify-end">
+            <div class="mb-3 flex flex-wrap justify-end">
                 <!-- Create screenshot -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -608,7 +608,7 @@
                             <h3 class="mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h3>
-                            <h4 class="text-primary dark:text-dark-primary" :title="t('players.character.created', $moment(character.characterCreationTimestamp).format('l'))">
+                            <h4 class="text-primary dark:text-dark-primary" :title="t('players.characters.created', $moment(character.characterCreationTimestamp).format('l'))">
                                 <span>{{ t('players.edit.dob') }}:</span> {{
                                     $moment(character.dateOfBirth).format('l')
                                 }}
@@ -1165,7 +1165,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTrustedPanelStatus/0');
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateSoftBanStatus/0');
         },
         async addSoftBan() {
             if (!confirm(this.t('players.show.soft_ban_confirm'))) {
@@ -1173,7 +1173,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTrustedPanelStatus/1');
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateSoftBanStatus/1');
         },
         async kickPlayer() {
             if (!confirm(this.t('players.show.kick_confirm'))) {

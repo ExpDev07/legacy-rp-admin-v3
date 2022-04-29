@@ -7,7 +7,9 @@ const Permissions = {
                 return 0;
             }
 
-            if (options.props.auth.player.isSuperAdmin) {
+            if (options.props.auth.player.isRoot) {
+                return 4;
+            } else if (options.props.auth.player.isSuperAdmin) {
                 return 3;
             } else if (options.props.auth.player.isPanelTrusted) {
                 return 2;
