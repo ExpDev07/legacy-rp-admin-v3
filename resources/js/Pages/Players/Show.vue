@@ -50,6 +50,10 @@
                     <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" :title="formatSecondDiff(player.playTime)" v-html="local.played">
                         {{ local.played }}
                     </badge>
+
+                    <badge class="border-pink-300 bg-pink-200 dark:bg-pink-700" v-if="player.tag">
+                        {{ player.tag }}
+                    </badge>
                 </div>
             </div>
             <div class="text-sm italic">
@@ -106,6 +110,15 @@
             </div>
 
             <div class="mb-3 flex flex-wrap justify-end">
+                <!-- Add Tag -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isTagging = true"
+                    v-if="this.perm.check(this.perm.PERM_EDIT_TAG)"
+                >
+                    <i class="fas fa-tag"></i>
+                    {{ t('players.show.edit_tag') }}
+                </button>
                 <!-- Create screenshot -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -125,7 +138,7 @@
                     <i class="fas fa-map"></i>
                     {{ t('global.view_map') }}
                 </a>
-                <!-- Kicking -->
+                <!-- Revive -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="revivePlayer()" v-if="player.status.status === 'online'">
@@ -266,6 +279,40 @@
                         </button>
                         <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                                 type="button" @click="isUnloading = false">
+                            {{ t('global.cancel') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tag -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isTagging">
+            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.edit_tag') }}</h3>
+                <form class="space-y-6">
+                    <div class="flex">
+                        <select class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 mr-1" v-model="tagCategory">
+                            <option value="custom">{{ t('players.show.tag_custom') }}</option>
+                            <option :value="tag" :key="tag" v-for="tag in tags">{{ tag }}</option>
+                        </select>
+
+                        <input type="text" class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 ml-1" v-if="tagCategory === 'custom'" v-model="tagCustom" />
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-3">
+                        <button class="px-5 py-2 font-semibold text-white bg-green-500 rounded hover:bg-green-600"
+                                type="button" @click="addTag">
+                            <i class="fas fa-tag mr-1"></i>
+                            {{ t('players.show.edit_tag') }}
+                        </button>
+                        <button class="px-5 py-2 font-semibold text-white bg-red-500 rounded hover:bg-red-600"
+                                type="button" @click="removeTag">
+                            {{ t('global.remove_tag') }}
+                        </button>
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                                type="button" @click="isTagging = false">
                             {{ t('global.cancel') }}
                         </button>
                     </div>
@@ -964,6 +1011,10 @@ export default {
             type: Array,
             required: true,
         },
+        tags: {
+            type: Array,
+            required: true,
+        },
         discord: {
             type: Object,
         },
@@ -1022,6 +1073,10 @@ export default {
             },
 
             sortedScreenshots: sortedScreenshots,
+
+            isTagging: false,
+            tagCategory: 'custom',
+            tagCustom: '',
 
             isScreenshot: false,
             isScreenshotLoading: false,
@@ -1174,6 +1229,24 @@ export default {
 
             // Send request.
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateSoftBanStatus/1');
+        },
+        async removeTag() {
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTag', {
+                tag: false
+            });
+        },
+        async addTag() {
+            const tag = this.tagCategory === 'custom' ? this.tagCustom.trim() : this.tagCategory;
+
+            if (!tag) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTag', {
+                tag: tag
+            });
         },
         async kickPlayer() {
             if (!confirm(this.t('players.show.kick_confirm'))) {

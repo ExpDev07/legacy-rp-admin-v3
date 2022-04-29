@@ -56,6 +56,7 @@ class PlayerResource extends JsonResource
             }))) : [],
             'enabledCommands' => $enabledCommands ?? [],
             'panelDrugDepartment' => $drug,
+            'tag'             => $this->panel_tag
         ];
     }
 

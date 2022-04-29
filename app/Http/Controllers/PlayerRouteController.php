@@ -232,6 +232,28 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Sets the tag
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateTag(Player $player, Request $request): RedirectResponse
+    {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_EDIT_TAG)) {
+            return back()->with('error', 'You dont have permissions to do this.');
+        }
+
+        $tag = $request->input('tag') ? trim($request->input('tag')) : null;
+
+        $player->update([
+            'panel_tag' => $tag,
+        ]);
+
+        return back()->with('success', 'Tag has been updated successfully.');
+    }
+
+    /**
      * Takes a screenshot
      *
      * @param string $server
