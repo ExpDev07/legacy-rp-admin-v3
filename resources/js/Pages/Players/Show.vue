@@ -89,7 +89,7 @@
                 </button>
 
                 <!-- Soft Ban -->
-                <badge class="border-green-200 bg-danger-pale dark:bg-dark-danger-pale py-2 mr-3" v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && player.isSoftBanned">
+                <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale py-2 mr-3" v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && player.isSoftBanned">
                     <span class="font-semibold">{{ t('global.soft_banned') }}</span>
                     <a href="#" @click="removeSoftBan($event)" class="ml-1 text-white" :title="t('players.show.remove_soft_ban')">
                         <i class="fas fa-times"></i>
@@ -656,9 +656,7 @@
                                 {{ character.name }} (#{{ character.id }})
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary" :title="t('players.characters.created', $moment(character.characterCreationTimestamp).format('l'))">
-                                <span>{{ t('players.edit.dob') }}:</span> {{
-                                    $moment(character.dateOfBirth).format('l')
-                                }}
+                                <span>{{ t('players.edit.dob') }}:</span> {{ $moment(character.dateOfBirth).format('l') }}
                             </h4>
                             <h4 class="text-red-700 dark:text-red-300" v-if="character.characterDeleted">
                                 <span>{{ t('players.edit.deleted') }}:</span>
@@ -715,12 +713,30 @@
                                 >
                                     <i class="fas fa-skull-crossbones"></i>
                                 </button>
+
                                 <button
-                                    class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute font-bold top-1 right-10 bg-green-500 dark:bg-green-400 rounded"
-                                    v-if="!character.characterDeleted"
+                                    class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-red-500 dark:bg-red-400 rounded"
+                                    v-if="character.isDead"
+                                    :class="{'left-10' : player.status.character === character.id}"
                                 >
-                                    {{ character.slot }}
+                                    <i class="fas fa-female"></i>
                                 </button>
+
+                                <button
+                                    class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute font-bold top-1 right-10 bg-pink-500 dark:bg-pink-400 rounded"
+                                    v-if="character.gender === 1"
+                                    :title="t('players.characters.is_female')"
+                                >
+                                    <i class="fas fa-female"></i>
+                                </button>
+                                <button
+                                    class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute font-bold top-1 right-10 bg-blue-600 dark:bg-blue-300 rounded"
+                                    v-if="character.gender === 0"
+                                    :title="t('players.characters.is_male')"
+                                >
+                                    <i class="fas fa-male"></i>
+                                </button>
+
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-red-600 dark:bg-red-400 rounded"
                                     href="#"
@@ -1075,8 +1091,8 @@ export default {
             sortedScreenshots: sortedScreenshots,
 
             isTagging: false,
-            tagCategory: 'custom',
-            tagCustom: this.player.tag ? this.player.tag : 'custom',
+            tagCategory: this.player.tag ? this.player.tag : 'custom',
+            tagCustom: '',
 
             isScreenshot: false,
             isScreenshotLoading: false,
