@@ -719,7 +719,7 @@
                                     v-if="character.isDead"
                                     :class="{'left-10' : player.status.character === character.id}"
                                 >
-                                    <i class="fas fa-female"></i>
+                                    <i class="fas fa-skull-crossbones"></i>
                                 </button>
 
                                 <button

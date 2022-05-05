@@ -19,7 +19,7 @@ class GeneralHelper
      */
     private static ?array $rootCache = null;
 
-    public static function isUserRoot(string $steam_identifier): bool
+    public static function getRootUsers(): array
     {
         if (!self::$rootCache) {
             $config = __DIR__ . '/../../envs/root-config.json';
@@ -41,7 +41,14 @@ class GeneralHelper
             }
         }
 
-        return in_array($steam_identifier, self::$rootCache);
+        return self::$rootCache;
+    }
+
+    public static function isUserRoot(string $steam_identifier): bool
+    {
+        $users = self::getRootUsers();
+
+        return in_array($steam_identifier, $users);
     }
 
     public static function ipInfo(string $ip): ?array
