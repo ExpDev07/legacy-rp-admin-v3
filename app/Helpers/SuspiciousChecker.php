@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Character;
 use App\Log;
+use App\Player;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -113,14 +114,11 @@ class SuspiciousChecker
         'weapon_compactlauncher',
         'weapon_rayminigun',
         'weapon_grenade',
-        //'weapon_bzgas', // People can get these now
         'weapon_molotov',
         'weapon_stickybomb',
         'weapon_proxmine',
         'weapon_pipebomb',
         'weapon_ball',
-        //'weapon_smokegrenade', // People can get these now
-        'weapon_flare',
         'weapon_hazardcan',
     ];
 
@@ -154,7 +152,6 @@ class SuspiciousChecker
         'weapon_stickybomb',
         'weapon_proxmine',
         'weapon_pipebomb',
-        'weapon_flare',
     ];
 
     /**
@@ -195,7 +192,10 @@ class SuspiciousChecker
             return CacheHelper::read($key, []);
         }
 
-        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE `amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "');";
+        $inv = self::getIgnorableInventories();
+        $inv = $inv ? ' AND inventory_name NOT IN ("' . implode('", "', $inv) . '")' : '';
+
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE (`amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "'))" . $inv . ";";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
@@ -238,7 +238,7 @@ class SuspiciousChecker
             return CacheHelper::read($key, []);
         }
 
-        $sql = "SELECT * FROM (SELECT `identifier`, SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', 1)) as `amount`, SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', -1) as `item`, `details`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 600) * 600 as `time` FROM `user_logs` WHERE `action`='Item Moved' GROUP BY CONCAT(`identifier`, '|', `time`, '|', `item`) ORDER BY `time` DESC) `logs` WHERE amount > 250";
+        $sql = "SELECT * FROM (SELECT `identifier`, SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', 1)) as `amount`, SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', -1) as `item`, `details`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 600) * 600 as `time` FROM `user_logs` WHERE `action`='Item Moved' AND steam_identifier NOT IN ('" . implode("', '", self::getIgnorableSteamIdentifiers()) . "') GROUP BY CONCAT(`identifier`, '|', `time`, '|', `item`) ORDER BY `time` DESC) `logs` WHERE amount > 250";
 
         DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
         $logs = DB::select($sql);
@@ -270,6 +270,7 @@ class SuspiciousChecker
     {
         return Character::query()
             ->where(DB::raw('`cash`+`bank`+`stocks_balance`'), '>=', 700000)
+            ->whereNotIn("steam_identifier", self::getIgnorableSteamIdentifiers())
             ->select(['steam_identifier', 'character_id', 'cash', 'bank', 'stocks_balance', 'first_name', 'last_name'])
             ->get()->toArray();
     }
@@ -345,5 +346,32 @@ class SuspiciousChecker
         }
 
         return $sus;
+    }
+
+    private static function getIgnorableInventories(): array
+    {
+        $ids = self::getIgnorableSteamIdentifiers();
+
+        $characters = Character::query()->select(["character_id"])->whereIn("steam_identifier", $ids)->get()->toArray();
+
+        return array_values(array_map(function($character) {
+            return 'character-' . $character['character_id'];
+        }, $characters));
+    }
+
+    private static function getIgnorableSteamIdentifiers(): array
+    {
+        $ids = Player::query()->select(["steam_identifier"])->where("super_admin", "=", 1)->get()->toArray();
+
+        $ids = array_values(array_map(function($entry) {
+            return $entry["steam_identifier"];
+        }, $ids));
+
+        $root = GeneralHelper::getRootUsers();
+        foreach($root as $user) {
+            $ids[] = $user;
+        }
+
+        return $ids;
     }
 }

@@ -23,6 +23,9 @@ module.exports = {
             '2xl': '1536px',
         },
         extend: {
+            spacing: {
+                '17': '4.25rem'
+            },
             zIndex: {
                 '1k': '1000',
                 '2k': '2000'

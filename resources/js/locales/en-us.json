@@ -678,6 +678,8 @@
             "tattoo_do": "Remove tattoos",
             "tattoo_zone": "Tattoo Body-Part",
             "delete": "Delete this character",
+            "is_female": "This character is female.",
+            "is_male": "This character is male.",
             "economy": "Economic Influence: {0}%",
             "zone": {
                 "all": "All",
