@@ -361,7 +361,7 @@ class SuspiciousChecker
 
     private static function getIgnorableSteamIdentifiers(): array
     {
-        $ids = Player::query()->select(["steam_identifier"])->where("super_admin", "=", 1)->get()->toArray();
+        $ids = Player::query()->select(["steam_identifier"])->where("is_super_admin", "=", 1)->get()->toArray();
 
         $ids = array_values(array_map(function($entry) {
             return $entry["steam_identifier"];
