@@ -55,7 +55,7 @@ class PlayerController extends Controller
 
         // Filtering by serer-id.
         if ($server = $request->input('server')) {
-            $online = array_keys(array_filter(Player::getAllOnlinePlayers(true), function ($player) use ($server) {
+            $online = array_keys(array_filter(Player::getAllOnlinePlayers(true) ?? [], function ($player) use ($server) {
                 return $player['id'] === intval($server);
             }));
 
