@@ -48,9 +48,6 @@
 
                     <!-- Footer -->
                     <foot />
-
-                    <!-- Staff Chat -->
-                    <StaffChat />
                 </div>
             </div>
         </div>
@@ -63,7 +60,6 @@ import FlashMessage from './../Components/FlashMessage';
 import Navbar from './../Components/Navbar';
 import Sidebar from './../Components/Sidebar';
 import Foot from './../Components/Footer';
-import StaffChat from './../Components/StaffChat';
 
 export default {
     components: {
@@ -71,7 +67,6 @@ export default {
         Foot,
         Sidebar,
         Navbar,
-        StaffChat,
     },
     methods: {
         isMobile() {

@@ -100,6 +100,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
     Route::get('/', [HomeController::class, 'render']);
     Route::get('/changelog', [ChangelogController::class, 'render']);
+    Route::get('/staff', [HomeController::class, 'staff']);
 
     // Players.
     Route::get('/players', [PlayerController::class, 'index']);
