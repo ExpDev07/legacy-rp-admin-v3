@@ -94,7 +94,9 @@
         "toggle": "Toggle staff-chat",
         "failed": "Failed to connect!",
         "connecting": "Connecting..",
-        "title": "Staff Chat"
+        "title": "Staff Chat",
+        "no_messages": "No staff messages",
+        "send_chat": "Send"
     },
     "overwatch": {
         "title": "Overwatch",

@@ -36,6 +36,7 @@ use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ScreenshotController;
 use App\Http\Controllers\SerialsController;
 use App\Http\Controllers\ServerController;
+use App\Http\Controllers\StaffChatController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\SuspiciousController;
 use App\Http\Controllers\TestController;
@@ -100,7 +101,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
     Route::get('/', [HomeController::class, 'render']);
     Route::get('/changelog', [ChangelogController::class, 'render']);
-    Route::get('/staff', [HomeController::class, 'staff']);
+
+    Route::get('/staff', [StaffChatController::class, 'staff']);
+    Route::post('/staff', [StaffChatController::class, 'externalStaffChat']);
 
     // Players.
     Route::get('/players', [PlayerController::class, 'index']);
