@@ -7,7 +7,7 @@
             </h1>
         </portal>
 
-        <div class="-mt-6">
+        <div class="-mt-12">
             <div class="flex flex-wrap flex-row">
                 <form class="mb-6 flex" @submit.prevent="sendChat">
                     <input class="w-80 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" maxlength="250" required placeholder="Hey gang!" v-model="staffMessage">
@@ -24,26 +24,30 @@
                     </button>
                 </form>
 
-                <badge
-                    class="border-gray-200 bg-secondary dark:bg-dark-secondary mb-2"
-                    v-if="isLoading"
-                >
-                    {{ t('staff_chat.connecting') }}
-                </badge>
+                <div class="w-full mb-3" v-if="isLoading">
+                    <div
+                        class="badge border-blue-200 bg-blue-100 dark:bg-blue-900 inline-block px-4 leading-5 py-2 border-2 rounded"
+                    >
+                        <i class="fas fa-cog animate-spin mr-1"></i>
+                        {{ t('staff_chat.connecting') }}
+                    </div>
+                </div>
 
-                <badge
-                    class="border-gray-200 bg-secondary dark:bg-dark-secondary mb-2"
-                    v-else-if="socketError"
-                >
-                    {{ t('staff_chat.failed') }}
-                </badge>
+                <div class="w-full mb-3" v-if="socketError">
+                    <div
+                        class="badge border-red-200 bg-red-100 dark:bg-red-900 inline-block px-4 leading-5 py-2 border-2 rounded"
+                    >
+                        {{ t('staff_chat.failed') }}
+                    </div>
+                </div>
 
-                <badge
-                    class="border-gray-200 bg-secondary dark:bg-dark-secondary mb-2"
-                    v-else-if="staffMessages.length === 0"
-                >
-                    {{ t('staff_chat.no_messages') }}
-                </badge>
+                <div class="w-full mb-3" v-if="!socketError && !isLoading && staffMessages.length === 0">
+                    <div
+                        class="badge border-yellow-200 bg-yellow-100 dark:bg-yellow-900 inline-block px-4 leading-5 py-2 border-2 rounded"
+                    >
+                        {{ t('staff_chat.no_messages') }}
+                    </div>
+                </div>
 
                 <div
                     class="w-full mb-3"
@@ -77,7 +81,7 @@
 </template>
 
 <script>
-import Layout from "../Layouts/App";
+import Layout from "../Layouts/Plain";
 import Badge from "../Components/Badge";
 import DataCompressor from "./Map/DataCompressor";
 
@@ -152,7 +156,7 @@ export default {
 
                 setTimeout(() => {
                     this.initChat();
-                }, 5000);
+                }, 3000);
             };
         }
     },
