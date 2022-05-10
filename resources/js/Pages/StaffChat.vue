@@ -107,7 +107,7 @@ export default {
             this.isSendingChat = true;
 
             // Send request.
-            await this.$inertia.post('/staff', {
+            await this.$inertia.post('/staffChat', {
                 message: this.staffMessage
             });
 

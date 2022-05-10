@@ -103,7 +103,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/changelog', [ChangelogController::class, 'render']);
 
     Route::get('/staff', [StaffChatController::class, 'staff']);
-    Route::post('/staff', [StaffChatController::class, 'externalStaffChat']);
+    Route::post('/staffChat', [StaffChatController::class, 'externalStaffChat']);
 
     // Players.
     Route::get('/players', [PlayerController::class, 'index']);
