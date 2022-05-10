@@ -33,24 +33,53 @@ class TestController extends Controller
             ->limit(10)
             ->get();
 
+        $text = self::renderStatistics("Reports", "24 hours", $reports24hours);
+        $text .= "\n\n";
+        $text .= self::renderStatistics("Reports", "30 days", $allReports);
+
+        return self::respond($text);
+    }
+
+    public function localOOC(): Response
+    {
+        $allOOC = Log::query()
+            ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
+            ->where('action', '=', 'Local OOC message')
+            ->groupBy('identifier')
+            ->leftJoin('users', 'identifier', '=', 'steam_identifier')
+            ->orderByDesc('amount')
+            ->limit(10)
+            ->get();
+
+        $ooc24hours = Log::query()
+            ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
+            ->where('action', '=', 'Local OOC message')
+            ->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24*60*60)
+            ->groupBy('identifier')
+            ->leftJoin('users', 'identifier', '=', 'steam_identifier')
+            ->orderByDesc('amount')
+            ->limit(10)
+            ->get();
+
+        $text = self::renderStatistics("Local OOC Messages", "24 hours", $ooc24hours);
+        $text .= "\n\n";
+        $text .= self::renderStatistics("Local OOC Messages", "30 days", $allOOC);
+
+        return self::respond($text);
+    }
+
+    private static function renderStatistics(string $type, string $timespan, $rows): string
+    {
         $lines = [
-            "Top 10 Reports in the past 30 days:",
+            "Top 10 " . $type . " in the past " . $timespan . ":",
             "",
         ];
 
-        foreach($allReports as $report) {
-            $lines[] = $report->player_name . ': ' . $report->amount;
+        foreach($rows as $message) {
+            $lines[] = $message->player_name . ': ' . $message->amount;
         }
 
-        $lines[] = "";
-        $lines[] = "Top 10 reports in the past 24 hours";
-        $lines[] = "";
-
-        foreach($reports24hours as $report) {
-            $lines[] = $report->player_name . ': ' . $report->amount;
-        }
-
-        return self::respond(implode("\n", $lines));
+        return implode("\n", $lines);
     }
 
     /**
