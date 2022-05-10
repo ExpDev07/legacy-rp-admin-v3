@@ -1612,9 +1612,9 @@ export default {
                 maxZoom: 8,
                 maxBounds: L.latLngBounds(L.latLng(0, 0), L.latLng(-256, 256))
             });
-            this.map.attributionControl.addAttribution('map by <a href="https://github.com/milan60" target="_blank">milan60</a>, cayo-perico by Spitfire2k6');
+            this.map.attributionControl.addAttribution('map by <a href="https://github.com/twooot" target="_blank">milan60</a>, cayo-perico map by Spitfire2k6');
 
-            L.tileLayer("https://cdn.celestial.network/tiles_" + Bounds.version + "/{z}/{x}/{y}.jpg", {
+            L.tileLayer("https://worryfree.host/tiles/tiles_" + Bounds.version + "/{z}/{x}/{y}.jpg", {
                 noWrap: true,
                 bounds: [
                     [0, 0],

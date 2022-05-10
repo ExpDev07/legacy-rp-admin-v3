@@ -26,5 +26,5 @@ export default {
             }
         }
     },
-    version: "cayo_v2"
+    version: "v1"
 };
