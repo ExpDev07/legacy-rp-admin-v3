@@ -58,17 +58,6 @@ class HomeController extends Controller
     }
 
     /**
-     * Renders the staff chat.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function staff(Request $request): Response
-    {
-        return Inertia::render('StaffChat', []);
-    }
-
-    /**
      * Returns player count info as json
      *
      * @return \Illuminate\Http\Response

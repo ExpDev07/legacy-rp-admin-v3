@@ -50,6 +50,32 @@ class OPFWHelper
     }
 
     /**
+     * Sends a staff chat message
+     *
+     * @param string $serverIp
+     * @param string $staffSteamIdentifier
+     * @param string $message
+     * @return OPFWResponse
+     */
+    public static function staffChat(string $serverIp, string $staffSteamIdentifier, string $message): OPFWResponse
+    {
+        if (!$message) {
+            return new OPFWResponse(false, 'Your message cannot be empty');
+        }
+
+        $response = self::executeRoute($serverIp . 'execute/staffChatMessage', [
+            'steamIdentifier' => $staffSteamIdentifier,
+            'message'         => $message,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Staff Chat Message has been sent successfully.';
+        }
+
+        return $response;
+    }
+
+    /**
      * Kicks a player from the server
      *
      * @param string $staffSteamIdentifier
