@@ -12,20 +12,26 @@ use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
-    public function reports(): Response
+    public function reports(string $action): Response
     {
-        $allReports = Log::query()
+        $action = trim($action);
+
+        if (!$action) {
+            return self::respond("Empty action!");
+        }
+
+        $all = Log::query()
             ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
-            ->where('action', '=', 'Report')
+            ->where('action', '=', $action)
             ->groupBy('identifier')
             ->leftJoin('users', 'identifier', '=', 'steam_identifier')
             ->orderByDesc('amount')
             ->limit(10)
             ->get();
 
-        $reports24hours = Log::query()
+        $last24hours = Log::query()
             ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
-            ->where('action', '=', 'Report')
+            ->where('action', '=', $action)
             ->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24*60*60)
             ->groupBy('identifier')
             ->leftJoin('users', 'identifier', '=', 'steam_identifier')
@@ -33,37 +39,9 @@ class TestController extends Controller
             ->limit(10)
             ->get();
 
-        $text = self::renderStatistics("Reports", "24 hours", $reports24hours);
+        $text = self::renderStatistics("Reports", "24 hours", $last24hours);
         $text .= "\n\n";
-        $text .= self::renderStatistics("Reports", "30 days", $allReports);
-
-        return self::respond($text);
-    }
-
-    public function localOOC(): Response
-    {
-        $allOOC = Log::query()
-            ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
-            ->where('action', '=', 'Local OOC message')
-            ->groupBy('identifier')
-            ->leftJoin('users', 'identifier', '=', 'steam_identifier')
-            ->orderByDesc('amount')
-            ->limit(10)
-            ->get();
-
-        $ooc24hours = Log::query()
-            ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
-            ->where('action', '=', 'Local OOC message')
-            ->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24*60*60)
-            ->groupBy('identifier')
-            ->leftJoin('users', 'identifier', '=', 'steam_identifier')
-            ->orderByDesc('amount')
-            ->limit(10)
-            ->get();
-
-        $text = self::renderStatistics("Local OOC Messages", "24 hours", $ooc24hours);
-        $text .= "\n\n";
-        $text .= self::renderStatistics("Local OOC Messages", "30 days", $allOOC);
+        $text .= self::renderStatistics("Reports", "30 days", $all);
 
         return self::respond($text);
     }
@@ -71,7 +49,7 @@ class TestController extends Controller
     private static function renderStatistics(string $type, string $timespan, $rows): string
     {
         $lines = [
-            "Top 10 " . $type . " in the past " . $timespan . ":",
+            "Top 10 Logs of type `" . $type . "` in the past " . $timespan . ":",
             "",
         ];
 
