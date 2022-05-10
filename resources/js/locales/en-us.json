@@ -93,7 +93,8 @@
     "staff_chat": {
         "toggle": "Toggle staff-chat",
         "failed": "Failed to connect!",
-        "connecting": "Connecting.."
+        "connecting": "Connecting..",
+        "title": "Staff Chat"
     },
     "overwatch": {
         "title": "Overwatch",
