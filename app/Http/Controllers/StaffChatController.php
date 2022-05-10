@@ -32,20 +32,19 @@ class StaffChatController extends Controller
      * Add external staff messages
      *
      * @param Request $request
-     * @param string $message
      * @return RedirectResponse
      */
-    public function externalStaffChat(Request $request, string $message): RedirectResponse
+    public function externalStaffChat(Request $request): RedirectResponse
     {
         $user = $request->user();
         if (!$user) {
             return back()->with('error', 'Something went wrong.');
         }
 
-        $message = trim($message);
+        $message = trim($request->input('message'));
 
         if (!$message || strlen($message) > 250) {
-            return back()->with('error', 'Invalid message.');
+            return back()->with('error', 'Invalid or empty message.');
         }
 
         $serverIp = Server::getFirstServer();
