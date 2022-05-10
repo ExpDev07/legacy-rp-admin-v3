@@ -31,11 +31,11 @@ class StaffChatController extends Controller
     /**
      * Add external staff messages
      *
-     * @param string $message
      * @param Request $request
+     * @param string $message
      * @return RedirectResponse
      */
-    public function externalStaffChat(string $message, Request $request): RedirectResponse
+    public function externalStaffChat(Request $request, string $message): RedirectResponse
     {
         $user = $request->user();
         if (!$user) {
