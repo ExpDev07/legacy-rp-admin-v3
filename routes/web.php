@@ -219,8 +219,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/skip_queue/{server}/{steamIdentifier}', [QueueController::class, 'skip']);
     Route::get('/api/queue/{server}', [QueueController::class, 'api']);
 
-    Route::get('/test/reports', [TestController::class, 'reports']);
-    Route::get('/test/local_ooc', [TestController::class, 'localOOC']);
+    Route::get('/test/logs/{action}', [TestController::class, 'logs']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
