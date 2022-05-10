@@ -24,24 +24,39 @@
 
             <badge
                 class="border-gray-200 bg-secondary dark:bg-dark-secondary mb-2"
-                :title="this.$options.filters.formatTime(message.createdAt * 1000)"
+                v-else-if="staffMessages.length === 0"
+            >
+                {{ t('staff_chat.no_messages') }}
+            </badge>
+
+            <div
+                class="w-full mb-3"
                 v-for="(message, index) in staffMessages"
                 :key="index"
                 v-else
             >
-                {{ message.user.playerName }}: {{ message.message }}
-            </badge>
+                <div
+                    :title="formatTimestamp(message.createdAt * 1000)"
+                    class="badge border-gray-200 bg-secondary dark:bg-dark-secondary inline-block px-4 leading-5 py-2 border-2 rounded" :class="{ 'inline-block' : small }" @click="click && click($event);"
+                >
+                    <span class="font-semibold">{{ message.user.playerName }}:</span> {{ message.message }}
+                </div>
+            </div>
+
         </div>
 
     </div>
 </template>
 
 <script>
+import Layout from "../Layouts/App";
 import Badge from "../Components/Badge";
+import DataCompressor from "./Map/DataCompressor";
 
 export default {
+    layout: Layout,
     components: {
-        Badge,
+        Badge
     },
     data() {
         return {
@@ -52,6 +67,9 @@ export default {
         };
     },
     methods: {
+        formatTimestamp(time) {
+            return this.$options.filters.formatTime(time);
+        },
         initChat() {
             if (this.isInitialized) {
                 return;
@@ -94,7 +112,12 @@ export default {
         }
     },
     mounted() {
-        this.initChat();
-    }
+        const _this = this;
+
+        this.$nextTick(function () {
+            _this.initChat();
+        });
+    },
+    props: {}
 }
 </script>
