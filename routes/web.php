@@ -220,6 +220,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/api/queue/{server}', [QueueController::class, 'api']);
 
     Route::get('/test/reports', [TestController::class, 'reports']);
+    Route::get('/test/local_ooc', [TestController::class, 'localOOC']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
