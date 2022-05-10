@@ -10,7 +10,7 @@
         <div class="-mt-6">
             <div class="flex flex-wrap flex-row">
                 <form class="mb-6 flex" @submit.prevent="sendChat">
-                    <input class="w-80 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" placeholder="Hey gang!" v-model="staffMessage">
+                    <input class="w-80 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" maxlength="250" required placeholder="Hey gang!" v-model="staffMessage">
 
                     <button class="px-4 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" type="submit">
                         <span v-if="!isSendingChat">
