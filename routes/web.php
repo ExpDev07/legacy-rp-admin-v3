@@ -218,6 +218,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/queue/{server}', [QueueController::class, 'render']);
     Route::post('/skip_queue/{server}/{steamIdentifier}', [QueueController::class, 'skip']);
     Route::get('/api/queue/{server}', [QueueController::class, 'api']);
+
+    Route::get('/test/reports', [TestController::class, 'reports']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
@@ -316,9 +318,3 @@ function doOPLogFileDownload(string $path, string $api_key)
     return (new Response('Unauthorized', 403))
         ->header('Content-Type', 'text/plain');
 }
-
-// Used for testing purposes.
-Route::get('/test', function () {
-    return (new Response('Hash: ' . md5($_SERVER['REMOTE_ADDR']), 200))
-        ->header('Content-Type', 'text/plain');
-});

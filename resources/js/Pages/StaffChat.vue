@@ -148,6 +148,12 @@ export default {
                 }
             };
 
+            socket.onerror = () => {
+                try {
+                    socket.close();
+                } catch(e) {}
+            };
+
             socket.onclose = () => {
                 this.isLoading = false;
                 this.isInitialized = false;
