@@ -39,9 +39,9 @@ class TestController extends Controller
             ->limit(10)
             ->get();
 
-        $text = self::renderStatistics("Reports", "24 hours", $last24hours);
+        $text = self::renderStatistics($action, "24 hours", $last24hours);
         $text .= "\n\n";
-        $text .= self::renderStatistics("Reports", "30 days", $all);
+        $text .= self::renderStatistics($action, "30 days", $all);
 
         return self::respond($text);
     }
