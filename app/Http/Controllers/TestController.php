@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
-    public function reports(string $action): Response
+    public function logs(string $action): Response
     {
         $action = trim($action);
 
