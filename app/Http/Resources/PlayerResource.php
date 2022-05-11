@@ -20,7 +20,7 @@ class PlayerResource extends JsonResource
     public function toArray($request): array
     {
         $path = explode('/', $request->path());
-        $loadStatus = sizeof($path) === 2 && $path[0] = 'players';
+        $loadStatus = sizeof($path) === 2 && $path[0] === 'players' && !$request->input('debug');
 
         $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null;
 
