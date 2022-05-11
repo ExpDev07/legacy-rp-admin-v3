@@ -29,9 +29,15 @@ class DataCompressor {
 
     decompressOnDuty(onDuty) {
         return {
-            police: onDuty.p,
-            ems: onDuty.e
+            police: DataCompressor.decompressDutyPlayers(onDuty.p),
+            ems: DataCompressor.decompressDutyPlayers(onDuty.e)
         };
+    }
+
+    static decompressDutyPlayers(players) {
+        return players.map(player => {
+            return player.c
+        });
     }
 
     decompressPlayers(players) {
