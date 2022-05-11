@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
-    public function logs(string $action): Response
+    public function logs(Request $request, string $action): Response
     {
         $action = trim($action);
 
@@ -20,10 +20,17 @@ class TestController extends Controller
             return self::respond("Empty action!");
         }
 
+        $details = trim($request->input('details'));
+
         $all = Log::query()
             ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
-            ->where('action', '=', $action)
-            ->groupBy('identifier')
+            ->where('action', '=', $action);
+
+        if ($details) {
+            $all->where('details', 'LIKE', '%' . $details . '%');
+        }
+
+        $all = $all->groupBy('identifier')
             ->leftJoin('users', 'identifier', '=', 'steam_identifier')
             ->orderByDesc('amount')
             ->limit(10)
@@ -31,26 +38,31 @@ class TestController extends Controller
 
         $last24hours = Log::query()
             ->selectRaw('`player_name`, COUNT(`identifier`) as `amount`')
-            ->where('action', '=', $action)
-            ->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24*60*60)
+            ->where('action', '=', $action);
+
+        if ($details) {
+            $last24hours->where('details', 'LIKE', '%' . $details . '%');
+        }
+
+        $last24hours = $last24hours->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24*60*60)
             ->groupBy('identifier')
             ->leftJoin('users', 'identifier', '=', 'steam_identifier')
             ->orderByDesc('amount')
             ->limit(10)
             ->get();
 
-        $text = self::renderStatistics($action, "24 hours", $last24hours);
+        $text = self::renderStatistics($action, "24 hours", $last24hours, $details);
         $text .= "\n\n";
-        $text .= self::renderStatistics($action, "30 days", $all);
+        $text .= self::renderStatistics($action, "30 days", $all, $details);
 
         return self::respond($text);
     }
 
-    private static function renderStatistics(string $type, string $timespan, $rows): string
+    private static function renderStatistics(string $type, string $timespan, $rows, $details): string
     {
         $lines = [
             "Top 10 Logs of type `" . $type . "` in the past " . $timespan . ":",
-            "",
+            $details ? "- Details like: `" . $details . "`\n" : "",
         ];
 
         foreach($rows as $message) {
