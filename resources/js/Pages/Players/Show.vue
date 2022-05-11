@@ -823,7 +823,7 @@
                                 <inertia-link
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
                                     method="DELETE"
-                                    v-bind:href="'/players/' + warning.player.steamIdentifier + '/warnings/' + warning.id">
+                                    v-bind:href="'/players/' + player.steamIdentifier + '/warnings/' + warning.id">
                                     <i class="fas fa-trash"></i>
                                 </inertia-link>
                             </div>
