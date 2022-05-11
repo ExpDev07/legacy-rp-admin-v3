@@ -4,18 +4,13 @@ namespace App;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\GeneralHelper;
-use App\Http\Resources\BanResource;
 use App\Http\Resources\CharacterResource;
-use App\Http\Resources\PanelLogResource;
-use App\Http\Resources\PlayerResource;
-use App\Http\Resources\WarningResource;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\SteamUser;
@@ -154,25 +149,25 @@ class Player extends Model
                         'warnings' => 0,
                         'ban' => null,
                         'status' => [
-                            'status'     => PlayerStatus::STATUS_ONLINE,
-                            'serverIp'   => $status->serverIp,
-                            'serverId'   => $status->serverId,
+                            'status' => PlayerStatus::STATUS_ONLINE,
+                            'serverIp' => $status->serverIp,
+                            'serverId' => $status->serverId,
                             'serverName' => $status->serverName,
-                            'character'  => $status->character,
-                            'fakeName'   => null,
+                            'character' => $status->character,
+                            'fakeName' => null,
                         ],
                     ];
 
                     $data = [
-                        'player'      => $res,
-                        'characters'  => CharacterResource::collection($characters),
-                        'warnings'    => [],
-                        'panelLogs'   => [],
-                        'discord'     => null,
-                        'kickReason'  => '',
+                        'player' => $res,
+                        'characters' => CharacterResource::collection($characters),
+                        'warnings' => [],
+                        'panelLogs' => [],
+                        'discord' => null,
+                        'kickReason' => '',
                         'screenshots' => [],
                         'whitelisted' => false,
-                        'tags'        => Player::resolveTags()
+                        'tags' => Player::resolveTags()
                     ];
 
                     CacheHelper::write($key, $data, 3 * CacheHelper::MONTH);
@@ -217,7 +212,12 @@ class Player extends Model
      */
     public function getAvatarAttribute(): string
     {
-        $steam = $this->getSteamUser();
+        return self::getAvatar($this->steam_identifier);
+    }
+
+    public static function getAvatar(string $steamIdentifier): string
+    {
+        $steam = self::getSteamUser($steamIdentifier);
 
         return $steam && isset($steam['avatar']) ? $steam['avatar'] : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
     }
@@ -390,28 +390,35 @@ class Player extends Model
     /**
      * Gets the steam user.
      *
+     * @param string $steamIdenfier
      * @return array|null
      */
-    public function getSteamUser(): ?array
+    public static function getSteamUser(string $steamIdenfier): ?array
     {
-        $id = $this->getSteamID()->ConvertToUInt64();
-        $key = 'steam_user_' . md5($id);
+        $steam = get_steam_id($steamIdenfier);
 
-        if (CacheHelper::exists($key)) {
-            return CacheHelper::read($key, []);
+        if ($steam) {
+            $id = $steam->ConvertToUInt64();
+            $key = 'steam_user_' . md5($id);
+
+            if (CacheHelper::exists($key)) {
+                return CacheHelper::read($key, []);
+            }
+
+            try {
+                $steam = new SteamUser($id);
+                $steam->getUserInfo();
+
+                $info = $steam->toArray();
+                CacheHelper::write($key, $info, CacheHelper::DAY);
+
+                return $info;
+            } catch (\Exception $e) {
+                return null;
+            }
         }
 
-        try {
-            $steam = new SteamUser($id);
-            $steam->getUserInfo();
-
-            $info = $steam->toArray();
-            CacheHelper::write($key, $info, CacheHelper::DAY);
-
-            return $info;
-        } catch (\Exception $e) {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -442,6 +449,33 @@ class Player extends Model
     public function warnings(): HasMany
     {
         return $this->hasMany(Warning::class, 'player_id', 'user_id');
+    }
+
+    public function fasterWarnings(): array
+    {
+        $warnings = Warning::query()
+            ->select(['id', 'message', 'warning_type', 'created_at', 'updated_at', 'player_name', 'steam_identifier'])
+            ->where('player_id', '=', $this->user_id)
+            ->leftJoin('users', 'issuer_id', '=', 'user_id')
+            ->get();
+
+        $plainWarnings = [];
+        foreach ($warnings as $warning) {
+            $plainWarnings[] = [
+                'id' => $warning->id,
+                'message' => $warning->message,
+                'warningType' => $warning->warning_type,
+                'createdAt' => $warning->created_at,
+                'updatedAt' => $warning->updated_at,
+                'issuer' => [
+                    'avatar' => Player::getAvatar($warning->steam_identifier),
+                    'playerName' => $warning->player_name,
+                    'steamIdentifier' => $warning->steam_identifier
+                ]
+            ];
+        }
+
+        return $plainWarnings;
     }
 
     /**

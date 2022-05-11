@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Helpers\GeneralHelper;
 use App\Player;
+use App\PlayerStatus;
 use App\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -19,10 +20,12 @@ class PlayerResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $path = explode('/', $request->path());
-        $loadStatus = sizeof($path) === 2 && $path[0] === 'players' && !$request->input('debug');
+        $plain = $request->input('plain');
 
-        $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : null;
+        $path = explode('/', $request->path());
+        $loadStatus = sizeof($path) === 2 && $path[0] === 'players' && !$plain;
+
+        $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
 
         $identifiers = is_array($this->player_aliases) ? $this->player_aliases : json_decode($this->player_aliases, true);
         $enabledCommands = is_array($this->enabled_commands) ? $this->enabled_commands : json_decode($this->enabled_commands, true);
@@ -47,7 +50,7 @@ class PlayerResource extends JsonResource
             'isRoot'          => $this->isRoot(),
             'isBanned'        => $this->isBanned(),
             'isSoftBanned'    => $this->is_soft_banned,
-            'warnings'        => $this->warnings()->whereIn('warning_type', [Warning::TypeStrike, Warning::TypeWarning])->count(),
+            'warnings'        => $plain ? 0 : $this->warnings()->whereIn('warning_type', [Warning::TypeStrike, Warning::TypeWarning])->count(),
             'ban'             => new BanResource($this->getActiveBan()),
             'status'          => $status,
             'fakeName'        => $status ? $status->fakeName : false,

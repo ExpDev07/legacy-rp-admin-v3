@@ -7,10 +7,8 @@ use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PanelLogResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
-use App\Http\Resources\WarningResource;
 use App\Player;
 use App\Screenshot;
-use App\Server;
 use App\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -164,7 +162,7 @@ class PlayerController extends Controller
                 return Inertia::render('Players/Show', [
                     'player'      => new PlayerResource($resolved),
                     'characters'  => CharacterResource::collection($resolved->characters),
-                    'warnings'    => WarningResource::collection($resolved->warnings()->oldest()->get()),
+                    'warnings'    => $resolved->fasterWarnings(),
                     'panelLogs'   => PanelLogResource::collection($resolved->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
                     'discord'     => $resolved->getDiscordInfo(),
                     'kickReason'  => trim($request->query('kick')) ?? '',

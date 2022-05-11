@@ -2,21 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Ban;
 use App\BlacklistedIdentifier;
 use App\Http\Requests\BlacklistedIdentifierStoreRequest;
 use App\Http\Resources\BlacklistedIdentifierResource;
-use App\Http\Resources\CharacterResource;
-use App\Http\Resources\PanelLogResource;
-use App\Http\Resources\PlayerIndexResource;
-use App\Http\Resources\PlayerResource;
-use App\Http\Resources\WarningResource;
 use App\Player;
-use App\Warning;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
