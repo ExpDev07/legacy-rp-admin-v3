@@ -220,6 +220,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/api/queue/{server}', [QueueController::class, 'api']);
 
     Route::get('/test/logs/{action}', [TestController::class, 'logs']);
+    Route::get('/test/smart_watch', [TestController::class, 'smartWatchLeaderboard']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

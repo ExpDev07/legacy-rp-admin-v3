@@ -44,7 +44,7 @@ class TestController extends Controller
             $last24hours->where('details', 'LIKE', '%' . $details . '%');
         }
 
-        $last24hours = $last24hours->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24*60*60)
+        $last24hours = $last24hours->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24 * 60 * 60)
             ->groupBy('identifier')
             ->leftJoin('users', 'identifier', '=', 'steam_identifier')
             ->orderByDesc('amount')
@@ -65,11 +65,54 @@ class TestController extends Controller
             $details ? "- Details like: `" . $details . "`\n" : "",
         ];
 
-        foreach($rows as $message) {
+        foreach ($rows as $message) {
             $lines[] = $message->player_name . ': ' . $message->amount;
         }
 
         return implode("\n", $lines);
+    }
+
+    public function smartWatchLeaderboard(): Response
+    {
+        $all = DB::table('inventories')
+            ->select('item_metadata')
+            ->where('item_name', '=', 'smart_watch')
+            ->get();
+
+        $leaderboard = [];
+
+        foreach ($all as $item) {
+            $metadata = json_decode($item->item_metadata, true);
+
+            if ($metadata && isset($metadata['stepsTraveled']) && isset($metadata['firstName']) && isset($metadata['lastName'])) {
+                $name = $metadata['firstName'] . ' ' . $metadata['lastName'];
+
+                $steps = floatval($metadata['stepsTraveled']);
+
+                if (!isset($leaderboard[$name]) || $leaderboard[$name] < $steps) {
+                    $leaderboard[$name] = $steps;
+                }
+            }
+        }
+
+        $list = [];
+
+        foreach ($leaderboard as $name => $steps) {
+            $list[] = [
+                'name' => $name,
+                'steps' => $steps
+            ];
+        }
+
+        usort($list, function($a, $b) {
+            return $a['steps'] - $b['steps'];
+        });
+
+        $list = array_map(function($entry) {
+            return $entry['steps'] . ' - ' . $entry['name'];
+        }, array_splice($list, 0, 25));
+
+        return self::respond("Top 25 steps traveled\n\n" . implode("\n", $list));
     }
 
     /**
