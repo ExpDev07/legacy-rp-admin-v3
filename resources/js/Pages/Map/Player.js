@@ -59,12 +59,10 @@ class Player {
             value: invisible && !shouldIgnoreInvisible(staffMembers, rawData, this.character)
         };
 
-        // Player is afk if they either haven't moved for 45 minutes
-        // Or haven't moved for 30 minutes and are inside their apartment
+        // Player is afk if they either haven't moved for 15 minutes
         this.afk = {
             time: rawData.afk,
-            apartment: rawData.afk > 30 * 60 && this.location.z < -10,
-            normal: rawData.afk > 45 * 60,
+            value: rawData.afk > 15 * 60,
             staff: this.player.isStaff
         };
 
@@ -111,14 +109,12 @@ class Player {
     }
 
     isAFK() {
-        return !this.afk.staff && (this.afk.apartment || this.afk.normal);
+        return !this.afk.staff && this.afk.value;
     }
 
     getAFKTitle() {
-        if (this.afk.apartment) {
-            return 'Player has not moved for more than 30 minutes while inside an apartment.';
-        } else if (this.afk.normal) {
-            return 'Player has not moved for more than 45 minutes.'
+        if (this.afk.value) {
+            return 'Player has not moved for more than 15 minutes.'
         }
         return 'Player is not considered afk.';
     }
