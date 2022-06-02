@@ -77,20 +77,21 @@ class TestController extends Controller
         $all = DB::table('inventories')
             ->select('item_metadata')
             ->where('item_name', '=', 'smart_watch')
-            ->get();
+            ->get()
+            ->toArray();
 
         $leaderboard = [];
 
         foreach ($all as $item) {
             $metadata = json_decode($item->item_metadata, true);
 
-            if ($metadata && isset($metadata['stepsTraveled']) && isset($metadata['firstName']) && isset($metadata['lastName'])) {
+            if ($metadata && isset($metadata['stepsWalked']) && isset($metadata['firstName']) && isset($metadata['lastName'])) {
                 $name = $metadata['firstName'] . ' ' . $metadata['lastName'];
 
-                $steps = floatval($metadata['stepsTraveled']);
+                $steps = floatval($metadata['stepsWalked']);
 
                 if (!isset($leaderboard[$name]) || $leaderboard[$name] < $steps) {
-                    $leaderboard[$name] = $steps;
+                    $leaderboard[$name] = floor($steps);
                 }
             }
         }
@@ -105,7 +106,7 @@ class TestController extends Controller
         }
 
         usort($list, function($a, $b) {
-            return $a['steps'] - $b['steps'];
+            return $b['steps'] - $a['steps'];
         });
 
         $list = array_map(function($entry) {
