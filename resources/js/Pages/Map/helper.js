@@ -2,8 +2,8 @@ const ignore_invisible = require("../../data/ignore_invisible.json");
 const Rainbow = require("rainbowvis.js");
 
 const rainbow = new Rainbow();
-rainbow.setNumberRange(30 * 60, 3 * 60 * 60);
-rainbow.setSpectrum('#d9ff00', '#ffbf00', '#ff6600', '#ff0000');
+rainbow.setNumberRange(15 * 60, 1.5 * 60 * 60);
+rainbow.setSpectrum('#f7ff00', '#ffbf00', '#ff6600', '#ff0000');
 
 module.exports = {
     mapNumber(val, in_min, in_max, out_min, out_max) {
