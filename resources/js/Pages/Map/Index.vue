@@ -1501,8 +1501,13 @@ export default {
                                 player.getTitle(),
                                 'Coords: ' + player.location.toStringGame()
                             ];
+
                             !player.vehicle || trackingInfo.push('Vehicle: ' + player.vehicle.model);
-                            player.afk < 15 || trackingInfo.push('AFK since ' + _this.$options.filters.humanizeSeconds(player.afk.time));
+
+                            if (player.afk.time > 10) {
+                                trackingInfo.push('AFK since ' + _this.$options.filters.humanizeSeconds(player.afk.time));
+                            }
+
                             _this.tracking.data.advanced = trackingInfo.join("\n");
 
                             if (_this.firstRefresh) {
