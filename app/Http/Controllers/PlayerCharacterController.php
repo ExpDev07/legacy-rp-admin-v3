@@ -117,7 +117,7 @@ class PlayerCharacterController extends Controller
 
         $query->select([
             'character_id', 'steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',
-            'department_name', 'position_name', 'phone_number',
+            'department_name', 'position_name', 'phone_number', 'date_of_birth'
         ]);
 
         $characters = CharacterIndexResource::collection($query->paginate(15, [
