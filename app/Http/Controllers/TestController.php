@@ -109,8 +109,12 @@ class TestController extends Controller
             return $b['steps'] - $a['steps'];
         });
 
-        $list = array_map(function($entry) {
-            return $entry['steps'] . ' - ' . $entry['name'];
+        $index = 0;
+
+        $list = array_map(function($entry) use ($index) {
+            $index++;
+
+            return $index . '. ' . $entry['steps'] . "\t" . $entry['name'];
         }, array_splice($list, 0, 25));
 
         return self::respond("Top 25 steps traveled\n\n" . implode("\n", $list));
