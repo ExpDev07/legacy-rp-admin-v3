@@ -84,6 +84,16 @@ class PlayerCharacterController extends Controller
             }
         }
 
+        // Filtering by DoB.
+        if ($dob = $request->input('dob')) {
+            if (Str::startsWith($dob, '=')) {
+                $dob = Str::substr($dob, 1);
+                $query->where('date_of_birth', $dob);
+            } else {
+                $query->where('date_of_birth', 'like', "%{$dob}%");
+            }
+        }
+
         // Filtering by Job.
         if ($job = $request->input('job')) {
             if (Str::startsWith($phone, '=')) {
@@ -123,6 +133,7 @@ class PlayerCharacterController extends Controller
                 'name'          => $request->input('name'),
                 'vehicle_plate' => $request->input('vehicle_plate'),
                 'phone'         => $request->input('phone'),
+                'dob'           => $request->input('dob'),
                 'job'           => $request->input('job'),
                 'deleted'       => $request->input('deleted') ?: 'all',
             ],
