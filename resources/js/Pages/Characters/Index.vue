@@ -116,6 +116,7 @@
                         <th class="px-6 py-4">{{ t('characters.form.phone') }}</th>
                         <th class="px-6 py-4">{{ t('characters.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('characters.result.gender') }}</th>
+                        <th class="px-6 py-4">{{ t('characters.result.dob') }}</th>
                         <th class="px-6 py-4">{{ t('characters.form.job') }}</th>
                         <th class="px-6 py-4"></th>
                     </tr>
@@ -132,6 +133,9 @@
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ character.gender | formatGender(t) }}
+                        </td>
+                        <td class="px-6 py-3 border-t mobile:block">
+                            {{ character.dateOfBirth }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ character.jobName || t('global.none') }} /

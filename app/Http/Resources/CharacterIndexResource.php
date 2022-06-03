@@ -21,6 +21,7 @@ class CharacterIndexResource extends JsonResource
             'steamIdentifier' => $this->steam_identifier,
             'firstName'       => $this->first_name,
             'lastName'        => $this->last_name,
+            'dateOfBirth'     => $this->date_of_birth,
             'gender'          => $this->gender,
             'jobName'         => $this->job_name,
             'departmentName'  => $this->department_name,
