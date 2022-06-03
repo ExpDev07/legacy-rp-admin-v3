@@ -498,10 +498,20 @@ export default {
 
             return this.parseOtherLog(details);
         },
+        escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        },
         parseLog(details) {
             const regex = /(to|from) (inventory )?((trunk|glovebox|character|property|motel-\w+?|evidence|ground|locker-\w+?)-(\d+-)?\d+:\d+)/gmi;
 
             let inventories = [];
+
+            details = this.escapeHtml(details);
 
             let m;
             while ((m = regex.exec(details)) !== null) {

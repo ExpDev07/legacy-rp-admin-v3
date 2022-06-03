@@ -423,7 +423,8 @@
             "plate": "Vehicle Plate",
             "job": "Job",
             "phone": "Phone Number",
-            "deleted": "Is Deleted"
+            "deleted": "Is Deleted",
+            "dob": "Date of Birth"
         },
         "result": {
             "player": "Player",

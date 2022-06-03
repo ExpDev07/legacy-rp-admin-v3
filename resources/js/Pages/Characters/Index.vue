@@ -22,39 +22,46 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
                         <!-- Character ID -->
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="character_id">
                                 {{ t('characters.form.character_id') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="number" id="character_id" placeholder="16802" v-model="filters.character_id">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="number" id="character_id" placeholder="83118" v-model="filters.character_id">
                         </div>
                         <!-- Name -->
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="name">
                                 {{ t('characters.form.name') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="name" placeholder="Charlie Ives" v-model="filters.name">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="name" placeholder="Lela Law" v-model="filters.name">
                         </div>
                         <!-- Vehicle Plate -->
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="vehicle_plate">
                                 {{ t('characters.form.plate') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="vehicle_plate" placeholder="95MBH817" v-model="filters.vehicle_plate">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="vehicle_plate" placeholder="23FTW355" v-model="filters.vehicle_plate">
+                        </div>
+                        <!-- Date of Birth -->
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-2" for="vehicle_plate">
+                                {{ t('characters.form.dob') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                            </label>
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="dob" placeholder="1998-03-04" v-model="filters.dob">
                         </div>
                         <!-- Phone Number -->
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="phone">
                                 {{ t('characters.form.phone') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="phone" placeholder="606-0992" v-model="filters.phone">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="phone" placeholder="723-4797" v-model="filters.phone">
                         </div>
                         <!-- Job -->
                         <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="job">
                                 {{ t('characters.form.job') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" placeholder="Government Waste Collector Employee" v-model="filters.job">
+                            <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job" placeholder="Law Enforcement SASP Cadet" v-model="filters.job">
                         </div>
                         <!-- Deletion status -->
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
@@ -168,6 +175,7 @@ export default {
             character_id: Number,
             name: String,
             vehicle_plate: String,
+            dob: String,
             phone: String,
             job: String,
             deleted: String,
