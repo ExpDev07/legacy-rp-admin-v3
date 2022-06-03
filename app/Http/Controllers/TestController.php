@@ -111,13 +111,13 @@ class TestController extends Controller
 
         $index = 0;
 
-        $list = array_map(function($entry) use ($index) {
+        $list = array_map(function($entry) use (&$index) {
             $index++;
 
-            return $index . '. ' . $entry['steps'] . "\t" . $entry['name'];
+            return $index . ".\t" . number_format($entry['steps']) . "\t" . $entry['name'];
         }, array_splice($list, 0, 25));
 
-        return self::respond("Top 25 steps traveled\n\n" . implode("\n", $list));
+        return self::respond("Top 25 steps traveled\n\nSpot\tSteps\tFull-Name\n" . implode("\n", $list));
     }
 
     /**
