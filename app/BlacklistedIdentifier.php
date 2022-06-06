@@ -49,6 +49,7 @@ class BlacklistedIdentifier extends Model
         'identifier',
         'creator_identifier',
         'reason',
+        'note',
         'timestamp',
     ];
 
