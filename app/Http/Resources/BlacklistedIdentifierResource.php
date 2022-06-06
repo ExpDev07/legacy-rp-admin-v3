@@ -21,6 +21,7 @@ class BlacklistedIdentifierResource extends JsonResource
             'identifier' => $this->identifier,
             'creator'    => new PlayerIndexResource($this->creator()->first()),
             'reason'     => $this->reason,
+            'note'       => $this->note,
             'timestamp'  => $this->timestamp,
         ];
     }

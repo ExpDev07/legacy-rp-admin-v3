@@ -49,8 +49,18 @@ class BlacklistController extends Controller
             }
         }
 
+        // Filtering by note.
+        if ($note = $request->input('note')) {
+            if (Str::startsWith($note, '=')) {
+                $note = Str::substr($note, 1);
+                $query->where('note', '=', $note);
+            } else {
+                $query->where('note', 'like', "%{$note}%");
+            }
+        }
+
         $query->select([
-            'blacklist_id', 'identifier', 'creator_identifier', 'reason', 'timestamp',
+            'blacklist_id', 'identifier', 'creator_identifier', 'reason', 'note', 'timestamp',
         ]);
 
         $page = Paginator::resolveCurrentPage('page');
@@ -62,14 +72,15 @@ class BlacklistController extends Controller
 
         return Inertia::render('Blacklist/Index', [
             'identifiers' => BlacklistedIdentifierResource::collection($identifiers),
-            'filters'     => [
-                'creator'    => $request->input('creator'),
+            'filters' => [
+                'creator' => $request->input('creator'),
                 'identifier' => $request->input('identifier'),
-                'reason'     => $request->input('reason'),
+                'reason' => $request->input('reason'),
+                'note' => $request->input('note'),
             ],
-            'links'       => $this->getPageUrls($page),
-            'time'        => $end - $start,
-            'page'        => $page,
+            'links' => $this->getPageUrls($page),
+            'time' => $end - $start,
+            'page' => $page,
         ]);
     }
 
@@ -110,6 +121,7 @@ class BlacklistController extends Controller
     public function destroy(BlacklistedIdentifier $identifier): RedirectResponse
     {
         $identifier->forceDelete();
+
         return back()->with('success', 'The identifier has successfully been removed.');
     }
 

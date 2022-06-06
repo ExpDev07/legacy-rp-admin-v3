@@ -21,23 +21,29 @@
             <template>
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="creator">
                                 {{ t('blacklist.creator') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="creator" name="creator" placeholder="steam:11000010d322da9" v-model="filters.creator">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="identifier">
                                 {{ t('blacklist.identifier') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="identifier" name="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
                         </div>
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="identifier">
                                 {{ t('blacklist.reason') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="reason" name="reason" placeholder="Really bad guy i don't like him." v-model="filters.reason">
+                        </div>
+                        <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-4 font-semibold" for="identifier">
+                                {{ t('blacklist.note') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                            </label>
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="note" name="note" placeholder="Really bad guy i don't like him." v-model="filters.note">
                         </div>
                     </div>
                     <!-- Description -->
@@ -89,12 +95,20 @@
                     <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="add_identifier" placeholder="steam:11000010df22c8b" v-model="form.identifier" />
                 </div>
 
-                <!-- Type -->
+                <!-- Ban Reason -->
                 <div class="w-full p-3 flex justify-between px-0">
                     <label class="mr-4 block w-1/4 pt-2 font-bold">
-                        {{ t('blacklist.identifier') }}
+                        {{ t('blacklist.reason') }}
                     </label>
-                    <textarea class="block w-3/4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="add_reason" placeholder="Really bad guy i don't like him." v-model="form.reason"></textarea>
+                    <textarea class="block w-3/4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="add_reason" placeholder="1.1, 1.2" v-model="form.reason"></textarea>
+                </div>
+
+                <!-- Note -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold">
+                        {{ t('blacklist.note') }}
+                    </label>
+                    <textarea class="block w-3/4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="add_note" placeholder="Really bad guy i don't like him." v-model="form.note"></textarea>
                 </div>
 
                 <!-- Buttons -->
@@ -128,6 +142,7 @@
                         <th class="px-6 py-4">{{ t('blacklist.creator') }}</th>
                         <th class="px-6 py-4">{{ t('blacklist.identifier') }}</th>
                         <th class="px-6 py-4">{{ t('blacklist.reason') }}</th>
+                        <th class="px-6 py-4">{{ t('blacklist.note') }}</th>
                         <th class="px-6 py-4">{{ t('blacklist.timestamp') }}</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
@@ -141,6 +156,7 @@
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">{{ identifier.identifier }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ identifier.reason }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ identifier.note }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ identifier.timestamp | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <button class="block px-4 py-2 font-semibold text-center text-white bg-danger rounded dark:bg-dark-danger" @click="removeIdentifier(identifier.id)">
@@ -212,6 +228,7 @@ export default {
             creator: String,
             identifier: String,
             reason: String,
+            note: String,
         },
         time: {
             type: Number,
@@ -232,7 +249,8 @@ export default {
             isAdding: false,
             form: {
                 identifier: '',
-                reason: ''
+                reason: '',
+                note: ''
             }
         };
     },
@@ -262,6 +280,7 @@ export default {
             this.isAdding = false;
             this.form.reason = '';
             this.form.identifier = '';
+            this.form.note = '';
         },
         async removeIdentifier(id) {
             if (!confirm(this.t('blacklist.confirm_remove'))) {

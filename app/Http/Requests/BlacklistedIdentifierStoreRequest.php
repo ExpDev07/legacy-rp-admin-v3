@@ -17,6 +17,7 @@ class BlacklistedIdentifierStoreRequest extends FormRequest
         return [
             'identifier' => ['string', 'required'],
             'reason'     => ['string', 'required'],
+            'note'       => ['string', 'required'],
         ];
     }
 
