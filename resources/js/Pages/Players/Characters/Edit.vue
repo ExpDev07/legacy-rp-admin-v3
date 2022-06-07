@@ -91,8 +91,8 @@
                         {{ t('players.characters.spawn_point') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="spawn">
-                        <option v-for="coords in getResetCoords()" :key="coords" :value="coords">
-                            {{ coords }}
+                        <option v-for="coords in getResetCoords()" :key="coords.key" :value="coords.key">
+                            {{ coords.label }}
                         </option>
                         <option value="staff" v-if="player.isStaff">
                             {{ t('players.characters.spawn.staff') }}
@@ -1076,7 +1076,14 @@ export default {
     },
     methods: {
         getResetCoords() {
-            return this.resetCoords.map(coords => this.t('players.characters.spawn.' + coords)).sort();
+            return this.resetCoords
+                .map(coords => {
+                    return {
+                        label: this.t('players.characters.spawn.' + coords),
+                        key: coords
+                    }
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
         },
         getMoneyLocals() {
             const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance + this.vehicleValue,
