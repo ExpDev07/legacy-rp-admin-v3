@@ -158,7 +158,7 @@ class PanelLog extends Model
         $to = self::resolvePlayerLogName($toIdentifier);
 
         $log = $from . ' kicked ' . $to . ' with the reason: `' . $reason . '`';
-        self::createLog($fromIdentifier, $toIdentifier, $log, 'Kicked Player');
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Kicked Player', true);
     }
 
     /**
@@ -225,7 +225,7 @@ class PanelLog extends Model
         $reason = $reason ? ' with the reason `' . $reason . '`' : ' with no reason';
 
         $log = $from . ' unloaded ' . $to . $reason;
-        self::createLog($fromIdentifier, $toIdentifier, $log, 'Unloaded Character');
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Unloaded Character', true);
     }
 
     /**
@@ -262,9 +262,9 @@ class PanelLog extends Model
      * @param string $log
      * @param string $action
      */
-    private static function createLog(string $source, string $target, string $log, string $action)
+    private static function createLog(string $source, string $target, string $log, string $action, bool $ignoreRoot = false)
     {
-        if (!GeneralHelper::isUserRoot($source)) {
+        if (!GeneralHelper::isUserRoot($source) || $ignoreRoot) {
             self::query()->create([
                 'source_identifier' => $source,
                 'target_identifier' => $target,
