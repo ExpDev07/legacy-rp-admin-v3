@@ -91,8 +91,8 @@
                         {{ t('players.characters.spawn_point') }}
                     </label>
                     <select class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="spawn">
-                        <option v-for="coords in getResetCoords()" :key="coords" :value="coords">
-                            {{ coords }}
+                        <option v-for="coords in getResetCoords()" :key="coords.key" :value="coords.key">
+                            {{ coords.label }}
                         </option>
                         <option value="staff" v-if="player.isStaff">
                             {{ t('players.characters.spawn.staff') }}
@@ -379,8 +379,9 @@
                                 <select
                                     class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
                                     v-model="vehicleForm.repair">
-                                    <option :value="true">{{ t('global.yes') }}</option>
-                                    <option :value="false">{{ t('global.no') }}</option>
+                                    <option value="fix">{{ t('players.characters.vehicle.repair_fix') }}</option>
+                                    <option value="break">{{ t('players.characters.vehicle.repair_break') }}</option>
+                                    <option :value="false">{{ t('players.characters.vehicle.repair_false') }}</option>
                                 </select>
                             </td>
                             <th class="p-2">
@@ -890,7 +891,7 @@ export default {
             required: true,
         },
         vehicleMap: {
-            type: Object,
+            type: Array,
             required: true,
         },
         horns: {
@@ -998,10 +999,10 @@ export default {
             }
         }
 
-        const sortedVehicles = Object.entries(this.vehicleMap).sort((a, b) => a[1].localeCompare(b[1])).map(m => {
+        const sortedVehicles = this.vehicleMap.sort((a, b) => a.localeCompare(b)).map(m => {
             return {
-                value: m[0],
-                text: m[1] + ' (' + m[0] + ')'
+                value: m,
+                text: m
             };
         });
 
@@ -1076,7 +1077,14 @@ export default {
     },
     methods: {
         getResetCoords() {
-            return this.resetCoords.map(coords => this.t('players.characters.spawn.' + coords)).sort();
+            return this.resetCoords
+                .map(coords => {
+                    return {
+                        label: this.t('players.characters.spawn.' + coords),
+                        key: coords
+                    }
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
         },
         getMoneyLocals() {
             const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance + this.vehicleValue,

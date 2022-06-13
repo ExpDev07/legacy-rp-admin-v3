@@ -179,8 +179,6 @@ class PlayerCharacterController extends Controller
 
     public function backstories(Request $request): Response
     {
-        $character = Character::query()->where('character_deleted', '=', '0')->orderByRaw('RAND()')->limit(1)->get()->first();
-
         return Inertia::render('Players/Characters/Backstories');
     }
 
@@ -347,7 +345,7 @@ class PlayerCharacterController extends Controller
     }
 
     /**
-     * Resets a characters spawnpoint
+     * Resets a characters spawn-point
      *
      * @param Player $player
      * @param Character $character
@@ -462,7 +460,7 @@ class PlayerCharacterController extends Controller
         };
 
         $map = CacheHelper::getVehicleMap();
-        if (!isset($map[$model])) {
+        if (!in_array($model, $map)) {
             return back()->with('error', 'Unknown model name "' . $model . '".');
         }
 
@@ -591,11 +589,33 @@ class PlayerCharacterController extends Controller
             return self::json(false, null, 'Invalid modifications ("' . $invalidMod . '") submitted, please try again.');
         }
 
+        $repair = $request->post('repair');
+        $damage = $vehicle->deprecated_damage;
+
+        if ($repair === 'fix') {
+            $damage = null;
+        } else if ($repair === 'break') {
+            $damage = '{';
+
+            // No doors
+            $damage .= '"doors":{"1":true,"2":true,"3":true,"4":true,"5":true,"0":true},';
+            // Very dirty
+            $damage .= '"dirt":15.0,';
+            // No tires
+            $damage .= '"tires":{"1":true,"2":true,"3":true,"4":true,"5":true,"0":true},';
+            // No windows
+            $damage .= '"windows":{"1":true,"2":true,"3":true,"4":true,"5":true,"6":true,"7":true,"0":true},';
+            // Damage completely fucked
+            $damage .= '"tank":0.0,"body":0.0,"general":1000,"engine":0.0';
+
+            $damage .= '}';
+        }
+
         $vehicle->update([
             'owner_cid'                => $character->character_id,
             'plate'                    => $plate,
             'deprecated_modifications' => $vehicle->deprecated_modifications,
-            'deprecated_damage'        => $request->post('repair') ? null : $vehicle->deprecated_damage,
+            'deprecated_damage'        => $damage,
             'deprecated_fuel'          => $fuel,
         ]);
 
