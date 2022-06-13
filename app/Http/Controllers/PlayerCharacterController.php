@@ -179,8 +179,6 @@ class PlayerCharacterController extends Controller
 
     public function backstories(Request $request): Response
     {
-        $character = Character::query()->where('character_deleted', '=', '0')->orderByRaw('RAND()')->limit(1)->get()->first();
-
         return Inertia::render('Players/Characters/Backstories');
     }
 
