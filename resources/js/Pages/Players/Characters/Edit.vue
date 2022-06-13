@@ -891,7 +891,7 @@ export default {
             required: true,
         },
         vehicleMap: {
-            type: Object,
+            type: Array,
             required: true,
         },
         horns: {
@@ -999,10 +999,10 @@ export default {
             }
         }
 
-        const sortedVehicles = Object.entries(this.vehicleMap).sort((a, b) => a[1].localeCompare(b[1])).map(m => {
+        const sortedVehicles = this.vehicleMap.sort((a, b) => a.localeCompare(b)).map(m => {
             return {
-                value: m[0],
-                text: m[1] + ' (' + m[0] + ')'
+                value: m,
+                text: m
             };
         });
 

@@ -59,7 +59,17 @@ class CacheHelper
     {
         $map = self::read('vehicle_map', null);
         if (!$map) {
-            $map = json_decode(GeneralHelper::get('https://raw.githubusercontent.com/milan60/legacyrp-admin-panel-sockets/master/display-map.json'), true) ?? [];
+            $map = json_decode(GeneralHelper::get('https://raw.githubusercontent.com/twooot/legacyrp-admin-panel-sockets/master/vehicles.json'), true) ?? [];
+
+            if ($map) {
+                $list = [];
+
+                foreach($map['data'] as $model) {
+                    $list[] = $model;
+                }
+
+                $map = $list;
+            }
 
             self::write('vehicle_map', $map, self::DAY);
         }
