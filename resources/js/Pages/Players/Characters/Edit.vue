@@ -1222,7 +1222,7 @@ export default {
             this.isVehicleEdit = false;
         },
         async addVehicle() {
-            if (!(this.vehicleAdd.value in this.vehicleMap)) {
+            if (!this.vehicleMap.includes(this.vehicleAdd.value)) {
                 alert('Unknown vehicle model "' + this.vehicleAdd.value + '"');
                 return;
             }
