@@ -379,8 +379,9 @@
                                 <select
                                     class="w-28 block shadow-none !border-gray-500 border-0 border-b-2 bg-transparent !ring-transparent dark:bg-gray-600"
                                     v-model="vehicleForm.repair">
-                                    <option :value="true">{{ t('global.yes') }}</option>
-                                    <option :value="false">{{ t('global.no') }}</option>
+                                    <option value="fix">{{ t('players.characters.vehicle.repair_fix') }}</option>
+                                    <option value="break">{{ t('players.characters.vehicle.repair_break') }}</option>
+                                    <option :value="false">{{ t('players.characters.vehicle.repair_false') }}</option>
                                 </select>
                             </td>
                             <th class="p-2">
