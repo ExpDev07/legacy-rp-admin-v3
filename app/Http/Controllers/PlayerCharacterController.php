@@ -345,7 +345,7 @@ class PlayerCharacterController extends Controller
     }
 
     /**
-     * Resets a characters spawnpoint
+     * Resets a characters spawn-point
      *
      * @param Player $player
      * @param Character $character
@@ -460,7 +460,7 @@ class PlayerCharacterController extends Controller
         };
 
         $map = CacheHelper::getVehicleMap();
-        if (!isset($map[$model])) {
+        if (!in_array($model, $map)) {
             return back()->with('error', 'Unknown model name "' . $model . '".');
         }
 
