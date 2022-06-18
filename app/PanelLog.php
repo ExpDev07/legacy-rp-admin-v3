@@ -261,6 +261,7 @@ class PanelLog extends Model
      * @param string $target
      * @param string $log
      * @param string $action
+     * @param bool $ignoreRoot
      */
     private static function createLog(string $source, string $target, string $log, string $action, bool $ignoreRoot = false)
     {

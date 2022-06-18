@@ -178,5 +178,11 @@
         "radius": 15,
         "height": 70,
         "label": "Interior"
+    },
+    {
+        "coords": "-91 -821 222",
+        "radius": 4,
+        "height": 3,
+        "label": "Exclusive Dealership"
     }
 ]
