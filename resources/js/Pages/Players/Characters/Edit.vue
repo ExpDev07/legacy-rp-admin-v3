@@ -1102,7 +1102,7 @@ export default {
             };
         },
         getAvailableLicenses() {
-            return ["heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military"].filter(l => !this.character.licenses.includes(l));
+            return ["heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military", "utility", "commercial"].filter(l => !this.character.licenses.includes(l));
         },
         setPayCheck() {
             for (let x = 0; x < jobsObject.length; x++) {
