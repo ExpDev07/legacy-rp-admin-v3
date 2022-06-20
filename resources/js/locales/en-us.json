@@ -779,6 +779,8 @@
                 "perf": "Performance",
                 "management": "Management",
                 "military": "Military",
+                "utility": "Utility",
+                "commercial": "Commercial",
                 "confirm": "Are you sure you want to remove all of this characters licenses?"
             }
         },
