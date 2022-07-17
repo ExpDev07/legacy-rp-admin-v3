@@ -46,6 +46,7 @@ class PlayerResource extends JsonResource
             'isDebugger'      => $this->isDebugger(),
             'isPanelTrusted'  => $this->isPanelTrusted(),
             'isStaff'         => $this->isStaff(),
+            'isSeniorStaff'   => $this->isSeniorStaff(),
             'isSuperAdmin'    => $this->isSuperAdmin(),
             'isRoot'          => $this->isRoot(),
             'isBanned'        => $this->isBanned(),

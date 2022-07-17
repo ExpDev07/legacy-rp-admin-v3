@@ -18,10 +18,13 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
-                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="player.isTrusted">
+                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="player.isTrusted && !player.isStaff">
                         <span class="font-semibold">{{ t('global.trusted') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff && !player.isSeniorStaff">
+                        <span class="font-semibold">{{ t('global.staff') }}</span>
+                    </badge>
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSeniorStaff && !player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
