@@ -60,6 +60,7 @@ class Player extends Model
         'player_aliases',
         'identifiers',
         'is_staff',
+        'is_senior_staff',
         'is_super_admin',
         'is_trusted',
         'is_panel_trusted',
@@ -143,6 +144,7 @@ class Player extends Model
                         'isDebugger' => false,
                         'isPanelTrusted' => false,
                         'isStaff' => false,
+                        'isSeniorStaff' => false,
                         'isSuperAdmin' => false,
                         'isRoot' => false,
                         'isBanned' => false,
@@ -311,7 +313,17 @@ class Player extends Model
      */
     public function isStaff(): bool
     {
-        return ($this->is_staff ?? false) || $this->isSuperAdmin();
+        return ($this->is_staff ?? false) || $this->isSeniorStaff();
+    }
+
+    /**
+     * Checks whether this player is a senior staff member.
+     *
+     * @return bool
+     */
+    public function isSeniorStaff(): bool
+    {
+        return ($this->is_senior_staff ?? false) || $this->isSuperAdmin();
     }
 
     /**

@@ -1266,6 +1266,63 @@ export default {
 
             return null;
         },
+        async renderTimestamp(timestamp) {
+            if (this.loadingScreenStatus) {
+                return;
+            }
+            this.loadingScreenStatus = this.t('map.timestamp_fetch');
+
+            const server = $('#server').val(),
+                players = await this.loadTimestamp(server, timestamp);
+
+            this.loadingScreenStatus = this.t('map.timestamp_render');
+
+            if (players) {
+                if (this.heatmapLayer) {
+                    this.map.removeLayer(this.heatmapLayer);
+                    if (this.historyMarker) {
+                        this.map.removeLayer(this.historyMarker);
+                    }
+                    this.heatmapLayer = null;
+                }
+
+                $('.leaflet-control-layers-selector').each(function() {
+                    if ($(this).prop('checked')) {
+                        $(this).trigger('click');
+                    }
+                });
+
+                this.heatmapLayer = L.layerGroup();
+
+                this.heatmapLayer.addTo(this.map);
+
+                for (let x=0;x<players.length;x++) {
+                    const player = players[x];
+
+                    const location = Vector3.fromGameCoords(player.x, player.y, 0.0);
+
+                    let marker = L.marker(location.toMap(),
+                        {
+                            icon: new L.Icon(
+                                {
+                                    iconUrl: '/images/icons/circle.png',
+                                    iconSize: [17, 17]
+                                }
+                            ),
+                            forceZIndex: 99
+                        }
+                    );
+
+                    marker.bindPopup('<a href="/players/' + player.steam + '" target="_blank">' + player.steam + '</a>', {
+                        autoPan: false
+                    });
+
+                    this.heatmapLayer.addLayer(marker);
+                }
+            }
+
+            this.loadingScreenStatus = null;
+        },
         async renderHeatMap(date) {
             if (this.loadingScreenStatus) {
                 return;
@@ -1306,6 +1363,36 @@ export default {
             }
 
             this.loadingScreenStatus = null;
+        },
+        async loadTimestamp(server, timestamp) {
+            try {
+                const result = await axios.get(this.hostname(false) + '/history/timestamp/' + server + '/' + timestamp + '?token=' + this.token + '&cluster=' + this.cluster);
+
+                this.loadingScreenStatus = this.t('map.timestamp_parse');
+                if (result.data && result.data.status) {
+                    let players = [];
+
+                    for (const steam in result.data.data) {
+                        if (Object.hasOwnProperty(steam)) continue;
+
+                        const coords = result.data.data[steam];
+
+                        players.push({
+                            steam: "steam:" + steam.replace(".csv", ""),
+                            x: coords[0],
+                            y: coords[1]
+                        });
+                    }
+
+                    return players;
+                } else if (result.data && !result.data.status) {
+                    console.error(result.data.error);
+                }
+            } catch(e) {
+                console.error(e);
+            }
+
+            return null;
         },
         async loadHeatMap(server, date) {
             this.loadingScreenStatus = this.t('map.heatmap_fetch');
@@ -1789,6 +1876,10 @@ export default {
 
         window.renderHeatMap = (date) => {
             this.renderHeatMap(date);
+        };
+
+        window.renderTimestamp = (timestamp) => {
+            this.renderTimestamp(timestamp);
         };
 
         window.instance = this;
