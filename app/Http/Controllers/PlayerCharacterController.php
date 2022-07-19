@@ -32,7 +32,7 @@ class PlayerCharacterController extends Controller
     ];
 
     const Licenses = [
-        "heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military", "utility", "commercial",
+        "heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military", "utility", "commercial", "hunting"
     ];
 
     /**

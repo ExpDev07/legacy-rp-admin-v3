@@ -784,6 +784,7 @@
                 "military": "Military",
                 "utility": "Utility",
                 "commercial": "Commercial",
+                "hunting": "Hunting",
                 "confirm": "Are you sure you want to remove all of this characters licenses?"
             }
         },
