@@ -25,7 +25,7 @@
                         <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSeniorStaff && !player.isSuperAdmin">
-                        <span class="font-semibold">{{ t('global.staff') }}</span>
+                        <span class="font-semibold">{{ t('global.senior_staff') }}</span>
                     </badge>
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.super') }}</span>
