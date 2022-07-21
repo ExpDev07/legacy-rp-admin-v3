@@ -148,7 +148,7 @@ class TestController extends Controller
         }, array_splice($list, 0, 15));
 
         $text = "Top 15 steps traveled\n\nSpot\tSteps\tFull-Name\n" . implode("\n", $stepsList);
-        $text .= "\n\n";
+        $text .= "\n\n- - -\n\n";
         $text .= "Top 15 deaths\n\nSpot\tDeaths\tFull-Name\n" . implode("\n", $deathsList);
 
         return self::respond($text);
