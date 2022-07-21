@@ -18,6 +18,8 @@ class PlayerContainer {
         this.staff = [];
         this.resetStats();
 
+        this.instances = [];
+
         this.isTrackedPlayerVisible = false;
 
         this.notifier = new Notifier();
@@ -34,7 +36,7 @@ class PlayerContainer {
         };
     }
 
-    updatePlayers(rawData, vue) {
+    updatePlayers(rawData, vue, selectedInstance) {
         this.resetStats();
 
         this.vehicles = {};
@@ -48,13 +50,17 @@ class PlayerContainer {
         };
         this.staff = [];
 
+        this.instances = [];
+
         this.isTrackedPlayerVisible = false;
 
         for (let x = 0; x < rawData.players.length; x++) {
             rawData.players[x] = Player.fixData(rawData.players[x]);
 
-            this.updatePlayer(rawData.players[x], rawData.on_duty);
+            this.updatePlayer(rawData.players[x], rawData.on_duty, selectedInstance);
         }
+
+        this.instances.sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
 
         this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
 
@@ -68,7 +74,7 @@ class PlayerContainer {
         this.notifier.checkPlayers(this, vue);
     }
 
-    updatePlayer(rawPlayer, onDutyList) {
+    updatePlayer(rawPlayer, onDutyList, selectedInstance) {
         const id = Player.getPlayerID(rawPlayer);
 
         if (!onDutyList.police) {
@@ -81,6 +87,15 @@ class PlayerContainer {
         const flags = Player.getPlayerFlags(rawPlayer);
 
         if (flags.fakeDisconnected) {
+            return;
+        }
+
+        const instance = rawPlayer.instance;
+        if (!this.instances.includes(instance) && rawPlayer.character) {
+            this.instances.push(instance);
+        }
+
+        if (instance !== selectedInstance) {
             return;
         }
 
