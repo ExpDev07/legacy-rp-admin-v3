@@ -81,7 +81,6 @@ class TestController extends Controller
             ->toArray();
 
         $leaderboard = [];
-        $deathLeaderboard = [];
 
         foreach ($all as $item) {
             $metadata = json_decode($item->item_metadata, true);
@@ -130,7 +129,7 @@ class TestController extends Controller
 
         $index = 0;
 
-        $list = array_map(function($entry) use (&$index) {
+        $stepsList = array_map(function($entry) use (&$index) {
             $index++;
 
             return $index . ".\t" . number_format($entry['steps']) . "\t" . $entry['name'];
@@ -148,7 +147,7 @@ class TestController extends Controller
             return $index . ".\t" . number_format($entry['deaths']) . "\t" . $entry['name'];
         }, array_splice($list, 0, 15));
 
-        $text = "Top 15 steps traveled\n\nSpot\tSteps\tFull-Name\n" . implode("\n", $list);
+        $text = "Top 15 steps traveled\n\nSpot\tSteps\tFull-Name\n" . implode("\n", $stepsList);
         $text .= "\n\n";
         $text .= "Top 15 deaths\n\nSpot\tDeaths\tFull-Name\n" . implode("\n", $deathsList);
 
