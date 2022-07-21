@@ -81,27 +81,46 @@ class TestController extends Controller
             ->toArray();
 
         $leaderboard = [];
+        $deathLeaderboard = [];
 
         foreach ($all as $item) {
             $metadata = json_decode($item->item_metadata, true);
 
-            if ($metadata && isset($metadata['stepsWalked']) && isset($metadata['firstName']) && isset($metadata['lastName'])) {
+            if ($metadata && isset($metadata['firstName']) && isset($metadata['lastName'])) {
                 $name = $metadata['firstName'] . ' ' . $metadata['lastName'];
 
-                $steps = floatval($metadata['stepsWalked']);
+                if (!isset($leaderboard[$name])) {
+                    $leaderboard[$name] = [
+                        'steps' => 0,
+                        'deaths' => 0
+                    ];
+                }
 
-                if (!isset($leaderboard[$name]) || $leaderboard[$name] < $steps) {
-                    $leaderboard[$name] = floor($steps);
+                if (isset($metadata['stepsWalked'])) {
+                    $steps = floor(floatval($metadata['stepsWalked']));
+
+                    if ($leaderboard[$name]['steps'] < $steps) {
+                        $leaderboard[$name]['steps'] = $steps;
+                    }
+                }
+
+                if (isset($metadata['deaths'])) {
+                    $deaths = intval($metadata['deaths']);
+
+                    if ($leaderboard[$name]['deaths'] < $deaths) {
+                        $leaderboard[$name]['deaths'] = $deaths;
+                    }
                 }
             }
         }
 
         $list = [];
 
-        foreach ($leaderboard as $name => $steps) {
+        foreach ($leaderboard as $name => $data) {
             $list[] = [
                 'name' => $name,
-                'steps' => $steps
+                'steps' => $data['steps'],
+                'deaths' => $data['deaths']
             ];
         }
 
@@ -115,9 +134,25 @@ class TestController extends Controller
             $index++;
 
             return $index . ".\t" . number_format($entry['steps']) . "\t" . $entry['name'];
-        }, array_splice($list, 0, 25));
+        }, array_splice($list, 0, 15));
 
-        return self::respond("Top 25 steps traveled\n\nSpot\tSteps\tFull-Name\n" . implode("\n", $list));
+        usort($list, function($a, $b) {
+            return $b['deaths'] - $a['deaths'];
+        });
+
+        $index = 0;
+
+        $deathsList = array_map(function($entry) use (&$index) {
+            $index++;
+
+            return $index . ".\t" . number_format($entry['deaths']) . "\t" . $entry['name'];
+        }, array_splice($list, 0, 15));
+
+        $text = "Top 15 steps traveled\n\nSpot\tSteps\tFull-Name\n" . implode("\n", $list);
+        $text .= "\n\n";
+        $text .= "Top 15 deaths\n\nSpot\tDeaths\tFull-Name\n" . implode("\n", $deathsList);
+
+        return self::respond($text);
     }
 
     /**
