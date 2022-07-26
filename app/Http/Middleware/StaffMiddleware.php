@@ -65,6 +65,13 @@ class StaffMiddleware
                     'player_name', 'is_super_admin', 'is_staff', 'is_panel_trusted', 'steam_identifier'
                 ])->first();
 
+                if (!$player) {
+                    LoggingHelper::log($session->getSessionKey(), 'Dropping session');
+                    SessionHelper::drop();
+
+                    return redirect('/login')->with('error', 'You have to have connected to the server at least once before (Player not found).');
+                }
+
                 $user['player']['player_name'] = $player->player_name;
                 $user['player']['is_super_admin'] = $player->is_super_admin || GeneralHelper::isUserRoot($player->steam_identifier);
                 $user['player']['is_staff'] = $player->is_staff;

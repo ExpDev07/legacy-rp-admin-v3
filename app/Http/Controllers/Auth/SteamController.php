@@ -86,7 +86,7 @@ class SteamController extends AbstractSteamLoginController
             LoggingHelper::log($session->getSessionKey(), 'steam->' . json_encode($steam->toArray()));
             LoggingHelper::log($session->getSessionKey(), 'player->' . json_encode($player ? $player->toArray() : null));
 
-            return redirect('/login')->with('error', 'Failed to get information from steam, please contact a developer.');
+            return redirect('/login')->with('error', !$player ? 'You have to have connected to the server at least once before (Player not found).' : 'Failed to get information from steam, please contact a developer.');
         }
 
         $host = $_SERVER['HTTP_HOST'];
