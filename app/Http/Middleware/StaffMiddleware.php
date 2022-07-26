@@ -69,7 +69,7 @@ class StaffMiddleware
                     LoggingHelper::log($session->getSessionKey(), 'Dropping session');
                     SessionHelper::drop();
 
-                    return redirect('/login')->with('error', 'You have to have connected to the server at least once before (Player not found).');
+                    return redirect('/login')->with('error', 'You have to have connected to the server at least once before trying to log-in (Player not found).');
                 }
 
                 $user['player']['player_name'] = $player->player_name;
