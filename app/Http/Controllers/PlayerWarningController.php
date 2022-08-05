@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GeneralHelper;
 use App\Http\Requests\WarningStoreRequest;
 use App\Player;
 use App\Warning;
@@ -19,9 +20,19 @@ class PlayerWarningController extends Controller
      */
     public function store(Player $player, WarningStoreRequest $request): RedirectResponse
     {
-        $player->warnings()->create(array_merge($request->validated(), [
+        $data = $request->validated();
+
+        $user = $request->user();
+        $isSenior = !is_null($user) && ($user->player->is_senior_staff || $user->player->is_super_admin || GeneralHelper::isUserRoot($user->steam_identifier));
+
+        if (!$isSenior && $data['warning_type'] === Warning::TypeHidden) {
+            abort(401);
+        }
+
+        $player->warnings()->create(array_merge($data, [
             'issuer_id' => $request->user()->player->user_id,
         ]));
+
         return back()->with('success', 'Warning/Note has been added successfully.');
     }
 
@@ -37,6 +48,7 @@ class PlayerWarningController extends Controller
     {
         $staffIdentifier = $request->user()->player->steam_identifier;
         $issuer = $warning->issuer()->first();
+
         if (!$issuer || $staffIdentifier !== $issuer->steam_identifier) {
             return back()->with('error', 'You can only edit your own warnings/notes!');
         }
@@ -56,6 +68,7 @@ class PlayerWarningController extends Controller
     public function destroy(Player $player, Warning $warning): RedirectResponse
     {
         $warning->forceDelete();
+
         return back()->with('success', 'The warning/note has successfully been deleted from the player\'s record.');
     }
 

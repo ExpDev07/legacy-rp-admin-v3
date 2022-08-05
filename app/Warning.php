@@ -17,12 +17,14 @@ class Warning extends Model
         self::TypeWarning,
         self::TypeStrike,
         self::TypeSystem,
+        self::TypeHidden,
     ];
 
     const TypeNote    = 'note';
     const TypeWarning = 'warning';
     const TypeStrike  = 'strike';
     const TypeSystem  = 'system';
+    const TypeHidden  = 'hidden';
 
     /**
      * The attributes that are mass assignable.

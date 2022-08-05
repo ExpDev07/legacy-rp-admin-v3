@@ -463,13 +463,18 @@ class Player extends Model
         return $this->hasMany(Warning::class, 'player_id', 'user_id');
     }
 
-    public function fasterWarnings(): array
+    public function fasterWarnings(bool $includeHidden = false): array
     {
         $warnings = Warning::query()
             ->select(['id', 'message', 'warning_type', 'created_at', 'updated_at', 'player_name', 'steam_identifier'])
             ->where('player_id', '=', $this->user_id)
-            ->leftJoin('users', 'issuer_id', '=', 'user_id')
-            ->get();
+            ->leftJoin('users', 'issuer_id', '=', 'user_id');
+
+        if (!$includeHidden) {
+            $warnings = $warnings->where('warning_type', '!=', Warning::TypeHidden);
+        }
+
+        $warnings = $warnings->get();
 
         $plainWarnings = [];
         foreach ($warnings as $warning) {

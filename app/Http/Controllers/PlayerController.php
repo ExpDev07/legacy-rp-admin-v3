@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ban;
+use App\Helpers\GeneralHelper;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PanelLogResource;
 use App\Http\Resources\PlayerIndexResource;
@@ -159,10 +160,13 @@ class PlayerController extends Controller
                     ->where('steam_identifier', '=', $resolved->steam_identifier)
                     ->first();
 
+                $user = $request->user();
+                $isSenior = !is_null($user) && ($user->player->is_senior_staff || $user->player->is_super_admin || GeneralHelper::isUserRoot($user->steam_identifier));
+
                 return Inertia::render('Players/Show', [
                     'player'      => new PlayerResource($resolved),
                     'characters'  => CharacterResource::collection($resolved->characters),
-                    'warnings'    => $resolved->fasterWarnings(),
+                    'warnings'    => $resolved->fasterWarnings($isSenior),
                     'panelLogs'   => PanelLogResource::collection($resolved->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
                     'discord'     => $resolved->getDiscordInfo(),
                     'kickReason'  => trim($request->query('kick')) ?? '',

@@ -18,7 +18,7 @@ class WarningStoreRequest extends FormRequest
     {
         return [
             'message'      => ['required'],
-            'warning_type' => ['required', Rule::in([Warning::TypeWarning, Warning::TypeNote, Warning::TypeStrike])],
+            'warning_type' => ['required', Rule::in([Warning::TypeWarning, Warning::TypeNote, Warning::TypeStrike, Warning::TypeHidden])],
         ];
     }
 
