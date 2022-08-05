@@ -23,7 +23,7 @@ class PlayerWarningController extends Controller
         $data = $request->validated();
 
         $user = $request->user();
-        $isSenior = !is_null($user) && ($user->player->is_senior_staff || $user->player->is_super_admin || GeneralHelper::isUserRoot($user->steam_identifier));
+        $isSenior = !is_null($user) && ($user->player->is_senior_staff || $user->player->is_super_admin || GeneralHelper::isUserRoot($user->player->steam_identifier));
 
         if (!$isSenior && $data['warning_type'] === Warning::TypeHidden) {
             abort(401);
