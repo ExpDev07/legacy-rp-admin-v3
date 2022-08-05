@@ -161,7 +161,7 @@ class PlayerController extends Controller
                     ->first();
 
                 $user = $request->user();
-                $isSenior = !is_null($user) && ($user->player->is_senior_staff || $user->player->is_super_admin || GeneralHelper::isUserRoot($user->steam_identifier));
+                $isSenior = !is_null($user) && ($user->player->is_senior_staff || $user->player->is_super_admin || GeneralHelper::isUserRoot($user->player->steam_identifier));
 
                 return Inertia::render('Players/Show', [
                     'player'      => new PlayerResource($resolved),
