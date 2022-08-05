@@ -771,6 +771,7 @@
                         <option value="warning">{{ t('players.show.warning_type.warning') }}</option>
                         <option value="note">{{ t('players.show.warning_type.note') }}</option>
                         <option value="system">{{ t('players.show.warning_type.system') }}</option>
+                        <option value="hidden">{{ t('players.show.warning_type.hidden') }}</option>
                     </select>
                 </h2>
             </template>
@@ -873,6 +874,10 @@
                     <button class="px-5 py-2 ml-2 font-semibold text-white bg-yellow-400 dark:bg-yellow-500 rounded" @click="form.warning.warning_type = 'note'" type="submit">
                         <i class="mr-1 fas fa-sticky-note"></i>
                         {{ t('players.warning.do_note') }}
+                    </button>
+                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-pink-400 dark:bg-pink-500 rounded" @click="form.warning.warning_type = 'hidden'" type="submit" v-if="$page.auth.player.isSeniorStaff">
+                        <i class="mr-1 fas fa-treasure-chest"></i>
+                        {{ t('players.warning.do_hidden_note') }}
                     </button>
                 </form>
             </template>
@@ -1189,6 +1194,8 @@ export default {
                     return '<span class="italic text-yellow-400"><i class="fas fa-sticky-note"></i> ' + label + '</span>';
                 case 'system':
                     return '<span class="italic text-blue-500"><i class="fas fa-robot"></i> ' + label + '</span>';
+                case 'hidden':
+                    return '<span class="italic text-pink-500"><i class="fas fa-treasure-chest"></i> ' + label + '</span>';
             }
 
             return '';

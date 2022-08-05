@@ -617,7 +617,8 @@
                 "warning": "Warning",
                 "note": "Note",
                 "strike": "Strike",
-                "system": "System"
+                "system": "System",
+                "hidden": "Hidden Note"
             },
             "copy_steam": "Copy Steam",
             "warnings": "Strikes/Warnings/Notes/System",
@@ -647,7 +648,8 @@
             "placeholder": "{0} did an oopsie.",
             "do_strike": "Add as strike",
             "do_warn": "Add as warning",
-            "do_note": "Add as note"
+            "do_note": "Add as note",
+            "do_hidden_note": "Add as hidden note"
         },
         "job": {
             "job": "Job",
