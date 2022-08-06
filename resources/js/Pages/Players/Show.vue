@@ -1215,10 +1215,13 @@ export default {
                 return 'unknown';
             }
 
+            // convert signed to unsigned
+            const checkHash = Uint32Array.from(Int32Array.of(hash))[0];
+
             for (let x = 0; x < models.length; x++) {
                 const name = models[x];
 
-                if (this.joaat(name) === hash) {
+                if (this.joaat(name) === checkHash) {
                     return name + ' (' + hash + ')';
                 }
             }
