@@ -665,7 +665,7 @@
                                 <span>{{ t('players.edit.deleted') }}:</span>
                                 {{ $moment(character.characterDeletionTimestamp).format('l') }}
                             </h4>
-                            <h4 class="text-gray-700 dark:text-gray-300">
+                            <h4 class="text-gray-700 dark:text-gray-300 text-sm italic font-mono mt-1">
                                 {{ pedModel(character.pedModelHash) }}
                             </h4>
                         </template>
