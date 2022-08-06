@@ -41,7 +41,7 @@ class CharacterResource extends JsonResource
             'characterDeletionTimestamp' => $this->character_deletion_timestamp,
             'characterCreationTimestamp' => $this->character_creation_timestamp,
             'licenses'                   => $this->getLicenses(),
+            'pedModelHash'               => $this->ped_model_hash ? intval($this->ped_model_hash) : null
         ];
     }
-
 }

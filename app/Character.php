@@ -60,6 +60,8 @@ class Character extends Model
         'character_deleted',
         'character_deletion_timestamp',
 
+        'ped_model_hash',
+
         'tattoos_data',
         'coords',
         'character_data'
