@@ -1219,9 +1219,10 @@ export default {
             const checkHash = Uint32Array.from(Int32Array.of(hash))[0];
 
             for (let x = 0; x < models.length; x++) {
-                const name = models[x];
+                const name = models[x],
+                    calcHash = this.joaat(name);
 
-                if (this.joaat(name) === checkHash) {
+                if (calcHash === checkHash || Uint32Array.from(Int32Array.of(calcHash))[0] === checkHash) {
                     return name + ' (' + hash + ')';
                 }
             }
