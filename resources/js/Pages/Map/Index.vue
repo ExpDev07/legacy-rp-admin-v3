@@ -1711,7 +1711,7 @@ export default {
             });
             this.map.attributionControl.addAttribution('map by <a href="https://github.com/twooot" target="_blank">milan60</a>, cayo-perico map by Spitfire2k6');
 
-            L.tileLayer("https://worryfree.host/tiles/tiles_" + Bounds.version + "/{z}/{x}/{y}.jpg", {
+            L.tileLayer("https://worryfree.host/tiles/tiles_" + Bounds.version + "/{z}/{x}/{y}.png", {
                 noWrap: true,
                 bounds: [
                     [0, 0],
