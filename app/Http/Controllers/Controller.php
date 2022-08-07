@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GeneralHelper;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Str;
@@ -47,11 +49,11 @@ class Controller extends BaseController
         if ($status) {
             $resp = [
                 'status' => true,
-                'data'   => $data,
+                'data' => $data,
             ];
         } else {
             $resp = [
-                'status'  => false,
+                'status' => false,
                 'message' => $error,
             ];
         }
@@ -67,5 +69,23 @@ class Controller extends BaseController
     protected static function text(int $status, string $text): Response
     {
         return (new Response($text, $status))->header('Content-Type', 'text/plain');
+    }
+
+    protected function isSeniorStaff(Request $request): bool
+    {
+        $user = $request->user();
+
+        if ($user) {
+            $player = $user->player ?? false;
+
+            if ($player) {
+                $seniorStaff = $player->is_senior_staff ?? false;
+                $superAdmin = $player->is_super_admin ?? false;
+
+                return $seniorStaff || $superAdmin || GeneralHelper::isUserRoot($player->steam_identifier);
+            }
+        }
+
+        return false;
     }
 }

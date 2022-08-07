@@ -665,7 +665,7 @@
                                 <span>{{ t('players.edit.deleted') }}:</span>
                                 {{ $moment(character.characterDeletionTimestamp).format('l') }}
                             </h4>
-                            <h4 class="text-gray-700 dark:text-gray-300">
+                            <h4 class="text-gray-700 dark:text-gray-300 text-sm italic font-mono mt-1">
                                 {{ pedModel(character.pedModelHash) }}
                             </h4>
                         </template>
@@ -1215,10 +1215,14 @@ export default {
                 return 'unknown';
             }
 
-            for (let x = 0; x < models.length; x++) {
-                const name = models[x];
+            // convert signed to unsigned
+            const checkHash = Uint32Array.from(Int32Array.of(hash))[0];
 
-                if (this.joaat(name) === hash) {
+            for (let x = 0; x < models.length; x++) {
+                const name = models[x],
+                    calcHash = this.joaat(name);
+
+                if (calcHash === checkHash || Uint32Array.from(Int32Array.of(calcHash))[0] === checkHash) {
                     return name + ' (' + hash + ')';
                 }
             }
