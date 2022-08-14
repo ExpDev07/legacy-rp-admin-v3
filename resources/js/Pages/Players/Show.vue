@@ -131,11 +131,12 @@
                     <i class="fas fa-camera"></i>
                     {{ t('screenshot.screenshot') }}
                 </button>
+                @if()
                 <!-- View on Map -->
                 <a
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     :href="'/map#' + player.steamIdentifier"
-                    v-if="player.status.status === 'online'"
+                    v-if="this.perm.check(this.perm.PERM_LIVEMAP) && player.status.status === 'online'"
                     target="_blank"
                 >
                     <i class="fas fa-map"></i>
