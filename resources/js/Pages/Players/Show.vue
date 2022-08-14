@@ -131,7 +131,6 @@
                     <i class="fas fa-camera"></i>
                     {{ t('screenshot.screenshot') }}
                 </button>
-                @if()
                 <!-- View on Map -->
                 <a
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
