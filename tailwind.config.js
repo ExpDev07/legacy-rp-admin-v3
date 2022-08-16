@@ -71,6 +71,9 @@ module.exports = {
             minWidth: {
                 'input': '200px',
             },
+            minHeight: {
+                '50': '50px'
+            },
             maxHeight: {
                 'max':       'calc(100% - 60px)',
                 'img':       '500px',
