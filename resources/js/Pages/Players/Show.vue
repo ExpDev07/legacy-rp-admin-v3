@@ -967,16 +967,18 @@
                     {{ screenshotError }}
                 </p>
 
-                <a v-if="screenshotImage" class="w-full" :href="screenshotImage" target="_blank">
-                    <img :src="screenshotImage" alt="Screenshot" class="w-full" />
-                </a>
+                <div class="relative min-h-50">
+                    <a v-if="screenshotImage && !screenshotError" class="w-full" :class="{'blur-sm' : isScreenshotLoading}" :href="screenshotImage" target="_blank">
+                        <img :src="screenshotImage" alt="Screenshot" class="w-full" />
+                    </a>
+
+                    <div class="flex justify-center absolute top-0 left-0 w-full top-1/2 transform -translate-y-1/2" v-if="isScreenshotLoading">
+                        <i class="fas fa-cog animate-spin text-3xl"></i>
+                    </div>
+                </div>
                 <p v-if="screenshotImage" class="mt-3 text-sm">
                     {{ t('map.screenshot_description') }}
                 </p>
-
-                <div class="flex justify-center" v-if="isScreenshotLoading">
-                    <i class="fas fa-cog animate-spin text-xl"></i>
-                </div>
 
                 <!-- Buttons -->
                 <div class="flex justify-end mt-2">
@@ -984,6 +986,11 @@
                             @click="isAttachingScreenshot = true"
                             v-if="screenshotImage && screenshotSteam">
                         {{ t('screenshot.title') }}
+                    </button>
+                    <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
+                            @click="createScreenshot()"
+                            v-if="!isScreenshotLoading">
+                        {{ t('global.refresh') }}
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                             @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotSteam = null">
@@ -1126,7 +1133,6 @@ export default {
             this.isScreenshotLoading = true;
             this.screenshotError = null;
 
-            this.screenshotImage = null;
             this.screenshotSteam = null;
 
             try {
