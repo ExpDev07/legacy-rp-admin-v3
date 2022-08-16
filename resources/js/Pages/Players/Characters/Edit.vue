@@ -736,6 +736,21 @@
                                 {{ t('global.delete') }}
                             </inertia-link>
 
+                            <button
+                                class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-blue-700 dark:bg-blue-800 rounded"
+                                :title="t('players.characters.vehicle.pd_emergency')"
+                                v-if="vehicle.emergency === 1"
+                            >
+                                <i class="fas fa-car-alt"></i>
+                            </button>
+                            <button
+                                class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-pink-700 dark:bg-pink-800 rounded"
+                                :title="t('players.characters.vehicle.ems_emergency')"
+                                v-else-if="vehicle.emergency === 2"
+                            >
+                                <i class="fas fa-ambulance"></i>
+                            </button>
+
                             <inertia-link
                                 class="block px-2 py-1 text-center text-white absolute top-1 right-10 bg-blue-600 dark:bg-blue-400 rounded"
                                 :href="'/inventory_find/trunk/' + vehicle.id"

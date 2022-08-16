@@ -735,6 +735,8 @@
                 "owner": "Owner CID",
                 "plate": "Plate",
                 "confirm": "Edit Vehicle",
+                "pd_emergency": "PD Vehicle",
+                "ems_emergency": "EMS Vehicle",
                 "add": "Add Vehicle",
                 "model": "Model Name",
                 "xenon_headlights": "Xenon Headlights",
