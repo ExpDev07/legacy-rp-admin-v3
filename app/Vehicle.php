@@ -48,6 +48,7 @@ class Vehicle extends Model
         'deprecated_damage',
         'deprecated_modifications',
         'deprecated_fuel',
+        'emergency_type',
     ];
 
     /**
@@ -76,6 +77,12 @@ class Vehicle extends Model
         $this->garage_identifier = trim($this->garage_identifier);
 
         if (is_numeric($this->garage_identifier)) {
+            if (intval($this->emergency_type) === 1) {
+                return 'PD Garage';
+            } else if (intval($this->emergency_type) === 2) {
+                return 'EMS Garage';
+            }
+
             switch (intval($this->garage_identifier)) {
                 case 1:
                 case 2:
