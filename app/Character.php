@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 /**
  * A character made by a player.
@@ -107,6 +108,13 @@ class Character extends Model
     protected function getMoneyAttribute(): int
     {
         return $this->cash + $this->bank;
+    }
+
+    private function countOutfits(): int
+    {
+        $id = $this->character_id;
+
+        return DB::table('outfits')->where('cid', '=', $id)->count();
     }
 
     /**

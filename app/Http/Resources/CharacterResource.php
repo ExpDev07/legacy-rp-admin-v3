@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class CharacterResource extends JsonResource
 {
@@ -16,6 +17,8 @@ class CharacterResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $isView = Str::contains($request->path(), '/edit');
+
         return [
             'id'                         => $this->character_id,
             'steamIdentifier'            => $this->steam_identifier,
@@ -41,7 +44,8 @@ class CharacterResource extends JsonResource
             'characterDeletionTimestamp' => $this->character_deletion_timestamp,
             'characterCreationTimestamp' => $this->character_creation_timestamp,
             'licenses'                   => $this->getLicenses(),
-            'pedModelHash'               => $this->ped_model_hash ? intval($this->ped_model_hash) : null
+            'pedModelHash'               => $this->ped_model_hash ? intval($this->ped_model_hash) : null,
+            'outfits'                    => $isView ? $this->countOutfits() : 0
         ];
     }
 }
