@@ -808,6 +808,7 @@
             "update": "Update Character",
             "job": "Job",
             "phone": "Phone Number",
+            "outfits": "{0} saved outfit(s).",
             "gender": "Gender"
         }
     },

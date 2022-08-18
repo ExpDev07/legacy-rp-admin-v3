@@ -202,6 +202,9 @@
                                         </span>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th class="italic p-2" colspan="2">{{ t('players.edit.outfits', character.outfits) }}</th>
+                                </tr>
                             </table>
                         </div>
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3 relative">
