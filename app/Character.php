@@ -110,11 +110,9 @@ class Character extends Model
         return $this->cash + $this->bank;
     }
 
-    private function countOutfits(): int
+    public static function getOutfits(int $cid): int
     {
-        $id = $this->character_id;
-
-        return DB::table('outfits')->where('cid', '=', $id)->count();
+        return DB::table('outfits')->where('cid', '=', $cid)->count();
     }
 
     /**

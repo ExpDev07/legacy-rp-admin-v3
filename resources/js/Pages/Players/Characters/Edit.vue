@@ -203,7 +203,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="italic p-2" colspan="2">{{ t('players.edit.outfits', character.outfits) }}</th>
+                                    <th class="italic p-2 font-normal" colspan="2">{{ t('players.edit.outfits', character.outfits) }}</th>
                                 </tr>
                             </table>
                         </div>

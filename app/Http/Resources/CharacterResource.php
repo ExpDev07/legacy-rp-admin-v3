@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Character;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
@@ -45,7 +46,7 @@ class CharacterResource extends JsonResource
             'characterCreationTimestamp' => $this->character_creation_timestamp,
             'licenses'                   => $this->getLicenses(),
             'pedModelHash'               => $this->ped_model_hash ? intval($this->ped_model_hash) : null,
-            'outfits'                    => $isView ? $this->countOutfits() : 0
+            'outfits'                    => $isView ? Character::getOutfits($this->character_id) : 0
         ];
     }
 }

@@ -148,6 +148,8 @@ class SessionHelper
     {
         if (!file_put_contents($this->getSessionFile(), json_encode($this->value))) {
             LoggingHelper::log($this->sessionKey, 'Failed to write session file while storing data');
+
+            self::updateCookie($this->sessionKey);
         }
     }
 
