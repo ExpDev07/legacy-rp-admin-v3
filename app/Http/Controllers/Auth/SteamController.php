@@ -89,19 +89,6 @@ class SteamController extends AbstractSteamLoginController
             return redirect('/login')->with('error', !$player ? 'You have to have connected to the server at least once before trying to log-in (Player not found).' : 'Failed to get information from steam, please contact a developer.');
         }
 
-        $host = $_SERVER['HTTP_HOST'];
-        switch ($host) {
-            case CLUSTER . '.legacy-roleplay.com':
-                $redirect = 'https://' . CLUSTER . '.opfw.net/s/' . $session->getSessionKey() . '?back=' . urlencode('https://' . $host . $redirect);
-                break;
-            case CLUSTER . '.opfw.net':
-                $redirect = 'https://' . CLUSTER . '.legacy-roleplay.com/s/' . $session->getSessionKey() . '?back=' . urlencode('https://' . $host . $redirect);
-                break;
-            case 'localhost':
-                $redirect = 'http://localhost/s/' . $session->getSessionKey() . '?back=' . urlencode('http://localhost' . $redirect);
-                break;
-        }
-
         return redirect($redirect);
     }
 

@@ -72,27 +72,7 @@ Route::group([], function () {
             $steam = 'steam:' . $steam;
         }
 
-        return redirect('/players/' . $steam);
-    });
-
-    Route::get('/s/{session}', function (string $session, Request $request) {
-        $session = preg_replace('/[^\w]+/mi', '', $session);
-        if (!$session) {
-            abort(400);
-        }
-
-        $back = $request->query('back');
-        if (
-            !Str::startsWith($back, "https://" . CLUSTER . '.legacy-roleplay.com') &&
-            !Str::startsWith($back, "https://" . CLUSTER . '.opfw.net') &&
-            !Str::startsWith($back, 'http://localhost/')
-        ) {
-            abort(400);
-        }
-
-        SessionHelper::updateCookie($session);
-
-        return redirect($back);
+        return redirect('https://' . CLUSTER . '.legacy-roleplay.com/players/' . $steam);
     });
 });
 
