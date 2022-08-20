@@ -39,7 +39,7 @@
             <!-- Right side -->
             <div class="flex items-center space-x-6">
                 <inertia-link class="hover:text-gray-100" v-bind:href="'/players/' + $page.auth.player.steamIdentifier">
-                    {{ $page.auth.user.name }}
+                    {{ $page.auth.player.playerName }}
                 </inertia-link>
                 <inertia-link class="px-4 py-1 text-white bg-red-500 rounded hover:bg-red-600" method="POST" href="/logout">
                     {{ t("nav.logout") }}

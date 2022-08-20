@@ -58,7 +58,7 @@ class StaffMiddleware
                 );
             }
         } else {
-            if ($_SERVER['REQUEST_METHOD'] !== 'GET' || time() - $this->lastUpdated() > 15) {
+            if ($_SERVER['REQUEST_METHOD'] !== 'GET' || time() - $this->lastUpdated() > 10) {
                 $user = $session->get('user');
 
                 $player = Player::query()->where('steam_identifier', '=', $user['player']['steam_identifier'])->select([
