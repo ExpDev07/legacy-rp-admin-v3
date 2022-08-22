@@ -485,7 +485,7 @@ class Player extends Model
                 'createdAt' => $warning->created_at,
                 'updatedAt' => $warning->updated_at,
                 'issuer' => [
-                    'avatar' => Player::getAvatar($warning->steam_identifier),
+                    'avatar' => $warning->steam_identifier ? Player::getAvatar($warning->steam_identifier) : null,
                     'playerName' => $warning->player_name,
                     'steamIdentifier' => $warning->steam_identifier
                 ]
