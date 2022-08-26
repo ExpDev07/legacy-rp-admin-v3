@@ -123,25 +123,25 @@ class TestController extends Controller
             ];
         }
 
-        usort($list, function($a, $b) {
+        usort($list, function ($a, $b) {
             return $b['steps'] - $a['steps'];
         });
 
         $index = 0;
 
-        $stepsList = array_map(function($entry) use (&$index) {
+        $stepsList = array_map(function ($entry) use (&$index) {
             $index++;
 
             return $index . ".\t" . number_format($entry['steps']) . "\t" . $entry['name'];
         }, array_splice($list, 0, 15));
 
-        usort($list, function($a, $b) {
+        usort($list, function ($a, $b) {
             return $b['deaths'] - $a['deaths'];
         });
 
         $index = 0;
 
-        $deathsList = array_map(function($entry) use (&$index) {
+        $deathsList = array_map(function ($entry) use (&$index) {
             $index++;
 
             return $index . ".\t" . number_format($entry['deaths']) . "\t" . $entry['name'];
@@ -150,6 +150,31 @@ class TestController extends Controller
         $text = "Top 15 steps traveled\n\nSpot\tSteps\tFull-Name\n" . implode("\n", $stepsList);
         $text .= "\n\n- - -\n\n";
         $text .= "Top 15 deaths\n\nSpot\tDeaths\tFull-Name\n" . implode("\n", $deathsList);
+
+        return self::respond($text);
+    }
+
+    public function banLeaderboard(): Response
+    {
+        $staff = Player::query()->select(["steam_identifier", "player_name"])->where("is_staff", "=", "1")->get();
+
+        $staffMap = [];
+
+        foreach ($staff as $player) {
+            $staffMap[$player->steam_identifier] = $player->player_name;
+        }
+
+        // Haha this is ass
+        $bans = DB::select("select identifier, creator_identifier, playtime from user_bans LEFT JOIN users ON identifier = steam_identifier where identifier LIKE \"steam:%\" AND playtime > 0 AND (SELECT COUNT(*) FROM characters WHERE users.steam_identifier = characters.steam_identifier) > 0 AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') ORDER BY playtime ASC LIMIT 100");
+
+        $leaderboard = [];
+        for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
+            $ban = $bans[$x];
+
+            $leaderboard[] = ($x+1) . ". " . $staffMap[$ban["creator_identifier"]] . "\t" . $ban["identifier"] . "\t" . $ban["playtime"] . "s";
+        }
+
+        $text = "Top 10 quickest bans\n\n" . implode("\n", $leaderboard);
 
         return self::respond($text);
     }
