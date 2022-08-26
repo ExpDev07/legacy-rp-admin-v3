@@ -196,7 +196,16 @@ class TestController extends Controller
             $leaderboard[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "\t" . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
         }
 
-        $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard);
+        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
+
+        $leaderboard2 = [];
+        for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
+            $ban = $bans[$x];
+
+            $leaderboard2[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "\t" . $ban->c . " bans";
+        }
+
+        $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nTop 10 most bans (Last 3 months)\n\n" . implode("\n", $leaderboard2);
 
         return self::respond($text);
     }
