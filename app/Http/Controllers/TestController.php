@@ -165,7 +165,7 @@ class TestController extends Controller
         }
 
         // Haha this is ass
-        $bans = DB::select("select identifier, creator_identifier, playtime from user_bans LEFT JOIN users ON identifier = steam_identifier where identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND playtime > 0 AND (SELECT COUNT(*) FROM characters WHERE users.steam_identifier = characters.steam_identifier) > 0 AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') ORDER BY playtime ASC LIMIT 100");
+        $bans = DB::select("select identifier, creator_identifier, playtime, reason from user_bans LEFT JOIN users ON identifier = steam_identifier where identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND playtime > 0 AND (SELECT COUNT(*) FROM characters WHERE users.steam_identifier = characters.steam_identifier) > 0 AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') ORDER BY playtime ASC LIMIT 100");
 
         $max = 0;
         for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
@@ -193,7 +193,7 @@ class TestController extends Controller
         for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
             $ban = $bans[$x];
 
-            $leaderboard[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "\t" . $ban->identifier . "\t" . $fmt(intval($ban->playtime));
+            $leaderboard[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "\t" . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
         }
 
         $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard);
