@@ -165,16 +165,38 @@ class TestController extends Controller
         }
 
         // Haha this is ass
-        $bans = DB::select("select identifier, creator_identifier, playtime from user_bans LEFT JOIN users ON identifier = steam_identifier where identifier LIKE \"steam:%\" AND playtime > 0 AND (SELECT COUNT(*) FROM characters WHERE users.steam_identifier = characters.steam_identifier) > 0 AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') ORDER BY playtime ASC LIMIT 100");
+        $bans = DB::select("select identifier, creator_identifier, playtime from user_bans LEFT JOIN users ON identifier = steam_identifier where identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND playtime > 0 AND (SELECT COUNT(*) FROM characters WHERE users.steam_identifier = characters.steam_identifier) > 0 AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') ORDER BY playtime ASC LIMIT 100");
+
+        $max = 0;
+        for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
+            $ban = $bans[$x];
+
+            $l = strlen($staffMap[$ban->creator_identifier]);
+
+            if ($l > $max) {
+                $max = $l;
+            }
+        }
+
+        $fmt = function($s) {
+            if ($s >= 60) {
+                $m = floor($s / 60);
+                $s -= $m * 60;
+
+                return $m . "m " . $s . "s";
+            }
+
+            return $s . "s";
+        };
 
         $leaderboard = [];
         for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
             $ban = $bans[$x];
 
-            $leaderboard[] = ($x+1) . ". " . $staffMap[$ban["creator_identifier"]] . "\t" . $ban["identifier"] . "\t" . $ban["playtime"] . "s";
+            $leaderboard[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "\t" . $ban->identifier . "\t" . $fmt(intval($ban->playtime));
         }
 
-        $text = "Top 10 quickest bans\n\n" . implode("\n", $leaderboard);
+        $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard);
 
         return self::respond($text);
     }
