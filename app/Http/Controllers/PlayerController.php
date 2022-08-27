@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Ban;
+use App\BlacklistedIdentifier;
 use App\Helpers\GeneralHelper;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PanelLogResource;
@@ -160,6 +161,13 @@ class PlayerController extends Controller
                     ->where('steam_identifier', '=', $resolved->steam_identifier)
                     ->first();
 
+                $identifiers = $resolved->identifiers ? (!is_array($resolved->identifiers) ? json_decode($resolved->identifiers, true) : $resolved->identifiers) : null;
+
+                $blacklisted = !empty($identifiers) ? BlacklistedIdentifier::query()
+                    ->select(['identifier'])
+                    ->whereIn('identifier', $identifiers)
+                    ->first() : false;
+
                 $isSenior = $this->isSeniorStaff($request);
 
                 return Inertia::render('Players/Show', [
@@ -171,6 +179,7 @@ class PlayerController extends Controller
                     'kickReason'  => trim($request->query('kick')) ?? '',
                     'screenshots' => Screenshot::getAllScreenshotsForPlayer($resolved->steam_identifier),
                     'whitelisted' => !!$whitelisted,
+                    'blacklisted' => !!$blacklisted,
                     'tags'        => Player::resolveTags()
                 ]);
             }
