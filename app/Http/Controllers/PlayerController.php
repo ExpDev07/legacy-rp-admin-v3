@@ -161,7 +161,7 @@ class PlayerController extends Controller
                     ->where('steam_identifier', '=', $resolved->steam_identifier)
                     ->first();
 
-                $identifiers = $resolved->identifiers ? (!is_array($resolved->identifiers) ? json_decode($resolved->identifiers, true) : $resolved->identifiers) : null;
+                $identifiers = $resolved instanceof Player ? $resolved->getIdentifiers() : null;
 
                 $blacklisted = !empty($identifiers) ? BlacklistedIdentifier::query()
                     ->select(['identifier'])
