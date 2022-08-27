@@ -70,6 +70,14 @@
 
         <portal to="actions">
             <div>
+                <!-- Importing -->
+                <button
+                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isUploading = true">
+                    <i class="mr-1 fas fa-cloud-upload-alt"></i>
+                    {{ t('blacklist.import') }}
+                </button>
+
                 <!-- Adding -->
                 <button
                     class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -120,6 +128,43 @@
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                             @click="isAdding = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isUploading">
+            <div class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                <h3 class="mb-2">
+                    {{ t('blacklist.import') }}
+                </h3>
+
+                <!-- Steam Identifier -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="add_identifier">
+                        {{ t('blacklist.file') }}
+                    </label>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded" id="import-file" type="file" accept=".csv,.txt" />
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex items-center mt-2">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded mr-2"
+                            @click="confirmImport">
+                        <span v-if="!isUploadLoading">
+                            <i class="mr-1 fas fa-cloud-upload-alt"></i>
+                            {{ t('global.confirm') }}
+                        </span>
+                        <span v-else>
+                            <i class="mr-1 fas fa-cog animate-spin"></i>
+                            {{ t('blacklist.importing') }}
+                        </span>
+                    </button>
+
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            @click="isUploading = false">
                         {{ t('global.cancel') }}
                     </button>
                 </div>
@@ -247,6 +292,8 @@ export default {
         return {
             isLoading: false,
             isAdding: false,
+            isUploading: false,
+            isUploadLoading: false,
             form: {
                 identifier: '',
                 reason: '',
@@ -271,6 +318,55 @@ export default {
             } catch(e) {}
 
             this.isLoading = false;
+        },
+        readFileContents(file) {
+            return new Promise(function(resolve, reject) {
+                const reader = new FileReader();
+
+                reader.readAsText(file, "UTF-8");
+
+                reader.onload = (evt) => {
+                    resolve(evt.target.result);
+                };
+
+                reader.onerror = () => {
+                    reject();
+                };
+            });
+        },
+        async confirmImport() {
+            if (this.isUploadLoading) {
+                return;
+            }
+            this.isUploadLoading = true;
+
+            const files = $("#import-file")[0].files,
+                file = files.length > 0 ? files[0] : null;
+
+            if (file) {
+                try {
+                    const text = await this.readFileContents(file);
+
+                    if (text.startsWith("steam_identifier,reason\n")) {
+                        // Send request.
+                        await this.$inertia.post('/blacklist/import', {
+                            text: text
+                        });
+
+                        this.isUploading = false;
+
+                        this.refresh();
+                    } else {
+                        alert("Invalid file!");
+                    }
+                } catch(e) {
+                    alert("Failed to read file!");
+                }
+            } else {
+                alert("No file selected!");
+            }
+
+            this.isUploadLoading = false;
         },
         async confirmAdd() {
             // Send request.

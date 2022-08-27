@@ -134,6 +134,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
         Route::get('/blacklist', [BlacklistController::class, 'index']);
         Route::post('/blacklist', [BlacklistController::class, 'store']);
         Route::delete('/blacklist/{identifier}', [BlacklistController::class, 'destroy']);
+
+        Route::post('/blacklist/import', [BlacklistController::class, 'import']);
     });
 
     // Suspicious.

@@ -177,6 +177,9 @@
         "timestamp": "Created at",
         "none": "No identifiers found.",
         "add": "Add Identifier",
+        "import": "Import Bans",
+        "file": "Ban file",
+        "importing": "Importing...",
         "confirm_remove": "Are you sure you want to remove this identifier?"
     },
     "statistics": {
