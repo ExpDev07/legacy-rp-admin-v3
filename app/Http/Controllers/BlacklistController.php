@@ -112,6 +112,63 @@ class BlacklistController extends Controller
         return back()->with('success', 'The identifier has successfully been blacklisted.');
     }
 
+    public function import(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        $text = str_replace("\r\n", "\n", $request->input('text', ''));
+
+        $lines = explode("\n", $text);
+
+        if (empty($lines) || $lines[0] !== "steam_identifier,reason") {
+            return back()->with('error', 'Invalid file submitted.');
+        }
+
+        unset($lines[0]);
+
+        $blacklist = BlacklistedIdentifier::query()->select(["identifier"])->get();
+        $existing = [];
+
+        foreach ($blacklist as $entry) {
+            $existing[$entry->identifier] = true;
+        }
+
+        $insert = [];
+
+        $imported = 0;
+        $skipped = 0;
+        $invalid = 0;
+
+        $date = date('d.m.Y - H:i:s');
+
+        foreach ($lines as $line) {
+            $identifier = explode(",", $line)[0];
+
+            if (isset($existing[$identifier]) && $existing[$identifier]) {
+                $skipped++;
+            } else {
+                if (Str::startsWith($identifier, "steam:")) {
+                    $insert[] = [
+                        'identifier' => $identifier,
+                        'creator_identifier' => $user->player->steam_identifier,
+                        'reason' => 'Modding',
+                        'note' => "IMPORTED-BANS (" . $date . ")"
+                    ];
+
+                    $imported++;
+                } else {
+                    $invalid++;
+                }
+            }
+        }
+
+        if (!empty($insert)) {
+            BlacklistedIdentifier::query()->insert($insert);
+        }
+
+        return back()->with('success', 'Imported ' . $imported . ' identifiers, skipped ' . $skipped . ' existing and ' . $invalid . ' invalid ones.');
+    }
+
     /**
      * Remove the specified resource from storage.
      *

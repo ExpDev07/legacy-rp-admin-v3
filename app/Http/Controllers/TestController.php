@@ -258,7 +258,10 @@ class TestController extends Controller
         $csv = stream_get_contents($fd);
         fclose($fd);
 
-        return self::respond($csv);
+        return (new Response($csv, 200))
+            ->header('Content-Type', 'application/octet-stream')
+            ->header("Content-Transfer-Encoding", "Binary")
+            ->header("Content-disposition", "attachment; filename=\"modders.csv\"");
     }
 
     /**
