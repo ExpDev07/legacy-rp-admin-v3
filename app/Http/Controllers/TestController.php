@@ -158,21 +158,21 @@ class TestController extends Controller
     {
         $staff = Player::query()->select(["steam_identifier", "player_name"])->where("is_staff", "=", "1")->get();
 
-		$max = 0;
+        $max = 0;
         $staffMap = [];
 
         foreach ($staff as $player) {
             $staffMap[$player->steam_identifier] = $player->player_name;
-			
-			if (strlen($player->player_name) > $max) {
-				$max = strlen($player->player_name);
-			}
+
+            if (strlen($player->player_name) > $max) {
+                $max = strlen($player->player_name);
+            }
         }
 
         // Haha this is ass
         $bans = DB::select("select identifier, creator_identifier, playtime, reason from user_bans LEFT JOIN users ON identifier = steam_identifier where identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND playtime > 0 AND (SELECT COUNT(*) FROM characters WHERE users.steam_identifier = characters.steam_identifier) > 0 AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') ORDER BY playtime ASC LIMIT 100");
-		
-		$fmt = function($s) {
+
+        $fmt = function ($s) {
             if ($s >= 60) {
                 $m = floor($s / 60);
                 $s -= $m * 60;
@@ -187,32 +187,78 @@ class TestController extends Controller
         for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
             $ban = $bans[$x];
 
-            $leaderboard[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
+            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
         }
 
-		$bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
-		
-		$leaderboard2 = [];
+        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
+
+        $leaderboard2 = [];
         for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
             $ban = $bans[$x];
 
-            $leaderboard2[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->c . " bans";
+            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->c . " bans";
         }
 
         $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nTop 10 most bans (Last 3 months)\n\n" . implode("\n", $leaderboard2);
 
-		if (isset($_GET["all"])) {
-			$bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"steam:%\" AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
+        if (isset($_GET["all"])) {
+            $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"steam:%\" AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
 
-			$leaderboard3 = [];
-			foreach ($bans as $x => $ban) {
-				$leaderboard3[] = str_pad(($x+1)."", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->c . " bans";
-			}
-			
-			$text .= "\n\n- - -\n\nTop 10 most bans (All time)\n\n" . implode("\n", $leaderboard3);
-		}
+            $leaderboard3 = [];
+            foreach ($bans as $x => $ban) {
+                $leaderboard3[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->c . " bans";
+            }
+
+            $text .= "\n\n- - -\n\nTop 10 most bans (All time)\n\n" . implode("\n", $leaderboard3);
+        }
 
         return self::respond($text);
+    }
+
+    public function moddingBans(Request $request): Response
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return self::respond('Only super admins can export bans.');
+        }
+
+        $keywords = [
+            "cheat",
+            "modder",
+            "modding",
+            "script",
+            "hacker",
+            "hacking",
+            "inject"
+        ];
+
+        foreach ($keywords as &$word) {
+            $word = "reason like \"%" . $word . "%\"";
+        }
+
+        $query = "select identifier, reason from user_bans where identifier like \"steam:%\" and (" . implode(" or ", $keywords);
+
+        if (CLUSTER === "c3") {
+            $query .= " or (reason like \"%1.5%\" and timestamp > 1614553200)";
+        }
+
+        $query .= ") GROUP BY identifier ORDER BY timestamp";
+
+        $bans = DB::select($query);
+
+        $fd = fopen('php://temp/maxmemory:1048576', 'w');
+
+        fputcsv($fd, ["steam_identifier", "reason"]);
+
+        foreach ($bans as $ban) {
+            fputcsv($fd, [$ban->identifier, $ban->reason]);
+        }
+
+        rewind($fd);
+        $csv = stream_get_contents($fd);
+        fclose($fd);
+
+        return self::respond($csv);
     }
 
     /**
