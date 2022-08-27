@@ -36,6 +36,7 @@
         "root": "Root",
         "do_search": "Search",
         "whitelisted": "On Whitelist",
+        "blacklisted": "Is Blacklisted",
         "status": {
             "online": "Online",
             "offline": "Offline",

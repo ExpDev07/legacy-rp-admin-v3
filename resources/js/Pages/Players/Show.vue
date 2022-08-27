@@ -35,6 +35,10 @@
                         <span class="font-semibold">{{ t('global.whitelisted') }}</span>
                     </badge>
 
+                    <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="blacklisted">
+                        <span class="font-semibold">{{ t('global.blacklisted') }}</span>
+                    </badge>
+
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
                            v-if="player.status.status === 'online'">
                         <span class="font-semibold">{{ t('global.status.online') }}
