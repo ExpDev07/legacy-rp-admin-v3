@@ -25,6 +25,11 @@ ssh -i %SSH_PRIVKEY% -o StrictHostKeyChecking=no %SSH_SERVER% "echo 'Connection 
 %END_TIME%
 
 %START_TIME%
+echo|set /p=%INFO%Testing asia ssh connection %DEFAULT%......
+ssh -i %SSH_PRIVKEY% -o StrictHostKeyChecking=no %SSH_SERVER_ASIA% "echo 'Connection successful'" >nul || goto :ssh_error
+%END_TIME%
+
+%START_TIME%
 echo|set /p=%INFO%Compiling for production %DEFAULT%.........
 call npm run production > npm.log 2>&1 || goto :compile_error
 del npm.log
@@ -48,6 +53,37 @@ scp -i %SSH_PRIVKEY% -q -o StrictHostKeyChecking=no -r .\public\css\* %SSH_SERVE
 %START_TIME%
 echo|set /p=%INFO%Transferring mix-manifest.json %DEFAULT%...
 scp -i %SSH_PRIVKEY% -q -o StrictHostKeyChecking=no .\public\mix-manifest.json %SSH_SERVER%:/var/www/legacy-rp-admin-v3/public || goto :transfer_error
+%END_TIME%
+
+%START_TIME%
+echo|set /p=%INFO%Triggering update script %DEFAULT%.........
+ssh -i %SSH_PRIVKEY% -o StrictHostKeyChecking=no %SSH_SERVER% "cd /var/www; nohup ./panel-update.sh > update.log 2>&1 &" || goto :ssh_error
+%END_TIME%
+
+
+%START_TIME%
+echo|set /p=%INFO%Cleaning up old files %DEFAULT%............
+ssh -i %SSH_PRIVKEY% -o StrictHostKeyChecking=no %SSH_SERVER_ASIA% "rm -rf /var/www/legacy-rp-admin-v3/public/js/*; rm -rf /var/www/legacy-rp-admin-v3/public/css/*; rm /var/www/legacy-rp-admin-v3/public/mix-manifest.json"
+%END_TIME%
+
+%START_TIME%
+echo|set /p=%INFO%Transferring js files %DEFAULT%............
+scp -i %SSH_PRIVKEY% -q -o StrictHostKeyChecking=no -r .\public\js\* %SSH_SERVER_ASIA%:/var/www/legacy-rp-admin-v3/public/js || goto :transfer_error
+%END_TIME%
+
+%START_TIME%
+echo|set /p=%INFO%Transferring css files %DEFAULT%...........
+scp -i %SSH_PRIVKEY% -q -o StrictHostKeyChecking=no -r .\public\css\* %SSH_SERVER_ASIA%:/var/www/legacy-rp-admin-v3/public/css || goto :transfer_error
+%END_TIME%
+
+%START_TIME%
+echo|set /p=%INFO%Transferring mix-manifest.json %DEFAULT%...
+scp -i %SSH_PRIVKEY% -q -o StrictHostKeyChecking=no .\public\mix-manifest.json %SSH_SERVER_ASIA%:/var/www/legacy-rp-admin-v3/public || goto :transfer_error
+%END_TIME%
+
+%START_TIME%
+echo|set /p=%INFO%Triggering update script %DEFAULT%.........
+ssh -i %SSH_PRIVKEY% -o StrictHostKeyChecking=no %SSH_SERVER_ASIA% "cd /var/www; nohup ./panel-update-asia.sh > update.log 2>&1 &" || goto :ssh_error
 %END_TIME%
 
 echo|set /p=[30m               [102m UPDATE SUCCESSFUL [0m
