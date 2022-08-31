@@ -122,7 +122,7 @@ class SessionHelper
      */
     private function getSessionFile(): string
     {
-        return $this->storage . CLUSTER . $this->sessionKey . '.session';
+        return $this->storage . (CLUSTER === '' ? 'c1' : CLUSTER) . $this->sessionKey . '.session';
     }
 
     /**

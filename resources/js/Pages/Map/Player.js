@@ -13,8 +13,8 @@ const IconSizes = {
 };
 
 class Player {
-    constructor(rawData, staffMembers, onDutyList) {
-        this.update(rawData, staffMembers, onDutyList);
+    constructor(rawData, staffMembers) {
+        this.update(rawData, staffMembers);
     }
 
     static fixData(rawData) {
@@ -27,7 +27,7 @@ class Player {
         return rawData;
     }
 
-    update(rawData, staffMembers, onDutyList) {
+    update(rawData, staffMembers) {
         const flags = Player.getPlayerFlags(rawData);
 
         this.player = {
@@ -55,7 +55,6 @@ class Player {
 
         this.invisible = {
             raw: invisible,
-            time: rawData.invisible_since,
             value: invisible && !shouldIgnoreInvisible(staffMembers, rawData, this.character)
         };
 
@@ -66,12 +65,7 @@ class Player {
             staff: this.player.isStaff
         };
 
-        this.onDuty = 'none';
-        if (onDutyList.police.includes(this.player.steam)) {
-            this.onDuty = 'police';
-        } else if (onDutyList.ems.includes(this.player.steam)) {
-            this.onDuty = 'ems';
-        }
+        this.onDuty = rawData.duty ? rawData.duty.type : 'none';
 
         this.icon = {
             dead: this.character && this.character.isDead,

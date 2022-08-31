@@ -741,6 +741,8 @@ import 'leaflet-fullscreen';
 import 'leaflet.heat';
 import VueSpeedometer from "vue-speedometer";
 
+import {io} from "socket.io-client";
+
 import PlayerContainer from './PlayerContainer';
 import Player from './Player';
 import Vector3 from "./Vector3";
@@ -1429,19 +1431,6 @@ export default {
 
             return null;
         },
-        getOTToken() {
-            const _this = this;
-
-            return new Promise(function (resolve, reject) {
-                $.get(_this.hostname(false) + '/token?token=' + _this.token + '&cluster=' + _this.cluster, function (data) {
-                    if (data.status) {
-                        resolve(data.token);
-                    } else {
-                        reject(data.error);
-                    }
-                }).fail(reject);
-            });
-        },
         async doMapRefresh(server) {
             const _this = this;
 
@@ -1450,19 +1439,20 @@ export default {
             }
 
             try {
-                const token = await this.getOTToken();
-                const steam = this.$page.auth.player.steamIdentifier;
-
-                this.lastSocketMessage = null;
                 this.lastConnectionError = null;
-                this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server) + "&cluster=" + this.cluster + "&steam=" + steam);
+                this.connection = io(this.hostname(true), {
+                    reconnectionDelayMax: 5000,
+                    query: {
+                        server: server,
+                        token: _this.token,
+                        type: "world"
+                    }
+                });
                 this.socketStart = Date.now();
 
-                this.connection.onmessage = async function (event) {
-                    _this.lastSocketMessage = event.data;
-
+                this.connection.on("message", async function (buffer) {
                     try {
-                        const unzipped = await DataCompressor.GUnZIP(event.data),
+                        const unzipped = await DataCompressor.GUnZIP(buffer),
                             data = JSON.parse(unzipped);
 
                         await _this.renderMapData(data);
@@ -1471,24 +1461,10 @@ export default {
                     } catch (e) {
                         console.error('Failed to parse socket message ', e)
                     }
-                }
+                });
 
-                this.connection.onclose = async function () {
+                this.connection.on("disconnect", async function () {
                     let connectionTime = _this.$moment.duration(Date.now() - _this.socketStart, 'milliseconds').format('h[h] m[m] s[s]');
-
-                    if (_this.lastSocketMessage) {
-                        try {
-                            const unzipped = await DataCompressor.GUnZIP(_this.lastSocketMessage),
-                                data = JSON.parse(unzipped);
-
-                            if ('status' in data && 'message' in data) {
-                                _this.lastConnectionError = data.status + ' - ' + data.message;
-                                console.info('WebSocket:', _this.lastConnectionError);
-                                console.info('WebSocket (RAW):', data);
-                            }
-                        } catch (e) {
-                        }
-                    }
 
                     if (_this.lastConnectionError) {
                         _this.data = _this.t('map.closed_expected', server, connectionTime);
@@ -1504,7 +1480,7 @@ export default {
                             _this.doMapRefresh(server);
                         }, 3000);
                     }
-                };
+                });
             } catch (e) {
                 this.data = this.t('map.closed_unexpected', server, '1 second');
 
@@ -1547,9 +1523,7 @@ export default {
 
             data = DataCompressor.decompressData(data);
 
-            if (data && 'status' in data && data.status) {
-                this.data = this.t('map.advanced_error', $('#server option:selected').text(), data.message);
-            } else if (DataCompressor.isValid(data)) {
+            if (data) {
                 if (this.map) {
                     const _this = this;
 
