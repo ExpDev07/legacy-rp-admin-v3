@@ -141,7 +141,8 @@ export default {
                 query: {
                     server: server,
                     token: token,
-                    type: "staff"
+                    type: "staff",
+                    steam: this.$page.auth.player.steamIdentifier
                 }
             });
 

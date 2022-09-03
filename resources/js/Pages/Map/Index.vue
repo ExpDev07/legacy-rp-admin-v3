@@ -1496,58 +1496,36 @@ export default {
 
             return null;
         },
-        async doMapRefresh(server) {
-            const _this = this;
-
-            if (this.connection) {
-                this.connection.close();
-            }
-
+        async initializeMap(server) {
             try {
-                this.lastConnectionError = null;
-                this.connection = io(this.hostname(true), {
+                const connection = io(this.hostname(true), {
                     reconnectionDelayMax: 5000,
                     query: {
                         server: server,
-                        token: _this.token,
-                        type: "world"
+                        token: this.token,
+                        type: "world",
+                        steam: this.$page.auth.player.steamIdentifier
                     }
                 });
-                this.socketStart = Date.now();
 
-                this.connection.on("message", async function (buffer) {
+                connection.on("message", async (buffer) => {
                     try {
                         const unzipped = await DataCompressor.GUnZIP(buffer),
                             data = JSON.parse(unzipped);
 
-                        await _this.renderMapData(data);
+                        await this.renderMapData(data);
 
-                        _this.firstRefresh = false;
+                        this.firstRefresh = false;
                     } catch (e) {
-                        console.error('Failed to parse socket message ', e)
+                        console.error('Failed to parse socket message ', e);
                     }
                 });
 
-                this.connection.on("disconnect", async function () {
-                    let connectionTime = _this.$moment.duration(Date.now() - _this.socketStart, 'milliseconds').format('h[h] m[m] s[s]');
-
-                    if (_this.lastConnectionError) {
-                        _this.data = _this.t('map.closed_expected', server, connectionTime);
-                    } else {
-                        _this.data = _this.t('map.closed_unexpected', server, connectionTime);
-                    }
-
-                    // Try reconnecting if the socket was active for more than 30 seconds
-                    if (Date.now() - _this.socketStart > 30 * 1000) {
-                        _this.data += ' ' + _this.t('map.try_reconnect');
-
-                        setTimeout(function () {
-                            _this.doMapRefresh(server);
-                        }, 3000);
-                    }
+                connection.on("disconnect", async () => {
+                    this.data = this.t('map.closed_expected', server);
                 });
             } catch (e) {
-                this.data = this.t('map.closed_unexpected', server, '1 second');
+                this.data = this.t('map.closed_unexpected', server);
 
                 console.error('Failed to connect to socket', e);
             }
@@ -1588,11 +1566,11 @@ export default {
 
             data = DataCompressor.decompressData(data);
 
-            if (data) {
+            if (data && data.players.length > 0) {
                 if (this.map) {
                     const _this = this;
 
-                    this.container.updatePlayers(data, this, this.selectedInstance);
+                    this.container.updatePlayers(data.players, this, this.selectedInstance);
 
                     let unknownCharacters = [],
                         foundTracked = false;
@@ -1728,7 +1706,7 @@ export default {
                     }
                 }
 
-                this.activeViewers = [...new Set(data.staff)].sort();
+                this.activeViewers = data.viewers.sort();
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
@@ -1908,7 +1886,7 @@ export default {
             $('#server').on('change', function () {
                 _this.firstRefresh = true;
 
-                _this.doMapRefresh($(this).val());
+                _this.initializeMap($(this).val());
             }).trigger('change');
         });
 
