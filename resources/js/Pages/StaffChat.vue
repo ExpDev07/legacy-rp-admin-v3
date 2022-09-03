@@ -85,6 +85,8 @@ import Layout from "../Layouts/Plain";
 import Badge from "../Components/Badge";
 import DataCompressor from "./Map/DataCompressor";
 
+import {io} from "socket.io-client";
+
 export default {
     layout: Layout,
     components: {
@@ -131,41 +133,42 @@ export default {
             const isDev = window.location.hostname === 'localhost';
 
             const token = this.$page.auth.token,
-                cluster = this.$page.auth.cluster,
                 server = this.$page.auth.server,
-                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com',
-                steam = this.$page.auth.player.steamIdentifier;
+                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com';
 
-            let socket = new WebSocket(socketUrl + "/staff-chat?token=" + token + "&cluster=" + cluster + "&server=" + server + "&steam=" + steam);
+            let socket = io(socketUrl, {
+                reconnectionDelayMax: 5000,
+                query: {
+                    server: server,
+                    token: token,
+                    type: "staff"
+                }
+            });
 
-            socket.onmessage = async (event) => {
+            socket.on("message", async (buffer) => {
                 this.isLoading = false;
 
                 try {
-                    const unzipped = await DataCompressor.GUnZIP(event.data);
+                    const unzipped = await DataCompressor.GUnZIP(buffer);
 
                     this.staffMessages = JSON.parse(unzipped).reverse();
                 } catch (e) {
                     console.error('Failed to parse socket message ', e)
                 }
-            };
+            });
 
-            socket.onerror = () => {
-                try {
-                    socket.close();
-                } catch(e) {}
-            };
-
-            socket.onclose = () => {
+            socket.on("disconnect", () => {
                 this.isLoading = false;
                 this.isInitialized = false;
+
+                socket.close();
 
                 this.socketError = true;
 
                 setTimeout(() => {
                     this.initChat();
                 }, 3000);
-            };
+            });
         }
     },
     mounted() {
