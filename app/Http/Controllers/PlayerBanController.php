@@ -261,9 +261,9 @@ class PlayerBanController extends Controller
         if ($expireBefore === $expireAfter && $reason === $ban->reason) {
             return back()->with('success', 'You changed nothing, redirecting back to player page...');
         } else if ($expireBefore === $expireAfter) {
-            $message = 'I changed this bans reason to be "' . $reason . '".';
+            $message = 'I changed this bans reason to be "' . $reason . '". ';
         } else if ($reason === $ban->reason) {
-            $message = 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '".';
+            $message = 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '". ';
         } else {
             $message = 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '" and changed the reason to "' . $reason . '". ';
         }
