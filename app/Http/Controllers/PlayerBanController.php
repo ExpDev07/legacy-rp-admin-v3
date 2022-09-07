@@ -250,21 +250,33 @@ class PlayerBanController extends Controller
             abort(401);
         }
 
+        $user = $request->user();
+        $reason = $request->input('reason') ?: 'No reason.';
+
         $expireBefore = $ban->getExpireTimeInSeconds() ? $this->formatSeconds($ban->getExpireTimeInSeconds()) : 'permanent';
         $expireAfter = $request->input('expire') ? $this->formatSeconds(intval($request->input('expire')) + (time() - $ban->getTimestamp())) : 'permanent';
+
+        $message = '';
+
+        if ($expireBefore === $expireAfter && $reason === $ban->reason) {
+            return back()->with('success', 'You changed nothing, redirecting back to player page...');
+        } else if ($expireBefore === $expireAfter) {
+            $message = 'I changed this bans reason to be "' . $reason . '".';
+        } else if ($reason === $ban->reason) {
+            $message = 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '".';
+        } else {
+            $message = 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '" and changed the reason to "' . $reason . '". ';
+        }
 
         $bans = Ban::query()->where('ban_hash', '=', $ban->ban_hash)->get();
         foreach ($bans->values() as $b) {
             $b->update($request->validated());
         }
 
-        $user = $request->user();
-        $reason = $request->input('reason') ?: 'No reason.';
-
         // Automatically log the ban update as a warning.
         $player->warnings()->create([
             'issuer_id' => $user->player->user_id,
-            'message'   => 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '" and changed the reason to "' . $reason . '". ' .
+            'message'   => $message .
                 'This warning was generated automatically as a result of updating a ban.',
         ]);
 
