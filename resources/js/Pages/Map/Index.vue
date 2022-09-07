@@ -1726,7 +1726,7 @@ export default {
                 maxZoom: 8,
                 maxBounds: L.latLngBounds(L.latLng(0, 0), L.latLng(-256, 256))
             });
-            this.map.attributionControl.addAttribution('map by <a href="https://github.com/twooot" target="_blank">milan60</a>, cayo-perico map by Spitfire2k6');
+            this.map.attributionControl.addAttribution('map by <a href="https://github.com/twooot" target="_blank">Laura</a> <i>accurate to about 1-2m</i>');
 
             L.tileLayer("https://worryfree.host/tiles/tiles_" + Bounds.version + "/{z}/{x}/{y}.png", {
                 noWrap: true,
@@ -1799,6 +1799,10 @@ export default {
             this.map.on('click', function (e) {
                 const coords = Vector3.fromMapCoords(e.latlng.lng, e.latlng.lat),
                     map = coords.toMap();
+
+                if (Bounds.calibrating) {
+                    _this.copyText(null, `lng: ${e.latlng.lng}, lat: ${e.latlng.lat}`);
+                }
 
                 _this.clickedCoords = "[X=" + Math.round(coords.x) + ",Y=" + Math.round(coords.y) + "] / [Lng=" + map.lng.toFixed(3) + ",Lat=" + map.lat.toFixed(3) + "]";
                 _this.rawClickedCoords = {x: Math.round(coords.x), y: Math.round(coords.y)};

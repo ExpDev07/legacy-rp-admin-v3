@@ -2,6 +2,7 @@ import Vector3 from './Vector3';
 import {shouldIgnoreInvisible, mapNumber, replaceLast} from './helper';
 import {Character, Vehicle} from './Objects';
 import L from "leaflet";
+import Bounds from "./map.config";
 
 const IconSizes = {
     circle: 17,
@@ -167,6 +168,15 @@ class Player {
     }
 
     getIcon(highlightedPeople) {
+        if (Bounds.calibrating) {
+            return new L.Icon(
+                {
+                    iconUrl: '/images/icons/calibrate.png',
+                    iconSize: [20, 20]
+                }
+            );
+        }
+
         let icon = new L.Icon(
             {
                 iconUrl: '/images/icons/circle.png',
