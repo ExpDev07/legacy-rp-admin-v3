@@ -54,10 +54,10 @@ class PlayerContainer {
 
         this.isTrackedPlayerVisible = false;
 
-        for (let x = 0; x < rawData.players.length; x++) {
-            rawData.players[x] = Player.fixData(rawData.players[x]);
+        for (let x = 0; x < rawData.length; x++) {
+            rawData[x] = Player.fixData(rawData[x]);
 
-            this.updatePlayer(rawData.players[x], rawData.on_duty, selectedInstance);
+            this.updatePlayer(rawData[x], selectedInstance);
         }
 
         this.instances.sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
@@ -74,15 +74,8 @@ class PlayerContainer {
         this.notifier.checkPlayers(this, vue);
     }
 
-    updatePlayer(rawPlayer, onDutyList, selectedInstance) {
+    updatePlayer(rawPlayer, selectedInstance) {
         const id = Player.getPlayerID(rawPlayer);
-
-        if (!onDutyList.police) {
-            onDutyList.police = [];
-        }
-        if (!onDutyList.ems) {
-            onDutyList.ems = [];
-        }
 
         const flags = Player.getPlayerFlags(rawPlayer);
 
@@ -100,9 +93,9 @@ class PlayerContainer {
         }
 
         if (id in this.players) {
-            this.players[id].update(rawPlayer, this.staffMembers, onDutyList);
+            this.players[id].update(rawPlayer, this.staffMembers);
         } else {
-            this.players[id] = new Player(rawPlayer, this.staffMembers, onDutyList);
+            this.players[id] = new Player(rawPlayer, this.staffMembers);
         }
 
         const vehicle = this.players[id].getVehicleID();

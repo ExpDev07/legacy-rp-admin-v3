@@ -1,43 +1,23 @@
 import * as pako from "pako";
 
 class DataCompressor {
-    static async GUnZIP(raw) {
-        const data = await raw.arrayBuffer();
-
+    static async GUnZIP(data) {
         return pako.ungzip(data, {
             to: 'string'
         });
     }
 
     static decompressData(data) {
-        if (data && 'p' in data && 'd' in data && 's' in data && Array.isArray(data.p) && Array.isArray(data.s) && typeof data.d === 'object') {
+        if ('v' in data && Array.isArray(data.v) && 'p' in data && Array.isArray(data.p)) {
             const decompressor = new DataCompressor();
 
             return {
                 players: decompressor.decompressPlayers(data.p),
-                on_duty: decompressor.decompressOnDuty(data.d),
-                staff: data.s
+                viewers: data.v
             };
         }
 
-        return data;
-    }
-
-    static isValid(data) {
-        return 'players' in data && 'on_duty' in data && 'staff' in data && Array.isArray(data.players) && Array.isArray(data.staff) && typeof data.on_duty === 'object';
-    }
-
-    decompressOnDuty(onDuty) {
-        return {
-            police: DataCompressor.decompressDutyPlayers(onDuty.p),
-            ems: DataCompressor.decompressDutyPlayers(onDuty.e)
-        };
-    }
-
-    static decompressDutyPlayers(players) {
-        return players.map(player => {
-            return player.c
-        });
+        return false;
     }
 
     decompressPlayers(players) {
@@ -64,6 +44,11 @@ class DataCompressor {
             name: this.get('d', '', this.player['i']),
         } : false;
 
+        const duty = 'e' in this.player ? {
+            type: this.get('a', false, this.player['e']),
+            department: this.get('b', false, this.player['e'])
+        } : false;
+
         const coordsArray = 'c' in this.player ? this.player['c'].split(',') : [],
             coords = coordsArray.length >= 3 ? {
                 x: parseFloat(coordsArray[0]),
@@ -77,7 +62,7 @@ class DataCompressor {
             coords: coords,
             heading: coordsArray.length >= 4 ? parseFloat(coordsArray[3]) : 0.0,
             flags: this.get('d', 0),
-            invisible_since: this.get('e', 0),
+            duty: duty,
             name: this.get('f', ''),
             source: this.get('g', 0),
             speed: coordsArray.length >= 5 ? parseFloat(coordsArray[4]) : 0.0,

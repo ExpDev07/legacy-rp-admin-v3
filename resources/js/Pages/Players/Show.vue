@@ -1063,6 +1063,9 @@ export default {
         },
         whitelisted: {
             type: Boolean
+        },
+        blacklisted: {
+            type: Boolean
         }
     },
     data() {

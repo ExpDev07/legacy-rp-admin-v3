@@ -8,8 +8,11 @@
                         id="server">
                     <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
                 </select>
-                <select class="inline-block w-40 ml-2 mr-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" v-model="selectedInstance">
-                    <option v-for="instance in container.instances" :key="instance" :value="instance">{{ instance === 1 ? t('map.main_instance') : t('map.instance', instance) }}</option>
+                <select class="inline-block w-40 ml-2 mr-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
+                        v-model="selectedInstance">
+                    <option v-for="instance in container.instances" :key="instance" :value="instance">
+                        {{ instance === 1 ? t('map.main_instance') : t('map.instance', instance) }}
+                    </option>
                 </select>
             </h1>
             <p>
@@ -227,9 +230,11 @@
                     <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_date_from">
                         {{ t('map.historic_from') }}
                     </label>
-                    <input class="w-1/3 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" type="date" step="any" id="historic_date_from"
+                    <input class="w-1/3 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" type="date"
+                           step="any" id="historic_date_from"
                            v-model="form.historic_from_date"/>
-                    <input class="w-1/3 px-4 py-2 ml-1 bg-gray-200 dark:bg-gray-600 border rounded" type="time" step="any" id="historic_time_from"
+                    <input class="w-1/3 px-4 py-2 ml-1 bg-gray-200 dark:bg-gray-600 border rounded" type="time"
+                           step="any" id="historic_time_from"
                            v-model="form.historic_from_time"/>
                 </div>
 
@@ -238,9 +243,11 @@
                     <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_date_till">
                         {{ t('map.historic_till') }}
                     </label>
-                    <input class="w-1/3 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" type="date" step="any" id="historic_date_till"
+                    <input class="w-1/3 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" type="date"
+                           step="any" id="historic_date_till"
                            v-model="form.historic_till_date"/>
-                    <input class="w-1/3 px-4 py-2 ml-1 bg-gray-200 dark:bg-gray-600 border rounded" type="time" step="any" id="historic_time_till"
+                    <input class="w-1/3 px-4 py-2 ml-1 bg-gray-200 dark:bg-gray-600 border rounded" type="time"
+                           step="any" id="historic_time_till"
                            v-model="form.historic_till_time"/>
                 </div>
 
@@ -264,7 +271,8 @@
         </div>
 
         <!-- Screenshot -->
-        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isScreenshot && this.perm.check(this.perm.PERM_SCREENSHOT)">
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k"
+             v-if="isScreenshot && this.perm.check(this.perm.PERM_SCREENSHOT)">
             <div
                 class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
                 <h3 class="mb-2">
@@ -276,7 +284,7 @@
                 </p>
 
                 <a v-if="screenshotImage" class="w-full" :href="screenshotImage" target="_blank">
-                    <img :src="screenshotImage" alt="Screenshot" class="w-full" />
+                    <img :src="screenshotImage" alt="Screenshot" class="w-full"/>
                 </a>
                 <p v-if="screenshotImage" class="mt-3 text-sm">
                     {{ t('map.screenshot_description') }}
@@ -317,21 +325,36 @@
             </div>
         </div>
 
-        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage" v-if="isAttachingScreenshot" />
+        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage"
+                            v-if="isAttachingScreenshot"/>
 
         <template>
             <div class="-mt-12" id="map-wrapper">
                 <div v-if="historyRange.view" class="mb-3">
                     <div class="flex">
-                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(-20)">-20s</button>
-                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(-5)">-5s</button>
-                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(-1)">-1s</button>
+                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                @click="historyRangeButton(-20)">-20s
+                        </button>
+                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                @click="historyRangeButton(-5)">-5s
+                        </button>
+                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                @click="historyRangeButton(-1)">-1s
+                        </button>
 
-                        <input type="range" :min="historyRange.min" :max="historyRange.max" value="0" @change="historyRangeChange" @input="historyRangeChange" id="range-slider" class="w-full px-2 py-1 range bg-transparent" />
+                        <input type="range" :min="historyRange.min" :max="historyRange.max" value="0"
+                               @change="historyRangeChange" @input="historyRangeChange" id="range-slider"
+                               class="w-full px-2 py-1 range bg-transparent"/>
 
-                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(1)">+1s</button>
-                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(5)">+5s</button>
-                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary" @click="historyRangeButton(20)">+20s</button>
+                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                @click="historyRangeButton(1)">+1s
+                        </button>
+                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                @click="historyRangeButton(5)">+5s
+                        </button>
+                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                @click="historyRangeButton(20)">+20s
+                        </button>
                     </div>
                     <p class="text-center">{{ historyRange.val }}</p>
                 </div>
@@ -541,10 +564,13 @@
                                     {{ t('map.area_not_inside') }}
                                 </td>
                                 <td>
-                                    <span class="text-yellow-600" :title="t('map.invisible_time', formatSeconds(Math.round(player.invisible_time / 1000)))" v-if="player.invisible_time > 0">
+                                    <span class="text-yellow-600"
+                                          :title="t('map.invisible_time', formatSeconds(Math.round(player.invisible_time / 1000)))"
+                                          v-if="player.invisible_time > 0">
                                         [I]
                                     </span>
-                                    <a class="track-cid text-yellow-600" href="#" :data-trackid="'server_' + player.source" data-popup="true">
+                                    <a class="track-cid text-yellow-600" href="#"
+                                       :data-trackid="'server_' + player.source" data-popup="true">
                                         {{ t('map.short.track') }}
                                     </a>
                                     <a class="highlight-cid text-yellow-600" href="#" :data-steam="player.steam">
@@ -599,7 +625,8 @@
                                     {{ t('map.highlighted') }}
                                 </td>
                                 <td>
-                                    <a class="track-cid" href="#" :data-trackid="'server_' + player.source" data-popup="true">
+                                    <a class="track-cid" href="#" :data-trackid="'server_' + player.source"
+                                       data-popup="true">
                                         {{ t('map.short.track') }}
                                     </a>
                                     <a href="#" @click="stopHighlight($event, steam)">{{ t('map.short.remove') }}</a>
@@ -643,9 +670,12 @@
                             <tr v-for="(player, steam) in container.notifier.notifications.invisible"
                                 :key="'invisible_' + steam">
                                 <td class="pr-2">
-                                    <span class="dark:text-yellow-500 text-yellow-600" v-if="steam === '*'">* (any)</span>
+                                    <span class="dark:text-yellow-500 text-yellow-600"
+                                          v-if="steam === '*'">* (any)</span>
                                     <a target="_blank" :href="'/players/' + steam"
-                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{ steam }}</a>
+                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{
+                                            steam
+                                        }}</a>
                                     <a target="_blank" :href="'/players/' + steam"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
@@ -659,9 +689,12 @@
                             </tr>
                             <tr v-for="(player, steam) in container.notifier.notifications.load" :key="'load_' + steam">
                                 <td class="pr-2">
-                                    <span class="dark:text-yellow-500 text-yellow-600" v-if="steam === '*'">* (any)</span>
+                                    <span class="dark:text-yellow-500 text-yellow-600"
+                                          v-if="steam === '*'">* (any)</span>
                                     <a target="_blank" :href="'/players/' + steam"
-                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{ steam }}</a>
+                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{
+                                            steam
+                                        }}</a>
                                     <a target="_blank" :href="'/players/' + steam"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
@@ -676,9 +709,12 @@
                             <tr v-for="(player, steam) in container.notifier.notifications.unload"
                                 :key="'unload_' + steam">
                                 <td class="pr-2">
-                                    <span class="dark:text-yellow-500 text-yellow-600" v-if="steam === '*'">* (any)</span>
+                                    <span class="dark:text-yellow-500 text-yellow-600"
+                                          v-if="steam === '*'">* (any)</span>
                                     <a target="_blank" :href="'/players/' + steam"
-                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{ steam }}</a>
+                                       class="dark:text-green-400 text-green-600" v-else-if="player === true">{{
+                                            steam
+                                        }}</a>
                                     <a target="_blank" :href="'/players/' + steam"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
@@ -741,6 +777,8 @@ import 'leaflet-fullscreen';
 import 'leaflet.heat';
 import VueSpeedometer from "vue-speedometer";
 
+import {io} from "socket.io-client";
+
 import PlayerContainer from './PlayerContainer';
 import Player from './Player';
 import Vector3 from "./Vector3";
@@ -762,7 +800,8 @@ import DetectionArea from "./DetectionArea";
 
 window.instance = null;
 
-window.findPlayer = function() {};
+window.findPlayer = function () {
+};
 
 export default {
     layout: Layout,
@@ -1117,7 +1156,7 @@ export default {
                         this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
                     }
                 }
-            } catch(e) {
+            } catch (e) {
                 this.screenshotError = this.t('map.screenshot_failed');
             }
         },
@@ -1134,15 +1173,43 @@ export default {
             if (this.historyRange && this.historyMarker) {
                 const val = $('#range-slider').val();
 
-                this.historyRange.val = (new Date(val * 1000)).toGMTString() + ' (' + val + ')';
+                let pos = this.historyRange.data[val];
 
-                const pos = this.historyRange.data[val];
+                if (!pos) {
+                    pos = this.historyRange.data[val - 1];
+
+                    if (!pos) {
+                        pos = this.historyRange.data[val + 1];
+                    }
+                }
+
+                let icon = "circle",
+                    label = (new Date(val * 1000)).toGMTString() + ' (' + val + ')';
 
                 if (pos) {
                     const coords = Vector3.fromGameCoords(parseInt(pos.x), parseInt(pos.y), 0).toMap();
 
                     this.historyMarker.setLatLng([coords.lat, coords.lng]);
+
+                    if (pos.i) {
+                        icon = "circle_green";
+
+                        label += ' [invisible]';
+                    }
+                } else {
+                    label += ' [no-data]';
+
+                    icon = "circle_red";
                 }
+
+                this.historyRange.val = label;
+
+                this.historyMarker.setIcon(new L.Icon(
+                    {
+                        iconUrl: '/images/icons/' + icon + '.png',
+                        iconSize: [20, 20]
+                    }
+                ));
             }
         },
         async showHistory() {
@@ -1183,7 +1250,7 @@ export default {
             this.historyRange.view = false;
 
             if (history) {
-                $('.leaflet-control-layers-selector').each(function() {
+                $('.leaflet-control-layers-selector').each(function () {
                     if ($(this).prop('checked')) {
                         $(this).trigger('click');
                     }
@@ -1238,7 +1305,7 @@ export default {
 
                 this.historyRange.val = this.historyRange.val = (new Date(timestamps[0] * 1000)).toGMTString() + ' (' + timestamps[0] + ')';
                 this.historyRange.min = timestamps[0];
-                this.historyRange.max = timestamps[timestamps.length-1];
+                this.historyRange.max = timestamps[timestamps.length - 1];
 
                 this.historyRange.data = history;
 
@@ -1255,7 +1322,7 @@ export default {
         async loadHistory(server, steam, from, till) {
             this.loadingScreenStatus = this.t('map.heatmap_fetch');
             try {
-                const result = await axios.get(this.hostname(false) + '/history/track/' + server + '/' + steam + '/' + from + '/' + till + '?token=' + this.token + '&cluster=' + this.cluster);
+                const result = await axios.get(this.hostname(false) + '/historic/' + server + '/' + steam + '/' + from + '/' + till + '?token=' + this.token);
 
                 this.loadingScreenStatus = this.t('map.heatmap_parse');
                 if (result.data && result.data.status) {
@@ -1265,7 +1332,7 @@ export default {
 
                     alert(result.data.error);
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
             }
 
@@ -1291,7 +1358,7 @@ export default {
                     this.heatmapLayer = null;
                 }
 
-                $('.leaflet-control-layers-selector').each(function() {
+                $('.leaflet-control-layers-selector').each(function () {
                     if ($(this).prop('checked')) {
                         $(this).trigger('click');
                     }
@@ -1301,7 +1368,7 @@ export default {
 
                 this.heatmapLayer.addTo(this.map);
 
-                for (let x=0;x<players.length;x++) {
+                for (let x = 0; x < players.length; x++) {
                     const player = players[x];
 
                     const location = Vector3.fromGameCoords(player.x, player.y, 0.0);
@@ -1350,7 +1417,7 @@ export default {
             this.historyRange.view = false;
 
             if (heatmap) {
-                $('.leaflet-control-layers-selector').each(function() {
+                $('.leaflet-control-layers-selector').each(function () {
                     if ($(this).prop('checked')) {
                         $(this).trigger('click');
                     }
@@ -1393,7 +1460,7 @@ export default {
                 } else if (result.data && !result.data.status) {
                     console.error(result.data.error);
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
             }
 
@@ -1423,90 +1490,42 @@ export default {
                 } else if (result.data && !result.data.status) {
                     console.error(result.data.error);
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
             }
 
             return null;
         },
-        getOTToken() {
-            const _this = this;
-
-            return new Promise(function (resolve, reject) {
-                $.get(_this.hostname(false) + '/token?token=' + _this.token + '&cluster=' + _this.cluster, function (data) {
-                    if (data.status) {
-                        resolve(data.token);
-                    } else {
-                        reject(data.error);
-                    }
-                }).fail(reject);
-            });
-        },
-        async doMapRefresh(server) {
-            const _this = this;
-
-            if (this.connection) {
-                this.connection.close();
-            }
-
+        async initializeMap(server) {
             try {
-                const token = await this.getOTToken();
-                const steam = this.$page.auth.player.steamIdentifier;
+                const connection = io(this.hostname(true), {
+                    reconnectionDelayMax: 5000,
+                    query: {
+                        server: server,
+                        token: this.token,
+                        type: "world",
+                        steam: this.$page.auth.player.steamIdentifier
+                    }
+                });
 
-                this.lastSocketMessage = null;
-                this.lastConnectionError = null;
-                this.connection = new WebSocket(this.hostname(true) + "/socket?ott=" + token + "&server=" + encodeURIComponent(server) + "&cluster=" + this.cluster + "&steam=" + steam);
-                this.socketStart = Date.now();
-
-                this.connection.onmessage = async function (event) {
-                    _this.lastSocketMessage = event.data;
-
+                connection.on("message", async (buffer) => {
                     try {
-                        const unzipped = await DataCompressor.GUnZIP(event.data),
+                        const unzipped = await DataCompressor.GUnZIP(buffer),
                             data = JSON.parse(unzipped);
 
-                        await _this.renderMapData(data);
+                        await this.renderMapData(data);
 
-                        _this.firstRefresh = false;
+                        this.firstRefresh = false;
                     } catch (e) {
-                        console.error('Failed to parse socket message ', e)
+                        console.error('Failed to parse socket message ', e);
                     }
-                }
+                });
 
-                this.connection.onclose = async function () {
-                    let connectionTime = _this.$moment.duration(Date.now() - _this.socketStart, 'milliseconds').format('h[h] m[m] s[s]');
-
-                    if (_this.lastSocketMessage) {
-                        try {
-                            const unzipped = await DataCompressor.GUnZIP(_this.lastSocketMessage),
-                                data = JSON.parse(unzipped);
-
-                            if ('status' in data && 'message' in data) {
-                                _this.lastConnectionError = data.status + ' - ' + data.message;
-                                console.info('WebSocket:', _this.lastConnectionError);
-                                console.info('WebSocket (RAW):', data);
-                            }
-                        } catch (e) {
-                        }
-                    }
-
-                    if (_this.lastConnectionError) {
-                        _this.data = _this.t('map.closed_expected', server, connectionTime);
-                    } else {
-                        _this.data = _this.t('map.closed_unexpected', server, connectionTime);
-                    }
-
-                    // Try reconnecting if the socket was active for more than 30 seconds
-                    if (Date.now() - _this.socketStart > 30 * 1000) {
-                        _this.data += ' ' + _this.t('map.try_reconnect');
-
-                        setTimeout(function () {
-                            _this.doMapRefresh(server);
-                        }, 3000);
-                    }
-                };
+                connection.on("disconnect", async () => {
+                    this.data = this.t('map.closed_expected', server);
+                });
             } catch (e) {
-                this.data = this.t('map.closed_unexpected', server, '1 second');
+                this.data = this.t('map.closed_unexpected', server);
 
                 console.error('Failed to connect to socket', e);
             }
@@ -1547,13 +1566,11 @@ export default {
 
             data = DataCompressor.decompressData(data);
 
-            if (data && 'status' in data && data.status) {
-                this.data = this.t('map.advanced_error', $('#server option:selected').text(), data.message);
-            } else if (DataCompressor.isValid(data)) {
+            if (data && data.players.length > 0) {
                 if (this.map) {
                     const _this = this;
 
-                    this.container.updatePlayers(data, this, this.selectedInstance);
+                    this.container.updatePlayers(data.players, this, this.selectedInstance);
 
                     let unknownCharacters = [],
                         foundTracked = false;
@@ -1638,7 +1655,7 @@ export default {
                         }
                     });
 
-                    for (let x=0;x<this.detectionAreas.length;x++) {
+                    for (let x = 0; x < this.detectionAreas.length; x++) {
                         this.detectionAreas[x].checkPlayers(Object.values(this.container.players), this.characters, this.highlightedPeople);
                     }
 
@@ -1689,7 +1706,7 @@ export default {
                     }
                 }
 
-                this.activeViewers = [...new Set(data.staff)].sort();
+                this.activeViewers = data.viewers.sort();
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
             }
@@ -1709,7 +1726,7 @@ export default {
                 maxZoom: 8,
                 maxBounds: L.latLngBounds(L.latLng(0, 0), L.latLng(-256, 256))
             });
-            this.map.attributionControl.addAttribution('map by <a href="https://github.com/twooot" target="_blank">milan60</a>, cayo-perico map by Spitfire2k6');
+            this.map.attributionControl.addAttribution('map by <a href="https://github.com/twooot" target="_blank">Laura</a> <i>accurate to about 1-2m</i>');
 
             L.tileLayer("https://worryfree.host/tiles/tiles_" + Bounds.version + "/{z}/{x}/{y}.png", {
                 noWrap: true,
@@ -1782,6 +1799,10 @@ export default {
             this.map.on('click', function (e) {
                 const coords = Vector3.fromMapCoords(e.latlng.lng, e.latlng.lat),
                     map = coords.toMap();
+
+                if (Bounds.calibrating) {
+                    _this.copyText(null, `lng: ${e.latlng.lng}, lat: ${e.latlng.lat}`);
+                }
 
                 _this.clickedCoords = "[X=" + Math.round(coords.x) + ",Y=" + Math.round(coords.y) + "] / [Lng=" + map.lng.toFixed(3) + ",Lat=" + map.lat.toFixed(3) + "]";
                 _this.rawClickedCoords = {x: Math.round(coords.x), y: Math.round(coords.y)};
@@ -1869,7 +1890,7 @@ export default {
             $('#server').on('change', function () {
                 _this.firstRefresh = true;
 
-                _this.doMapRefresh($(this).val());
+                _this.initializeMap($(this).val());
             }).trigger('change');
         });
 

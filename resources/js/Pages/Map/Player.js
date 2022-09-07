@@ -2,6 +2,7 @@ import Vector3 from './Vector3';
 import {shouldIgnoreInvisible, mapNumber, replaceLast} from './helper';
 import {Character, Vehicle} from './Objects';
 import L from "leaflet";
+import Bounds from "./map.config";
 
 const IconSizes = {
     circle: 17,
@@ -13,8 +14,8 @@ const IconSizes = {
 };
 
 class Player {
-    constructor(rawData, staffMembers, onDutyList) {
-        this.update(rawData, staffMembers, onDutyList);
+    constructor(rawData, staffMembers) {
+        this.update(rawData, staffMembers);
     }
 
     static fixData(rawData) {
@@ -27,7 +28,7 @@ class Player {
         return rawData;
     }
 
-    update(rawData, staffMembers, onDutyList) {
+    update(rawData, staffMembers) {
         const flags = Player.getPlayerFlags(rawData);
 
         this.player = {
@@ -55,7 +56,6 @@ class Player {
 
         this.invisible = {
             raw: invisible,
-            time: rawData.invisible_since,
             value: invisible && !shouldIgnoreInvisible(staffMembers, rawData, this.character)
         };
 
@@ -66,12 +66,7 @@ class Player {
             staff: this.player.isStaff
         };
 
-        this.onDuty = 'none';
-        if (onDutyList.police.includes(this.player.steam)) {
-            this.onDuty = 'police';
-        } else if (onDutyList.ems.includes(this.player.steam)) {
-            this.onDuty = 'ems';
-        }
+        this.onDuty = rawData.duty ? rawData.duty.type : 'none';
 
         this.icon = {
             dead: this.character && this.character.isDead,
@@ -95,6 +90,16 @@ class Player {
     static getPlayerFlags(player) {
         let flags = player.flags ? player.flags : 0;
 
+        const modifiedCameraCoords = flags / 8 >= 1
+        if (modifiedCameraCoords) {
+            flags -= 8
+        }
+
+        const inMiniGame = flags / 4 >= 1
+        if (inMiniGame) {
+            flags -= 4
+        }
+
         const fakeDisconnected = flags / 2 >= 1
         if (fakeDisconnected) {
             flags -= 2
@@ -104,7 +109,9 @@ class Player {
 
         return {
             identityOverride: identityOverride,
-            fakeDisconnected: fakeDisconnected
+            fakeDisconnected: fakeDisconnected,
+            inMiniGame: inMiniGame,
+            modifiedCameraCoords: modifiedCameraCoords
         }
     }
 
@@ -161,6 +168,15 @@ class Player {
     }
 
     getIcon(highlightedPeople) {
+        if (Bounds.calibrating) {
+            return new L.Icon(
+                {
+                    iconUrl: '/images/icons/calibrate.png',
+                    iconSize: [20, 20]
+                }
+            );
+        }
+
         let icon = new L.Icon(
             {
                 iconUrl: '/images/icons/circle.png',
