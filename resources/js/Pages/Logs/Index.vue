@@ -188,7 +188,10 @@
                             </span>
                             <span v-else>Start</span>
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block" v-else>{{ log.timestamp | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block" v-else>
+                            {{ log.timestamp | formatTime(true) }}
+                            <i class="block text-xs leading-1 whitespace-nowrap text-yellow-600 dark:text-yellow-400">{{ formatRawTimestamp(log.timestamp) }}</i>
+                        </td>
                     </tr>
                     <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
@@ -355,6 +358,9 @@ export default {
             this.filters.action = this.drugActions.map(e => '=' + e).join(',');
 
             this.refresh();
+        },
+        formatRawTimestamp(timestamp) {
+            return this.$moment(timestamp).unix();
         },
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
