@@ -245,6 +245,8 @@
         "notify_type": "Notification type",
         "no_notify": "No notifications",
         "historic_title": "Historic Data",
+        "timestamp_title": "Timestamp Data",
+        "timestamp_date": "Timestamp",
         "historic_steam": "Steam Identifier",
         "historic_from": "From",
         "historic_till": "Till",

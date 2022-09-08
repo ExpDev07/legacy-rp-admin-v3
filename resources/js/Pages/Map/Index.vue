@@ -38,6 +38,15 @@
                     {{ t('map.screenshot') }}
                 </button>
 
+                <!-- Show Timestamp -->
+                <button
+                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="isTimestamp = true"
+                    v-if="this.perm.check(this.perm.PERM_ADVANCED)">
+                    <i class="fas fa-vial"></i>
+                    {{ t('map.timestamp_title') }}
+                </button>
+
                 <!-- Show Historic -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -264,6 +273,37 @@
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                             @click="isHistoric = false">
+                        {{ t('global.cancel') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isTimestamp">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                <h3 class="mb-2">
+                    {{ t('map.timestamp_title') }}
+                </h3>
+
+                <!-- From -->
+                <div class="w-full p-3 flex justify-between px-0">
+                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_steam">
+                        {{ t('map.timestamp_date') }}
+                    </label>
+                    <input class="w-2/3 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
+                           v-model="form.timestamp"/>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex items-center mt-2">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded mr-2"
+                            @click="showTimestamp">
+                        <i class="mr-1 fas fa-plus"></i>
+                        {{ t('global.confirm') }}
+                    </button>
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            @click="isTimestamp = false">
                         {{ t('global.cancel') }}
                     </button>
                 </div>
@@ -886,6 +926,8 @@ export default {
 
                 screenshotId: 0,
 
+                timestamp: Math.floor(Date.now() / 1000),
+
                 historic_steam: '',
                 historic_from_date: '',
                 historic_from_time: '',
@@ -928,6 +970,7 @@ export default {
             historyMarker: null,
             loadingScreenStatus: null,
 
+            isTimestamp: false,
             isHistoric: false,
 
             historyRange: {
@@ -1212,6 +1255,17 @@ export default {
                 ));
             }
         },
+        async showTimestamp() {
+            const timestamp = this.form.timestamp;
+
+            if (timestamp && timestamp > 0 && timestamp < Date.now() / 1000) {
+                this.isTimestamp = false;
+
+                await this.renderTimestamp(timestamp);
+            } else {
+                alert('Invalid timestamp');
+            }
+        },
         async showHistory() {
             const fromUnix = this.$moment(this.form.historic_from_date + ' ' + this.form.historic_from_time).unix();
             const tillUnix = this.$moment(this.form.historic_till_date + ' ' + this.form.historic_till_time).unix();
@@ -1371,13 +1425,15 @@ export default {
                 for (let x = 0; x < players.length; x++) {
                     const player = players[x];
 
+                    console.log(player)
+
                     const location = Vector3.fromGameCoords(player.x, player.y, 0.0);
 
                     let marker = L.marker(location.toMap(),
                         {
                             icon: new L.Icon(
                                 {
-                                    iconUrl: '/images/icons/circle.png',
+                                    iconUrl: `/images/icons/${player.i ? 'circle_green' : 'circle'}.png`,
                                     iconSize: [17, 17]
                                 }
                             ),
@@ -1438,7 +1494,7 @@ export default {
         },
         async loadTimestamp(server, timestamp) {
             try {
-                const result = await axios.get(this.hostname(false) + '/history/timestamp/' + server + '/' + timestamp + '?token=' + this.token + '&cluster=' + this.cluster);
+                const result = await axios.get(this.hostname(false) + '/timestamp/' + server + '/' + timestamp + '?token=' + this.token);
 
                 this.loadingScreenStatus = this.t('map.timestamp_parse');
                 if (result.data && result.data.status) {
@@ -1451,8 +1507,9 @@ export default {
 
                         players.push({
                             steam: "steam:" + steam.replace(".csv", ""),
-                            x: coords[0],
-                            y: coords[1]
+                            x: coords.x,
+                            y: coords.y,
+                            i: coords.i
                         });
                     }
 
