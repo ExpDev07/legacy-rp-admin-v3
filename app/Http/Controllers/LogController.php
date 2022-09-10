@@ -155,7 +155,7 @@ class LogController extends Controller
             'page' => $page,
             'drugActions' => self::DRUG_LOGS,
             'canSearchDrugs' => $canSearchDrugs,
-            'actions' => CacheHelper::getLogActions(true)
+            'actions' => CacheHelper::getLogActions()
         ]);
     }
 
