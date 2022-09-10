@@ -405,12 +405,14 @@ export default {
 
             this.searchTimeout = setTimeout(() => {
                 this.searchingActions = false;
-            }, 100);
+            }, 250);
         },
         searchActions() {
             clearTimeout(this.searchTimeout);
 
-            const search = this.filters.action ? this.filters.action.trim().toLowerCase() : '';
+            let search = this.filters.action ? this.filters.action.trim().toLowerCase() : '';
+
+            search = search.startsWith('=') ? search.substring(1) : search;
 
             if (search === '') {
                 this.searchingActions = false;
