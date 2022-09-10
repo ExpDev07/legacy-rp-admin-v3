@@ -52,7 +52,7 @@
                                     <button
                                         class="block text-left w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 transition duration-200 hover:bg-gray-300 hover:dark:bg-gray-500"
                                         :class="{'border-b' : index < searchableActions.length-1}"
-                                        v-for="(action, index) in searchableActions" @click="selectAction(action)">
+                                        v-for="(action, index) in searchableActions" @click="selectAction(action.action)">
                                         {{ action.action }}
                                         <sup class="text-muted dark:text-dark-muted">{{ numberFormat(action.count, 0, false) }}</sup>
                                     </button>
