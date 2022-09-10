@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Log;
 use App\Player;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -10,10 +11,10 @@ use Psr\SimpleCache\InvalidArgumentException;
 class CacheHelper
 {
     const MINUTE = 60;
-    const HOUR   = self::MINUTE * 60;
-    const DAY    = self::HOUR * 24;
-    const WEEK   = self::DAY * 7;
-    const MONTH  = self::DAY * 30;
+    const HOUR = self::MINUTE * 60;
+    const DAY = self::HOUR * 24;
+    const WEEK = self::DAY * 7;
+    const MONTH = self::DAY * 30;
 
     /**
      * Loads a map for steamIdentifier->PlayerName
@@ -51,6 +52,25 @@ class CacheHelper
     }
 
     /**
+     * Array of possible log actions
+     *
+     * @param bool $forceRefresh
+     * @return array
+     */
+    public static function getLogActions(bool $forceRefresh = false): array
+    {
+        $actions = self::read('actions', null);
+
+        if (!$actions || $forceRefresh) {
+            $actions = Log::query()->selectRaw('action, COUNT(action) as count')->groupBy('action')->get()->toArray();
+
+            self::write('actions', $actions, self::HOUR * 2);
+        }
+
+        return $actions;
+    }
+
+    /**
      * Get model -> display name map
      *
      * @return array
@@ -64,7 +84,7 @@ class CacheHelper
             if ($map) {
                 $list = [];
 
-                foreach($map['data'] as $model) {
+                foreach ($map['data'] as $model) {
                     $list[] = $model;
                 }
 

@@ -1793,7 +1793,7 @@ export default {
                 ],
             }).addTo(this.map);
 
-            this.map.setView([-124, 124], 3);
+            this.map.setView([-159.287, 124.773], 3);
 
             L.control.layers({}, this.layers).addTo(this.map);
 

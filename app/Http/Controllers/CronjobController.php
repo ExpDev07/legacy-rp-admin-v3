@@ -18,6 +18,18 @@ use Illuminate\Support\Str;
 class CronjobController extends Controller
 {
     /**
+     * General purpose cronjobs
+     *
+     * @return Response
+     */
+    public function generalCronjob(): Response
+    {
+        CacheHelper::getLogActions(true);
+
+        return (new Response('Success', 200))->header('Content-Type', 'text/plain');
+    }
+
+    /**
      * Stores statistics for bans of the current day
      *
      * @param Request $request
@@ -93,45 +105,6 @@ class CronjobController extends Controller
 
             $today->update();
         }
-    }
-
-    public function evaders(Request $request): \Illuminate\Http\Response
-    {
-        if (!$this->validateRequest($request)) {
-            return $this->json(false, null, 'Invalid token');
-        }
-
-        $players = Player::query()
-            ->select([
-                'steam_identifier', 'timestamp', 'identifiers'
-            ])
-            ->leftJoin('user_bans', 'identifier', '=', 'steam_identifier')
-            ->whereNotNull('timestamp')->get();
-
-
-        $ips = [];
-
-        /**
-         * @var $player Player
-         */
-        foreach($players as $player) {
-            $identifiers = $player->getIdentifiers();
-
-            $ip = null;
-            foreach($identifiers as $identifier) {
-                if (Str::startsWith($identifier, 'ip:')) {
-                    $ip = $identifier;
-
-                    break;
-                }
-            }
-
-            if ($ip) {
-                $ips[$ip] = $player->steam_identifier;
-            }
-        }
-
-        return $this->json(true, $ips);
     }
 
     /**
