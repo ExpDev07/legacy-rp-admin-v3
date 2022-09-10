@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use WhichBrowser\Cache;
 
 class LogController extends Controller
 {
@@ -153,7 +154,8 @@ class LogController extends Controller
             'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
             'page' => $page,
             'drugActions' => self::DRUG_LOGS,
-            'canSearchDrugs' => $canSearchDrugs
+            'canSearchDrugs' => $canSearchDrugs,
+            'actions' => CacheHelper::getLogActions(true)
         ]);
     }
 

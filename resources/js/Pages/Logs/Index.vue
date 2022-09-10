@@ -27,7 +27,9 @@
             </template>
 
             <template>
-                <form @submit.prevent>
+                <form @submit.prevent autocomplete="off">
+                    <input autocomplete="false" name="hidden" type="text" class="hidden"/>
+
                     <div class="flex flex-wrap mb-4">
                         <!-- Identifier -->
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
@@ -38,12 +40,24 @@
                                    id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
                         </div>
                         <!-- Action -->
-                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3 relative">
                             <label class="block mb-2" for="action">
                                 {{ t('logs.action') }} <sup class="text-muted dark:text-dark-muted">**, C</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
-                                   id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action">
+                                   id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action"
+                                   @keyup="searchActions()" @blur="cancelActionSearch()" @focus="searchActions()">
+                            <div class="w-full absolute top-full left-0 px-3 z-10" v-if="searchingActions">
+                                <div class="max-h-40 overflow-y-auto rounded-b border">
+                                    <button
+                                        class="block text-left w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 transition duration-200 hover:bg-gray-300 hover:dark:bg-gray-500"
+                                        :class="{'border-b' : index < searchableActions.length-1}"
+                                        v-for="(action, index) in searchableActions" @click="selectAction(action.action)">
+                                        {{ action.action }}
+                                        <sup class="text-muted dark:text-dark-muted">{{ numberFormat(action.count, 0, false) }}</sup>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <!-- Server -->
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
@@ -66,7 +80,8 @@
                             <label class="block mb-3 mt-3" for="after-date">
                                 {{ t('logs.after-date') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="after-date"
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                   id="after-date"
                                    type="date" placeholder="">
                         </div>
                         <!-- After Time -->
@@ -149,7 +164,8 @@
                         <th class="px-6 py-4">{{ t('logs.details') }}</th>
                         <th class="px-6 py-4">
                             {{ t('logs.timestamp') }}
-                            <a href="#" :title="t('logs.toggle_diff')" @click="$event.preventDefault();showLogTimeDifference = !showLogTimeDifference">
+                            <a href="#" :title="t('logs.toggle_diff')"
+                               @click="$event.preventDefault();showLogTimeDifference = !showLogTimeDifference">
                                 <i class="fas fa-stopwatch"></i>
                             </a>
                         </th>
@@ -174,21 +190,29 @@
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ log.action }}
-                            <a href="#" @click="detailedAction($event, log)" class="block text-xs leading-1 text-blue-600 dark:text-blue-400 whitespace-nowrap" v-if="log.metadata">
+                            <a href="#" @click="detailedAction($event, log)"
+                               class="block text-xs leading-1 text-blue-600 dark:text-blue-400 whitespace-nowrap"
+                               v-if="log.metadata">
                                 {{ t('logs.metadata.show') }}
                             </a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)">
                             {{ parseLog(log.details) }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block" v-if="showLogTimeDifference" :title="t('logs.diff_label')">
+                        <td class="px-6 py-3 border-t mobile:block" v-if="showLogTimeDifference"
+                            :title="t('logs.diff_label')">
                             <span v-if="index+1 < logs.length">
-                                {{ formatSecondDiff(stamp(log.timestamp) - stamp(logs[index+1].timestamp)) }}
+                                {{ formatSecondDiff(stamp(log.timestamp) - stamp(logs[index + 1].timestamp)) }}
                                 <i class="fas fa-arrow-down"></i>
                             </span>
                             <span v-else>Start</span>
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block" v-else>{{ log.timestamp | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block" v-else>
+                            {{ log.timestamp | formatTime(true) }}
+                            <i class="block text-xs leading-1 whitespace-nowrap text-yellow-600 dark:text-yellow-400">{{
+                                    formatRawTimestamp(log.timestamp)
+                                }}</i>
+                        </td>
                     </tr>
                     <tr v-if="logs.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
@@ -246,7 +270,9 @@
             </template>
 
             <template #actions>
-                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="showLogDetail = false">
+                <button type="button"
+                        class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400"
+                        @click="showLogDetail = false">
                     {{ t('global.close') }}
                 </button>
             </template>
@@ -261,14 +287,19 @@
 
             <template #default>
                 <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.details') }}:</p>
-                <pre class="block mb-2 text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{ parseLogMetadata(logMetadata) || 'N/A' }}</pre>
+                <pre class="block mb-2 text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{
+                        parseLogMetadata(logMetadata) || 'N/A'
+                    }}</pre>
 
                 <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.raw') }}:</p>
-                <pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded" v-html="logMetadataJSON">{{ logMetadataJSON }}</pre>
+                <pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded"
+                     v-html="logMetadataJSON">{{ logMetadataJSON }}</pre>
             </template>
 
             <template #actions>
-                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="showLogMetadata = false; logMetadata = null">
+                <button type="button"
+                        class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400"
+                        @click="showLogMetadata = false; logMetadata = null">
                     {{ t('global.close') }}
                 </button>
             </template>
@@ -286,6 +317,7 @@ import Modal from './../../Components/Modal';
 import hljs from 'highlight.js';
 
 import json from 'highlight.js/lib/languages/json';
+
 hljs.registerLanguage('json', json);
 
 import 'highlight.js/styles/github-dark-dimmed.css';
@@ -333,6 +365,9 @@ export default {
         canSearchDrugs: {
             type: Boolean,
             required: true,
+        },
+        actions: {
+            type: Array
         }
     },
     data() {
@@ -347,14 +382,53 @@ export default {
             showLogTimeDifference: false,
             logMetadata: null,
             showLogMetadata: false,
-            logMetadataJSON: ''
+            logMetadataJSON: '',
+            searchingActions: false,
+            searchableActions: [],
+
+            searchTimeout: false
         };
     },
     methods: {
+        selectAction(action) {
+            clearTimeout(this.searchTimeout);
+
+            this.filters.action = action;
+            this.searchingActions = false;
+        },
+        cancelActionSearch() {
+            clearTimeout(this.searchTimeout);
+
+            this.searchTimeout = setTimeout(() => {
+                this.searchingActions = false;
+            }, 100);
+        },
+        searchActions() {
+            clearTimeout(this.searchTimeout);
+
+            const search = this.filters.action ? this.filters.action.trim().toLowerCase() : '';
+
+            if (search === '') {
+                this.searchingActions = false;
+
+                return;
+            }
+
+            const actions = this.actions ? this.actions.filter(action => action.action.toLowerCase().includes(search)) : [];
+            actions.sort((a, b) => {
+                return b.count - a.count;
+            });
+
+            this.searchableActions = actions;
+            this.searchingActions = true;
+        },
         showDrugLogs() {
             this.filters.action = this.drugActions.map(e => '=' + e).join(',');
 
             this.refresh();
+        },
+        formatRawTimestamp(timestamp) {
+            return this.$moment(timestamp).unix();
         },
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
@@ -486,8 +560,8 @@ export default {
 
                 const html = $('<div />').append(
                     $('<a></a>', {
-                        "data-reason" : match,
-                        "data-description" : description,
+                        "data-reason": match,
+                        "data-description": description,
                         "class": "text-yellow-800 dark:text-yellow-200 exit-log",
                         "href": "#"
                     }).text(match)
@@ -536,7 +610,7 @@ export default {
     },
     mounted() {
         const _this = this;
-        $('body').on('click', 'a.exit-log', function(e) {
+        $('body').on('click', 'a.exit-log', function (e) {
             e.preventDefault();
             const parent = $(this).closest('tr');
 

@@ -229,7 +229,8 @@ Route::group(['prefix' => 'cron'], function () {
     // economy statistics cronjob
     Route::get('economy', [CronjobController::class, 'updateEconomyStatistics']);
 
-    Route::get('/evaders', [CronjobController::class, 'evaders']);
+    // General purpose cronjobs
+    Route::get('general', [CronjobController::class, 'generalCronjob']);
 });
 
 Route::group(['prefix' => 'debug'], function () {
