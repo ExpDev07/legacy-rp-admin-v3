@@ -47,14 +47,18 @@
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
                                    id="action" :placeholder="t('logs.placeholder_action')" v-model="filters.action"
                                    @keyup="searchActions()" @blur="cancelActionSearch()" @focus="searchActions()">
-                            <div class="w-full absolute top-full left-0 px-3 z-10" v-if="searchingActions">
+                            <div class="w-full absolute top-full left-0 px-3 z-10"
+                                 v-if="searchingActions && searchableActions.length > 0">
                                 <div class="max-h-40 overflow-y-auto rounded-b border">
                                     <button
                                         class="block text-left w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 transition duration-200 hover:bg-gray-300 hover:dark:bg-gray-500"
                                         :class="{'border-b' : index < searchableActions.length-1}"
-                                        v-for="(action, index) in searchableActions" @click="selectAction(action.action)">
+                                        v-for="(action, index) in searchableActions"
+                                        @click="selectAction('=' + action.action)">
                                         {{ action.action }}
-                                        <sup class="text-muted dark:text-dark-muted">{{ numberFormat(action.count, 0, false) }}</sup>
+                                        <sup class="text-muted dark:text-dark-muted">{{
+                                                numberFormat(action.count, 0, false)
+                                            }}</sup>
                                     </button>
                                 </div>
                             </div>
@@ -401,12 +405,14 @@ export default {
 
             this.searchTimeout = setTimeout(() => {
                 this.searchingActions = false;
-            }, 100);
+            }, 250);
         },
         searchActions() {
             clearTimeout(this.searchTimeout);
 
-            const search = this.filters.action ? this.filters.action.trim().toLowerCase() : '';
+            let search = this.filters.action ? this.filters.action.trim().toLowerCase() : '';
+
+            search = search.startsWith('=') ? search.substring(1) : search;
 
             if (search === '') {
                 this.searchingActions = false;

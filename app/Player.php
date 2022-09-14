@@ -466,7 +466,7 @@ class Player extends Model
     public function fasterWarnings(bool $includeHidden = false): array
     {
         $warnings = Warning::query()
-            ->select(['id', 'message', 'warning_type', 'created_at', 'updated_at', 'player_name', 'steam_identifier'])
+            ->select(['id', 'message', 'warning_type', 'created_at', 'updated_at', 'player_name', 'steam_identifier', 'can_be_deleted'])
             ->where('player_id', '=', $this->user_id)
             ->leftJoin('users', 'issuer_id', '=', 'user_id');
 
@@ -484,6 +484,7 @@ class Player extends Model
                 'warningType' => $warning->warning_type,
                 'createdAt' => $warning->created_at,
                 'updatedAt' => $warning->updated_at,
+                'canDelete' => $warning->can_be_deleted,
                 'issuer' => [
                     'avatar' => $warning->steam_identifier ? Player::getAvatar($warning->steam_identifier) : null,
                     'playerName' => $warning->player_name,

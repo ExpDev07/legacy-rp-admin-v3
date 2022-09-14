@@ -813,7 +813,7 @@
                                 <button
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-yellow-500 rounded"
                                     @click="warningEditId = warning.id"
-                                    v-if="warningEditId !== warning.id && $page.auth.player.steamIdentifier === warning.issuer.steamIdentifier"
+                                    v-if="warningEditId !== warning.id && $page.auth.player.steamIdentifier === warning.issuer.steamIdentifier && warning.warningType !== 'system'"
                                 >
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -834,7 +834,8 @@
                                 <inertia-link
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
                                     method="DELETE"
-                                    v-bind:href="'/players/' + player.steamIdentifier + '/warnings/' + warning.id">
+                                    v-bind:href="'/players/' + player.steamIdentifier + '/warnings/' + warning.id"
+                                    v-if="warning.canDelete || $page.auth.player.isSeniorStaff">
                                     <i class="fas fa-trash"></i>
                                 </inertia-link>
                             </div>
