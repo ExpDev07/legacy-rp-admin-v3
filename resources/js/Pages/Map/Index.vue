@@ -407,7 +407,11 @@
                         <p class="text-center text-sm">{{ historicDetails }}</p>
                     </div>
 
-                    <div class="flex flex-wrap justify-between mb-2 w-map max-w-full">
+                    <div class="w-full mb-2">
+                        <canvas width="1160" height="140" v-if="historicChart" id="historicChart"></canvas>
+                    </div>
+
+                    <div class="flex flex-wrap justify-between mb-2 w-map max-w-full" v-if="!historicChart">
                         <div class="flex flex-wrap">
                             <input type="text"
                                    class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600"
@@ -989,12 +993,17 @@ export default {
 
             historicDetails: '',
 
+            historicChart: false,
+
             historyRange: {
                 view: false,
                 min: 0,
                 max: 1,
                 val: 0,
-                data: []
+                data: [],
+
+                minAltitude: 0,
+                maxAltitude: 0
             },
 
             activeViewers: [],
@@ -1228,11 +1237,13 @@ export default {
                 this.historyRangeChange();
             }
         },
-        historyRangeChange() {
+        historyRangeChange(timestamp) {
             if (this.historyRange && this.historyMarker) {
-                const val = $('#range-slider').val();
+                const val = Number.isInteger(timestamp) ? timestamp : $('#range-slider').val();
 
                 let pos = this.historyRange.data[val];
+
+                this.renderAltitudeChart(val);
 
                 if (!pos) {
                     pos = this.historyRange.data[val - 1];
@@ -1246,12 +1257,12 @@ export default {
                     label = (new Date(val * 1000)).toGMTString() + ' (' + val + ')';
 
                 const flags = [
-                    pos.i ? 'invisible' : false,
-                    pos.c ? 'invincible' : false,
-                    pos.f ? 'frozen' : false
+                    pos && pos.i ? 'invisible' : false,
+                    pos && pos.c ? 'invincible' : false,
+                    pos && pos.f ? 'frozen' : false
                 ].filter(flag => flag).join(", ");
 
-                this.historicDetails = "Flags: " + (flags ? flags : 'N/A') + " - Altitude: " + pos.z + "m";
+                this.historicDetails = "Flags: " + (flags ? flags : 'N/A') + " - Altitude: " + (pos ? pos.z + "m" : "N/A");
 
                 if (pos) {
                     const coords = Vector3.fromGameCoords(parseInt(pos.x), parseInt(pos.y), 0).toMap();
@@ -1277,11 +1288,92 @@ export default {
                 ));
             }
         },
+        renderAltitudeChart(timestamp) {
+            const fromTime = parseInt(timestamp),
+                tillTime = fromTime + 60;
+
+            const canvas = document.getElementById("historicChart");
+
+            if (canvas) {
+                let data = [],
+                    colors = [];
+
+                for (let x = fromTime; x < tillTime; x++) {
+                    let pos = this.historyRange.data[x];
+
+                    if (!pos) {
+                        pos = this.historyRange.data[x - 1];
+
+                        if (!pos) {
+                            pos = this.historyRange.data[x + 1];
+                        }
+                    }
+
+                    const val = pos ? pos.z : null;
+
+                    data.push(val);
+
+                    colors.push(pos ? (pos.i ? '#67e467' : '#4d4dff') : '#ff4d4d');
+                }
+
+                const cWidth = canvas.width - 2,
+                    cHeight = canvas.height - 2;
+
+                const min = this.historyRange.minAltitude,
+                    max = this.historyRange.maxAltitude - min,
+                    width = cWidth / data.length;
+
+                let lastValue = false;
+
+                const ctx = canvas.getContext('2d');
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let x = 0; x < data.length; x++) {
+                    const value = data[x] ? data[x] : lastValue;
+
+                    if (lastValue !== false) {
+                        const x2 = x * width,
+                            y2 = Math.max(
+                                Math.min(
+                                    (((value - min) / max) * cHeight) + 1,
+                                    canvas.height - 1),
+                                1);
+
+                        ctx.lineTo(x2, y2);
+                        ctx.closePath();
+
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = colors[x];
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(x2, y2);
+                    } else {
+                        const x1 = 1,
+                            y1 = value ? (((value - min) / max) * cHeight) + 1 : 1;
+
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                    }
+
+                    if (value) {
+                        lastValue = value;
+                    }
+                }
+            } else {
+                setTimeout(() => {
+                    this.renderAltitudeChart(timestamp);
+                }, 100);
+            }
+        },
         async showTimestamp() {
             const timestamp = this.form.timestamp;
 
             if (timestamp && timestamp > 0 && timestamp < Date.now() / 1000) {
                 this.isTimestamp = false;
+
+                this.stopTracking();
 
                 await this.renderTimestamp(timestamp);
             } else {
@@ -1296,6 +1388,8 @@ export default {
                 if (this.form.historic_steam || !this.form.historic_steam.startsWith('steam:')) {
                     this.isHistoric = false;
 
+                    this.stopTracking();
+
                     await this.renderHistory(this.form.historic_steam.replace('steam:', ''), fromUnix, tillUnix);
                 } else {
                     alert('Invalid steam identifier');
@@ -1309,6 +1403,8 @@ export default {
                 return;
             }
             this.loadingScreenStatus = this.t('map.heatmap_fetch');
+
+            this.historicChart = false;
 
             const server = $('#server').val(),
                 history = await this.loadHistory(server, steam, from, till);
@@ -1326,6 +1422,8 @@ export default {
             this.historyRange.view = false;
 
             if (history) {
+                this.historicChart = true;
+
                 $('.leaflet-control-layers-selector').each(function () {
                     if ($(this).prop('checked')) {
                         $(this).trigger('click');
@@ -1379,9 +1477,16 @@ export default {
                     }
                 ));
 
-                this.historyRange.val = this.historyRange.val = (new Date(timestamps[0] * 1000)).toGMTString() + ' (' + timestamps[0] + ')';
+                const temp = Object.values(history).map(entry => entry.z);
+
+                this.historyRange.minAltitude = Math.min(...temp);
+                this.historyRange.maxAltitude = Math.max(...temp);
+
+                this.historyRange.val = (new Date(timestamps[0] * 1000)).toGMTString() + ' (' + timestamps[0] + ')';
                 this.historyRange.min = timestamps[0];
                 this.historyRange.max = timestamps[timestamps.length - 1];
+
+                console.log(timestamps[0]);
 
                 this.historyRange.data = history;
 
@@ -1391,6 +1496,8 @@ export default {
                 this.historyMarker.addTo(this.map);
 
                 this.map.fitBounds(this.heatmapLayer.getBounds());
+
+                this.historyRangeChange(parseInt(timestamps[0]));
             }
 
             this.loadingScreenStatus = null;
@@ -1415,6 +1522,8 @@ export default {
             return null;
         },
         async renderTimestamp(timestamp) {
+            this.historicChart = false;
+
             if (this.loadingScreenStatus) {
                 return;
             }
