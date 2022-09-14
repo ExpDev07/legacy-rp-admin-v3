@@ -72,8 +72,8 @@ class PlayerBanController extends Controller
 
         return Inertia::render('Players/Bans', [
             'players' => $players->toArray(),
-            'links'   => $this->getPageUrls($page),
-            'page'    => $page
+            'links' => $this->getPageUrls($page),
+            'page' => $page
         ]);
     }
 
@@ -96,8 +96,8 @@ class PlayerBanController extends Controller
 
         // Create ban.
         $ban = array_merge([
-            'ban_hash'           => $hash,
-            'creator_name'       => $user->player->player_name,
+            'ban_hash' => $hash,
+            'creator_name' => $user->player->player_name,
             'creator_identifier' => $user->player->steam_identifier,
         ], $request->validated());
 
@@ -105,7 +105,7 @@ class PlayerBanController extends Controller
         $identifiers = $player->getBannableIdentifiers();
 
         // Go through the player's identifiers and create a ban record for each of them.
-        foreach($identifiers as $identifier) {
+        foreach ($identifiers as $identifier) {
             $b = $ban;
             $b['identifier'] = $identifier;
 
@@ -122,7 +122,8 @@ class PlayerBanController extends Controller
         // Automatically log the ban as a warning.
         $player->warnings()->create([
             'issuer_id' => $user->player->user_id,
-            'message'   => $reason . ' This warning was generated automatically as a result of banning someone.',
+            'message' => $reason . ' This warning was generated automatically as a result of banning someone.',
+            'can_be_deleted' => 0,
         ]);
 
         $kickReason = $request->input('reason')
@@ -154,7 +155,7 @@ class PlayerBanController extends Controller
         // Automatically log the ban update as a warning.
         $player->warnings()->create([
             'issuer_id' => $user->player->user_id,
-            'message'   => 'I removed this players ban.',
+            'message' => 'I removed this players ban.',
         ]);
 
         return back()->with('success', 'The player has successfully been unbanned.');
@@ -189,6 +190,7 @@ class PlayerBanController extends Controller
     /**
      * Display the specified resource for editing.
      *
+     * @param Request $request
      * @param Player $player
      * @param Ban $ban
      * @return Response
@@ -201,7 +203,7 @@ class PlayerBanController extends Controller
 
         return Inertia::render('Players/Ban/Edit', [
             'player' => new PlayerResource($player),
-            'ban'    => new BanResource($ban),
+            'ban' => new BanResource($ban),
         ]);
     }
 
@@ -276,7 +278,7 @@ class PlayerBanController extends Controller
         // Automatically log the ban update as a warning.
         $player->warnings()->create([
             'issuer_id' => $user->player->user_id,
-            'message'   => $message .
+            'message' => $message .
                 'This warning was generated automatically as a result of updating a ban.',
         ]);
 
@@ -302,7 +304,7 @@ class PlayerBanController extends Controller
 
         $identifiers = $player->getIdentifiers();
 
-        foreach($identifiers as $identifier) {
+        foreach ($identifiers as $identifier) {
             if (Str::startsWith($identifier, 'ip:')) {
                 $info = GeneralHelper::ipInfo(str_replace('ip:', '', $identifier));
 
@@ -337,13 +339,13 @@ class PlayerBanController extends Controller
 
         $linked = [];
 
-        foreach($players as $found) {
+        foreach ($players as $found) {
             if ($found->steam_identifier !== $steam) {
                 $ips = [];
 
                 $identifiers = $found->getIdentifiers();
 
-                foreach($identifiers as $identifier) {
+                foreach ($identifiers as $identifier) {
                     if (Str::startsWith($identifier, 'ip:')) {
                         $ips[] = $identifier;
                     }

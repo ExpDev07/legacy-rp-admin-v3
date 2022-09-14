@@ -7,6 +7,7 @@ use App\Http\Requests\WarningStoreRequest;
 use App\Player;
 use App\Warning;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class PlayerWarningController extends Controller
 {
@@ -45,6 +46,10 @@ class PlayerWarningController extends Controller
      */
     public function update(Player $player, Warning $warning, WarningStoreRequest $request): RedirectResponse
     {
+        if (!$warning->can_be_deleted) {
+            abort(401);
+        }
+
         $staffIdentifier = $request->user()->player->steam_identifier;
         $issuer = $warning->issuer()->first();
 
@@ -60,12 +65,19 @@ class PlayerWarningController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param Player $player
      * @param Warning $warning
      * @return RedirectResponse
      */
-    public function destroy(Player $player, Warning $warning): RedirectResponse
+    public function destroy(Request $request, Player $player, Warning $warning): RedirectResponse
     {
+        $isSenior = $this->isSeniorStaff($request);
+
+        if (!$warning->can_be_deleted && !$isSenior) {
+            abort(401);
+        }
+
         $warning->forceDelete();
 
         return back()->with('success', 'The warning/note has successfully been deleted from the player\'s record.');

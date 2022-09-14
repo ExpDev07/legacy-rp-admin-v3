@@ -35,6 +35,7 @@ class Warning extends Model
         'issuer_id',
         'message',
         'warning_type',
+        'can_be_deleted',
     ];
 
     /**
