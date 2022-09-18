@@ -16,6 +16,8 @@ class Character {
         c.name = rawData.character.fullName;
         c.isDead = characterFlags.dead;
         c.invisible = characterFlags.invisible;
+        c.invincible = characterFlags.invincible;
+        c.frozen = characterFlags.frozen;
         c.inShell = characterFlags.shell;
         c.inTrunk = characterFlags.trunk;
         c.isDriving = rawData.vehicle && rawData.vehicle.driving;
@@ -26,6 +28,16 @@ class Character {
     static getCharacterFlags(character) {
         if (character) {
             let flags = character.flags ? character.flags : 0;
+
+            const frozen = flags / 32 >= 1
+            if (frozen) {
+                flags -= 32
+            }
+
+            const invincible = flags / 16 >= 1
+            if (invincible) {
+                flags -= 16
+            }
 
             const invisible = flags / 8 >= 1
             if (invisible) {
