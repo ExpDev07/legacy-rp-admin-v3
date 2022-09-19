@@ -1195,9 +1195,9 @@ export default {
             const isDev = window.location.hostname === 'localhost';
 
             if (isSocket) {
-                return isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com';
+                return isDev ? 'ws://localhost:9999' : 'wss://map.opfw.net';
             } else {
-                return isDev ? 'http://localhost:9999' : 'https://map.legacy-roleplay.com';
+                return isDev ? 'http://localhost:9999' : 'https://opfw.net';
             }
         },
         async createScreenshot() {
