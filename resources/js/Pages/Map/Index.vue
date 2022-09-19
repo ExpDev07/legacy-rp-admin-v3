@@ -1197,7 +1197,7 @@ export default {
             if (isSocket) {
                 return isDev ? 'ws://localhost:9999' : 'wss://map.opfw.net';
             } else {
-                return isDev ? 'http://localhost:9999' : 'https://opfw.net';
+                return isDev ? 'http://localhost:9999' : 'https://map.opfw.net';
             }
         },
         async createScreenshot() {
