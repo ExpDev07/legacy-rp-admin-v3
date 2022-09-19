@@ -1646,6 +1646,7 @@ export default {
 
                     return players;
                 } else if (result.data && !result.data.status) {
+                    alert(result.data.error);
                     console.error(result.data.error);
                 }
             } catch (e) {
