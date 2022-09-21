@@ -369,208 +369,226 @@
                             v-if="isAttachingScreenshot"/>
 
         <template>
-            <div class="-mt-12" id="map-wrapper">
-                <div v-if="historyRange.view" class="mb-3">
-                    <div class="flex">
-                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+            <div class="-mt-12 flex flex-wrap">
+                <div class="w-map mr-10" id="map-wrapper">
+                    <div v-if="historyRange.view" class="mb-3">
+                        <div class="flex">
+                            <button
+                                class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
                                 @click="historyRangeButton(-20)">-20s
-                        </button>
-                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                            </button>
+                            <button
+                                class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
                                 @click="historyRangeButton(-5)">-5s
-                        </button>
-                        <button class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                            </button>
+                            <button
+                                class="px-2 py-1 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
                                 @click="historyRangeButton(-1)">-1s
-                        </button>
+                            </button>
 
-                        <input type="range" :min="historyRange.min" :max="historyRange.max" value="0"
-                               @change="historyRangeChange" @input="historyRangeChange" id="range-slider"
-                               class="w-full px-2 py-1 range bg-transparent"/>
+                            <input type="range" :min="historyRange.min" :max="historyRange.max" value="0"
+                                   @change="historyRangeChange" @input="historyRangeChange" id="range-slider"
+                                   class="w-full px-2 py-1 range bg-transparent"/>
 
-                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                            <button
+                                class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
                                 @click="historyRangeButton(1)">+1s
-                        </button>
-                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                            </button>
+                            <button
+                                class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
                                 @click="historyRangeButton(5)">+5s
-                        </button>
-                        <button class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                            </button>
+                            <button
+                                class="px-2 py-1 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
                                 @click="historyRangeButton(20)">+20s
-                        </button>
+                            </button>
+                        </div>
+                        <p class="text-center">{{ historyRange.val }}</p>
+                        <p class="text-center text-sm">{{ historicDetails }}</p>
                     </div>
-                    <p class="text-center">{{ historyRange.val }}</p>
-                </div>
 
-                <div class="flex flex-wrap justify-between mb-2 w-map max-w-full">
-                    <div class="flex flex-wrap">
-                        <input type="text"
-                               class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600"
-                               :placeholder="t('map.track_placeholder')" v-model="tracking.id"/>
-                        <select
-                            class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1"
-                            v-model="tracking.type">
-                            <option value="server_">{{ t('map.track_server') }}</option>
-                            <option value="">{{ t('map.track_steam') }}</option>
-                            <option value="player_">{{ t('map.track_character') }}</option>
-                        </select>
-                        <button
-                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                            @click="trackId(tracking.type + tracking.id)">
-                            {{ t('map.do_track') }}
-                        </button>
-                        <button
-                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                            @click="stopTracking()" v-if="container.isTrackedPlayerVisible">
-                            {{ t('global.stop') }}
-                        </button>
+                    <div class="w-full mb-2">
+                        <canvas width="1160" height="140" v-if="historicChart" id="historicChart"></canvas>
                     </div>
-                    <div class="flex flex-wrap">
-                        <button
-                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                            @click="isNotification = true">
-                            {{ t('map.notify_add') }}
-                        </button>
-                        <button
-                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                            @click="addArea(false)">
-                            {{ t('map.area_add') }}
-                        </button>
-                        <button
-                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                            @click="addArea(true)"
-                            :title="t('map.quick_area_title')"
-                        >
-                            {{ t('map.quick_area') }}
-                        </button>
-                        <button
-                            class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
-                            @click="advancedTracking = !advancedTracking"
-                            :title="advancedTracking ? t('global.enabled') : t('global.disabled')"
-                        >
-                            {{ t('map.advanced_track') }}
-                            <i class="fas fa-check ml-1" v-if="advancedTracking"></i>
-                            <i class="fas fa-times ml-1" v-else></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="relative w-map max-w-full">
-                    <div id="map" class="w-map max-w-full relative h-max"></div>
-                    <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k"
-                         v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{ clickedCoords }}</span> / <span
-                        @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
-                    <pre
-                        class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
-                        v-if="advancedTracking && container.isTrackedPlayerVisible"
-                    >{{ tracking.data.advanced }}</pre>
-                    <div
-                        class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
-                        :class="{'hidden' : !advancedTracking || !container.isTrackedPlayerVisible}"
-                    >
-                        <div class="relative w-map-other-gauge">
-                            <img src="/images/height-indicator.png" style="height: 90px" alt="Height indicator"/>
-                            <div
-                                class="font-bold absolute border-b-2 border-gray-700 left-8 text-gray-700 w-map-height-ind text-right text-xxs leading-3"
-                                :style="'bottom: ' + tracking.data.alt + '%;'"
+
+                    <div class="flex flex-wrap justify-between mb-2 w-map max-w-full" v-if="!historicChart">
+                        <div class="flex flex-wrap">
+                            <input type="text"
+                                   class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600"
+                                   :placeholder="t('map.track_placeholder')" v-model="tracking.id"/>
+                            <select
+                                class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1"
+                                v-model="tracking.type">
+                                <option value="server_">{{ t('map.track_server') }}</option>
+                                <option value="">{{ t('map.track_steam') }}</option>
+                                <option value="player_">{{ t('map.track_character') }}</option>
+                            </select>
+                            <button
+                                class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                                @click="trackId(tracking.type + tracking.id)">
+                                {{ t('map.do_track') }}
+                            </button>
+                            <button
+                                class="px-5 py-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                                @click="stopTracking()" v-if="container.isTrackedPlayerVisible">
+                                {{ t('global.stop') }}
+                            </button>
+                        </div>
+                        <div class="flex flex-wrap">
+                            <button
+                                class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                                @click="isNotification = true">
+                                {{ t('map.notify_add') }}
+                            </button>
+                            <button
+                                class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                                @click="addArea(false)">
+                                {{ t('map.area_add') }}
+                            </button>
+                            <button
+                                class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                                @click="addArea(true)"
+                                :title="t('map.quick_area_title')"
                             >
-                                {{ tracking.data.altitude }}
-                            </div>
+                                {{ t('map.quick_area') }}
+                            </button>
+                            <button
+                                class="px-5 py-2 ml-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary mobile:block mobile:w-full mobile:m-0 mobile:mt-1"
+                                @click="advancedTracking = !advancedTracking"
+                                :title="advancedTracking ? t('global.enabled') : t('global.disabled')"
+                            >
+                                {{ t('map.advanced_track') }}
+                                <i class="fas fa-check ml-1" v-if="advancedTracking"></i>
+                                <i class="fas fa-times ml-1" v-else></i>
+                            </button>
                         </div>
-                        <vue-speedometer
-                            class="inline-block"
-                            :value="tracking.data.speed"
-                            labelFontSize="12px"
-                            :ringWidth="20"
-                            :height="90"
-                            :width="120"
-                            startColor="#90EF90"
-                            endColor="#fa1e43"
-                            :minValue="0"
-                            :maxValue="360"
-                            :segments="4"
-                            currentValueText="${value}mph"
-                            valueTextFontSize="14px"
-                            :needleHeightRatio="0.7"
-                        />
                     </div>
-
-                    <div v-if="rightClickedPlayer.id"
-                         class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
+                    <div class="relative w-map max-w-full">
+                        <div id="map" class="w-map max-w-full relative h-max"></div>
+                        <pre class="bg-opacity-70 bg-white coordinate-attr absolute bottom-0 left-0 cursor-pointer z-1k"
+                             v-if="clickedCoords"><span @click="copyText($event, clickedCoords)">{{
+                                clickedCoords
+                            }}</span> / <span
+                            @click="copyText($event, coordsCommand)">{{ t('map.command') }}</span></pre>
+                        <pre
+                            class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr2 right-0 z-1k p-2 text-gray-800 text-xs"
+                            v-if="advancedTracking && container.isTrackedPlayerVisible"
+                        >{{ tracking.data.advanced }}</pre>
                         <div
-                            class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
-                            <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name">{{ rightClickedPlayer.name }}</h2>
-                            <p class="text-muted dark:text-dark-muted mb-1">
-                                <span class="font-semibold">{{ t('players.steam') }}:</span>
-                                <a :href="'/players/' + rightClickedPlayer.id" target="_blank"
-                                   class="text-blue-600 dark:text-blue-400 italic">{{ rightClickedPlayer.id }}</a>
-                            </p>
-                            <p class="text-muted dark:text-dark-muted mb-3">
-                                <span class="font-semibold">{{ t('players.name') }}:</span>
-                                <span class="italic">{{ rightClickedPlayer.playerName }}</span>
-                            </p>
-                            <div class="flex justify-between">
-                                <button
-                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
-                                    @click="trackId(rightClickedPlayer.id)"
-                                    v-if="!rightClickedPlayer.tracked">
-                                    {{ t('map.do_track') }}
-                                </button>
-                                <button
-                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger"
-                                    @click="stopTracking()"
-                                    v-else>
-                                    {{ t('map.stop_track') }}
-                                </button>
+                            class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
+                            :class="{'hidden' : !advancedTracking || !container.isTrackedPlayerVisible}"
+                        >
+                            <div class="relative w-map-other-gauge">
+                                <img src="/images/height-indicator.png" style="height: 90px" alt="Height indicator"/>
+                                <div
+                                    class="font-bold absolute border-b-2 border-gray-700 left-8 text-gray-700 w-map-height-ind text-right text-xxs leading-3"
+                                    :style="'bottom: ' + tracking.data.alt + '%;'"
+                                >
+                                    {{ tracking.data.altitude }}
+                                </div>
+                            </div>
+                            <vue-speedometer
+                                class="inline-block"
+                                :value="tracking.data.speed"
+                                labelFontSize="12px"
+                                :ringWidth="20"
+                                :height="90"
+                                :width="120"
+                                startColor="#90EF90"
+                                endColor="#fa1e43"
+                                :minValue="0"
+                                :maxValue="360"
+                                :segments="4"
+                                currentValueText="${value}mph"
+                                valueTextFontSize="14px"
+                                :needleHeightRatio="0.7"
+                            />
+                        </div>
 
-                                <button
-                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
-                                    @click="highlightSteam(rightClickedPlayer.id)"
-                                    v-if="!(rightClickedPlayer.id in highlightedPeople)">
-                                    {{ t('map.do_highlight') }}
-                                </button>
-                                <button
-                                    class="px-5 py-2 mr-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger"
-                                    @click="stopHighlight($event, rightClickedPlayer.id)"
-                                    v-else>
-                                    {{ t('map.stop_highlight') }}
-                                </button>
+                        <div v-if="rightClickedPlayer.id"
+                             class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
+                            <div
+                                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
+                                <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name">{{
+                                        rightClickedPlayer.name
+                                    }}</h2>
+                                <p class="text-muted dark:text-dark-muted mb-1">
+                                    <span class="font-semibold">{{ t('players.steam') }}:</span>
+                                    <a :href="'/players/' + rightClickedPlayer.id" target="_blank"
+                                       class="text-blue-600 dark:text-blue-400 italic">{{ rightClickedPlayer.id }}</a>
+                                </p>
+                                <p class="text-muted dark:text-dark-muted mb-3">
+                                    <span class="font-semibold">{{ t('players.name') }}:</span>
+                                    <span class="italic">{{ rightClickedPlayer.playerName }}</span>
+                                </p>
+                                <div class="flex justify-between">
+                                    <button
+                                        class="px-5 py-2 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                        @click="trackId(rightClickedPlayer.id)"
+                                        v-if="!rightClickedPlayer.tracked">
+                                        {{ t('map.do_track') }}
+                                    </button>
+                                    <button
+                                        class="px-5 py-2 mr-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger"
+                                        @click="stopTracking()"
+                                        v-else>
+                                        {{ t('map.stop_track') }}
+                                    </button>
 
-                                <button type="button"
-                                        class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
-                                        @click="rightClickedPlayer.id = null">
-                                    {{ t('global.close') }}
-                                </button>
+                                    <button
+                                        class="px-5 py-2 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
+                                        @click="highlightSteam(rightClickedPlayer.id)"
+                                        v-if="!(rightClickedPlayer.id in highlightedPeople)">
+                                        {{ t('map.do_highlight') }}
+                                    </button>
+                                    <button
+                                        class="px-5 py-2 mr-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger"
+                                        @click="stopHighlight($event, rightClickedPlayer.id)"
+                                        v-else>
+                                        {{ t('map.stop_highlight') }}
+                                    </button>
+
+                                    <button type="button"
+                                            class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                                            @click="rightClickedPlayer.id = null">
+                                        {{ t('global.close') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Map Legend -->
-                <div class="my-2 flex flex-wrap -mx-2 justify-between text-xs w-map max-w-full">
-                    <div class="mx-2">
-                        <img src="/images/icons/circle.png" class="w-map-icon inline-block" alt="on foot"/>
-                        <span class="leading-map-icon">Someone is on foot</span>
-                    </div>
-                    <div class="mx-2">
-                        <img src="/images/icons/circle_green.png" class="w-map-icon inline-block" alt="invisible"/>
-                        <span class="leading-map-icon">Someone is invisible</span>
-                    </div>
-                    <div class="mx-2">
-                        <img src="/images/icons/circle_red.png" class="w-map-icon inline-block" alt="passenger"/>
-                        <span class="leading-map-icon">Someone is a passenger</span>
-                    </div>
-                    <div class="mx-2">
-                        <img src="/images/icons/skull.png" class="w-map-icon inline-block" alt="dead"/>
-                        <span class="leading-map-icon">Someone is dead</span>
-                    </div>
-                    <div class="mx-2">
-                        <img src="/images/icons/skull_red.png" class="w-map-icon inline-block" alt="dead passenger"/>
-                        <span class="leading-map-icon">Someone is dead and a passenger</span>
-                    </div>
-                    <div class="mx-2">
-                        <img src="/images/icons/circle_police.png" class="w-map-icon inline-block" alt="police"/>
-                        <span class="leading-map-icon">Someone is on duty as police</span>
-                    </div>
-                    <div class="mx-2">
-                        <img src="/images/icons/circle_ems.png" class="w-map-icon inline-block" alt="ems"/>
-                        <span class="leading-map-icon">Someone is on duty as ems</span>
+                    <!-- Map Legend -->
+                    <div class="my-2 flex flex-wrap -mx-2 justify-between text-xs w-map max-w-full">
+                        <div class="mx-2">
+                            <img src="/images/icons/circle.png" class="w-map-icon inline-block" alt="on foot"/>
+                            <span class="leading-map-icon">Someone is on foot</span>
+                        </div>
+                        <div class="mx-2">
+                            <img src="/images/icons/circle_green.png" class="w-map-icon inline-block" alt="invisible"/>
+                            <span class="leading-map-icon">Someone is invisible</span>
+                        </div>
+                        <div class="mx-2">
+                            <img src="/images/icons/circle_red.png" class="w-map-icon inline-block" alt="passenger"/>
+                            <span class="leading-map-icon">Someone is a passenger</span>
+                        </div>
+                        <div class="mx-2">
+                            <img src="/images/icons/skull.png" class="w-map-icon inline-block" alt="dead"/>
+                            <span class="leading-map-icon">Someone is dead</span>
+                        </div>
+                        <div class="mx-2">
+                            <img src="/images/icons/skull_red.png" class="w-map-icon inline-block"
+                                 alt="dead passenger"/>
+                            <span class="leading-map-icon">Someone is dead and a passenger</span>
+                        </div>
+                        <div class="mx-2">
+                            <img src="/images/icons/circle_police.png" class="w-map-icon inline-block" alt="police"/>
+                            <span class="leading-map-icon">Someone is on duty as police</span>
+                        </div>
+                        <div class="mx-2">
+                            <img src="/images/icons/circle_ems.png" class="w-map-icon inline-block" alt="ems"/>
+                            <span class="leading-map-icon">Someone is on duty as ems</span>
+                        </div>
                     </div>
                 </div>
 
@@ -806,6 +824,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import SimplePlayerList from './../../Components/Map/SimplePlayerList';
@@ -973,12 +992,19 @@ export default {
             isTimestamp: false,
             isHistoric: false,
 
+            historicDetails: '',
+
+            historicChart: false,
+
             historyRange: {
                 view: false,
                 min: 0,
                 max: 1,
                 val: 0,
-                data: []
+                data: [],
+
+                minAltitude: 0,
+                maxAltitude: 0
             },
 
             activeViewers: [],
@@ -1170,9 +1196,9 @@ export default {
             const isDev = window.location.hostname === 'localhost';
 
             if (isSocket) {
-                return isDev ? 'ws://localhost:9999' : 'wss://map.legacy-roleplay.com';
+                return isDev ? 'ws://localhost:9999' : 'wss://map.opfw.net';
             } else {
-                return isDev ? 'http://localhost:9999' : 'https://map.legacy-roleplay.com';
+                return isDev ? 'http://localhost:9999' : 'https://map.opfw.net';
             }
         },
         async createScreenshot() {
@@ -1212,11 +1238,13 @@ export default {
                 this.historyRangeChange();
             }
         },
-        historyRangeChange() {
+        historyRangeChange(timestamp) {
             if (this.historyRange && this.historyMarker) {
-                const val = $('#range-slider').val();
+                const val = Number.isInteger(timestamp) ? timestamp : $('#range-slider').val();
 
                 let pos = this.historyRange.data[val];
+
+                this.renderAltitudeChart(val);
 
                 if (!pos) {
                     pos = this.historyRange.data[val - 1];
@@ -1226,8 +1254,21 @@ export default {
                     }
                 }
 
+                const timezone = new Date(val * 1000).toLocaleDateString('en-US', {
+                    day: '2-digit',
+                    timeZoneName: 'short',
+                }).slice(4);
+
                 let icon = "circle",
-                    label = (new Date(val * 1000)).toGMTString() + ' (' + val + ')';
+                    label = moment.unix(val).format("MM/DD/YYYY - h:mmss") + ' ' + timezone + ' (' + val + ')';
+
+                const flags = [
+                    pos && pos.i ? 'invisible' : false,
+                    pos && pos.c ? 'invincible' : false,
+                    pos && pos.f ? 'frozen' : false
+                ].filter(flag => flag).join(", ");
+
+                this.historicDetails = "Flags: " + (flags ? flags : 'N/A') + " - Altitude: " + (pos ? pos.z + "m" : "N/A");
 
                 if (pos) {
                     const coords = Vector3.fromGameCoords(parseInt(pos.x), parseInt(pos.y), 0).toMap();
@@ -1236,8 +1277,6 @@ export default {
 
                     if (pos.i) {
                         icon = "circle_green";
-
-                        label += ' [invisible]';
                     }
                 } else {
                     label += ' [no-data]';
@@ -1255,11 +1294,92 @@ export default {
                 ));
             }
         },
+        renderAltitudeChart(timestamp) {
+            const fromTime = parseInt(timestamp),
+                tillTime = fromTime + 60;
+
+            const canvas = document.getElementById("historicChart");
+
+            if (canvas) {
+                let data = [],
+                    colors = [];
+
+                for (let x = fromTime; x < tillTime; x++) {
+                    let pos = this.historyRange.data[x];
+
+                    if (!pos) {
+                        pos = this.historyRange.data[x - 1];
+
+                        if (!pos) {
+                            pos = this.historyRange.data[x + 1];
+                        }
+                    }
+
+                    const val = pos ? pos.z : null;
+
+                    data.push(val);
+
+                    colors.push(pos ? (pos.i ? '#67e467' : '#4d4dff') : '#ff4d4d');
+                }
+
+                const cWidth = canvas.width - 2,
+                    cHeight = canvas.height - 2;
+
+                const min = this.historyRange.minAltitude,
+                    max = this.historyRange.maxAltitude - min,
+                    width = cWidth / data.length;
+
+                let lastValue = false;
+
+                const ctx = canvas.getContext('2d');
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let x = 0; x < data.length; x++) {
+                    const value = data[x] ? data[x] : lastValue;
+
+                    if (lastValue !== false) {
+                        const x2 = x * width,
+                            y2 = Math.max(
+                                Math.min(
+                                    (((value - min) / max) * cHeight) + 1,
+                                    canvas.height - 1),
+                                1);
+
+                        ctx.lineTo(x2, y2);
+                        ctx.closePath();
+
+                        ctx.lineWidth = 2;
+                        ctx.strokeStyle = colors[x];
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(x2, y2);
+                    } else {
+                        const x1 = 1,
+                            y1 = value ? (((value - min) / max) * cHeight) + 1 : 1;
+
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                    }
+
+                    if (value) {
+                        lastValue = value;
+                    }
+                }
+            } else {
+                setTimeout(() => {
+                    this.renderAltitudeChart(timestamp);
+                }, 100);
+            }
+        },
         async showTimestamp() {
             const timestamp = this.form.timestamp;
 
             if (timestamp && timestamp > 0 && timestamp < Date.now() / 1000) {
                 this.isTimestamp = false;
+
+                this.stopTracking();
 
                 await this.renderTimestamp(timestamp);
             } else {
@@ -1274,6 +1394,8 @@ export default {
                 if (this.form.historic_steam || !this.form.historic_steam.startsWith('steam:')) {
                     this.isHistoric = false;
 
+                    this.stopTracking();
+
                     await this.renderHistory(this.form.historic_steam.replace('steam:', ''), fromUnix, tillUnix);
                 } else {
                     alert('Invalid steam identifier');
@@ -1287,6 +1409,8 @@ export default {
                 return;
             }
             this.loadingScreenStatus = this.t('map.heatmap_fetch');
+
+            this.historicChart = false;
 
             const server = $('#server').val(),
                 history = await this.loadHistory(server, steam, from, till);
@@ -1304,6 +1428,8 @@ export default {
             this.historyRange.view = false;
 
             if (history) {
+                this.historicChart = true;
+
                 $('.leaflet-control-layers-selector').each(function () {
                     if ($(this).prop('checked')) {
                         $(this).trigger('click');
@@ -1357,9 +1483,16 @@ export default {
                     }
                 ));
 
-                this.historyRange.val = this.historyRange.val = (new Date(timestamps[0] * 1000)).toGMTString() + ' (' + timestamps[0] + ')';
+                const temp = Object.values(history).map(entry => entry.z);
+
+                this.historyRange.minAltitude = Math.min(...temp);
+                this.historyRange.maxAltitude = Math.max(...temp);
+
+                this.historyRange.val = (new Date(timestamps[0] * 1000)).toGMTString() + ' (' + timestamps[0] + ')';
                 this.historyRange.min = timestamps[0];
                 this.historyRange.max = timestamps[timestamps.length - 1];
+
+                console.log(timestamps[0]);
 
                 this.historyRange.data = history;
 
@@ -1369,6 +1502,8 @@ export default {
                 this.historyMarker.addTo(this.map);
 
                 this.map.fitBounds(this.heatmapLayer.getBounds());
+
+                this.historyRangeChange(parseInt(timestamps[0]));
             }
 
             this.loadingScreenStatus = null;
@@ -1393,6 +1528,8 @@ export default {
             return null;
         },
         async renderTimestamp(timestamp) {
+            this.historicChart = false;
+
             if (this.loadingScreenStatus) {
                 return;
             }
@@ -1515,6 +1652,7 @@ export default {
 
                     return players;
                 } else if (result.data && !result.data.status) {
+                    alert(result.data.error);
                     console.error(result.data.error);
                 }
             } catch (e) {

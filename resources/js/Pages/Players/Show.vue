@@ -5,12 +5,15 @@
                 <h1 class="dark:text-white">
                     {{ player.playerName }}
                 </h1>
-                <div class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
-                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copyShare">
+                <div
+                    class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
+                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer"
+                           :click="copyShare">
                         <i class="fas fa-share-square mr-1"></i>
                         <span>{{ t('global.copy_link') }}</span>
                     </badge>
-                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer" :click="copySteam">
+                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer"
+                           :click="copySteam">
                         <i class="fab fa-steam mr-1"></i>
                         <span>{{ t('players.show.copy_steam') }}</span>
                     </badge>
@@ -18,16 +21,20 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
-                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" v-if="player.isTrusted && !player.isStaff">
+                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700"
+                           v-if="player.isTrusted && !player.isStaff">
                         <span class="font-semibold">{{ t('global.trusted') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isStaff && !player.isSeniorStaff">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
+                           v-if="player.isStaff && !player.isSeniorStaff">
                         <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSeniorStaff && !player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
+                           v-if="player.isSeniorStaff && !player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.senior_staff') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
+                           v-if="player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
 
@@ -54,7 +61,8 @@
                         <span class="font-semibold">{{ t('global.status.' + player.status.status) }}</span>
                     </badge>
 
-                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary" :title="formatSecondDiff(player.playTime)" v-html="local.played">
+                    <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary"
+                           :title="formatSecondDiff(player.playTime)" v-html="local.played">
                         {{ local.played }}
                     </badge>
 
@@ -81,24 +89,29 @@
         <div class="flex flex-wrap justify-between mb-6">
             <div class="mb-3 flex flex-wrap">
                 <!-- Tusted Panel User -->
-                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2 mr-3" v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
+                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2 mr-3"
+                       v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
                     <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
-                    <a href="#" @click="removeTrustedPanel($event)" class="ml-1 text-white" :title="t('players.show.remove_panel_trusted')" v-if="!player.isSuperAdmin">
+                    <a href="#" @click="removeTrustedPanel($event)" class="ml-1 text-white"
+                       :title="t('players.show.remove_panel_trusted')" v-if="!player.isSuperAdmin">
                         <i class="fas fa-times"></i>
                     </a>
                 </badge>
 
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="addTrustedPanel()" v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && player.isStaff">
+                    @click="addTrustedPanel()"
+                    v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && player.isStaff">
                     <i class="fas fa-glass-cheers"></i>
                     {{ t('players.show.add_panel_trusted') }}
                 </button>
 
                 <!-- Soft Ban -->
-                <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale py-2 mr-3" v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && player.isSoftBanned">
+                <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale py-2 mr-3"
+                       v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && player.isSoftBanned">
                     <span class="font-semibold">{{ t('global.soft_banned') }}</span>
-                    <a href="#" @click="removeSoftBan($event)" class="ml-1 text-white" :title="t('players.show.remove_soft_ban')">
+                    <a href="#" @click="removeSoftBan($event)" class="ml-1 text-white"
+                       :title="t('players.show.remove_soft_ban')">
                         <i class="fas fa-times"></i>
                     </a>
                 </badge>
@@ -111,47 +124,61 @@
                 </button>
 
                 <!-- Panel drug department -->
-                <badge class="border-orange-200 bg-warning-pale dark:bg-dark-warning-pale py-2 mr-3" v-if="$page.auth.player.isSuperAdmin && player.panelDrugDepartment">
+                <badge class="border-orange-200 bg-warning-pale dark:bg-dark-warning-pale py-2 mr-3"
+                       v-if="$page.auth.player.isSuperAdmin && player.panelDrugDepartment">
                     <span class="font-semibold">{{ t('global.panel_drug_department') }}</span>
                 </badge>
             </div>
 
-            <div class="mb-3 flex flex-wrap justify-end">
+            <div class="absolute top-2 right-2 flex">
                 <!-- Add Tag -->
                 <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="py-1 px-2 ml-2 font-semibold text-white rounded bg-success dark:bg-dark-success block"
                     @click="isTagging = true"
+                    :title="t('players.show.edit_tag')"
                     v-if="this.perm.check(this.perm.PERM_EDIT_TAG)"
                 >
                     <i class="fas fa-tag"></i>
-                    {{ t('players.show.edit_tag') }}
+                </button>
+                <!-- Create screen capture -->
+                <button
+                    class="py-1 px-2 ml-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 block"
+                    @click="isScreenCapture = true"
+                    :title="t('screenshot.screencapture')"
+                    v-if="player.status.status === 'online' && this.perm.check(this.perm.PERM_SCREENSHOT)"
+                >
+                    <i class="fas fa-video"></i>
                 </button>
                 <!-- Create screenshot -->
                 <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="py-1 px-2 ml-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 block"
                     @click="isScreenshot = true; createScreenshot()"
+                    :title="t('screenshot.screenshot')"
                     v-if="player.status.status === 'online' && this.perm.check(this.perm.PERM_SCREENSHOT)"
                 >
                     <i class="fas fa-camera"></i>
-                    {{ t('screenshot.screenshot') }}
                 </button>
                 <!-- View on Map -->
                 <a
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="py-1 px-2 ml-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 block"
                     :href="'/map#' + player.steamIdentifier"
+                    :title="t('global.view_map')"
                     v-if="this.perm.check(this.perm.PERM_LIVEMAP) && player.status.status === 'online'"
                     target="_blank"
                 >
                     <i class="fas fa-map"></i>
-                    {{ t('global.view_map') }}
                 </a>
                 <!-- Revive -->
                 <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="revivePlayer()" v-if="player.status.status === 'online'">
+                    class="py-1 px-2 ml-2 font-semibold text-white rounded bg-success dark:bg-dark-success block"
+                    @click="revivePlayer()" v-if="player.status.status === 'online'"
+                    :title="t('players.show.revive')"
+                >
                     <i class="fas fa-heartbeat"></i>
-                    {{ t('players.show.revive') }}
                 </button>
+            </div>
+
+            <div class="mb-3 flex flex-wrap justify-end">
                 <!-- StaffPM -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
@@ -192,7 +219,8 @@
                 <!-- Lock ban -->
                 <inertia-link
                     class="px-5 py-2 ml-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    method="POST" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/lock'"
+                    method="POST"
+                    v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/lock'"
                     v-if="player.isBanned && !player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
                     <i class="mr-1 fas fa-lock"></i>
                     {{ t('players.show.lock_ban') }}
@@ -200,7 +228,8 @@
                 <!-- Lock ban -->
                 <inertia-link
                     class="px-5 py-2 ml-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    method="POST" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/unlock'"
+                    method="POST"
+                    v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/unlock'"
                     v-if="player.isBanned && player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
                     <i class="mr-1 fas fa-lock-open"></i>
                     {{ t('players.show.unlock_ban') }}
@@ -210,7 +239,8 @@
 
         <!-- Linked Accounts -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
-            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.show.linked_title') }}</h3>
                 <div v-if="isShowingLinkedLoading">
                     <div class="flex justify-center items-center my-6 mt-12">
@@ -221,10 +251,13 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked" :key="identifier">
+                    <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked"
+                         :key="identifier">
                         <div class="p-3 w-1/2 relative">
                             <b class="block">{{ link.label }}</b>
-                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{ identifier }}</pre>
+                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{
+                                    identifier
+                                }}</pre>
 
                             <button
                                 class="p-1 absolute top-0 right-0 text-xs font-semibold bg-transparent text-red-600 dark:text-red-400 rounded"
@@ -252,7 +285,9 @@
                     </div>
                 </div>
                 <div class="flex justify-end mt-2">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isShowingLinked = false">
+                    <button type="button"
+                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isShowingLinked = false">
                         {{ t('global.close') }}
                     </button>
                 </div>
@@ -261,7 +296,8 @@
 
         <!-- Unloading -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isUnloading">
-            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.show.unload') }}</h3>
                 <form class="space-y-6" @submit.prevent="unloadCharacter">
                     <!-- Message -->
@@ -295,16 +331,22 @@
 
         <!-- Tag -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isTagging">
-            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.show.edit_tag') }}</h3>
                 <form class="space-y-6">
                     <div class="flex">
-                        <select class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 mr-1" v-model="tagCategory">
+                        <select class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 mr-1"
+                                v-model="tagCategory">
                             <option value="custom">{{ t('players.show.tag_custom') }}</option>
-                            <option :value="tag.panel_tag" :key="tag.panel_tag" v-for="tag in tags">{{ tag.panel_tag }}</option>
+                            <option :value="tag.panel_tag" :key="tag.panel_tag" v-for="tag in tags">{{
+                                    tag.panel_tag
+                                }}
+                            </option>
                         </select>
 
-                        <input type="text" class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 ml-1" v-if="tagCategory === 'custom'" v-model="tagCustom" />
+                        <input type="text" class="px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600 w-1/2 ml-1"
+                               v-if="tagCategory === 'custom'" v-model="tagCustom"/>
                     </div>
 
                     <!-- Buttons -->
@@ -329,7 +371,8 @@
 
         <!-- Linked Accounts -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
-            <div class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
                 <h3 class="mb-2">{{ t('players.show.linked_title') }}</h3>
                 <div v-if="isShowingLinkedLoading">
                     <div class="flex justify-center items-center my-6 mt-12">
@@ -340,10 +383,13 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked" :key="identifier">
+                    <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked"
+                         :key="identifier">
                         <div class="p-3 w-1/2 relative">
                             <b class="block">{{ link.label }}</b>
-                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{ identifier }}</pre>
+                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{
+                                    identifier
+                                }}</pre>
 
                             <button
                                 class="p-1 absolute top-0 right-0 text-xs font-semibold bg-transparent text-red-600 dark:text-red-400 rounded"
@@ -371,7 +417,9 @@
                     </div>
                 </div>
                 <div class="flex justify-end mt-2">
-                    <button type="button" class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary" @click="isShowingLinked = false">
+                    <button type="button"
+                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isShowingLinked = false">
                         {{ t('global.close') }}
                     </button>
                 </div>
@@ -662,8 +710,11 @@
                             <h3 class="mb-2">
                                 {{ character.name }} (#{{ character.id }})
                             </h3>
-                            <h4 class="text-primary dark:text-dark-primary" :title="t('players.characters.created', $moment(character.characterCreationTimestamp).format('l'))">
-                                <span>{{ t('players.edit.dob') }}:</span> {{ $moment(character.dateOfBirth).format('l') }}
+                            <h4 class="text-primary dark:text-dark-primary"
+                                :title="t('players.characters.created', $moment(character.characterCreationTimestamp).format('l'))">
+                                <span>{{ t('players.edit.dob') }}:</span> {{
+                                    $moment(character.dateOfBirth).format('l')
+                                }}
                             </h4>
                             <h4 class="text-red-700 dark:text-red-300" v-if="character.characterDeleted">
                                 <span>{{ t('players.edit.deleted') }}:</span>
@@ -689,7 +740,8 @@
                             <div class="flex justify-between flex-wrap">
                                 <button
                                     class="block w-full px-4 py-3 2xl:w-split text-center text-white mt-3 bg-warning dark:bg-dark-warning rounded"
-                                    v-if="player.status.status === 'online' && player.status.character === character.id" @click="form.unload.character = character.id; isUnloading = true">
+                                    v-if="player.status.status === 'online' && player.status.character === character.id"
+                                    @click="form.unload.character = character.id; isUnloading = true">
                                     <i class="fas fa-bolt mr-1"></i>
                                     {{ t('players.show.unload') }}
                                 </button>
@@ -800,14 +852,18 @@
                                 <h4>
                                     {{ warning.issuer.playerName }}
                                     -
-                                    <span v-html="wrapWarningType(warning.warningType)">{{ wrapWarningType(warning.warningType) }}</span>
+                                    <span v-html="wrapWarningType(warning.warningType)">{{
+                                            wrapWarningType(warning.warningType)
+                                        }}</span>
                                 </h4>
                             </div>
                             <div class="flex items-center">
                                 <span class="text-muted dark:text-dark-muted">
                                     {{ warning.createdAt | formatTime }}
                                 </span>
-                                <sup class="ml-2 italic text-sm text-gray-600 dark:text-gray-400" v-if="warning.updatedAt !== warning.createdAt" :title="t('players.show.warning_edited_title', formatTime(warning.updatedAt))">
+                                <sup class="ml-2 italic text-sm text-gray-600 dark:text-gray-400"
+                                     v-if="warning.updatedAt !== warning.createdAt"
+                                     :title="t('players.show.warning_edited_title', formatTime(warning.updatedAt))">
                                     {{ t('players.show.warning_edited') }}
                                 </sup>
                                 <button
@@ -844,9 +900,11 @@
 
                     <template>
                         <p class="text-muted dark:text-dark-muted" v-if="warningEditId !== warning.id">
-                            <span class="whitespace-pre-line" v-html="formatWarning(warning.message)">{{ formatWarning(warning.message) }}</span>
+                            <span class="whitespace-pre-line"
+                                  v-html="formatWarning(warning.message)">{{ formatWarning(warning.message) }}</span>
                         </p>
-                        <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" :id="'warning_' + warning.id" v-else-if="warningEditId === warning.id">{{ warning.message }}</textarea>
+                        <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                  :id="'warning_' + warning.id" v-else-if="warningEditId === warning.id">{{ warning.message }}</textarea>
                     </template>
                 </card>
                 <p class="text-muted dark:text-dark-muted" v-if="filteredWarnings.length === 0">
@@ -871,19 +929,24 @@
                     >
                     </textarea>
 
-                    <button class="px-5 py-2 font-semibold text-white bg-red-500 dark:bg-red-500 rounded" @click="form.warning.warning_type = 'strike'" type="submit">
+                    <button class="px-5 py-2 font-semibold text-white bg-red-500 dark:bg-red-500 rounded"
+                            @click="form.warning.warning_type = 'strike'" type="submit">
                         <i class="mr-1 fas fa-bolt"></i>
                         {{ t('players.warning.do_strike') }}
                     </button>
-                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-yellow-600 rounded" @click="form.warning.warning_type = 'warning'" type="submit">
+                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-yellow-600 rounded"
+                            @click="form.warning.warning_type = 'warning'" type="submit">
                         <i class="mr-1 fas fa-exclamation-triangle"></i>
                         {{ t('players.warning.do_warn') }}
                     </button>
-                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-yellow-400 dark:bg-yellow-500 rounded" @click="form.warning.warning_type = 'note'" type="submit">
+                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-yellow-400 dark:bg-yellow-500 rounded"
+                            @click="form.warning.warning_type = 'note'" type="submit">
                         <i class="mr-1 fas fa-sticky-note"></i>
                         {{ t('players.warning.do_note') }}
                     </button>
-                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-pink-400 dark:bg-pink-500 rounded" @click="form.warning.warning_type = 'hidden'" type="submit" v-if="$page.auth.player.isSeniorStaff">
+                    <button class="px-5 py-2 ml-2 font-semibold text-white bg-pink-400 dark:bg-pink-500 rounded"
+                            @click="form.warning.warning_type = 'hidden'" type="submit"
+                            v-if="$page.auth.player.isSeniorStaff">
                         <i class="mr-1 fas fa-eye-slash"></i>
                         {{ t('players.warning.do_hidden_note') }}
                     </button>
@@ -906,19 +969,24 @@
                         <th class="px-6 py-4">{{ t('screenshot.note') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.created_at') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in sortedScreenshots"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4"
+                        v-for="screenshot in sortedScreenshots"
                         :key="screenshot.system ? screenshot.url : screenshot.filename">
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.system">
-                            <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
+                            <a :href="screenshot.url" target="_blank"
+                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>
-                            <a :href="'/export/screenshot/' + screenshot.filename" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
+                            <a :href="'/export/screenshot/' + screenshot.filename" target="_blank"
+                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <i class="fas fa-cogs mr-1" v-if="screenshot.system"></i>
                             {{ screenshot.note || 'N/A' }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">{{ screenshot.created_at * 1000 | formatTime(true) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">
+                            {{ screenshot.created_at * 1000 | formatTime(true) }}
+                        </td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>{{ t('global.unknown') }}</td>
                     </tr>
                     <tr v-if="sortedScreenshots.length === 0">
@@ -961,7 +1029,8 @@
         </v-section>
 
         <!-- Screenshot -->
-        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k" v-if="isScreenshot && this.perm.check(this.perm.PERM_SCREENSHOT)">
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k"
+             v-if="isScreenshot && this.perm.check(this.perm.PERM_SCREENSHOT)">
             <div
                 class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
                 <h3 class="mb-2">
@@ -973,11 +1042,13 @@
                 </p>
 
                 <div class="relative min-h-50">
-                    <a v-if="screenshotImage && !screenshotError" class="w-full" :class="{'blur-sm' : isScreenshotLoading}" :href="screenshotImage" target="_blank">
-                        <img :src="screenshotImage" alt="Screenshot" class="w-full" />
+                    <a v-if="screenshotImage && !screenshotError" class="w-full"
+                       :class="{'blur-sm' : isScreenshotLoading}" :href="screenshotImage" target="_blank">
+                        <img :src="screenshotImage" alt="Screenshot" class="w-full"/>
                     </a>
 
-                    <div class="flex justify-center absolute top-0 left-0 w-full top-1/2 transform -translate-y-1/2" v-if="isScreenshotLoading">
+                    <div class="flex justify-center absolute top-0 left-0 w-full top-1/2 transform -translate-y-1/2"
+                         v-if="isScreenshotLoading">
                         <i class="fas fa-cog animate-spin text-3xl"></i>
                     </div>
                 </div>
@@ -1005,7 +1076,82 @@
             </div>
         </div>
 
-        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage" v-if="isAttachingScreenshot" />
+        <!-- Screen capture -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k"
+             v-if="isScreenCapture && this.perm.check(this.perm.PERM_SCREENSHOT)">
+            <div
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded"
+                :class="screenCaptureVideo ? 'w-large-alert' : 'w-alert'"
+            >
+                <h3 class="mb-2">
+                    {{ t('screenshot.screencapture') }}
+                </h3>
+
+                <!-- Duration -->
+                <div class="w-full p-3 flex justify-between px-0" v-if="!screenCaptureStatus && !screenCaptureVideo">
+                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="capture_duration">
+                        {{ t('screenshot.capture_duration') }}
+                    </label>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="capture_duration"
+                           min="3" max="30" type="number"
+                           v-model="captureData.duration"/>
+                </div>
+
+                <p v-if="screenCaptureError" class="text-danger dark:text-dark-danger font-semibold mb-3">
+                    {{ screenCaptureError }}
+                </p>
+
+                <div class="relative min-h-50">
+                    <video class="w-full" controls v-if="screenCaptureVideo">
+                        <source :src="screenCaptureVideo" type="video/webm">
+                    </video>
+
+                    <div class="w-full" v-if="screenCaptureStatus === 'capturing'">
+                        <span class="text-sm block mb-1">{{
+                                t('screenshot.capturing', Math.ceil(captureRemaining / 10))
+                            }}</span>
+                        <div class="bg-green-700 dark:bg-green-400"
+                             :style="`height: 4px; width: ${(1 - (captureRemaining / (captureData.duration * 10))) * 100}%`"></div>
+                    </div>
+
+                    <div
+                        class="flex justify-center absolute top-0 left-0 w-full top-1/2 transform -translate-y-1/2 flex-wrap"
+                        v-if="screenCaptureStatus === 'processing'">
+                        <i class="fas fa-cog animate-spin text-3xl"></i>
+                        <span class="text-sm block mt-1 text-center w-full">{{ t('screenshot.processing') }}</span>
+                    </div>
+                </div>
+
+                <p v-if="screenCaptureStatus === 'processing'" class="mt-3 text-sm">
+                    {{ t('screenshot.processing_description') }}
+                </p>
+
+                <p v-if="screenCaptureVideo" class="mt-3 text-sm">
+                    {{ t('map.screecapture_description') }}
+                </p>
+
+                <!-- Buttons -->
+                <div class="flex justify-end mt-2">
+                    <a v-if="screenCaptureVideo" :href="screenCaptureVideo" target="_blank"
+                       class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2">
+                        {{ t('global.download') }}
+                    </a>
+                    <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
+                            @click="createScreenCapture()"
+                            v-if="!screenCaptureStatus && !screenCaptureVideo">
+                        {{ t('global.create') }}
+                    </button>
+                    <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            v-if="!screenCaptureStatus"
+                            @click="isScreenCapture = false; captureData.duration = 5; screenCaptureVideo = false; screenCaptureError = false">
+                        {{ t('global.close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage"
+                            v-if="isAttachingScreenshot"/>
 
     </div>
 </template>
@@ -1122,6 +1268,15 @@ export default {
             tagCategory: this.player.tag ? this.player.tag : 'custom',
             tagCustom: '',
 
+            isScreenCapture: false,
+            screenCaptureStatus: false,
+            screenCaptureVideo: false,
+            screenCaptureError: false,
+            captureRemaining: false,
+            captureData: {
+                duration: 5
+            },
+
             isScreenshot: false,
             isScreenshotLoading: false,
             screenshotImage: null,
@@ -1133,6 +1288,56 @@ export default {
     methods: {
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
+        },
+        async createScreenCapture() {
+            if (this.screenCaptureStatus) {
+                return;
+            }
+
+            if (!Number.isInteger(this.captureData.duration) && this.captureData.duration < 3 && this.captureData.duration > 30) {
+                alert(this.t("screenshot.invalid_duration"));
+
+                return;
+            }
+
+            let interval = setInterval(() => {
+                this.captureRemaining--;
+
+                if (this.captureRemaining === 0) {
+                    this.screenCaptureStatus = "processing";
+
+                    clearInterval(interval);
+                }
+            }, 100);
+
+            this.captureRemaining = this.captureData.duration * 10;
+            this.screenCaptureStatus = "capturing";
+
+            try {
+                const result = await axios({
+                    method: 'post',
+                    url: '/api/capture/' + this.player.status.serverName + '/' + this.player.status.serverId + '/' + this.captureData.duration,
+                    timeout: this.captureData.duration + 20000
+                });
+
+                clearInterval(interval);
+
+                if (result.data) {
+                    if (result.data.status) {
+                        console.info('Screen capture of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.steam);
+
+                        this.screenCaptureVideo = result.data.data.url;
+                    } else {
+                        this.screenshotError = result.data.message ? result.data.message : this.t('screenshot.screencapture_failed');
+                    }
+                }
+            } catch (e) {
+                clearInterval(interval);
+
+                this.screenCaptureError = this.t('screenshot.screencapture_failed');
+            }
+
+            this.screenCaptureStatus = false;
         },
         async createScreenshot() {
             if (this.isScreenshotLoading) {
@@ -1157,8 +1362,10 @@ export default {
                         this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
                     }
                 }
-            } catch(e) {
+            } catch (e) {
                 this.screenshotError = this.t('map.screenshot_failed');
+
+                this.isScreenshotLoading = false;
             }
         },
         screenshotAttached(status, message) {
@@ -1194,7 +1401,7 @@ export default {
                     this.linkedAccounts.total = 0;
                     this.linkedAccounts.linked = [];
                 }
-            } catch(e) {
+            } catch (e) {
                 this.linkedAccounts.total = 0;
                 this.linkedAccounts.linked = [];
             }

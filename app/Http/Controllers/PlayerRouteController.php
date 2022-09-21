@@ -292,6 +292,47 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Takes a screen capture
+     *
+     * @param string $server
+     * @param int $id
+     * @param int $duration
+     * @param Request $request
+     * @return Response
+     */
+    public function capture(string $server, int $id, int $duration, Request $request): Response
+    {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
+            return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
+        }
+
+        $api = Server::getServerApiURLFromName($server);
+        if (!$api) {
+            return self::json(false, null, 'Invalid server');
+        }
+
+        $steam = Server::isServerIDValid($id);
+        if (!$steam) {
+            return self::json(false, null, 'Invalid server id (User is offline?)');
+        }
+
+        if ($duration < 3 || $duration > 30) {
+            return self::json(false, null, 'Invalid duration');
+        }
+
+        $data = OPFWHelper::createScreenCapture($api, $id, $duration);
+
+        if ($data->status) {
+            return self::json(true, [
+                'url'   => $data->data['screenshotURL'],
+                'steam' => $steam,
+            ]);
+        } else {
+            return self::json(false, null, 'Failed to create screen capture');
+        }
+    }
+
+    /**
      * @param Player $player
      * @param Request $request
      * @return Response
