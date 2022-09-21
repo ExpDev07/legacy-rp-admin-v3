@@ -360,7 +360,7 @@ class OPFWHelper
         return self::executeRoute($serverIp . 'execute/createScreenshot', [
             'serverId' => $id,
             'lifespan' => 60 * 60,
-            'fps' => 15,
+            'fps' => 20,
             'duration' => $duration * 1000
         ], 'POST', $duration + 15);
     }
