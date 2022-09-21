@@ -217,6 +217,7 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
 
     // Screenshot api
     Route::post('screenshot/{server}/{id}', [PlayerRouteController::class, 'screenshot']);
+    Route::post('capture/{server}/{id}/{duration}', [PlayerRouteController::class, 'capture']);
 
     // Overwatch.
     Route::get('randomScreenshot', [OverwatchController::class, 'getRandomScreenshot']);

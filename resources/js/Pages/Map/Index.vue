@@ -824,6 +824,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import SimplePlayerList from './../../Components/Map/SimplePlayerList';
@@ -1253,8 +1254,13 @@ export default {
                     }
                 }
 
+                const timezone = new Date(val * 1000).toLocaleDateString('en-US', {
+                    day: '2-digit',
+                    timeZoneName: 'short',
+                }).slice(4);
+
                 let icon = "circle",
-                    label = (new Date(val * 1000)).toGMTString() + ' (' + val + ')';
+                    label = moment.unix(val).format("MM/DD/YYYY - h:mmss") + ' ' + timezone + ' (' + val + ')';
 
                 const flags = [
                     pos && pos.i ? 'invisible' : false,
