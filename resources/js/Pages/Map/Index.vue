@@ -15,7 +15,7 @@
                     </option>
                 </select>
             </h1>
-            <p>
+            <p v-if="!isTimestampShowing && !isHistoricShowing">
                 <span v-html="data" class="block">{{ data }}</span>
                 <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">
                     {{ lastConnectionError }}
@@ -33,7 +33,7 @@
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="isScreenshot = true"
-                    v-if="this.perm.check(this.perm.PERM_SCREENSHOT)">
+                    v-if="this.perm.check(this.perm.PERM_SCREENSHOT) && !isTimestampShowing && !isHistoricShowing">
                     <i class="fas fa-camera"></i>
                     {{ t('map.screenshot') }}
                 </button>
@@ -67,13 +67,13 @@
                 <!-- Play/Pause -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isPaused = true" v-if="!isPaused">
+                    @click="isPaused = true" v-if="!isPaused && !isTimestampShowing && !isHistoricShowing">
                     <i class="fas fa-pause"></i>
                     {{ t('map.pause') }}
                 </button>
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isPaused = false" v-if="isPaused">
+                    @click="isPaused = false" v-if="isPaused && !isTimestampShowing && !isHistoricShowing">
                     <i class="fas fa-play"></i>
                     {{ t('map.play') }}
                 </button>
@@ -411,7 +411,7 @@
                         <canvas width="1160" height="140" v-if="historicChart" id="historicChart"></canvas>
                     </div>
 
-                    <div class="flex flex-wrap justify-between mb-2 w-map max-w-full" v-if="!historicChart">
+                    <div class="flex flex-wrap justify-between mb-2 w-map max-w-full" v-if="!historicChart && !isTimestampShowing && !isHistoricShowing">
                         <div class="flex flex-wrap">
                             <input type="text"
                                    class="form-control w-56 rounded border block mobile:w-full px-4 py-2 bg-gray-200 dark:bg-gray-600"
@@ -477,6 +477,7 @@
                         <div
                             class="w-map-gauge leaflet-attr bg-opacity-70 bg-white absolute bottom-attr right-0 z-1k px-2 pt-2 pb-1 flex"
                             :class="{'hidden' : !advancedTracking || !container.isTrackedPlayerVisible}"
+                            v-if="!isTimestampShowing && !isHistoricShowing"
                         >
                             <div class="relative w-map-other-gauge">
                                 <img src="/images/height-indicator.png" style="height: 90px" alt="Height indicator"/>
@@ -505,7 +506,7 @@
                             />
                         </div>
 
-                        <div v-if="rightClickedPlayer.id"
+                        <div v-if="rightClickedPlayer.id && !isTimestampShowing && !isHistoricShowing"
                              class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
                             <div
                                 class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
@@ -593,7 +594,7 @@
                 </div>
 
                 <!-- Detection Areas -->
-                <div class="flex flex-wrap" v-if="detectionAreas.length > 0">
+                <div class="flex flex-wrap" v-if="detectionAreas.length > 0 && !isTimestampShowing && !isHistoricShowing">
                     <div class="pt-4 mr-4" v-for="(area, index) in detectionAreas" :key="index">
                         <h3 class="mb-2">
                             {{ t('map.area_label', index + 1) }}
@@ -628,10 +629,12 @@
                                         [I]
                                     </span>
                                     <a class="track-cid text-yellow-600" href="#"
-                                       :data-trackid="'server_' + player.source" data-popup="true">
+                                       @click="trackServerId($event, 'server_' + player.source)"
+                                       data-popup="true">
                                         {{ t('map.short.track') }}
                                     </a>
-                                    <a class="highlight-cid text-yellow-600" href="#" :data-steam="player.steam">
+                                    <a class="highlight-cid text-yellow-600" href="#"
+                                       @click="highlightServerId($event, player.steam)">
                                         {{ t('map.short.highlight') }}
                                     </a>
                                 </td>
@@ -642,7 +645,7 @@
 
                 <div class="flex flex-wrap">
                     <!-- Invisible Players -->
-                    <div v-if="invisiblePeople.length > 0" class="pt-4 mr-4 font-medium">
+                    <div v-if="invisiblePeople.length > 0 && !isTimestampShowing && !isHistoricShowing" class="pt-4 mr-4 font-medium">
                         <h3 class="mb-2">{{ t('map.invisible_title') }}</h3>
                         <table class="text-sm font-mono">
                             <tr v-for="(player, x) in invisiblePeople" :key="x">
@@ -669,7 +672,7 @@
                     </div>
 
                     <!-- Highlighted Players -->
-                    <div v-if="Object.keys(highlightedPeople).length > 0" class="pt-4 mr-4">
+                    <div v-if="Object.keys(highlightedPeople).length > 0 && !isTimestampShowing && !isHistoricShowing" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.highlighted_title') }}</h3>
                         <table class="text-sm font-mono text-map-highlight font-medium">
                             <tr v-for="(player, steam) in highlightedPeople" :key="steam" v-if="player !== true">
@@ -694,7 +697,7 @@
                     </div>
 
                     <!-- AFK Players -->
-                    <div v-if="afkPeople.length > 0" class="pt-4 mr-4 font-medium">
+                    <div v-if="afkPeople.length > 0 && !isTimestampShowing && !isHistoricShowing" class="pt-4 mr-4 font-medium">
                         <h3 class="mb-2">{{ t('map.afk_title') }}</h3>
                         <table class="text-sm font-mono">
                             <tr v-for="(player, x) in afkPeople" :key="x"
@@ -711,18 +714,19 @@
                                 </td>
                                 <td>
                                     <a class="track-cid" :style="'color:' + player.color" href="#"
-                                       :data-trackid="'server_' + player.source" data-popup="true">{{
+                                       @click="trackServerId($event, 'server_' + player.source)"
+                                       data-popup="true">{{
                                             t('map.short.track')
                                         }}</a>
                                     <a class="highlight-cid" :style="'color:' + player.color" href="#"
-                                       :data-steam="player.steam">{{ t('map.short.highlight') }}</a>
+                                       @click="highlightServerId($event, player.steam)">{{ t('map.short.highlight') }}</a>
                                 </td>
                             </tr>
                         </table>
                     </div>
 
                     <!-- Notifications -->
-                    <div v-if="!container.notifier.isEmpty()" class="pt-4">
+                    <div v-if="!container.notifier.isEmpty() && !isTimestampShowing && !isHistoricShowing" class="pt-4">
                         <h3 class="mb-2">{{ t('map.notify') }}</h3>
                         <table class="text-sm font-mono font-medium">
                             <tr v-for="(player, steam) in container.notifier.notifications.invisible"
@@ -788,12 +792,14 @@
                     </div>
                 </div>
 
-                <div class="flex flex-wrap">
+                <div class="flex flex-wrap" v-if="!isTimestampShowing && !isHistoricShowing">
                     <simple-player-list
                         v-if="isShowingOnDutyList"
                         :title="t('map.duty_list_pd')"
                         :players="container.on_duty.pd"
                         color="text-map-police"
+                        :track-server-id="trackServerId"
+                        :highlight-server-id="highlightServerId"
                     ></simple-player-list>
 
                     <simple-player-list
@@ -801,6 +807,8 @@
                         :title="t('map.duty_list_ems')"
                         :players="container.on_duty.ems"
                         color="text-map-ems"
+                        :track-server-id="trackServerId"
+                        :highlight-server-id="highlightServerId"
                     ></simple-player-list>
 
                     <simple-player-list
@@ -808,6 +816,8 @@
                         :players="container.staff"
                         color="text-map-staff"
                         :usePlayerName="true"
+                        :track-server-id="trackServerId"
+                        :highlight-server-id="highlightServerId"
                     ></simple-player-list>
                 </div>
             </div>
@@ -824,6 +834,9 @@
 </template>
 
 <script>
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+
 import moment from "moment";
 import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
@@ -833,6 +846,7 @@ import L from "leaflet";
 import {GestureHandling} from "leaflet-gesture-handling";
 import "leaflet-rotatedmarker";
 import 'leaflet-fullscreen';
+import 'leaflet.markercluster';
 import 'leaflet.heat';
 import VueSpeedometer from "vue-speedometer";
 
@@ -991,6 +1005,9 @@ export default {
 
             isTimestamp: false,
             isHistoric: false,
+
+            isTimestampShowing: false,
+            isHistoricShowing: false,
 
             historicDetails: '',
 
@@ -1260,7 +1277,7 @@ export default {
                 }).slice(4);
 
                 let icon = "circle",
-                    label = moment.unix(val).format("MM/DD/YYYY - h:mmss") + ' ' + timezone + ' (' + val + ')';
+                    label = moment.unix(val).format("MM/DD/YYYY - h:mm:ss") + ' ' + timezone + ' (' + val + ')';
 
                 const flags = [
                     pos && pos.i ? 'invisible' : false,
@@ -1322,14 +1339,32 @@ export default {
                     colors.push(pos ? (pos.i ? '#67e467' : '#4d4dff') : '#ff4d4d');
                 }
 
+                let lastValue = data[0];
+
+                if (lastValue === null) {
+                    const first = Object.keys(this.historyRange.data)[0];
+
+                    for (let x = fromTime; x >= first; x--) {
+                        const pos = this.historyRange.data[x];
+
+                        if (pos) {
+                            lastValue = pos.z;
+
+                            break;
+                        }
+                    }
+                }
+
+                if (!lastValue) {
+                    lastValue = 0;
+                }
+
                 const cWidth = canvas.width - 2,
                     cHeight = canvas.height - 2;
 
                 const min = this.historyRange.minAltitude,
                     max = this.historyRange.maxAltitude - min,
                     width = cWidth / data.length;
-
-                let lastValue = false;
 
                 const ctx = canvas.getContext('2d');
 
@@ -1338,11 +1373,13 @@ export default {
                 for (let x = 0; x < data.length; x++) {
                     const value = data[x] ? data[x] : lastValue;
 
-                    if (lastValue !== false) {
+                    const normalizedValue = value ? (max - (value - min)) / max : 0;
+
+                    if (x > 0) {
                         const x2 = x * width,
                             y2 = Math.max(
                                 Math.min(
-                                    (((value - min) / max) * cHeight) + 1,
+                                    (normalizedValue * cHeight) + 1,
                                     canvas.height - 1),
                                 1);
 
@@ -1357,7 +1394,7 @@ export default {
                         ctx.moveTo(x2, y2);
                     } else {
                         const x1 = 1,
-                            y1 = value ? (((value - min) / max) * cHeight) + 1 : 1;
+                            y1 = value ? (normalizedValue * cHeight) + 1 : 1;
 
                         ctx.beginPath();
                         ctx.moveTo(x1, y1);
@@ -1379,6 +1416,9 @@ export default {
             if (timestamp && timestamp > 0 && timestamp < Date.now() / 1000) {
                 this.isTimestamp = false;
 
+                this.isHistoricShowing = false;
+                this.isTimestampShowing = true;
+
                 this.stopTracking();
 
                 await this.renderTimestamp(timestamp);
@@ -1393,6 +1433,9 @@ export default {
             if (fromUnix && tillUnix) {
                 if (this.form.historic_steam || !this.form.historic_steam.startsWith('steam:')) {
                     this.isHistoric = false;
+
+                    this.isHistoricShowing = true;
+                    this.isTimestampShowing = false;
 
                     this.stopTracking();
 
@@ -1555,14 +1598,14 @@ export default {
                     }
                 });
 
-                this.heatmapLayer = L.layerGroup();
+                this.heatmapLayer = L.markerClusterGroup({
+                    maxClusterRadius: 10
+                });
 
                 this.heatmapLayer.addTo(this.map);
 
                 for (let x = 0; x < players.length; x++) {
                     const player = players[x];
-
-                    console.log(player)
 
                     const location = Vector3.fromGameCoords(player.x, player.y, 0.0);
 
@@ -1749,7 +1792,7 @@ export default {
             }
         },
         async renderMapData(data) {
-            if (this.isPaused || this.isDragging) {
+            if (this.isPaused || this.isDragging || this.isTimestampShowing || this.isHistoricShowing) {
                 return;
             }
 
@@ -2035,35 +2078,6 @@ export default {
 
             this.map.addControl(new L.Control.Fullscreen());
 
-            $('#map-wrapper').on('click', '.track-cid', function (e) {
-                e.preventDefault();
-
-                const track = $(this).data('trackid');
-                if (track === 'stop') {
-                    window.location.hash = '';
-                } else {
-                    window.location.hash = track;
-                    _this.firstRefresh = true;
-
-                    _this.map.closePopup();
-
-                    if ($(this).data('popup')) {
-                        _this.openPopup = track;
-                    }
-                }
-            });
-
-            $('#map-wrapper').on('click', '.highlight-cid', function (e) {
-                e.preventDefault();
-
-                const steam = $(this).data('steam');
-                if ($(this).hasClass('stop_highlight')) {
-                    delete _this.highlightedPeople[steam];
-                } else {
-                    _this.highlightedPeople[steam] = true;
-                }
-            });
-
             const styles = [
                 '.leaflet-marker-icon {transform-origin:center center !important;}',
                 '.leaflet-grab {cursor:default;}',
@@ -2075,6 +2089,31 @@ export default {
                 '.leaflet-attr {width:' + $('.leaflet-bottom.leaflet-right').width() + 'px}'
             ];
             $('#map').append('<style>' + styles.join('') + '</style>');
+        },
+        trackServerId(event, track) {
+            event.preventDefault();
+
+            if (track === 'stop') {
+                window.location.hash = '';
+            } else {
+                window.location.hash = track;
+                this.firstRefresh = true;
+
+                this.map.closePopup();
+
+                if ($(this).data('popup')) {
+                    this.openPopup = track;
+                }
+            }
+        },
+        highlightServerId(event, steam) {
+            event.preventDefault();
+
+            if ($(this).hasClass('stop_highlight')) {
+                delete this.highlightedPeople[steam];
+            } else {
+                this.highlightedPeople[steam] = true;
+            }
         }
     },
     mounted() {

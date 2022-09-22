@@ -1165,7 +1165,7 @@ import Card from './../../Components/Card';
 import Avatar from './../../Components/Avatar';
 import ScreenshotAttacher from './../../Components/ScreenshotAttacher';
 
-import {models} from '../../data/ped_models.json';
+import models from '../../data/ped_models.js';
 
 export default {
     layout: Layout,
