@@ -16,7 +16,7 @@ mix.version();
 mix.sourceMaps();
 
 // Assets.
-mix.js('resources/js/app.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js').vue();
 mix.postCss('resources/css/app.pcss', 'public/css', [
     require('postcss-import'),
     require('tailwindcss'),

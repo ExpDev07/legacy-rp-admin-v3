@@ -12,11 +12,13 @@
                     ({{ player.source }})
                 </td>
                 <td>
-                    <a :class="'track-cid ' + color" href="#" :data-trackid="'server_' + player.source"
-                       data-popup="true" :title="t('map.track')">
+                    <a :class="'track-cid ' + color" href="#"
+                       data-popup="true" :title="t('map.track')"
+                       @click="trackServerId($event, 'server_' + player.source)">
                         {{ t('map.short.track') }}
                     </a>
-                    <a :class="'highlight-cid ' + color" href="#" :data-steam="player.steam" :title="t('map.do_highlight')">
+                    <a :class="'highlight-cid ' + color" href="#" :title="t('map.do_highlight')"
+                       @click="highlightServerId($event, player.steam)">
                         {{ t('map.short.highlight') }}
                     </a>
                 </td>
@@ -28,6 +30,12 @@
 export default {
     name: "SimplePlayerList",
     props: {
+        trackServerId: {
+            type: Function
+        },
+        highlightServerId: {
+            type: Function
+        },
         players: {
             type: Array,
             required: true
