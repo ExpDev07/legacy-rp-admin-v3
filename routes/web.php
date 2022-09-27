@@ -182,8 +182,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Overwatch.
     Route::get('/overwatch', [OverwatchController::class, 'index']);
 
-    // Testing.
+    // Screenshots.
     Route::get('/screenshots', [ScreenshotController::class, 'render']);
+    Route::get('/anti_cheat', [ScreenshotController::class, 'antiCheat']);
 
     // Errors.
     Route::get('/errors/client', [ErrorController::class, 'client']);
