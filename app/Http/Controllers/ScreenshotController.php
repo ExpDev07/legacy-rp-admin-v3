@@ -37,9 +37,9 @@ class ScreenshotController extends Controller
 
         return Inertia::render('Screenshots/Index', [
             'screenshots' => $screenshots,
-            'links'       => $this->getPageUrls($page),
-            'playerMap'   => Player::fetchSteamPlayerNameMap($screenshots, ['steam_identifier']),
-            'page'        => $page,
+            'links' => $this->getPageUrls($page),
+            'playerMap' => Player::fetchSteamPlayerNameMap($screenshots, ['steam_identifier']),
+            'page' => $page,
         ]);
     }
 
@@ -54,6 +54,7 @@ class ScreenshotController extends Controller
         $page = Paginator::resolveCurrentPage('page');
 
         $system = DB::table('system_screenshots')
+            ->where('details', 'LIKE', 'Anti-Cheat:%')
             ->orderByDesc('created_at')
             ->select(['character_id', 'url', 'details', 'created_at'])
             ->limit(20)->offset(($page - 1) * 20)
@@ -69,13 +70,20 @@ class ScreenshotController extends Controller
             }
         }
 
-        $players = !empty($characterIds) ? Character::query()->select(['player_name', 'steam_identifier'])->whereIn('character_id', $characterIds)->groupBy('steam_identifier')->get()->toArray() : [];
+        $players = !empty($characterIds) ? Character::query()->select(['character_id', 'steam_identifier'])->whereIn('character_id', $characterIds)->groupBy('steam_identifier')->get()->toArray() : [];
 
-        return Inertia::render('Screenshots/Index', [
+        $characterSteamNames = [];
+
+        foreach ($players as $character) {
+            $characterSteamNames[$character['character_id']] = $character['steam_identifier'];
+        }
+
+        return Inertia::render('Screenshots/AntiCheat', [
             'screenshots' => $system,
-            'links'       => $this->getPageUrls($page),
-            'playerMap'   => Player::fetchSteamPlayerNameMap($players, ['steam_identifier']),
-            'page'        => $page,
+            'links' => $this->getPageUrls($page),
+            'playerMap' => Player::fetchSteamPlayerNameMap($players, ['steam_identifier']),
+            'characterSteamNames' => $characterSteamNames,
+            'page' => $page,
         ]);
     }
 
