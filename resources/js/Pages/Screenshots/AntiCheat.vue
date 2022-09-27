@@ -31,7 +31,7 @@
                         :key="screenshot.url">
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + screenshot.steam_identifier">
-                                {{ playerName(screenshot.steam_identifier) }}
+                                {{ playerName(screenshot.character_id) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
@@ -107,6 +107,10 @@ export default {
             type: Object,
             required: true,
         },
+        characterSteamNames: {
+            type: Object,
+            required: true,
+        },
         links: {
             type: Object,
             required: true,
@@ -139,7 +143,12 @@ export default {
 
             this.isLoading = false;
         },
-        playerName(steamIdentifier) {
+        steamIdentifier(characterId) {
+            return this.characterSteamNames[characterId];
+        },
+        playerName(characterId) {
+            const steamIdentifier = this.steamIdentifier(characterId);
+
             return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
         }
     }
