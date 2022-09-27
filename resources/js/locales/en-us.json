@@ -148,6 +148,7 @@
         "screenshots": "Attached Screenshots",
         "no_screenshots": "No screenshots attached",
         "view": "View screenshot",
+        "view_capture": "View screen-capture",
         "description": "Recently attached screenshots.",
         "player": "Player",
         "label": "Screenshots"
