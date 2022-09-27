@@ -217,7 +217,7 @@ export default {
                             url: '/backstories',
                         },
                         {
-                            label: this.t('screenshots.anti_cheat_title'),
+                            label: this.t('screenshot.anti_cheat_title'),
                             icon: 'ghost',
                             url: '/anti_cheat',
                         }
