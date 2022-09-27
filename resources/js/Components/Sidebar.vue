@@ -215,6 +215,11 @@ export default {
                             label: this.t('backstories.title'),
                             icon: 'box-open',
                             url: '/backstories',
+                        },
+                        {
+                            label: this.t('screenshots.anti_cheat_title'),
+                            icon: 'ghost',
+                            url: '/anti_cheat',
                         }
                     ]
                 },

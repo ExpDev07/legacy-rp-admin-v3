@@ -146,6 +146,7 @@
         "processing_description": "This step may take a while depending on the players connection speed and processing power.",
         "created_at": "Created at",
         "screenshots": "Attached Screenshots",
+        "anti_cheat_title": "Anti-Cheat",
         "anti_cheat": "Anti-Cheat Screenshots",
         "anti_cheat_description": "Automated screenshots and screen captures by the anti cheat.",
         "no_screenshots": "No screenshots attached",
