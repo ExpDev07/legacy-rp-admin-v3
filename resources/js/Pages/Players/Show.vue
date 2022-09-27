@@ -973,8 +973,10 @@
                         v-for="screenshot in sortedScreenshots"
                         :key="screenshot.system ? screenshot.url : screenshot.filename">
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.system">
-                            <a :href="screenshot.url" target="_blank"
+                            <a :href="screenshot.url" target="_blank" v-if="screenshot.url.endsWith('.jpg') || screenshot.url.endsWith('.png') || screenshot.url.endsWith('.jpeg')"
                                class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
+                            <a :href="screenshot.url" target="_blank" v-else
+                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view_capture') }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>
                             <a :href="'/export/screenshot/' + screenshot.filename" target="_blank"
