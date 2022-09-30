@@ -728,7 +728,7 @@
                         </template>
 
                         <template>
-                            <p>
+                            <p class="break-words">
                                 {{ character.backstory }}
                             </p>
                         </template>
