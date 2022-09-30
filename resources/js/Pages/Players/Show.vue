@@ -517,6 +517,8 @@
                     <span class="whitespace-pre-line">{{ player.ban.reason || t('players.show.no_reason') }}</span>
                 </p>
 
+                <p class="text-sm italic">{{ player.ban.banHash }}</p>
+
             </alert>
             <!-- Issuing -->
             <div class="p-8 mb-10 bg-gray-100 rounded dark:bg-dark-secondary" v-if="isBanning">
@@ -726,7 +728,7 @@
                         </template>
 
                         <template>
-                            <p>
+                            <p class="break-words">
                                 {{ character.backstory }}
                             </p>
                         </template>

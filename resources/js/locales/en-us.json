@@ -812,6 +812,7 @@
                 "utility": "Utility",
                 "commercial": "Commercial",
                 "hunting": "Hunting",
+                "special": "Special",
                 "confirm": "Are you sure you want to remove all of this characters licenses?"
             }
         },

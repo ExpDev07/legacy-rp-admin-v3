@@ -30,7 +30,7 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in screenshots"
                         :key="screenshot.url">
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + screenshot.steam_identifier">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + steamIdentifier(screenshot.character_id)">
                                 {{ playerName(screenshot.character_id) }}
                             </inertia-link>
                         </td>
