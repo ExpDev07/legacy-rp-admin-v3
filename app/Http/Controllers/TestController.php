@@ -266,19 +266,19 @@ class TestController extends Controller
 
     public function jobApi(Request $request, string $api_key, string $jobName, string $departmentName, string $positionName, string $characterIds): Response
     {
-        if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
+        if (env('DEV_API_KEY', '') !== $api_key || empty($api_key)) {
             return (new Response('Unauthorized', 403))->header('Content-Type', 'text/plain');
         }
 
         $characterIds = explode(',', $characterIds);
 
-        if (empty($character_ids)) {
+        if (empty($characterIds)) {
             return (new Response('No character_ids provided', 400))->header('Content-Type', 'text/plain');
         }
 
-        $players = Player::query()
-            ->select(["steam_identifier", "character_id", "job_name", "department_name", "position_name"])
-            ->whereIn('character_id', $character_ids)
+        $characters = Character::query()
+            ->select(["steam_identifier", "character_id", "job_name", "department_name", "position_name", "first_name", "last_name"])
+            ->whereIn('character_id', $characterIds)
             ->orWhere(function ($query) use ($jobName, $departmentName, $positionName) {
                 return $query->where('job_name', $jobName)
                     ->where('department_name', $departmentName)
@@ -286,7 +286,7 @@ class TestController extends Controller
             })
             ->get()->toArray();
 
-        return (new Response(json_encode($players), 200))->header('Content-Type', 'application/json');
+        return (new Response(json_encode($characters), 200))->header('Content-Type', 'application/json');
     }
 
     /**
