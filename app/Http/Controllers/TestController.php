@@ -264,6 +264,26 @@ class TestController extends Controller
             ->header("Content-disposition", "attachment; filename=\"modders.csv\"");
     }
 
+    public function players(Request $request, string $api_key): Response
+    {
+        if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
+            return (new Response('Unauthorized', 403))->header('Content-Type', 'text/plain');
+        }
+
+        $character_ids = $request->input('character_ids', []);
+
+        if (empty($character_ids)) {
+            return (new Response('No character_ids provided', 400))->header('Content-Type', 'text/plain');
+        }
+
+        $players = Player::query()
+            ->select(["steam_identifier", "character_id"])
+            ->whereIn('character_id', $character_ids)
+            ->get()->toArray();
+
+        return (new Response(json_encode($players), 200))->header('Content-Type', 'application/json');
+    }
+
     /**
      * Responds with plain text
      *
