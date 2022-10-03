@@ -205,7 +205,6 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/logs/{action}', [TestController::class, 'logs']);
     Route::get('/test/smart_watch', [TestController::class, 'smartWatchLeaderboard']);
     Route::get('/test/bans', [TestController::class, 'banLeaderboard']);
-    Route::post('/test/job_api/{api_key}/{jobName}/{departmentName}/{positionName}', [TestController::class, 'jobApi']);
 
     Route::get('/test/modders', [TestController::class, 'moddingBans']);
 });
@@ -265,6 +264,8 @@ Route::group(['prefix' => 'debug'], function () {
         abort(200);
     });
 });
+
+Route::post('/test/job_api/{api_key}/{jobName}/{departmentName}/{positionName}', [TestController::class, 'jobApi']);
 
 // Used to get logs.
 Route::get('/op-logs/{type}/{api_key}/{date?}', function (string $type, string $api_key, string $date = '') {
