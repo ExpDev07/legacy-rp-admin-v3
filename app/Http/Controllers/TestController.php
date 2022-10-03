@@ -264,13 +264,13 @@ class TestController extends Controller
             ->header("Content-disposition", "attachment; filename=\"modders.csv\"");
     }
 
-    public function jobApi(Request $request, string $api_key, string $jobName, string $departmentName, string $positionName): Response
+    public function jobApi(Request $request, string $api_key, string $jobName, string $departmentName, string $positionName, string $characterIds): Response
     {
         if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
             return (new Response('Unauthorized', 403))->header('Content-Type', 'text/plain');
         }
 
-        $character_ids = $request->input('character_ids', []);
+        $characterIds = explode(',', $characterIds);
 
         if (empty($character_ids)) {
             return (new Response('No character_ids provided', 400))->header('Content-Type', 'text/plain');
