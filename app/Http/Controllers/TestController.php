@@ -264,7 +264,7 @@ class TestController extends Controller
             ->header("Content-disposition", "attachment; filename=\"modders.csv\"");
     }
 
-    public function players(Request $request, string $api_key): Response
+    public function jobApi(Request $request, string $api_key, string $jobName, string $departmentName, string $positionName): Response
     {
         if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
             return (new Response('Unauthorized', 403))->header('Content-Type', 'text/plain');
@@ -277,8 +277,13 @@ class TestController extends Controller
         }
 
         $players = Player::query()
-            ->select(["steam_identifier", "character_id"])
+            ->select(["steam_identifier", "character_id", "job_name", "department_name", "position_name"])
             ->whereIn('character_id', $character_ids)
+            ->orWhere(function ($query) use ($jobName, $departmentName, $positionName) {
+                return $query->where('job_name', $jobName)
+                    ->where('department_name', $departmentName)
+                    ->where('position_name', $positionName);
+            })
             ->get()->toArray();
 
         return (new Response(json_encode($players), 200))->header('Content-Type', 'application/json');
