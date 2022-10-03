@@ -277,7 +277,7 @@ class TestController extends Controller
         }
 
         $characters = Character::query()
-            ->select(["steam_identifier", "character_id", "job_name", "department_name", "position_name"])
+            ->select(["steam_identifier", "character_id", "job_name", "department_name", "position_name", "first_name", "last_name"])
             ->whereIn('character_id', $characterIds)
             ->orWhere(function ($query) use ($jobName, $departmentName, $positionName) {
                 return $query->where('job_name', $jobName)
