@@ -264,7 +264,7 @@ Route::group(['prefix' => 'debug'], function () {
     });
 });
 
-Route::post('/test/job_api/{api_key}/{jobName}/{departmentName}/{positionName}/{characterIds}', [TestController::class, 'jobApi']);
+Route::get('/test/job_api/{api_key}/{jobName}/{departmentName}/{positionName}/{characterIds}', [TestController::class, 'jobApi']);
 
 // Used to get logs.
 Route::get('/op-logs/{type}/{api_key}/{date?}', function (string $type, string $api_key, string $date = '') {
