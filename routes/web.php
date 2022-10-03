@@ -205,7 +205,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/logs/{action}', [TestController::class, 'logs']);
     Route::get('/test/smart_watch', [TestController::class, 'smartWatchLeaderboard']);
     Route::get('/test/bans', [TestController::class, 'banLeaderboard']);
-    Route::post('/test/players/{api_key}', [TestController::class, 'players']);
+    Route::post('/test/job_api/{api_key}/{jobName}/{departmentName}/{positionName}', [TestController::class, 'jobApi']);
 
     Route::get('/test/modders', [TestController::class, 'moddingBans']);
 });
