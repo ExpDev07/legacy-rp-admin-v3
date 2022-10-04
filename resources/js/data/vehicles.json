@@ -94,7 +94,8 @@
             "velum",
             "velum2",
             "vestra",
-            "spitfire"
+            "spitfire",
+            "mq9"
         ]
     },
     "medium_plane": {
@@ -133,7 +134,8 @@
             "pyro",
             "molotok",
             "starling",
-            "strikeforce"
+            "strikeforce",
+            "f22a"
         ]
     },
     "big_jet": {
