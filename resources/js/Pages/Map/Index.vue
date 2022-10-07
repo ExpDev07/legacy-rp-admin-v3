@@ -999,7 +999,7 @@ export default {
             screenshotError: null,
             isAttachingScreenshot: false,
 
-            heatmapLayer: null,
+            heatmapLayers: [],
             historyMarker: null,
             loadingScreenStatus: null,
 
@@ -1486,12 +1486,16 @@ export default {
 
             this.loadingScreenStatus = this.t('map.heatmap_render');
 
-            if (this.heatmapLayer) {
-                this.map.removeLayer(this.heatmapLayer);
+            if (this.heatmapLayers) {
+                for (let x = 0; x < this.heatmapLayers.length; x++) {
+                    this.map.removeLayer(this.heatmapLayers[x]);
+                }
+
                 if (this.historyMarker) {
                     this.map.removeLayer(this.historyMarker);
                 }
-                this.heatmapLayer = null;
+
+                this.heatmapLayers = [];
             }
 
             this.historyRange.view = false;
@@ -1507,12 +1511,77 @@ export default {
 
                 const timestamps = Object.keys(history);
 
-                const latlngs = Object.values(history).map(entry => {
-                    const coords = Vector3.fromGameCoords(parseInt(entry.x), parseInt(entry.y), 0).toMap();
-                    return [coords.lat, coords.lng];
-                });
+                const first = timestamps[0],
+                    last = timestamps[timestamps.length - 1];
 
-                this.heatmapLayer = L.polyline(latlngs, {color: '#3380f3'});
+                const addPolyline = (coords) => {
+                    let line = L.polyline(coords, {color: '#3380f3'});
+
+                    line.on('click', (e) => {
+                        const latlng = e.latlng;
+
+                        let closestDistance = 1000;
+                        let closest = false;
+
+                        Object.entries(history).forEach(entrySet => {
+                            const coords = Vector3.fromGameCoords(parseInt(entrySet[1].x), parseInt(entrySet[1].y), 0).toMap();
+
+                            const dst = distance(coords.lat, coords.lng, latlng.lat, latlng.lng);
+
+                            if (dst < closestDistance) {
+                                closestDistance = dst;
+                                closest = entrySet[0];
+                            }
+                        });
+
+                        $('#range-slider').val(closest);
+
+                        this.historyRangeChange();
+                    });
+
+                    line.addTo(this.map);
+
+                    this.heatmapLayers.push(line);
+                }
+
+                let latlngs = [],
+                    lastEntryNull = 0;
+
+                for (let x = first; x <= last; x++) {
+                    let pos = history[x];
+
+                    if (!pos) {
+                        pos = history[x - 1];
+
+                        if (!pos) {
+                            pos = history[x + 1];
+                        }
+                    }
+
+                    if (pos) {
+                        if (lastEntryNull >= 10 && pos.i && pos.c && pos.f) {
+                            continue;
+                        }
+
+                        const coords = Vector3.fromGameCoords(pos.x, pos.y, 0).toMap();
+
+                        latlngs.push([coords.lat, coords.lng]);
+
+                        lastEntryNull = 0;
+                    } else {
+                        if (latlngs.length > 0) {
+                            addPolyline(latlngs);
+
+                            latlngs = [];
+                        }
+
+                        lastEntryNull++;
+                    }
+                }
+
+                if (latlngs.length > 0) {
+                    addPolyline(latlngs);
+                }
 
                 function distance(x1, y1, x2, y2) {
                     const xDiff = x1 - x2;
@@ -1520,28 +1589,6 @@ export default {
 
                     return Math.abs(Math.sqrt(xDiff * xDiff + yDiff * yDiff));
                 }
-
-                this.heatmapLayer.on('click', (e) => {
-                    const latlng = e.latlng;
-
-                    let closestDistance = 1000;
-                    let closest = false;
-
-                    Object.entries(history).forEach(entrySet => {
-                        const coords = Vector3.fromGameCoords(parseInt(entrySet[1].x), parseInt(entrySet[1].y), 0).toMap();
-
-                        const dst = distance(coords.lat, coords.lng, latlng.lat, latlng.lng);
-
-                        if (dst < closestDistance) {
-                            closestDistance = dst;
-                            closest = entrySet[0];
-                        }
-                    });
-
-                    $('#range-slider').val(closest);
-
-                    this.historyRangeChange();
-                });
 
                 this.historyMarker = L.marker(latlngs[0], {});
 
@@ -1567,10 +1614,9 @@ export default {
 
                 this.historyRange.view = true;
 
-                this.heatmapLayer.addTo(this.map);
                 this.historyMarker.addTo(this.map);
 
-                this.map.fitBounds(this.heatmapLayer.getBounds());
+                //this.map.fitBounds(this.heatmapLayer.getBounds());
 
                 this.historyRangeChange(parseInt(timestamps[0]));
             }
