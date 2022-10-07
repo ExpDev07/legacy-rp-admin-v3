@@ -1282,7 +1282,8 @@ export default {
                 const flags = [
                     pos && pos.i ? 'invisible' : false,
                     pos && pos.c ? 'invincible' : false,
-                    pos && pos.f ? 'frozen' : false
+                    pos && pos.f ? 'frozen' : false,
+                    pos && pos.d ? 'dead' : false
                 ].filter(flag => flag).join(", ");
 
                 this.historicDetails = "Flags: " + (flags ? flags : 'N/A') + " - Altitude: " + (pos ? pos.z + "m" : "N/A");
@@ -1311,6 +1312,23 @@ export default {
                 ));
             }
         },
+        getAltitudeChartColor(invincible, invisible, frozen, dead) {
+            if (invincible && invisible && frozen) {
+                return "#c567e4";
+            } else if (invincible && invisible || invisible && frozen || invincible && frozen) {
+                return "#e4c567";
+            } else if (invisible) {
+                return "#a6e467";
+            } else if (invincible) {
+                return "#ff99ff";
+            } else if (frozen) {
+                return "#99ccff";
+            } else if (dead) {
+                return "#002db3";
+            }
+
+            return "#8080ff";
+        },
         renderAltitudeChart(timestamp) {
             const fromTime = parseInt(timestamp),
                 tillTime = fromTime + 60;
@@ -1336,7 +1354,7 @@ export default {
 
                     data.push(val);
 
-                    colors.push(pos ? (pos.i ? '#67e467' : '#4d4dff') : '#ff4d4d');
+                    colors.push(pos ? this.getAltitudeChartColor(pos.c, pos.i, pos.f, pos.d) : '#ff4d4d')
                 }
 
                 let lastValue = data[0];
@@ -1353,10 +1371,18 @@ export default {
                             break;
                         }
                     }
-                }
 
-                if (!lastValue) {
-                    lastValue = 0;
+                    if (lastValue === null) {
+                        for (let x = first; x >= tillTime; x++) {
+                            const pos = this.historyRange.data[x];
+
+                            if (pos) {
+                                lastValue = pos.z;
+
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 const cWidth = canvas.width - 2,
