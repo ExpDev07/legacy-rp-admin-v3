@@ -16,13 +16,13 @@
                 </select>
             </h1>
             <p v-if="!isTimestampShowing && !isHistoricShowing">
-                <span v-html="data" class="block">{{ data }}</span>
+                <span v-html="data" class="block"></span>
                 <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">
                     {{ lastConnectionError }}
                 </span>
                 <span class="block text-xs text-muted dark:text-dark-muted leading-3 mt-2">
                     <b>{{ t('map.current_viewers') }}: </b>
-                    <span v-html="formatViewers()">{{ formatViewers() }}</span>
+                    <span v-html="formatViewers()"></span>
                 </span>
             </p>
         </portal>
@@ -510,9 +510,7 @@
                              class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
                             <div
                                 class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
-                                <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name">{{
-                                        rightClickedPlayer.name
-                                    }}</h2>
+                                <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name"></h2>
                                 <p class="text-muted dark:text-dark-muted mb-1">
                                     <span class="font-semibold">{{ t('players.steam') }}:</span>
                                     <a :href="'/players/' + rightClickedPlayer.id" target="_blank"
@@ -1656,12 +1654,16 @@ export default {
             this.loadingScreenStatus = this.t('map.timestamp_render');
 
             if (players) {
-                if (this.heatmapLayer) {
-                    this.map.removeLayer(this.heatmapLayer);
+                if (this.heatmapLayers) {
+                    for (let x = 0; x < this.heatmapLayers.length; x++) {
+                        this.map.removeLayer(this.heatmapLayers[x]);
+                    }
+
                     if (this.historyMarker) {
                         this.map.removeLayer(this.historyMarker);
                     }
-                    this.heatmapLayer = null;
+
+                    this.heatmapLayers = [];
                 }
 
                 $('.leaflet-control-layers-selector').each(function () {
@@ -1670,11 +1672,13 @@ export default {
                     }
                 });
 
-                this.heatmapLayer = L.markerClusterGroup({
+                const cluster = L.markerClusterGroup({
                     maxClusterRadius: 10
                 });
 
-                this.heatmapLayer.addTo(this.map);
+                this.heatmapLayers.push(cluster);
+
+                cluster.addTo(this.map);
 
                 for (let x = 0; x < players.length; x++) {
                     const player = players[x];
@@ -1697,7 +1701,7 @@ export default {
                         autoPan: false
                     });
 
-                    this.heatmapLayer.addLayer(marker);
+                    cluster.addLayer(marker);
                 }
             }
 
