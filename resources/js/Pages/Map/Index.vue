@@ -16,13 +16,13 @@
                 </select>
             </h1>
             <p v-if="!isTimestampShowing && !isHistoricShowing">
-                <span v-html="data" class="block">{{ data }}</span>
+                <span v-html="data" class="block"></span>
                 <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">
                     {{ lastConnectionError }}
                 </span>
                 <span class="block text-xs text-muted dark:text-dark-muted leading-3 mt-2">
                     <b>{{ t('map.current_viewers') }}: </b>
-                    <span v-html="formatViewers()">{{ formatViewers() }}</span>
+                    <span v-html="formatViewers()"></span>
                 </span>
             </p>
         </portal>
@@ -510,9 +510,7 @@
                              class="absolute z-1k top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70">
                             <div
                                 class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
-                                <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name">{{
-                                        rightClickedPlayer.name
-                                    }}</h2>
+                                <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name"></h2>
                                 <p class="text-muted dark:text-dark-muted mb-1">
                                     <span class="font-semibold">{{ t('players.steam') }}:</span>
                                     <a :href="'/players/' + rightClickedPlayer.id" target="_blank"
@@ -999,7 +997,7 @@ export default {
             screenshotError: null,
             isAttachingScreenshot: false,
 
-            heatmapLayer: null,
+            heatmapLayers: [],
             historyMarker: null,
             loadingScreenStatus: null,
 
@@ -1282,7 +1280,8 @@ export default {
                 const flags = [
                     pos && pos.i ? 'invisible' : false,
                     pos && pos.c ? 'invincible' : false,
-                    pos && pos.f ? 'frozen' : false
+                    pos && pos.f ? 'frozen' : false,
+                    pos && pos.d ? 'dead' : false
                 ].filter(flag => flag).join(", ");
 
                 this.historicDetails = "Flags: " + (flags ? flags : 'N/A') + " - Altitude: " + (pos ? pos.z + "m" : "N/A");
@@ -1311,6 +1310,23 @@ export default {
                 ));
             }
         },
+        getAltitudeChartColor(invincible, invisible, frozen, dead) {
+            if (invincible && invisible && frozen) {
+                return "#c567e4";
+            } else if (invincible && invisible || invisible && frozen || invincible && frozen) {
+                return "#e4c567";
+            } else if (invisible) {
+                return "#a6e467";
+            } else if (invincible) {
+                return "#ff99ff";
+            } else if (frozen) {
+                return "#99ccff";
+            } else if (dead) {
+                return "#002db3";
+            }
+
+            return "#8080ff";
+        },
         renderAltitudeChart(timestamp) {
             const fromTime = parseInt(timestamp),
                 tillTime = fromTime + 60;
@@ -1336,7 +1352,7 @@ export default {
 
                     data.push(val);
 
-                    colors.push(pos ? (pos.i ? '#67e467' : '#4d4dff') : '#ff4d4d');
+                    colors.push(pos ? this.getAltitudeChartColor(pos.c, pos.i, pos.f, pos.d) : '#ff4d4d')
                 }
 
                 let lastValue = data[0];
@@ -1353,10 +1369,18 @@ export default {
                             break;
                         }
                     }
-                }
 
-                if (!lastValue) {
-                    lastValue = 0;
+                    if (lastValue === null) {
+                        for (let x = first; x >= tillTime; x++) {
+                            const pos = this.historyRange.data[x];
+
+                            if (pos) {
+                                lastValue = pos.z;
+
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 const cWidth = canvas.width - 2,
@@ -1460,12 +1484,16 @@ export default {
 
             this.loadingScreenStatus = this.t('map.heatmap_render');
 
-            if (this.heatmapLayer) {
-                this.map.removeLayer(this.heatmapLayer);
+            if (this.heatmapLayers) {
+                for (let x = 0; x < this.heatmapLayers.length; x++) {
+                    this.map.removeLayer(this.heatmapLayers[x]);
+                }
+
                 if (this.historyMarker) {
                     this.map.removeLayer(this.historyMarker);
                 }
-                this.heatmapLayer = null;
+
+                this.heatmapLayers = [];
             }
 
             this.historyRange.view = false;
@@ -1481,12 +1509,77 @@ export default {
 
                 const timestamps = Object.keys(history);
 
-                const latlngs = Object.values(history).map(entry => {
-                    const coords = Vector3.fromGameCoords(parseInt(entry.x), parseInt(entry.y), 0).toMap();
-                    return [coords.lat, coords.lng];
-                });
+                const first = timestamps[0],
+                    last = timestamps[timestamps.length - 1];
 
-                this.heatmapLayer = L.polyline(latlngs, {color: '#3380f3'});
+                const addPolyline = (coords) => {
+                    let line = L.polyline(coords, {color: '#3380f3'});
+
+                    line.on('click', (e) => {
+                        const latlng = e.latlng;
+
+                        let closestDistance = 1000;
+                        let closest = false;
+
+                        Object.entries(history).forEach(entrySet => {
+                            const coords = Vector3.fromGameCoords(parseInt(entrySet[1].x), parseInt(entrySet[1].y), 0).toMap();
+
+                            const dst = distance(coords.lat, coords.lng, latlng.lat, latlng.lng);
+
+                            if (dst < closestDistance) {
+                                closestDistance = dst;
+                                closest = entrySet[0];
+                            }
+                        });
+
+                        $('#range-slider').val(closest);
+
+                        this.historyRangeChange();
+                    });
+
+                    line.addTo(this.map);
+
+                    this.heatmapLayers.push(line);
+                }
+
+                let latlngs = [],
+                    lastEntryNull = 0;
+
+                for (let x = first; x <= last; x++) {
+                    let pos = history[x];
+
+                    if (!pos) {
+                        pos = history[x - 1];
+
+                        if (!pos) {
+                            pos = history[x + 1];
+                        }
+                    }
+
+                    if (pos) {
+                        if (lastEntryNull >= 10 && pos.i && pos.c && pos.f) {
+                            continue;
+                        }
+
+                        const coords = Vector3.fromGameCoords(pos.x, pos.y, 0).toMap();
+
+                        latlngs.push([coords.lat, coords.lng]);
+
+                        lastEntryNull = 0;
+                    } else {
+                        if (latlngs.length > 0) {
+                            addPolyline(latlngs);
+
+                            latlngs = [];
+                        }
+
+                        lastEntryNull++;
+                    }
+                }
+
+                if (latlngs.length > 0) {
+                    addPolyline(latlngs);
+                }
 
                 function distance(x1, y1, x2, y2) {
                     const xDiff = x1 - x2;
@@ -1494,28 +1587,6 @@ export default {
 
                     return Math.abs(Math.sqrt(xDiff * xDiff + yDiff * yDiff));
                 }
-
-                this.heatmapLayer.on('click', (e) => {
-                    const latlng = e.latlng;
-
-                    let closestDistance = 1000;
-                    let closest = false;
-
-                    Object.entries(history).forEach(entrySet => {
-                        const coords = Vector3.fromGameCoords(parseInt(entrySet[1].x), parseInt(entrySet[1].y), 0).toMap();
-
-                        const dst = distance(coords.lat, coords.lng, latlng.lat, latlng.lng);
-
-                        if (dst < closestDistance) {
-                            closestDistance = dst;
-                            closest = entrySet[0];
-                        }
-                    });
-
-                    $('#range-slider').val(closest);
-
-                    this.historyRangeChange();
-                });
 
                 this.historyMarker = L.marker(latlngs[0], {});
 
@@ -1541,10 +1612,9 @@ export default {
 
                 this.historyRange.view = true;
 
-                this.heatmapLayer.addTo(this.map);
                 this.historyMarker.addTo(this.map);
 
-                this.map.fitBounds(this.heatmapLayer.getBounds());
+                //this.map.fitBounds(this.heatmapLayer.getBounds());
 
                 this.historyRangeChange(parseInt(timestamps[0]));
             }
@@ -1584,12 +1654,16 @@ export default {
             this.loadingScreenStatus = this.t('map.timestamp_render');
 
             if (players) {
-                if (this.heatmapLayer) {
-                    this.map.removeLayer(this.heatmapLayer);
+                if (this.heatmapLayers) {
+                    for (let x = 0; x < this.heatmapLayers.length; x++) {
+                        this.map.removeLayer(this.heatmapLayers[x]);
+                    }
+
                     if (this.historyMarker) {
                         this.map.removeLayer(this.historyMarker);
                     }
-                    this.heatmapLayer = null;
+
+                    this.heatmapLayers = [];
                 }
 
                 $('.leaflet-control-layers-selector').each(function () {
@@ -1598,11 +1672,13 @@ export default {
                     }
                 });
 
-                this.heatmapLayer = L.markerClusterGroup({
+                const cluster = L.markerClusterGroup({
                     maxClusterRadius: 10
                 });
 
-                this.heatmapLayer.addTo(this.map);
+                this.heatmapLayers.push(cluster);
+
+                cluster.addTo(this.map);
 
                 for (let x = 0; x < players.length; x++) {
                     const player = players[x];
@@ -1625,7 +1701,7 @@ export default {
                         autoPan: false
                     });
 
-                    this.heatmapLayer.addLayer(marker);
+                    cluster.addLayer(marker);
                 }
             }
 
