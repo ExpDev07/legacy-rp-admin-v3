@@ -313,6 +313,10 @@ class PlayerBanController extends Controller
                 if ($info) {
                     $additionalInfo = '    - ' . $info['country'] . ' (' . $info['isp'] . ')';
 
+                    if (in_array($info['isp'], ['OVH SAS'])) {
+                        $isProxy = true;
+                    }
+
                     if ($info['proxy']) {
                         $additionalInfo .= "\n    - Is Proxy";
                         $isProxy = true;
