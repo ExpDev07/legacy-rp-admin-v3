@@ -136,8 +136,47 @@ class PlayerController extends Controller
 
         $players = $query->get();
 
+        $characterIds = [];
+
+        foreach ($players as $player) {
+            $status = Player::getOnlineStatus($player->steam_identifier, true);
+
+            if ($status->character) {
+                $characterIds[] = $status->character;
+            }
+        }
+
+        $characters = !empty($characterIds) ? Character::query()->whereIn('character_id', $characterIds)->get() : [];
+
+        $playerList = [];
+
+        foreach ($players as $player) {
+            $character = null;
+
+            foreach ($characters as $char) {
+                if ($char->steam_identifier === $player->steam_identifier) {
+                    $character = $char;
+
+                    break;
+                }
+            }
+
+            $status = Player::getOnlineStatus($player->steam_identifier, true);
+
+            $playerList[] = [
+                'serverId' => $status && $status->serverId ? $status->serverId : null,
+                'character' => $character ? [
+                    'name' => $character->first_name . ' ' . $character->last_name,
+                    'backstory' => $character->backstory
+                ] : null,
+                'playerName' => $player->player_name,
+                'playTime' => $player->playtime,
+                'steamIdentifier' => $player->steam_identifier,
+            ];
+        }
+
         return Inertia::render('Players/NewPlayers', [
-            'players' => PlayerIndexResource::collection($players)
+            'players' => $playerList,
         ]);
     }
 
