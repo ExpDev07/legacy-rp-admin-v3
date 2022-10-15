@@ -168,7 +168,8 @@ class PlayerController extends Controller
                 'serverId' => $status && $status->serverId ? $status->serverId : null,
                 'character' => $character ? [
                     'name' => $character->first_name . ' ' . $character->last_name,
-                    'backstory' => $character->backstory
+                    'backstory' => $character->backstory,
+                    'danny' => GeneralHelper::isDefaultDanny(intval($character->ped_model_hash), $character->ped_model_data)
                 ] : null,
                 'playerName' => $player->player_name,
                 'playTime' => $player->playtime,

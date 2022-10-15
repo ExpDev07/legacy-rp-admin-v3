@@ -23,6 +23,7 @@
                         <th class="px-6 py-4">{{ t('global.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.playtime') }}</th>
+                        <th class="px-6 py-4">{{ t('players.new.danny_percentage') }}</th>
                         <th class="px-6 py-4">{{ t('players.new.character') }}</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
@@ -36,9 +37,17 @@
                             </span>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playerName }}</td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ player.playTime | humanizeSeconds }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ formatSecondDiff(player.playTime) }}</td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <pre class="whitespace-pre-wrap text-xs" v-if="player.character"><b>{{ player.character.name }}</b><br>{{ player.character.backstory }}</pre>
+                            <span v-if="player.character">
+                                {{ player.character.danny }}% Default Danny
+                            </span>
+                            <span v-else>
+                                {{ t('players.new.no_character') }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-3 border-t mobile:block">
+                            <pre class="whitespace-pre-wrap text-xs max-w-xl" v-if="player.character"><b>{{ player.character.name }}</b><br>{{ player.character.backstory.length > 250 ? player.character.backstory.substr(0, 250) + "..." : player.character.backstory }}</pre>
                             <span v-else>{{ t('players.new.no_character') }}</span>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
@@ -84,6 +93,9 @@ export default {
         };
     },
     methods: {
+        formatSecondDiff(sec) {
+            return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
+        },
         refresh: async function () {
             if (this.isLoading) {
                 return;
