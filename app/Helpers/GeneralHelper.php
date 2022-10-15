@@ -82,6 +82,41 @@ class GeneralHelper
         return $info;
     }
 
+    public static function isDefaultDanny($modelHash, $modelData)
+    {
+        $modelData = is_string($modelData) ? json_decode($modelData, true) : $modelData;
+
+        if (!$modelData || !isset($modelData["props"]) || !isset($modelData["components"]) || !isset($modelData["headBlendData"])) {
+            return 0;
+        }
+
+        if ($modelHash !== 1885233650 && $modelHash !== -1667301416) {
+            return 0;
+        }
+
+        $hasChangedProps = false;
+        foreach($modelData["props"] as $prop) {
+            if ($prop["drawableId"] !== -1) {
+                $hasChangedProps = true;
+
+                break;
+            }
+        }
+
+        $hasChangedComponents = false;
+        foreach($modelData["components"] as $component) {
+            if ($component["drawableId"] !== 0) {
+                $hasChangedComponents = true;
+
+                break;
+            }
+        }
+
+        $isDefaultHead = $modelData["headBlendData"]["skinFirstId"] === 0 && $modelData["headBlendData"]["skinSecondId"] === 0 && $modelData["headBlendData"]["shapeFirstId"] === 0 && $modelData["headBlendData"]["shapeSecondId"] === 0;
+
+        return (!$hasChangedProps ? 0.2 : 0) + (!$hasChangedComponents ? 0.5 : 0) + ($isDefaultHead ? 0.3 : 0);
+    }
+
     /**
      * Returns a random inspiring quote
      *
