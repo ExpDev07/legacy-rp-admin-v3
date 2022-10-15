@@ -10,6 +10,7 @@ use App\Http\Resources\PanelLogResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
+use App\Character;
 use App\Screenshot;
 use App\Warning;
 use Illuminate\Http\Request;
