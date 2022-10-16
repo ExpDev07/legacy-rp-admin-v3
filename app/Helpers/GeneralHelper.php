@@ -87,11 +87,11 @@ class GeneralHelper
         $modelData = is_string($modelData) ? json_decode($modelData, true) : $modelData;
 
         if (!$modelData || !isset($modelData["headOverlay"]) || !isset($modelData["components"]) || !isset($modelData["headBlendData"])) {
-            return 0;
+            return false;
         }
 
         if ($modelHash !== 1885233650 && $modelHash !== -1667301416) {
-            return 0;
+            return false;
         }
 
         $hasChangedComponents = 0;

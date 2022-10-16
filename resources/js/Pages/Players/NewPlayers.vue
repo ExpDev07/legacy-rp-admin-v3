@@ -39,7 +39,7 @@
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ formatSecondDiff(player.playTime) }}</td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <span v-if="player.character">
+                            <span v-if="player.character && player.character.danny !== false">
                                 {{ Math.ceil(player.character.danny * 1000) / 10 }}% Default Danny
                             </span>
                             <span v-else>
