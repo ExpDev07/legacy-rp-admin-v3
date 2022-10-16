@@ -94,6 +94,7 @@ class GeneralHelper
             return 0;
         }
 
+        $hasChangedComponents = 0;
         foreach($modelData["components"] as $component) {
             if ($component["drawableId"] !== 0) {
                 $hasChangedComponents++;
