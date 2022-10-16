@@ -232,6 +232,11 @@ class PlayerCharacterController extends Controller
             $data['date_of_birth'] = date('Y-m-d', $time);
         }
 
+        if ($data['job_name'] === "None") {
+            $data['department_name'] = "None";
+            $data['position_name'] = "None";
+        }
+
         $changed = [];
         $old = $character->toArray();
         foreach ($data as $k => $v) {
