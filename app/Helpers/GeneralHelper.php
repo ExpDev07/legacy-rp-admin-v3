@@ -13,7 +13,6 @@ class GeneralHelper
         4, // Pants
         6, // Shoes
         7, // Necklace and Ties
-        8, // Undershirt
         10, // Decals
         11, // Shirts
         3, // Arms
@@ -26,6 +25,11 @@ class GeneralHelper
         5, // Blush
         8, // Lipstick
         9, // Moles and Freckles
+    ];
+
+    const PedProps = [
+        0, // Hats
+        6, // Left Wrist
     ];
 
     /**
@@ -105,7 +109,7 @@ class GeneralHelper
     {
         $modelData = is_string($modelData) ? json_decode($modelData, true) : $modelData;
 
-        if (!$modelData || !isset($modelData["headOverlay"]) || !isset($modelData["components"]) || !isset($modelData["headBlendData"])) {
+        if (!$modelData || !isset($modelData["headOverlay"]) || !isset($modelData["props"]) || !isset($modelData["components"]) || !isset($modelData["headBlendData"])) {
             return false;
         }
 
@@ -131,12 +135,21 @@ class GeneralHelper
             }
         }
 
-        $total = sizeof(self::PedComponents) + sizeof(self::PedOverlays);
+        foreach($modelData["props"] as $propId => $prop) {
+            if (!in_array(intval($propId), self::PedProps)) continue;
+
+            if ($prop["drawableId"] !== -1) {
+                $changed++;
+            }
+        }
+
+        $total = sizeof(self::PedComponents) + sizeof(self::PedOverlays) + sizeof(self::PedProps);
         $percentage = 1 - ($changed / $total);
 
-        $isDefaultHead = $modelData["headBlendData"]["skinFirstId"] === 0 && $modelData["headBlendData"]["skinSecondId"] === 0 && $modelData["headBlendData"]["shapeFirstId"] === 0 && $modelData["headBlendData"]["shapeSecondId"] === 0;
+        $isDefaultSkin = $modelData["headBlendData"]["skinFirstId"] === 0 && $modelData["headBlendData"]["skinSecondId"] === 0;
+        $isDefaultShape = $modelData["headBlendData"]["shapeFirstId"] === 0 && $modelData["headBlendData"]["shapeSecondId"] === 0;
 
-        return ($percentage * 0.7) + ($isDefaultHead ? 0.3 : 0);
+        return ($percentage * 0.8) + ($isDefaultSkin ? 0.1 : 0) + ($isDefaultShape ? 0.1 : 0);
     }
 
     /**
