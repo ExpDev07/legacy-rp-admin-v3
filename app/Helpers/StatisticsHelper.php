@@ -5,8 +5,6 @@ namespace App\Helpers;
 use App\Ban;
 use App\CasinoLog;
 use App\Character;
-use App\Statistics\BanStatistic;
-use App\Statistics\EconomyStatistic;
 use App\Warning;
 use DateTime;
 use DateTimeZone;
@@ -41,52 +39,6 @@ class StatisticsHelper
         $data = self::parseHistoricData($stats, true);
 
         CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
-
-        return $data;
-    }
-
-    /**
-     * Returns Ban movement statistics
-     *
-     * @return array
-     */
-    public static function getBanMoveStats(): array
-    {
-        $key = 'ban_move_statistics';
-        if (CacheHelper::exists($key)) {
-            return CacheHelper::read($key, []);
-        }
-
-        $stats = BanStatistic::query()->select([
-            'day', 'opening', 'closing', 'high', 'low',
-        ])->get()->toArray();
-
-        $data = self::formatFinanceStatistics($stats);
-
-        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
-
-        return $data;
-    }
-
-    /**
-     * Returns Economy statistics
-     *
-     * @return array
-     */
-    public static function getEconomyStats(): array
-    {
-        $key = 'economy_statistics';
-        if (CacheHelper::exists($key)) {
-            return CacheHelper::read($key, []);
-        }
-
-        $stats = EconomyStatistic::query()->select([
-            'day', 'opening', 'closing', 'high', 'low',
-        ])->get()->toArray();
-
-        $data = self::formatFinanceStatistics($stats);
-
-        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
 
         return $data;
     }

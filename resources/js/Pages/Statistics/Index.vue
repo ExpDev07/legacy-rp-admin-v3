@@ -23,16 +23,6 @@
             </div>
 
             <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
-                <FinancialChart
-                    :data="[banMove.data]"
-                    :data-labels="banMove.labels"
-                    :format-as-money="false"
-                    :title="t('statistics.titles.bans_move')"
-                    class="w-full"
-                ></FinancialChart>
-            </div>
-
-            <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
                     :data="[creations.data, deletions.data]"
                     :data-labels="creations.labels"
@@ -41,18 +31,6 @@
                     :title="t('statistics.titles.character')"
                     class="w-full"
                 ></LineChart>
-            </div>
-
-            <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
-
-            <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
-                <FinancialChart
-                    :data="[economy.data]"
-                    :data-labels="economy.labels"
-                    :is-casino-chart="true"
-                    :title="t('statistics.titles.economy')"
-                    class="w-full"
-                ></FinancialChart>
             </div>
 
             <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
@@ -198,24 +176,14 @@
 <script>
 import Layout from './../../Layouts/App';
 import LineChart from '../../Components/Charts/LineChart';
-import FinancialChart from '../../Components/Charts/FinancialChart';
 
 export default {
     components: {
-        LineChart,
-        FinancialChart
+        LineChart
     },
     layout: Layout,
     props: {
         bans: {
-            type: Object,
-            required: true,
-        },
-        banMove: {
-            type: Object,
-            required: true,
-        },
-        economy: {
             type: Object,
             required: true,
         },
