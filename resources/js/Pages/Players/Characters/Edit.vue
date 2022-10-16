@@ -313,7 +313,7 @@
                         </label>
                         <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
                                 id="department" v-model="form.department_name" @change="setPayCheck">
-                            <option :value="null">{{ t('global.none') }}</option>
+                            <option :value="null" v-if="form.job_name === 'Unemployed'">{{ t('global.none') }}</option>
 
                             <option :value="department.name" v-for="department in job.departments">
                                 {{ department.name || t('global.none') }}
@@ -328,7 +328,7 @@
                             </label>
                             <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
                                     id="position" v-model="form.position_name" @change="setPayCheck">
-                                <option :value="null">{{ t('global.none') }}</option>
+                                <option :value="null" v-if="form.job_name === 'Unemployed'">{{ t('global.none') }}</option>
 
                                 <option :value="position" v-for="position in department.positions">
                                     {{ position || t('global.none') }}
@@ -1120,6 +1120,8 @@ export default {
             if (this.form.job_name === "Unemployed") {
                 this.form.department_name = null;
                 this.form.position_name = null;
+
+                this.paycheck = 0;
 
                 return;
             }
