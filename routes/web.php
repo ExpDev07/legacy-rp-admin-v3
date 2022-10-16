@@ -224,12 +224,6 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
 });
 
 Route::group(['prefix' => 'cron'], function () {
-    // ban statistics cronjob
-    Route::get('bans', [CronjobController::class, 'updateBanStatistics']);
-
-    // economy statistics cronjob
-    Route::get('economy', [CronjobController::class, 'updateEconomyStatistics']);
-
     // General purpose cronjobs
     Route::get('general', [CronjobController::class, 'generalCronjob']);
 });

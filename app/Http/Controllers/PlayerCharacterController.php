@@ -14,7 +14,6 @@ use App\PanelLog;
 use App\Player;
 use App\Property;
 use App\Server;
-use App\Statistics\EconomyStatistic;
 use App\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -158,8 +157,6 @@ class PlayerCharacterController extends Controller
 
         $horns = Vehicle::getHornMap(false);
 
-        $economy = EconomyStatistic::query()->orderByDesc('last_updated')->select(['last_updated', 'closing'])->limit(1)->first();
-
         $jobs = OPFWHelper::getJobsJSON(Server::getFirstServer() ?? '');
 
         return Inertia::render('Players/Characters/Edit', [
@@ -171,7 +168,6 @@ class PlayerCharacterController extends Controller
             'vehicleMap'   => CacheHelper::getVehicleMap() ?? ['empty' => 'map'],
             'jobs'         => $jobs ? $jobs['jobs'] : [],
             'resetCoords'  => $resetCoords ? array_keys($resetCoords) : [],
-            'economy'      => $economy ? $economy->closing : 0,
             'vehicleValue' => Vehicle::getTotalVehicleValue($character->character_id),
             'returnTo'     => $_GET['returnTo'] ?? $player->steam_identifier,
         ]);

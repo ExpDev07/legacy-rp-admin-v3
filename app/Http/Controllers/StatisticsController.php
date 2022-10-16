@@ -29,8 +29,6 @@ class StatisticsController extends Controller
 
         return Inertia::render('Statistics/Index', [
             'bans'       => StatisticsHelper::getBanStats(),
-            'banMove'    => StatisticsHelper::getBanMoveStats(),
-            'economy'    => StatisticsHelper::getEconomyStats(),
             'warnings'   => StatisticsHelper::getWarningStats(),
             'notes'      => StatisticsHelper::getNoteStats(),
             'creations'  => StatisticsHelper::getCharacterCreationStats(),
