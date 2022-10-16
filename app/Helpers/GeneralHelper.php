@@ -126,7 +126,7 @@ class GeneralHelper
         foreach($modelData["headOverlay"] as $overlayId => $overlay) {
             if (!in_array(intval($overlayId), self::PedOverlays)) continue;
 
-            if ($overlay["overlayOpacity"] > 0) {
+            if ($overlay["overlayOpacity"] > 0 && $overlay["overlayValue"] !== 255) {
                 $changed++;
             }
         }
