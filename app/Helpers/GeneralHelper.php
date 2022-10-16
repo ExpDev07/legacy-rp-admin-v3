@@ -86,23 +86,12 @@ class GeneralHelper
     {
         $modelData = is_string($modelData) ? json_decode($modelData, true) : $modelData;
 
-        if (!$modelData || !isset($modelData["props"]) || !isset($modelData["components"]) || !isset($modelData["headBlendData"])) {
+        if (!$modelData || !isset($modelData["headOverlay"]) || !isset($modelData["components"]) || !isset($modelData["headBlendData"])) {
             return 0;
         }
 
         if ($modelHash !== 1885233650 && $modelHash !== -1667301416) {
             return 0;
-        }
-
-        $totalComponents = 0;
-        $hasChangedComponents = 0;
-
-        foreach($modelData["props"] as $prop) {
-            $totalComponents++;
-
-            if ($prop["drawableId"] !== -1) {
-                $hasChangedComponents++;
-            }
         }
 
         foreach($modelData["components"] as $component) {
@@ -113,9 +102,18 @@ class GeneralHelper
             }
         }
 
+        $changedHeadOverlays = 0;
+        foreach($modelData["headOverlay"] as $overlayId => $overlay) {
+            if (!in_array(intval($overlayId), [2, 4, 5, 8, 9])) continue;
+
+            if ($overlay["overlayOpacity"] > 0) {
+                $changedHeadOverlays++;
+            }
+        }
+
         $isDefaultHead = $modelData["headBlendData"]["skinFirstId"] === 0 && $modelData["headBlendData"]["skinSecondId"] === 0 && $modelData["headBlendData"]["shapeFirstId"] === 0 && $modelData["headBlendData"]["shapeSecondId"] === 0;
 
-        return (($hasChangedComponents/$totalComponents) * 0.6) + ($isDefaultHead ? 0.4 : 0);
+        return ((1 - ($hasChangedComponents/12)) * 0.5) + ((1 - ($changedHeadOverlays/5)) * 0.2) + ($isDefaultHead ? 0.3 : 0);
     }
 
     /**
