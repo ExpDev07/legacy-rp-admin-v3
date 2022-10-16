@@ -9,6 +9,25 @@ use Illuminate\Support\Str;
 
 class GeneralHelper
 {
+    const PedComponents = [
+        4, // Pants
+        6, // Shoes
+        7, // Necklace and Ties
+        8, // Undershirt
+        10, // Decals
+        11, // Shirts
+        3, // Arms
+        1, // Masks
+    ];
+
+    const PedOverlays = [
+        2, // Eyebrows
+        4, // Makeup
+        5, // Blush
+        8, // Lipstick
+        9, // Moles and Freckles
+    ];
+
     /**
      * @var array
      */
@@ -94,25 +113,30 @@ class GeneralHelper
             return false;
         }
 
-        $hasChangedComponents = 0;
-        foreach($modelData["components"] as $component) {
+        $changed = 0;
+
+        foreach($modelData["components"] as $componentId => $component) {
+            if (!in_array(intval($componentId), self::PedComponents)) continue;
+
             if ($component["drawableId"] !== 0) {
-                $hasChangedComponents++;
+                $changed++;
             }
         }
 
-        $changedHeadOverlays = 0;
         foreach($modelData["headOverlay"] as $overlayId => $overlay) {
-            if (!in_array(intval($overlayId), [2, 4, 5, 8, 9])) continue;
+            if (!in_array(intval($overlayId), self::PedOverlays)) continue;
 
             if ($overlay["overlayOpacity"] > 0) {
-                $changedHeadOverlays++;
+                $changed++;
             }
         }
+
+        $total = sizeof(self::PedComponents) + sizeof(self::PedOverlays);
+        $percentage = 1 - ($changed / $total);
 
         $isDefaultHead = $modelData["headBlendData"]["skinFirstId"] === 0 && $modelData["headBlendData"]["skinSecondId"] === 0 && $modelData["headBlendData"]["shapeFirstId"] === 0 && $modelData["headBlendData"]["shapeSecondId"] === 0;
 
-        return ((1 - ($hasChangedComponents/12)) * 0.5) + ((1 - ($changedHeadOverlays/5)) * 0.2) + ($isDefaultHead ? 0.3 : 0);
+        return ($percentage * 0.7) + ($isDefaultHead ? 0.3 : 0);
     }
 
     /**
