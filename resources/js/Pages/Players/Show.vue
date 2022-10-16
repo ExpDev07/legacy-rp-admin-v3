@@ -726,7 +726,7 @@
                                 {{ pedModel(character.pedModelHash) }}
                             </h4>
                             <h4 class="text-gray-700 dark:text-gray-300 text-sm italic font-mono mt-1" v-if="character.danny !== false">
-                                {{ Math.ceil(character.danny * 1000) / 10 }}% Default Danny
+                                {{ (character.danny * 100).toFixed(1) }}% Default Danny
                             </h4>
                         </template>
 
