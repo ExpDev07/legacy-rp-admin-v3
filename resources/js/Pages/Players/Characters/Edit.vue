@@ -993,7 +993,7 @@ export default {
         }
 
         jobs.unshift({
-            name: '',
+            name: 'Unemployed',
             departments: [
                 {
                     name: '',
