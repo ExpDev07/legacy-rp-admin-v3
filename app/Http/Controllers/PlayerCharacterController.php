@@ -232,10 +232,10 @@ class PlayerCharacterController extends Controller
             $data['date_of_birth'] = date('Y-m-d', $time);
         }
 
-        if (!$data['job_name']) {
+        if (!$data['job_name'] || $data['job_name'] === 'Unemployed') {
             $data['job_name'] = "Unemployed";
-            $data['department_name'] = "None";
-            $data['position_name'] = "None";
+            $data['department_name'] = null;
+            $data['position_name'] = null;
         }
 
         $changed = [];
