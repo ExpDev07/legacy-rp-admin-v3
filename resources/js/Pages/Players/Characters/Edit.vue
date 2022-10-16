@@ -301,6 +301,8 @@
                         </label>
                         <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" id="job"
                                 v-model="form.job_name" @change="setPayCheck">
+                            <option value="Unemployed">Unemployed</option>
+
                             <option :value="job.name" v-for="job in formattedJobs">{{ job.name || t('global.none') }}</option>
                         </select>
                     </div>
@@ -311,6 +313,8 @@
                         </label>
                         <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
                                 id="department" v-model="form.department_name" @change="setPayCheck">
+                            <option :value="null">{{ t('global.none') }}</option>
+
                             <option :value="department.name" v-for="department in job.departments">
                                 {{ department.name || t('global.none') }}
                             </option>
@@ -324,6 +328,8 @@
                             </label>
                             <select class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600"
                                     id="position" v-model="form.position_name" @change="setPayCheck">
+                                <option :value="null">{{ t('global.none') }}</option>
+
                                 <option :value="position" v-for="position in department.positions">
                                     {{ position || t('global.none') }}
                                 </option>
@@ -992,18 +998,6 @@ export default {
             jobs[x].departments = departments;
         }
 
-        jobs.unshift({
-            name: 'Unemployed',
-            departments: [
-                {
-                    name: '',
-                    positions: {
-                        '': ''
-                    }
-                }
-            ]
-        });
-
         let paychecks = {};
         for (let x = 0; x < jobsObject.length; x++) {
             const j = jobsObject[x];
@@ -1123,6 +1117,13 @@ export default {
             return ["heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military", "utility", "commercial", "hunting", "special"].filter(l => !this.character.licenses.includes(l));
         },
         setPayCheck() {
+            if (this.form.job_name === "Unemployed") {
+                this.form.department_name = null;
+                this.form.position_name = null;
+
+                return;
+            }
+
             for (let x = 0; x < jobsObject.length; x++) {
                 const j = jobsObject[x];
 
