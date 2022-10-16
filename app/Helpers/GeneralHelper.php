@@ -94,27 +94,28 @@ class GeneralHelper
             return 0;
         }
 
-        $hasChangedProps = false;
-        foreach($modelData["props"] as $prop) {
-            if ($prop["drawableId"] !== -1) {
-                $hasChangedProps = true;
+        $totalComponents = 0;
+        $hasChangedComponents = 0;
 
-                break;
+        foreach($modelData["props"] as $prop) {
+            $totalComponents++;
+
+            if ($prop["drawableId"] !== -1) {
+                $hasChangedComponents++;
             }
         }
 
-        $hasChangedComponents = false;
         foreach($modelData["components"] as $component) {
-            if ($component["drawableId"] !== 0) {
-                $hasChangedComponents = true;
+            $totalComponents++;
 
-                break;
+            if ($component["drawableId"] !== 0) {
+                $hasChangedComponents++;
             }
         }
 
         $isDefaultHead = $modelData["headBlendData"]["skinFirstId"] === 0 && $modelData["headBlendData"]["skinSecondId"] === 0 && $modelData["headBlendData"]["shapeFirstId"] === 0 && $modelData["headBlendData"]["shapeSecondId"] === 0;
 
-        return (!$hasChangedProps ? 0.2 : 0) + (!$hasChangedComponents ? 0.5 : 0) + ($isDefaultHead ? 0.3 : 0);
+        return (($hasChangedComponents/$totalComponents) * 0.6) + ($isDefaultHead ? 0.4 : 0);
     }
 
     /**
