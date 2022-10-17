@@ -88,4 +88,21 @@ class Controller extends BaseController
 
         return false;
     }
+
+    protected function isSuperAdmin(Request $request): bool
+    {
+        $user = $request->user();
+
+        if ($user) {
+            $player = $user->player ?? false;
+
+            if ($player) {
+                $superAdmin = $player->is_super_admin ?? false;
+
+                return $superAdmin || GeneralHelper::isUserRoot($player->steam_identifier);
+            }
+        }
+
+        return false;
+    }
 }

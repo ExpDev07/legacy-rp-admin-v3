@@ -208,13 +208,6 @@
                             </table>
                         </div>
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3 relative">
-                            <span
-                                class="absolute top-0 right-0 block p-0.5 text-center text-black dark:text-white text-xs absolute top-0 right-3 bg-transparent rounded"
-                                :title="local.influence"
-                            >
-                                <i class="fas fa-info"></i>
-                            </span>
-
                             <table class="text-left w-full">
                                 <tr>
                                     <th class="p-2">
@@ -938,10 +931,6 @@ export default {
             type: Array,
             required: true,
         },
-        economy: {
-            type: Number,
-            required: true,
-        },
         vehicleValue: {
             type: Number,
             required: true,
@@ -1025,8 +1014,7 @@ export default {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
                 cash: money.cash,
                 cashTitle: money.cashTitle,
-                stocks: money.stocks,
-                influence: money.influence
+                stocks: money.stocks
             },
             paycheck: 0,
             form: {
@@ -1099,9 +1087,6 @@ export default {
                 .sort((a, b) => a.label.localeCompare(b.label));
         },
         getMoneyLocals() {
-            const totalMoney = this.character.cash + this.character.bank + this.character.stocksBalance + this.vehicleValue,
-                influence = this.economy > 0 && totalMoney > 0 ? (totalMoney / this.economy) * 100 : 0;
-
             return {
                 cash: this.t("players.edit.cash", this.numberFormat(this.character.money, 0, true)),
                 cashTitle: this.t(
@@ -1109,8 +1094,7 @@ export default {
                     this.numberFormat(this.character.cash, 0, true),
                     this.numberFormat(this.character.bank, 0, true)
                 ),
-                stocks: this.t("players.edit.stocks", this.numberFormat(this.character.stocksBalance, 0, true)),
-                influence: this.t('players.characters.economy', this.numberFormat(influence, 3))
+                stocks: this.t("players.edit.stocks", this.numberFormat(this.character.stocksBalance, 0, true))
             };
         },
         getAvailableLicenses() {
@@ -1292,7 +1276,6 @@ export default {
             this.local.cash = money.cash;
             this.local.cashTitle = money.cashTitle;
             this.local.stocks = money.stocks;
-            this.local.influence = money.influence;
 
             this.balanceForm.cash = this.character.cash;
             this.balanceForm.bank = this.character.bank;

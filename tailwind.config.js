@@ -41,6 +41,7 @@ module.exports = {
             },
             width: {
                 'inventory':          '220px',
+                'small-alert':        '380px',
                 'alert':              '650px',
                 'big-alert':          '650px',
                 'large-alert':        '1000px',

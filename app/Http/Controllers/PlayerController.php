@@ -22,7 +22,6 @@ use Inertia\Response;
 
 class PlayerController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -212,16 +211,17 @@ class PlayerController extends Controller
                 $isSenior = $this->isSeniorStaff($request);
 
                 return Inertia::render('Players/Show', [
-                    'player'      => new PlayerResource($resolved),
-                    'characters'  => CharacterResource::collection($resolved->characters),
-                    'warnings'    => $resolved->fasterWarnings($isSenior),
-                    'panelLogs'   => PanelLogResource::collection($resolved->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
-                    'discord'     => $resolved->getDiscordInfo(),
-                    'kickReason'  => trim($request->query('kick')) ?? '',
-                    'screenshots' => Screenshot::getAllScreenshotsForPlayer($resolved->steam_identifier),
-                    'whitelisted' => !!$whitelisted,
-                    'blacklisted' => !!$blacklisted,
-                    'tags'        => Player::resolveTags()
+                    'player'        => new PlayerResource($resolved),
+                    'characters'    => CharacterResource::collection($resolved->characters),
+                    'warnings'      => $resolved->fasterWarnings($isSenior),
+                    'panelLogs'     => PanelLogResource::collection($resolved->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
+                    'discord'       => $resolved->getDiscordInfo(),
+                    'kickReason'    => trim($request->query('kick')) ?? '',
+                    'screenshots'   => Screenshot::getAllScreenshotsForPlayer($resolved->steam_identifier),
+                    'whitelisted'   => !!$whitelisted,
+                    'blacklisted'   => !!$blacklisted,
+                    'tags'          => Player::resolveTags(),
+                    'allowRoleEdit' => env('ALLOW_ROLE_EDITING', false) && $this->isSuperAdmin($request),
                 ]);
             }
         } else {

@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 
     <!-- Remote Debugging -->
-    <script>var REMOTE_DEBUG = {{ REMOTE_DEBUG ? 'true' : 'false' }};</script>
+    <script>var REMOTE_DEBUG = false;</script>
     <script src="/debugging.js"></script>
 
     <!-- Scripts -->
@@ -34,5 +34,3 @@
 <body class="h-full font-sans bg-white text-black antialiased">
     @inertia
 </body>
-
-

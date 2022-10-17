@@ -256,6 +256,40 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Updates the role
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateRole(Player $player, Request $request): RedirectResponse
+    {
+        if (!env('ALLOW_ROLE_EDITING', false) || !$this->isSuperAdmin($request)) {
+            return back()->with('error', 'You dont have permissions to do this.');
+        }
+
+        $role = $request->input('role') ? trim($request->input('role')) : null;
+
+        $data = [
+            'is_trusted' => 0,
+            'is_staff' => 0,
+            'is_senior_staff' => 0
+        ];
+
+        if ($role === 'seniorStaff') {
+            $data['is_senior_staff'] = 1;
+        } else if ($role === 'staff') {
+            $data['is_staff'] = 1;
+        } else if ($role === 'trusted') {
+            $data['is_trusted'] = 1;
+        }
+
+        $player->update($data);
+
+        return back()->with('success', 'Role has been updated successfully.');
+    }
+
+    /**
      * Takes a screenshot
      *
      * @param string $server
