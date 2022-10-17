@@ -311,7 +311,7 @@ class GeneralHelper
         if (empty($cluster)) {
             return null;
         } else if ($cluster === 'localhost') {
-            return '';
+            return 'c1';
         } else {
             return $cluster;
         }

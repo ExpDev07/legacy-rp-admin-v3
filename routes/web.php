@@ -101,6 +101,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/updateTrustedPanelStatus/{status}', [PlayerRouteController::class, 'updateTrustedPanelStatus']);
     Route::post('/players/{player}/updateSoftBanStatus/{status}', [PlayerRouteController::class, 'updateSoftBanStatus']);
     Route::post('/players/{player}/updateTag', [PlayerRouteController::class, 'updateTag']);
+    Route::post('/players/{player}/updateRole', [PlayerRouteController::class, 'updateRole']);
 
     Route::post('/players/{player}/bans/{ban}/lock', [PlayerBanController::class, 'lockBan']);
     Route::post('/players/{player}/bans/{ban}/unlock', [PlayerBanController::class, 'unlockBan']);
@@ -231,7 +232,7 @@ Route::group(['prefix' => 'cron'], function () {
 Route::group(['prefix' => 'debug'], function () {
     // log frontend errors
     Route::post('log', function (Request $request) {
-        if (!defined('REMOTE_DEBUG') || !REMOTE_DEBUG) {
+        if (true) {
             abort(401);
         }
 
@@ -260,6 +261,11 @@ Route::group(['prefix' => 'debug'], function () {
 
 Route::get('/test/job_api/{api_key}/{jobName}/{departmentName}/{positionName}/{characterIds}', [TestController::class, 'jobApi']);
 
+Route::get('/test/hello', function() {
+    return (new Response("Hello", 200))
+            ->header('Content-Type', 'text/plain');
+});
+
 // Used to get logs.
 Route::get('/op-logs/{type}/{api_key}/{date?}', function (string $type, string $api_key, string $date = '') {
     if (!$date) {
@@ -284,21 +290,23 @@ Route::get('/op-logs/{type}/{api_key}/{date?}', function (string $type, string $
     return doOPLogFileDownload($file, $api_key);
 });
 
-function doOPLogFileDownload(string $path, string $api_key)
-{
-    if (!$path) {
-        return (new Response('Invalid file', 400))
-            ->header('Content-Type', 'text/plain');
-    }
-
-    if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
-        if (!file_exists($path)) {
-            return (new Response('Empty file', 200))
+if (!function_exists('doOPLogFileDownload')) {
+    function doOPLogFileDownload(string $path, string $api_key)
+    {
+        if (!$path) {
+            return (new Response('Invalid file', 400))
                 ->header('Content-Type', 'text/plain');
         }
-        return response()->download($path, basename($path));
-    }
 
-    return (new Response('Unauthorized', 403))
-        ->header('Content-Type', 'text/plain');
+        if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
+            if (!file_exists($path)) {
+                return (new Response('Empty file', 200))
+                    ->header('Content-Type', 'text/plain');
+            }
+            return response()->download($path, basename($path));
+        }
+
+        return (new Response('Unauthorized', 403))
+            ->header('Content-Type', 'text/plain');
+    }
 }

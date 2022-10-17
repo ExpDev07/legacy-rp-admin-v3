@@ -131,6 +131,15 @@
             </div>
 
             <div class="absolute top-2 right-2 flex">
+                <!-- Edit Role -->
+                <button
+                    class="py-1 px-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger block"
+                    @click="isRoleEdit = true"
+                    v-if="allowRoleEdit && !player.isSuperAdmin"
+                    :title="t('players.show.edit_role')"
+                >
+                    <i class="fas fa-clipboard-list"></i>
+                </button>
                 <!-- Add Tag -->
                 <button
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-success dark:bg-dark-success block"
@@ -323,6 +332,41 @@
                         <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                                 type="button" @click="isUnloading = false">
                             {{ t('global.cancel') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Role Edit -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isRoleEdit">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-small-alert">
+                <h3 class="mb-2">{{ t('players.show.edit_role') }}</h3>
+                <form class="space-y-6">
+                    <div class="w-full p-3 flex justify-between">
+                        <label class="mr-4 block w-1/4 text-center pt-2 font-bold">
+                            {{ t('players.show.role') }}
+                        </label>
+                        <select class="block bg-gray-200 dark:bg-gray-600 rounded w-3/4 px-4 py-2"
+                                v-model="selectedRole">
+                            <option value="player">{{ t('players.show.role_player') }}</option>
+                            <option value="trusted">{{ t('players.show.role_trusted') }}</option>
+                            <option value="staff">{{ t('players.show.role_staff') }}</option>
+                            <option value="seniorStaff">{{ t('players.show.role_seniorStaff') }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-end space-x-3">
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                                type="button" @click="isRoleEdit = false">
+                            {{ t('global.cancel') }}
+                        </button>
+                        <button class="px-5 py-2 font-semibold text-white bg-green-500 rounded hover:bg-green-600"
+                                type="button" @click="updateRole">
+                            <i class="fas fa-clipboard-list mr-1"></i>
+                            {{ t('players.show.edit_role') }}
                         </button>
                     </div>
                 </form>
@@ -1220,10 +1264,25 @@ export default {
         },
         blacklisted: {
             type: Boolean
+        },
+        allowRoleEdit: {
+            type: Boolean
         }
     },
     data() {
         const sortedScreenshots = this.screenshots.sort((a, b) => b.created_at - a.created_at);
+
+        let selectedRole;
+
+        if (this.player.isSeniorStaff) {
+            selectedRole = 'seniorStaff';
+        } else if (this.player.isStaff) {
+            selectedRole = 'staff';
+        } else if (this.player.isTrusted) {
+            selectedRole = 'trusted';
+        } else {
+            selectedRole = 'player';
+        }
 
         return {
             local: {
@@ -1274,6 +1333,9 @@ export default {
             isTagging: false,
             tagCategory: this.player.tag ? this.player.tag : 'custom',
             tagCustom: '',
+
+            isRoleEdit: false,
+            selectedRole: selectedRole,
 
             isScreenCapture: false,
             screenCaptureStatus: false,
@@ -1528,6 +1590,14 @@ export default {
 
             await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTag', {
                 tag: false
+            });
+        },
+        async updateRole() {
+            this.isRoleEdit = false;
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateRole', {
+                role: this.selectedRole ? this.selectedRole : 'player'
             });
         },
         async addTag() {

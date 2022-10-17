@@ -1,10 +1,5 @@
 <?php
 /*
- * Gets forwarded to frontend for more advanced debugging
- */
-const REMOTE_DEBUG = false;
-
-/*
 |--------------------------------------------------------------------------
 | Create The Application
 |--------------------------------------------------------------------------
