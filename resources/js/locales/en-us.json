@@ -214,8 +214,6 @@
         "your_spot": "Your Ranking",
         "return_rate": "Return Rate",
         "titles": {
-            "bans_move": "Bans over time",
-            "economy": "Economy (vehicles + cash + bank + stocks + company balances + PDM & State funds)",
             "ban_warn": "30-Day average of Bans, Warnings/Strikes & Notes",
             "character": "Character creations & deletions",
             "lucky_wheel": "Lucky Wheel Spins",
@@ -714,7 +712,6 @@
             "delete": "Delete this character",
             "is_female": "This character is female.",
             "is_male": "This character is male.",
-            "economy": "Economic Influence: {0}%",
             "zone": {
                 "all": "All",
                 "head": "Head",
