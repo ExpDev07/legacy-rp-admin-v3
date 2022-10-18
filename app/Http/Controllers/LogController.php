@@ -159,6 +159,65 @@ class LogController extends Controller
         ]);
     }
 
+    /**
+     * Display a phone message logs.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function phoneLogs(Request $request): Response
+    {
+        if (!$this->isSuperAdmin($request)) {
+            abort(403);
+        }
+
+        $start = round(microtime(true) * 1000);
+
+        $query = DB::table("phone_message_logs")->select()->orderByDesc('timestamp');
+
+        // Filtering by number.
+        if ($number = $this->multiValues($request->input('number'))) {
+            /**
+             * @var $q Builder
+             */
+            $query->where(function ($q) use ($number) {
+                foreach ($number as $i) {
+                    $q->orWhere('sender_number', $i);
+                    $q->orWhere('receiver_number', $i);
+                }
+            });
+        }
+
+        // Filtering by message.
+        if ($message = $request->input('message')) {
+            if (Str::startsWith($message, '=')) {
+                $message = Str::substr($message, 1);
+                $query->where('message', $message);
+            } else {
+                $query->where('message', 'like', "%{$message}%");
+            }
+        }
+
+        $page = Paginator::resolveCurrentPage('page');
+
+        $query->limit(15)->offset(($page - 1) * 15);
+
+        $logs = $query->get()->toArray();
+
+        $end = round(microtime(true) * 1000);
+
+        return Inertia::render('Logs/Phone', [
+            'logs' => $logs,
+            'filters' => $request->all(
+                'number',
+                'message'
+            ),
+            'links' => $this->getPageUrls($page),
+            'time' => $end - $start,
+            'page' => $page
+        ]);
+    }
+
     public function searches(Request $request): Response
     {
         if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_ADVANCED)) {
