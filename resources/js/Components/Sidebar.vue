@@ -138,6 +138,12 @@ export default {
                             label: this.t('panel_logs.title'),
                             icon: 'paperstack',
                             url: '/panel_logs',
+                        },
+                        {
+                            label: this.t('phone.title'),
+                            icon: 'phone',
+                            url: '/phoneLogs',
+                            private: true,
                         }
                     ]
                 },

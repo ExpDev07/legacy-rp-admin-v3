@@ -870,6 +870,14 @@
         "description": "Who searched what in the server logs.",
         "searches": "Search Query"
     },
+    "phone": {
+        "title": "Phone Logs",
+        "description": "On this page you can view and filter the phone message logs.",
+        "from": "Sender",
+        "to": "Receiver",
+        "message": "Message",
+        "number": "Phone Number"
+    },
     "logs": {
         "title": "Server Logs",
         "description": "On this page you can view and filter the server logs.",
