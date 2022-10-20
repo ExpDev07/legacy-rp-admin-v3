@@ -1,6 +1,4 @@
 <template>
-    <title>OP-FW - {{ server.name }}</title>
-
     <div>
         <portal to="title">
             <div class="flex items-start space-x-10">

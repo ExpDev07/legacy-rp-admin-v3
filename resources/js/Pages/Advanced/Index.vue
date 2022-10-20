@@ -1,7 +1,6 @@
 <template>
-    <title>OP-FW - {{ t('advanced.title') }}</title>
-
     <div>
+
         <portal to="title">
             <h1 class="dark:text-white">
                 {{ t('advanced.title') }}

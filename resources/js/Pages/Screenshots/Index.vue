@@ -1,7 +1,6 @@
 <template>
-    <title>OP-FW - {{ t('screenshot.screenshots') }}</title>
-
     <div>
+
         <portal to="title">
             <h1 class="dark:text-white">
                 {{ t('screenshot.screenshots') }}

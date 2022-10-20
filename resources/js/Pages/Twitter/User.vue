@@ -1,7 +1,6 @@
 <template>
-    <title>OP-FW - @{{ user.username }}</title>
-
     <div>
+
         <template>
             <div class="w-full items-center flex flex-wrap mb-6 max-w-screen-md m-auto">
                 <div class="mr-3">

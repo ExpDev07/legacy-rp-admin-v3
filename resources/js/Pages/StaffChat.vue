@@ -1,7 +1,6 @@
 <template>
-    <title>OP-FW - {{ t('staff_chat.title') }}</title>
-
     <div>
+
         <portal to="title">
             <h1 class="dark:text-white">
                 {{ t("staff_chat.title") }}
