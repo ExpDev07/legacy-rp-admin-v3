@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <title>OP-FW - {{ t('queue.title') }}</title>
 
+    <div>
         <portal to="title">
             <h1 class="dark:text-white" id="queueTitle">
                 {{ t('queue.title') }}

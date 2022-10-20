@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <title>OP-FW - {{ t('map.title') }}</title>
 
+    <div>
         <portal to="title">
             <h1 class="dark:text-white !mb-2">
                 <span id="map_title">{{ t('map.title') }}</span>

@@ -1,4 +1,6 @@
 <template>
+    <title>OP-FW - {{ player.playerName }}</title>
+
     <div>
         <portal to="title">
             <div class="flex items-start space-x-10 mobile:flex-wrap">

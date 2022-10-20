@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <title>OP-FW - {{ character.name }} #{{ character.id }}</title>
 
+    <div>
         <portal to="title">
             <div class="flex items-start space-x-10 mobile:flex-wrap">
                 <h1 class="dark:text-white">

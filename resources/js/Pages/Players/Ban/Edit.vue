@@ -1,12 +1,11 @@
 <template>
-    <div>
+    <title>OP-FW - Edit Ban</title>
 
+    <div>
         <!-- Editing -->
         <v-section>
             <template #header>
-                <h2 v-html="local.title">
-                    {{ local.title }}
-                </h2>
+                <h2 v-html="local.title"></h2>
                 <h3>
                     {{ local.time }}
                 </h3>

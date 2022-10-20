@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <title>OP-FW - {{ inventory.title }} ({{ inventory.type }})</title>
 
+    <div>
         <portal to="title">
             <h1 class="dark:text-white" v-if="inventory">
                 {{ t('inventories.show.title') }} {{ inventory.title }} ({{ inventory.type }})

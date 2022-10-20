@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <title>OP-FW - {{ t('logs.logs') }}</title>
 
+    <div>
         <portal to="title">
             <h1 class="dark:text-white">
                 {{ t('logs.logs') }}

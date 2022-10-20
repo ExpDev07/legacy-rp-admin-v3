@@ -1,4 +1,6 @@
 <template>
+    <title>OP-FW - Login</title>
+
     <div
         class="flex flex-col items-center justify-center h-screen p-5"
         :style="{ background: 'url(https://fivem.net/17c4e5d0b35262c228dcf66c98365982.jpg)' }"

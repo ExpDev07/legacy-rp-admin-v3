@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <title>OP-FW - {{ t('servers.title') }}</title>
 
+    <div>
         <modal :show.sync="isAdding">
             <template #header>
                 <h1 class="dark:text-white">

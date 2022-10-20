@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <title>OP-FW - {{ t('screenshot.anti_cheat') }}</title>
 
+    <div>
         <portal to="title">
             <h1 class="dark:text-white">
                 {{ t('screenshot.anti_cheat') }}
