@@ -76,7 +76,9 @@ export default {
     updated() {
         const title = $("header h1").text().trim();
 
-        $("title").text("OP-FW - " + title);
+        if (title) {
+            $("title").text("OP-FW - " + title);
+        }
     },
     beforeCreate() {
         this.loadLocale(this.$page.lang);
