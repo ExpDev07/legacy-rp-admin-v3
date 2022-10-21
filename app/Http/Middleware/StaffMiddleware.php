@@ -115,8 +115,15 @@ class StaffMiddleware
                 return json_decode(json_encode($user), FALSE);
             });
 
-            if (!empty($user['player']) && ($user['player']['is_staff'] || GeneralHelper::isUserRoot($user['player']['steam_identifier']))) {
-                return true;
+            if (!empty($user['player'])) {
+                $isRoot = GeneralHelper::isUserRoot($user['player']['steam_identifier']);
+                $isSuperAdmin = $user['player']['is_super_admin'] || $isRoot;
+                $isSeniorStaff = $user['player']['is_senior_staff'] || $isSuperAdmin;
+                $isStaff = $user['player']['is_staff'] || $isSeniorStaff;
+
+                if ($isStaff) {
+                    return true;
+                }
             }
 
             $this->error = 'You have to be a staff member to access this page.';
