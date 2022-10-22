@@ -35,9 +35,9 @@ class MapController extends Controller
         }
 
         $staff = Player::query()->where(function ($q) {
-            $q->orWhere('is_staff', '=', true)
-                ->orWhere('is_senior_staff', '=', true)
-                ->orWhere('is_super_admin', '=', true)
+            $q->orWhere('is_staff', '=', 1)
+                ->orWhere('is_senior_staff', '=', 1)
+                ->orWhere('is_super_admin', '=', 1)
                 ->orWhereIn('steam_identifier', GeneralHelper::getRootUsers());
         })->select(['steam_identifier', 'player_name'])->get()->toArray();
 

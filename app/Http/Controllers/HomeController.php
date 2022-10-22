@@ -48,9 +48,9 @@ class HomeController extends Controller
             return $playerList[$a]['id'] <=> $playerList[$b]['id'];
         });
         $staff = Player::query()->where(function ($q) {
-            $q->orWhere('is_staff', '=', true)
-                ->orWhere('is_senior_staff', '=', true)
-                ->orWhere('is_super_admin', '=', true)
+            $q->orWhere('is_staff', '=', 1)
+                ->orWhere('is_senior_staff', '=', 1)
+                ->orWhere('is_super_admin', '=', 1)
                 ->orWhereIn('steam_identifier', GeneralHelper::getRootUsers());
         })->whereIn('steam_identifier', $players)->get();
 
