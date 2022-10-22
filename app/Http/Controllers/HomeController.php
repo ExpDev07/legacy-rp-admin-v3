@@ -47,7 +47,12 @@ class HomeController extends Controller
         usort($players, function ($a, $b) use ($playerList) {
             return $playerList[$a]['id'] <=> $playerList[$b]['id'];
         });
-        $staff = Player::query()->where('is_staff', '=', true)->whereIn('steam_identifier', $players)->get();
+        $staff = Player::query()->where(function ($q) {
+            $q->orWhere('is_staff', '=', true)
+                ->orWhere('is_senior_staff', '=', true)
+                ->orWhere('is_super_admin', '=', true)
+                ->orWhereIn('steam_identifier', GeneralHelper::getRootUsers());
+        })->whereIn('steam_identifier', $players)->get();
 
         return Inertia::render('Home', [
             'quote'     => $quote,
