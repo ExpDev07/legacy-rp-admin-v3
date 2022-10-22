@@ -62,7 +62,7 @@ class StaffMiddleware
                 $user = $session->get('user');
 
                 $player = Player::query()->where('steam_identifier', '=', $user['player']['steam_identifier'])->select([
-                    'player_name', 'is_super_admin', 'is_staff', 'is_panel_trusted', 'steam_identifier'
+                    'player_name', 'is_super_admin', 'is_staff', 'is_senior_staff', 'is_panel_trusted', 'steam_identifier'
                 ])->first();
 
                 if (!$player) {
