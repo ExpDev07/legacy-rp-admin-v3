@@ -72,15 +72,21 @@ class StaffMiddleware
                     return redirect('/login')->with('error', 'You have to have connected to the server at least once before trying to log-in (Player not found).');
                 }
 
+                $isRoot = GeneralHelper::isUserRoot($user['player']['steam_identifier']);
+                $isSuperAdmin = $player->is_super_admin || $isRoot;
+                $isSeniorStaff = $player->is_senior_staff || $isSuperAdmin;
+                $isStaff = $player->is_staff || $isSeniorStaff;
+
                 $user['player']['player_name'] = $player->player_name;
-                $user['player']['is_super_admin'] = $player->is_super_admin || GeneralHelper::isUserRoot($player->steam_identifier);
-                $user['player']['is_staff'] = $player->is_staff;
+                $user['player']['is_super_admin'] = $isSuperAdmin;
+                $user['player']['is_senior_staff'] = $isSeniorStaff;
+                $user['player']['is_staff'] = $isStaff;
                 $user['player']['is_panel_trusted'] = $player->is_panel_trusted;
 
                 $session->put('user', $user);
                 $session->put('last_updated', time());
 
-                if (!$player->is_staff && !GeneralHelper::isUserRoot($user['player']['steam_identifier'])) {
+                if (!$isStaff) {
                     return redirect('/login')->with('error',
                         'Your staff status has changed, please log in again!'
                     );
