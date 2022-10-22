@@ -32,6 +32,7 @@
         <template>
             <h2 class="mb-4 max-w-screen-md m-auto text-2xl">
                 <span class="cursor-pointer" @click="urlOnly = !urlOnly">{{ t('loading_screen.pictures') }}</span>
+                <sup>{{ pictures.length }}</sup>
             </h2>
 
             <div class="w-full flex flex-wrap max-w-screen-md m-auto">
