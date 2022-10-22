@@ -34,7 +34,12 @@ class MapController extends Controller
             ];
         }
 
-        $staff = Player::query()->where('is_staff', '=', true)->select(['steam_identifier', 'player_name'])->get()->toArray();
+        $staff = Player::query()->where(function ($q) {
+            $q->orWhere('is_staff', '=', 1)
+                ->orWhere('is_senior_staff', '=', 1)
+                ->orWhere('is_super_admin', '=', 1)
+                ->orWhereIn('steam_identifier', GeneralHelper::getRootUsers());
+        })->select(['steam_identifier', 'player_name'])->get()->toArray();
 
         $marker = $request->query('m') ?? null;
         if ($marker) {
