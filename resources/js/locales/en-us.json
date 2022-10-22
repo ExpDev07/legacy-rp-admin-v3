@@ -61,6 +61,16 @@
         "entries": "Showing {0} total entries on {1} page(s).",
         "loading": "Loading..."
     },
+    "loading_screen": {
+        "sidebar": "Loading Screen",
+        "title": "Loading screen pictures",
+        "description": "Add and remove pictures for the loading screen. The pictures will be shown randomly.",
+        "pictures": "Pictures",
+        "picture": "Picture URL",
+        "add": "Add Picture",
+        "remove": "Remove",
+        "do_add": "Add"
+    },
     "backstories": {
         "title": "Backstories",
         "description": "Random character backstories.",

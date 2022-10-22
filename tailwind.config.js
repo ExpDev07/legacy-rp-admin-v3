@@ -67,6 +67,7 @@ module.exports = {
                 'side-open-two':   '134px',
                 'side-open-three': '180px',
                 'side-open-four':  '226px',
+                'side-open-five':  '272px',
                 'max':             'calc(100vh - (210px + 120px))',
                 'inventory_slot':  '100px'
             },

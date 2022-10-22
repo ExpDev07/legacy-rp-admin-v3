@@ -77,6 +77,7 @@
     <i class="fas fa-binoculars" v-else-if="name === 'binoculars'"></i>
     <i class="fas fa-ghost" v-else-if="name === 'ghost'"></i>
     <i class="fas fa-mobile-alt" v-else-if="name === 'phone'"></i>
+    <i class="fas fa-spinner" v-else-if="name === 'spinner'"></i>
 </template>
 
 <script>

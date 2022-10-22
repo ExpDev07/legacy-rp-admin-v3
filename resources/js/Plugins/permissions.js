@@ -22,13 +22,14 @@ const Permissions = {
         const permissionLevel = getPermissionLevel();
 
         Vue.prototype.perm = {
-            PERM_SOFT_BAN:   'soft_ban',
-            PERM_LIVEMAP:    'livemap',
-            PERM_SCREENSHOT: 'screenshot',
-            PERM_SUSPICIOUS: 'suspicious',
-            PERM_ADVANCED:   'advanced',
-            PERM_LOCK_BAN:   'lock_ban',
-            PERM_EDIT_TAG:   'edit_tag',
+            PERM_SOFT_BAN:       'soft_ban',
+            PERM_LIVEMAP:        'livemap',
+            PERM_SCREENSHOT:     'screenshot',
+            PERM_SUSPICIOUS:     'suspicious',
+            PERM_ADVANCED:       'advanced',
+            PERM_LOCK_BAN:       'lock_ban',
+            PERM_EDIT_TAG:       'edit_tag',
+            PERM_LOADING_SCREEN: 'loading_screen',
 
             check(permission) {
                 if (!(permission in permissions)) {

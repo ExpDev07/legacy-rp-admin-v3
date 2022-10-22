@@ -51,7 +51,7 @@
                                  v-if="searchingActions && searchableActions.length > 0">
                                 <div class="max-h-40 overflow-y-auto rounded-b border">
                                     <button
-                                        class="block text-left w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 transition duration-200 hover:bg-gray-300 hover:dark:bg-gray-500"
+                                        class="block text-left w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 transition duration-200 hover:bg-gray-300"
                                         :class="{'border-b' : index < searchableActions.length-1}"
                                         v-for="(action, index) in searchableActions"
                                         @click="selectAction('=' + action.action)">
@@ -200,9 +200,7 @@
                                 {{ t('logs.metadata.show') }}
                             </a>
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)">
-                            {{ parseLog(log.details) }}
-                        </td>
+                        <td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)"></td>
                         <td class="px-6 py-3 border-t mobile:block" v-if="showLogTimeDifference"
                             :title="t('logs.diff_label')">
                             <span v-if="index+1 < logs.length">
@@ -291,13 +289,13 @@
 
             <template #default>
                 <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.details') }}:</p>
-                <pre class="block mb-2 text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{
+                <pre class="block text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{
                         parseLogMetadata(logMetadata) || 'N/A'
                     }}</pre>
 
                 <p class="m-0 mb-2 font-bold">{{ t('logs.metadata.raw') }}:</p>
                 <pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded"
-                     v-html="logMetadataJSON">{{ logMetadataJSON }}</pre>
+                     v-html="logMetadataJSON"></pre>
             </template>
 
             <template #actions>

@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-col w-60 px-3 py-10 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4">
+        class="flex flex-col w-64 px-3 py-10 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4">
         <!-- General stuff -->
         <nav>
             <ul v-if="!isMobile()">
@@ -117,6 +117,12 @@ export default {
                             icon: 'shield',
                             private: true,
                             url: '/blacklist',
+                        },
+                        {
+                            label: this.t('loading_screen.sidebar'),
+                            icon: 'spinner',
+                            hidden: !this.perm.check(this.perm.PERM_LOADING_SCREEN),
+                            url: '/loading_screen',
                         }
                     ]
                 },
@@ -325,6 +331,8 @@ export default {
                     return 'h-side-close hover:h-side-open-three';
                 case 4:
                     return 'h-side-close hover:h-side-open-four';
+                case 5:
+                    return 'h-side-close hover:h-side-open-five';
                 default:
                     return '';
             }
