@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <modal :show.sync="isAdding">
             <template #header>
                 <h1 class="dark:text-white">

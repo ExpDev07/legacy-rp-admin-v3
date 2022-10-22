@@ -8,22 +8,24 @@ use Illuminate\Http\Request;
 class PermissionHelper
 {
     const PERMISSIONS = [
-        self::PERM_SCREENSHOT => ['screenshot', self::LEVEL_STAFF],
-        self::PERM_SUSPICIOUS => ['suspicious', self::LEVEL_TRUSTED],
-        self::PERM_ADVANCED   => ['advanced', self::LEVEL_TRUSTED],
-        self::PERM_LIVEMAP    => ['livemap', self::LEVEL_STAFF],
-        self::PERM_LOCK_BAN   => ['lock_ban', self::LEVEL_TRUSTED],
-        self::PERM_SOFT_BAN   => ['soft_ban', self::LEVEL_ROOT],
-        self::PERM_EDIT_TAG   => ['edit_tag', self::LEVEL_ROOT],
+        self::PERM_SCREENSHOT     => ['screenshot', self::LEVEL_STAFF],
+        self::PERM_SUSPICIOUS     => ['suspicious', self::LEVEL_TRUSTED],
+        self::PERM_ADVANCED       => ['advanced', self::LEVEL_TRUSTED],
+        self::PERM_LIVEMAP        => ['livemap', self::LEVEL_STAFF],
+        self::PERM_LOCK_BAN       => ['lock_ban', self::LEVEL_TRUSTED],
+        self::PERM_SOFT_BAN       => ['soft_ban', self::LEVEL_ROOT],
+        self::PERM_EDIT_TAG       => ['edit_tag', self::LEVEL_ROOT],
+        self::PERM_LOADING_SCREEN => ['loading_screen', self::LEVEL_SUPERADMIN],
     ];
 
-    const PERM_SCREENSHOT = 'P_SCREENSHOT';
-    const PERM_SUSPICIOUS = 'P_SUSPICIOUS';
-    const PERM_ADVANCED   = 'P_ADVANCED';
-    const PERM_LIVEMAP    = 'P_LIVEMAP';
-    const PERM_LOCK_BAN   = 'P_LOCK_BAN';
-    const PERM_SOFT_BAN   = 'P_SOFT_BAN';
-    const PERM_EDIT_TAG   = 'P_EDIT_TAG';
+    const PERM_SCREENSHOT     = 'P_SCREENSHOT';
+    const PERM_SUSPICIOUS     = 'P_SUSPICIOUS';
+    const PERM_ADVANCED       = 'P_ADVANCED';
+    const PERM_LIVEMAP        = 'P_LIVEMAP';
+    const PERM_LOCK_BAN       = 'P_LOCK_BAN';
+    const PERM_SOFT_BAN       = 'P_SOFT_BAN';
+    const PERM_EDIT_TAG       = 'P_EDIT_TAG';
+    const PERM_LOADING_SCREEN = 'P_LOADING_SCREEN';
 
     const LEVEL_STAFF      = 1;
     const LEVEL_TRUSTED    = 2;

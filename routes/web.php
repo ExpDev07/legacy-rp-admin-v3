@@ -41,6 +41,7 @@ use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\SuspiciousController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TwitterController;
+use App\Http\Controllers\LoadingScreenController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -137,6 +138,11 @@ Route::group(['middleware' => ['log', 'staff']], function () {
         Route::delete('/blacklist/{identifier}', [BlacklistController::class, 'destroy']);
 
         Route::post('/blacklist/import', [BlacklistController::class, 'import']);
+
+        // Loading screen pictures
+        Route::get('/loading_screen', [LoadingScreenController::class, 'index']);
+        Route::delete('/loading_screen/{id}', [LoadingScreenController::class, 'delete']);
+        Route::post('/loading_screen', [LoadingScreenController::class, 'add']);
     });
 
     // Suspicious.

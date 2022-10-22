@@ -33,9 +33,7 @@
                       class="text-gray-400 dark:text-gray-500 font-normal">- {{ formatDate(post.time) }}</span>
             </inertia-link>
 
-            <div class="text-sm block" v-html="formatBody(post.message)">
-                {{ formatBody(post.message) }}
-            </div>
+            <div class="text-sm block" v-html="formatBody(post.message)"></div>
         </div>
 
         <inertia-link
