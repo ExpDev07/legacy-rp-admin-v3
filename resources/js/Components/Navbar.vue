@@ -6,7 +6,7 @@
             <inertia-link href="/" class="flex justify-between">
                 <img src="/images/op-logo.png" class="block" />
                 <h1 class="text-lg px-4">
-                    <span class="block py-4">OP-FW</span>
+                    <span class="block py-4">OP-FW <sub class="font-normal italic">{{ $page.auth.cluster }}</sub></span>
                 </h1>
             </inertia-link>
         </div>
