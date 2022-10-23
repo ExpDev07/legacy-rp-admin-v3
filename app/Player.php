@@ -114,7 +114,7 @@ class Player extends Model
     {
         $data = $this->user_data ?? [];
 
-        if (!isset($data['muted'])) {
+        if (!isset($data['muted']) || !$data['muted']) {
             return null;
         }
 
