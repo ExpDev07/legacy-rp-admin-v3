@@ -77,7 +77,9 @@ export default {
         const title = $("header h1").text().trim();
 
         if (title) {
-            $("title").text("OP-FW - " + title);
+            const cluster = this.$page?.auth?.cluster ? this.$page.auth.cluster.toUpperCase() : "OP-FW";
+
+            $("title").text(cluster + " - " + title);
         }
     },
     beforeCreate() {
