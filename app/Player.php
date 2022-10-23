@@ -85,6 +85,7 @@ class Player extends Model
         'identifiers' => 'array',
         'player_aliases' => 'array',
         'enabled_commands' => 'array',
+        'user_data' => 'array',
         'last_connection' => 'datetime',
         'is_trusted' => 'boolean',
         'is_staff' => 'boolean',
@@ -107,6 +108,27 @@ class Player extends Model
         }
 
         return CacheHelper::read('tags', []);
+    }
+
+    public function getActiveMute(): ?array
+    {
+        $data = $this->user_data ?? [];
+
+        if (!isset($data['muted'])) {
+            return null;
+        }
+
+        $mute = $data['muted'];
+
+        if ($mute['expiryTimestamp'] && $mute['expiryTimestamp'] < time()) {
+            return null;
+        }
+
+        return [
+            'reason' => $mute['reason'] ?? null,
+            'expires' => $mute['expiryTimestamp'] ?? null,
+            'creator' => $mute['creatorName'] ?? null
+        ];
     }
 
     /**

@@ -62,9 +62,7 @@
                     </badge>
 
                     <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary"
-                           :title="formatSecondDiff(player.playTime)" v-html="local.played">
-                        {{ local.played }}
-                    </badge>
+                           :title="formatSecondDiff(player.playTime)" v-html="local.played"></badge>
 
                     <badge class="border-pink-300 bg-pink-200 dark:bg-pink-700" v-if="player.tag">
                         <span class="font-semibold">{{ player.tag }}</span>
@@ -295,7 +293,7 @@
                 </div>
                 <div class="flex justify-end mt-2">
                     <button type="button"
-                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
                             @click="isShowingLinked = false">
                         {{ t('global.close') }}
                     </button>
@@ -462,7 +460,7 @@
                 </div>
                 <div class="flex justify-end mt-2">
                     <button type="button"
-                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
                             @click="isShowingLinked = false">
                         {{ t('global.close') }}
                     </button>
@@ -542,15 +540,32 @@
             </div>
         </div>
 
+        <!-- Mute -->
+        <alert class="bg-red-400 dark:bg-red-500" v-if="player.mute">
+            <div class="flex items-center justify-between mb-2">
+                <h2 class="text-lg font-semibold" v-if="player.mute.expires">
+                    {{ t('players.show.muted', formatTime(player.mute.expires*1000)) }}
+                </h2>
+                <h2 class="text-lg font-semibold" v-else>
+                    {{ t('players.show.muted_forever') }}
+                </h2>
+                <div class="font-semibold" v-if="player.mute.creator">
+                    {{ player.mute.creator }}
+                </div>
+            </div>
+
+            <p class="text-gray-100">
+                <span class="whitespace-pre-line">{{ player.mute.reason || t('players.show.no_reason') }}</span>
+            </p>
+        </alert>
+
         <!-- Ban -->
         <div>
             <!-- Viewing -->
             <alert class="bg-danger dark:bg-dark-danger" v-if="player.isBanned">
 
                 <div class="flex items-center justify-between mb-2">
-                    <h2 class="text-lg font-semibold" v-html="local.ban">
-                        {{ local.ban }}
-                    </h2>
+                    <h2 class="text-lg font-semibold" v-html="local.ban"></h2>
                     <div class="font-semibold">
                         <i class="mr-1 fas fa-lock" v-if="player.ban.locked" :title="t('players.show.ban_locked')"></i>
                         {{ player.ban.timestamp | formatTime }}
@@ -570,9 +585,7 @@
                     <h2 class="text-2xl font-semibold">
                         {{ t('players.ban.issuing') }}
                     </h2>
-                    <p class="text-gray-900 dark:text-gray-100" v-html="local.ban_warning">
-                        {{ local.ban_warning }}
-                    </p>
+                    <p class="text-gray-900 dark:text-gray-100" v-html="local.ban_warning"></p>
                 </div>
                 <form class="space-y-6" @submit.prevent="submitBan">
                     <!-- Deciding if ban is temporary -->
@@ -901,9 +914,7 @@
                                 <h4>
                                     {{ warning.issuer.playerName }}
                                     -
-                                    <span v-html="wrapWarningType(warning.warningType)">{{
-                                            wrapWarningType(warning.warningType)
-                                        }}</span>
+                                    <span v-html="wrapWarningType(warning.warningType)"></span>
                                 </h4>
                             </div>
                             <div class="flex items-center">
@@ -950,7 +961,7 @@
                     <template>
                         <p class="text-muted dark:text-dark-muted" v-if="warningEditId !== warning.id">
                             <span class="whitespace-pre-line"
-                                  v-html="formatWarning(warning.message)">{{ formatWarning(warning.message) }}</span>
+                                  v-html="formatWarning(warning.message)"></span>
                         </p>
                         <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
                                   :id="'warning_' + warning.id" v-else-if="warningEditId === warning.id">{{ warning.message }}</textarea>
@@ -1098,7 +1109,7 @@
                         <img :src="screenshotImage" alt="Screenshot" class="w-full"/>
                     </a>
 
-                    <div class="flex justify-center absolute top-0 left-0 w-full top-1/2 transform -translate-y-1/2"
+                    <div class="flex justify-center absolute left-0 w-full top-1/2 transform -translate-y-1/2"
                          v-if="isScreenshotLoading">
                         <i class="fas fa-cog animate-spin text-3xl"></i>
                     </div>
@@ -1166,7 +1177,7 @@
                     </div>
 
                     <div
-                        class="flex justify-center absolute top-0 left-0 w-full top-1/2 transform -translate-y-1/2 flex-wrap"
+                        class="flex justify-center absolute left-0 w-full top-1/2 transform -translate-y-1/2 flex-wrap"
                         v-if="screenCaptureStatus === 'processing'">
                         <i class="fas fa-cog animate-spin text-3xl"></i>
                         <span class="text-sm block mt-1 text-center w-full">{{ t('screenshot.processing') }}</span>
