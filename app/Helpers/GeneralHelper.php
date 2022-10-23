@@ -9,6 +9,11 @@ use Illuminate\Support\Str;
 
 class GeneralHelper
 {
+    const DefaultDannies = [
+        -1667301416 => ["headBlendData"=>["skinSecondId"=>0,"shapeSecondId"=>0,"shapeMix"=>0.0,"isParent"=>false,"skinMix"=>0.0,"thirdMix"=>0.0,"shapeThirdId"=>0,"shapeFirstId"=>0,"skinFirstId"=>0,"skinThirdId"=>0],"headOverlay"=>[],"hairColor"=>["colorId"=>-1,"highlightColorId"=>-1],"components"=>["1"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"2"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"3"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"4"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"5"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"6"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"7"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"8"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>240],"9"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"10"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"11"=>["drawableId"=>6,"paletteId"=>0,"textureId"=>1],"0"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0]],"props"=>["1"=>["textureId"=>-1,"drawableId"=>-1],"2"=>["textureId"=>-1,"drawableId"=>-1],"0"=>["textureId"=>-1,"drawableId"=>-1],"7"=>["textureId"=>-1,"drawableId"=>-1],"6"=>["textureId"=>-1,"drawableId"=>-1]],"faceFeatures"=>["1"=>0.0,"2"=>0.0,"3"=>0.0,"4"=>0.0,"5"=>0.0,"6"=>0.0,"7"=>0.0,"8"=>0.0,"9"=>0.0,"10"=>0.0,"11"=>0.0,"12"=>0.0,"13"=>0.0,"14"=>0.0,"15"=>0.0,"16"=>0.0,"17"=>0.0,"18"=>0.0,"19"=>0.0,"0"=>0.0],"eyeColor"=>-1],
+        1885233650 => ["headBlendData"=>["skinSecondId"=>0,"shapeSecondId"=>0,"shapeMix"=>0.0,"isParent"=>false,"skinMix"=>0.0,"thirdMix"=>0.0,"shapeThirdId"=>0,"shapeFirstId"=>0,"skinFirstId"=>0,"skinThirdId"=>0],"headOverlay"=>[],"hairColor"=>["colorId"=>-1,"highlightColorId"=>-1],"components"=>["1"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"2"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"3"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"4"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"5"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"6"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"7"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"8"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>240],"9"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"10"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0],"11"=>["drawableId"=>6,"paletteId"=>0,"textureId"=>1],"0"=>["drawableId"=>0,"paletteId"=>0,"textureId"=>0]],"props"=>["1"=>["textureId"=>-1,"drawableId"=>-1],"2"=>["textureId"=>-1,"drawableId"=>-1],"0"=>["textureId"=>-1,"drawableId"=>-1],"7"=>["textureId"=>-1,"drawableId"=>-1],"6"=>["textureId"=>-1,"drawableId"=>-1]],"faceFeatures"=>["1"=>0.0,"2"=>0.0,"3"=>0.0,"4"=>0.0,"5"=>0.0,"6"=>0.0,"7"=>0.0,"8"=>0.0,"9"=>0.0,"10"=>0.0,"11"=>0.0,"12"=>0.0,"13"=>0.0,"14"=>0.0,"15"=>0.0,"16"=>0.0,"17"=>0.0,"18"=>0.0,"19"=>0.0,"0"=>0.0],"eyeColor"=>-1]
+    ];
+
     const PedComponents = [
         4, // Pants
         6, // Shoes
@@ -117,12 +122,16 @@ class GeneralHelper
             return false;
         }
 
+        $default = self::DefaultDannies[$modelHash];
+
         $changed = 0;
 
         foreach($modelData["components"] as $componentId => $component) {
             if (!in_array(intval($componentId), self::PedComponents)) continue;
 
-            if ($component["drawableId"] !== 0) {
+            $defaultValue = $default["components"][$componentId] ?? null;
+
+            if ($component["drawableId"] !== $defaultValue["drawableId"]) {
                 $changed++;
             }
         }
@@ -138,7 +147,9 @@ class GeneralHelper
         foreach($modelData["props"] as $propId => $prop) {
             if (!in_array(intval($propId), self::PedProps)) continue;
 
-            if ($prop["drawableId"] !== -1) {
+            $defaultValue = $default["props"][$propId] ?? null;
+
+            if ($prop["drawableId"] !== $defaultValue["drawableId"]) {
                 $changed++;
             }
         }
@@ -146,10 +157,15 @@ class GeneralHelper
         $total = sizeof(self::PedComponents) + sizeof(self::PedOverlays) + sizeof(self::PedProps);
         $percentage = 1 - ($changed / $total);
 
-        $isDefaultSkin = $modelData["headBlendData"]["skinFirstId"] === 0 && $modelData["headBlendData"]["skinSecondId"] === 0;
-        $isDefaultShape = $modelData["headBlendData"]["shapeFirstId"] === 0 && $modelData["headBlendData"]["shapeSecondId"] === 0;
+        $defaultHeadBlend = $default["headBlendData"];
 
-        return ($percentage * 0.8) + ($isDefaultSkin ? 0.1 : 0) + ($isDefaultShape ? 0.1 : 0);
+        $isDefaultSkin1 = $modelData["headBlendData"]["skinFirstId"] === $defaultHeadBlend["skinFirstId"] ? 0.05 : 0;
+        $isDefaultSkin2 = $modelData["headBlendData"]["skinSecondId"] === $defaultHeadBlend["skinSecondId"] ? 0.05 : 0;
+
+        $isDefaultShape1 = $modelData["headBlendData"]["shapeFirstId"] === $defaultHeadBlend["shapeFirstId"] ? 0.05 : 0;
+        $isDefaultShape2 = $modelData["headBlendData"]["shapeSecondId"] === $defaultHeadBlend["shapeSecondId"] ? 0.05 : 0;
+
+        return ($percentage * 0.8) + $isDefaultSkin1 + $isDefaultSkin2 + $isDefaultShape1 + $isDefaultShape2;
     }
 
     /**
