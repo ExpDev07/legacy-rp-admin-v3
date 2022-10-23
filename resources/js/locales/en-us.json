@@ -612,6 +612,8 @@
             "ban_text": "Till {0}",
             "ban_forever_text": "Indefinitely",
             "no_reason": "No reason.",
+            "muted": "Muted until {0}",
+            "muted_forever": "Muted indefinitely",
             "logs": "Check player's logs",
             "steam": "Open Steam profile",
             "discord": "Open Discord profile",
