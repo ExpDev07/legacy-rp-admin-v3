@@ -31,16 +31,32 @@
 
         <template>
             <h2 class="mb-4 max-w-screen-md m-auto text-2xl">
-                <span class="cursor-pointer" @click="urlOnly = !urlOnly">{{ t('loading_screen.pictures') }}</span>
+                {{ t('loading_screen.pictures') }}
                 <sup>{{ pictures.length }}</sup>
             </h2>
+
+            <div v-if="failedLoadCount > 0" class="badge px-5 py-1 border-2 max-w-screen-md m-auto mb-3 rounded border-red-200 bg-danger-pale dark:bg-dark-danger-pale">
+                {{ t("loading_screen.failed_count", failedLoadCount, pictures.length) }}
+            </div>
+
+            <div v-if="smallSizeCount > 0" class="badge px-5 py-1 border-2 max-w-screen-md m-auto mb-3 rounded border-red-200 bg-danger-pale dark:bg-dark-danger-pale">
+                {{ t("loading_screen.small_size_count", smallSizeCount, pictures.length) }}
+            </div>
 
             <div class="w-full flex flex-wrap max-w-screen-md m-auto">
                 <div class="flex pt-3 pb-3 border-t w-full border-gray-400 dark:border-gray-500 px-2 relative hover:bg-gray-100 dark:hover:bg-gray-700" v-for="(picture, index) in pictures" :key="picture.id">
                     <div>
-                        <a clas="block" target="_blank" :href="picture.image_url">
-                            <span v-if="urlOnly">{{ picture.image_url }}</span>
-                            <img :src="picture.image_url" class="h-48" v-else />
+                        <a clas="block relative" target="_blank" :href="picture.image_url">
+                            <img :src="picture.image_url" class="h-48 border-red-500" @load="imageLoaded($event, picture.id)" @error="imageFailed(picture.id)" :class="{'border-4' : failedLoad[picture.id] || smallSize[picture.id]}" />
+
+                            <span v-if="failedLoad[picture.id]" class="block text-sm text-red-400 mt-2 italic">
+                                <i class="fas fa-skull-crossbones"></i>
+                                {{ t("loading_screen.failed_count_label") }}
+                            </span>
+                            <span v-else-if="smallSize[picture.id]" class="block text-sm text-red-400 mt-2 italic">
+                                <i class="fas fa-search-minus"></i>
+                                {{ t("loading_screen.small_size_count_label") }}
+                            </span>
                         </a>
                     </div>
 
@@ -115,7 +131,11 @@ export default {
             isLoading: false,
             isAdding: false,
 
-            urlOnly: false,
+            failedLoad: {},
+            smallSize: {},
+
+            failedLoadCount: 0,
+            smallSizeCount: 0,
 
             image_url: '',
         };
@@ -131,9 +151,35 @@ export default {
             this.isLoading = true;
             try {
                 await this.$inertia.delete('/loading_screen/' + id);
+
+                if (this.smallSize[id]) {
+                    delete this.smallSize[id];
+
+                    this.smallSizeCount = Object.values(this.smallSize).length;
+                }
+
+                if (this.failedLoad[id]) {
+                    delete this.failedLoad[id];
+
+                    this.failedLoadCount = Object.values(this.failedLoad).length;
+                }
             } catch (e) { }
 
             this.isLoading = false;
+        },
+        imageFailed(id) {
+            this.failedLoad[id] = true;
+
+            this.failedLoadCount = Object.values(this.failedLoad).length;
+        },
+        imageLoaded(event, id) {
+            const img = event.target;
+
+            if (img.width < 1920 || img.height < 1080) {
+                this.smallSize[id] = true;
+
+                this.smallSizeCount = Object.values(this.smallSize).length;
+            }
         },
         async handleAdd() {
             const url = this.image_url.trim();

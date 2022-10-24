@@ -69,7 +69,11 @@
         "picture": "Picture URL",
         "add": "Add Picture",
         "remove": "Remove",
-        "do_add": "Add"
+        "do_add": "Add",
+        "failed_count": "{0} of {1} images failed to load.",
+        "small_size_count": "{0} of {1} images are too small. Recommended size is at least 1920x1080.",
+        "failed_count_label": "Image failed to load.",
+        "small_size_count_label": "Image is too small. Recommended size is at least 1920x1080."
     },
     "backstories": {
         "title": "Backstories",
