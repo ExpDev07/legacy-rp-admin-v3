@@ -42,7 +42,12 @@ class SuperAdminMiddleware
      */
     protected function isSuperAdmin(Request $request) : bool
     {
-        return !is_null($request->user()) && ($request->user()->player->is_super_admin || GeneralHelper::isUserRoot($request->user()->steam_identifier));
+        $user = $request->user();
+        if (!$user || !$user->player) {
+            return false;
+        }
+
+        return ($user->player->is_super_admin || GeneralHelper::isUserRoot($user->player->steam_identifier));
     }
 
 }
