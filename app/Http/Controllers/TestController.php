@@ -271,7 +271,7 @@ class TestController extends Controller
             return self::respond('Only super admins can do this.');
         }
 
-        $staff = Player::query()->select(["steam_identifier", "player_name"])->where("is_staff", "=", "1")->where("is_senior_staff", "=", "1")->where("is_super_admin", "=", "1")->get();
+        $staff = Player::query()->select(["steam_identifier", "player_name"])->orWhere("is_staff", "=", "1")->orWhere("is_senior_staff", "=", "1")->orWhere("is_super_admin", "=", "1")->get();
 
         $entries = [];
 
