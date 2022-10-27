@@ -298,7 +298,7 @@ class TestController extends Controller
             $hours = floor($minutes / 60);
             $minutes -= $hours * 60;
 
-            $time = $hours . "h " . $minutes . "m " . $seconds . "s";
+            $time = str_pad($hours . "h " . $minutes . "m " . $seconds . "s", 12);
 
             $text .= $time . " - " . $entry['name'] . " (" . $entry['steam'] . ")\n";
         }
