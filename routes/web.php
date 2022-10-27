@@ -214,6 +214,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/smart_watch', [TestController::class, 'smartWatchLeaderboard']);
     Route::get('/test/bans', [TestController::class, 'banLeaderboard']);
     Route::get('/test/modders', [TestController::class, 'moddingBans']);
+    Route::get('/test/staff', [TestController::class, 'staffPlaytime']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
