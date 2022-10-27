@@ -264,6 +264,48 @@ class TestController extends Controller
             ->header("Content-disposition", "attachment; filename=\"modders.csv\"");
     }
 
+    public function staffPlaytime(Request $request): Response
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return self::respond('Only super admins can do this.');
+        }
+
+        $staff = Player::query()->select(["steam_identifier", "player_name"])->where("is_staff", "=", "1")->where("is_senior_staff", "=", "1")->where("is_super_admin", "=", "1")->get();
+
+        $entries = [];
+
+        foreach ($staff as $player) {
+            $entries[] = [
+                'steam' => $player->steam_identifer,
+                'name' => $player->player_name,
+                'playtime' => intval($player->playtime)
+            ];
+        }
+
+        usort($entries, function ($a, $b) {
+            return $b['playtime'] - $a['playtime'];
+        });
+
+        $text = "Staff playtime\n\n";
+
+        foreach ($entries as $entry) {
+            $seconds = $entry['playtime'];
+
+            $minutes = floor($seconds / 60);
+            $seconds -= $minutes * 60;
+
+            $hours = floor($minutes / 60);
+            $minutes -= $hours * 60;
+
+            $time = $hours . "h " . $minutes . "m " . $seconds . "s";
+
+            $text .= $time . " - " . $entry['name'] . " (" . $entry['steam'] . ")\n";
+        }
+
+        return self::respond($text);
+    }
+
     public function jobApi(Request $request, string $api_key, string $jobName, string $departmentName, string $positionName, string $characterIds): Response
     {
         if (env('DEV_API_KEY', '') !== $api_key || empty($api_key)) {
