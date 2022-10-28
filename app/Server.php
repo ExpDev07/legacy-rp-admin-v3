@@ -80,19 +80,12 @@ class Server extends Model
         $serverIp = self::fixApiUrl($serverIp);
 
         $host = str_replace('https://', '', $serverIp);
+        $host = str_replace('http://', '', $host);
         $host = explode('/', $host)[0];
 
-        $names = explode(',', env('SERVER_NAMES', ''));
-        if (!empty($names)) {
-            foreach ($names as $def) {
-                $def = explode('=', $def);
-                if (sizeof($def) === 2 && $def[0] === $host) {
-                    return $def[1];
-                }
-            }
-        }
+        $name = CLUSTER . "s1";
 
-        return preg_match('/^\d+\.\d+\.\d+\.\d+(:\d+)?$/m', $host) ? $host : explode('.', $host)[0];
+        return preg_match('/^\d+\.\d+\.\d+\.\d+(:\d+)?$/m', $host) ? $name : explode('.', $host)[0];
     }
 
     /**
