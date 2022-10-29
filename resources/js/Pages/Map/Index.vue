@@ -1642,6 +1642,7 @@ export default {
         },
         async renderTimestamp(timestamp) {
             this.historicChart = false;
+            this.historyRange.view = false;
 
             if (this.loadingScreenStatus) {
                 return;
