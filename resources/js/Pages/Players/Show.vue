@@ -1801,9 +1801,18 @@ export default {
             });
         },
         formatWarning(warning) {
+            warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi, (full, _ignore, host, steam) => {
+                const url = full && full.startsWith("http") ? full : "/players/" + steam,
+                    cluster = host ? host.split(".")[0].replace("localhost", "c1") : this.$page?.auth?.cluster;
+
+                return `<a href="${url}" target="_blank" class="text-yellow-600 dark:text-yellow-400">${cluster.toLowerCase()}/${steam.toLowerCase()}</a>`;
+            });
+
             return this.urlify(warning, function (url) {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
                 let extraClass = 'user-link';
+
+                if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi)) return;
 
                 switch (ext) {
                     case 'jpg':
@@ -1829,12 +1838,6 @@ export default {
             $(el).replaceWith('<div class="user-close relative">' +
                 '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
                 '<img class="block max-h-96 max-w-full" src="' + url + '" />' +
-                '</div>');
-        },
-        viewVideo(el, url) {
-            $(el).replaceWith('<div class="user-close relative">' +
-                '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
-                '<video class="block max-h-96 max-w-full" controls autoplay><source src="' + url + '">Your browser does not support the video tag.</video>' +
                 '</div>');
         },
         async removeIdentifier(identifier) {
