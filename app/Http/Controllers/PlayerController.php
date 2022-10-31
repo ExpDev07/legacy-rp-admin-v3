@@ -215,7 +215,6 @@ class PlayerController extends Controller
                     'characters'    => CharacterResource::collection($resolved->characters),
                     'warnings'      => $resolved->fasterWarnings($isSenior),
                     'panelLogs'     => PanelLogResource::collection($resolved->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
-                    'discord'       => $resolved->getDiscordInfo(),
                     'kickReason'    => trim($request->query('kick')) ?? '',
                     'screenshots'   => Screenshot::getAllScreenshotsForPlayer($resolved->steam_identifier),
                     'whitelisted'   => !!$whitelisted,

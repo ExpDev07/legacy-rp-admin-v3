@@ -251,28 +251,43 @@ class Player extends Model
      *
      * @return array|null
      */
-    public function getDiscordInfo(): ?array
+    public function getDiscordInfo(): array
     {
-        $user = DiscordUser::getUser($this->getDiscordID());
-        return $user ? $user->toArray() : null;
+        $ids = $this->getDiscordIDs();
+
+        $users = [];
+
+        foreach ($ids as $id) {
+            $user = DiscordUser::getUser($id);
+
+            $users[$id] = $user ? $user->toArray() : null;
+        }
+
+        return $users;
     }
 
     /**
      * Returns the discord user id
      *
-     * @return string
+     * @return array
      */
-    public function getDiscordID(): string
+    public function getDiscordIDs(): array
     {
+        $discords = [];
+
         $ids = $this->getIdentifiers();
 
         foreach ($ids as $id) {
             if (Str::startsWith($id, 'discord:')) {
-                return str_replace('discord:', '', $id);
+                $discord = str_replace('discord:', '', $id);
+
+                if (!in_array($discord, $discords)) {
+                    $discords[] = $discord;
+                }
             }
         }
 
-        return '';
+        return $discords;
     }
 
     /**

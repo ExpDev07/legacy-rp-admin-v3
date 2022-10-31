@@ -244,6 +244,62 @@
             </div>
         </div>
 
+        <!-- Discord Accounts -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingDiscord">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.discord_title') }}</h3>
+                <div v-if="isShowingDiscordLoading">
+                    <div class="flex justify-center items-center my-6 mt-12">
+                        <div>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="w-full flex justify-between mb-2" v-for="(discord, id) in discordAccounts" :key="id">
+                        <div class="p-3 w-full relative">
+                            <a
+                                class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
+                                v-if="discord && discord.username"
+                                href="#"
+                                :title="t('players.show.discord_copy')"
+                                @click="copyText($event, '<@' + discord.id + '> ' + discord.username + '#' + discord.discriminator)"
+                            >
+                                <avatar
+                                    v-if="discord.avatar"
+                                    class="mr-3"
+                                    :src="discord.avatar"
+                                    :alt="discord.username + ' Avatar'"
+                                />
+                                <span>
+                                    {{ discord.username }}#{{ discord.discriminator }}
+                                </span>
+                            </a>
+                            <a
+                                class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
+                                v-else
+                                href="#"
+                                :title="t('players.show.discord_copy')"
+                                @click="copyText($event, '<@' + id + '>')"
+                            >
+                                <i class="mr-1 fab fa-discord"></i>
+                                {{ t('players.show.discord', id) }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button type="button"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isShowingDiscord = false">
+                        {{ t('global.close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Linked Accounts -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
             <div
@@ -692,29 +748,12 @@
             <div class="flex flex-wrap items-center text-center">
                 <a
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
-                    v-if="discord"
+                    v-if="player.discord.length > 0"
                     href="#"
-                    :title="t('players.show.discord_copy')"
-                    @click="copyText($event, '<@' + discord.id + '> ' + discord.username + '#' + discord.discriminator)"
-                >
-                    <avatar
-                        class="mr-3"
-                        :src="discord.avatar"
-                        :alt="discord.username + ' Avatar'"
-                    />
-                    <span>
-                        {{ discord.username }}#{{ discord.discriminator }}
-                    </span>
-                </a>
-                <a
-                    class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
-                    v-else-if="player.discord"
-                    href="#"
-                    :title="t('players.show.discord_copy')"
-                    @click="copyText($event, '<@' + player.discord + '>')"
+                    @click="showDiscord($event)"
                 >
                     <i class="mr-1 fab fa-discord"></i>
-                    {{ t('players.show.discord') }}
+                    {{ t('players.show.discord_accounts', player.discord.length) }}
                 </a>
 
                 <button
@@ -1264,9 +1303,6 @@ export default {
             type: Array,
             required: true,
         },
-        discord: {
-            type: Object,
-        },
         kickReason: {
             type: String
         },
@@ -1338,6 +1374,10 @@ export default {
                 total: 0,
                 linked: []
             },
+
+            isShowingDiscord: false,
+            isShowingDiscordLoading: false,
+            discordAccounts: [],
 
             sortedScreenshots: sortedScreenshots,
 
@@ -1461,6 +1501,29 @@ export default {
                 this.screenshotError = null;
                 this.screenshotSteam = null;
             }
+        },
+        async showDiscord(e) {
+            e.preventDefault();
+            this.isShowingDiscordLoading = true;
+            this.isShowingDiscord = true;
+
+            this.discordAccounts = [];
+
+            try {
+                const data = await axios.get('/players/' + this.player.steamIdentifier + '/discord');
+
+                if (data.data && data.data.status) {
+                    const accounts = data.data.data;
+
+                    this.discordAccounts = accounts;
+                } else {
+                    this.discordAccounts = [];
+                }
+            } catch (e) {
+                this.discordAccounts = [];
+            }
+
+            this.isShowingDiscordLoading = false;
         },
         async showLinked() {
             this.isShowingLinkedLoading = true;
@@ -1801,9 +1864,18 @@ export default {
             });
         },
         formatWarning(warning) {
+            warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi, (full, _ignore, host, steam) => {
+                const url = full && full.startsWith("http") ? full : "/players/" + steam,
+                    cluster = host ? host.split(".")[0].replace("localhost", "c1") : this.$page?.auth?.cluster;
+
+                return `<a href="${url}" target="_blank" class="text-yellow-600 dark:text-yellow-400">${cluster.toLowerCase()}/${steam.toLowerCase()}</a>`;
+            });
+
             return this.urlify(warning, function (url) {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
                 let extraClass = 'user-link';
+
+                if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi)) return;
 
                 switch (ext) {
                     case 'jpg':
@@ -1829,12 +1901,6 @@ export default {
             $(el).replaceWith('<div class="user-close relative">' +
                 '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
                 '<img class="block max-h-96 max-w-full" src="' + url + '" />' +
-                '</div>');
-        },
-        viewVideo(el, url) {
-            $(el).replaceWith('<div class="user-close relative">' +
-                '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
-                '<video class="block max-h-96 max-w-full" controls autoplay><source src="' + url + '">Your browser does not support the video tag.</video>' +
                 '</div>');
         },
         async removeIdentifier(identifier) {
