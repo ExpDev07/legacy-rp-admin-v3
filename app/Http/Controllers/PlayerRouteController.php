@@ -130,6 +130,21 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Returns all discord accounts
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return Response
+     */
+    public function discordAccounts(Player $player, Request $request): Response
+    {
+        return (new Response([
+            'status' => true,
+            'data'   => $player->getDiscordInfo(),
+        ], 200))->header('Content-Type', 'application/json');
+    }
+
+    /**
      * Revives the player
      *
      * @param Player $player
