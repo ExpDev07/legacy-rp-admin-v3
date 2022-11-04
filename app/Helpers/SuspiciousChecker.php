@@ -94,8 +94,6 @@ class SuspiciousChecker
         'weapon_unarmed',
         'weapon_flaregun',
         'weapon_raypistol',
-        'weapon_ceramicpistol',
-        'weapon_navyrevolver',
         'weapon_raycarbine',
         'weapon_mg',
         'weapon_combatmg',
