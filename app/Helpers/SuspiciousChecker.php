@@ -120,6 +120,19 @@ class SuspiciousChecker
         'weapon_pipebomb',
         'weapon_ball',
         'weapon_hazardcan',
+        'weapon_stungun_mp',
+        'weapon_gadgetpistol',
+        'weapon_tacticalrifle',
+        'weapon_precisionrifle',
+        'weapon_stinger',
+        'weapon_emplauncher',
+
+        'weapon_addon_katana',
+        'weapon_addon_rpk16',
+        'weapon_addon_g36c',
+        'weapon_addon_vandal',
+        'weapon_addon_mk18',
+        'weapon_addon_p320b'
     ];
 
     /**
