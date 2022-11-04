@@ -119,7 +119,6 @@ class SuspiciousChecker
         'weapon_stickybomb',
         'weapon_proxmine',
         'weapon_pipebomb',
-        'weapon_ball',
         'weapon_hazardcan',
         'weapon_stungun_mp',
         'weapon_gadgetpistol',
