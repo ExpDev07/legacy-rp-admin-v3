@@ -231,7 +231,7 @@ class SuspiciousChecker
 
         $ignore = self::ignoreCharacterInventories();
 
-        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE inventory_name NOT IN ('" . implode('\', \'', $ignore) . "') AND (`amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "'))" . $inv . ";";
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE inventory_name NOT IN ('" . implode('\', \'', $ignore) . "') AND (`amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "'));";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
