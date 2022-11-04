@@ -5,6 +5,7 @@ namespace App\Helpers;
 use App\Character;
 use App\Log;
 use App\Player;
+use App\Helpers\GeneralHelper;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -165,7 +166,36 @@ class SuspiciousChecker
         'weapon_stickybomb',
         'weapon_proxmine',
         'weapon_pipebomb',
+        'weapon_stungun_mp',
+        'weapon_gadgetpistol',
+        'weapon_tacticalrifle',
+        'weapon_precisionrifle',
+        'weapon_stinger',
+        'weapon_emplauncher',
+
+        'weapon_addon_katana',
+        'weapon_addon_rpk16',
+        'weapon_addon_g36c',
+        'weapon_addon_vandal',
+        'weapon_addon_mk18',
+        'weapon_addon_p320b'
     ];
+
+    private static function ignoreCharacterInventories(): array
+    {
+        $characters = Character::query()->select("character_id")->whereIn("steam_identifier", self::getIgnorableSteamIdentifiers())->get()->toArray();
+
+        $inventories = [];
+
+        foreach($characters as $character) {
+            $id = $character['character_id'];
+
+            $inventories[] = 'character-' . $id;
+            $inventories[] = 'locker-police-' . $id;
+        }
+
+        return $inventories;
+    }
 
     /**
      * Finds items that cant be obtained in the city
@@ -182,7 +212,9 @@ class SuspiciousChecker
             return CacheHelper::read($key, []);
         }
 
-        $sql = "SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as amount FROM `inventories` WHERE item_name IN ('" . implode('\', \'', $items) . "') GROUP BY CONCAT(inventory_name, item_name) ORDER BY id DESC";
+        $ignore = self::ignoreCharacterInventories();
+
+        $sql = "SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as amount FROM `inventories` WHERE item_name IN ('" . implode('\', \'', $items) . "') AND inventory_name NOT IN ('" . implode('\', \'', $ignore) . "') GROUP BY CONCAT(inventory_name, item_name) ORDER BY id DESC";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
@@ -205,10 +237,9 @@ class SuspiciousChecker
             return CacheHelper::read($key, []);
         }
 
-        $inv = self::getIgnorableInventories();
-        $inv = $inv ? ' AND inventory_name NOT IN ("' . implode('", "', $inv) . '")' : '';
+        $ignore = self::ignoreCharacterInventories();
 
-        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE (`amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "'))" . $inv . ";";
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE inventory_name NOT IN ('" . implode('\', \'', $ignore) . "') AND (`amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "'))" . $inv . ";";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
@@ -359,17 +390,6 @@ class SuspiciousChecker
         }
 
         return $sus;
-    }
-
-    private static function getIgnorableInventories(): array
-    {
-        $ids = self::getIgnorableSteamIdentifiers();
-
-        $characters = Character::query()->select(["character_id"])->whereIn("steam_identifier", $ids)->get()->toArray();
-
-        return array_values(array_map(function($character) {
-            return 'character-' . $character['character_id'];
-        }, $characters));
     }
 
     private static function getIgnorableSteamIdentifiers(): array
