@@ -65,7 +65,7 @@
                     {{ t('logs.logs') }}
                 </h2>
                 <p class="mb-2 text-sm"
-                   v-if="logType === 'pawn' || logType === 'items' || logType === 'warehouse' || logType === 'unusual' || logType === 'inventories'">
+                   v-if="logType === 'pawn' || logType === 'warehouse' || logType === 'unusual' || logType === 'inventories'">
                     {{ t('suspicious.cached') }}
                 </p>
                 <p class="text-muted dark:text-dark-muted text-xs">

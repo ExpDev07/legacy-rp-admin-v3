@@ -206,19 +206,11 @@ class SuspiciousChecker
     {
         $items = self::SingleUnusualItems;
 
-        $key = 'illegal_items_' . md5(json_encode($items));
-
-        if (CacheHelper::exists($key)) {
-            return CacheHelper::read($key, []);
-        }
-
         $ignore = self::ignoreCharacterInventories();
 
         $sql = "SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as amount FROM `inventories` WHERE item_name IN ('" . implode('\', \'', $items) . "') AND inventory_name NOT IN ('" . implode('\', \'', $ignore) . "') GROUP BY CONCAT(inventory_name, item_name) ORDER BY id DESC";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
-
-        CacheHelper::write($key, $entries, self::CacheTime);
 
         return $entries;
     }
@@ -394,7 +386,7 @@ class SuspiciousChecker
 
     private static function getIgnorableSteamIdentifiers(): array
     {
-        $ids = Player::query()->select(["steam_identifier"])->where("is_super_admin", "=", 1)->get()->toArray();
+        $ids = Player::query()->select(["steam_identifier"])->where("is_super_admin", "=", 1)->orWhere("is_senior_staff", "=", 1)->get()->toArray();
 
         $ids = array_values(array_map(function($entry) {
             return $entry["steam_identifier"];
