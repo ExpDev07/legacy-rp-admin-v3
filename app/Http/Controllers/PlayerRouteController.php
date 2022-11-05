@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Support\Facades\DB;
 
 class PlayerRouteController extends Controller
 {
@@ -141,6 +142,57 @@ class PlayerRouteController extends Controller
         return (new Response([
             'status' => true,
             'data'   => $player->getDiscordInfo(),
+        ], 200))->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Returns all anti cheat information.
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return Response
+     */
+    public function antiCheat(Player $player, Request $request): Response
+    {
+        $events = DB::table("anti_cheat_events")->where('steam_identifier', $player->steam_identifier)->orderByDesc("timestamp")->limit(200)->get()->toArray();
+
+        return (new Response([
+            'status' => true,
+            'data'   => array_map(function($entry) {
+                $entry->metadata = json_decode($entry->metadata);
+
+                return $entry;
+            }, $events),
+        ], 200))->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Returns all screenshots.
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return Response
+     */
+    public function screenshots(Player $player, Request $request): Response
+    {
+        return (new Response([
+            'status' => true,
+            'data'   => Screenshot::getAllScreenshotsForPlayer($player->steam_identifier),
+        ], 200))->header('Content-Type', 'application/json');
+    }
+
+    /**
+     * Returns all panel logs.
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return Response
+     */
+    public function panelLogs(Player $player, Request $request): Response
+    {
+        return (new Response([
+            'status' => true,
+            'data'   => PanelLogResource::collection($player->panelLogs()->orderByDesc('timestamp')->limit(10)->get()),
         ], 200))->header('Content-Type', 'application/json');
     }
 

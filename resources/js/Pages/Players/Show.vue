@@ -357,6 +357,62 @@
             </div>
         </div>
 
+        <!-- Anti Cheat -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingAntiCheat">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.anti_cheat_title') }}</h3>
+                <div v-if="isShowingAntiCheatLoading">
+                    <div class="flex justify-center items-center my-6 mt-12">
+                        <div>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <table class="w-full whitespace-no-wrap">
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="event in antiCheatEvents" :key="event.id">
+                            <td class="px-3 py-2 border-t">{{ event.type }}</td>
+                            <td class="px-3 py-2 border-t">
+                                <a href="#" @click="showAntiCheatMetadata($event, event.metadata)" class="text-indigo-600 !no-underline dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">
+                                    {{ t("players.show.anti_cheat_metadata") }}
+                                </a>
+                            </td>
+                            <td class="px-3 py-2 border-t">{{ event.timestamp * 1000 | formatTime(true) }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button type="button"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isShowingAntiCheat = false">
+                        {{ t('global.close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <modal :show.sync="antiCheatMetadata">
+			<template #header>
+				<h1 class="dark:text-white">
+					{{ t('players.show.anti_cheat_metadata') }}
+				</h1>
+			</template>
+
+			<template #default>
+				<pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded" v-html="antiCheatMetadataJSON"></pre>
+			</template>
+
+			<template #actions>
+				<button type="button"
+						class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400"
+						@click="antiCheatMetadata = false">
+					{{ t('global.close') }}
+				</button>
+			</template>
+		</modal>
+
         <!-- Unloading -->
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isUnloading">
             <div
@@ -727,7 +783,6 @@
         <!-- Useful links -->
         <v-section class="py-1 dark:bg-dark-secondary">
             <div class="flex flex-wrap items-center text-center">
-
                 <inertia-link
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     :href="'/logs?identifier=' + player.steamIdentifier"
@@ -743,7 +798,15 @@
                     <i class="mr-1 fab fa-steam"></i>
                     {{ t('players.show.steam') }}
                 </a>
-
+                <button
+                    class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
+                    @click="showAntiCheat"
+                >
+                    <i class="mr-1 fas fa-bullseye"></i>
+                    <span>
+                        {{ t('players.show.anti_cheat') }}
+                    </span>
+                </button>
             </div>
             <div class="flex flex-wrap items-center text-center">
                 <a
@@ -770,7 +833,6 @@
                         {{ t('players.show.linked') }}
                     </span>
                 </button>
-
             </div>
         </v-section>
 
@@ -1062,7 +1124,13 @@
             </template>
 
             <template>
-                <table class="w-full whitespace-no-wrap">
+                <div class="flex justify-center items-center my-6 mt-12" v-if="!haveScreenshotsLoaded">
+                    <div>
+                        <i class="fas fa-cog animate-spin"></i>
+                        {{ t('global.loading') }}
+                    </div>
+                </div>
+                <table class="w-full whitespace-no-wrap" v-else>
                     <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('screenshot.screenshot') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.note') }}</th>
@@ -1109,7 +1177,13 @@
             </template>
 
             <template>
-                <table class="w-full whitespace-no-wrap">
+                <div class="flex justify-center items-center my-6 mt-12" v-if="!havePanelLogsLoaded">
+                    <div>
+                        <i class="fas fa-cog animate-spin"></i>
+                        {{ t('global.loading') }}
+                    </div>
+                </div>
+                <table class="w-full whitespace-no-wrap" v-else>
                     <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('logs.action') }}</th>
                         <th class="px-6 py-4">{{ t('logs.timestamp') }}</th>
@@ -1265,8 +1339,17 @@ import Alert from './../../Components/Alert';
 import Card from './../../Components/Card';
 import Avatar from './../../Components/Avatar';
 import ScreenshotAttacher from './../../Components/ScreenshotAttacher';
+import Modal from './../../Components/Modal';
 
 import models from '../../data/ped_models.js';
+
+import hljs from 'highlight.js';
+
+import json from 'highlight.js/lib/languages/json';
+
+hljs.registerLanguage('json', json);
+
+import 'highlight.js/styles/github-dark-dimmed.css';
 
 export default {
     layout: Layout,
@@ -1277,6 +1360,7 @@ export default {
         Card,
         Avatar,
         ScreenshotAttacher,
+        Modal,
     },
     props: {
         player: {
@@ -1284,14 +1368,6 @@ export default {
             required: true,
         },
         characters: {
-            type: Array,
-            required: true,
-        },
-        screenshots: {
-            type: Array,
-            required: true,
-        },
-        panelLogs: {
             type: Array,
             required: true,
         },
@@ -1317,8 +1393,6 @@ export default {
         }
     },
     data() {
-        const sortedScreenshots = this.screenshots.sort((a, b) => b.created_at - a.created_at);
-
         let selectedRole;
 
         if (this.player.isSeniorStaff) {
@@ -1379,7 +1453,13 @@ export default {
             isShowingDiscordLoading: false,
             discordAccounts: [],
 
-            sortedScreenshots: sortedScreenshots,
+            isShowingAntiCheat: false,
+            isShowingAntiCheatLoading: false,
+            antiCheatEvents: [],
+
+            antiCheatMetadata: false,
+            antiCheatMetadataJSON: '',
+
 
             isTagging: false,
             tagCategory: this.player.tag ? this.player.tag : 'custom',
@@ -1402,12 +1482,52 @@ export default {
             screenshotImage: null,
             screenshotSteam: null,
             screenshotError: null,
-            isAttachingScreenshot: false
+            isAttachingScreenshot: false,
+
+            haveScreenshotsLoaded: false,
+            sortedScreenshots: [],
+
+            havePanelLogsLoaded: false,
+            panelLogs: []
         }
     },
     methods: {
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
+        },
+        showAntiCheatMetadata(event, eventMetadata) {
+            event.preventDefault();
+
+            this.antiCheatMetadata = true;
+            this.antiCheatMetadataJSON = hljs.highlight(JSON.stringify(eventMetadata, null, 4), {language: 'json'}).value;
+        },
+        async loadScreenshots() {
+            try {
+                const data = await axios.get('/players/' + this.player.steamIdentifier + '/screenshots');
+
+                if (data.data && data.data.status) {
+                    const screenshots = data.data.data;
+
+                    const sortedScreenshots = screenshots.sort((a, b) => b.created_at - a.created_at);
+
+                    this.sortedScreenshots = sortedScreenshots;
+                }
+            } catch (e) {
+            }
+
+            this.haveScreenshotsLoaded = true;
+        },
+        async loadPanelLogs() {
+            try {
+                const data = await axios.get('/players/' + this.player.steamIdentifier + '/panelLogs');
+
+                if (data.data && data.data.status) {
+                    this.panelLogs = data.data.data;
+                }
+            } catch (e) {
+            }
+
+            this.havePanelLogsLoaded = true;
         },
         async createScreenCapture() {
             if (this.screenCaptureStatus) {
@@ -1550,6 +1670,22 @@ export default {
             }
 
             this.isShowingLinkedLoading = false;
+        },
+        async showAntiCheat() {
+            this.isShowingAntiCheatLoading = true;
+            this.isShowingAntiCheat = true;
+
+            this.antiCheatEvents = [];
+
+            try {
+                const data = await axios.get('/players/' + this.player.steamIdentifier + '/antiCheat');
+
+                if (data.data && data.data.status) {
+                    this.antiCheatEvents = data.data.data;
+                }
+            } catch (e) {}
+
+            this.isShowingAntiCheatLoading = false;
         },
         wrapWarningType(type) {
             const label = this.t('players.show.warning_type.' + type);
@@ -1926,6 +2062,9 @@ export default {
             this.isKicking = true;
             this.form.kick.reason = this.kickReason;
         }
+
+        this.loadScreenshots();
+        this.loadPanelLogs();
 
         const _this = this;
         $(document).ready(function () {
