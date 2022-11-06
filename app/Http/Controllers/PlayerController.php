@@ -9,6 +9,7 @@ use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PanelLogResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
+use App\Http\Controllers\PlayerRouteController;
 use App\Player;
 use App\Character;
 use App\Screenshot;
@@ -211,14 +212,15 @@ class PlayerController extends Controller
                 $isSenior = $this->isSeniorStaff($request);
 
                 return Inertia::render('Players/Show', [
-                    'player'        => new PlayerResource($resolved),
-                    'characters'    => CharacterResource::collection($resolved->characters),
-                    'warnings'      => $resolved->fasterWarnings($isSenior),
-                    'kickReason'    => trim($request->query('kick')) ?? '',
-                    'whitelisted'   => !!$whitelisted,
-                    'blacklisted'   => !!$blacklisted,
-                    'tags'          => Player::resolveTags(),
-                    'allowRoleEdit' => env('ALLOW_ROLE_EDITING', false) && $this->isSuperAdmin($request),
+                    'player'            => new PlayerResource($resolved),
+                    'characters'        => CharacterResource::collection($resolved->characters),
+                    'warnings'          => $resolved->fasterWarnings($isSenior),
+                    'kickReason'        => trim($request->query('kick')) ?? '',
+                    'whitelisted'       => !!$whitelisted,
+                    'blacklisted'       => !!$blacklisted,
+                    'tags'              => Player::resolveTags(),
+                    'allowRoleEdit'     => env('ALLOW_ROLE_EDITING', false) && $this->isSuperAdmin($request),
+                    'enablableCommands' => PlayerRouteController::EnablableCommands
                 ]);
             }
         } else {
