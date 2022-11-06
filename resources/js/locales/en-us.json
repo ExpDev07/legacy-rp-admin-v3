@@ -640,6 +640,8 @@
             "revive": "Revive Player",
             "edit_role": "Edit Role",
             "edit_tag": "Edit Tag",
+            "update_commands": "Update Commands",
+            "edit": "Edit",
             "remove_tag": "Remove Tag",
             "tag_custom": "Custom Tag",
             "role": "Role",

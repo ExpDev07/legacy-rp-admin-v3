@@ -34,7 +34,7 @@ class OPFWHelper
             return new OPFWResponse(false, 'Player is offline.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/staffPrivateMessage', [
+        $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/staffPrivateMessage', [
             'steamIdentifier' => $staffSteamIdentifier,
             'targetSource'    => $status->serverId,
             'message'         => $message,
@@ -63,7 +63,7 @@ class OPFWHelper
             return new OPFWResponse(false, 'Your message cannot be empty');
         }
 
-        $response = self::executeRoute($serverIp . 'execute/staffChatMessage', [
+        $response = self::executeRoute($serverIp, $serverIp . 'execute/staffChatMessage', [
             'steamIdentifier' => $staffSteamIdentifier,
             'message'         => $message,
         ]);
@@ -93,7 +93,7 @@ class OPFWHelper
             return new OPFWResponse(false, 'Player is offline.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/kickPlayer', [
+        $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/kickPlayer', [
             'steamIdentifier'         => $steam,
             'reason'                  => 'You have been kicked by ' . $staffPlayerName . ' for reason `' . $reason . '`',
             'removeReconnectPriority' => false,
@@ -122,7 +122,7 @@ class OPFWHelper
             return new OPFWResponse(false, 'Player is offline.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/revivePlayer', [
+        $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/revivePlayer', [
             'targetSource' => $status->serverId,
         ]);
 
@@ -151,7 +151,7 @@ class OPFWHelper
             return new OPFWResponse(true, 'Player is offline, no refresh needed.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/refreshTattoos', [
+        $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/refreshTattoos', [
             'steamIdentifier' => $steam,
             'characterId'     => $character_id,
         ]);
@@ -179,7 +179,7 @@ class OPFWHelper
             return new OPFWResponse(true, 'Player is offline, no refresh needed.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/refreshJob', [
+        $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/refreshJob', [
             'steamIdentifier' => $steam,
             'characterId'     => $character_id,
         ]);
@@ -209,7 +209,7 @@ class OPFWHelper
             return new OPFWResponse(true, 'Player is offline, no unload needede.');
         }
 
-        $response = self::executeRoute($status->serverIp . 'execute/unloadCharacter', [
+        $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/unloadCharacter', [
             'steamIdentifier' => $steam,
             'characterId'     => $character_id,
             'message'         => $message,
@@ -234,7 +234,7 @@ class OPFWHelper
      */
     public static function updateQueuePosition(string $serverIp, string $steamIdentifier, int $targetPosition): OPFWResponse
     {
-        return self::executeRoute($serverIp . 'execute/setQueuePosition', [
+        return self::executeRoute($serverIp, $serverIp . 'execute/setQueuePosition', [
             'steamIdentifier' => $steamIdentifier,
             'targetPosition'  => $targetPosition,
         ], 'PATCH');
@@ -254,7 +254,7 @@ class OPFWHelper
         if (CacheHelper::exists($cache)) {
             return CacheHelper::read($cache, []);
         } else {
-            $data = self::executeRoute($serverIp . 'world.json', [], 'GET', 3);
+            $data = self::executeRoute($serverIp, $serverIp . 'world.json', [], 'GET', 3);
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 10);
@@ -281,7 +281,7 @@ class OPFWHelper
         if (CacheHelper::exists($cache) && !$forceRefresh) {
             return CacheHelper::read($cache, []);
         } else {
-            $data = self::executeRoute($serverIp . 'queue.json', [], 'GET', 3);
+            $data = self::executeRoute($serverIp, $serverIp . 'queue.json', [], 'GET', 3);
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 3);
@@ -307,7 +307,7 @@ class OPFWHelper
         if (CacheHelper::exists($cache)) {
             return CacheHelper::read($cache, []);
         } else {
-            $data = self::executeRoute($serverIp . 'jobs.json', [], 'GET', 3);
+            $data = self::executeRoute($serverIp, $serverIp . 'jobs.json', [], 'GET', 3);
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 12 * CacheHelper::HOUR);
@@ -333,7 +333,7 @@ class OPFWHelper
         if (CacheHelper::exists($cache)) {
             return CacheHelper::read($cache, []);
         } else {
-            $data = self::executeRoute($serverIp . 'vehicles.json', [], 'GET', 3);
+            $data = self::executeRoute($serverIp, $serverIp . 'vehicles.json', [], 'GET', 3);
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 12 * CacheHelper::HOUR);
@@ -356,7 +356,7 @@ class OPFWHelper
     {
         $serverIp = Server::fixApiUrl($serverIp);
 
-        return self::executeRoute($serverIp . 'execute/createScreenshot', [
+        return self::executeRoute($serverIp, $serverIp . 'execute/createScreenshot', [
             'serverId' => $id,
             'lifespan' => 60 * 60
         ]);
@@ -374,7 +374,7 @@ class OPFWHelper
     {
         $serverIp = Server::fixApiUrl($serverIp);
 
-        return self::executeRoute($serverIp . 'execute/createScreenshot', [
+        return self::executeRoute($serverIp, $serverIp . 'execute/createScreenshot', [
             'serverId' => $id,
             'lifespan' => 60 * 60,
             'fps' => 20,
@@ -391,13 +391,19 @@ class OPFWHelper
      * @param int $timeout
      * @return OPFWResponse
      */
-    private static function executeRoute(string $route, array $data, string $requestType = 'POST', int $timeout = 10): OPFWResponse
+    private static function executeRoute(string $serverIp, string $route, array $data, string $requestType = 'POST', int $timeout = 10): OPFWResponse
     {
         $token = env('OP_FW_TOKEN');
 
         if (!$token) {
             return new OPFWResponse(false, 'Invalid OP-FW configuration.');
         }
+
+        /*
+        if (!CacheHelper::getServerStatus($serverIp)) {
+            return new OPFWResponse(false, 'Server is offline (cached).');
+        }
+        */
 
         if (Str::contains($route, 'localhost')) {
             $route = str_replace('https://', 'http://', $route);
@@ -435,7 +441,9 @@ class OPFWHelper
 
             $result = self::parseResponse($response);
             if (!$result->status) {
-                sleep(2);
+                if ($x+1 < self::RetryAttempts) {
+                    sleep(2);
+                }
             } else {
                 return $result;
             }

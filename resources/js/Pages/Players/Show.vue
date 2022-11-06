@@ -74,9 +74,11 @@
                     <span class="font-bold">{{ t('players.show.aliases') }}:</span>
                     {{ player.playerAliases.join(", ") }}
                 </span>
-                <span class="block" v-if="player.enabledCommands && player.enabledCommands.length > 0">
+                <span class="block">
                     <span class="font-bold">{{ t('players.show.enabled_commands') }}:</span>
-                    {{ player.enabledCommands.map(e => '/' + e).join(", ") }}
+                    {{ player.enabledCommands.length > 0 ? player.enabledCommands.map(e => '/' + e).join(", ") : "N/A" }}
+
+                    <a href="#" class="text-indigo-600 dark:text-indigo-400" @click="$event.preventDefault(); isEnablingCommands = true" v-if="$page.auth.player.isSuperAdmin">{{ t('players.show.edit') }}</a>
                 </span>
             </div>
             <p class="dark:text-dark-muted">
@@ -516,6 +518,33 @@
                         </button>
                         <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
                                 type="button" @click="isTagging = false">
+                            {{ t('global.cancel') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Enabled commands -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isEnablingCommands">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.update_commands') }}</h3>
+                <form class="space-y-2">
+                    <div class="flex items-center" v-for="command in commands" :key="command.name">
+                        <input type="checkbox" v-model="command.enabled" :id="command.name" class="mr-2 outline-none">
+                        <label>/{{ command.name }}</label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex items-center space-x-3 mt-4">
+                        <button class="px-5 py-2 font-semibold text-white bg-green-500 rounded hover:bg-green-600"
+                                type="button" @click="updateCommands">
+                            <i class="fas fa-tag mr-1"></i>
+                            {{ t('players.show.update_commands') }}
+                        </button>
+                        <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                                type="button" @click="isEnablingCommands = false">
                             {{ t('global.cancel') }}
                         </button>
                     </div>
@@ -1379,6 +1408,10 @@ export default {
             type: Array,
             required: true,
         },
+        enablableCommands: {
+            type: Array,
+            required: true,
+        },
         kickReason: {
             type: String
         },
@@ -1404,6 +1437,13 @@ export default {
         } else {
             selectedRole = 'player';
         }
+
+        const commands = this.enablableCommands.sort().map(c => {
+            return {
+                name: c,
+                enabled: this.player.enabledCommands.includes(c),
+            };
+        });
 
         return {
             local: {
@@ -1448,6 +1488,9 @@ export default {
                 total: 0,
                 linked: []
             },
+
+            commands: commands,
+            isEnablingCommands: false,
 
             isShowingDiscord: false,
             isShowingDiscordLoading: false,
@@ -1500,6 +1543,16 @@ export default {
 
             this.antiCheatMetadata = true;
             this.antiCheatMetadataJSON = hljs.highlight(JSON.stringify(eventMetadata, null, 4), {language: 'json'}).value;
+        },
+        async updateCommands() {
+            this.isEnablingCommands = false;
+
+            const enabledCommands = this.commands.filter(c => c.enabled).map(c => c.name);
+
+            // Send request.
+            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateEnabledCommands', {
+                enabledCommands: enabledCommands,
+            });
         },
         async loadScreenshots() {
             try {

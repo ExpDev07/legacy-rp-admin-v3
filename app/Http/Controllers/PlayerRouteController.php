@@ -8,6 +8,7 @@ use App\Helpers\PermissionHelper;
 use App\Player;
 use App\Screenshot;
 use App\Server;
+use App\Http\Resources\PanelLogResource;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,15 @@ class PlayerRouteController extends Controller
         'license2',
         'live',
         'xbl',
+    ];
+
+    const EnablableCommands = [
+        "freecam",
+        "idle",
+        "cam_point",
+        "cam_clear",
+        "cam_play",
+        "orbitcam"
     ];
 
     /**
@@ -354,6 +364,34 @@ class PlayerRouteController extends Controller
         $player->update($data);
 
         return back()->with('success', 'Role has been updated successfully.');
+    }
+
+    /**
+     * Updates enabled commands
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function updateEnabledCommands(Player $player, Request $request): RedirectResponse
+    {
+        if (!$this->isSuperAdmin($request)) {
+            return back()->with('error', 'You dont have permissions to do this.');
+        }
+
+        $enabledCommands = $request->input('enabledCommands');
+
+        foreach($enabledCommands as $command) {
+            if (!in_array($command, self::EnablableCommands)) {
+                return back()->with('error', 'You cannot enable the command "' . $command . '".');
+            }
+        }
+
+        $player->update([
+            "enabled_commands" => $enabledCommands
+        ]);
+
+        return back()->with('success', 'Commands have been updated successfully.');
     }
 
     /**

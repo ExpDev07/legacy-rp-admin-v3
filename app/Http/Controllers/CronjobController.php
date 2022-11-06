@@ -8,6 +8,7 @@ use App\Helpers\CacheHelper;
 use App\Player;
 use App\Statistics\Statistic;
 use App\Vehicle;
+use App\Server;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -22,9 +23,23 @@ class CronjobController extends Controller
      */
     public function generalCronjob(): Response
     {
+        $start = microtime(true);
+        echo "Getting log actions...";
         CacheHelper::getLogActions(true);
 
+        echo $this->stopTime($start);
+
+        $start = microtime(true);
+        echo "Getting server status...";
+        CacheHelper::getServerStatus(Server::getFirstServer(), true);
+
+        echo $this->stopTime($start);
+
         return (new Response('Success', 200))->header('Content-Type', 'text/plain');
+    }
+
+    private function stopTime($time): string {
+        return round(microtime(true) - $time, 2) . "s" . PHP_EOL;
     }
 
     /**

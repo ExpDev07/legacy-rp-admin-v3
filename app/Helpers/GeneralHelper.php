@@ -278,7 +278,7 @@ class GeneralHelper
      * @param string $url
      * @return string
      */
-    public static function get(string $url): string
+    public static function get(string $url, int $timeout = 3, int $connectTimeout = 1): string
     {
         if (isset(self::$GETCache[$url])) {
             LoggingHelper::quickLog("Returning cached request '" . $url . "'");
@@ -295,8 +295,8 @@ class GeneralHelper
             );
 
             $res = $client->request('GET', $url, [
-                'timeout' => 3,
-                'connect_timeout' => 1,
+                'timeout' => $timeout,
+                'connect_timeout' => $connectTimeout,
             ]);
 
             $body = $res->getBody()->getContents();
