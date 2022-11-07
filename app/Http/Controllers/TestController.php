@@ -240,7 +240,7 @@ class TestController extends Controller
         foreach ($month as $x => $ban) {
             $count = str_pad(number_format($ban->count), 6);
 
-            $percentage = str_pad(number_format(($ban->count / $monthCount) * 100, 1) . "%", 5);
+            $percentage = str_pad(number_format(($ban->count / $monthCount) * 100, 1) . "%", 6);
 
             $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $ban->reason;
         }
@@ -249,7 +249,7 @@ class TestController extends Controller
         foreach ($all as $x => $ban) {
             $count = str_pad(number_format($ban->count), 6);
 
-            $percentage = str_pad(number_format(($ban->count / $allCount) * 100, 1) . "%", 5);
+            $percentage = str_pad(number_format(($ban->count / $allCount) * 100, 1) . "%", 6);
 
             $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $ban->reason;
         }
