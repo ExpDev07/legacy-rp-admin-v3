@@ -217,8 +217,8 @@ class TestController extends Controller
 
     public function systemBans(): Response
     {
-        $all = DB::select("SELECT COUNT(*) as count, reason FROM user_bans WHERE creator_name IS NULL AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY reason LIMIT 20");
-        $month = DB::select("SELECT COUNT(*) as count, reason FROM user_bans WHERE creator_name IS NULL AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY reason LIMIT 20");
+        $all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason FROM user_bans WHERE creator_name IS NULL AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
+        $month = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason FROM user_bans WHERE creator_name IS NULL AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
 
         usort($all, function ($a, $b) {
             return $b->count - $a->count;
