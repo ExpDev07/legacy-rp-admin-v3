@@ -1,6 +1,7 @@
 import Player from './Player';
 import Notifier from './Notifier';
 import {getAFKColor, getOnDutyClass} from './helper';
+import {Character} from './Objects.js';
 
 class PlayerContainer {
     constructor(staffMembers) {
@@ -80,6 +81,11 @@ class PlayerContainer {
         const flags = Player.getPlayerFlags(rawPlayer);
 
         if (flags.fakeDisconnected) {
+            return;
+        }
+
+        const characterFlags = Character.getCharacterFlags(rawPlayer.character);
+        if (!characterFlags.spawned) {
             return;
         }
 
