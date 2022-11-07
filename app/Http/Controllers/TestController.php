@@ -230,12 +230,16 @@ class TestController extends Controller
 
         $leaderboard = [];
         foreach ($month as $x => $ban) {
-            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . number_format($ban->count) . " " . $ban->reason;
+            $count = str_pad(number_format($ban->count), 6);
+
+            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $count . " " . $ban->reason;
         }
 
         $leaderboard2 = [];
         foreach ($all as $x => $ban) {
-            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . number_format($ban->count) . " " . $ban->reason;
+            $count = str_pad(number_format($ban->count), 6);
+
+            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $count . " " . $ban->reason;
         }
 
         $text = "Last 30 days\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nAll time\n\n" . implode("\n", $leaderboard2);
