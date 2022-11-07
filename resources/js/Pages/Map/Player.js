@@ -88,30 +88,13 @@ class Player {
     }
 
     static getPlayerFlags(player) {
-        let flags = player.flags ? player.flags : 0;
-
-        const modifiedCameraCoords = flags / 8 >= 1
-        if (modifiedCameraCoords) {
-            flags -= 8
-        }
-
-        const inMiniGame = flags / 4 >= 1
-        if (inMiniGame) {
-            flags -= 4
-        }
-
-        const fakeDisconnected = flags / 2 >= 1
-        if (fakeDisconnected) {
-            flags -= 2
-        }
-
-        const identityOverride = flags !== 0
+        const flags = player.flags ? player.flags : 0;
 
         return {
-            identityOverride: identityOverride,
-            fakeDisconnected: fakeDisconnected,
-            inMiniGame: inMiniGame,
-            modifiedCameraCoords: modifiedCameraCoords
+            modifiedCameraCoords: !!(flags & 8),
+            inMiniGame: !!(flags & 4),
+            fakeDisconnected: !!(flags & 2),
+            identityOverride: !!(flags & 1)
         }
     }
 
