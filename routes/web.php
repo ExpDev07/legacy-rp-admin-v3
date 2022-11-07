@@ -218,6 +218,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/logs/{action}', [TestController::class, 'logs']);
     Route::get('/test/smart_watch', [TestController::class, 'smartWatchLeaderboard']);
     Route::get('/test/bans', [TestController::class, 'banLeaderboard']);
+    Route::get('/test/system', [TestController::class, 'systemBans']);
     Route::get('/test/modders', [TestController::class, 'moddingBans']);
     Route::get('/test/staff', [TestController::class, 'staffPlaytime']);
 });

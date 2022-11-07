@@ -215,6 +215,34 @@ class TestController extends Controller
         return self::respond($text);
     }
 
+    public function systemBans(): Response
+    {
+        $all = DB::select("SELECT COUNT(*) as count, reason FROM user_bans WHERE creator_name IS NULL AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY reason LIMIT 20");
+        $month = DB::select("SELECT COUNT(*) as count, reason FROM user_bans WHERE creator_name IS NULL AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY reason LIMIT 20");
+
+        usort($all, function ($a, $b) {
+            return $b->count - $a->count;
+        });
+
+        usort($month, function ($a, $b) {
+            return $b->count - $a->count;
+        });
+
+        $leaderboard = [];
+        foreach ($month as $x => $ban) {
+            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . number_format($ban->count) . " " . $ban->reason;
+        }
+
+        $leaderboard2 = [];
+        foreach ($all as $x => $ban) {
+            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . number_format($ban->count) . " " . $ban->reason;
+        }
+
+        $text = "Last 30 days\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nAll time\n\n" . implode("\n", $leaderboard2);
+
+        return self::respond($text);
+    }
+
     public function moddingBans(Request $request): Response
     {
         $user = $request->user();
