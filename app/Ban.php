@@ -148,7 +148,7 @@ class Ban extends Model
         if ($reasons && $category && $key && isset($reasons[$category]) && isset($reasons[$category][$key])) {
             $reason = $reasons[$category][$key];
 
-            return str_replace('${DATA}', implode('-', $parts), $reason);
+            return str_replace('${DATA}', implode('-', $parts), $reason) . " (" . $this->reason . ")";
         }
         return $this->reason ?? '';
     }
