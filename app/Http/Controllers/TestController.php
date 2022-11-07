@@ -228,18 +228,30 @@ class TestController extends Controller
             return $b->count - $a->count;
         });
 
+        $allCount = array_reduce($all, function ($carry, $item) {
+            return $carry + $item->count;
+        }, 0);
+
+        $monthCount = array_reduce($month, function ($carry, $item) {
+            return $carry + $item->count;
+        }, 0);
+
         $leaderboard = [];
         foreach ($month as $x => $ban) {
             $count = str_pad(number_format($ban->count), 6);
 
-            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $count . " " . $ban->reason;
+            $percentage = str_pad(number_format(($ban->count / $monthCount) * 100, 1) . "%", 5);
+
+            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $ban->reason;
         }
 
         $leaderboard2 = [];
         foreach ($all as $x => $ban) {
             $count = str_pad(number_format($ban->count), 6);
 
-            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $count . " " . $ban->reason;
+            $percentage = str_pad(number_format(($ban->count / $allCount) * 100, 1) . "%", 5);
+
+            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $ban->reason;
         }
 
         $text = "Last 30 days\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nAll time\n\n" . implode("\n", $leaderboard2);
