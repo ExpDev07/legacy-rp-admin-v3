@@ -29,6 +29,11 @@ class Character {
         if (character) {
             let flags = character.flags ? character.flags : 0;
 
+            const spawned = flags / 64 >= 1
+            if (spawned) {
+                flags -= 64
+            }
+
             const frozen = flags / 32 >= 1
             if (frozen) {
                 flags -= 32
@@ -60,7 +65,10 @@ class Character {
                 invisible: invisible,
                 shell: shell,
                 trunk: trunk,
-                dead: dead
+                dead: dead,
+                spawned: spawned,
+                invincible: invincible,
+                frozen: frozen
             }
         }
 
@@ -68,7 +76,10 @@ class Character {
             invisible: false,
             shell: false,
             trunk: false,
-            dead: false
+            dead: false,
+            spawned: false,
+            invincible: false,
+            frozen: false
         };
     }
 }
