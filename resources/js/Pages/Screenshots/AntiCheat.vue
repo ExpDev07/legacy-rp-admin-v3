@@ -53,7 +53,7 @@
                             >
                                 {{ t('global.banned') }}
                                 <span class="block text-xxs">
-                                    {{ t('global.by', screenshot.ban.creator_name) }}
+                                    {{ t('global.by', screenshot.ban.creator_name ? screenshot.ban.creator_name : 'System') }}
                                 </span>
                             </span>
                             <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
