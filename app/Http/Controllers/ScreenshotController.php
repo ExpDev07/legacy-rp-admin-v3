@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Character;
 use App\Http\Resources\LogResource;
 use App\Log;
+use App\Ban;
 use App\PanelLog;
 use App\Player;
 use App\Screenshot;
