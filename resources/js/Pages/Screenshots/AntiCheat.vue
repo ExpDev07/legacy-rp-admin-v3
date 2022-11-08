@@ -26,8 +26,9 @@
                         <th class="px-6 py-4">{{ t('screenshot.screenshot') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.note') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.created_at') }}</th>
+                        <th class="w-64 px-6 py-4">{{ t('players.form.banned') }}?</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in screenshots"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in formattedScreenshots"
                         :key="screenshot.url">
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + steamIdentifier(screenshot.character_id)">
@@ -43,6 +44,22 @@
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">{{ screenshot.created_at * 1000 | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>{{ t('global.unknown') }}</td>
+                        <td class="px-6 py-3 text-center border-t mobile:block">
+                            <span
+                                class="block px-4 py-2 text-white rounded"
+                                :class="screenshot.ban.reason ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
+                                :title="screenshot.ban.reason ? screenshot.ban.reason : t('players.ban.no_reason')"
+                                v-if="screenshot.ban"
+                            >
+                                {{ t('global.banned') }}
+                                <span class="block text-xxs">
+                                    {{ t('global.by', screenshot.ban.creator_name) }}
+                                </span>
+                            </span>
+                            <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
+                                {{ t('global.not_banned') }}
+                            </span>
+                        </td>
                     </tr>
                     <tr v-if="screenshots.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
@@ -107,6 +124,10 @@ export default {
             type: Object,
             required: true,
         },
+        banMap: {
+            type: Object,
+            required: true,
+        },
         characterSteamNames: {
             type: Object,
             required: true,
@@ -121,8 +142,16 @@ export default {
         }
     },
     data() {
+        const screenshots = this.screenshots.map(screenshot => {
+            screenshot.ban = this.getBanInfo(screenshot.character_id);
+
+            return screenshot;
+        });
+
         return {
-            isLoading: false
+            isLoading: false,
+
+            formattedScreenshots: screenshots
         };
     },
     methods: {
@@ -142,6 +171,18 @@ export default {
             } catch(e) {}
 
             this.isLoading = false;
+        },
+        getBanInfo(characterId, key) {
+            const steamIdentifier = this.steamIdentifier(characterId);
+
+            if (steamIdentifier) {
+                const ban = steamIdentifier in this.banMap ? this.banMap[steamIdentifier] : null;
+
+                if (key) {
+                    return ban && key in ban ? ban[key] : null;
+                }
+                return ban;
+            }
         },
         steamIdentifier(characterId) {
             return this.characterSteamNames[characterId];

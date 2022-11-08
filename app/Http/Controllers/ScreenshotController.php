@@ -78,10 +78,15 @@ class ScreenshotController extends Controller
             $characterSteamNames[$character['character_id']] = $character['steam_identifier'];
         }
 
+        $identifiers = array_values(array_map(function ($player) {
+            return $player['steam_identifier'];
+        }, $players));
+
         return Inertia::render('Screenshots/AntiCheat', [
             'screenshots' => $system,
             'links' => $this->getPageUrls($page),
             'playerMap' => Player::fetchSteamPlayerNameMap($players, ['steam_identifier']),
+            'banMap'  => Ban::getAllBans(false, $identifiers, true),
             'characterSteamNames' => $characterSteamNames,
             'page' => $page,
         ]);
