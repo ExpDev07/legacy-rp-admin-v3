@@ -26,50 +26,17 @@ class Character {
     }
 
     static getCharacterFlags(character) {
-        if (character) {
-            let flags = character.flags ? character.flags : 0;
-
-            const frozen = flags / 32 >= 1
-            if (frozen) {
-                flags -= 32
-            }
-
-            const invincible = flags / 16 >= 1
-            if (invincible) {
-                flags -= 16
-            }
-
-            const invisible = flags / 8 >= 1
-            if (invisible) {
-                flags -= 8
-            }
-
-            const shell = flags / 4 >= 1
-            if (shell) {
-                flags -= 4
-            }
-
-            const trunk = flags / 2 >= 1
-            if (trunk) {
-                flags -= 2
-            }
-
-            const dead = flags !== 0
-
-            return {
-                invisible: invisible,
-                shell: shell,
-                trunk: trunk,
-                dead: dead
-            }
-        }
+        const flags = character && character.flags ? character.flags : 0;
 
         return {
-            invisible: false,
-            shell: false,
-            trunk: false,
-            dead: false
-        };
+            spawned: !!(flags & 64),
+            frozen: !!(flags & 32),
+            invincible: !!(flags & 16),
+            invisible: !!(flags & 8),
+            shell: !!(flags & 4),
+            trunk: !!(flags & 2),
+            dead: !!(flags & 1)
+        }
     }
 }
 
