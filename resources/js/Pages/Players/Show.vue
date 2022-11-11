@@ -2064,7 +2064,7 @@ export default {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
                 let extraClass = 'user-link';
 
-                if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi)) return;
+                if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi)) return url;
 
                 switch (ext) {
                     case 'jpg':
