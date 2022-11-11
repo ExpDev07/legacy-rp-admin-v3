@@ -260,8 +260,8 @@
                     </div>
                 </div>
                 <div v-else>
-                    <div class="w-full flex justify-between mb-2" v-for="(discord, id) in discordAccounts" :key="id">
-                        <div class="p-3 w-full relative">
+                    <div class="w-full flex justify-between" v-for="(discord, id) in discordAccounts" :key="id">
+                        <div class="w-full relative">
                             <a
                                 class="flex-1 block p-5 m-2 font-semibold text-white bg-blue-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                                 v-if="discord && discord.username"
