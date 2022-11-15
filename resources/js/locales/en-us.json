@@ -935,7 +935,8 @@
             "secondary_vehicle": "The player was killed by a Vehicle. Server-ID of driver: {0}.",
             "secondary_touching": "At the time of death the player was touching these vehicles: {0}.",
             "details": "Details",
-            "raw": "Raw metadata"
+            "raw": "Raw metadata",
+            "screenshot": "Attached Screenshot"
         },
         "detail": {
             "title": "Detailed disconnect reason",
