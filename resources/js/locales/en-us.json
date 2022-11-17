@@ -742,6 +742,8 @@
             "delete": "Delete this character",
             "is_female": "This character is female.",
             "is_male": "This character is male.",
+            "born": "Born",
+            "no_mugshot": "No mugshot available",
             "zone": {
                 "all": "All",
                 "head": "Head",
@@ -853,7 +855,7 @@
             "surname": "Last Name",
             "backstory": "Backstory",
             "dob": "Date of Birth",
-            "deleted": "Deleted at",
+            "deleted": "Deleted",
             "update": "Update Character",
             "job": "Job",
             "phone": "Phone Number",
@@ -935,7 +937,8 @@
             "secondary_vehicle": "The player was killed by a Vehicle. Server-ID of driver: {0}.",
             "secondary_touching": "At the time of death the player was touching these vehicles: {0}.",
             "details": "Details",
-            "raw": "Raw metadata"
+            "raw": "Raw metadata",
+            "screenshot": "Attached Screenshot"
         },
         "detail": {
             "title": "Detailed disconnect reason",

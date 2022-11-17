@@ -215,10 +215,37 @@ class TestController extends Controller
         return self::respond($text);
     }
 
+    private function formatSecondsMinimal($seconds)
+    {
+        $seconds = floor($seconds);
+
+        $hours = floor($seconds / 3600);
+        $seconds -= $hours * 3600;
+
+        $minutes = floor($seconds / 60);
+        $seconds -= $minutes * 60;
+
+        $time = "";
+
+        if ($hours > 0) {
+            $time .= $hours . "h ";
+        }
+
+        if ($minutes > 0) {
+            $time .= $minutes . "m ";
+        }
+
+        if ($seconds > 0) {
+            $time .= $seconds . "s";
+        }
+
+        return "~" . $time;
+    }
+
     public function systemBans(): Response
     {
-        $all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason FROM user_bans WHERE creator_name IS NULL AND identifier LIKE 'steam:%' AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
-        $month = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason FROM user_bans WHERE creator_name IS NULL AND identifier LIKE 'steam:%' AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
+        $all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON steam_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'steam:%' AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
+        $month = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON steam_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'steam:%' AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
 
         usort($all, function ($a, $b) {
             return $b->count - $a->count;
@@ -227,6 +254,14 @@ class TestController extends Controller
         usort($month, function ($a, $b) {
             return $b->count - $a->count;
         });
+
+        $totalPlaytime = array_reduce($all, function ($carry, $item) {
+            return $carry + $item->playtime;
+        }, 0) / sizeof($all);
+
+        $monthPlaytime = array_reduce($month, function ($carry, $item) {
+            return $carry + $item->playtime;
+        }, 0) / sizeof($month);
 
         $allCount = array_reduce($all, function ($carry, $item) {
             return $carry + $item->count;
@@ -241,8 +276,9 @@ class TestController extends Controller
             $count = str_pad(number_format($ban->count), 6);
 
             $percentage = str_pad(number_format(($ban->count / $monthCount) * 100, 1) . "%", 6);
+            $playtime = str_pad($this->formatSecondsMinimal($ban->playtime), 13);
 
-            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $ban->reason;
+            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $playtime . " " . $ban->reason;
         }
 
         $leaderboard2 = [];
@@ -250,11 +286,12 @@ class TestController extends Controller
             $count = str_pad(number_format($ban->count), 6);
 
             $percentage = str_pad(number_format(($ban->count / $allCount) * 100, 1) . "%", 6);
+            $playtime = str_pad($this->formatSecondsMinimal($ban->playtime), 13);
 
-            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $ban->reason;
+            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $playtime . " " . $ban->reason;
         }
 
-        $text = "Last 30 days\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nAll time\n\n" . implode("\n", $leaderboard2);
+        $text = "Last 30 days (" . $this->formatSecondsMinimal($monthPlaytime) . ")\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nAll time (" . $this->formatSecondsMinimal($totalPlaytime) . ")\n\n" . implode("\n", $leaderboard2);
 
         return self::respond($text);
     }

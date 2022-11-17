@@ -296,6 +296,9 @@
 				<p class="m-0 mb-2 font-bold">{{ t('logs.metadata.raw') }}:</p>
 				<pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded"
 					 v-html="logMetadataJSON"></pre>
+
+				<p class="m-0 mt-2 mb-2 font-bold" v-if="metaScreenshot">{{ t('logs.metadata.screenshot') }}:</p>
+				<img :src="metaScreenshot" class="w-full" v-if="metaScreenshot" />
 			</template>
 
 			<template #actions>
@@ -384,6 +387,7 @@ export default {
 			showLogTimeDifference: false,
 			logMetadata: null,
 			showLogMetadata: false,
+			metaScreenshot: null,
 			logMetadataJSON: '',
 			searchingActions: false,
 			searchableActions: [],
@@ -449,6 +453,8 @@ export default {
 				this.logMetadata = metadata;
 				this.logMetadataJSON = hljs.highlight(JSON.stringify(metadata, null, 4), {language: 'json'}).value;
 				this.showLogMetadata = true;
+
+				this.metaScreenshot = metadata && metadata.screenshotURL ? metadata.screenshotURL : null;
 			}
 		},
 		parseLogMetadata(metadata) {
