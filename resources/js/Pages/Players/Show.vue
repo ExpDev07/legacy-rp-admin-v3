@@ -887,7 +887,7 @@
             </template>
 
             <template>
-                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
+                <div class="grid grid-cols-1 xl:grid-cols-2 3xl:grid-cols-3 gap-9">
                     <card
                         v-for="(character) in characters"
                         :key="character.id"
@@ -896,25 +896,30 @@
                         :class="{ 'shadow-lg' : player.status.character === character.id }"
                     >
                         <template #header>
-                            <h3 class="mb-2">
-                                {{ character.name }} (#{{ character.id }})
-                            </h3>
-                            <h4 class="text-primary dark:text-dark-primary"
-                                :title="t('players.characters.created', $moment(character.characterCreationTimestamp).format('l'))">
-                                <span>{{ t('players.edit.dob') }}:</span> {{
-                                    $moment(character.dateOfBirth).format('l')
-                                }}
-                            </h4>
-                            <h4 class="text-red-700 dark:text-red-300" v-if="character.characterDeleted">
-                                <span>{{ t('players.edit.deleted') }}:</span>
-                                {{ $moment(character.characterDeletionTimestamp).format('l') }}
-                            </h4>
-                            <h4 class="text-gray-700 dark:text-gray-300 text-sm italic font-mono mt-1">
-                                {{ pedModel(character.pedModelHash) }}
-                            </h4>
-                            <h4 class="text-gray-700 dark:text-gray-300 text-sm italic font-mono mt-1" v-if="character.danny !== false">
-                                {{ (character.danny * 100).toFixed(1) }}% Default Danny
-                            </h4>
+                            <div class="flex justify-between">
+                                <div class="flex-shrink-0">
+                                    <img class="w-32 h-32 rounded-3xl" :src="character.mugshot" v-if="character.mugshot" />
+                                    <img class="w-32 h-32 rounded-3xl" src="/images/no_mugshot.png" v-else :title="t('players.characters.no_mugshot')" />
+                                </div>
+                                <div class="w-full">
+                                    <h3 class="mb-2">
+                                        {{ character.name }} (#{{ character.id }})
+                                    </h3>
+                                    <h4 class="text-primary dark:text-dark-primary"
+                                        :title="t('players.characters.created', $moment(character.characterCreationTimestamp).format('l'))">
+                                        {{ t('players.characters.born') }} {{ $moment(character.dateOfBirth).format('l') }}
+                                    </h4>
+                                    <h4 class="text-red-700 dark:text-red-300" v-if="character.characterDeleted">
+                                        {{ t('players.edit.deleted') }} {{ $moment(character.characterDeletionTimestamp).format('l') }}
+                                    </h4>
+                                    <h4 class="text-gray-700 dark:text-gray-300 text-sm italic font-mono mt-1">
+                                        {{ pedModel(character.pedModelHash) }}
+                                        <span v-if="character.danny !== false" :title="t('players.new.danny_percentage')">
+                                            ({{ (character.danny * 100).toFixed(1) }}%)
+                                        </span>
+                                    </h4>
+                                </div>
+                            </div>
                         </template>
 
                         <template>
@@ -1776,11 +1781,11 @@ export default {
                     calcHash = this.joaat(name);
 
                 if (calcHash === checkHash || Uint32Array.from(Int32Array.of(calcHash))[0] === checkHash) {
-                    return name + ' (' + hash + ')';
+                    return name;
                 }
             }
 
-            return 'unknown (' + hash + ')';
+            return hash;
         },
         joaat(key) {
             let hash = 0;
