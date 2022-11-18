@@ -131,7 +131,16 @@ class SessionHelper
     private function load()
     {
         if (file_exists($this->getSessionFile())) {
-            $json = json_decode(file_get_contents($this->getSessionFile()), true) ?: [];
+            $contents = file_get_contents($this->getSessionFile());
+
+            if (!$contents) {
+                LoggingHelper::log($this->sessionKey, 'Failed to load session file');
+                $this->value = [];
+
+                return;
+            }
+
+            $json = json_decode($contents, true) ?: [];
             $this->value = $json;
 
             touch($this->getSessionFile());
