@@ -144,7 +144,7 @@ class StaffMiddleware
     public static function getSessionDetail(): array
     {
         return [
-            'ua'   => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            //'ua'   => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
             'db'   => DB::connection()->getDatabaseName(),
         ];
     }
