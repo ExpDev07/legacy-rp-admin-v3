@@ -918,6 +918,9 @@
                                             ({{ (character.danny * 100).toFixed(1) }}%)
                                         </span>
                                     </h4>
+                                    <h4 class="text-gray-700 dark:text-gray-300 text-xs italic font-mono mt-1" v-if="character.playtime" :title="t('players.characters.playtime')">
+                                        {{ formatSecondDiff(character.playtime) }}
+                                    </h4>
                                 </div>
                             </div>
                         </template>
