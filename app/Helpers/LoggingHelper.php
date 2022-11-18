@@ -116,13 +116,13 @@ class LoggingHelper
     {
         $timestamp = date(\DateTimeInterface::RFC3339);
         $method = str_pad($_SERVER['REQUEST_METHOD'], 7, ' ');
-        $ipHash = md5($_SERVER['REMOTE_ADDR']);
+        $ip = $_SERVER['REMOTE_ADDR'];
         $path = explode('?', $_SERVER['REQUEST_URI']);
         $get = isset($path[1]) ? $path[1] : null;
         $path = $path[0];
 
         $msg = '[' . $timestamp . '] ' .
-            '[' . $ipHash . '] ' .
+            '[' . $ip . '] ' .
             '[' . $method . '] ' .
             $path;
 
