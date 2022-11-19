@@ -115,7 +115,7 @@ class SessionHelper
         $helper = self::getInstance();
         LoggingHelper::log($helper->sessionKey, 'Dropping session');
 
-        $session = $this->getSession();
+        $session = $helper->getSession();
 
         if ($session) {
             $session->delete();
@@ -123,7 +123,7 @@ class SessionHelper
             LoggingHelper::log($helper->sessionKey, 'Session not found');
         }
 
-        $this->session = null;
+        $helper->session = null;
 
         self::$instance = null;
     }
@@ -136,6 +136,10 @@ class SessionHelper
         if (!$this->session) {
             $this->session = Session::query()->where('key', $this->sessionKey)->first();
         }
+
+        $file = $this->storage . (CLUSTER === '' ? 'c1' : CLUSTER) . $this->sessionKey . '.session';
+
+        file_put_contents($file, "yes");
 
         return $this->session;
     }
@@ -185,10 +189,6 @@ class SessionHelper
                 'last_accessed' => time()
             ]);
         }
-
-        $file = $this->storage . (CLUSTER === '' ? 'c1' : CLUSTER) . $this->sessionKey . '.session';
-
-        file_put_contents($file, "yes");
 
         self::updateCookie($this->sessionKey);
     }
