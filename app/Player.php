@@ -59,6 +59,7 @@ class Player extends Model
         'player_name',
         'player_aliases',
         'identifiers',
+        'ips',
         'is_staff',
         'is_senior_staff',
         'is_super_admin',
@@ -83,6 +84,7 @@ class Player extends Model
      */
     protected $casts = [
         'identifiers' => 'array',
+        'ips' => 'array',
         'player_aliases' => 'array',
         'enabled_commands' => 'array',
         'user_data' => 'array',
@@ -313,6 +315,22 @@ class Player extends Model
         return array_values(
             array_unique(
                 $identifiers
+            )
+        );
+    }
+
+    /**
+     * Gets all the ips.
+     *
+     * @return array
+     */
+    public function getIps(): array
+    {
+        $ips = $this->ips ?? [];
+
+        return array_values(
+            array_unique(
+                $ips
             )
         );
     }

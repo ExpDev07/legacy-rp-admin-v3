@@ -293,7 +293,7 @@ class PlayerBanController extends Controller
             return $this->text(400, "Invalid steam id.");
         }
 
-        $player = Player::query()->select(['identifiers'])->where('steam_identifier', '=', $steam)->get()->first();
+        $player = Player::query()->select(['ips'])->where('steam_identifier', '=', $steam)->get()->first();
 
         if (!$player) {
             return $this->text(404, "Player not found.");
@@ -302,58 +302,48 @@ class PlayerBanController extends Controller
         $ips = [];
         $list = [];
 
-        $identifiers = $player->getIdentifiers();
+        $identifiers = $player->getIps();
 
         foreach ($identifiers as $identifier) {
-            if (Str::startsWith($identifier, 'ip:')) {
-                $info = GeneralHelper::ipInfo(str_replace('ip:', '', $identifier));
+            $info = GeneralHelper::ipInfo(str_replace('ip:', '', $identifier));
 
-                $isProxy = false;
-                $additionalInfo = '    - No info';
-                if ($info) {
-                    $additionalInfo = '    - ' . $info['country'] . ' (' . $info['isp'] . ')';
+            $isProxy = false;
+            $additionalInfo = '    - No info';
+            if ($info) {
+                $additionalInfo = '    - ' . $info['country'] . ' (' . $info['isp'] . ')';
 
-                    if (in_array($info['isp'], ['OVH SAS'])) {
-                        $isProxy = true;
-                    }
-
-                    if ($info['proxy']) {
-                        $additionalInfo .= "\n    - Is Proxy";
-                        $isProxy = true;
-                    }
-
-                    if ($info['hosting']) {
-                        $additionalInfo .= "\n    - Is Hosting";
-                    }
+                if (in_array($info['isp'], ['OVH SAS'])) {
+                    $isProxy = true;
                 }
 
-                if (!$isProxy) {
-                    $ips[] = 'identifiers LIKE "%' . $identifier . '%"';
+                if ($info['proxy']) {
+                    $additionalInfo .= "\n    - Is Proxy";
+                    $isProxy = true;
                 }
 
-                $list[] = $identifier . "\n" . $additionalInfo;
+                if ($info['hosting']) {
+                    $additionalInfo .= "\n    - Is Hosting";
+                }
             }
+
+            if (!$isProxy) {
+                $ips[] = 'ips LIKE \'%"' . $identifier . '"%\'';
+            }
+
+            $list[] = $identifier . "\n" . $additionalInfo;
         }
 
         if (empty($ips) && empty($list)) {
             return $this->text(404, "No IP identifiers found.");
         }
 
-        $players = empty($ips) ? [] : Player::query()->select(['player_name', 'steam_identifier', 'identifiers'])->whereRaw(implode(" OR ", $ips))->get();
+        $players = empty($ips) ? [] : Player::query()->select(['player_name', 'steam_identifier', 'ips'])->whereRaw(implode(" OR ", $ips))->get();
 
         $linked = [];
 
         foreach ($players as $found) {
             if ($found->steam_identifier !== $steam) {
-                $ips = [];
-
-                $identifiers = $found->getIdentifiers();
-
-                foreach ($identifiers as $identifier) {
-                    if (Str::startsWith($identifier, 'ip:')) {
-                        $ips[] = $identifier;
-                    }
-                }
+                $ips = $found->getIps();
 
                 $linked[] = $found->player_name . ' (' . $found->steam_identifier . ') - [' . implode(", ", $ips) . ']';
             }
