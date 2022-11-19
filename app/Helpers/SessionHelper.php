@@ -208,6 +208,16 @@ class SessionHelper
     }
 
     /**
+     * Cleans up old sessions
+     */
+    public static function cleanup()
+    {
+        $lifetime = time() - self::Lifetime;
+
+        Session::query()->where('last_accessed', '<', $lifetime)->delete();
+    }
+
+    /**
      * Returns an instance of the session helper
      *
      * @return SessionHelper

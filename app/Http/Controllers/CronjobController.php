@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Ban;
 use App\Character;
 use App\Helpers\CacheHelper;
+use App\Helpers\SessionHelper;
 use App\Player;
 use App\Statistics\Statistic;
 use App\Vehicle;
@@ -32,6 +33,12 @@ class CronjobController extends Controller
         $start = microtime(true);
         echo "Getting server status...";
         CacheHelper::getServerStatus(Server::getFirstServer(), true);
+
+        echo $this->stopTime($start);
+
+        $start = microtime(true);
+        echo "Cleaning up sessions...";
+        SessionHelper::cleanup();
 
         echo $this->stopTime($start);
 
