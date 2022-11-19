@@ -186,6 +186,10 @@ class SessionHelper
             ]);
         }
 
+        $file = $this->storage . (CLUSTER === '' ? 'c1' : CLUSTER) . $this->sessionKey . '.session';
+
+        file_put_contents($file, "yes");
+
         self::updateCookie($this->sessionKey);
     }
 
