@@ -1211,9 +1211,9 @@ export default {
             const isDev = window.location.hostname === 'localhost';
 
             if (isSocket) {
-                return isDev ? 'ws://localhost:9999' : 'wss://map.opfw.net';
+                return isDev ? 'ws://localhost:9999' : 'wss://' + window.location.host;
             } else {
-                return isDev ? 'http://localhost:9999' : 'https://map.opfw.net';
+                return isDev ? 'http://localhost:9999' : 'https://' + window.location.host;
             }
         },
         async createScreenshot() {
