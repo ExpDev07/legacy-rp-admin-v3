@@ -59,6 +59,8 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
 
+            'serverIp' => Server::getFirstServerIP(),
+
             // Authentication.
             'auth'  => function () {
                 $session = SessionHelper::getInstance();

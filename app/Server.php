@@ -210,6 +210,18 @@ class Server extends Model
     }
 
     /**
+     * Returns the first server ip found
+     *
+     * @return string|null
+     */
+    public static function getFirstServerIP(): ?string
+    {
+        $rawServerIps = explode(',', env('OP_FW_SERVERS', ''));
+
+        return empty($rawServerIps) ? null : $rawServerIps[0];
+    }
+
+    /**
      * Collects all the /api.json data from all servers
      *
      * @return array|null

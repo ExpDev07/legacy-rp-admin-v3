@@ -15,6 +15,12 @@
         <nav class="flex items-center justify-between w-full px-12 py-4 text-white bg-gray-900 shadow">
             <!-- Left side -->
             <p class="italic">
+                <button class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-lime-700 bg-lime-500 rounded text-sm float-right" v-if="$page.serverIp" @click="copyServerIp($page.serverIp)">
+                    <i class="fas fa-server"></i>
+                    <span v-if="copiedIp">{{ t('global.copied_ip') }}</span>
+                    <span v-else>{{ t('global.copy_ip') }}</span>
+                </button>
+
                 <span class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-yellow-700 bg-warning rounded dark:bg-dark-warning text-sm float-right" v-if="$page.auth.player.isRoot">
                     <i class="fas fa-tools"></i>
                     {{ t('global.root') }}
@@ -60,12 +66,26 @@ export default {
     data() {
         return {
             theme: 'light',
+
+            copiedIp: false,
+            copyIpTimeout: false
         }
     },
     beforeMount() {
         this.updateTheme();
     },
     methods: {
+        copyServerIp(ip) {
+            clearTimeout(this.copyIpTimeout);
+
+            navigator.clipboard.writeText(ip).then(() => {
+                this.copiedIp = true;
+
+                this.copyIpTimeout = setTimeout(() => {
+                    this.copiedIp = false;
+                }, 2000);
+            });
+        },
         showStaffChat() {
             window.open('/staff','Staff Chat','directories=no,titlebar=no,toolbar=no,menubar=no,location=no,status=no,width=550,height=700');
         },
