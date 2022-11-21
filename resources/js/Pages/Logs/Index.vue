@@ -200,7 +200,7 @@
 								{{ t('logs.metadata.show') }}
 							</a>
 						</td>
-						<td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details)"></td>
+						<td class="px-6 py-3 border-t mobile:block" v-html="parseLog(log.details, log.action, log.metadata)"></td>
 						<td class="px-6 py-3 border-t mobile:block" v-if="showLogTimeDifference"
 							:title="t('logs.diff_label')">
 							<span v-if="index+1 < logs.length">
@@ -479,7 +479,7 @@ export default {
 
 			return null;
 		},
-		refresh: async function () {
+		async refresh() {
 			if (this.isLoading) {
 				return;
 			}
@@ -518,7 +518,7 @@ export default {
 
 			this.isLoading = false;
 		},
-		parseOtherLog(details) {
+		parseOtherLog(details, action, metadata) {
 			const regex = /attempted to add a song with video ID `(.+?)` to boombox/gmi;
 			const matches = details.matchAll(regex).next();
 			const match = matches && matches.value ? matches.value[1] : null;
@@ -531,7 +531,7 @@ export default {
 
 			return details;
 		},
-		parseDisconnectLog(details) {
+		parseDisconnectLog(details, action, metadata) {
 			const regex = /(?<=\) has disconnected from the server .+? with reason: `)(.+?)(?=`\.)/gm;
 			const matches = details.match(regex);
 			const match = matches && matches.length === 1 && matches[0].trim() ? matches[0].trim() : null;
@@ -580,7 +580,7 @@ export default {
 				return details.replace(match, html);
 			}
 
-			return this.parseOtherLog(details);
+			return this.parseOtherLog(details, action, metadata);
 		},
 		escapeHtml(unsafe) {
 			return unsafe
@@ -590,7 +590,7 @@ export default {
 				.replace(/"/g, "&quot;")
 				.replace(/'/g, "&#039;");
 		},
-		parseLog(details) {
+		parseLog(details, action, metadata) {
 			const regex = /(to|from) (inventory )?((trunk|glovebox|character|property|motel-\w+?|evidence|ground|locker-\w+?)-(\d+-)?\d+:\d+)/gmi;
 
 			let inventories = [];
@@ -612,7 +612,15 @@ export default {
 				details = details.replaceAll(inventories[x], '<a title="' + this.t('inventories.view') + '" class="text-indigo-600 dark:text-indigo-400" href="/inventory/' + inventories[x] + '">' + inventories[x] + '</a>');
 			}
 
-			return this.parseDisconnectLog(details);
+			if (metadata && metadata.killerSteam) {
+				const killerSteam = metadata.killerSteam;
+
+				details = details.replace(/killed by (.+?), death cause/gm, (match, playerName) => {
+					return 'killed by <a title="' + this.t('players.view') + '" class="text-red-600 dark:text-red-400" href="/players/' + killerSteam + '">' + playerName + '</a>, death cause';
+				});
+			}
+
+			return this.parseDisconnectLog(details, action, metadata);
 		},
 		playerName(steamIdentifier) {
 			return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
