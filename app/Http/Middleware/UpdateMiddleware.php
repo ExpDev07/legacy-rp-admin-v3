@@ -25,7 +25,7 @@ class UpdateMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (file_exists(__DIR__ . '/../../../update')) {
-            abort(503, 'Update in progress');
+            abort(418, 'Update in progress');
         }
 
         return $next($request);
