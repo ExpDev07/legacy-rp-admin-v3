@@ -36,6 +36,8 @@
         "disabled": "Disabled",
         "filter": "Filter",
         "root": "Root",
+        "copy_ip": "Copy Connect",
+        "copied_ip": "Copied!",
         "do_search": "Search",
         "whitelisted": "On Whitelist",
         "blacklisted": "Is Blacklisted",

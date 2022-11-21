@@ -134,7 +134,7 @@ export default {
 
             const token = this.$page.auth.token,
                 server = this.$page.auth.server,
-                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://map.opfw.net';
+                socketUrl = isDev ? 'ws://localhost:9999' : 'wss://' + window.location.host;
 
             let socket = io(socketUrl, {
                 reconnectionDelayMax: 5000,

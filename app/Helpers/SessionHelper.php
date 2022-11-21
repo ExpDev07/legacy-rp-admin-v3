@@ -137,10 +137,6 @@ class SessionHelper
             $this->session = Session::query()->where('key', $this->sessionKey)->first();
         }
 
-        $file = $this->storage . (CLUSTER === '' ? 'c1' : CLUSTER) . $this->sessionKey . '.session';
-
-        file_put_contents($file, "yes");
-
         return $this->session;
     }
 
