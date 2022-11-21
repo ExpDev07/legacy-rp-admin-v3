@@ -616,7 +616,7 @@ export default {
 				const killerSteam = metadata.killerSteam;
 
 				details = details.replace(/killed by (.+?), death cause/gm, (match, playerName) => {
-					return 'killed by <a title="' + this.t('players.view') + '" class="text-red-600 dark:text-red-400" href="/players/' + killerSteam + '">' + playerName + '</a>, death cause';
+					return 'killed by <a class="text-red-600 dark:text-red-400" href="/players/' + killerSteam + '">' + playerName + '</a>, death cause';
 				});
 			}
 
