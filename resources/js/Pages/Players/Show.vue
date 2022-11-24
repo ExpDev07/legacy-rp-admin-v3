@@ -898,7 +898,7 @@
                         <template #header>
                             <div class="flex justify-between">
                                 <div class="flex-shrink-0">
-                                    <img class="w-32 h-32 rounded-3xl" :src="character.mugshot" v-if="character.mugshot" />
+                                    <img class="w-32 h-32 rounded-3xl" src="/images/loading.svg" :data-lazy="character.mugshot" v-if="character.mugshot" />
                                     <img class="w-32 h-32 rounded-3xl" src="/images/no_mugshot.png" v-else :title="t('players.characters.no_mugshot')" />
                                 </div>
                                 <div class="w-full">
@@ -2116,6 +2116,16 @@ export default {
                 return this.t('global.system');
             }
             return creator;
+        },
+        asyncLoadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+
+                img.onload = resolve;
+                img.onerror = reject;
+
+                img.src = url;
+            });
         }
     },
     mounted() {
@@ -2141,6 +2151,16 @@ export default {
                 e.preventDefault();
 
                 $(this).closest('.user-close').replaceWith(_this.formatWarning($(this).data('original')));
+            });
+        });
+
+        $("img[data-lazy]").each((i, img) => {
+            const url = $(img).data("lazy");
+
+            this.asyncLoadImage(url).then(() => {
+                $(img).attr("src", url);
+            }).catch(() => {
+                $(img).attr("src", "/images/no_mugshot.png");
             });
         });
     }

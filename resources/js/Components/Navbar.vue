@@ -15,7 +15,7 @@
         <nav class="flex items-center justify-between w-full px-12 py-4 text-white bg-gray-900 shadow">
             <!-- Left side -->
             <p class="italic">
-                <button class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-lime-700 bg-lime-500 rounded text-sm float-right" v-if="$page.serverIp" @click="copyServerIp($page.serverIp)">
+                <button class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-pink-700 bg-pink-400 rounded text-sm float-right" v-if="$page.serverIp" @click="copyServerIp($page.serverIp)">
                     <i class="fas fa-server"></i>
                     <span v-if="copiedIp">{{ t('global.copied_ip') }}</span>
                     <span v-else>{{ t('global.copy_ip') }}</span>
@@ -78,7 +78,7 @@ export default {
         copyServerIp(ip) {
             clearTimeout(this.copyIpTimeout);
 
-            navigator.clipboard.writeText(ip).then(() => {
+            navigator.clipboard.writeText("connect " + ip).then(() => {
                 this.copiedIp = true;
 
                 this.copyIpTimeout = setTimeout(() => {
