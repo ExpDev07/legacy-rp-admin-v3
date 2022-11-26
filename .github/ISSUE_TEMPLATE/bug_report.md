@@ -3,9 +3,12 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: milan60
+assignees: coalaura
 
 ---
+
+**Which clusters panel is this on?**
+c2, c3, etc.
 
 **Describe the bug**
 A clear and concise description of what the bug is.
