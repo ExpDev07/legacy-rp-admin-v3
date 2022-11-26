@@ -41,6 +41,7 @@
         "do_search": "Search",
         "whitelisted": "On Whitelist",
         "blacklisted": "Is Blacklisted",
+        "permission": "Your current permission level",
         "status": {
             "online": "Online",
             "offline": "Offline",
@@ -106,6 +107,7 @@
         "steamIdentifier": "Player",
         "consoleName": "Console name",
         "priorityName": "Priority type",
+        "queueTime": "Time passed",
         "none": "Nobody in queue.",
         "skip": "Make player skip queue",
         "skip_confirm": "Are you sure you want to make this player skip the queue?",

@@ -156,7 +156,7 @@ class TestController extends Controller
 
     public function banLeaderboard(): Response
     {
-        $staff = Player::query()->select(["steam_identifier", "player_name"])->where("is_staff", "=", "1")->get();
+        $staff = Player::query()->select(["steam_identifier", "player_name"])->where("is_staff", "=", "1")->orWhere("is_senior_staff", "=", "1")->orWhere("is_super_admin", "=", "1")->get();
 
         $max = 0;
         $staffMap = [];
@@ -169,8 +169,10 @@ class TestController extends Controller
             }
         }
 
-        // Haha this is ass
-        $bans = DB::select("select identifier, creator_identifier, playtime, reason from user_bans LEFT JOIN users ON identifier = steam_identifier where identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND playtime > 0 AND (SELECT COUNT(*) FROM characters WHERE users.steam_identifier = characters.steam_identifier) > 0 AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') ORDER BY playtime ASC LIMIT 100");
+        // What a chonker
+        $query = "SELECT * FROM (SELECT identifier, creator_identifier, reason, (SELECT SUM(playtime) FROM characters WHERE steam_identifier = identifier) as playtime FROM user_bans WHERE identifier LIKE 'steam:%' AND creator_identifier LIKE 'steam:%' AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))) bans WHERE playtime IS NOT NULL AND playtime > 0 ORDER BY playtime LIMIT 10";
+
+        $bans = DB::select($query);
 
         $fmt = function ($s) {
             if ($s >= 60) {
