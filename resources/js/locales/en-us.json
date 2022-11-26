@@ -41,6 +41,7 @@
         "do_search": "Search",
         "whitelisted": "On Whitelist",
         "blacklisted": "Is Blacklisted",
+        "permission": "Your current permission level",
         "status": {
             "online": "Online",
             "offline": "Offline",

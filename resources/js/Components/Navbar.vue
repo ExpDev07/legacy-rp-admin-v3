@@ -21,9 +21,12 @@
                     <span v-else>{{ t('global.copy_ip') }}</span>
                 </button>
 
-                <span class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-yellow-700 bg-warning rounded dark:bg-dark-warning text-sm float-right" v-if="$page.auth.player.isRoot">
+                <span class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-yellow-700 bg-warning rounded dark:bg-dark-warning text-sm float-right" :title="t('global.permission')">
                     <i class="fas fa-tools"></i>
-                    {{ t('global.root') }}
+                    <span v-if="$page.auth.player.isRoot">{{ t('global.root') }}</span>
+                    <span v-else-if="$page.auth.player.isSuperAdmin">{{ t('global.super') }}</span>
+                    <span v-else-if="$page.auth.player.isSeniorStaff">{{ t('global.senior_staff') }}</span>
+                    <span v-else>{{ t('global.staff') }}</span>
                 </span>
 
                 <button @click="showStaffChat" class="px-4 py-1 ml-3 font-semibold text-black text-sm not-italic border-2 border-green-700 bg-success rounded dark:bg-dark-success text-sm float-right">
