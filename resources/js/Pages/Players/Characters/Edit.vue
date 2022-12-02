@@ -1098,7 +1098,7 @@ export default {
             };
         },
         getAvailableLicenses() {
-            return ["heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military", "utility", "commercial", "hunting", "special"].filter(l => !this.character.licenses.includes(l));
+            return ["heli", "fw", "cfi", "hw", "hwh", "perf", "management", "military", "utility", "commercial", "special", "hunting", "fishing", "weapon"].filter(l => !this.character.licenses.includes(l));
         },
         setPayCheck() {
             if (this.form.job_name === "Unemployed") {
