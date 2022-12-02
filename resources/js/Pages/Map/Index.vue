@@ -50,7 +50,7 @@
                 <!-- Show Historic -->
                 <button
                     class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isHistoric = true"
+                    @click="showHistoric()"
                     v-if="this.perm.check(this.perm.PERM_ADVANCED)">
                     <i class="fas fa-map"></i>
                     {{ t('map.historic_title') }}
@@ -1053,6 +1053,23 @@ export default {
                 title = this.container.players && steam in this.container.players ? this.t('map.viewer_in_server') : this.t('map.viewer_not_server');
 
             return '<a href="/players/' + steam + '" target="_blank" title="' + title + '" class="!no-underline ' + cls + '">' + player_name + '</a>';
+        },
+        showHistoric() {
+            if (!this.form.historic_from_date) {
+                this.form.historic_from_date = moment().sub(1, 'hours').format("YYYY-MM-DD");
+            }
+            if (!this.form.historic_till_date) {
+                this.form.historic_till_date = moment().format("YYYY-MM-DD");
+            }
+
+            if (!this.form.historic_from_time) {
+                this.form.historic_from_time = moment().sub(1, 'hours').format("HH:mm");
+            }
+            if (!this.form.historic_till_time) {
+                this.form.historic_till_time = moment().format("HH:mm");
+            }
+
+            this.isHistoric = true;
         },
         isFake(steam) {
             const player = this.container.get(steam);
