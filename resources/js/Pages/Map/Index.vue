@@ -1055,18 +1055,21 @@ export default {
             return '<a href="/players/' + steam + '" target="_blank" title="' + title + '" class="!no-underline ' + cls + '">' + player_name + '</a>';
         },
         showHistoric() {
+            const fromDate = this.$moment().subtract(1, 'hours'),
+                tillDate = this.$moment();
+
             if (!this.form.historic_from_date) {
-                this.form.historic_from_date = moment().sub(1, 'hours').format("YYYY-MM-DD");
+                this.form.historic_from_date = fromDate.format("YYYY-MM-DD");
             }
             if (!this.form.historic_till_date) {
-                this.form.historic_till_date = moment().format("YYYY-MM-DD");
+                this.form.historic_till_date = tillDate.format("YYYY-MM-DD");
             }
 
             if (!this.form.historic_from_time) {
-                this.form.historic_from_time = moment().sub(1, 'hours').format("HH:mm");
+                this.form.historic_from_time = fromDate.format("HH:mm");
             }
             if (!this.form.historic_till_time) {
-                this.form.historic_till_time = moment().format("HH:mm");
+                this.form.historic_till_time = tillDate.format("HH:mm");
             }
 
             this.isHistoric = true;
