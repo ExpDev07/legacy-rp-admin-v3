@@ -38,7 +38,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats, true);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
         return $data;
     }
@@ -66,7 +66,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats, true);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
         return $data;
     }
@@ -94,7 +94,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats, true);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
         return $data;
     }
@@ -122,7 +122,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
         return $data;
     }
@@ -157,7 +157,7 @@ class StatisticsHelper
             $data['labels'][] = $stat->date;
         }
 
-        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 5 * CacheHelper::MINUTE);
 
         return $data;
     }
@@ -185,7 +185,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
         return $data;
     }
@@ -213,7 +213,7 @@ class StatisticsHelper
 
         $data = self::parseHistoricData($stats);
 
-        CacheHelper::write($key, $data, 6 * CacheHelper::HOUR);
+        CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
         return $data;
     }
