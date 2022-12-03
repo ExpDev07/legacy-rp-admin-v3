@@ -33,6 +33,17 @@
                 ></LineChart>
             </div>
 
+            <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
+                <LineChart
+                    :data="userStatistics.data"
+                    :data-labels="userStatistics.labels"
+                    :labels="[t('statistics.total_joins'), t('statistics.max_joined'), t('statistics.unique_joins')]"
+                    :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204']"
+                    :title="t('statistics.titles.user_statistics')"
+                    class="w-full"
+                ></LineChart>
+            </div>
+
             <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
 
             <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
@@ -192,6 +203,10 @@ export default {
             required: true,
         },
         notes: {
+            type: Object,
+            required: true,
+        },
+        userStatistics: {
             type: Object,
             required: true,
         },

@@ -128,6 +128,41 @@ class StatisticsHelper
     }
 
     /**
+     * Returns user statistics
+     *
+     * @return array
+     */
+    public static function getUserStatistics(): array
+    {
+        $key = 'user_statistics';
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
+        }
+
+        $stats = DB::table('user_statistics')->select()->whereRaw("UNIX_TIMESTAMP(STR_TO_DATE(date, '%d.%m.%Y')) >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 3 MONTH))")->get()->toArray();
+
+        $data = [
+            'data' => [
+                [], [], []
+            ],
+            'labels' => []
+        ];
+
+        foreach ($stats as $stat) {
+            $joined = json_decode($stat->joined_users, true) ?? [];
+
+            $data['data'][0][] = $stat->total_joins;
+            $data['data'][1][] = $stat->max_joined;
+            $data['data'][2][] = sizeof($joined);
+            $data['labels'][] = $stat->date;
+        }
+
+        CacheHelper::write($key, $data, 1 * CacheHelper::HOUR);
+
+        return $data;
+    }
+
+    /**
      * Returns Lucky Wheel statistics
      *
      * @return array
