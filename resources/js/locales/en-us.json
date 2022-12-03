@@ -223,6 +223,9 @@
         "notes": "Notes",
         "creations": "Character creations",
         "deletions": "Character deletions",
+        "total_joins": "Total joins",
+        "max_joined": "Max joined",
+        "unique_joins": "Unique joins",
         "lucky_wheel": "Lucky Wheel Spins",
         "min_money_return": "Min. Return",
         "max_money_return": "Max. Return",
@@ -238,7 +241,8 @@
             "lucky_wheel": "Lucky Wheel Spins",
             "blackjack": "Blackjack Bets vs. Returns",
             "slots": "Slots Bets vs. Returns",
-            "tracks": "Tracks Bets vs. Returns"
+            "tracks": "Tracks Bets vs. Returns",
+            "user_statistics": "User Statistics"
         }
     },
     "map": {
