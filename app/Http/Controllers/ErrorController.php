@@ -40,36 +40,33 @@ class ErrorController extends Controller
             $query->where('error_trace', 'LIKE', '%' . $trace . '%');
         }
 
-        $cycle = intval($request->input('cycle')) ?? 0;
-        if (!is_numeric($cycle) || $cycle < 0) {
-            $cycle = 0;
+        if ($serverVersion = $request->input('server_version')) {
+            $query->where('server_version', '=', $serverVersion);
         }
-
-        $query->where('cycle_number', '=', $cycle);
 
         $page = Paginator::resolveCurrentPage('page');
 
         $query->groupByRaw('CONCAT(error_location, error_trace, FLOOR(timestamp / 300))');
 
-        $query->selectRaw('cycle_number, error_id, steam_identifier, error_location, error_trace, error_feedback, full_trace, player_ping, server_id, timestamp, server_version, COUNT(error_id) as `occurrences`');
+        $query->selectRaw('error_id, steam_identifier, error_location, error_trace, error_feedback, full_trace, player_ping, server_id, timestamp, server_version, COUNT(error_id) as `occurrences`');
         $query->limit(15)->offset(($page - 1) * 15);
 
         $errors = $query->get()->toArray();
 
-        $cycles = ClientError::query()
-            ->selectRaw('cycle_number, MAX(timestamp) as first_occurence')
-            ->where('cycle_number', '>', '0')
-            ->groupBy('cycle_number')
+        $versions = ClientError::query()
+            ->selectRaw('server_version, MIN(timestamp) as timestamp')
+            ->where('server_version', '!=', '')
+            ->groupBy('server_version')
             ->get()->toArray();
 
         $end = round(microtime(true) * 1000);
 
         return Inertia::render('Errors/Client', [
             'errors'    => $errors,
-            'cycles'    => $cycles,
+            'versions'  => $versions,
             'filters'   => [
-                'trace' => $request->input('trace') ?? '',
-                'cycle' => $cycle,
+                'trace'          => $request->input('trace') ?? '',
+                'server_version' => $request->input('server_version') ?? '',
             ],
             'links'     => $this->getPageUrls($page),
             'playerMap' => Player::fetchSteamPlayerNameMap($errors, 'steam_identifier'),
