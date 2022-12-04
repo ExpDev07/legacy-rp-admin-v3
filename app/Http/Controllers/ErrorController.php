@@ -51,7 +51,7 @@ class ErrorController extends Controller
 
         $query->groupByRaw('CONCAT(error_location, error_trace, FLOOR(timestamp / 300))');
 
-        $query->selectRaw('cycle_number, error_id, steam_identifier, error_location, error_trace, error_feedback, player_ping, server_id, timestamp, COUNT(error_id) as `occurrences`');
+        $query->selectRaw('cycle_number, error_id, steam_identifier, error_location, error_trace, error_feedback, full_trace, player_ping, server_id, timestamp, server_version, COUNT(error_id) as `occurrences`');
         $query->limit(15)->offset(($page - 1) * 15);
 
         $errors = $query->get()->toArray();
