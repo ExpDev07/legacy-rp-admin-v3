@@ -172,11 +172,8 @@
             </template>
 
             <template #default>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line" v-if="errorDetail.error_location.length < 40">
-                    {{ errorDetail.error_location }}
-                </pre>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>
-                    {{ errorDetail.error_location }}
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line">
+                    {{ getErrorLocation(errorDetail) }}
                 </pre>
                 <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words"
                     v-html="formatChatColors(errorDetail.error_trace)"></pre>
