@@ -78,7 +78,7 @@ class ErrorController extends Controller
             'versions'  => $versions,
             'filters'   => [
                 'trace'          => $request->input('trace') ?? '',
-                'server_version' => $request->input('server_version') ?? '',
+                'server_version' => $serverVersion ?? '',
             ],
             'links'     => $this->getPageUrls($page),
             'playerMap' => Player::fetchSteamPlayerNameMap($errors, 'steam_identifier'),
