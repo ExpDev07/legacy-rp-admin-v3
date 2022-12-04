@@ -109,7 +109,7 @@
                         <th class="px-6 py-4">{{ t('errors.occurrences') }}</th>
                         <th class="px-6 py-4">{{ t('errors.timestamp') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="error in errors"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="error in parsedErrors"
                         :key="error.error_id">
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link
@@ -118,10 +118,8 @@
                                 {{ playerName(error.steam_identifier) }} [{{ error.server_id }}]
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block whitespace-nowrap font-mono" :title="error.error_location">{{ trim(error.error_location, 20) }}</td>
-                        <td class="px-6 py-3 border-t mobile:block font-mono text-sm cursor-pointer" @click="showError(error)" v-html="formatChatColors(trim(error.error_trace, 200))">
-                            {{ formatChatColors(trim(error.error_trace, 200)) }}
-                        </td>
+                        <td class="px-6 py-3 border-t mobile:block whitespace-nowrap font-mono">{{ getErrorLocation(error) }}</td>
+                        <td class="px-6 py-3 border-t mobile:block font-mono text-sm cursor-pointer" @click="showError(error)" v-html="formatChatColors(trim(error.error_trace, 200))"></td>
                         <td class="px-6 py-3 border-t mobile:block">{{ error.occurrences }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ error.timestamp * 1000 | formatTime(true) }}</td>
                     </tr>
@@ -174,17 +172,15 @@
             </template>
 
             <template #default>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line" v-if="errorDetail.error_location.length < 40">
-                    {{ errorDetail.error_location }}
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line">
+                    {{ getErrorLocation(errorDetail) }}
                 </pre>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>
-                    {{ errorDetail.error_location }}
-                </pre>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-html="formatChatColors(errorDetail.error_trace)">
-                    {{ formatChatColors(errorDetail.error_trace) }}
-                </pre>
-                <p class="m-0 mb-2 font-bold">{{ t('errors.feedback') }}:</p>
-                <pre class="text-lg block mb-4 text-sm whitespace-pre-line break-words">
+                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words"
+                    v-html="formatChatColors(errorDetail.error_trace)"></pre>
+                <div class="text-lg mb-4 pb-4 border-gray-500 border-dashed border-b-2" v-if="errorDetail.full_trace">
+                    <pre class="block whitespace-pre-line break-words lines" v-html="lineNumbers(errorDetail.full_trace)"></pre>
+                </div>
+                <p class="m-0 mb-2 font-bold">{{ t('errors.feedback') }}:</p><pre class="text-lg block mb-4 text-sm whitespace-pre-line break-words">
                     {{ errorDetail.error_feedback || "N/A" }}
                 </pre>
             </template>
@@ -247,7 +243,15 @@ export default {
             isLoading: false,
             isCreatingCycle: false,
             showErrorDetail: false,
-            errorDetail: null
+            errorDetail: null,
+
+            parsedErrors: this.errors.map(error => {
+                try {
+                    error.full_trace = JSON.parse(error.full_trace);
+                } catch (e) {}
+
+                return error;
+            })
         };
     },
     methods: {
@@ -268,6 +272,58 @@ export default {
             }
 
             this.isLoading = false;
+        },
+        lineNumbers(fullTrace) {
+            const padSize = (fullTrace.length % 10) + 1;
+
+            const cleanMatch = part => {
+                return part ? part.replace(/^[/:@]/gm, match => {
+                    return `<span style="opacity:0.6;font-style:normal">${match}</span>`;
+                }) : '';
+            };
+
+            const formatLine = entry => {
+                const match = entry.matchAll(/^(.+?)(\/.+?)?(:\d+)?(@.+)?$/gm).next().value;
+                if (!match) {
+                    return entry;
+                }
+
+                const [_, resource, file, line, method] = match;
+
+                return [
+                    `<span style="color:#B4BEFE">${resource}</span>`,
+                    `<span style="color:#A6E3A1">${cleanMatch(file)}</span>`,
+                    `<span style="color:#FAB387">${cleanMatch(line)}</span>`,
+                    `<span style="color:#F38BA8">${cleanMatch(method)}</span>`,
+                ].join("");
+            };
+
+            return fullTrace.map((line, index) => {
+                return `<span><span class="line-number">${(index + 1).toString().padStart(padSize, '0')}</span>${formatLine(line)}</span>`;
+            }).join("\n");
+        },
+        getErrorLocation(error) {
+            const fullTrace = error.full_trace;
+
+            if (fullTrace) {
+                let location = false;
+
+                fullTrace.forEach(entry => {
+                    if (entry.match(/^(C|citizen)[:@]/gm)) {
+                        return;
+                    }
+
+                    const match = entry.matchAll(/^.+?\/(.+?\/.+?)[/:@]/gm).next().value;
+
+                    location = match ? match[1] : entry;
+                });
+
+                if (location) {
+                    return location;
+                }
+            }
+
+            return error.error_location;
         },
         async createCycle() {
             if (this.isCreatingCycle || !confirm(this.t('errors.confirm_cycle'))) {
