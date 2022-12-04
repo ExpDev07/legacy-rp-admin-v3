@@ -243,7 +243,7 @@ export default {
                         {
                             label: this.t('errors.client.title'),
                             icon: 'spider',
-                            url: '/errors/client',
+                            url: '/errors/client?server_version=newest',
                         },
                         {
                             label: this.t('errors.server.title'),

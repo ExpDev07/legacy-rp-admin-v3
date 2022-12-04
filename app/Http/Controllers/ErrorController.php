@@ -33,6 +33,14 @@ class ErrorController extends Controller
     {
         $start = round(microtime(true) * 1000);
 
+        $versions = ClientError::query()
+            ->selectRaw('server_version, MIN(timestamp) as timestamp')
+            ->where('server_version', '!=', '')
+            ->groupBy('server_version')
+            ->get()->toArray();
+
+        $newestVersion = $versions[0];
+
         $query = ClientError::query()->orderByDesc('timestamp');
 
         // Filtering by error_trace.
@@ -41,6 +49,10 @@ class ErrorController extends Controller
         }
 
         if ($serverVersion = $request->input('server_version')) {
+            if ($serverVersion === 'newest') {
+                $serverVersion = $newestVersion['server_version'];
+            }
+
             $query->where('server_version', '=', $serverVersion);
         }
 
