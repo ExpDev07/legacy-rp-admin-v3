@@ -147,7 +147,7 @@
         "detail": "Detailed Error Report",
         "feedback": "User Feedback",
         "occurrences": "Occurrences",
-        "newest_cycle": "Uncycled Errors",
+        "no_version_filter": "No filter",
         "cycle": "Error cycle",
         "create_cycle": "Create new cycle",
         "confirm_cycle": "Are you sure you want to create a new error cycle? This cannot be undone!"
