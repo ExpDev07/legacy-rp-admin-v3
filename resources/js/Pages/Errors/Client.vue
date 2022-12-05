@@ -256,7 +256,7 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: ['errors', 'cycles', 'playerMap', 'time', 'links', 'page'],
+                    only: ['errors', 'versions', 'playerMap', 'time', 'links', 'page'],
                 });
             } catch (e) {
             }
