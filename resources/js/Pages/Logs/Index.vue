@@ -293,7 +293,7 @@
 						parseLogMetadata(logMetadata) || 'N/A'
 					}}</pre>
 
-				<pre class="block text-xs whitespace-pre break-words border-dashed border-b-2 mb-4 px-3 py-2 rounded" v-if="parsedMetadata"
+				<pre class="block text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4" v-if="parsedMetadata"
 					v-html="parsedMetadata"></pre>
 
 				<p class="m-0 mb-2 font-bold">{{ t('logs.metadata.raw') }}:</p>
