@@ -148,13 +148,23 @@ class Character extends Model
     }
 
     /**
-     * Gets the vehicles owned by this character.
+     * Gets the properties owned by this character.
      *
      * @return HasMany
      */
     public function properties(): HasMany
     {
         return $this->hasMany(Property::class, 'property_renter_cid');
+    }
+
+    /**
+     * Gets the properties this character has access to.
+     *
+     * @return HasMany
+     */
+    public function accessProperties()
+    {
+        return Property::query()->select()->where("shared_keys", "LIKE", "%-" . $this->character_id . ";%")->get();
     }
 
     /**

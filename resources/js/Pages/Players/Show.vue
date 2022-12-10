@@ -682,7 +682,7 @@
         </div>
 
         <!-- Mute -->
-        <alert class="bg-red-400 dark:bg-red-500" v-if="player.mute">
+        <alert class="bg-rose-500 dark:bg-rose-500" v-if="player.mute">
             <div class="flex items-center justify-between mb-2">
                 <h2 class="text-lg font-semibold" v-if="player.mute.expires">
                     {{ t('players.show.muted', formatTime(player.mute.expires*1000)) }}

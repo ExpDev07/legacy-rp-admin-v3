@@ -824,6 +824,42 @@
                     {{ t('players.properties.none') }}
                 </p>
             </template>
+
+            <template v-if="$page.auth.player.isSeniorStaff">
+                <h3 class="mb-4 mt-5 pt-5 border-t-2 border-dashed border-gray-500">
+                    {{ t('players.properties.properties_shared') }}
+                </h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9" v-if="character.accessProperties.length > 0">
+                    <card
+                        :key="property.id"
+                        v-for="(property) in character.accessProperties"
+                        :no_body="true"
+                    >
+                        <template #header>
+                            <h3 class="mb-2">
+                                {{ property.property_address }}
+                            </h3>
+                            <h4 class="text-primary dark:text-dark-primary">
+                                <span>{{ t('players.properties.access_level') }}:</span>
+                                {{ property.keys["c_" + character.id] || "N/A" }}
+                            </h4>
+                        </template>
+
+                        <template #footer>
+                            <inertia-link
+                                class="block px-4 py-3 mt-3 text-center text-white bg-blue-600 dark:bg-blue-400 rounded"
+                                :href="'/inventories/property/' + property.property_id"
+                            >
+                                <i class="fas fa-briefcase mr-1"></i>
+                                {{ t('inventories.view') }}
+                            </inertia-link>
+                        </template>
+                    </card>
+                </div>
+                <p class="text-muted dark:text-dark-muted" v-if="character.accessProperties.length === 0">
+                    {{ t('players.properties.none_access') }}
+                </p>
+            </template>
         </v-section>
 
         <!-- Motels -->

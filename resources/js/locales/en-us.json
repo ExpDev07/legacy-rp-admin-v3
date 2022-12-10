@@ -726,10 +726,13 @@
         },
         "properties": {
             "properties": "Properties",
+			"properties_shared": "Shared Properties",
             "none": "This character does not have access to any properties.",
+			"none_access": "This character does not have shared access to any properties.",
             "cost": "Maintenance Cost",
             "rent": "Rent",
-            "expires": "Expires"
+            "expires": "Expires",
+			"access_level": "Access Level"
         },
         "motels": {
             "motels": "Motels",

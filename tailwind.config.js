@@ -101,6 +101,17 @@ module.exports = {
                 'map-ems':       '#FF5959',
                 'map-highlight': '#FF6400',
 
+                // Rose
+                'rose-100': 'rgb(255, 228, 230)',
+                'rose-200': 'rgb(254, 205, 211)',
+                'rose-300': 'rgb(253, 164, 175)',
+                'rose-400': 'rgb(251, 113, 133)',
+                'rose-500': 'rgb(244, 63, 94)',
+                'rose-600': 'rgb(225, 29, 72)',
+                'rose-700': 'rgb(190, 18, 60)',
+                'rose-800': 'rgb(159, 18, 57)',
+                'rose-900': 'rgb(136, 19, 55)',
+
                 // Theme colors.
                 'primary':   defaultTheme.colors.indigo['600'],
                 'secondary': defaultTheme.colors.gray['100'],
