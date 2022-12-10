@@ -46,6 +46,19 @@
 
             <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
 
+            <div class=" bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
+                <BarChart
+                    :data="commandStatistics.data"
+                    :data-labels="commandStatistics.labels"
+                    :tooltips="commandStatistics.tooltips"
+                    :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204']"
+                    :title="t('statistics.titles.command_statistics')"
+                    class="w-full"
+                ></BarChart>
+            </div>
+
+            <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
+
             <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300">
                 <LineChart
                     :data="[blackjack.average_spent, blackjack.min_earned, blackjack.max_earned, blackjack.average_earned, blackjack.return_rate]"
@@ -187,10 +200,12 @@
 <script>
 import Layout from './../../Layouts/App';
 import LineChart from '../../Components/Charts/LineChart';
+import BarChart from '../../Components/Charts/BarChart';
 
 export default {
     components: {
-        LineChart
+        LineChart,
+        BarChart
     },
     layout: Layout,
     props: {
@@ -207,6 +222,10 @@ export default {
             required: true,
         },
         userStatistics: {
+            type: Object,
+            required: true,
+        },
+        commandStatistics: {
             type: Object,
             required: true,
         },

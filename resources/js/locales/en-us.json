@@ -243,7 +243,8 @@
             "blackjack": "Blackjack Bets vs. Returns",
             "slots": "Slots Bets vs. Returns",
             "tracks": "Tracks Bets vs. Returns",
-            "user_statistics": "User Statistics"
+            "user_statistics": "User Statistics",
+            "command_statistics": "Command Usage Statistics"
         }
     },
     "map": {
