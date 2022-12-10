@@ -163,6 +163,62 @@ class StatisticsHelper
     }
 
     /**
+     * Returns command statistics
+     *
+     * @return array
+     */
+    public static function getCommandStatistics(): array
+    {
+        $key = 'command_statistics';
+        if (CacheHelper::exists($key)) {
+            //return CacheHelper::read($key, []);
+        }
+
+        $stats = DB::table('command_statistics')->select()->whereRaw("UNIX_TIMESTAMP(STR_TO_DATE(date, '%d.%m.%Y')) >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 MONTH))")->get()->toArray();
+
+        $data = [
+            'data' => [
+                [], [], [], [], []
+            ],
+            'labels' => [],
+			'tooltips' => []
+        ];
+
+        foreach ($stats as $stat) {
+            $usage = json_decode($stat->usage, true) ?? [];
+
+			$cleanedUsage = [];
+
+			foreach ($usage as $command => $count) {
+				$cleanedUsage[] = [
+					'command' => $command,
+					'count' => $count
+				];
+			}
+
+			usort($cleanedUsage, function ($a, $b) {
+				return $b['count'] <=> $a['count'];
+			});
+
+			$data['data'][2][] = sizeof($cleanedUsage) > 0 ? $cleanedUsage[0]['count'] : null;
+			$data['data'][1][] = sizeof($cleanedUsage) > 1 ? $cleanedUsage[1]['count'] : null;
+			$data['data'][0][] = sizeof($cleanedUsage) > 2 ? $cleanedUsage[2]['count'] : null;
+
+            $data['labels'][] = $stat->date;
+
+			$data['tooltips'][] = array_filter([
+				sizeof($cleanedUsage) > 2 ? $cleanedUsage[2]['command'] . ": " . $cleanedUsage[2]['count'] : null,
+				sizeof($cleanedUsage) > 1 ? $cleanedUsage[1]['command'] . ": " . $cleanedUsage[1]['count'] : null,
+				sizeof($cleanedUsage) > 0 ? $cleanedUsage[0]['command'] . ": " . $cleanedUsage[0]['count'] : null,
+			]);
+        }
+
+        CacheHelper::write($key, $data, 10 * CacheHelper::MINUTE);
+
+        return $data;
+    }
+
+    /**
      * Returns Lucky Wheel statistics
      *
      * @return array
@@ -304,7 +360,7 @@ class StatisticsHelper
         $allBest = DB::table('casino_logs')
             ->where('game', '=', $game)
             ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-            ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`')
+            ->selectRaw('SUM(IF(`money_won` < `bet_placed`, `money_won`, `money_won` - `bet_placed`)) as `win`, `casino_logs`.`steam_identifier`')
             ->groupBy('steam_identifier')
             ->orderByDesc('win')
             ->get()->toArray();

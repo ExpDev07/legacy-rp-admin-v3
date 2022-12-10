@@ -34,6 +34,7 @@ class StatisticsController extends Controller
             'creations'  => StatisticsHelper::getCharacterCreationStats(),
             'deletions'  => StatisticsHelper::getCharacterDeletionStats(),
             'userStatistics'  => StatisticsHelper::getUserStatistics(),
+            'commandStatistics'  => StatisticsHelper::getCommandStatistics(),
             'luckyWheel' => StatisticsHelper::getLuckyWheelStats(),
             'blackjack'  => StatisticsHelper::getBlackjackStats($steam),
             'tracks'     => StatisticsHelper::getTracksStats($steam),
