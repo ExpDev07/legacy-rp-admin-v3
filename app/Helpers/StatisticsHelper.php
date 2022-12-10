@@ -304,7 +304,7 @@ class StatisticsHelper
         $allBest = DB::table('casino_logs')
             ->where('game', '=', $game)
             ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-            ->selectRaw('SUM(IF(`money_earned` < `money_spent`, `money_earned`, `money_earned` - `money_spent`)) as `win`, `casino_logs`.`steam_identifier`')
+            ->selectRaw('SUM(IF(`money_won` < `bet_placed`, `money_won`, `money_won` - `bet_placed`)) as `win`, `casino_logs`.`steam_identifier`')
             ->groupBy('steam_identifier')
             ->orderByDesc('win')
             ->get()->toArray();
