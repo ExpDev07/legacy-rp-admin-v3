@@ -41,6 +41,7 @@
                     :labels="[t('statistics.total_joins'), t('statistics.max_joined'), t('statistics.unique_joins')]"
                     :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204']"
                     :title="t('statistics.titles.user_statistics')"
+                    :smooth="true"
                     class="w-full"
                 ></LineChart>
             </div>
