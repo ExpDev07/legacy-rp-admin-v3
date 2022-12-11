@@ -157,7 +157,7 @@ class StatisticsHelper
             $data['labels'][] = $stat->date;
         }
 
-        CacheHelper::write($key, $data, 5 * CacheHelper::MINUTE);
+        CacheHelper::write($key, $data, 15 * CacheHelper::MINUTE);
 
         return $data;
     }
@@ -171,7 +171,7 @@ class StatisticsHelper
     {
         $key = 'command_statistics';
         if (CacheHelper::exists($key)) {
-            //return CacheHelper::read($key, []);
+            return CacheHelper::read($key, []);
         }
 
         $stats = DB::table('command_statistics')->select()->whereRaw("UNIX_TIMESTAMP(STR_TO_DATE(date, '%d.%m.%Y')) >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 MONTH))")->get()->toArray();
@@ -200,20 +200,24 @@ class StatisticsHelper
 				return $b['count'] <=> $a['count'];
 			});
 
-			$data['data'][2][] = sizeof($cleanedUsage) > 0 ? $cleanedUsage[0]['count'] : null;
-			$data['data'][1][] = sizeof($cleanedUsage) > 1 ? $cleanedUsage[1]['count'] : null;
-			$data['data'][0][] = sizeof($cleanedUsage) > 2 ? $cleanedUsage[2]['count'] : null;
+			$data['data'][4][] = sizeof($cleanedUsage) > 0 ? $cleanedUsage[0]['count'] : null;
+			$data['data'][3][] = sizeof($cleanedUsage) > 1 ? $cleanedUsage[1]['count'] : null;
+			$data['data'][2][] = sizeof($cleanedUsage) > 2 ? $cleanedUsage[2]['count'] : null;
+			$data['data'][1][] = sizeof($cleanedUsage) > 3 ? $cleanedUsage[3]['count'] : null;
+			$data['data'][0][] = sizeof($cleanedUsage) > 4 ? $cleanedUsage[4]['count'] : null;
 
             $data['labels'][] = $stat->date;
 
 			$data['tooltips'][] = array_filter([
+				sizeof($cleanedUsage) > 4 ? $cleanedUsage[4]['command'] . ": " . $cleanedUsage[4]['count'] : null,
+				sizeof($cleanedUsage) > 3 ? $cleanedUsage[3]['command'] . ": " . $cleanedUsage[3]['count'] : null,
 				sizeof($cleanedUsage) > 2 ? $cleanedUsage[2]['command'] . ": " . $cleanedUsage[2]['count'] : null,
 				sizeof($cleanedUsage) > 1 ? $cleanedUsage[1]['command'] . ": " . $cleanedUsage[1]['count'] : null,
 				sizeof($cleanedUsage) > 0 ? $cleanedUsage[0]['command'] . ": " . $cleanedUsage[0]['count'] : null,
 			]);
         }
 
-        CacheHelper::write($key, $data, 10 * CacheHelper::MINUTE);
+        CacheHelper::write($key, $data, 15 * CacheHelper::MINUTE);
 
         return $data;
     }

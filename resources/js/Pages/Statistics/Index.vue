@@ -69,6 +69,7 @@
                     :colors="['55, 55, 235', '87, 235, 54', '255, 230, 0', '255, 42, 0']"
                     :title="t('statistics.titles.blackjack')"
                     :is-casino-chart="true"
+                    :smooth="true"
                     class="w-full"
                 ></LineChart>
 
