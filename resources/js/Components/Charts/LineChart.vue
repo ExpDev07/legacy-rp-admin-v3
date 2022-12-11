@@ -1,6 +1,8 @@
 <script>
 import {Line} from 'vue-chartjs';
 
+import ChartTrendline from 'chartjs-plugin-trendline';
+
 export default {
     extends: Line,
     data() {
@@ -62,35 +64,57 @@ export default {
             };
         }
 
+        if (this.smooth) {
+            options.elements = {
+                point: {
+                    radius: 0
+                }
+            };
+        }
+
         return {
             options: options
         };
     },
     mounted() {
+        this.addPlugin(ChartTrendline);
+
         let datasets = [];
         for (let x = 0; x < this.data.length; x++) {
             while (this.data[x].length < this.data[0].length) {
                 this.data[x].unshift(null);
             }
 
-            let bg, fg;
+            let bg, fg, lineCol;
 
             if (x >= this.colors.length || !this.colors[x]) {
                 bg = 'rgba(0, 0, 0, 0)';
                 fg = 'rgba(0, 0, 0, 0)';
+                lineCol = 'rgba(0, 0, 0, 0)';
             } else {
                 bg = 'rgba(' + this.colors[x] + ', 0.3)';
                 fg = 'rgba(' + this.colors[x] + ', 1)';
+                lineCol = 'rgba(' + this.colors[x] + ', 1)';
             }
 
-            datasets.push({
+            let dataset = {
                 label: this.labels[x],
                 data: this.data[x],
                 backgroundColor: bg,
                 fill: true,
                 borderColor: fg,
                 borderWidth: 1
-            });
+            };
+
+            if (this.smooth) {
+                dataset.trendlineLinear = {
+                    style: lineCol,
+                    lineStyle: "dotted",
+                    width: 2
+                };
+            }
+
+            datasets.push(dataset);
         }
 
         this.renderChart({
@@ -120,6 +144,10 @@ export default {
             required: true,
         },
         isCasinoChart: {
+            type: Boolean,
+            default: false,
+        },
+        smooth: {
             type: Boolean,
             default: false,
         }
