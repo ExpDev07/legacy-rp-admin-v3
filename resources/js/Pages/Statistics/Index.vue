@@ -53,7 +53,7 @@
                     :data="commandStatistics.data"
                     :data-labels="commandStatistics.labels"
                     :tooltips="commandStatistics.tooltips"
-                    :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204']"
+                    :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204', '255, 102, 102', '255, 179, 102']"
                     :title="t('statistics.titles.command_statistics')"
                     class="w-full"
                 ></BarChart>
