@@ -139,7 +139,7 @@ class StatisticsHelper
             return CacheHelper::read($key, []);
         }
 
-        $stats = DB::table('user_statistics')->select()->whereRaw("UNIX_TIMESTAMP(STR_TO_DATE(date, '%d.%m.%Y'))")->orderByRawDesc("UNIX_TIMESTAMP(STR_TO_DATE(date, '%d.%m.%Y'))")->get()->toArray();
+        $stats = DB::table('user_statistics')->select()->whereRaw("UNIX_TIMESTAMP(STR_TO_DATE(date, '%d.%m.%Y'))")->orderByRaw("UNIX_TIMESTAMP(STR_TO_DATE(date, '%d.%m.%Y')) DESC")->get()->toArray();
 
         $data = [
             'data' => [
