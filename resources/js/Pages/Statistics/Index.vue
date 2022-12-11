@@ -27,8 +27,9 @@
                     :data="[creations.data, deletions.data]"
                     :data-labels="creations.labels"
                     :labels="[t('statistics.creations'), t('statistics.deletions')]"
-                    :colors="['87, 235, 54', '235, 54, 54']"
+                    :colors="['49, 186, 18', '186, 18, 18']"
                     :title="t('statistics.titles.character')"
+                    :smooth="true"
                     class="w-full"
                 ></LineChart>
             </div>

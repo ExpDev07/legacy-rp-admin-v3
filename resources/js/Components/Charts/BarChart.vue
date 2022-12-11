@@ -90,8 +90,6 @@ export default {
             });
         }
 
-        console.log(datasets)
-
         this.renderChart({
             labels: this.dataLabels,
             datasets: datasets

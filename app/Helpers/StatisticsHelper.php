@@ -120,7 +120,7 @@ class StatisticsHelper
             'date',
         ])->groupBy('date')->get()->toArray();
 
-        $data = self::parseHistoricData($stats);
+        $data = self::parseHistoricData($stats, false, false);
 
         CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
@@ -267,7 +267,7 @@ class StatisticsHelper
             'date',
         ])->groupBy('date')->get()->toArray();
 
-        $data = self::parseHistoricData($stats);
+        $data = self::parseHistoricData($stats, false, false);
 
         CacheHelper::write($key, $data, 30 * CacheHelper::MINUTE);
 
@@ -452,7 +452,7 @@ class StatisticsHelper
         return $data;
     }
 
-    private static function parseHistoricData(array $stats, bool $doAverage = false): array
+    private static function parseHistoricData(array $stats, bool $doAverage = false, $lookbackTime = 30): array
     {
         $map = [];
         $earliest = time();
@@ -492,7 +492,11 @@ class StatisticsHelper
                 $item = round($item['value'] / $item['count']);
             }
         } else {
-            for ($x = 30; $x >= 0; $x--) {
+			if (!$lookbackTime) {
+				$lookbackTime = $days;
+			}
+
+            for ($x = $lookbackTime; $x >= 0; $x--) {
                 $t = date('Y-m-d', strtotime('-' . $x . ' day'));
                 if (!isset($map[$t])) {
                     $complete[$t] = 0;
