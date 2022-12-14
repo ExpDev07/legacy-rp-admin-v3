@@ -108,6 +108,7 @@
         "consoleName": "Console name",
         "priorityName": "Priority type",
         "queueTime": "Time passed",
+        "skipQueue": "Skip",
         "none": "Nobody in queue.",
         "skip": "Make player skip queue",
         "skip_confirm": "Are you sure you want to make this player skip the queue?",
