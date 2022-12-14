@@ -20,9 +20,8 @@ class QueueController extends Controller
      */
     public function render(Request $request, string $server): Response
     {
-        $user = $request->user();
-        if (!$user->player->is_super_admin) {
-            abort(401, 'Only super admins can view the current queue.');
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_VIEW_QUEUE)) {
+            abort(401);
         }
 
         if (!Server::getServerApiURLFromName($server)) {
@@ -72,9 +71,8 @@ class QueueController extends Controller
      */
     public function api(Request $request, string $server): \Illuminate\Http\Response
     {
-        $user = $request->user();
-        if (!$user->player->is_super_admin) {
-            return self::json(false, null, 'Only super admins can view the current queue.');
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_VIEW_QUEUE)) {
+            abort(401);
         }
 
         $serverIp = Server::getServerApiURLFromName($server);
