@@ -8,6 +8,7 @@ use App\Player;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Helpers\PermissionHelper;
 
 class QueueController extends Controller
 {
