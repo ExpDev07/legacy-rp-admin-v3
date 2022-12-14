@@ -294,7 +294,7 @@ export default {
                 sub: []
             };
 
-            $.each(servers, function(key, name) {
+            $.each(servers, (key, name) => {
                 queue.sub.push({
                     label: name.toUpperCase(),
                     icon: 'subway',
