@@ -16,6 +16,7 @@ class PermissionHelper
         self::PERM_SOFT_BAN       => ['soft_ban', self::LEVEL_ROOT],
         self::PERM_EDIT_TAG       => ['edit_tag', self::LEVEL_ROOT],
         self::PERM_LOADING_SCREEN => ['loading_screen', self::LEVEL_SUPERADMIN],
+        self::PERM_VIEW_QUEUE     => ['view_queue', self::LEVEL_TRUSTED],
     ];
 
     const PERM_SCREENSHOT     = 'P_SCREENSHOT';
@@ -26,6 +27,7 @@ class PermissionHelper
     const PERM_SOFT_BAN       = 'P_SOFT_BAN';
     const PERM_EDIT_TAG       = 'P_EDIT_TAG';
     const PERM_LOADING_SCREEN = 'P_LOADING_SCREEN';
+    const PERM_VIEW_QUEUE     = 'P_VIEW_QUEUE';
 
     const LEVEL_STAFF      = 1;
     const LEVEL_TRUSTED    = 2;

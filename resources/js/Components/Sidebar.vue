@@ -290,7 +290,7 @@ export default {
             let queue = {
                 label: this.t('queue.title'),
                 icon: 'subway',
-                private: true,
+                hidden: !this.perm.check(this.perm.PERM_VIEW_QUEUE),
                 sub: []
             };
 
@@ -298,8 +298,8 @@ export default {
                 queue.sub.push({
                     label: name.toUpperCase(),
                     icon: 'subway',
-                    url: '/queue/' + name,
-                    private: true,
+                    hidden: !this.perm.check(this.perm.PERM_VIEW_QUEUE),
+                    url: '/queue/' + name
                 });
             });
 

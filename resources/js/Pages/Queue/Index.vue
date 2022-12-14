@@ -28,7 +28,7 @@
                         <th class="px-6 py-4">{{ t('queue.consoleName') }}</th>
                         <th class="px-6 py-4">{{ t('queue.priorityName') }}</th>
                         <th class="px-6 py-4">{{ t('queue.queueTime') }}</th>
-                        <th class="w-24 px-6 py-4"></th>
+                        <th class="w-24 px-6 py-4" v-if="$page.auth.player.isSuperAdmin"></th>
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="(player, index) in queue" :key="player.steamIdentifier">
                         <td class="px-6 py-3 border-t mobile:block">{{ index+1 }}.</td>
@@ -43,7 +43,7 @@
                         <td class="px-6 py-3 border-t mobile:block">{{ player.priorityName || t('queue.no_prio') }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ formatSeconds(player.queueTime) }}</td>
 
-                        <td class="px-6 py-3 border-t mobile:block">
+                        <td class="px-6 py-3 border-t mobile:block" v-if="$page.auth.player.isSuperAdmin">
                             <button class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :title="t('queue.skip')" @click="skipQueue(player.steamIdentifier)">
                                 <i class="fas fa-ticket-alt"></i>
                             </button>

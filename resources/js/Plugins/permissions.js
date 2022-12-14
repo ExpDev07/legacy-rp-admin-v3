@@ -30,6 +30,7 @@ const Permissions = {
             PERM_LOCK_BAN:       'lock_ban',
             PERM_EDIT_TAG:       'edit_tag',
             PERM_LOADING_SCREEN: 'loading_screen',
+            PERM_VIEW_QUEUE:     'view_queue',
 
             check(permission) {
                 if (!(permission in permissions)) {
