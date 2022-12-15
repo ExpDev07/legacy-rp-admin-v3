@@ -108,6 +108,7 @@
         "consoleName": "Console name",
         "priorityName": "Priority type",
         "queueTime": "Time passed",
+        "skipQueue": "Skip",
         "none": "Nobody in queue.",
         "skip": "Make player skip queue",
         "skip_confirm": "Are you sure you want to make this player skip the queue?",
@@ -247,6 +248,13 @@
             "command_statistics": "Command Usage Statistics"
         }
     },
+	"weapon_damage": {
+		"title": "{0} Damage Statistics",
+		"description": "Statistics about a specified weapon's damage.",
+		"average_damage": "Average Damage",
+		"damage": "Damage",
+		"amount": "Amount"
+	},
     "map": {
         "title": "Live-Map",
         "loading": "Loading player data...",
