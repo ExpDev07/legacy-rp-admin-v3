@@ -13,14 +13,23 @@ use Illuminate\Support\Facades\DB;
 
 class WeaponController extends Controller
 {
+	const MaximumDamage = 200;
+
     public function weaponDamage(Request $request, string $weapon): Response
     {
 		$weapon = strtolower($weapon);
 		$weaponHash = hexdec(hash("joaat", $weapon));
 
-		$data = DB::table("weapon_damage_events")
-			->selectRaw("COUNT(steam_identifier) as count, weapon_damage")
-			->where("weapon_type", $weaponHash)
+		$query = DB::table("weapon_damage_events")
+			->selectRaw("COUNT(steam_identifier) as count, weapon_damage");
+
+		if ($request->has('ban')) {
+			$query = $query->leftJoin("user_bans", function ($join) {
+				$join->on("identifier", "=", "steam_identifier");
+			})->whereNull("ban_hash");
+		}
+
+		$data = $query->where("weapon_type", $weaponHash)
 			->where("hit_players", "!=", "[]")
 			->groupBy("weapon_damage")
 			->orderByDesc("weapon_damage")
@@ -31,8 +40,12 @@ class WeaponController extends Controller
             'data'   => [],
 		];
 
+		$data = array_values(array_filter($data, function($row) {
+			return $row->count > 1;
+		}));
+
 		if (!empty($data)) {
-			$maxDamage = min($data[0]->weapon_damage, 300);
+			$maxDamage = min($data[0]->weapon_damage, self::MaximumDamage);
 
 			$damages = [];
 
@@ -41,11 +54,11 @@ class WeaponController extends Controller
 			}
 
 			foreach ($data as $row) {
-				$damages[min($row->weapon_damage, 300)] += $row->count;
+				$damages[min($row->weapon_damage, self::MaximumDamage)] += $row->count;
 			}
 
 			foreach ($damages as $damage => $count) {
-				$average['labels'][] = $damage;
+				$average['labels'][] = $damage === self::MaximumDamage ? self::MaximumDamage . "+" : $damage;
 				$average['data'][] = $count;
 			}
 
