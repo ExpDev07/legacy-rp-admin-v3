@@ -41,7 +41,7 @@ class WeaponController extends Controller
 			}
 
 			foreach ($data as $row) {
-				$damages[min($row->weapon_damage, 300)] = $row->count;
+				$damages[min($row->weapon_damage, 300)] += $row->count;
 			}
 
 			foreach ($damages as $damage => $count) {
