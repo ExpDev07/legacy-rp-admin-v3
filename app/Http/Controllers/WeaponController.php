@@ -32,7 +32,7 @@ class WeaponController extends Controller
 		];
 
 		if (!empty($data)) {
-			$maxDamage = $data[0]->weapon_damage;
+			$maxDamage = min($data[0]->weapon_damage, 300);
 
 			$damages = [];
 
@@ -41,7 +41,7 @@ class WeaponController extends Controller
 			}
 
 			foreach ($data as $row) {
-				$damages[$row->weapon_damage] = $row->count;
+				$damages[min($row->weapon_damage, 300)] = $row->count;
 			}
 
 			foreach ($damages as $damage => $count) {
