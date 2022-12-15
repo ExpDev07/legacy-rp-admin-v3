@@ -248,6 +248,13 @@
             "command_statistics": "Command Usage Statistics"
         }
     },
+	"weapon_damage": {
+		"title": "{0} Damage Statistics",
+		"description": "Statistics about a specified weapon's damage.",
+		"average_damage": "Average Damage",
+		"damage": "Damage",
+		"amount": "Amount"
+	},
     "map": {
         "title": "Live-Map",
         "loading": "Loading player data...",

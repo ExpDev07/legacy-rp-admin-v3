@@ -42,6 +42,7 @@ use App\Http\Controllers\SuspiciousController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TwitterController;
 use App\Http\Controllers\LoadingScreenController;
+use App\Http\Controllers\WeaponController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -221,6 +222,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/system', [TestController::class, 'systemBans']);
     Route::get('/test/modders', [TestController::class, 'moddingBans']);
     Route::get('/test/staff', [TestController::class, 'staffPlaytime']);
+
+    Route::get('/weapon/{weapon}', [WeaponController::class, 'weaponDamage']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

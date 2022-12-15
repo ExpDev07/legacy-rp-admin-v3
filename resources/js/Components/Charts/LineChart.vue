@@ -48,6 +48,20 @@ export default {
             },
         };
 
+        if (this.weaponChart) {
+            options.scales.xAxes[0].display = true;
+
+            options.scales.xAxes[0].scaleLabel = {
+                display: true,
+                labelString: this.weaponChart.x
+            };
+
+            options.scales.yAxes[0].scaleLabel = {
+                display: true,
+                labelString: this.weaponChart.y
+            };
+        }
+
         if (this.isCasinoChart) {
             options.tooltips.callbacks = {
                 label: function(tooltipItem, data) {
@@ -64,7 +78,7 @@ export default {
             };
         }
 
-        if (this.smooth) {
+        if (this.smooth || this.weaponChart) {
             options.elements = {
                 point: {
                     radius: 0
@@ -145,6 +159,10 @@ export default {
         },
         isCasinoChart: {
             type: Boolean,
+            default: false,
+        },
+        weaponChart: {
+            type: Object,
             default: false,
         },
         smooth: {
