@@ -43,7 +43,7 @@ class WeaponController extends Controller
 			->orderByDesc("weapon_damage")
 			->get()->toArray();
 
-		$data2 = $query->where("weapon_type", $weaponHash)
+		$data2 = $query2->where("weapon_type", $weaponHash)
 			->where("hit_players", "!=", "[]")
 			->whereNotNull("distance")
 			->groupByRaw("ROUND(distance)")
@@ -55,7 +55,7 @@ class WeaponController extends Controller
             'data'   => [],
 		];
 
-		$distance = [
+		$distanceData = [
 			'labels' => [],
             'data'   => [],
 		];
@@ -77,7 +77,20 @@ class WeaponController extends Controller
 				$damages[min($row->weapon_damage, self::MaximumDamage)] += $row->count;
 			}
 
+			$valueFound = false;
+			$cleanedDamages = [];
+
 			foreach ($damages as $damage => $count) {
+				if ($count > 0) {
+					$valueFound = true;
+				}
+
+				if ($valueFound) {
+					$cleanedDistance[$damage] = $count;
+				}
+			}
+
+			foreach ($cleanedDistance as $damage => $count) {
 				$average['labels'][] = $damage === self::MaximumDamage ? self::MaximumDamage . "+" : $damage;
 				$average['data'][] = $count;
 			}
@@ -101,20 +114,33 @@ class WeaponController extends Controller
 				}
 			}
 
+			$valueFound = false;
+			$cleanedDistance = [];
+
 			foreach ($distances as $distance => $damage) {
-				$distance['labels'][] = $distance;
-				$distance['data'][] = $damage;
+				if ($damage > 0) {
+					$valueFound = true;
+				}
+
+				if ($valueFound) {
+					$cleanedDistance[$distance] = $damage;
+				}
 			}
 
-			$distance['labels'] = array_reverse($distance['labels']);
-			$distance['data'] = array_reverse($distance['data']);
+			foreach ($cleanedDistance as $distance => $damage) {
+				$distanceData['labels'][] = $distance;
+				$distanceData['data'][] = $damage;
+			}
+
+			$distanceData['labels'] = array_reverse($distanceData['labels']);
+			$distanceData['data'] = array_reverse($distanceData['data']);
 		}
 
         return Inertia::render('Statistics/WeaponDamage', [
 			'weapon' => $weapon,
 			'weaponHash' => $weaponHash,
             'average' => $average,
-			'distance' => $distance
+			'distance' => $distanceData
         ]);
     }
 }
