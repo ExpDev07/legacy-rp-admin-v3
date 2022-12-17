@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class WeaponController extends Controller
 {
 	const MaximumDamage = 200;
+	const MaximumDistance = 200;
 
     public function weaponDamage(Request $request, string $weapon): Response
     {
@@ -23,8 +24,15 @@ class WeaponController extends Controller
 		$query = DB::table("weapon_damage_events")
 			->selectRaw("COUNT(steam_identifier) as count, weapon_damage");
 
+		$query2 = DB::table("weapon_damage_events")
+			->selectRaw("AVG(weapon_damage) as damage, ROUND(distance) as dst");
+
 		if ($request->has('ban')) {
 			$query = $query->leftJoin("user_bans", function ($join) {
+				$join->on("identifier", "=", "steam_identifier");
+			})->whereNull("ban_hash");
+
+			$query2 = $query2->leftJoin("user_bans", function ($join) {
 				$join->on("identifier", "=", "steam_identifier");
 			})->whereNull("ban_hash");
 		}
@@ -35,7 +43,19 @@ class WeaponController extends Controller
 			->orderByDesc("weapon_damage")
 			->get()->toArray();
 
+		$data2 = $query->where("weapon_type", $weaponHash)
+			->where("hit_players", "!=", "[]")
+			->whereNotNull("distance")
+			->groupByRaw("ROUND(distance)")
+			->orderByDesc("dst")
+			->get()->toArray();
+
 		$average = [
+			'labels' => [],
+            'data'   => [],
+		];
+
+		$distance = [
 			'labels' => [],
             'data'   => [],
 		];
@@ -66,10 +86,35 @@ class WeaponController extends Controller
 			$average['data'] = array_reverse($average['data']);
 		}
 
+		if (!empty($data2)) {
+			$maxDistance = min($data2[0]->dst, self::MaximumDistance);
+
+			$distances = [];
+
+			for ($distance = $maxDistance; $distance >= 0; $distance--) {
+				$distances[$distance] = 0;
+			}
+
+			foreach ($data2 as $row) {
+				if ($row->dst <= self::MaximumDistance) {
+					$distances[$row->dst] = $row->damage;
+				}
+			}
+
+			foreach ($distances as $distance => $damage) {
+				$distance['labels'][] = $distance;
+				$distance['data'][] = $damage;
+			}
+
+			$distance['labels'] = array_reverse($distance['labels']);
+			$distance['data'] = array_reverse($distance['data']);
+		}
+
         return Inertia::render('Statistics/WeaponDamage', [
 			'weapon' => $weapon,
 			'weaponHash' => $weaponHash,
-            'average' => $average
+            'average' => $average,
+			'distance' => $distance
         ]);
     }
 }
