@@ -43,7 +43,7 @@ class WeaponController extends Controller
 			->orderByDesc("weapon_damage")
 			->get()->toArray();
 
-		$data2 = $query->where("weapon_type", $weaponHash)
+		$data2 = $query2->where("weapon_type", $weaponHash)
 			->where("hit_players", "!=", "[]")
 			->whereNotNull("distance")
 			->groupByRaw("ROUND(distance)")
