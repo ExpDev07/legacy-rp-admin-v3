@@ -38,8 +38,8 @@
                 <LineChart
                     :data="userStatistics.data"
                     :data-labels="userStatistics.labels"
-                    :labels="[t('statistics.total_joins'), t('statistics.max_joined'), t('statistics.unique_joins')]"
-                    :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204']"
+                    :labels="[t('statistics.total_joins'), t('statistics.max_joined'), t('statistics.unique_joins'), t('statistics.max_queue')]"
+                    :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204', '235, 127, 55']"
                     :title="t('statistics.titles.user_statistics')"
                     :smooth="true"
                     class="w-full"
