@@ -154,6 +154,7 @@ class StatisticsHelper
             $data['data'][0][] = $stat->total_joins;
             $data['data'][1][] = $stat->max_joined;
             $data['data'][2][] = sizeof($joined);
+            $data['data'][3][] = $stat->max_queue;
             $data['labels'][] = $stat->date;
         }
 

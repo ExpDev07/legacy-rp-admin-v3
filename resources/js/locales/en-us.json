@@ -228,6 +228,7 @@
         "total_joins": "Total joins",
         "max_joined": "Max joined",
         "unique_joins": "Unique joins",
+		"max_queue": "Max queue",
         "lucky_wheel": "Lucky Wheel Spins",
         "min_money_return": "Min. Return",
         "max_money_return": "Max. Return",
