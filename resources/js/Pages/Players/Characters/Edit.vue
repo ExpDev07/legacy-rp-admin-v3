@@ -739,14 +739,31 @@
                             </inertia-link>
 
                             <button
-                                class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-blue-700 dark:bg-blue-800 rounded"
+                                class="block px-2 w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-yellow-400 dark:bg-yellow-400 rounded cursor-pointer"
+                                :title="t('players.characters.vehicle.reset_last_garage')"
+                                v-if="$page.auth.player.isSuperAdmin"
+                                @click="resetLastGarage(vehicle.id, false)"
+                            >
+                                <i class="fas fa-parking"></i>
+                            </button>
+                            <button
+                                class="block px-2 w-ch-button py-1 text-center text-white absolute top-1 left-10 bg-red-400 dark:bg-red-400 rounded cursor-pointer"
+                                :title="t('players.characters.vehicle.reset_garage_state')"
+                                v-if="$page.auth.player.isSuperAdmin"
+                                @click="resetLastGarage(vehicle.id, true)"
+                            >
+                                <i class="fas fa-unlink"></i>
+                            </button>
+
+                            <button
+                                class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 right-20 bg-blue-700 dark:bg-blue-800 rounded"
                                 :title="t('players.characters.vehicle.pd_emergency')"
                                 v-if="vehicle.emergency === 1"
                             >
                                 <i class="fas fa-car-alt"></i>
                             </button>
                             <button
-                                class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-pink-700 dark:bg-pink-800 rounded"
+                                class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 right-20 bg-pink-700 dark:bg-pink-800 rounded"
                                 :title="t('players.characters.vehicle.ems_emergency')"
                                 v-else-if="vehicle.emergency === 2"
                             >
@@ -1190,6 +1207,14 @@ export default {
 
             // Send request.
             await this.$inertia.post('/vehicles/delete/' + vehicleId);
+        },
+        async resetLastGarage(vehicleId, fullReset) {
+            if (!confirm(this.t('players.characters.vehicle.' + (fullReset ? 'full_reset_confirm' : 'reset_last_garage_confirm')))) {
+                return;
+            }
+
+            // Send request.
+            await this.$inertia.post('/vehicles/resetGarage/' + vehicleId + '/' + (fullReset ? 'true' : 'false'));
         },
         sortJobs(array, type) {
             switch (type) {

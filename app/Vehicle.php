@@ -49,6 +49,7 @@ class Vehicle extends Model
         'deprecated_modifications',
         'deprecated_fuel',
         'emergency_type',
+		'last_garage_identifier'
     ];
 
     /**
