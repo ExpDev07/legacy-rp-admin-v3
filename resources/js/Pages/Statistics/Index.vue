@@ -42,6 +42,7 @@
                     :colors="['145, 55, 235', '235, 54, 54', '255, 102, 204', '235, 127, 55']"
                     :title="t('statistics.titles.user_statistics')"
                     :smooth="true"
+                    :stacked="true"
                     class="w-full"
                 ></LineChart>
             </div>

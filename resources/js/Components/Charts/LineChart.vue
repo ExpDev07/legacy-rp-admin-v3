@@ -21,7 +21,8 @@ export default {
                     gridLines: {
                         display: true,
                         color: "rgba(128, 128, 128, 0.3)"
-                    }
+                    },
+                    stacked: this.stacked
                 }],
                 xAxes: [{
                     display: false,
@@ -166,6 +167,10 @@ export default {
             default: false,
         },
         smooth: {
+            type: Boolean,
+            default: false,
+        },
+        stacked: {
             type: Boolean,
             default: false,
         }
