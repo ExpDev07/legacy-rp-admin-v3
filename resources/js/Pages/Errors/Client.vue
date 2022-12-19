@@ -278,6 +278,38 @@ export default {
             };
 
             const formatLine = entry => {
+                if (entry.startsWith("event@")) {
+                    const eventName = entry.replace(/^event@/gm, '');
+
+                    return `<span style="color:#B4BEFE">event<span style="opacity:0.6;font-style:normal">@</span></span><span style="color:#A6E3A1">${eventName}</span>`;
+                } else if (entry.startsWith("callback@")) {
+                    const callbackData = entry.replace(/^callback@/gm, '').split("("),
+                        callbackName = callbackData.shift(),
+                        callbackArgs = callbackData.join("(").replace(/\)$/, '');
+
+                    const argRegex = /\b(?:function|vec3)\([^)]*\)|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|\S+/g,
+                        args = [];
+
+                    let match;
+
+                    while (match = argRegex.exec(callbackArgs)) {
+                        const arg = match[0].replace(/,$/, '');
+
+                        if (arg) {
+                            args.push(arg);
+                        }
+                    }
+
+                    const argString = args.map(arg => `<span style="color:#BEE4ED;font-weight:600">${arg}</span>`).join(`<span style="color:#F38BA8;opacity:0.6;font-style:normal">,</span> `);
+
+                    return [
+                        `<span style="color:#B4BEFE">callback<span style="opacity:0.6;font-style:normal">@</span></span>`,
+                        `<span style="color:#F38BA8">${callbackName}<span style="opacity:0.6;font-style:normal">(</span></span>`,
+                        `${argString}`,
+                        `<span style="color:#F38BA8;opacity:0.6;font-style:normal">)</span>`,
+                    ].join("");
+                }
+
                 const match = entry.matchAll(/^(.+?)(\/.+?)?(:\d+)?(@.+)?$/gm).next().value;
                 if (!match) {
                     return entry;
