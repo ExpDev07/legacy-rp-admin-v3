@@ -30,7 +30,7 @@ class PlayerResource extends JsonResource
         $identifiers = is_array($this->player_aliases) ? $this->player_aliases : json_decode($this->player_aliases, true);
         $enabledCommands = is_array($this->enabled_commands) ? $this->enabled_commands : json_decode($this->enabled_commands, true);
 
-        $drug = (isset($this->panel_drug_department) && $this->panel_drug_department) || GeneralHelper::isUserRoot($this->license_identifier);
+        $drug = (isset($this->panel_drug_department) && $this->panel_drug_department) || ($this->license_identifier && GeneralHelper::isUserRoot($this->license_identifier));
 
         return [
             'id'              => $this->user_id,
