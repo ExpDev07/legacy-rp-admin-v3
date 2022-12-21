@@ -24,15 +24,15 @@ class Notifier {
         });
     }
 
-    on(target, steam) {
+    on(target, license) {
         if (target in this.notifications) {
-            this.notifications[target][steam] = true;
+            this.notifications[target][license] = true;
         }
     }
 
-    removeNotify(target, steam) {
+    removeNotify(target, license) {
         if (target in this.notifications) {
-            delete this.notifications[target][steam];
+            delete this.notifications[target][license];
         }
     }
 
@@ -98,15 +98,15 @@ class Notifier {
                 switch (target) {
                     case 'load':
                         this.playSound('player-joined');
-                        this.notification('Loaded ' + player.name, player.name + ' (' + player.steam + ') has loaded into a character.', vue);
+                        this.notification('Loaded ' + player.name, player.name + ' (' + player.license + ') has loaded into a character.', vue);
                         break;
                     case 'unload':
                         this.playSound('player-left');
-                        this.notification('Unloaded ' + player.name, player.name + ' (' + player.steam + ') unloaded or left the server.', vue);
+                        this.notification('Unloaded ' + player.name, player.name + ' (' + player.license + ') unloaded or left the server.', vue);
                         break;
                     case 'invisible':
                         this.playSound('player-invisible');
-                        this.notification(player.name + ' just went invisible', player.name + ' (' + player.steam + ') just went invisible.', vue);
+                        this.notification(player.name + ' just went invisible', player.name + ' (' + player.license + ') just went invisible.', vue);
                         break;
                 }
             }

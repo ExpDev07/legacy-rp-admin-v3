@@ -41,7 +41,7 @@ module.exports = {
         }
 
         // Check if staff member
-        if (staffMembers.includes(player.steamIdentifier)) {
+        if (staffMembers.includes(player.licenseIdentifier)) {
             return true;
         }
 

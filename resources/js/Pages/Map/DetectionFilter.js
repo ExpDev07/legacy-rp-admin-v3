@@ -24,9 +24,9 @@ class DetectionFilter {
             case 'is_not_invisible':
                 return !player.invisible.raw;
             case 'is_highlighted':
-                return player.player.steam in highlightedPeople;
+                return player.player.license in highlightedPeople;
             case 'is_not_highlighted':
-                return !(player.player.steam in highlightedPeople);
+                return !(player.player.license in highlightedPeople);
             case 'is_male':
                 return character && character.gender === 0;
             case 'is_female':

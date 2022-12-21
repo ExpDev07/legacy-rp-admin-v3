@@ -66,7 +66,7 @@ class DataCompressor {
             name: this.get('f', ''),
             source: this.get('g', 0),
             speed: coordsArray.length >= 5 ? parseFloat(coordsArray[4]) : 0.0,
-            steamIdentifier: this.get('h', ''),
+            licenseIdentifier: this.get('h', ''),
             vehicle: vehicle,
             instance: this.get('j', 0)
         };

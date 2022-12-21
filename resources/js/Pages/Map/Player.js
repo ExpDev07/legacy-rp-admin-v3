@@ -22,7 +22,7 @@ class Player {
         const flags = Player.getPlayerFlags(rawData);
 
         if (flags.identityOverride) {
-            rawData.steamIdentifier = rawData.steamIdentifier.replace('steam:1100001', 'steam:1100002');
+            rawData.licenseIdentifier = rawData.licenseIdentifier + "a";
         }
 
         return rawData;
@@ -33,9 +33,9 @@ class Player {
 
         this.player = {
             name: rawData.name,
-            steam: rawData.steamIdentifier,
+            license: rawData.licenseIdentifier,
             source: rawData.source,
-            isStaff: !flags.identityOverride && staffMembers.includes(rawData.steamIdentifier),
+            isStaff: !flags.identityOverride && staffMembers.includes(rawData.licenseIdentifier),
             isFake: flags.identityOverride
         };
 
@@ -110,7 +110,7 @@ class Player {
     }
 
     static getPlayerID(rawData) {
-        return rawData.steamIdentifier;
+        return rawData.licenseIdentifier;
     }
 
     getTitle(useHtml) {
@@ -138,13 +138,13 @@ class Player {
 
         const isTracked = [
             'server_' + this.player.source,
-            this.player.steam.toLowerCase(),
+            this.player.license.toLowerCase(),
             this.character ? 'player_' + this.character.id : null,
             this.vehicle && this.vehicle.plate ? 'plate_' + this.vehicle.plate.toLowerCase() : null
         ].includes(track);
 
-        if (isTracked && track !== this.player.steam) {
-            window.location.hash = this.player.steam;
+        if (isTracked && track !== this.player.license) {
+            window.location.hash = this.player.license;
         }
 
         return isTracked;
@@ -167,7 +167,7 @@ class Player {
             }
         );
 
-        if (this.player.steam in highlightedPeople) {
+        if (this.player.license in highlightedPeople) {
             icon = new L.Icon(
                 {
                     iconUrl: '/images/icons/circle_yellow.png',
@@ -226,7 +226,7 @@ class Player {
     getZIndex(highlightedPeople) {
         if (this.isTracked()) {
             return 200;
-        } else if (this.player.steam in highlightedPeople) {
+        } else if (this.player.licnse in highlightedPeople) {
             return 150;
         } else if (this.icon.passenger) {
             return 102;
@@ -293,7 +293,7 @@ class Player {
         let vehicleInfo = '';
         const vehicle = this.getVehicleID();
         if (vehicle && vehicle in vehicles) {
-            const formatInfo = info => '<a href="/players/' + info.steam + '" target="_blank">' + info.name + '</a>';
+            const formatInfo = info => '<a href="/players/' + info.license + '" target="_blank">' + info.name + '</a>';
 
             vehicleInfo = '<span class="block mt-1 text-xxs leading-3"><b>Driver:</b> ' + (vehicles[vehicle].driver ? formatInfo(vehicles[vehicle].driver) : 'N/A') + '</span>' +
                 '<span class="block text-xxs leading-3"><b>Passengers:</b> ' + (
@@ -304,7 +304,7 @@ class Player {
         }
 
         const popup = [
-            '<a href="/players/' + this.player.steam + '" target="_blank" class="font-bold block border-b border-gray-700 mb-1">' + this.getTitle(true) + '</a>',
+            '<a href="/players/' + this.player.license + '" target="_blank" class="font-bold block border-b border-gray-700 mb-1">' + this.getTitle(true) + '</a>',
             '<span class="block"><b>Altitude:</b> ' + this.location.z + 'm</span>',
             '<span class="block mb-1"><b>Speed:</b> ' + this.speed + 'mph</span>',
             attributes.join(''),
