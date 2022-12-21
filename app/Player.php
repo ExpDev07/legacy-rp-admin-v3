@@ -318,7 +318,7 @@ class Player extends Model
      */
     public function isRoot(): bool
     {
-        return GeneralHelper::isUserRoot($this->license_identifier);
+        return $this->license_identifier && GeneralHelper::isUserRoot($this->license_identifier);
     }
 
     /**
