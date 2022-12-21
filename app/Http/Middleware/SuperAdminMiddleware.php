@@ -47,7 +47,7 @@ class SuperAdminMiddleware
             return false;
         }
 
-        return ($user->player->is_super_admin || GeneralHelper::isUserRoot($user->player->steam_identifier));
+        return ($user->player->is_super_admin || GeneralHelper::isUserRoot($user->player->license_identifier));
     }
 
 }

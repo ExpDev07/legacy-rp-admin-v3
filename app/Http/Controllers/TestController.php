@@ -31,7 +31,7 @@ class TestController extends Controller
         }
 
         $all = $all->groupBy('identifier')
-            ->leftJoin('users', 'identifier', '=', 'steam_identifier')
+            ->leftJoin('users', 'identifier', '=', 'license_identifier')
             ->orderByDesc('amount')
             ->limit(10)
             ->get();
@@ -46,7 +46,7 @@ class TestController extends Controller
 
         $last24hours = $last24hours->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', time() - 24 * 60 * 60)
             ->groupBy('identifier')
-            ->leftJoin('users', 'identifier', '=', 'steam_identifier')
+            ->leftJoin('users', 'identifier', '=', 'license_identifier')
             ->orderByDesc('amount')
             ->limit(10)
             ->get();
@@ -156,13 +156,13 @@ class TestController extends Controller
 
     public function banLeaderboard(): Response
     {
-        $staff = Player::query()->select(["steam_identifier", "player_name"])->where("is_staff", "=", "1")->orWhere("is_senior_staff", "=", "1")->orWhere("is_super_admin", "=", "1")->get();
+        $staff = Player::query()->select(["license_identifier", "player_name"])->where("is_staff", "=", "1")->orWhere("is_senior_staff", "=", "1")->orWhere("is_super_admin", "=", "1")->get();
 
         $max = 0;
         $staffMap = [];
 
         foreach ($staff as $player) {
-            $staffMap[$player->steam_identifier] = $player->player_name;
+            $staffMap[$player->license_identifier] = $player->player_name;
 
             if (strlen($player->player_name) > $max) {
                 $max = strlen($player->player_name);
@@ -170,7 +170,7 @@ class TestController extends Controller
         }
 
         // What a chonker
-        $query = "SELECT * FROM (SELECT identifier, creator_identifier, reason, (SELECT SUM(playtime) FROM characters WHERE steam_identifier = identifier) as playtime FROM user_bans WHERE identifier LIKE 'steam:%' AND creator_identifier LIKE 'steam:%' AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))) bans WHERE playtime IS NOT NULL AND playtime > 0 ORDER BY playtime LIMIT 10";
+        $query = "SELECT * FROM (SELECT identifier, creator_identifier, reason, (SELECT SUM(playtime) FROM characters WHERE license_identifier = identifier) as playtime FROM user_bans WHERE identifier LIKE 'license:%' AND creator_identifier LIKE 'license:%' AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))) bans WHERE playtime IS NOT NULL AND playtime > 0 ORDER BY playtime LIMIT 10";
 
         $bans = DB::select($query);
 
@@ -192,7 +192,7 @@ class TestController extends Controller
             $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
         }
 
-        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"steam:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
+        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
 
         $leaderboard2 = [];
         for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
@@ -204,7 +204,7 @@ class TestController extends Controller
         $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nTop 10 most bans (Last 3 months)\n\n" . implode("\n", $leaderboard2);
 
         if (isset($_GET["all"])) {
-            $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"steam:%\" AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
+            $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
 
             $leaderboard3 = [];
             foreach ($bans as $x => $ban) {
@@ -246,8 +246,8 @@ class TestController extends Controller
 
     public function systemBans(): Response
     {
-        $all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON steam_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'steam:%' AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
-        $month = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON steam_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'steam:%' AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
+        $all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON license_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'license:%' AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
+        $month = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON license_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'license:%' AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
 
         usort($all, function ($a, $b) {
             return $b->count - $a->count;
@@ -319,7 +319,7 @@ class TestController extends Controller
             $word = "reason like \"%" . $word . "%\"";
         }
 
-        $query = "select identifier, reason from user_bans where identifier like \"steam:%\" and (" . implode(" or ", $keywords);
+        $query = "select identifier, reason from user_bans where identifier like \"license:%\" and (" . implode(" or ", $keywords);
 
         if (CLUSTER === "c3") {
             $query .= " or (reason like \"%1.5%\" and timestamp > 1614553200)";
@@ -331,7 +331,7 @@ class TestController extends Controller
 
         $fd = fopen('php://temp/maxmemory:1048576', 'w');
 
-        fputcsv($fd, ["steam_identifier", "reason"]);
+        fputcsv($fd, ["license_identifier", "reason"]);
 
         foreach ($bans as $ban) {
             fputcsv($fd, [$ban->identifier, $ban->reason]);
@@ -354,13 +354,13 @@ class TestController extends Controller
             return self::respond('Only super admins can do this.');
         }
 
-        $staff = Player::query()->select(["steam_identifier", "player_name", "playtime"])->orWhere("is_staff", "=", "1")->orWhere("is_senior_staff", "=", "1")->orWhere("is_super_admin", "=", "1")->get();
+        $staff = Player::query()->select(["license_identifier", "player_name", "playtime"])->orWhere("is_staff", "=", "1")->orWhere("is_senior_staff", "=", "1")->orWhere("is_super_admin", "=", "1")->get();
 
         $entries = [];
 
         foreach ($staff as $player) {
             $entries[] = [
-                'steam' => $player->steam_identifer,
+                'license' => $player->license_identifer,
                 'name' => $player->player_name,
                 'playtime' => intval($player->playtime)
             ];
@@ -383,7 +383,7 @@ class TestController extends Controller
 
             $time = str_pad($hours . "h " . $minutes . "m " . $seconds . "s", 12);
 
-            $text .= $time . " - " . $entry['name'] . " (" . $entry['steam'] . ")\n";
+            $text .= $time . " - " . $entry['name'] . " (" . $entry['license'] . ")\n";
         }
 
         return self::respond($text);
@@ -402,7 +402,7 @@ class TestController extends Controller
         }
 
         $characters = Character::query()
-            ->select(["steam_identifier", "character_id", "job_name", "department_name", "position_name", "first_name", "last_name"])
+            ->select(["license_identifier", "character_id", "job_name", "department_name", "position_name", "first_name", "last_name"])
             ->whereIn('character_id', $characterIds)
             ->orWhere(function ($query) use ($jobName, $departmentName, $positionName) {
                 return $query->where('job_name', $jobName)

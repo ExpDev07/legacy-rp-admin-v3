@@ -69,12 +69,12 @@
                         <template #footer>
                             <inertia-link
                                 class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                                :href="'/players/' + inventory.character.license_identifier + '/characters/' + inventory.character.character_id + '/edit'">
                                 {{ t('inventories.show.view_character') }}
                             </inertia-link>
                             <inertia-link
                                 class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier">
+                                :href="'/players/' + inventory.character.license_identifier">
                                 {{ t('inventories.show.view_player') }}
                             </inertia-link>
                         </template>
@@ -174,12 +174,12 @@
                         <template #footer>
                             <inertia-link
                                 class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                                :href="'/players/' + inventory.character.license_identifier + '/characters/' + inventory.character.character_id + '/edit'">
                                 {{ t('inventories.show.view_character') }}
                             </inertia-link>
                             <inertia-link
                                 class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier">
+                                :href="'/players/' + inventory.character.license_identifier">
                                 {{ t('inventories.show.view_player') }}
                             </inertia-link>
                             <inertia-link
@@ -282,12 +282,12 @@
                         <template #footer>
                             <inertia-link
                                 class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                                :href="'/players/' + inventory.character.license_identifier + '/characters/' + inventory.character.character_id + '/edit'">
                                 {{ t('inventories.show.view_character') }}
                             </inertia-link>
                             <inertia-link
                                 class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier">
+                                :href="'/players/' + inventory.character.license_identifier">
                                 {{ t('inventories.show.view_player') }}
                             </inertia-link>
                             <inertia-link
@@ -331,12 +331,12 @@
                         <template #footer>
                             <inertia-link
                                 class="px-4 py-3 mb-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier + '/characters/' + inventory.character.character_id + '/edit'">
+                                :href="'/players/' + inventory.character.license_identifier + '/characters/' + inventory.character.character_id + '/edit'">
                                 {{ t('inventories.show.view_character') }}
                             </inertia-link>
                             <inertia-link
                                 class="px-4 py-3 block text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + inventory.character.steam_identifier">
+                                :href="'/players/' + inventory.character.license_identifier">
                                 {{ t('inventories.show.view_player') }}
                             </inertia-link>
                             <inertia-link

@@ -72,7 +72,7 @@ class Log extends Model
      */
     public function player(): BelongsTo
     {
-        return $this->belongsTo(Player::class, 'identifier', 'steam_identifier');
+        return $this->belongsTo(Player::class, 'identifier', 'license_identifier');
     }
 
 }

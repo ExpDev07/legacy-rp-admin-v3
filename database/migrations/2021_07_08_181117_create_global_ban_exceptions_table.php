@@ -19,10 +19,10 @@ class CreateGlobalBanExceptionsTable extends Migration
                 $table->integer('id')->nullable(false)->autoIncrement();
             });
         }
-        if (!Schema::hasColumn("global_ban_exceptions", "steam_identifier")) {
+        if (!Schema::hasColumn("global_ban_exceptions", "license_identifier")) {
             Schema::table("global_ban_exceptions", function (Blueprint $table) {
-                $table->string('steam_identifier', 50)->nullable()->default(null);
-                $table->index('steam_identifier');
+                $table->string('license_identifier', 50)->nullable()->default(null);
+                $table->index('license_identifier');
             });
         }
     }

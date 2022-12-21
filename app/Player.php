@@ -55,7 +55,7 @@ class Player extends Model
      * @var array
      */
     protected $fillable = [
-        'steam_identifier',
+        'license_identifier',
         'player_name',
         'player_aliases',
         'identifiers',
@@ -140,79 +140,8 @@ class Player extends Model
      */
     public static function resolvePlayer(string $player, Request $request)
     {
-        if (Str::startsWith($player, 'steam:1100002')) {
-            $steam = str_replace('steam:1100002', 'steam:1100001', $player);
-
-            $key = 'fake_' . $steam;
-
-            $status = Player::getOnlineStatus($steam, false, true);
-
-            if ($status && $status->fakeName && $status->character) {
-                $resolved = Player::query()->select()->where('steam_identifier', '=', $steam)->first();
-
-                if ($resolved) {
-                    $characters = Character::query()->select()->where('character_id', '=', $status->character)->get();
-
-                    $res = [
-                        'id' => $resolved->user_id,
-                        'avatar' => null,
-                        'discord' => null,
-                        'steamIdentifier' => $player,
-                        'overrideSteam' => $steam,
-                        'steam36' => base_convert(str_replace('steam:', '', $player), 16, 36),
-                        'playerName' => $status->fakeName,
-                        'playTime' => $resolved->playtime,
-                        'lastConnection' => $resolved->last_connection,
-                        'steamProfileUrl' => $resolved->getSteamProfileUrl() . 'f',
-                        'isTrusted' => false,
-                        'isDebugger' => false,
-                        'isPanelTrusted' => false,
-                        'isStaff' => false,
-                        'isSeniorStaff' => false,
-                        'isSuperAdmin' => false,
-                        'isRoot' => false,
-                        'isBanned' => false,
-                        'warnings' => 0,
-                        'ban' => null,
-                        'status' => [
-                            'status' => PlayerStatus::STATUS_ONLINE,
-                            'serverIp' => $status->serverIp,
-                            'serverId' => $status->serverId,
-                            'serverName' => $status->serverName,
-                            'character' => $status->character,
-                            'fakeName' => null,
-                        ],
-                    ];
-
-                    $data = [
-                        'player' => $res,
-                        'characters' => CharacterResource::collection($characters),
-                        'warnings' => [],
-                        'panelLogs' => [],
-                        'discord' => null,
-                        'kickReason' => '',
-                        'screenshots' => [],
-                        'whitelisted' => false,
-                        'tags' => Player::resolveTags()
-                    ];
-
-                    CacheHelper::write($key, $data, 3 * CacheHelper::MONTH);
-                } else {
-                    return null;
-                }
-            } else if (CacheHelper::exists($key)) {
-                $data = CacheHelper::read($key);
-
-                $data['player']['status']['status'] = PlayerStatus::STATUS_OFFLINE;
-                $data['player']['status']['character'] = 0;
-
-                CacheHelper::write($key, $data, 3 * CacheHelper::MONTH);
-            }
-
-            return CacheHelper::read($key);
-        }
-
-        $resolved = Player::query()->select()->where('steam_identifier', '=', $player)->first();
+		//TODO: Fix old steam links
+        $resolved = Player::query()->select()->where('license_identifier', '=', $player)->first();
 
         if ($resolved and $resolved instanceof Player) {
             return $resolved;
@@ -228,24 +157,15 @@ class Player extends Model
      */
     public function getRouteKeyName(): string
     {
-        return 'steam_identifier';
+        return 'license_identifier';
     }
 
     /**
-     * Gets the avatar attribute.
-     *
      * @return string
      */
-    public function getAvatarAttribute(): string
+    public function getSteamIdentifier(): string
     {
-        return self::getAvatar($this->steam_identifier);
-    }
-
-    public static function getAvatar(string $steamIdentifier): string
-    {
-        $steam = self::getSteamUser($steamIdentifier);
-
-        return $steam && isset($steam['avatar']) ? $steam['avatar'] : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+        return $this->getIdentifier('steam');
     }
 
     /**
@@ -310,7 +230,7 @@ class Player extends Model
     public function getIdentifiers(): array
     {
         $identifiers = $this->identifiers ?? [];
-        $identifiers[] = $this->steam_identifier;
+        $identifiers[] = $this->license_identifier;
 
         return array_values(
             array_unique(
@@ -398,7 +318,7 @@ class Player extends Model
      */
     public function isRoot(): bool
     {
-        return GeneralHelper::isUserRoot($this->steam_identifier);
+        return GeneralHelper::isUserRoot($this->license_identifier);
     }
 
     /**
@@ -439,7 +359,7 @@ class Player extends Model
     public function getActiveBan(): ?Ban
     {
         return Ban::query()
-            ->where('identifier', '=', $this->steam_identifier)
+            ->where('identifier', '=', $this->license_identifier)
             ->get()
             ->first();
     }
@@ -451,7 +371,7 @@ class Player extends Model
      */
     public function getSteamID(): ?SteamID
     {
-        return get_steam_id($this->steam_identifier);
+        return get_steam_id($this->getSteamIdentifier());
     }
 
     /**
@@ -495,7 +415,7 @@ class Player extends Model
      */
     public function characters(): HasMany
     {
-        return $this->hasMany(Character::class, 'steam_identifier', 'steam_identifier')->orderBy('character_slot');
+        return $this->hasMany(Character::class, 'license_identifier', 'license_identifier')->orderBy('character_slot');
     }
 
     /**
@@ -505,7 +425,7 @@ class Player extends Model
      */
     public function logs(): HasMany
     {
-        return $this->hasMany(Log::class, 'identifier', 'steam_identifier');
+        return $this->hasMany(Log::class, 'identifier', 'license_identifier');
     }
 
     /**
@@ -521,7 +441,7 @@ class Player extends Model
     public function fasterWarnings(bool $includeHidden = false): array
     {
         $warnings = Warning::query()
-            ->select(['id', 'message', 'warning_type', 'created_at', 'updated_at', 'player_name', 'steam_identifier', 'can_be_deleted'])
+            ->select(['id', 'message', 'warning_type', 'created_at', 'updated_at', 'player_name', 'license_identifier', 'can_be_deleted'])
             ->where('player_id', '=', $this->user_id)
             ->leftJoin('users', 'issuer_id', '=', 'user_id');
 
@@ -541,9 +461,8 @@ class Player extends Model
                 'updatedAt' => $warning->updated_at,
                 'canDelete' => $warning->can_be_deleted,
                 'issuer' => [
-                    'avatar' => $warning->steam_identifier ? Player::getAvatar($warning->steam_identifier) : null,
                     'playerName' => $warning->player_name,
-                    'steamIdentifier' => $warning->steam_identifier
+                    'licenseIdentifier' => $warning->license_identifier
                 ]
             ];
         }
@@ -558,7 +477,7 @@ class Player extends Model
      */
     public function panelLogs(): HasMany
     {
-        return $this->hasMany(PanelLog::class, 'target_identifier', 'steam_identifier');
+        return $this->hasMany(PanelLog::class, 'target_identifier', 'license_identifier');
     }
 
     /**
@@ -572,7 +491,7 @@ class Player extends Model
     }
 
     /**
-     * Returns a map of steamIdentifier->serverId,server for each online player
+     * Returns a map of licenseIdentifier->serverId,server for each online player
      *
      * @param bool $useCache
      * @return array|null
@@ -588,13 +507,13 @@ class Player extends Model
         $result = [];
         foreach ($serverIps as $serverIp) {
             if ($serverIp) {
-                $steamIdentifiers = Server::fetchSteamIdentifiers($serverIp, $useCache);
+                $licenseIdentifiers = Server::fetchLicenseIdentifiers($serverIp, $useCache);
 
-                if ($steamIdentifiers === null) {
+                if ($licenseIdentifiers === null) {
                     return null;
                 }
 
-                foreach ($steamIdentifiers as $key => $player) {
+                foreach ($licenseIdentifiers as $key => $player) {
                     if (!isset($result[$key])) {
                         $flags = $player['flags'];
 
@@ -606,7 +525,7 @@ class Player extends Model
                         $result[$key] = [
                             'id' => intval($player['source']),
                             'character' => $player['character'],
-                            'steam' => $key,
+                            'license' => $key,
                             'server' => $serverIp,
                             'fakeDisconnected' => $fake,
                             'fakeName' => $flags !== 0 ? $player['name'] : null,
@@ -622,11 +541,11 @@ class Player extends Model
     /**
      * Returns the online status of the player
      *
-     * @param string $steamIdentifier
+     * @param string $licenseIdentifier
      * @param bool $useCache
      * @return PlayerStatus
      */
-    public static function getOnlineStatus(string $steamIdentifier, bool $useCache, bool $trueStatus = false): PlayerStatus
+    public static function getOnlineStatus(string $licenseIdentifier, bool $useCache, bool $trueStatus = false): PlayerStatus
     {
         $serverIps = explode(',', env('OP_FW_SERVERS', ''));
 
@@ -640,8 +559,8 @@ class Player extends Model
             return new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
         }
 
-        if (isset($players[$steamIdentifier])) {
-            $player = $players[$steamIdentifier];
+        if (isset($players[$licenseIdentifier])) {
+            $player = $players[$licenseIdentifier];
 
             if (!$trueStatus && ($player['fakeDisconnected'] || $player['fakeName'])) {
                 return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
@@ -654,14 +573,14 @@ class Player extends Model
     }
 
     /**
-     * Returns a map of steamIdentifier->player_name
+     * Returns a map of licenseIdentifier->player_name
      * This is used instead of a left join as it appears to be a lot faster
      *
      * @param array $source
      * @param string|array $sourceKey
      * @return array
      */
-    public static function fetchSteamPlayerNameMap(array $source, $sourceKey): array
+    public static function fetchLicensePlayerNameMap(array $source, $sourceKey): array
     {
         if (!is_array($sourceKey)) {
             $sourceKey = [$sourceKey];
@@ -679,7 +598,7 @@ class Player extends Model
         }
 
         $identifiers = array_values(array_unique($identifiers));
-        $playerMap = CacheHelper::loadSteamPlayerNameMap($identifiers);
+        $playerMap = CacheHelper::loadLicensePlayerNameMap($identifiers);
 
         if (empty($playerMap)) {
             $playerMap['empty'] = 'empty';
@@ -687,6 +606,27 @@ class Player extends Model
 
         return $playerMap;
     }
+
+	public static function findPlayerBySteam(string $steamIdentifier): ?Player
+	{
+		$players = Player::query()->where('identifiers', 'LIKE', "%\"" . $steamIdentifier . "\"%")->get();
+
+		foreach($players as $player) {
+			$identifiers = $player->identifiers ?? [];
+
+			foreach ($identifiers as $identifier) {
+				if (Str::startsWith($identifier, 'steam:')) {
+					if ($identifier === $steamIdentifier) {
+						return $player;
+					}
+
+					break;
+				}
+			}
+		}
+
+		return null;
+	}
 
     public static function getIdentifierLabel(string $identifier): ?string
     {

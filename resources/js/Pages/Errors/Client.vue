@@ -103,8 +103,8 @@
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link
                                 class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                                :href="'/players/' + error.steam_identifier">
-                                {{ playerName(error.steam_identifier) }} [{{ error.server_id }}]
+                                :href="'/players/' + error.license_identifier">
+                                {{ playerName(error.license_identifier) }} [{{ error.server_id }}]
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block whitespace-nowrap font-mono">{{ getErrorLocation(error) }}</td>
@@ -356,8 +356,8 @@ export default {
             this.showErrorDetail = true;
             this.errorDetail = error;
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         },
         trim(str, length) {
             if (str.length > length) {

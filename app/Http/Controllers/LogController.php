@@ -43,7 +43,7 @@ class LogController extends Controller
         if (env('RESTRICT_DRUG_LOGS', false)) {
             $player = $request->user()->player;
 
-            if ((!isset($player->panel_drug_department) || !$player->panel_drug_department) && !GeneralHelper::isUserRoot($player->steam_identifier)) {
+            if ((!isset($player->panel_drug_department) || !$player->panel_drug_department) && !GeneralHelper::isUserRoot($player->license_identifier)) {
                 $query->whereNotIn('action', self::DRUG_LOGS);
 
                 $canSearchDrugs = false;
@@ -121,7 +121,7 @@ class LogController extends Controller
                 ->insert([
                     'action' => $action,
                     'details' => $details,
-                    'steam_identifier' => $request->user()->player->steam_identifier,
+                    'license_identifier' => $request->user()->player->license_identifier,
                     'timestamp' => time()
                 ]);
 
@@ -151,7 +151,7 @@ class LogController extends Controller
             ),
             'links' => $this->getPageUrls($page),
             'time' => $end - $start,
-            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
+            'playerMap' => Player::fetchLicensePlayerNameMap($logs->toArray($request), 'licenseIdentifier'),
             'page' => $page,
             'drugActions' => self::DRUG_LOGS,
             'canSearchDrugs' => $canSearchDrugs,
@@ -233,7 +233,7 @@ class LogController extends Controller
              */
             $query->where(function ($q) use ($identifier) {
                 foreach ($identifier as $i) {
-                    $q->orWhere('steam_identifier', $i);
+                    $q->orWhere('license_identifier', $i);
                 }
             });
         }
@@ -279,7 +279,7 @@ class LogController extends Controller
                 'identifier'
             ),
             'links' => $this->getPageUrls($page),
-            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steam_identifier'),
+            'playerMap' => Player::fetchLicensePlayerNameMap($logs->toArray($request), 'license_identifier'),
             'page' => $page,
         ]);
     }

@@ -18,27 +18,27 @@ class CacheHelper
     const MONTH = self::DAY * 30;
 
     /**
-     * Loads a map for steamIdentifier->PlayerName
+     * Loads a map for licenseIdentifier->PlayerName
      *
      * @param array $identifiers
      * @return array
      */
-    public static function loadSteamPlayerNameMap(array $identifiers): array
+    public static function loadLicensePlayerNameMap(array $identifiers): array
     {
-        $map = self::read('steam_player_map', []);
+        $map = self::read('license_player_map', []);
         $missingIdentifiers = array_values(array_filter($identifiers, function ($identifier) use ($map) {
             return !isset($map[$identifier]);
         }));
 
         if (!empty($missingIdentifiers)) {
-            $players = Player::query()->whereIn('steam_identifier', $identifiers)->select([
-                'steam_identifier', 'player_name',
+            $players = Player::query()->whereIn('license_identifier', $identifiers)->select([
+                'license_identifier', 'player_name',
             ])->get();
             foreach ($players as $player) {
-                $map[$player->steam_identifier] = $player->player_name;
+                $map[$player->license_identifier] = $player->player_name;
             }
 
-            self::write('steam_player_map', $map, 12 * self::HOUR);
+            self::write('license_player_map', $map, 12 * self::HOUR);
         }
 
         $filtered = [];

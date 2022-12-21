@@ -27,7 +27,7 @@ class HomeController extends Controller
         $quote['quote'] = nl2br($quote['quote']);
 
         $user = $request->user();
-        $identifier = $user->player->steam_identifier;
+        $identifier = $user->player->license_identifier;
         $name = $user->player->player_name;
 
         $bans = BanResource::collection(Ban::query()
@@ -35,7 +35,7 @@ class HomeController extends Controller
                 $query->orWhere('creator_identifier', '=', $identifier);
                 $query->orWhere('creator_name', '=', $name);
             })
-            ->where('identifier', 'LIKE', 'steam:%')
+            ->where('identifier', 'LIKE', 'license:%')
             ->orderByDesc('timestamp')
             ->limit(8)->get())->toArray($request);
 
@@ -51,13 +51,13 @@ class HomeController extends Controller
             $q->orWhere('is_staff', '=', 1)
                 ->orWhere('is_senior_staff', '=', 1)
                 ->orWhere('is_super_admin', '=', 1)
-                ->orWhereIn('steam_identifier', GeneralHelper::getRootUsers());
-        })->whereIn('steam_identifier', $players)->get();
+                ->orWhereIn('license_identifier', GeneralHelper::getRootUsers());
+        })->whereIn('license_identifier', $players)->get();
 
         return Inertia::render('Home', [
             'quote'     => $quote,
             'bans'      => $bans,
-            'playerMap' => Player::fetchSteamPlayerNameMap($bans, 'identifier'),
+            'playerMap' => Player::fetchLicensePlayerNameMap($bans, 'identifier'),
             'staff'     => PlayerIndexResource::collection($staff),
         ]);
     }

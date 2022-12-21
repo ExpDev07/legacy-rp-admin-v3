@@ -144,7 +144,7 @@ class InventoryController extends Controller
 
         return Inertia::render('Inventories/Index', [
             'logs'      => $logs,
-            'playerMap' => Player::fetchSteamPlayerNameMap($logs->toArray($request), 'steamIdentifier'),
+            'playerMap' => Player::fetchLicensePlayerNameMap($logs->toArray($request), 'licenseIdentifier'),
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
             'page'      => $page,
@@ -174,7 +174,7 @@ class InventoryController extends Controller
             'contents'       => $contents,
             'created'        => time(),
             'expires'        => time() + (2 * 24 * 60 * 60),
-            'created_by'     => $request->user()->player->steam_identifier,
+            'created_by'     => $request->user()->player->license_identifier,
         ];
 
         CacheHelper::write('inv_snap_' . $snapshot['hash'], $snapshot, 2 * CacheHelper::DAY);
@@ -205,7 +205,7 @@ class InventoryController extends Controller
             $snapshot['contents'] = [];
         }
 
-        $snapshot['created_by'] = Player::query()->where('steam_identifier', '=', $snapshot['created_by'])->select([
+        $snapshot['created_by'] = Player::query()->where('license_identifier', '=', $snapshot['created_by'])->select([
             'player_name',
         ])->first()->toArray();
 

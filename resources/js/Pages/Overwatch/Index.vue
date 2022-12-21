@@ -10,7 +10,7 @@
             </p>
         </portal>
 
-        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshot.steam" :url="screenshot.url" v-if="isAttaching" />
+        <ScreenshotAttacher :close="screenshotAttached" :license="screenshot.license" :url="screenshot.url" v-if="isAttaching" />
 
         <v-section class="-mt-10 max-w-screen-lg">
             <div class="-mt-8">
@@ -18,7 +18,7 @@
                     <div class="flex">
                         <inertia-link
                             class="px-5 py-2 font-semibold text-white mr-3 rounded bg-blue-600 dark:bg-blue-500"
-                            :href="'/players/' + screenshot.steam"
+                            :href="'/players/' + screenshot.license"
                             v-if="screenshot">
                             <i class="fas fa-user"></i>
                             {{ t("overwatch.profile", screenshot.id) }}

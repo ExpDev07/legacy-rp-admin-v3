@@ -78,7 +78,7 @@ class PermissionHelper
 
         $level = 0;
 
-        if (GeneralHelper::isUserRoot($player->steam_identifier)) {
+        if (GeneralHelper::isUserRoot($player->license_identifier)) {
             $level = self::LEVEL_ROOT;
         } else if ($player->is_super_admin) {
             $level = self::LEVEL_SUPERADMIN;

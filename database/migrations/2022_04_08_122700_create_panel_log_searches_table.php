@@ -22,7 +22,7 @@ class CreatePanelLogSearchesTable extends Migration
             $table->id();
             $table->string('action')->nullable(true);
             $table->string('details')->nullable(true);
-            $table->string('steam_identifier');
+            $table->string('license_identifier');
             $table->integer('timestamp');
         });
     }

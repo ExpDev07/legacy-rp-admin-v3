@@ -92,10 +92,10 @@ class ServerController extends Controller
     {
         $players = [];
         try {
-            $steamIdentifiers = array_keys(Server::fetchSteamIdentifiers($server->url, true));
+            $licenseIdentifiers = array_keys(Server::fetchLicenseIdentifiers($server->url, true));
 
             $query = Player::query()->orderBy('last_connection');
-            $query->whereIn('steam_identifier', $steamIdentifiers);
+            $query->whereIn('license_identifier', $licenseIdentifiers);
 
             $players = PlayerResource::collection($query->get());
         } catch (\Throwable $e) {}

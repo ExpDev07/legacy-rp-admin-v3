@@ -44,9 +44,9 @@ class PlayerController extends Controller
             }
         }
 
-        // Filtering by steam_identifier.
-        if ($steam = $request->input('steam')) {
-            $query->where('steam_identifier', $steam);
+        // Filtering by license_identifier.
+        if ($license = $request->input('license')) {
+            $query->where('license_identifier', $license);
         }
 
         // Filtering by discord.
@@ -60,7 +60,7 @@ class PlayerController extends Controller
                 return $player['id'] === intval($server);
             }));
 
-            $query->whereIn('steam_identifier', $online);
+            $query->whereIn('license_identifier', $online);
         }
 
         $playerList = Player::getAllOnlinePlayers(true) ?? [];
@@ -81,13 +81,13 @@ class PlayerController extends Controller
         }
 
         if (!empty($players)) {
-            $query->orderByRaw('FIELD(steam_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
+            $query->orderByRaw('FIELD(license_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
         } else {
             $query->orderByDesc($orderField);
         }
 
         $query->select([
-            'steam_identifier', 'player_name', 'playtime', 'identifiers',
+            'license_identifier', 'player_name', 'playtime', 'identifiers',
         ]);
         $query->selectSub('SELECT COUNT(`id`) FROM `warnings` WHERE `player_id` = `user_id` AND `warning_type` IN (\'' . Warning::TypeWarning . '\', \'' . Warning::TypeStrike . '\')', 'warning_count');
 
@@ -99,7 +99,7 @@ class PlayerController extends Controller
         $end = round(microtime(true) * 1000);
 
         $identifiers = array_values(array_map(function ($player) {
-            return $player['steam_identifier'];
+            return $player['license_identifier'];
         }, $players->toArray()));
 
         return Inertia::render('Players/Index', [
@@ -107,7 +107,7 @@ class PlayerController extends Controller
             'banMap'  => Ban::getAllBans(false, $identifiers, true),
             'filters' => [
                 'name'    => $request->input('name'),
-                'steam'   => $request->input('steam'),
+                'license'   => $request->input('license'),
                 'discord' => $request->input('discord'),
                 'server'  => $request->input('server'),
             ],
@@ -130,7 +130,7 @@ class PlayerController extends Controller
         $playerList = Player::getAllOnlinePlayers(true) ?? [];
         $players = array_keys($playerList);
 
-        $query->whereIn('steam_identifier', $players);
+        $query->whereIn('license_identifier', $players);
         $query->where('playtime', '<=', 60 * 60 * 12);
 
         $query->orderBy('playtime');
@@ -140,7 +140,7 @@ class PlayerController extends Controller
         $characterIds = [];
 
         foreach ($players as $player) {
-            $status = Player::getOnlineStatus($player->steam_identifier, true);
+            $status = Player::getOnlineStatus($player->license_identifier, true);
 
             if ($status->character) {
                 $characterIds[] = $status->character;
@@ -155,14 +155,14 @@ class PlayerController extends Controller
             $character = null;
 
             foreach ($characters as $char) {
-                if ($char->steam_identifier === $player->steam_identifier) {
+                if ($char->license_identifier === $player->license_identifier) {
                     $character = $char;
 
                     break;
                 }
             }
 
-            $status = Player::getOnlineStatus($player->steam_identifier, true);
+            $status = Player::getOnlineStatus($player->license_identifier, true);
 
             $playerList[] = [
                 'serverId' => $status && $status->serverId ? $status->serverId : null,
@@ -173,7 +173,7 @@ class PlayerController extends Controller
                 ] : null,
                 'playerName' => $player->player_name,
                 'playTime' => $player->playtime,
-                'steamIdentifier' => $player->steam_identifier,
+                'licenseIdentifier' => $player->license_identifier,
             ];
         }
 
@@ -191,6 +191,16 @@ class PlayerController extends Controller
      */
     public function show(Request $request, string $player)
     {
+		if (Str::startsWith($player, 'steam:')) {
+			$player = $player = Player::findPlayerBySteam($player);
+
+			if (!$player) {
+				return abort(404);
+			}
+
+			return redirect('/players/' . $player->license_identifier);
+		}
+
         $resolved = Player::resolvePlayer($player, $request);
 
         if ($resolved) {
@@ -198,8 +208,8 @@ class PlayerController extends Controller
                 return Inertia::render('Players/Show', $resolved);
             } else {
                 $whitelisted = DB::table('user_whitelist')
-                    ->select(['steam_identifier'])
-                    ->where('steam_identifier', '=', $resolved->steam_identifier)
+                    ->select(['license_identifier'])
+                    ->where('license_identifier', '=', $resolved->license_identifier)
                     ->first();
 
                 $identifiers = $resolved instanceof Player ? $resolved->getIdentifiers() : null;

@@ -1196,7 +1196,7 @@ export default {
                 form.position_name = this.character.positionName;
             }
 
-            this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + query, form)
+            this.$inertia.put('/players/' + this.player.licenseIdentifier + '/characters/' + this.character.id + query, form)
         },
         async deleteVehicle(e, vehicleId) {
             e.preventDefault();
@@ -1245,7 +1245,7 @@ export default {
         },
         async removeTattoos() {
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/removeTattoos', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/characters/' + this.character.id + '/removeTattoos', {
                 zone: $('#zone').val(),
             });
 
@@ -1254,7 +1254,7 @@ export default {
         },
         async resetSpawn() {
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/resetSpawn', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/characters/' + this.character.id + '/resetSpawn', {
                 spawn: $('#spawn').val(),
             });
 
@@ -1294,7 +1294,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addVehicle', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/characters/' + this.character.id + '/addVehicle', {
                 model: this.vehicleAdd.value
             });
 
@@ -1303,7 +1303,7 @@ export default {
         },
         async addLicense() {
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addLicense', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/characters/' + this.character.id + '/addLicense', {
                 license: this.licenseForm.license
             });
 
@@ -1319,7 +1319,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/addLicense', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/characters/' + this.character.id + '/addLicense', {
                 license: 'remove'
             });
 
@@ -1330,7 +1330,7 @@ export default {
         },
         async editBalance() {
             // Send request.
-            await this.$inertia.put('/players/' + this.player.steamIdentifier + '/characters/' + this.character.id + '/editBalance', this.balanceForm);
+            await this.$inertia.put('/players/' + this.player.licenseIdentifier + '/characters/' + this.character.id + '/editBalance', this.balanceForm);
 
             const money = this.getMoneyLocals();
 

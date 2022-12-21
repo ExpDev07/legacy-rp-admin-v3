@@ -6,15 +6,13 @@
                 {{ t("home.title") }}
             </h1>
             <p>
-                {{ t("home.welcome", $page.auth.user.name) }} <inertia-link href="/changelog" class="text-indigo-600 !no-underline dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">{{ t('changelog.title') }}</inertia-link>
+                {{ t("home.welcome", $page.auth.player.playerName) }}
             </p>
         </portal>
 
         <div class="flex -mt-6 justify-between max-w-screen-2xl mobile:flex-wrap">
             <div class="p-4 max-w-xl pl-6 italic border-l-4 border-gray-300 inline-block bg-gray-100 shadow-lg dark:border-gray-500 dark:bg-gray-700 dark:text-gray-100 mobile:w-full mobile:mb-3">
-                <span class="mb-1 block" v-html="quote.quote">
-                    {{ quote.quote }}
-                </span>
+                <span class="mb-1 block" v-html="quote.quote"></span>
                 <span class="text-xs">
                     - {{ quote.author }}
                 </span>
@@ -35,7 +33,7 @@
                                 :show-percent="false">
                         <p class="text-sm font-semibold mobile:-mt-12">{{ joinedPlayers }}</p>
                     </vue-circle>
-                    <p class="ml-3 pt-5" v-html="playerCount">{{ playerCount }}</p>
+                    <p class="ml-3 pt-5" v-html="playerCount"></p>
                 </div>
                 <div class="p-4 bg-gray-100 shadow-lg dark:bg-gray-700 dark:text-gray-100 flex justify-between" v-else>
                     <p class="py-5 px-3">{{ t('home.no_player_count') }}</p>
@@ -49,7 +47,7 @@
             </h3>
             <table class="w-full whitespace-no-wrap table-fixed max-w-screen-lg">
                 <tr class="font-semibold text-left mobile:hidden">
-                    <th class="px-6 py-4">{{ t('home.ban.steam') }}</th>
+                    <th class="px-6 py-4">{{ t('home.ban.license') }}</th>
                     <th class="px-6 py-4">{{ t('home.ban.reason') }}</th>
                     <th class="px-6 py-4">{{ t('home.ban.length') }}</th>
                     <th class="px-6 py-4">{{ t('home.ban.time') }}</th>
@@ -85,7 +83,7 @@
                 {{ t('home.staff') }}
             </h3>
             <div class="flex flex-wrap -mx-3">
-                <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-green-600 rounded m-3" v-for="player in staff" :key="player.id" :href="'/players/' + player.steamIdentifier">
+                <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-green-600 rounded m-3" v-for="player in staff" :key="player.id" :href="'/players/' + player.licenseIdentifier">
                     {{ player.playerName }}
                 </inertia-link>
             </div>
@@ -193,8 +191,8 @@ export default {
         banTime(ban) {
             return ban.expireAt ? this.$options.filters.humanizeSeconds(this.$moment(ban.expireAt).unix() - this.$moment(ban.timestamp).unix()) : this.t('players.ban.forever_edit');
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     },
     mounted() {

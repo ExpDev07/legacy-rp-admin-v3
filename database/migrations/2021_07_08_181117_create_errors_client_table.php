@@ -19,10 +19,10 @@ class CreateErrorsClientTable extends Migration
                 $table->integer('error_id')->nullable(false)->autoIncrement();
             });
         }
-        if (!Schema::hasColumn("errors_client", "steam_identifier")) {
+        if (!Schema::hasColumn("errors_client", "license_identifier")) {
             Schema::table("errors_client", function (Blueprint $table) {
-                $table->string('steam_identifier', 50)->nullable()->default(null);
-                $table->index('steam_identifier');
+                $table->string('license_identifier', 50)->nullable()->default(null);
+                $table->index('license_identifier');
             });
         }
         if (!Schema::hasColumn("errors_client", "error_location")) {

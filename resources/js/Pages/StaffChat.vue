@@ -61,7 +61,7 @@
                         class="badge border-green-200 bg-green-100 dark:bg-green-900 inline-block px-4 leading-5 py-2 border-2 rounded"
                         v-if="message.type === 'report'"
                     >
-                        <a :href="'/players/' + message.user.steamIdentifier" class="font-semibold text-black dark:text-white !no-underline">{{ message.user.playerName }}:</a> {{ message.message }}
+                        <a :href="'/players/' + message.user.licenseIdentifier" class="font-semibold text-black dark:text-white !no-underline">{{ message.user.playerName }}:</a> {{ message.message }}
                     </div>
 
                     <!-- Staff Chat Message -->
@@ -70,7 +70,7 @@
                         class="badge border-purple-200 bg-purple-100 dark:bg-purple-900 inline-block px-4 leading-5 py-2 border-2 rounded"
                         v-else
                     >
-                        <a :href="'/players/' + message.user.steamIdentifier" class="font-semibold text-black dark:text-white !no-underline">{{ message.user.playerName }}:</a> {{ message.message }}
+                        <a :href="'/players/' + message.user.licenseIdentifier" class="font-semibold text-black dark:text-white !no-underline">{{ message.user.playerName }}:</a> {{ message.message }}
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@ export default {
                     server: server,
                     token: token,
                     type: "staff",
-                    steam: this.$page.auth.player.steamIdentifier
+                    license: this.$page.auth.player.licenseIdentifier
                 }
             });
 

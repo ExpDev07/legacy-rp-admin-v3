@@ -18,14 +18,14 @@ class PlayerIndexResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $status = Player::getOnlineStatus($this->steam_identifier, true);
+        $status = Player::getOnlineStatus($this->license_identifier, true);
 
         return [
-            'steamIdentifier' => $this->steam_identifier,
+            'licenseIdentifier' => $this->license_identifier,
             'playerName'      => $status && $status->fakeName ? $status->fakeName : $this->player_name,
             'playTime'        => $this->playtime,
             'warnings'        => $this->warning_count,
-            'isBanned'        => !!Ban::getBanForUser($this->steam_identifier),
+            'isBanned'        => !!Ban::getBanForUser($this->license_identifier),
             'status'          => $status,
             'playtime'        => $this->playtime
         ];

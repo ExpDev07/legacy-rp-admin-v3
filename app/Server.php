@@ -34,7 +34,7 @@ class Server extends Model
     ];
 
     /**
-     * A steamidentifier->serverId map
+     * A license_identifier->serverId map
      *
      * @var array
      */
@@ -96,9 +96,9 @@ class Server extends Model
     {
         $players = Player::getAllOnlinePlayers(false);
 
-        foreach ($players as $steam => $player) {
+        foreach ($players as $license => $player) {
             if (intval($player['id']) === $id) {
-                return $steam;
+                return $license;
             }
         }
 
@@ -106,13 +106,13 @@ class Server extends Model
     }
 
     /**
-     * Returns an associative array (steamIdentifier -> serverId)
+     * Returns an associative array (licenseIdentifier -> serverId)
      *
      * @param string $serverIp
      * @param bool $useCache
      * @return array|null
      */
-    public static function fetchSteamIdentifiers(string $serverIp, bool $useCache): ?array
+    public static function fetchLicenseIdentifiers(string $serverIp, bool $useCache): ?array
     {
         if (!$serverIp) {
             return [];
@@ -141,7 +141,7 @@ class Server extends Model
             if (isset($json['players'])) {
                 $assoc = [];
                 foreach ($json['players'] as $player) {
-                    $assoc[$player['steamIdentifier']] = [
+                    $assoc[$player['licenseIdentifier']] = [
                         'source'    => $player['source'],
                         'character' => $player['character'] ? $player['character']['id'] : null,
                         'flags'     => $player['flags'] ?? 0,

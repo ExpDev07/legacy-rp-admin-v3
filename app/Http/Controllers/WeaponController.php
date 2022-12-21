@@ -22,18 +22,18 @@ class WeaponController extends Controller
 		$weaponHash = hexdec(hash("joaat", $weapon));
 
 		$query = DB::table("weapon_damage_events")
-			->selectRaw("COUNT(steam_identifier) as count, weapon_damage");
+			->selectRaw("COUNT(license_identifier) as count, weapon_damage");
 
 		$query2 = DB::table("weapon_damage_events")
 			->selectRaw("AVG(weapon_damage) as damage, ROUND(distance) as dst");
 
 		if ($request->has('ban')) {
 			$query = $query->leftJoin("user_bans", function ($join) {
-				$join->on("identifier", "=", "steam_identifier");
+				$join->on("identifier", "=", "license_identifier");
 			})->whereNull("ban_hash");
 
 			$query2 = $query2->leftJoin("user_bans", function ($join) {
-				$join->on("identifier", "=", "steam_identifier");
+				$join->on("identifier", "=", "license_identifier");
 			})->whereNull("ban_hash");
 		}
 

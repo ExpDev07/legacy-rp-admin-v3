@@ -55,7 +55,7 @@ class SerialsController extends Controller
                     $result['character'] = [
                         'name'  => $character->first_name . ' ' . $character->last_name,
                         'id'    => $character->character_id,
-                        'steam' => $character->steam_identifier,
+                        'license' => $character->license_identifier,
                     ];
                 }
             }

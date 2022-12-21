@@ -50,10 +50,10 @@ class PlayerWarningController extends Controller
             abort(401);
         }
 
-        $staffIdentifier = $request->user()->player->steam_identifier;
+        $staffIdentifier = $request->user()->player->license_identifier;
         $issuer = $warning->issuer()->first();
 
-        if (!$issuer || $staffIdentifier !== $issuer->steam_identifier) {
+        if (!$issuer || $staffIdentifier !== $issuer->license_identifier) {
             return back()->with('error', 'You can only edit your own warnings/notes!');
         }
 

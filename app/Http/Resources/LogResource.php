@@ -24,7 +24,7 @@ class LogResource extends JsonResource
             'metadata'        => $this->metadata,
             'timestamp'       => $this->timestamp,
             'server'          => $this->metadata['serverId'],
-            'steamIdentifier' => $this->identifier,
+            'licenseIdentifier' => $this->identifier,
             'playerName'      => $this->player_name,
             'status'          => Player::getOnlineStatus($this->identifier, true),
         ];

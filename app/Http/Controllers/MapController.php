@@ -38,8 +38,8 @@ class MapController extends Controller
             $q->orWhere('is_staff', '=', 1)
                 ->orWhere('is_senior_staff', '=', 1)
                 ->orWhere('is_super_admin', '=', 1)
-                ->orWhereIn('steam_identifier', GeneralHelper::getRootUsers());
-        })->select(['steam_identifier', 'player_name'])->get()->toArray();
+                ->orWhereIn('license_identifier', GeneralHelper::getRootUsers());
+        })->select(['license_identifier', 'player_name'])->get()->toArray();
 
         $marker = $request->query('m') ?? null;
         if ($marker) {
@@ -58,13 +58,13 @@ class MapController extends Controller
         return Inertia::render('Map/Index', [
             'servers'  => $serverIps,
             'staff'    => $staff ? array_map(function ($player) {
-                return $player['steam_identifier'];
+                return $player['license_identifier'];
             }, $staff) : [],
             'staffMap' => $staff,
             'blips'    => GeneralHelper::parseMapFile(__DIR__ . '/../../../helpers/markers.map') ?? [],
             'token'    => SessionHelper::getInstance()->getSessionKey(),
             'cluster'  => CLUSTER,
-            'myself'   => $request->user()->player->steam_identifier,
+            'myself'   => $request->user()->player->license_identifier,
             'marker'   => $marker
         ]);
     }

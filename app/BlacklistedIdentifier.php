@@ -69,7 +69,7 @@ class BlacklistedIdentifier extends Model
      */
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(Player::class, 'creator_identifier', 'steam_identifier');
+        return $this->belongsTo(Player::class, 'creator_identifier', 'license_identifier');
     }
 
 }

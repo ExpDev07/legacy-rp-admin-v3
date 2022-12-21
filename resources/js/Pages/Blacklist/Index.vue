@@ -25,13 +25,13 @@
                             <label class="block mb-4 font-semibold" for="creator">
                                 {{ t('blacklist.creator') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="creator" name="creator" placeholder="steam:11000010d322da9" v-model="filters.creator">
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="creator" name="creator" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="filters.creator">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="identifier">
                                 {{ t('blacklist.identifier') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="identifier" name="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="identifier" name="identifier" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="filters.identifier">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="identifier">
@@ -95,12 +95,12 @@
                     {{ t('blacklist.add') }}
                 </h3>
 
-                <!-- Steam Identifier -->
+                <!-- License Identifier -->
                 <div class="w-full p-3 flex justify-between px-0">
                     <label class="mr-4 block w-1/4 pt-2 font-bold" for="add_identifier">
                         {{ t('blacklist.identifier') }}
                     </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="add_identifier" placeholder="steam:11000010df22c8b" v-model="form.identifier" />
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="add_identifier" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="form.identifier" />
                 </div>
 
                 <!-- Ban Reason -->
@@ -141,7 +141,7 @@
                     {{ t('blacklist.import') }}
                 </h3>
 
-                <!-- Steam Identifier -->
+                <!-- License Identifier -->
                 <div class="w-full p-3 flex justify-between px-0">
                     <label class="mr-4 block w-1/4 pt-2 font-bold" for="add_identifier">
                         {{ t('blacklist.file') }}
@@ -195,7 +195,7 @@
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link
                                 class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                                :href="'/players/' + identifier.creator.steamIdentifier">
+                                :href="'/players/' + identifier.creator.licenseIdentifier">
                                 {{ identifier.creator.playerName }}
                             </inertia-link>
                         </td>
@@ -347,7 +347,7 @@ export default {
                 try {
                     const text = await this.readFileContents(file);
 
-                    if (text.startsWith("steam_identifier,reason\n")) {
+                    if (text.startsWith("license_identifier,reason\n")) {
                         // Send request.
                         await this.$inertia.post('/blacklist/import', {
                             text: text

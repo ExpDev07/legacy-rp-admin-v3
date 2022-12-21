@@ -37,7 +37,7 @@ class Character extends Model
      * @var array
      */
     protected $fillable = [
-        'steam_identifier',
+        'license_identifier',
         'character_slot',
         'gender',
         'first_name',
@@ -134,7 +134,7 @@ class Character extends Model
      */
     public function player(): BelongsTo
     {
-        return $this->belongsTo(Player::class, 'steam_identifier', 'steam_identifier');
+        return $this->belongsTo(Player::class, 'license_identifier', 'license_identifier');
     }
 
     /**
@@ -184,7 +184,7 @@ class Character extends Model
     }
 
     /**
-     * Returns a map of character_id->[character_name,steamIdentifier]
+     * Returns a map of character_id->[character_name,licenseIdentifier]
      * This is used instead of a left join as it appears to be a lot faster
      *
      * @param array $source
@@ -201,12 +201,12 @@ class Character extends Model
         }
 
         $characters = self::query()->whereIn('character_id', $ids)->select([
-            'character_id', 'steam_identifier', 'first_name', 'last_name',
+            'character_id', 'license_identifier', 'first_name', 'last_name',
         ])->get();
         $characterMap = [];
         foreach ($characters as $character) {
             $characterMap[$character->character_id] = [
-                'steam_identifier' => $character->steam_identifier,
+                'license_identifier' => $character->license_identifier,
                 'name'             => $character->first_name . ' ' . $character->last_name,
             ];
         }

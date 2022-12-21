@@ -17,7 +17,7 @@ class CreateWebpanelScreenshotsTable extends Migration
         if (!Schema::hasTable("webpanel_screenshots")) {
             Schema::create('webpanel_screenshots', function (Blueprint $table) {
                 $table->id();
-                $table->string('steam_identifier')->nullable(false);
+                $table->string('license_identifier')->nullable(false);
                 $table->string('filename')->nullable(false);
                 $table->string('note');
                 $table->integer('created_at');

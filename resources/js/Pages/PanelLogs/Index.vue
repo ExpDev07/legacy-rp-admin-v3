@@ -43,7 +43,7 @@
                             <label class="block mb-2" for="target">
                                 {{ t('panel_logs.target') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="target" placeholder="steam:11000010d322da9" v-model="filters.target">
+                            <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600" id="target" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="filters.target">
                         </div>
                         <!-- Action -->
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
@@ -226,8 +226,8 @@ export default {
 
             this.isLoading = false;
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     }
 };

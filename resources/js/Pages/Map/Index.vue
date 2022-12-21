@@ -181,13 +181,13 @@
                     {{ t('map.notify_add') }}
                 </h3>
 
-                <!-- Steam Identifier -->
+                <!-- license Identifier -->
                 <div class="w-full p-3 flex justify-between px-0">
-                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="notify_steam">
-                        {{ t('map.notify_steam') }}
+                    <label class="mr-4 block w-1/4 pt-2 font-bold" for="notify_license">
+                        {{ t('map.notify_license') }}
                     </label>
-                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_steam"
-                           v-model="form.notify_steam"/>
+                    <input class="w-3/4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="notify_license"
+                           v-model="form.notify_license"/>
                 </div>
 
                 <!-- Type -->
@@ -225,13 +225,13 @@
                     {{ t('map.historic_title') }}
                 </h3>
 
-                <!-- Steam Identifier -->
+                <!-- license Identifier -->
                 <div class="w-full p-3 flex justify-between px-0">
-                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_steam">
-                        {{ t('map.historic_steam') }}
+                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_license">
+                        {{ t('map.historic_license') }}
                     </label>
-                    <input class="w-2/3 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="historic_steam"
-                           v-model="form.historic_steam"/>
+                    <input class="w-2/3 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="historic_license"
+                           v-model="form.historic_license"/>
                 </div>
 
                 <!-- From -->
@@ -288,7 +288,7 @@
 
                 <!-- From -->
                 <div class="w-full p-3 flex justify-between px-0">
-                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_steam">
+                    <label class="mr-4 block w-1/3 pt-2 font-bold" for="historic_license">
                         {{ t('map.timestamp_date') }}
                     </label>
                     <input class="w-2/3 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
@@ -330,7 +330,7 @@
                     {{ t('map.screenshot_description') }}
                 </p>
 
-                <!-- Steam Identifier -->
+                <!-- License Identifier -->
                 <div class="w-full p-3 flex justify-between px-0" v-else>
                     <label class="mr-4 block w-1/4 pt-2 font-bold" for="screenshot_id">
                         {{ t('map.screenshot_id') }}
@@ -354,18 +354,18 @@
                     </button>
                     <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
                             @click="isAttachingScreenshot = true"
-                            v-if="screenshotImage && screenshotSteam">
+                            v-if="screenshotImage && screenshotLicense">
                         {{ t('screenshot.title') }}
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
-                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotSteam = null">
+                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotLicense = null">
                         {{ t('global.close') }}
                     </button>
                 </div>
             </div>
         </div>
 
-        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage"
+        <ScreenshotAttacher :close="screenshotAttached" :license="screenshotLicense" :url="screenshotImage"
                             v-if="isAttachingScreenshot"/>
 
         <template>
@@ -420,7 +420,7 @@
                                 class="block w-44 ml-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded mobile:w-full mobile:m-0 mobile:mt-1"
                                 v-model="tracking.type">
                                 <option value="server_">{{ t('map.track_server') }}</option>
-                                <option value="">{{ t('map.track_steam') }}</option>
+                                <option value="">{{ t('map.track_license') }}</option>
                                 <option value="player_">{{ t('map.track_character') }}</option>
                             </select>
                             <button
@@ -512,7 +512,7 @@
                                 class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded">
                                 <h2 class="text-xl mb-2" v-html="rightClickedPlayer.name"></h2>
                                 <p class="text-muted dark:text-dark-muted mb-1">
-                                    <span class="font-semibold">{{ t('players.steam') }}:</span>
+                                    <span class="font-semibold">{{ t('players.license') }}:</span>
                                     <a :href="'/players/' + rightClickedPlayer.id" target="_blank"
                                        class="text-blue-600 dark:text-blue-400 italic">{{ rightClickedPlayer.id }}</a>
                                 </p>
@@ -536,7 +536,7 @@
 
                                     <button
                                         class="px-5 py-2 mr-2 font-semibold text-white rounded bg-primary dark:bg-dark-primary"
-                                        @click="highlightSteam(rightClickedPlayer.id)"
+                                        @click="highlightLicense(rightClickedPlayer.id)"
                                         v-if="!(rightClickedPlayer.id in highlightedPeople)">
                                         {{ t('map.do_highlight') }}
                                     </button>
@@ -606,10 +606,10 @@
                             <tr v-if="Object.keys(area.players).length === 0">
                                 {{ t('map.area_none') }}
                             </tr>
-                            <tr v-for="(player, steam) in area.players" :key="steam" v-else>
+                            <tr v-for="(player, license) in area.players" :key="license" v-else>
                                 <td class="pr-2">
                                     <a class="text-yellow-500" target="_blank"
-                                       :href="'/players/' + player.steam">{{ player.name }}</a>
+                                       :href="'/players/' + player.license">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2 text-yellow-500">
                                     ({{ player.source }})
@@ -632,7 +632,7 @@
                                         {{ t('map.short.track') }}
                                     </a>
                                     <a class="highlight-cid text-yellow-600" href="#"
-                                       @click="highlightServerId($event, player.steam)">
+                                       @click="highlightServerId($event, player.license)">
                                         {{ t('map.short.highlight') }}
                                     </a>
                                 </td>
@@ -649,7 +649,7 @@
                             <tr v-for="(player, x) in invisiblePeople" :key="x">
                                 <td class="pr-2">
                                     <a class="dark:text-red-400 text-red-600" target="_blank"
-                                       :href="'/players/' + player.steam">{{ player.name }}</a>
+                                       :href="'/players/' + player.license">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2 dark:text-red-400 text-red-600">
                                     ({{ player.source }})
@@ -663,7 +663,7 @@
                                         {{ t('map.short.track') }}
                                     </a>
                                     <a class="highlight-cid dark:text-red-400 text-red-600" href="#"
-                                       :data-steam="player.steam">{{ t('map.short.highlight') }}</a>
+                                       :data-license="player.license">{{ t('map.short.highlight') }}</a>
                                 </td>
                             </tr>
                         </table>
@@ -673,9 +673,9 @@
                     <div v-if="Object.keys(highlightedPeople).length > 0 && !isTimestampShowing && !isHistoricShowing" class="pt-4 mr-4">
                         <h3 class="mb-2">{{ t('map.highlighted_title') }}</h3>
                         <table class="text-sm font-mono text-map-highlight font-medium">
-                            <tr v-for="(player, steam) in highlightedPeople" :key="steam" v-if="player !== true">
+                            <tr v-for="(player, license) in highlightedPeople" :key="license" v-if="player !== true">
                                 <td class="pr-2">
-                                    <a target="_blank" :href="'/players/' + steam">{{ player.name }}</a>
+                                    <a target="_blank" :href="'/players/' + license">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2">
                                     ({{ player.source }})
@@ -688,7 +688,7 @@
                                        data-popup="true">
                                         {{ t('map.short.track') }}
                                     </a>
-                                    <a href="#" @click="stopHighlight($event, steam)">{{ t('map.short.remove') }}</a>
+                                    <a href="#" @click="stopHighlight($event, license)">{{ t('map.short.remove') }}</a>
                                 </td>
                             </tr>
                         </table>
@@ -702,7 +702,7 @@
                                 :title="player.is_staff ? t('map.is_staff') : ''">
                                 <td class="pr-2">
                                     <a :style="'color:' + player.color" target="_blank"
-                                       :href="'/players/' + player.steam">{{ player.name }}</a>
+                                       :href="'/players/' + player.license">{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2" :style="'color:' + player.color">
                                     ({{ player.source }})
@@ -717,7 +717,7 @@
                                             t('map.short.track')
                                         }}</a>
                                     <a class="highlight-cid" :style="'color:' + player.color" href="#"
-                                       @click="highlightServerId($event, player.steam)">{{ t('map.short.highlight') }}</a>
+                                       @click="highlightServerId($event, player.license)">{{ t('map.short.highlight') }}</a>
                                 </td>
                             </tr>
                         </table>
@@ -727,16 +727,16 @@
                     <div v-if="!container.notifier.isEmpty() && !isTimestampShowing && !isHistoricShowing" class="pt-4">
                         <h3 class="mb-2">{{ t('map.notify') }}</h3>
                         <table class="text-sm font-mono font-medium">
-                            <tr v-for="(player, steam) in container.notifier.notifications.invisible"
-                                :key="'invisible_' + steam">
+                            <tr v-for="(player, license) in container.notifier.notifications.invisible"
+                                :key="'invisible_' + license">
                                 <td class="pr-2">
                                     <span class="dark:text-yellow-500 text-yellow-600"
-                                          v-if="steam === '*'">* (any)</span>
-                                    <a target="_blank" :href="'/players/' + steam"
+                                          v-if="license === '*'">* (any)</span>
+                                    <a target="_blank" :href="'/players/' + license"
                                        class="dark:text-green-400 text-green-600" v-else-if="player === true">{{
-                                            steam
+                                            license
                                         }}</a>
-                                    <a target="_blank" :href="'/players/' + steam"
+                                    <a target="_blank" :href="'/players/' + license"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2">
@@ -744,18 +744,18 @@
                                 </td>
                                 <td>
                                     <a class="dark:text-red-400 text-red-600" href="#"
-                                       @click="stopNotify($event, steam, 'invisible')">{{ t('map.short.remove') }}</a>
+                                       @click="stopNotify($event, license, 'invisible')">{{ t('map.short.remove') }}</a>
                                 </td>
                             </tr>
-                            <tr v-for="(player, steam) in container.notifier.notifications.load" :key="'load_' + steam">
+                            <tr v-for="(player, license) in container.notifier.notifications.load" :key="'load_' + license">
                                 <td class="pr-2">
                                     <span class="dark:text-yellow-500 text-yellow-600"
-                                          v-if="steam === '*'">* (any)</span>
-                                    <a target="_blank" :href="'/players/' + steam"
+                                          v-if="license === '*'">* (any)</span>
+                                    <a target="_blank" :href="'/players/' + license"
                                        class="dark:text-green-400 text-green-600" v-else-if="player === true">{{
-                                            steam
+                                            license
                                         }}</a>
-                                    <a target="_blank" :href="'/players/' + steam"
+                                    <a target="_blank" :href="'/players/' + license"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2">
@@ -763,19 +763,19 @@
                                 </td>
                                 <td>
                                     <a class="dark:text-red-400 text-red-600" href="#"
-                                       @click="stopNotify($event, steam, 'load')">{{ t('map.short.remove') }}</a>
+                                       @click="stopNotify($event, license, 'load')">{{ t('map.short.remove') }}</a>
                                 </td>
                             </tr>
-                            <tr v-for="(player, steam) in container.notifier.notifications.unload"
-                                :key="'unload_' + steam">
+                            <tr v-for="(player, license) in container.notifier.notifications.unload"
+                                :key="'unload_' + license">
                                 <td class="pr-2">
                                     <span class="dark:text-yellow-500 text-yellow-600"
-                                          v-if="steam === '*'">* (any)</span>
-                                    <a target="_blank" :href="'/players/' + steam"
+                                          v-if="license === '*'">* (any)</span>
+                                    <a target="_blank" :href="'/players/' + license"
                                        class="dark:text-green-400 text-green-600" v-else-if="player === true">{{
-                                            steam
+                                            license
                                         }}</a>
-                                    <a target="_blank" :href="'/players/' + steam"
+                                    <a target="_blank" :href="'/players/' + license"
                                        class="dark:text-green-400 text-green-600" v-else>{{ player.name }}</a>
                                 </td>
                                 <td class="pr-2">
@@ -783,7 +783,7 @@
                                 </td>
                                 <td>
                                     <a class="dark:text-red-400 text-red-600" href="#"
-                                       @click="stopNotify($event, steam, 'unload')">{{ t('map.short.remove') }}</a>
+                                       @click="stopNotify($event, license, 'unload')">{{ t('map.short.remove') }}</a>
                                 </td>
                             </tr>
                         </table>
@@ -952,14 +952,14 @@ export default {
                 },
                 filters: [],
 
-                notify_steam: '',
+                notify_license: '',
                 notify_type: 'load',
 
                 screenshotId: 0,
 
                 timestamp: Math.floor(Date.now() / 1000),
 
-                historic_steam: '',
+                historic_license: '',
                 historic_from_date: '',
                 historic_from_time: '',
                 historic_till_date: '',
@@ -993,7 +993,7 @@ export default {
             isScreenshot: false,
             isScreenshotLoading: false,
             screenshotImage: null,
-            screenshotSteam: null,
+            screenshotLicense: null,
             screenshotError: null,
             isAttachingScreenshot: false,
 
@@ -1037,22 +1037,22 @@ export default {
 
             return viewers.map(v => this.getStaffName(v)).join(', ');
         },
-        getStaffName(steam) {
-            let player_name = steam;
+        getStaffName(license) {
+            let player_name = license;
 
             for (let x = 0; x < this.staffMap.length; x++) {
                 const staff = this.staffMap[x];
 
-                if (staff.steam_identifier === steam) {
+                if (staff.license_identifier === license) {
                     player_name = staff.player_name;
                     break;
                 }
             }
 
-            const cls = this.container.players && steam in this.container.players ? 'dark:text-green-300 text-green-500' : 'dark:text-blue-300 text-blue-500',
-                title = this.container.players && steam in this.container.players ? this.t('map.viewer_in_server') : this.t('map.viewer_not_server');
+            const cls = this.container.players && license in this.container.players ? 'dark:text-green-300 text-green-500' : 'dark:text-blue-300 text-blue-500',
+                title = this.container.players && license in this.container.players ? this.t('map.viewer_in_server') : this.t('map.viewer_not_server');
 
-            return '<a href="/players/' + steam + '" target="_blank" title="' + title + '" class="!no-underline ' + cls + '">' + player_name + '</a>';
+            return '<a href="/players/' + license + '" target="_blank" title="' + title + '" class="!no-underline ' + cls + '">' + player_name + '</a>';
         },
         showHistoric() {
             const fromDate = this.$moment().subtract(1, 'hours'),
@@ -1074,8 +1074,8 @@ export default {
 
             this.isHistoric = true;
         },
-        isFake(steam) {
-            const player = this.container.get(steam);
+        isFake(license) {
+            const player = this.container.get(license);
 
             return player && player.player && player.player.isFake;
         },
@@ -1090,7 +1090,7 @@ export default {
                 this.isScreenshot = false;
                 this.screenshotImage = null;
                 this.screenshotError = null;
-                this.screenshotSteam = null;
+                this.screenshotLicense = null;
             }
         },
         copyText(e, text) {
@@ -1124,31 +1124,31 @@ export default {
 
             this.form.filters.splice(index, 1);
         },
-        highlightSteam(steam) {
-            this.highlightedPeople[steam] = true;
+        highlightLicense(license) {
+            this.highlightedPeople[license] = true;
 
             this.rightClickedPlayer.id = null;
         },
-        stopHighlight(e, steam) {
+        stopHighlight(e, license) {
             e.preventDefault();
 
-            delete this.highlightedPeople[steam];
+            delete this.highlightedPeople[license];
 
             this.rightClickedPlayer.id = null;
         },
-        stopNotify(e, steam, type) {
+        stopNotify(e, license, type) {
             e.preventDefault();
 
             if (type === 'load') {
-                this.container.notifier.removeNotify('load', steam);
+                this.container.notifier.removeNotify('load', license);
             } else if (type === 'unload') {
-                this.container.notifier.removeNotify('unload', steam);
+                this.container.notifier.removeNotify('unload', license);
             }
         },
         confirmNotification() {
-            this.container.notifier.on(this.form.notify_type, this.form.notify_steam);
+            this.container.notifier.on(this.form.notify_type, this.form.notify_license);
 
-            this.form.notify_steam = '';
+            this.form.notify_license = '';
             this.form.notify_type = 'load';
 
             this.isNotification = false;
@@ -1244,7 +1244,7 @@ export default {
             this.screenshotError = null;
 
             this.screenshotImage = null;
-            this.screenshotSteam = null;
+            this.screenshotLicense = null;
 
             try {
                 const result = await axios.post('/api/screenshot/' + $('#server').val() + '/' + this.form.screenshotId);
@@ -1252,10 +1252,10 @@ export default {
 
                 if (result.data) {
                     if (result.data.status) {
-                        console.info('Screenshot of ID ' + this.form.screenshotId, result.data.data.url, result.data.data.steam);
+                        console.info('Screenshot of ID ' + this.form.screenshotId, result.data.data.url, result.data.data.license);
 
                         this.screenshotImage = result.data.data.url;
-                        this.screenshotSteam = result.data.data.steam;
+                        this.screenshotLicense = result.data.data.license;
                     } else {
                         this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
                     }
@@ -1475,7 +1475,7 @@ export default {
             const tillUnix = this.$moment(this.form.historic_till_date + ' ' + this.form.historic_till_time).unix();
 
             if (fromUnix && tillUnix) {
-                if (this.form.historic_steam || !this.form.historic_steam.startsWith('steam:')) {
+                if (this.form.historic_license || !this.form.historic_license.startsWith('license:')) {
                     this.isHistoric = false;
 
                     this.isHistoricShowing = true;
@@ -1483,15 +1483,15 @@ export default {
 
                     this.stopTracking();
 
-                    await this.renderHistory(this.form.historic_steam.replace('steam:', ''), fromUnix, tillUnix);
+                    await this.renderHistory(this.form.historic_license.replace('license:', ''), fromUnix, tillUnix);
                 } else {
-                    alert('Invalid steam identifier');
+                    alert('Invalid license identifier');
                 }
             } else {
                 alert('Invalid from / till');
             }
         },
-        async renderHistory(steam, from, till) {
+        async renderHistory(license, from, till) {
             if (this.loadingScreenStatus) {
                 return;
             }
@@ -1500,7 +1500,7 @@ export default {
             this.historicChart = false;
 
             const server = $('#server').val(),
-                history = await this.loadHistory(server, steam, from, till);
+                history = await this.loadHistory(server, license, from, till);
 
             this.loadingScreenStatus = this.t('map.heatmap_render');
 
@@ -1641,10 +1641,10 @@ export default {
 
             this.loadingScreenStatus = null;
         },
-        async loadHistory(server, steam, from, till) {
+        async loadHistory(server, license, from, till) {
             this.loadingScreenStatus = this.t('map.heatmap_fetch');
             try {
-                const result = await axios.get(this.hostname(false) + '/historic/' + server + '/' + steam + '/' + from + '/' + till + '?token=' + this.token);
+                const result = await axios.get(this.hostname(false) + '/historic/' + server + '/' + license + '/' + from + '/' + till + '?token=' + this.token);
 
                 this.loadingScreenStatus = this.t('map.heatmap_parse');
                 if (result.data && result.data.status) {
@@ -1718,7 +1718,7 @@ export default {
                         }
                     );
 
-                    marker.bindPopup('<a href="/players/' + player.steam + '" target="_blank">' + player.steam + '</a>', {
+                    marker.bindPopup('<a href="/players/' + player.license + '" target="_blank">' + player.license + '</a>', {
                         autoPan: false
                     });
 
@@ -1777,13 +1777,13 @@ export default {
                 if (result.data && result.data.status) {
                     let players = [];
 
-                    for (const steam in result.data.data) {
-                        if (Object.hasOwnProperty(steam)) continue;
+                    for (const license in result.data.data) {
+                        if (Object.hasOwnProperty(license)) continue;
 
-                        const coords = result.data.data[steam];
+                        const coords = result.data.data[license];
 
                         players.push({
-                            steam: "steam:" + steam.replace(".csv", ""),
+                            license: "license:" + license.replace(".csv", ""),
                             x: coords.x,
                             y: coords.y,
                             i: coords.i
@@ -1839,7 +1839,7 @@ export default {
                         server: server,
                         token: this.token,
                         type: "world",
-                        steam: this.$page.auth.player.steamIdentifier
+                        license: this.$page.auth.player.licenseIdentifier
                     }
                 });
 
@@ -1919,7 +1919,7 @@ export default {
                             return;
                         }
 
-                        if (player.player.steam === _this.myself) {
+                        if (player.player.license === _this.myself) {
                             _this.whereAmI = player.location.toGame();
                         }
 
@@ -1965,8 +1965,8 @@ export default {
                             foundTracked = true;
                         }
 
-                        if (player.player.steam in _this.highlightedPeople) {
-                            _this.highlightedPeople[player.player.steam] = {
+                        if (player.player.license in _this.highlightedPeople) {
+                            _this.highlightedPeople[player.player.license] = {
                                 name: player.character.name,
                                 source: player.player.source,
                                 cid: player.character.id
@@ -2203,13 +2203,13 @@ export default {
                 }
             }
         },
-        highlightServerId(event, steam) {
+        highlightServerId(event, license) {
             event.preventDefault();
 
             if ($(this).hasClass('stop_highlight')) {
-                delete this.highlightedPeople[steam];
+                delete this.highlightedPeople[license];
             } else {
-                this.highlightedPeople[steam] = true;
+                this.highlightedPeople[license] = true;
             }
         }
     },

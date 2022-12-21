@@ -164,7 +164,8 @@ export default {
         },
         weaponChart: {
             type: Object,
-            default: false,
+            required: false,
+            default: null,
         },
         smooth: {
             type: Boolean,

@@ -49,7 +49,7 @@ class StaffChatController extends Controller
 
         $serverIp = Server::getFirstServer();
 
-        $status = OPFWHelper::staffChat($serverIp, $user->player->steam_identifier, $message);
+        $status = OPFWHelper::staffChat($serverIp, $user->player->license_identifier, $message);
 
         return $status->redirect();
     }

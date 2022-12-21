@@ -127,14 +127,14 @@
                         <td class="px-6 py-3 border-t">
                             <inertia-link
                                 class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                                :href="'/players/' + log.steam_identifier">
-                                {{ playerName(log.steam_identifier) }}
+                                :href="'/players/' + log.license_identifier">
+                                {{ playerName(log.license_identifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t">
                             <inertia-link
                                 class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                                :href="'/players/' + log.steam_identifier + '/characters/' + log.character_id + '/edit'">
+                                :href="'/players/' + log.license_identifier + '/characters/' + log.character_id + '/edit'">
                                 {{ log.first_name + ' ' + log.last_name }}
                             </inertia-link>
                         </td>
@@ -297,8 +297,8 @@ export default {
 
             return details;
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     }
 };

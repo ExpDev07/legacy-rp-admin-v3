@@ -17,7 +17,7 @@ class CreateCasinoLogsTable extends Migration
         if (!Schema::hasTable("casino_logs")) {
             Schema::create('casino_logs', function (Blueprint $table) {
                 $table->id();
-                $table->string('steam_identifier');
+                $table->string('license_identifier');
                 $table->integer('character_id')->nullable(false);
                 $table->enum('game', CasinoLog::ValidGames)->default(CasinoLog::GameBlackJack);
                 $table->integer('money_spent')->nullable(false);

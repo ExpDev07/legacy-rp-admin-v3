@@ -180,7 +180,7 @@ class SuspiciousChecker
 
     private static function ignoreCharacterInventories(): array
     {
-        $characters = Character::query()->select("character_id")->whereIn("steam_identifier", self::getIgnorableSteamIdentifiers())->get()->toArray();
+        $characters = Character::query()->select("character_id")->whereIn("license_identifier", self::getIgnorableLicenseIdentifiers())->get()->toArray();
 
         $inventories = [];
 
@@ -271,7 +271,7 @@ class SuspiciousChecker
             return CacheHelper::read($key, []);
         }
 
-        $sql = "SELECT * FROM (SELECT `identifier`, SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', 1)) as `amount`, SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', -1) as `item`, `details`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 600) * 600 as `time` FROM `user_logs` WHERE `action`='Item Moved' AND identifier NOT IN ('" . implode("', '", self::getIgnorableSteamIdentifiers()) . "') GROUP BY CONCAT(`identifier`, '|', `time`, '|', `item`) ORDER BY `time` DESC) `logs` WHERE amount > 250";
+        $sql = "SELECT * FROM (SELECT `identifier`, SUM(SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', 1)) as `amount`, SUBSTRING_INDEX(SUBSTRING_INDEX(SUBSTRING_INDEX(`details`, ' moved ', -1), ' to ', 1), 'x ', -1) as `item`, `details`, CEIL(UNIX_TIMESTAMP(`timestamp`) / 600) * 600 as `time` FROM `user_logs` WHERE `action`='Item Moved' AND identifier NOT IN ('" . implode("', '", self::getIgnorableLicenseIdentifiers()) . "') GROUP BY CONCAT(`identifier`, '|', `time`, '|', `item`) ORDER BY `time` DESC) `logs` WHERE amount > 250";
 
         DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));");
         $logs = DB::select($sql);
@@ -303,8 +303,8 @@ class SuspiciousChecker
     {
         return Character::query()
             ->where(DB::raw('`cash`+`bank`+`stocks_balance`'), '>=', 700000)
-            ->whereNotIn("steam_identifier", self::getIgnorableSteamIdentifiers())
-            ->select(['steam_identifier', 'character_id', 'cash', 'bank', 'stocks_balance', 'first_name', 'last_name'])
+            ->whereNotIn("license_identifier", self::getIgnorableLicenseIdentifiers())
+            ->select(['license_identifier', 'character_id', 'cash', 'bank', 'stocks_balance', 'first_name', 'last_name'])
             ->get()->toArray();
     }
 
@@ -381,12 +381,12 @@ class SuspiciousChecker
         return $sus;
     }
 
-    private static function getIgnorableSteamIdentifiers(): array
+    private static function getIgnorableLicenseIdentifiers(): array
     {
-        $ids = Player::query()->select(["steam_identifier"])->where("is_super_admin", "=", 1)->orWhere("is_senior_staff", "=", 1)->get()->toArray();
+        $ids = Player::query()->select(["license_identifier"])->where("is_super_admin", "=", 1)->orWhere("is_senior_staff", "=", 1)->get()->toArray();
 
         $ids = array_values(array_map(function($entry) {
-            return $entry["steam_identifier"];
+            return $entry["license_identifier"];
         }, $ids));
 
         $root = GeneralHelper::getRootUsers();

@@ -60,24 +60,6 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::name('logout')->post('/logout', [LogoutController::class, 'logout']);
 });
 
-// Shortened redirects.
-Route::group([], function () {
-    Route::get('/p/{steam}', function (string $steam) {
-        $steam = preg_replace('/[^\w]+/mi', '', $steam);
-        $steam = base_convert($steam, 36, 16);
-
-        if (!$steam) {
-            abort(400);
-        }
-
-        if (!Str::startsWith($steam, 'steam:')) {
-            $steam = 'steam:' . $steam;
-        }
-
-        return redirect('https://' . CLUSTER . '.legacy-roleplay.com/players/' . $steam);
-    });
-});
-
 // Routes requiring being logged in as a staff member.
 Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
@@ -214,7 +196,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Queue.
     Route::get('/queue/{server}', [QueueController::class, 'render']);
-    Route::post('/skip_queue/{server}/{steamIdentifier}', [QueueController::class, 'skip']);
+    Route::post('/skip_queue/{server}/{licenseIdentifier}', [QueueController::class, 'skip']);
     Route::get('/api/queue/{server}', [QueueController::class, 'api']);
 
     Route::get('/test/logs/{action}', [TestController::class, 'logs']);

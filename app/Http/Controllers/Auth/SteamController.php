@@ -6,7 +6,6 @@ use App\Helpers\LoggingHelper;
 use App\Helpers\SessionHelper;
 use App\Http\Middleware\StaffMiddleware;
 use App\Player;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\Http\Controllers\AbstractSteamLoginController;
@@ -31,36 +30,20 @@ class SteamController extends AbstractSteamLoginController
         // Make sure to fetch the steam user information.
         $steam->getUserInfo();
 
-        LoggingHelper::log($session->getSessionKey(), 'Updating user in table');
-        // Create the user or update them if already exists.
-        $user = User::query()->updateOrCreate([
-            'account_id' => $steam->steamId,
-            'name'       => $steam->name,
-            'avatar'     => $steam->avatar,
-        ]);
-
         LoggingHelper::log($session->getSessionKey(), 'Loading player');
         $start = round(microtime(true) * 1000);
 
-        $player = Player::query()
-            ->where('steam_identifier', '=', 'steam:' . dechex(intval($steam->steamId)))
-            ->first();
+		// TODO: find proper user by steam
+        $player = Player::findPlayerBySteam("steam:" . dechex(intval($steam->steamId)));
 
         $end = round(microtime(true) * 1000);
         LoggingHelper::log($session->getSessionKey(), 'Player loaded in ' . ($end - $start) . 'ms');
 
-        $user = $user->toArray();
-
-        if (array_key_exists('avatar', $user) && empty($user['avatar'])) {
-            LoggingHelper::log($session->getSessionKey(), 'Setting default avatar');
-            $user['avatar'] = '/images/op-logo.png';
-        }
-
         $redirect = '/';
 
-        if ($player && !empty($user['avatar'])) {
+        if ($player) {
+			$user = [];
             $user['player'] = $player->toArray();
-            $user['player']['avatar'] = $user['avatar'];
 
             LoggingHelper::log($session->getSessionKey(), 'Putting user in session');
             $session->put('user', $user);

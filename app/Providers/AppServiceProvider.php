@@ -8,7 +8,6 @@ use App\Http\Resources\PlayerResource;
 use App\Http\Resources\UserResource;
 use App\Player;
 use App\Server;
-use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -69,7 +68,6 @@ class AppServiceProvider extends ServiceProvider
                 $player = $user['player'] ?? null;
 
                 return [
-                    'user'        => $user ? new UserResource(new User($user)) : null,
                     'player'      => $player ? new PlayerResource(new Player($player)) : null,
                     'permissions' => PermissionHelper::getFrontendPermissions(),
                     'token'       => SessionHelper::getInstance()->getSessionKey(),

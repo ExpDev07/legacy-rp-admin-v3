@@ -40,7 +40,7 @@ class AdvancedSearchController extends Controller
             'last_name',
             'phone_number',
             'position_name',
-            'steam_identifier',
+            'license_identifier',
             'stocks_balance',
         ],
         'vehicles'   => [
@@ -58,7 +58,7 @@ class AdvancedSearchController extends Controller
             'last_connection',
             'player_name',
             'playtime',
-            'steam_identifier',
+            'license_identifier',
             'total_joins',
             'is_staff',
             'is_super_admin',
@@ -293,13 +293,13 @@ class AdvancedSearchController extends Controller
             $json = $entry;
 
             unset($json['player_name']);
-            unset($json['steam_identifier']);
+            unset($json['license_identifier']);
             unset($json['last_connection']);
 
             return [
                 [
                     'link' => [
-                        'target' => '/players/' . $entry['steam_identifier'],
+                        'target' => '/players/' . $entry['license_identifier'],
                         'label'  => $entry['player_name'],
                     ],
                 ],
@@ -344,24 +344,24 @@ class AdvancedSearchController extends Controller
 
             unset($json['first_name']);
             unset($json['last_name']);
-            unset($json['steam_identifier']);
+            unset($json['license_identifier']);
             unset($json['character_id']);
 
-            if (!isset($players[$entry['steam_identifier']])) {
-                $player = Player::query()->where('steam_identifier', '=', $entry['steam_identifier'])->first(['player_name']);
-                $players[$entry['steam_identifier']] = $player ? $player->player_name : $entry['steam_identifier'];
+            if (!isset($players[$entry['license_identifier']])) {
+                $player = Player::query()->where('license_identifier', '=', $entry['license_identifier'])->first(['player_name']);
+                $players[$entry['license_identifier']] = $player ? $player->player_name : $entry['license_identifier'];
             }
 
             return [
                 [
                     'link' => [
-                        'target' => '/players/' . $entry['steam_identifier'],
-                        'label'  => $players[$entry['steam_identifier']],
+                        'target' => '/players/' . $entry['license_identifier'],
+                        'label'  => $players[$entry['license_identifier']],
                     ],
                 ],
                 [
                     'link' => [
-                        'target' => '/players/' . $entry['steam_identifier'] . '/characters/' . $entry['character_id'] . '/edit',
+                        'target' => '/players/' . $entry['license_identifier'] . '/characters/' . $entry['character_id'] . '/edit',
                         'label'  => $entry['first_name'] . ' ' . $entry['last_name'] . ' (' . $entry['character_id'] . ')',
                     ],
                 ],
@@ -409,7 +409,7 @@ class AdvancedSearchController extends Controller
 
         return [
             'target' => $character
-                ? '/players/' . $character['steam_identifier'] . '/characters/' . $character['character_id'] . '/edit'
+                ? '/players/' . $character['license_identifier'] . '/characters/' . $character['character_id'] . '/edit'
                 : '',
             'label'  => $character
                 ? $character['first_name'] . ' ' . $character['last_name']

@@ -115,7 +115,7 @@ class PlayerCharacterController extends Controller
         }
 
         $query->select([
-            'character_id', 'steam_identifier', 'first_name', 'last_name', 'gender', 'job_name',
+            'character_id', 'license_identifier', 'first_name', 'last_name', 'gender', 'job_name',
             'department_name', 'position_name', 'phone_number', 'date_of_birth'
         ]);
 
@@ -137,7 +137,7 @@ class PlayerCharacterController extends Controller
                 'deleted'       => $request->input('deleted') ?: 'all',
             ],
             'time'       => $end - $start,
-            'playerMap'  => Player::fetchSteamPlayerNameMap($characters->toArray($request), 'steamIdentifier'),
+            'playerMap'  => Player::fetchLicensePlayerNameMap($characters->toArray($request), 'licenseIdentifier'),
         ]);
     }
 
@@ -169,7 +169,7 @@ class PlayerCharacterController extends Controller
             'jobs'         => $jobs ? $jobs['jobs'] : [],
             'resetCoords'  => $resetCoords ? array_keys($resetCoords) : [],
             'vehicleValue' => Vehicle::getTotalVehicleValue($character->character_id),
-            'returnTo'     => $_GET['returnTo'] ?? $player->steam_identifier,
+            'returnTo'     => $_GET['returnTo'] ?? $player->license_identifier,
         ]);
     }
 
@@ -198,13 +198,13 @@ class PlayerCharacterController extends Controller
      */
     public function find(Request $request, int $cid)
     {
-        $character = Character::query()->select(['steam_identifier', 'character_id'])->where('character_id', '=', $cid)->get()->first();
+        $character = Character::query()->select(['license_identifier', 'character_id'])->where('character_id', '=', $cid)->get()->first();
 
         if (!$character) {
             abort(404);
         }
 
-        return redirect('/players/' . $character->steam_identifier . '/characters/' . $character->character_id . '/edit');
+        return redirect('/players/' . $character->license_identifier . '/characters/' . $character->character_id . '/edit');
     }
 
     /**
@@ -255,7 +255,7 @@ class PlayerCharacterController extends Controller
         }
 
         $user = $request->user();
-        PanelLog::logCharacterEdit($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $changed);
+        PanelLog::logCharacterEdit($user->player->license_identifier, $player->license_identifier, $character->character_id, $changed);
 
         return back()->with('success', 'Character was successfully updated. ' . $info);
     }
@@ -335,7 +335,7 @@ class PlayerCharacterController extends Controller
         ]);
 
         $user = $request->user();
-        PanelLog::logTattooRemoval($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $zone);
+        PanelLog::logTattooRemoval($user->player->license_identifier, $player->license_identifier, $character->character_id, $zone);
 
         $info = 'In-Game Tattoo refresh failed, user has to softnap.';
         $refresh = OPFWHelper::updateTattoos($player, $character->character_id);
@@ -374,7 +374,7 @@ class PlayerCharacterController extends Controller
         ]);
 
         $user = $request->user();
-        PanelLog::logSpawnReset($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $spawn);
+        PanelLog::logSpawnReset($user->player->license_identifier, $player->license_identifier, $character->character_id, $spawn);
 
         return back()->with('success', 'Spawn was reset successfully.');
     }
@@ -542,11 +542,11 @@ class PlayerCharacterController extends Controller
         $user = $request->user();
 
         if ($license === 'remove') {
-            PanelLog::logLicenseRemove($user->player->steam_identifier, $player->steam_identifier, $character->character_id);
+            PanelLog::logLicenseRemove($user->player->license_identifier, $player->license_identifier, $character->character_id);
             return back()->with('success', 'All Licenses were successfully removed.');
         }
 
-        PanelLog::logLicenseAdd($user->player->steam_identifier, $player->steam_identifier, $character->character_id, $license);
+        PanelLog::logLicenseAdd($user->player->license_identifier, $player->license_identifier, $character->character_id, $license);
         return back()->with('success', 'License was successfully added (License: ' . $license . ').');
     }
 

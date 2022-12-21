@@ -35,7 +35,7 @@ class CasinoLog extends Model
      * @var array
      */
     protected $fillable = [
-        'steam_identifier',
+        'license_identifier',
         'character_id',
         'game',
         'money_won',
@@ -51,7 +51,7 @@ class CasinoLog extends Model
      */
     public function player(): BelongsTo
     {
-        return $this->belongsTo(Player::class, 'steam_identifier', 'steam_identifier');
+        return $this->belongsTo(Player::class, 'license_identifier', 'license_identifier');
     }
 
     /**

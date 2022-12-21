@@ -38,7 +38,7 @@ class ClientError extends Model
      */
     protected $fillable = [
         'error_id',
-        'steam_identifier',
+        'license_identifier',
         'error_location',
         'error_trace',
         'error_feedback',

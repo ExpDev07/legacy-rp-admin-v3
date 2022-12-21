@@ -282,14 +282,14 @@ class StatisticsHelper
     /**
      * Returns Blackjack statistics
      *
-     * @param string $steam
+     * @param string $license
      * @return array
      */
-    public static function getBlackjackStats(string $steam): array
+    public static function getBlackjackStats(string $license): array
     {
         $key = 'blackjack_statistics';
 
-        $myPlace = self::getMyPlace(CasinoLog::GameBlackJack, $steam);
+        $myPlace = self::getMyPlace(CasinoLog::GameBlackJack, $license);
         if (CacheHelper::exists($key)) {
             $data = CacheHelper::read($key, []);
             $data['my_place'] = $myPlace;
@@ -309,14 +309,14 @@ class StatisticsHelper
     /**
      * Returns Slots statistics
      *
-     * @param string $steam
+     * @param string $license
      * @return array
      */
-    public static function getSlotsStats(string $steam): array
+    public static function getSlotsStats(string $license): array
     {
         $key = 'slots_statistics';
 
-        $myPlace = self::getMyPlace(CasinoLog::GameSlots, $steam);
+        $myPlace = self::getMyPlace(CasinoLog::GameSlots, $license);
         if (CacheHelper::exists($key)) {
             $data = CacheHelper::read($key, []);
             $data['my_place'] = $myPlace;
@@ -336,14 +336,14 @@ class StatisticsHelper
     /**
      * Returns Tracks statistics
      *
-     * @param string $steam
+     * @param string $license
      * @return array
      */
-    public static function getTracksStats(string $steam): array
+    public static function getTracksStats(string $license): array
     {
         $key = 'tracks_statistics';
 
-        $myPlace = self::getMyPlace(CasinoLog::GameSlots, $steam);
+        $myPlace = self::getMyPlace(CasinoLog::GameSlots, $license);
         if (CacheHelper::exists($key)) {
             $data = CacheHelper::read($key, []);
             $data['my_place'] = $myPlace;
@@ -360,13 +360,13 @@ class StatisticsHelper
         return $data;
     }
 
-    private static function getMyPlace(string $game, string $staffSteamIdentifier): ?array
+    private static function getMyPlace(string $game, string $staffLicenseIdentifier): ?array
     {
         $allBest = DB::table('casino_logs')
             ->where('game', '=', $game)
             ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-            ->selectRaw('SUM(IF(`money_won` < `bet_placed`, `money_won`, `money_won` - `bet_placed`)) as `win`, `casino_logs`.`steam_identifier`')
-            ->groupBy('steam_identifier')
+            ->selectRaw('SUM(IF(`money_won` < `bet_placed`, `money_won`, `money_won` - `bet_placed`)) as `win`, `casino_logs`.`license_identifier`')
+            ->groupBy('license_identifier')
             ->orderByDesc('win')
             ->get()->toArray();
 
@@ -374,7 +374,7 @@ class StatisticsHelper
         foreach ($allBest as $place => $entry) {
             $entry = (array)$entry;
 
-            if ($entry['steam_identifier'] === $staffSteamIdentifier) {
+            if ($entry['license_identifier'] === $staffLicenseIdentifier) {
                 $entry['place'] = $place + 1;
                 $entry['total'] = sizeof($allBest);
 
@@ -406,12 +406,12 @@ class StatisticsHelper
             $q->from('casino_logs')
                 ->where('game', '=', $game)
                 ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-                ->selectRaw('SUM(`money_won`) as `win`, `casino_logs`.`steam_identifier`')
-                ->groupBy('steam_identifier')
+                ->selectRaw('SUM(`money_won`) as `win`, `casino_logs`.`license_identifier`')
+                ->groupBy('license_identifier')
                 ->orderByDesc('win')
                 ->limit(5);
         }, 'casino_logs')
-            ->leftJoin('users', 'casino_logs.steam_identifier', 'users.steam_identifier')
+            ->leftJoin('users', 'casino_logs.license_identifier', 'users.license_identifier')
             ->orderByDesc('win')
             ->get()->toArray();
 
@@ -419,12 +419,12 @@ class StatisticsHelper
             $q->from('casino_logs')
                 ->where('game', '=', $game)
                 ->whereRaw('`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)')
-                ->selectRaw('SUM(`money_won`) as `win`, `casino_logs`.`steam_identifier`')
-                ->groupBy('steam_identifier')
+                ->selectRaw('SUM(`money_won`) as `win`, `casino_logs`.`license_identifier`')
+                ->groupBy('license_identifier')
                 ->orderBy('win')
                 ->limit(5);
         }, 'casino_logs')
-            ->leftJoin('users', 'casino_logs.steam_identifier', 'users.steam_identifier')
+            ->leftJoin('users', 'casino_logs.license_identifier', 'users.license_identifier')
             ->orderBy('win')
             ->get()->toArray();
 

@@ -11,13 +11,13 @@
                     />
                 </div>
                 <div>
-                    <inertia-link :href="'/players/' + player.steamIdentifier + '/characters/' + character.id + '/edit'" class="hover:underline text-xl dark:text-white">
+                    <inertia-link :href="'/players/' + player.licenseIdentifier + '/characters/' + character.id + '/edit'" class="hover:underline text-xl dark:text-white">
                         {{ character.name }}
                         <sup>{{ character.id }}</sup>
                     </inertia-link>
                     <h3 class="text-base text-gray-500 dark:text-gray-400">
                         @{{ user.username }} -
-                        <inertia-link :href="'/players/' + player.steamIdentifier" class="hover:underline">{{ player.playerName }}</inertia-link>
+                        <inertia-link :href="'/players/' + player.licenseIdentifier" class="hover:underline">{{ player.playerName }}</inertia-link>
                     </h3>
                 </div>
             </div>

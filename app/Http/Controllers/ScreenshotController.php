@@ -31,7 +31,7 @@ class ScreenshotController extends Controller
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $query->select(['id', 'steam_identifier', 'filename', 'note', 'created_at']);
+        $query->select(['id', 'license_identifier', 'filename', 'note', 'created_at']);
         $query->limit(20)->offset(($page - 1) * 20);
 
         $screenshots = $query->get()->toArray();
@@ -39,7 +39,7 @@ class ScreenshotController extends Controller
         return Inertia::render('Screenshots/Index', [
             'screenshots' => $screenshots,
             'links' => $this->getPageUrls($page),
-            'playerMap' => Player::fetchSteamPlayerNameMap($screenshots, ['steam_identifier']),
+            'playerMap' => Player::fetchLicensePlayerNameMap($screenshots, ['license_identifier']),
             'page' => $page,
         ]);
     }
@@ -71,24 +71,24 @@ class ScreenshotController extends Controller
             }
         }
 
-        $players = !empty($characterIds) ? Character::query()->select(['character_id', 'steam_identifier'])->whereIn('character_id', $characterIds)->groupBy('steam_identifier')->get()->toArray() : [];
+        $players = !empty($characterIds) ? Character::query()->select(['character_id', 'license_identifier'])->whereIn('character_id', $characterIds)->groupBy('license_identifier')->get()->toArray() : [];
 
-        $characterSteamNames = [];
+        $characterLicenseNames = [];
 
         foreach ($players as $character) {
-            $characterSteamNames[$character['character_id']] = $character['steam_identifier'];
+            $characterLicenseNames[$character['character_id']] = $character['license_identifier'];
         }
 
         $identifiers = array_values(array_map(function ($player) {
-            return $player['steam_identifier'];
+            return $player['license_identifier'];
         }, $players));
 
         return Inertia::render('Screenshots/AntiCheat', [
             'screenshots' => $system,
             'links' => $this->getPageUrls($page),
-            'playerMap' => Player::fetchSteamPlayerNameMap($players, ['steam_identifier']),
+            'playerMap' => Player::fetchLicensePlayerNameMap($players, ['license_identifier']),
             'banMap'  => Ban::getAllBans(false, $identifiers, true),
-            'characterSteamNames' => $characterSteamNames,
+            'characterLicenseNames' => $characterLicenseNames,
             'page' => $page,
         ]);
     }

@@ -115,7 +115,7 @@ class Ban extends Model
      */
     public function player(): BelongsTo
     {
-        return $this->belongsTo(Player::class, 'steam_identifier', 'identifier');
+        return $this->belongsTo(Player::class, 'license_identifier', 'identifier');
     }
 
     /**
@@ -153,21 +153,21 @@ class Ban extends Model
         return $this->reason ?? '';
     }
 
-    public static function getBanForUser(string $steamIdentifier): ?array
+    public static function getBanForUser(string $licenseIdentifier): ?array
     {
         if (empty(self::$bans)) {
             $ban = Ban::query()
-                ->where('identifier', '=', $steamIdentifier)
+                ->where('identifier', '=', $licenseIdentifier)
                 ->select(['id', 'ban_hash', 'identifier', 'creator_name', 'reason', 'timestamp', 'expire', 'creator_identifier', 'locked'])
                 ->first();
             return $ban ? $ban->toArray() : null;
         }
 
-        return self::$bans[$steamIdentifier] ?? null;
+        return self::$bans[$licenseIdentifier] ?? null;
     }
 
     /**
-     * Returns all banned Steam Identifiers which were banned by a certain person
+     * Returns all banned License Identifiers which were banned by a certain person
      *
      * @param string $creatorName
      * @param string $creatorIdentifier
@@ -191,7 +191,7 @@ class Ban extends Model
                 ->select(['id', 'ban_hash', 'identifier', 'creator_name', 'reason', 'timestamp', 'expire', 'creator_identifier']);
 
             if ($filterByIdentifiers === null) {
-                $query->where('identifier', 'LIKE', 'steam:%');
+                $query->where('identifier', 'LIKE', 'license:%');
             } else {
                 $query->whereIn('identifier', $filterByIdentifiers);
             }
