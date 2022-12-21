@@ -61,7 +61,7 @@ class ErrorController extends Controller
 
         $query->groupByRaw('CONCAT(error_location, error_trace, FLOOR(timestamp / 300))');
 
-        $query->selectRaw('error_id, steam_identifier, error_location, error_trace, error_feedback, full_trace, player_ping, server_id, timestamp, server_version, COUNT(error_id) as `occurrences`');
+        $query->selectRaw('error_id, license_identifier, error_location, error_trace, error_feedback, full_trace, player_ping, server_id, timestamp, server_version, COUNT(error_id) as `occurrences`');
         $query->orderBy('timestamp', 'desc');
         $query->limit(15)->offset(($page - 1) * 15);
 
@@ -77,7 +77,7 @@ class ErrorController extends Controller
                 'server_version' => $serverVersion ?? '',
             ],
             'links'     => $this->getPageUrls($page),
-            'playerMap' => Player::fetchSteamPlayerNameMap($errors, 'steam_identifier'),
+            'playerMap' => Player::fetchLicensePlayerNameMap($errors, 'license_identifier'),
             'time'      => $end - $start,
             'page'      => $page,
         ]);
@@ -143,7 +143,7 @@ class ErrorController extends Controller
      */
     public function clientCycle(Request $request): \Illuminate\Http\Response
     {
-        if (!GeneralHelper::isUserRoot($request->user()->player->steam_identifier)) {
+        if (!GeneralHelper::isUserRoot($request->user()->player->license_identifier)) {
             return self::json(false, null, 'Only root users can create a new cycle');
         }
 
@@ -175,7 +175,7 @@ class ErrorController extends Controller
      */
     public function serverCycle(Request $request): \Illuminate\Http\Response
     {
-        if (!GeneralHelper::isUserRoot($request->user()->player->steam_identifier)) {
+        if (!GeneralHelper::isUserRoot($request->user()->player->license_identifier)) {
             return self::json(false, null, 'Only root users can create a new cycle');
         }
 

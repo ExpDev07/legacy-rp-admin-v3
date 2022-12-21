@@ -28,10 +28,10 @@
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster" v-model="filters.name">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-4 font-semibold" for="steam">
-                                {{ t('players.steam') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                            <label class="block mb-4 font-semibold" for="license">
+                                {{ t('players.license') }} <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
-                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="steam" name="steam" placeholder="steam:11000010df22c8b" v-model="filters.steam">
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="license" name="license" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="filters.license">
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="discord">
@@ -106,20 +106,20 @@
                                 {{ t('global.status.' + player.status.status) }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">{{ player.steamIdentifier }}</td>
+                        <td class="px-6 py-3 border-t mobile:block">{{ player.licenseIdentifier }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.playTime | humanizeSeconds }}</td>
                         <td class="px-6 py-3 border-t mobile:block">{{ player.warnings }}</td>
                         <td class="px-6 py-3 text-center border-t mobile:block">
                             <span
                                 class="block px-4 py-2 text-white rounded"
-                                :class="getBanInfo(player.steamIdentifier, 'reason') ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
-                                :title="getBanInfo(player.steamIdentifier, 'reason') ? getBanInfo(player.steamIdentifier, 'reason') : t('players.ban.no_reason')"
+                                :class="getBanInfo(player.licenseIdentifier, 'reason') ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
+                                :title="getBanInfo(player.licenseIdentifier, 'reason') ? getBanInfo(player.licenseIdentifier, 'reason') : t('players.ban.no_reason')"
                                 v-if="player.isBanned"
                             >
                                 {{ t('global.banned') }}
                                 <span class="block text-xxs">
-                                    {{ t('global.by', formatBanCreator(getBanInfo(player.steamIdentifier, 'creator_name'))) }}
+                                    {{ t('global.by', formatBanCreator(getBanInfo(player.licenseIdentifier, 'creator_name'))) }}
                                 </span>
                             </span>
                             <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
@@ -127,7 +127,7 @@
                             </span>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + player.steamIdentifier">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + player.licenseIdentifier">
                                 <i class="fas fa-chevron-right"></i>
                             </inertia-link>
                         </td>
@@ -198,7 +198,7 @@ export default {
         },
         filters: {
             name: String,
-            steam: String,
+            license: String,
             discord: String,
             server: Number,
         },
@@ -238,8 +238,8 @@ export default {
 
             this.isLoading = false;
         },
-        getBanInfo(steamIdentifier, key) {
-            const ban = steamIdentifier in this.banMap ? this.banMap[steamIdentifier] : null;
+        getBanInfo(licenseIdentifier, key) {
+            const ban = licenseIdentifier in this.banMap ? this.banMap[licenseIdentifier] : null;
 
             if (key) {
                 return ban && key in ban ? ban[key] : null;

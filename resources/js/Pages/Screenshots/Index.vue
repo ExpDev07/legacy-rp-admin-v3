@@ -30,8 +30,8 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in screenshots"
                         :key="screenshot.filename">
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + screenshot.steam_identifier">
-                                {{ playerName(screenshot.steam_identifier) }}
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + screenshot.license_identifier">
+                                {{ playerName(screenshot.license_identifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
@@ -139,8 +139,8 @@ export default {
 
             this.isLoading = false;
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     }
 };

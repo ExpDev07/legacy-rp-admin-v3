@@ -229,21 +229,21 @@ class PanelLog extends Model
     }
 
     /**
-     * Returns "Twoot (steam:11000010d322da9)"
+     * Returns "Twoot (license:2ced2cabd90f1208e7e056485d4704c7e1284196)"
      *
      * @param string $identifier
      * @return string
      */
     private static function resolvePlayerLogName(string $identifier): string
     {
-        $player = Player::query()->where('steam_identifier', $identifier)->first();
+        $player = Player::query()->where('license_identifier', $identifier)->first();
         $playerName = $player ? $player->player_name : 'Unknown';
 
         return $playerName . ' (' . $identifier . ')';
     }
 
     /**
-     * Returns "Twoot (steam:11000010d322da9)'s character (#739)"
+     * Returns "Twoot (license:2ced2cabd90f1208e7e056485d4704c7e1284196)'s character (#739)"
      *
      * @param string $identifier
      * @param string $character

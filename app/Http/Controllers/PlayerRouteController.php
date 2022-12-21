@@ -54,7 +54,7 @@ class PlayerRouteController extends Controller
         $user = $request->user();
         $reason = $request->input('reason') ?: 'You were kicked by ' . $user->player->player_name;
 
-        return OPFWHelper::kickPlayer($user->player->steam_identifier, $user->player->player_name, $player, $reason)->redirect();
+        return OPFWHelper::kickPlayer($user->player->license_identifier, $user->player->player_name, $player, $reason)->redirect();
     }
 
     /**
@@ -73,7 +73,7 @@ class PlayerRouteController extends Controller
             return back()->with('error', 'Message cannot be empty');
         }
 
-        return OPFWHelper::staffPM($user->player->steam_identifier, $player, $message)->redirect();
+        return OPFWHelper::staffPM($user->player->license_identifier, $player, $message)->redirect();
     }
 
     /**
@@ -94,7 +94,7 @@ class PlayerRouteController extends Controller
 
         $message = trim($request->input('message'));
 
-        return OPFWHelper::unloadCharacter($user->player->steam_identifier, $player, $character, $message)->redirect();
+        return OPFWHelper::unloadCharacter($user->player->license_identifier, $player, $character, $message)->redirect();
     }
 
     /**
@@ -126,8 +126,8 @@ class PlayerRouteController extends Controller
 
             $accounts = Player::query()
                 ->where('identifiers', 'LIKE', '%' . $identifier . '%')
-                ->where('steam_identifier', '!=', $player->steam_identifier)
-                ->select(['steam_identifier', 'player_name'])
+                ->where('license_identifier', '!=', $player->license_identifier)
+                ->select(['license_identifier', 'player_name'])
                 ->get()->toArray();
             $linked['linked'][$identifier]['accounts'] = $accounts;
 
@@ -164,7 +164,7 @@ class PlayerRouteController extends Controller
      */
     public function antiCheat(Player $player, Request $request): Response
     {
-        $events = DB::table("anti_cheat_events")->where('steam_identifier', $player->steam_identifier)->orderByDesc("timestamp")->limit(200)->get()->toArray();
+        $events = DB::table("anti_cheat_events")->where('license_identifier', $player->license_identifier)->orderByDesc("timestamp")->limit(200)->get()->toArray();
 
         return (new Response([
             'status' => true,
@@ -187,7 +187,7 @@ class PlayerRouteController extends Controller
     {
         return (new Response([
             'status' => true,
-            'data'   => Screenshot::getAllScreenshotsForPlayer($player->steam_identifier),
+            'data'   => Screenshot::getAllScreenshotsForPlayer($player->license_identifier),
         ], 200))->header('Content-Type', 'application/json');
     }
 
@@ -217,7 +217,7 @@ class PlayerRouteController extends Controller
     {
         $user = $request->user();
 
-        return OPFWHelper::revivePlayer($user->player->steam_identifier, $player->steam_identifier)->redirect();
+        return OPFWHelper::revivePlayer($user->player->license_identifier, $player->license_identifier)->redirect();
     }
 
     /**
@@ -413,8 +413,8 @@ class PlayerRouteController extends Controller
             return self::json(false, null, 'Invalid server');
         }
 
-        $steam = Server::isServerIDValid($id);
-        if (!$steam) {
+        $license = Server::isServerIDValid($id);
+        if (!$license) {
             return self::json(false, null, 'Invalid server id (User is offline?)');
         }
 
@@ -423,7 +423,7 @@ class PlayerRouteController extends Controller
         if ($data->status) {
             return self::json(true, [
                 'url'   => $data->data['screenshotURL'],
-                'steam' => $steam,
+                'license' => $license,
             ]);
         } else {
             return self::json(false, null, 'Failed to create screenshot');
@@ -450,8 +450,8 @@ class PlayerRouteController extends Controller
             return self::json(false, null, 'Invalid server');
         }
 
-        $steam = Server::isServerIDValid($id);
-        if (!$steam) {
+        $license = Server::isServerIDValid($id);
+        if (!$license) {
             return self::json(false, null, 'Invalid server id (User is offline?)');
         }
 
@@ -464,7 +464,7 @@ class PlayerRouteController extends Controller
         if ($data->status) {
             return self::json(true, [
                 'url'   => $data->data['screenshotURL'],
-                'steam' => $steam,
+                'license' => $license,
             ]);
         } else {
             return self::json(false, null, 'Failed to create screen capture');
@@ -532,7 +532,7 @@ class PlayerRouteController extends Controller
         }
 
         Screenshot::query()->create([
-            'steam_identifier' => $player->steam_identifier,
+            'license_identifier' => $player->license_identifier,
             'filename'         => $fileName,
             'note'             => $note ?? '',
             'created_at'       => time(),

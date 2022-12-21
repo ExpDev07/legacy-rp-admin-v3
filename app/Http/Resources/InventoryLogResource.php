@@ -19,7 +19,7 @@ class InventoryLogResource extends JsonResource
     {
         return [
             'timestamp'       => $this->timestamp,
-            'steamIdentifier' => $this->identifier,
+            'licenseIdentifier' => $this->identifier,
             'inventoryFrom'   => Inventory::parseLogDetails($this->details, 'from'),
             'inventoryTo'     => Inventory::parseLogDetails($this->details, 'to'),
             'itemMoved'       => Inventory::parseItem($this->details),

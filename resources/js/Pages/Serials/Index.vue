@@ -80,7 +80,7 @@
                         <td class="px-6 py-3" v-if="result.character">
                             <inertia-link
                                 class="text-indigo-600 dark:text-indigo-400"
-                                :href="'/players/' + result.character.steam + '/characters/' + result.character.id + '/edit'"
+                                :href="'/players/' + result.character.license + '/characters/' + result.character.id + '/edit'"
                             >{{ result.character.name }}</inertia-link>
 
                             <sup v-if="result.registered">{{ t('serials.registered') }}</sup>

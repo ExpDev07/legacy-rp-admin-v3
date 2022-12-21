@@ -24,18 +24,18 @@
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">
                         <th class="px-6 py-4">{{ t('queue.queuePosition') }}</th>
-                        <th class="px-6 py-4">{{ t('queue.steamIdentifier') }}</th>
+                        <th class="px-6 py-4">{{ t('queue.licenseIdentifier') }}</th>
                         <th class="px-6 py-4">{{ t('queue.consoleName') }}</th>
                         <th class="px-6 py-4">{{ t('queue.priorityName') }}</th>
                         <th class="px-6 py-4">{{ t('queue.queueTime') }}</th>
                         <th class="w-24 px-6 py-4" v-if="$page.auth.player.isSuperAdmin">{{ t('queue.skipQueue') }}</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="(player, index) in queue" :key="player.steamIdentifier">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="(player, index) in queue" :key="player.licenseIdentifier">
                         <td class="px-6 py-3 border-t mobile:block">{{ index+1 }}.</td>
 
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + player.steamIdentifier">
-                                {{ playerName(player.steamIdentifier) }}
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + player.licenseIdentifier">
+                                {{ playerName(player.licenseIdentifier) }}
                             </inertia-link>
                         </td>
 
@@ -44,7 +44,7 @@
                         <td class="px-6 py-3 border-t mobile:block">{{ formatSeconds(player.queueTime) }}</td>
 
                         <td class="px-6 py-3 border-t mobile:block" v-if="$page.auth.player.isSuperAdmin">
-                            <button class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :title="t('queue.skip')" @click="skipQueue(player.steamIdentifier)">
+                            <button class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :title="t('queue.skip')" @click="skipQueue(player.licenseIdentifier)">
                                 <i class="fas fa-ticket-alt"></i>
                             </button>
                         </td>
@@ -122,14 +122,14 @@ export default {
                 setTimeout(resolve, ms);
             });
         },
-        async skipQueue(steamIdentifier) {
+        async skipQueue(licenseIdentifier) {
             if (this.isSkipping || !confirm(this.t('queue.skip_confirm'))) {
                 return;
             }
 
             this.isSkipping = true;
             try {
-                const data = await axios.post('/skip_queue/' + this.server + '/' + steamIdentifier);
+                const data = await axios.post('/skip_queue/' + this.server + '/' + licenseIdentifier);
 
                 clearTimeout(this.responseTimeout);
 
@@ -155,8 +155,8 @@ export default {
 
             this.isSkipping = false;
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     },
     mounted() {

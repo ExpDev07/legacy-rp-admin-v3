@@ -73,10 +73,10 @@ class PanelLogController extends Controller
 
         $identifiers = $sources;
         foreach ($logs as $log) {
-            $steam = $log['target_identifier'];
+            $license = $log['target_identifier'];
 
             $identifiers[] = [
-                'source_identifier' => $steam,
+                'source_identifier' => $license,
             ];
         }
 
@@ -91,7 +91,7 @@ class PanelLogController extends Controller
             ],
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
-            'playerMap' => Player::fetchSteamPlayerNameMap($identifiers, ['source_identifier']),
+            'playerMap' => Player::fetchLicensePlayerNameMap($identifiers, ['source_identifier']),
             'page'      => $page,
         ]);
     }

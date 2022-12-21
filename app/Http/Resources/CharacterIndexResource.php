@@ -18,7 +18,7 @@ class CharacterIndexResource extends JsonResource
     {
         return [
             'id'              => $this->character_id,
-            'steamIdentifier' => $this->steam_identifier,
+            'licenseIdentifier' => $this->license_identifier,
             'firstName'       => $this->first_name,
             'lastName'        => $this->last_name,
             'dateOfBirth'     => $this->date_of_birth,

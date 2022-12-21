@@ -26,7 +26,7 @@ class CasinoLogController extends Controller
 
         // Filtering by identifier.
         if ($identifier = $request->input('identifier')) {
-            $query->where('steam_identifier', '=', $identifier);
+            $query->where('license_identifier', '=', $identifier);
         }
 
         // Filtering by character.
@@ -56,7 +56,7 @@ class CasinoLogController extends Controller
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $query->select(['id', 'steam_identifier', 'character_id', 'game', 'money_won', 'bet_placed', 'details', 'timestamp']);
+        $query->select(['id', 'license_identifier', 'character_id', 'game', 'money_won', 'bet_placed', 'details', 'timestamp']);
         $query->limit(15)->offset(($page - 1) * 15);
 
         $logs = $query->get()->toArray();
@@ -73,7 +73,7 @@ class CasinoLogController extends Controller
             ],
             'links'     => $this->getPageUrls($page),
             'time'      => $end - $start,
-            'playerMap' => Player::fetchSteamPlayerNameMap($logs, 'steam_identifier'),
+            'playerMap' => Player::fetchLicensePlayerNameMap($logs, 'license_identifier'),
             'page'      => $page,
         ]);
     }

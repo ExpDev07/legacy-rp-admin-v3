@@ -19,9 +19,9 @@ class CreateLuckyWheelSpinsTable extends Migration
                 $table->bigInteger('id')->unsigned()->nullable(false)->autoIncrement();
             });
         }
-        if (!Schema::hasColumn("lucky_wheel_spins", "steam_identifier")) {
+        if (!Schema::hasColumn("lucky_wheel_spins", "license_identifier")) {
             Schema::table("lucky_wheel_spins", function (Blueprint $table) {
-                $table->string('steam_identifier')->nullable(false);
+                $table->string('license_identifier')->nullable(false);
             });
         }
         if (!Schema::hasColumn("lucky_wheel_spins", "paid_spin")) {

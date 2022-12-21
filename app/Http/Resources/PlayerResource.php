@@ -25,19 +25,18 @@ class PlayerResource extends JsonResource
         $path = explode('/', $request->path());
         $loadStatus = sizeof($path) === 2 && $path[0] === 'players' && !$plain;
 
-        $status = $loadStatus ? Player::getOnlineStatus($this->steam_identifier, false) : new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
+        $status = $loadStatus ? Player::getOnlineStatus($this->license_identifier, false) : new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
 
         $identifiers = is_array($this->player_aliases) ? $this->player_aliases : json_decode($this->player_aliases, true);
         $enabledCommands = is_array($this->enabled_commands) ? $this->enabled_commands : json_decode($this->enabled_commands, true);
 
-        $drug = (isset($this->panel_drug_department) && $this->panel_drug_department) || GeneralHelper::isUserRoot($this->steam_identifier);
+        $drug = (isset($this->panel_drug_department) && $this->panel_drug_department) || GeneralHelper::isUserRoot($this->license_identifier);
 
         return [
             'id'              => $this->user_id,
             'avatar'          => $this->avatar,
             'discord'         => $this->getDiscordIDs(),
-            'steamIdentifier' => $this->steam_identifier,
-            'steam36'         => base_convert(str_replace('steam:', '', $this->steam_identifier), 16, 36),
+            'licenseIdentifier' => $this->license_identifier,
             'playerName'      => $this->player_name,
             'playTime'        => $this->playtime,
             'lastConnection'  => $this->last_connection,

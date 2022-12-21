@@ -38,7 +38,7 @@ class Screenshot extends Model
      * @var array
      */
     protected $fillable = [
-        'steam_identifier',
+        'license_identifier',
         'filename',
         'note',
         'created_at',
@@ -52,20 +52,20 @@ class Screenshot extends Model
     protected $casts = [
     ];
 
-    public static function getAllScreenshotsForPlayer(string $steam): array
+    public static function getAllScreenshotsForPlayer(string $license): array
     {
         $characters = array_map(
             function ($character) {
                 return $character['character_id'];
             },
             Character::query()
-                ->where('steam_identifier', '=', $steam)
+                ->where('license_identifier', '=', $license)
                 ->select(['character_id'])
                 ->get()->toArray()
         );
 
         $attached = self::query()
-            ->where('steam_identifier', '=', $steam)
+            ->where('license_identifier', '=', $license)
             ->orderByDesc('created_at')
             ->get()
             ->toArray();

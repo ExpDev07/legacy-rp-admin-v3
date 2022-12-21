@@ -109,10 +109,10 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.put('/players/' + this.player.steamIdentifier + '/bans/' + this.ban.id, { ...this.form, expire });
+            await this.$inertia.put('/players/' + this.player.licenseIdentifier + '/bans/' + this.ban.id, { ...this.form, expire });
 
             // Go back to player page
-            window.location.href = '/players/' + this.player.steamIdentifier;
+            window.location.href = '/players/' + this.player.licenseIdentifier;
         }
     },
 }

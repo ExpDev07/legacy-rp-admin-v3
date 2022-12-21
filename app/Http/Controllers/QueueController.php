@@ -39,10 +39,10 @@ class QueueController extends Controller
      *
      * @param Request $request
      * @param string $server
-     * @param string $steamIdentifier
+     * @param string $licenseIdentifier
      * @return \Illuminate\Http\Response
      */
-    public function skip(Request $request, string $server, string $steamIdentifier): \Illuminate\Http\Response
+    public function skip(Request $request, string $server, string $licenseIdentifier): \Illuminate\Http\Response
     {
         $user = $request->user();
         if (!$user->player->is_super_admin) {
@@ -54,7 +54,7 @@ class QueueController extends Controller
             return self::json(false, null, 'Unknown server.');
         }
 
-        $response = OPFWHelper::updateQueuePosition($serverIp, $steamIdentifier, 0);
+        $response = OPFWHelper::updateQueuePosition($serverIp, $licenseIdentifier, 0);
 
         if ($response->status) {
             return self::json(true, $response->message);
@@ -85,7 +85,7 @@ class QueueController extends Controller
 
         return self::json(true, [
             'queue'     => $queue,
-            'playerMap' => Player::fetchSteamPlayerNameMap($queue, ['steamIdentifier']),
+            'playerMap' => Player::fetchLicensePlayerNameMap($queue, ['licenseIdentifier']),
         ]);
     }
 

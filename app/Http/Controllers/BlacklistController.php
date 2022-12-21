@@ -95,7 +95,7 @@ class BlacklistController extends Controller
         $user = $request->user();
 
         $identifier = $request->validated();
-        $identifier['creator_identifier'] = $user->player->steam_identifier;
+        $identifier['creator_identifier'] = $user->player->license_identifier;
         $identifier['identifier'] = strtolower($identifier['identifier']);
 
         if (!Player::isValidIdentifier($identifier['identifier'])) {
@@ -120,7 +120,7 @@ class BlacklistController extends Controller
 
         $lines = explode("\n", $text);
 
-        if (empty($lines) || $lines[0] !== "steam_identifier,reason") {
+        if (empty($lines) || $lines[0] !== "license_identifier,reason") {
             return back()->with('error', 'Invalid file submitted.');
         }
 
@@ -147,10 +147,10 @@ class BlacklistController extends Controller
             if (isset($existing[$identifier]) && $existing[$identifier]) {
                 $skipped++;
             } else {
-                if (Str::startsWith($identifier, "steam:")) {
+                if (Str::startsWith($identifier, "license:")) {
                     $insert[] = [
                         'identifier' => $identifier,
-                        'creator_identifier' => $user->player->steam_identifier,
+                        'creator_identifier' => $user->player->license_identifier,
                         'reason' => 'Modding',
                         'note' => "IMPORTED-BANS (" . $date . ")"
                     ];

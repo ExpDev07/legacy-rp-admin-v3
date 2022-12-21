@@ -96,7 +96,7 @@
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="player in players"
                         v-bind:key="player.id">
-                        <td class="px-6 py-3 border-t">{{ player.steamIdentifier }}</td>
+                        <td class="px-6 py-3 border-t">{{ player.licenseIdentifier }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playerName }}</td>
                         <td class="px-6 py-3 border-t">{{ player.lastConnection | formatTime }}</td>
                         <td class="px-6 py-3 border-t">{{ player.playTime | humanizeSeconds }}</td>
@@ -113,7 +113,7 @@
                         <td class="px-6 py-3 border-t">
                             <inertia-link
                                 class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                                v-bind:href="'/players/' + player.steamIdentifier">
+                                v-bind:href="'/players/' + player.licenseIdentifier">
                                 <i class="fas fa-chevron-right"></i>
                             </inertia-link>
                         </td>

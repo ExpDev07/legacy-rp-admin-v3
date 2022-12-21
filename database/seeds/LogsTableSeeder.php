@@ -15,7 +15,7 @@ class LogsTableSeeder extends Seeder
     public function run(): void
     {
         Log::factory()->count(1000)->create([
-            'identifier' => Player::query()->inRandomOrder()->first()->steam_identifier,
+            'identifier' => Player::query()->inRandomOrder()->first()->license_identifier,
         ]);
     }
 

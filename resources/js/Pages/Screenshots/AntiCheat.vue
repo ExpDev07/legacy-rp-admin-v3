@@ -31,7 +31,7 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in formattedScreenshots"
                         :key="screenshot.url">
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + steamIdentifier(screenshot.character_id)">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + licenseIdentifier(screenshot.character_id)">
                                 {{ playerName(screenshot.character_id) }}
                             </inertia-link>
                         </td>
@@ -128,7 +128,7 @@ export default {
             type: Object,
             required: true,
         },
-        characterSteamNames: {
+        characterLicenseNames: {
             type: Object,
             required: true,
         },
@@ -173,10 +173,10 @@ export default {
             this.isLoading = false;
         },
         getBanInfo(characterId, key) {
-            const steamIdentifier = this.steamIdentifier(characterId);
+            const licenseIdentifier = this.licenseIdentifier(characterId);
 
-            if (steamIdentifier) {
-                const ban = steamIdentifier in this.banMap ? this.banMap[steamIdentifier] : null;
+            if (licenseIdentifier) {
+                const ban = licenseIdentifier in this.banMap ? this.banMap[licenseIdentifier] : null;
 
                 if (key) {
                     return ban && key in ban ? ban[key] : null;
@@ -184,13 +184,13 @@ export default {
                 return ban;
             }
         },
-        steamIdentifier(characterId) {
-            return this.characterSteamNames[characterId];
+        licenseIdentifier(characterId) {
+            return this.characterLicenseNames[characterId];
         },
         playerName(characterId) {
-            const steamIdentifier = this.steamIdentifier(characterId);
+            const licenseIdentifier = this.licenseIdentifier(characterId);
 
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     }
 };

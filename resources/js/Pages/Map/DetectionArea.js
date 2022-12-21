@@ -99,13 +99,13 @@ class DetectionArea {
             isInArea = dist(coords, this.location) <= this.radius && this.matchesFilters(player, characters, highlightedPeople);
 
         if (isInArea) {
-            const beforeInvTime = player.player.steam in this.players
-                ? this.players[player.player.steam].invisible_time
-                : player.player.steam in this.previousPlayers
-                    ? this.previousPlayers[player.player.steam].invisible_time : 0;
+            const beforeInvTime = player.player.license in this.players
+                ? this.players[player.player.license].invisible_time
+                : player.player.license in this.previousPlayers
+                    ? this.previousPlayers[player.player.license].invisible_time : 0;
 
-            this.players[player.player.steam] = {
-                steam: player.player.steam,
+            this.players[player.player.license] = {
+                license: player.player.license,
                 cid: player.character.id,
                 source: player.player.source,
                 name: player.character.name,

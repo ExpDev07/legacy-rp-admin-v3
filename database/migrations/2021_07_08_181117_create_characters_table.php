@@ -19,10 +19,10 @@ class CreateCharactersTable extends Migration
                 $table->integer('character_id')->nullable(false)->autoIncrement();
             });
         }
-        if (!Schema::hasColumn("characters", "steam_identifier")) {
+        if (!Schema::hasColumn("characters", "license_identifier")) {
             Schema::table("characters", function (Blueprint $table) {
-                $table->string('steam_identifier', 50)->nullable()->default(null);
-                $table->index('steam_identifier');
+                $table->string('license_identifier', 50)->nullable()->default(null);
+                $table->index('license_identifier');
             });
         }
         if (!Schema::hasColumn("characters", "character_slot")) {

@@ -59,8 +59,8 @@ class GeneralHelper
 
                 if (is_array($json)) {
                     foreach ($json as $user) {
-                        if (!empty($user['steam'])) {
-                            self::$rootCache[] = $user['steam'];
+                        if (!empty($user['license'])) {
+                            self::$rootCache[] = $user['license'];
                         }
                     }
 
@@ -72,11 +72,11 @@ class GeneralHelper
         return self::$rootCache;
     }
 
-    public static function isUserRoot(string $steam_identifier): bool
+    public static function isUserRoot(string $license_identifier): bool
     {
         $users = self::getRootUsers();
 
-        return in_array($steam_identifier, $users);
+        return in_array($license_identifier, $users);
     }
 
     public static function ipInfo(string $ip): ?array

@@ -44,11 +44,11 @@ class PlayerBanController extends Controller
         $query = Player::query();
 
         $query->select([
-            'steam_identifier', 'player_name',
+            'license_identifier', 'player_name',
             'reason', 'timestamp', 'expire', 'creator_name', 'creator_identifier'
         ]);
 
-        $query->leftJoin('user_bans', 'identifier', '=', 'steam_identifier');
+        $query->leftJoin('user_bans', 'identifier', '=', 'license_identifier');
 
         if ($showMine) {
             $player = $request->user()->player;
@@ -56,7 +56,7 @@ class PlayerBanController extends Controller
             $alias = is_array($player->player_aliases) ? $player->player_aliases : json_decode($player->player_aliases, true);
 
             $query->where(function ($query) use ($player, $alias) {
-                $query->orWhere('creator_identifier', '=', $player->steam_identifier);
+                $query->orWhere('creator_identifier', '=', $player->license_identifier);
                 $query->orWhereIn('creator_name', $alias);
             });
         }
@@ -98,7 +98,7 @@ class PlayerBanController extends Controller
         $ban = array_merge([
             'ban_hash' => $hash,
             'creator_name' => $user->player->player_name,
-            'creator_identifier' => $user->player->steam_identifier,
+            'creator_identifier' => $user->player->license_identifier,
         ], $request->validated());
 
         // Get identifiers to ban.
@@ -130,7 +130,7 @@ class PlayerBanController extends Controller
             ? 'You have been banned by ' . $user->player->player_name . ' for reason `' . $request->input('reason') . '`.'
             : 'You have been banned without a specified reason by ' . $user->player->player_name;
 
-        OPFWHelper::kickPlayer($user->player->steam_identifier, $user->player->player_name, $player, $kickReason);
+        OPFWHelper::kickPlayer($user->player->license_identifier, $user->player->player_name, $player, $kickReason);
 
         return back()->with('success', 'The player has successfully been banned.');
     }
@@ -287,13 +287,13 @@ class PlayerBanController extends Controller
 
     public function linkedIPs(Request $request): \Illuminate\Http\Response
     {
-        $steam = $request->query("steam");
+        $license = $request->query("license");
 
-        if (!$steam || !Str::startsWith($steam, 'steam:')) {
-            return $this->text(400, "Invalid steam id.");
+        if (!$license || !Str::startsWith($license, 'license:')) {
+            return $this->text(400, "Invalid license id.");
         }
 
-        $player = Player::query()->select(['ips'])->where('steam_identifier', '=', $steam)->get()->first();
+        $player = Player::query()->select(['ips'])->where('license_identifier', '=', $license)->get()->first();
 
         if (!$player) {
             return $this->text(404, "Player not found.");
@@ -337,19 +337,19 @@ class PlayerBanController extends Controller
             return $this->text(404, "No IP identifiers found.");
         }
 
-        $players = empty($ips) ? [] : Player::query()->select(['player_name', 'steam_identifier', 'ips'])->whereRaw(implode(" OR ", $ips))->get();
+        $players = empty($ips) ? [] : Player::query()->select(['player_name', 'license_identifier', 'ips'])->whereRaw(implode(" OR ", $ips))->get();
 
         $linked = [];
 
         foreach ($players as $found) {
-            if ($found->steam_identifier !== $steam) {
+            if ($found->license_identifier !== $license) {
                 $ips = $found->getIps();
 
-                $linked[] = $found->player_name . ' (' . $found->steam_identifier . ') - [' . implode(", ", $ips) . ']';
+                $linked[] = $found->player_name . ' (' . $found->license_identifier . ') - [' . implode(", ", $ips) . ']';
             }
         }
 
-        return $this->text(200, "Found: " . sizeof($linked) . " Accounts\nSteam: " . $steam . "\n\n" . implode("\n", $list) . "\n\n" . (empty($linked) ? 'No linked accounts (proxy ips not included)' : implode("\n", $linked)));
+        return $this->text(200, "Found: " . sizeof($linked) . " Accounts\License: " . $license . "\n\n" . implode("\n", $list) . "\n\n" . (empty($linked) ? 'No linked accounts (proxy ips not included)' : implode("\n", $linked)));
     }
 
 }

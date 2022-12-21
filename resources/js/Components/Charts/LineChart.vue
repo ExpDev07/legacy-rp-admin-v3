@@ -21,7 +21,8 @@ export default {
                     gridLines: {
                         display: true,
                         color: "rgba(128, 128, 128, 0.3)"
-                    }
+                    },
+                    stacked: this.stacked
                 }],
                 xAxes: [{
                     display: false,
@@ -163,9 +164,14 @@ export default {
         },
         weaponChart: {
             type: Object,
-            default: false,
+            required: false,
+            default: null,
         },
         smooth: {
+            type: Boolean,
+            default: false,
+        },
+        stacked: {
             type: Boolean,
             default: false,
         }

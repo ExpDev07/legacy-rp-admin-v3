@@ -27,7 +27,7 @@
                                 {{ t('logs.identifier') }} <sup class="text-muted dark:text-dark-muted">*, C</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
-                                   id="identifier" placeholder="steam:11000010df22c8b" v-model="filters.identifier">
+                                   id="identifier" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="filters.identifier">
                         </div>
                         <!-- Details -->
                         <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
@@ -124,8 +124,8 @@
                         <td class="px-6 py-3 border-t mobile:block">
                             <inertia-link
                                 class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                                :href="'/players/' + log.steam_identifier">
-                                {{ playerName(log.steam_identifier) }}
+                                :href="'/players/' + log.license_identifier">
+                                {{ playerName(log.license_identifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
@@ -274,8 +274,8 @@ export default {
 
             this.isLoading = false;
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     },
     mounted() {

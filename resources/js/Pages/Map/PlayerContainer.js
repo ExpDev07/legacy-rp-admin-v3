@@ -114,7 +114,7 @@ class PlayerContainer {
             }
 
             const info = {
-                steam: this.players[id].player.steam,
+                license: this.players[id].player.license,
                 name: this.players[id].character.name
             };
 
@@ -188,7 +188,7 @@ class PlayerContainer {
             is_staff: player.player.isStaff,
             name: player.character ? player.character.name : 'N/A',
             playerName: player.player.name,
-            steam: player.player.steam,
+            license: player.player.license,
             afk: player.afk.time,
             afk_title: player.getAFKTitle(),
             invisible: player.invisible.time,

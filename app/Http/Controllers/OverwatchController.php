@@ -50,18 +50,18 @@ class OverwatchController extends Controller
         $players = Player::getAllOnlinePlayers(true);
 
         $players = array_filter($players, function($player) {
-            return $player && $player['character'] && !GeneralHelper::isUserRoot($player['steam']);
+            return $player && $player['character'] && !GeneralHelper::isUserRoot($player['license']);
         });
 
         if (!empty($players)) {
-            $steam = array_rand($players);
-            $player = $players[$steam];
+            $license = array_rand($players);
+            $player = $players[$license];
 
             $screenshotResponse = OPFWHelper::createScreenshot($player['server'], $player['id']);
 
             if ($screenshotResponse->status) {
                 return self::json(true, [
-                    "steam"  => $steam,
+                    "license"  => $license,
                     "url"    => $screenshotResponse->data['screenshotURL'],
                     "id"     => $player['id'],
                     "server" => Server::getServerName($player['server'])

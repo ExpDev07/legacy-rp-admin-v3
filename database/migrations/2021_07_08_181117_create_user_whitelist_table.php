@@ -19,10 +19,10 @@ class CreateUserWhitelistTable extends Migration
                 $table->integer('whitelist_id')->nullable(false)->autoIncrement();
             });
         }
-        if (!Schema::hasColumn("user_whitelist", "steam_identifier")) {
+        if (!Schema::hasColumn("user_whitelist", "license_identifier")) {
             Schema::table("user_whitelist", function (Blueprint $table) {
-                $table->string('steam_identifier', 50)->nullable()->default(null);
-                $table->index('steam_identifier');
+                $table->string('license_identifier', 50)->nullable()->default(null);
+                $table->index('license_identifier');
             });
         }
     }

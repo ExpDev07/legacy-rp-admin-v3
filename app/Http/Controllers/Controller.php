@@ -82,7 +82,7 @@ class Controller extends BaseController
                 $seniorStaff = $player->is_senior_staff ?? false;
                 $superAdmin = $player->is_super_admin ?? false;
 
-                return $seniorStaff || $superAdmin || GeneralHelper::isUserRoot($player->steam_identifier);
+                return $seniorStaff || $superAdmin || GeneralHelper::isUserRoot($player->license_identifier);
             }
         }
 
@@ -99,7 +99,7 @@ class Controller extends BaseController
             if ($player) {
                 $superAdmin = $player->is_super_admin ?? false;
 
-                return $superAdmin || GeneralHelper::isUserRoot($player->steam_identifier);
+                return $superAdmin || GeneralHelper::isUserRoot($player->license_identifier);
             }
         }
 

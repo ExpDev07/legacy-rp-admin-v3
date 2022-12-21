@@ -61,8 +61,14 @@ class StaffMiddleware
             if ($_SERVER['REQUEST_METHOD'] !== 'GET' || time() - $this->lastUpdated() > 10) {
                 $user = $session->get('user');
 
-                $player = Player::query()->where('steam_identifier', '=', $user['player']['steam_identifier'])->select([
-                    'player_name', 'is_super_admin', 'is_staff', 'is_senior_staff', 'is_panel_trusted', 'steam_identifier'
+				if (!isset($user['player']['license_identifier'])) {
+                    return redirect('/login')->with('error',
+                        'Your staff status has changed, please log in again!'
+                    );
+                }
+
+                $player = Player::query()->where('license_identifier', '=', $user['player']['license_identifier'])->select([
+                    'player_name', 'is_super_admin', 'is_staff', 'is_senior_staff', 'is_panel_trusted', 'license_identifier'
                 ])->first();
 
                 if (!$player) {
@@ -72,7 +78,7 @@ class StaffMiddleware
                     return redirect('/login')->with('error', 'You have to have connected to the server at least once before trying to log-in (Player not found).');
                 }
 
-                $isRoot = GeneralHelper::isUserRoot($user['player']['steam_identifier']);
+                $isRoot = GeneralHelper::isUserRoot($user['player']['license_identifier']);
                 $isSuperAdmin = $player->is_super_admin || $isRoot;
                 $isSeniorStaff = $player->is_senior_staff || $isSuperAdmin;
                 $isStaff = $player->is_staff || $isSeniorStaff;
@@ -117,12 +123,16 @@ class StaffMiddleware
         if ($session->exists('user')) {
             $user = $session->get('user');
 
+			if (!isset($user['player']['license_identifier'])) {
+				return false;
+			}
+
             $request->setUserResolver(function () use ($user) {
                 return json_decode(json_encode($user), FALSE);
             });
 
             if (!empty($user['player'])) {
-                $isRoot = GeneralHelper::isUserRoot($user['player']['steam_identifier']);
+                $isRoot = GeneralHelper::isUserRoot($user['player']['license_identifier']);
                 $isSuperAdmin = $user['player']['is_super_admin'] || $isRoot;
                 $isSeniorStaff = $user['player']['is_senior_staff'] || $isSuperAdmin;
                 $isStaff = $user['player']['is_staff'] || $isSeniorStaff;

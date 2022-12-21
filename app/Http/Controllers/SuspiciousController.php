@@ -41,7 +41,7 @@ class SuspiciousController extends Controller
                     break;
                 case 'characters':
                     $logs = SuspiciousChecker::findSuspiciousCharacters();
-                    $map = 'steam_identifier';
+                    $map = 'license_identifier';
                     break;
                 case 'pawn':
                     $logs = SuspiciousChecker::findSuspiciousPawnShopUsages();
@@ -66,7 +66,7 @@ class SuspiciousController extends Controller
 
         $logs = array_slice($logs, ($page - 1) * 15, 15);
 
-        $map = $type == 'inventories' || $type == 'items' ? ['none' => 'none'] : Player::fetchSteamPlayerNameMap($logs, $map);
+        $map = $type == 'inventories' || $type == 'items' ? ['none' => 'none'] : Player::fetchLicensePlayerNameMap($logs, $map);
 
         $end = round(microtime(true) * 1000);
 

@@ -37,7 +37,7 @@
 <script>
 export default {
     props: {
-        steam: {
+        license: {
             type: String,
             required: true,
         },
@@ -64,7 +64,7 @@ export default {
             this.isAttaching = true;
 
             try {
-                const result = await axios.post('/players/' + this.steam + '/attachScreenshot', {
+                const result = await axios.post('/players/' + this.license + '/attachScreenshot', {
                     url: this.url,
                     note: this.note
                 });

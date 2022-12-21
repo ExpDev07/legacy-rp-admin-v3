@@ -4,7 +4,7 @@
         <table class="text-sm font-mono font-medium">
             <tr v-for="(player, x) in players" :key="x">
                 <td class="pr-2">
-                    <a target="_blank" :href="'/players/' + player.steam" :class="color">
+                    <a target="_blank" :href="'/players/' + player.license" :class="color">
                         {{ usePlayerName ? player.playerName : player.name }}
                     </a>
                 </td>
@@ -18,7 +18,7 @@
                         {{ t('map.short.track') }}
                     </a>
                     <a :class="'highlight-cid ' + color" href="#" :title="t('map.do_highlight')"
-                       @click="highlightServerId($event, player.steam)">
+                       @click="highlightServerId($event, player.license)">
                         {{ t('map.short.highlight') }}
                     </a>
                 </td>

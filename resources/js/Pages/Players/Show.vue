@@ -8,14 +8,8 @@
                 <div
                     class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
                     <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer"
-                           :click="copyShare">
-                        <i class="fas fa-share-square mr-1"></i>
-                        <span>{{ t('global.copy_link') }}</span>
-                    </badge>
-                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer"
-                           :click="copySteam">
-                        <i class="fab fa-steam mr-1"></i>
-                        <span>{{ t('players.show.copy_steam') }}</span>
+                           :click="copyLicense">
+                        <span>{{ t('players.show.copy_license') }}</span>
                     </badge>
 
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
@@ -170,7 +164,7 @@
                 <!-- View on Map -->
                 <a
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 block"
-                    :href="'/map#' + player.steamIdentifier"
+                    :href="'/map#' + player.licenseIdentifier"
                     :title="t('global.view_map')"
                     v-if="this.perm.check(this.perm.PERM_LIVEMAP) && player.status.status === 'online'"
                     target="_blank"
@@ -205,7 +199,7 @@
                 <!-- Edit Ban -->
                 <inertia-link
                     class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/edit'"
+                    v-bind:href="'/players/' + player.licenseIdentifier + '/bans/' + player.ban.id + '/edit'"
                     v-if="player.isBanned && (!player.ban.locked || this.perm.check(this.perm.PERM_LOCK_BAN))">
                     <i class="mr-1 fas fa-edit"></i>
                     {{ t('players.show.edit_ban') }}
@@ -213,7 +207,7 @@
                 <!-- Unbanning -->
                 <inertia-link
                     class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    method="DELETE" v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id"
+                    method="DELETE" v-bind:href="'/players/' + player.licenseIdentifier + '/bans/' + player.ban.id"
                     v-if="player.isBanned && (!player.ban.locked || this.perm.check(this.perm.PERM_LOCK_BAN))">
                     <i class="mr-1 fas fa-lock-open"></i>
                     {{ t('players.show.unban') }}
@@ -229,7 +223,7 @@
                 <inertia-link
                     class="px-5 py-2 ml-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     method="POST"
-                    v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/lock'"
+                    v-bind:href="'/players/' + player.licenseIdentifier + '/bans/' + player.ban.id + '/lock'"
                     v-if="player.isBanned && !player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
                     <i class="mr-1 fas fa-lock"></i>
                     {{ t('players.show.lock_ban') }}
@@ -238,7 +232,7 @@
                 <inertia-link
                     class="px-5 py-2 ml-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     method="POST"
-                    v-bind:href="'/players/' + player.steamIdentifier + '/bans/' + player.ban.id + '/unlock'"
+                    v-bind:href="'/players/' + player.licenseIdentifier + '/bans/' + player.ban.id + '/unlock'"
                     v-if="player.isBanned && player.ban.locked && this.perm.check(this.perm.PERM_LOCK_BAN)">
                     <i class="mr-1 fas fa-lock-open"></i>
                     {{ t('players.show.unlock_ban') }}
@@ -336,10 +330,10 @@
                         <div class="p-3 w-1/2" v-if="link.accounts.length > 0">
                             <a
                                 class="px-5 py-1 mb-2 border-2 rounded block w-full border-blue-200 bg-primary-pale dark:bg-dark-primary-pale"
-                                :href="'/players/' + account.steam_identifier"
+                                :href="'/players/' + account.license_identifier"
                                 target="_blank"
                                 v-for="account in link.accounts"
-                                :key="account.steam_identifier"
+                                :key="account.license_identifier"
                             >
                                 <span class="font-semibold">{{ account.player_name }}</span>
                             </a>
@@ -586,10 +580,10 @@
                         <div class="p-3 w-1/2" v-if="link.accounts.length > 0">
                             <a
                                 class="px-5 py-1 mb-2 border-2 rounded block w-full border-blue-200 bg-primary-pale dark:bg-dark-primary-pale"
-                                :href="'/players/' + account.steam_identifier"
+                                :href="'/players/' + account.license_identifier"
                                 target="_blank"
                                 v-for="account in link.accounts"
-                                :key="account.steam_identifier"
+                                :key="account.license_identifier"
                             >
                                 <span class="font-semibold">{{ account.player_name }}</span>
                             </a>
@@ -814,7 +808,7 @@
             <div class="flex flex-wrap items-center text-center">
                 <inertia-link
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
-                    :href="'/logs?identifier=' + player.steamIdentifier"
+                    :href="'/logs?identifier=' + player.licenseIdentifier"
                 >
                     <i class="mr-1 fas fa-toilet-paper"></i>
                     {{ t('players.show.logs') }}
@@ -852,12 +846,6 @@
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     @click="showLinked"
                 >
-                    <avatar
-                        class="mr-3"
-                        :src="player.avatar"
-                        :alt="player.playerName + ' Avatar'"
-                        v-if="player.avatar"
-                    />
                     <span>
                         {{ t('players.show.linked') }}
                     </span>
@@ -934,7 +922,7 @@
                         <template #footer>
                             <inertia-link
                                 class="block px-4 py-3 text-center text-white bg-indigo-600 dark:bg-indigo-400 rounded"
-                                :href="'/players/' + (player.overrideSteam ? player.overrideSteam : player.steamIdentifier) + '/characters/' + character.id + '/edit?returnTo=' + player.steamIdentifier">
+                                :href="'/players/' + (player.overrideLicense ? player.overrideLicense : player.licenseIdentifier) + '/characters/' + character.id + '/edit?returnTo=' + player.licenseIdentifier">
                                 {{ t('global.view') }}
                             </inertia-link>
                             <div class="flex justify-between flex-wrap">
@@ -1044,11 +1032,6 @@
                     <template #header>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <avatar
-                                    class="mr-3"
-                                    :src="warning.issuer.avatar"
-                                    :alt="warning.issuer.playerName + ' Avatar'"
-                                />
                                 <h4>
                                     {{ warning.issuer.playerName }}
                                     -
@@ -1067,7 +1050,7 @@
                                 <button
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-yellow-500 rounded"
                                     @click="warningEditId = warning.id"
-                                    v-if="warningEditId !== warning.id && $page.auth.player.steamIdentifier === warning.issuer.steamIdentifier && warning.warningType !== 'system'"
+                                    v-if="warningEditId !== warning.id && $page.auth.player.licenseIdentifier === warning.issuer.licenseIdentifier && warning.warningType !== 'system'"
                                 >
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -1088,7 +1071,7 @@
                                 <inertia-link
                                     class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
                                     method="DELETE"
-                                    v-bind:href="'/players/' + player.steamIdentifier + '/warnings/' + warning.id"
+                                    v-bind:href="'/players/' + player.licenseIdentifier + '/warnings/' + warning.id"
                                     v-if="warning.canDelete || $page.auth.player.isSeniorStaff">
                                     <i class="fas fa-trash"></i>
                                 </inertia-link>
@@ -1272,7 +1255,7 @@
                 <div class="flex justify-end mt-2">
                     <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
                             @click="isAttachingScreenshot = true"
-                            v-if="screenshotImage && screenshotSteam">
+                            v-if="screenshotImage && screenshotLicense">
                         {{ t('screenshot.title') }}
                     </button>
                     <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
@@ -1281,7 +1264,7 @@
                         {{ t('global.refresh') }}
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
-                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotSteam = null">
+                            @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotLicense = null">
                         {{ t('global.close') }}
                     </button>
                 </div>
@@ -1362,7 +1345,7 @@
             </div>
         </div>
 
-        <ScreenshotAttacher :close="screenshotAttached" :steam="screenshotSteam" :url="screenshotImage"
+        <ScreenshotAttacher :close="screenshotAttached" :license="screenshotLicense" :url="screenshotImage"
                             v-if="isAttachingScreenshot"/>
 
     </div>
@@ -1531,7 +1514,7 @@ export default {
             isScreenshot: false,
             isScreenshotLoading: false,
             screenshotImage: null,
-            screenshotSteam: null,
+            screenshotLicense: null,
             screenshotError: null,
             isAttachingScreenshot: false,
 
@@ -1558,13 +1541,13 @@ export default {
             const enabledCommands = this.commands.filter(c => c.enabled).map(c => c.name);
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateEnabledCommands', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateEnabledCommands', {
                 enabledCommands: enabledCommands,
             });
         },
         async loadScreenshots() {
             try {
-                const data = await axios.get('/players/' + this.player.steamIdentifier + '/screenshots');
+                const data = await axios.get('/players/' + this.player.licenseIdentifier + '/screenshots');
 
                 if (data.data && data.data.status) {
                     const screenshots = data.data.data;
@@ -1580,7 +1563,7 @@ export default {
         },
         async loadPanelLogs() {
             try {
-                const data = await axios.get('/players/' + this.player.steamIdentifier + '/panelLogs');
+                const data = await axios.get('/players/' + this.player.licenseIdentifier + '/panelLogs');
 
                 if (data.data && data.data.status) {
                     this.panelLogs = data.data.data;
@@ -1625,7 +1608,7 @@ export default {
 
                 if (result.data) {
                     if (result.data.status) {
-                        console.info('Screen capture of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.steam);
+                        console.info('Screen capture of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.license);
 
                         this.screenCaptureVideo = result.data.data.url;
                     } else {
@@ -1647,7 +1630,7 @@ export default {
             this.isScreenshotLoading = true;
             this.screenshotError = null;
 
-            this.screenshotSteam = null;
+            this.screenshotLicense = null;
 
             try {
                 const result = await axios.post('/api/screenshot/' + this.player.status.serverName + '/' + this.player.status.serverId);
@@ -1655,10 +1638,10 @@ export default {
 
                 if (result.data) {
                     if (result.data.status) {
-                        console.info('Screenshot of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.steam);
+                        console.info('Screenshot of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.license);
 
                         this.screenshotImage = result.data.data.url;
-                        this.screenshotSteam = result.data.data.steam;
+                        this.screenshotLicense = result.data.data.license;
                     } else {
                         this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
                     }
@@ -1680,7 +1663,7 @@ export default {
                 this.isScreenshot = false;
                 this.screenshotImage = null;
                 this.screenshotError = null;
-                this.screenshotSteam = null;
+                this.screenshotLicense = null;
             }
         },
         async showDiscord(e) {
@@ -1691,7 +1674,7 @@ export default {
             this.discordAccounts = [];
 
             try {
-                const data = await axios.get('/players/' + this.player.steamIdentifier + '/discord');
+                const data = await axios.get('/players/' + this.player.licenseIdentifier + '/discord');
 
                 if (data.data && data.data.status) {
                     const accounts = data.data.data;
@@ -1714,7 +1697,7 @@ export default {
             this.linkedAccounts.linked = [];
 
             try {
-                const data = await axios.get('/players/' + this.player.steamIdentifier + '/linked');
+                const data = await axios.get('/players/' + this.player.licenseIdentifier + '/linked');
 
                 if (data.data && data.data.status) {
                     const linked = data.data.data;
@@ -1739,7 +1722,7 @@ export default {
             this.antiCheatEvents = [];
 
             try {
-                const data = await axios.get('/players/' + this.player.steamIdentifier + '/antiCheat');
+                const data = await axios.get('/players/' + this.player.licenseIdentifier + '/antiCheat');
 
                 if (data.data && data.data.status) {
                     this.antiCheatEvents = data.data.data;
@@ -1816,7 +1799,7 @@ export default {
         },
         async pmPlayer() {
             // Send request.
-            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/staffPM', this.form.pm);
+            await this.$inertia.post('/players/' + (this.player.overrideLicense ? this.player.overrideLicense : this.player.licenseIdentifier) + '/staffPM', this.form.pm);
 
             // Reset.
             this.isStaffPM = false;
@@ -1828,7 +1811,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTrustedPanelStatus/0');
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateTrustedPanelStatus/0');
         },
         async addTrustedPanel() {
             if (!confirm(this.t('players.show.panel_trusted_confirm'))) {
@@ -1836,7 +1819,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTrustedPanelStatus/1');
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateTrustedPanelStatus/1');
         },
         async removeSoftBan() {
             if (!confirm(this.t('players.show.soft_ban_confirm'))) {
@@ -1844,7 +1827,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateSoftBanStatus/0');
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateSoftBanStatus/0');
         },
         async addSoftBan() {
             if (!confirm(this.t('players.show.soft_ban_confirm'))) {
@@ -1852,14 +1835,14 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateSoftBanStatus/1');
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateSoftBanStatus/1');
         },
         async removeTag() {
             this.isTagging = false;
 
             // Send request.
 
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTag', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateTag', {
                 tag: false
             });
         },
@@ -1867,7 +1850,7 @@ export default {
             this.isRoleEdit = false;
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateRole', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateRole', {
                 role: this.selectedRole ? this.selectedRole : 'player'
             });
         },
@@ -1882,7 +1865,7 @@ export default {
 
             // Send request.
 
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/updateTag', {
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateTag', {
                 tag: tag
             });
         },
@@ -1893,7 +1876,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/kick', this.form.kick);
+            await this.$inertia.post('/players/' + (this.player.overrideLicense ? this.player.overrideLicense : this.player.licenseIdentifier) + '/kick', this.form.kick);
 
             // Reset.
             this.isKicking = false;
@@ -1905,7 +1888,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/revivePlayer');
+            await this.$inertia.post('/players/' + (this.player.overrideLicense ? this.player.overrideLicense : this.player.licenseIdentifier) + '/revivePlayer');
         },
         async unloadCharacter() {
             if (!confirm(this.t('players.show.unload_confirm'))) {
@@ -1913,7 +1896,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + (this.player.overrideSteam ? this.player.overrideSteam : this.player.steamIdentifier) + '/unloadCharacter', this.form.unload);
+            await this.$inertia.post('/players/' + (this.player.overrideLicense ? this.player.overrideLicense : this.player.licenseIdentifier) + '/unloadCharacter', this.form.unload);
 
             this.form.unload.message = this.t('players.show.unload_default');
             this.form.unload.character = null;
@@ -1927,7 +1910,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.delete('/players/' + this.player.steamIdentifier + '/characters/' + characterId);
+            await this.$inertia.delete('/players/' + this.player.licenseIdentifier + '/characters/' + characterId);
         },
         async submitBan() {
             // Default expiration.
@@ -1969,7 +1952,7 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/bans', {...this.form.ban, expire});
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/bans', {...this.form.ban, expire});
 
             this.local.ban = this.localizeBan();
             this.filterWarnings();
@@ -1985,7 +1968,7 @@ export default {
         },
         async submitWarning() {
             // Send request.
-            await this.$inertia.post('/players/' + this.player.steamIdentifier + '/warnings', this.form.warning);
+            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/warnings', this.form.warning);
 
             this.filterWarnings();
 
@@ -1994,7 +1977,7 @@ export default {
         },
         async editWarning(id, warningType) {
             // Send request.
-            await this.$inertia.put('/players/' + this.player.steamIdentifier + '/warnings/' + id, {
+            await this.$inertia.put('/players/' + this.player.licenseIdentifier + '/warnings/' + id, {
                 message: $('#warning_' + id).val(),
                 warning_type: warningType,
             });
@@ -2014,30 +1997,16 @@ export default {
                 $('.card-deleted').addClass('hidden');
             }
         },
-        copyShare(e) {
-            const cluster = window.location.host.split('.')[0],
-                button = $(e.target).closest('.badge'),
-                _this = this,
-                url = 'https://' + cluster + '.opfw.net/p/' + this.player.steam36;
-
-            this.copyToClipboard(url);
-
-            $('span', button).text(this.t('global.copied'));
-
-            setTimeout(function () {
-                $('span', button).text(_this.t('global.copy_link'));
-            }, 1500);
-        },
-        copySteam(e) {
+        copyLicense(e) {
             const _this = this,
                 button = $(e.target).closest('.badge');
 
-            this.copyToClipboard(this.player.steamIdentifier);
+            this.copyToClipboard(this.player.licenseIdentifier);
 
             $('span', button).text(this.t('global.copied'));
 
             setTimeout(function () {
-                $('span', button).text(_this.t('players.show.copy_steam'));
+                $('span', button).text(_this.t('players.show.copy_license'));
             }, 1500);
         },
         copyText(e, text) {
@@ -2068,11 +2037,18 @@ export default {
                 return `<a href="${url}" target="_blank" class="text-yellow-600 dark:text-yellow-400">${cluster.toLowerCase()}/${steam.toLowerCase()}</a>`;
             });
 
+            warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(license:\w{15})/gmi, (full, _ignore, host, license) => {
+                const url = full && full.startsWith("http") ? full : "/players/" + license,
+                    cluster = host ? host.split(".")[0].replace("localhost", "c1") : this.$page?.auth?.cluster;
+
+                return `<a href="${url}" target="_blank" class="text-yellow-600 dark:text-yellow-400">${cluster.toLowerCase()}/${license.toLowerCase()}</a>`;
+            });
+
             return this.urlify(warning, function (url) {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
                 let extraClass = 'user-link';
 
-                if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi)) return url;
+                if (url.match(/(https?:\/\/(.+?)\/players\/)?((steam|license):\w{15})/gmi)) return url;
 
                 switch (ext) {
                     case 'jpg':
@@ -2109,7 +2085,7 @@ export default {
             this.isShowingLinkedLoading = false;
 
             // Send request.
-            await this.$inertia.delete('/players/' + this.player.steamIdentifier + '/removeIdentifier/' + identifier);
+            await this.$inertia.delete('/players/' + this.player.licenseIdentifier + '/removeIdentifier/' + identifier);
         },
         formatBanCreator(creator) {
             if (!creator) {

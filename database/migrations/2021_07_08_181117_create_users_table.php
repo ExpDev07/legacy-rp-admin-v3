@@ -19,10 +19,10 @@ class CreateUsersTable extends Migration
                 $table->integer('user_id')->nullable(false)->autoIncrement();
             });
         }
-        if (!Schema::hasColumn("users", "steam_identifier")) {
+        if (!Schema::hasColumn("users", "license_identifier")) {
             Schema::table("users", function (Blueprint $table) {
-                $table->string('steam_identifier', 50)->nullable()->default(null);
-                $table->index('steam_identifier');
+                $table->string('license_identifier', 50)->nullable()->default(null);
+                $table->index('license_identifier');
             });
         }
         if (!Schema::hasColumn("users", "player_name")) {

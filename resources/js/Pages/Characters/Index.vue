@@ -122,8 +122,8 @@
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="character in characters.data" :key="character.id">
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + character.steamIdentifier">
-                                {{ playerName(character.steamIdentifier) }}
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + character.licenseIdentifier">
+                                {{ playerName(character.licenseIdentifier) }}
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">{{ character.id }}</td>
@@ -143,7 +143,7 @@
                             {{ character.positionName || t('global.none') }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + character.steamIdentifier + '/characters/' + character.id + '/edit'">
+                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-bind:href="'/players/' + character.licenseIdentifier + '/characters/' + character.id + '/edit'">
                                 <i class="fas fa-chevron-right"></i>
                             </inertia-link>
                         </td>
@@ -216,8 +216,8 @@ export default {
 
             this.isLoading = false;
         },
-        playerName(steamIdentifier) {
-            return steamIdentifier in this.playerMap ? this.playerMap[steamIdentifier] : steamIdentifier;
+        playerName(licenseIdentifier) {
+            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
         }
     }
 };

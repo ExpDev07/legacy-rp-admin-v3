@@ -18,24 +18,24 @@ class OPFWHelper
     /**
      * Sends a staff pm to a player
      *
-     * @param string $staffSteamIdentifier
+     * @param string $staffLicenseIdentifier
      * @param Player $player
      * @param string $message
      * @return OPFWResponse
      */
-    public static function staffPM(string $staffSteamIdentifier, Player $player, string $message): OPFWResponse
+    public static function staffPM(string $staffLicenseIdentifier, Player $player, string $message): OPFWResponse
     {
         if (!$message) {
             return new OPFWResponse(false, 'Your message cannot be empty');
         }
 
-        $status = Player::getOnlineStatus($player->steam_identifier, false);
+        $status = Player::getOnlineStatus($player->license_identifier, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(false, 'Player is offline.');
         }
 
         $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/staffPrivateMessage', [
-            'steamIdentifier' => $staffSteamIdentifier,
+            'licenseIdentifier' => $staffLicenseIdentifier,
             'targetSource'    => $status->serverId,
             'message'         => $message,
         ]);
@@ -43,7 +43,7 @@ class OPFWHelper
         if ($response->status) {
             $response->message = 'Staff Message has been sent successfully.';
 
-            PanelLog::logStaffPM($staffSteamIdentifier, $player->steam_identifier, $message);
+            PanelLog::logStaffPM($staffLicenseIdentifier, $player->license_identifier, $message);
         }
 
         return $response;
@@ -53,18 +53,18 @@ class OPFWHelper
      * Sends a staff chat message
      *
      * @param string $serverIp
-     * @param string $staffSteamIdentifier
+     * @param string $staffLicenseIdentifier
      * @param string $message
      * @return OPFWResponse
      */
-    public static function staffChat(string $serverIp, string $staffSteamIdentifier, string $message): OPFWResponse
+    public static function staffChat(string $serverIp, string $staffLicenseIdentifier, string $message): OPFWResponse
     {
         if (!$message) {
             return new OPFWResponse(false, 'Your message cannot be empty');
         }
 
         $response = self::executeRoute($serverIp, $serverIp . 'execute/staffChatMessage', [
-            'steamIdentifier' => $staffSteamIdentifier,
+            'licenseIdentifier' => $staffLicenseIdentifier,
             'message'         => $message,
         ]);
 
@@ -78,23 +78,23 @@ class OPFWHelper
     /**
      * Kicks a player from the server
      *
-     * @param string $staffSteamIdentifier
+     * @param string $staffLicenseIdentifier
      * @param string $staffPlayerName
      * @param Player $player
      * @param string $reason
      * @return OPFWResponse
      */
-    public static function kickPlayer(string $staffSteamIdentifier, string $staffPlayerName, Player $player, string $reason): OPFWResponse
+    public static function kickPlayer(string $staffLicenseIdentifier, string $staffPlayerName, Player $player, string $reason): OPFWResponse
     {
-        $steam = $player->steam_identifier;
+        $license = $player->license_identifier;
 
-        $status = Player::getOnlineStatus($steam, false);
+        $status = Player::getOnlineStatus($license, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(false, 'Player is offline.');
         }
 
         $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/kickPlayer', [
-            'steamIdentifier'         => $steam,
+            'licenseIdentifier'         => $license,
             'reason'                  => 'You have been kicked by ' . $staffPlayerName . ' for reason `' . $reason . '`',
             'removeReconnectPriority' => false,
         ]);
@@ -102,7 +102,7 @@ class OPFWHelper
         if ($response->status) {
             $response->message = 'Kicked player from the server.';
 
-            PanelLog::logKick($staffSteamIdentifier, $steam, $reason);
+            PanelLog::logKick($staffLicenseIdentifier, $license, $reason);
         }
 
         return $response;
@@ -111,13 +111,13 @@ class OPFWHelper
     /**
      * Revives a player in the server
      *
-     * @param string $staffSteamIdentifier
-     * @param string $steamIdentifier
+     * @param string $staffLicenseIdentifier
+     * @param string $licenseIdentifier
      * @return OPFWResponse
      */
-    public static function revivePlayer(string $staffSteamIdentifier, string $steamIdentifier): OPFWResponse
+    public static function revivePlayer(string $staffLicenseIdentifier, string $licenseIdentifier): OPFWResponse
     {
-        $status = Player::getOnlineStatus($steamIdentifier, false);
+        $status = Player::getOnlineStatus($licenseIdentifier, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(false, 'Player is offline.');
         }
@@ -129,7 +129,7 @@ class OPFWHelper
         if ($response->status) {
             $response->message = 'Revived player.';
 
-            PanelLog::logRevive($staffSteamIdentifier, $steamIdentifier);
+            PanelLog::logRevive($staffLicenseIdentifier, $licenseIdentifier);
         }
 
         return $response;
@@ -144,15 +144,15 @@ class OPFWHelper
      */
     public static function updateTattoos(Player $player, string $character_id): OPFWResponse
     {
-        $steam = $player->steam_identifier;
+        $license = $player->license_identifier;
 
-        $status = Player::getOnlineStatus($steam, false);
+        $status = Player::getOnlineStatus($license, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(true, 'Player is offline, no refresh needed.');
         }
 
         $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/refreshTattoos', [
-            'steamIdentifier' => $steam,
+            'licenseIdentifier' => $license,
             'characterId'     => $character_id,
         ]);
 
@@ -172,15 +172,15 @@ class OPFWHelper
      */
     public static function updateJob(Player $player, string $character_id): OPFWResponse
     {
-        $steam = $player->steam_identifier;
+        $license = $player->license_identifier;
 
-        $status = Player::getOnlineStatus($steam, false);
+        $status = Player::getOnlineStatus($license, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(true, 'Player is offline, no refresh needed.');
         }
 
         $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/refreshJob', [
-            'steamIdentifier' => $steam,
+            'licenseIdentifier' => $license,
             'characterId'     => $character_id,
         ]);
 
@@ -194,23 +194,23 @@ class OPFWHelper
     /**
      * Unloads someone's character
      *
-     * @param string $staffSteamIdentifier
+     * @param string $staffLicenseIdentifier
      * @param Player $player
      * @param string $character_id
      * @param string $message
      * @return OPFWResponse
      */
-    public static function unloadCharacter(string $staffSteamIdentifier, Player $player, string $character_id, string $message): OPFWResponse
+    public static function unloadCharacter(string $staffLicenseIdentifier, Player $player, string $character_id, string $message): OPFWResponse
     {
-        $steam = $player->steam_identifier;
+        $license = $player->license_identifier;
 
-        $status = Player::getOnlineStatus($steam, false);
+        $status = Player::getOnlineStatus($license, false);
         if (!$status->isOnline()) {
             return new OPFWResponse(true, 'Player is offline, no unload needede.');
         }
 
         $response = self::executeRoute($status->serverIp, $status->serverIp . 'execute/unloadCharacter', [
-            'steamIdentifier' => $steam,
+            'licenseIdentifier' => $license,
             'characterId'     => $character_id,
             'message'         => $message,
         ]);
@@ -218,7 +218,7 @@ class OPFWHelper
         if ($response->status) {
             $response->message = 'Unloaded players character.';
 
-            PanelLog::logUnload($staffSteamIdentifier, $steam, $character_id, $message);
+            PanelLog::logUnload($staffLicenseIdentifier, $license, $character_id, $message);
         }
 
         return $response;
@@ -228,14 +228,14 @@ class OPFWHelper
      * Updates someones queue position
      *
      * @param string $serverIp
-     * @param string $steamIdentifier
+     * @param string $licenseIdentifier
      * @param int $targetPosition
      * @return OPFWResponse
      */
-    public static function updateQueuePosition(string $serverIp, string $steamIdentifier, int $targetPosition): OPFWResponse
+    public static function updateQueuePosition(string $serverIp, string $licenseIdentifier, int $targetPosition): OPFWResponse
     {
         return self::executeRoute($serverIp, $serverIp . 'execute/setQueuePosition', [
-            'steamIdentifier' => $steamIdentifier,
+            'licenseIdentifier' => $licenseIdentifier,
             'targetPosition'  => $targetPosition,
         ], 'PATCH');
     }
