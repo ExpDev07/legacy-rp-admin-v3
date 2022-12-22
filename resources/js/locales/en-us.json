@@ -588,6 +588,7 @@
         "name": "Player Name",
         "license": "License Identifier",
         "discord": "Discord ID",
+		"identifier": "Other Identifier",
         "server_id": "Current Server ID",
         "none": "No players was found.",
         "search_btn": "Search players",
