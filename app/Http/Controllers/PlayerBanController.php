@@ -48,6 +48,26 @@ class PlayerBanController extends Controller
             'reason', 'timestamp', 'expire', 'creator_name', 'creator_identifier'
         ]);
 
+		// Filtering by ban hash.
+		if ($banHash = $request->input('banHash')) {
+            if (Str::startsWith($banHash, '=')) {
+                $banHash = Str::substr($banHash, 1);
+                $query->where('ban_hash', $banHash);
+            } else {
+                $query->where('ban_hash', 'like', "%{$banHash}%");
+            }
+        }
+
+		// Filtering by reason.
+		if ($reason = $request->input('reason')) {
+            if (Str::startsWith($reason, '=')) {
+                $banHash = Str::substr($reason, 1);
+                $query->where('reason', $reason);
+            } else {
+                $query->where('reason', 'like', "%{$reason}%");
+            }
+        }
+
         $query->leftJoin('user_bans', 'identifier', '=', 'license_identifier');
 
         if ($showMine) {
@@ -73,7 +93,11 @@ class PlayerBanController extends Controller
         return Inertia::render('Players/Bans', [
             'players' => $players->toArray(),
             'links' => $this->getPageUrls($page),
-            'page' => $page
+            'page' => $page,
+			'filters' => [
+                'banHash' => $request->input('banHash'),
+                'reason' => $request->input('reason'),
+            ],
         ]);
     }
 

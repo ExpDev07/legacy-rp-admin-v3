@@ -623,6 +623,8 @@
             "week": "Week(s)",
             "month": "Month(s)",
             "no_reason": "This ban is missing a ban reason",
+			"hash": "Ban Hash",
+			"search_btn": "Search Bans",
 
             "title": "Bans",
             "description": "List of all banned players."

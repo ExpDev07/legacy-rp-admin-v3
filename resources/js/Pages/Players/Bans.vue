@@ -10,6 +10,52 @@
             </p>
         </portal>
 
+        <!-- Search -->
+        <v-section>
+            <template #header>
+                <h2>
+                    {{ t('players.search') }}
+                </h2>
+            </template>
+
+            <template>
+                <form @submit.prevent>
+                    <div class="flex flex-wrap mb-4">
+                        <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-4 font-semibold" for="banHash">
+                                {{ t('players.ban.hash') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                            </label>
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="banHash" name="banHash" placeholder="b60f832e-0c78-42ed-acae-9c89b5f14265" v-model="filters.banHash">
+                        </div>
+
+                        <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-4 font-semibold" for="reason">
+                                {{ t('players.ban.reason') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                            </label>
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="reason" name="reason" placeholder="L Bozo" v-model="filters.reason">
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <div class="w-full px-3 mt-3">
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">** {{ t('global.search.like') }} {{ t('global.search.like_prepend') }}</small>
+                    </div>
+                </form>
+                <!-- Search button -->
+                <div class="w-full mt-3">
+                    <button class="px-5 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" @click="refresh">
+                        <span v-if="!isLoading">
+                            <i class="fas fa-search"></i>
+                            {{ t('players.ban.search_btn') }}
+                        </span>
+                        <span v-else>
+                            <i class="fas fa-cog animate-spin"></i>
+                            {{ t('global.loading') }}
+                        </span>
+                    </button>
+                </div>
+            </template>
+        </v-section>
+
         <v-section class="overflow-x-auto">
             <template>
                 <table class="w-full whitespace-no-wrap">
@@ -105,6 +151,10 @@ export default {
             type: Number,
             required: true,
         },
+        filters: {
+            banHash: String,
+            reason: String,
+        },
     },
     data() {
         return {
@@ -112,6 +162,23 @@ export default {
         };
     },
     methods: {
+        refresh: async function () {
+            if (this.isLoading) {
+                return;
+            }
+
+            this.isLoading = true;
+            try {
+                await this.$inertia.replace('/bans', {
+                    data: this.filters,
+                    preserveState: true,
+                    preserveScroll: true,
+                    only: [ 'players', 'links', 'page' ],
+                });
+            } catch(e) {}
+
+            this.isLoading = false;
+        },
         cutText(text) {
             if (text.length > 120) {
                 return text.substring(0, 90) + '...';
