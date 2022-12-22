@@ -22,26 +22,26 @@
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-4 font-semibold" for="name">
+                            <label class="block mb-2" for="name">
                                 {{ t('players.name') }} <sup class="text-muted dark:text-dark-muted">**</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="name" name="name" placeholder="Marius Truckster" v-model="filters.name">
                         </div>
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-4 font-semibold" for="license">
+                            <label class="block mb-2" for="license">
                                 {{ t('players.license') }} <sup class="text-muted dark:text-dark-muted">*, S</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="license" name="license" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="filters.license">
                         </div>
                         <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-4 font-semibold" for="server_id">
+                            <label class="block mb-2" for="server_id">
                                 {{ t('players.server_id') }}
                                 <sup class="text-muted dark:text-dark-muted">*</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="server_id" name="server" type="number" min="0" max="9999" placeholder="123" v-model="filters.server">
                         </div>
                         <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-4 font-semibold" for="discord">
+                            <label class="block mb-2 mt-3" for="discord">
                                 {{ t('players.discord') }}
                                 <sup class="text-muted dark:text-dark-muted">
                                     <a class="dark:text-blue-300 text-blue-500" href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID" target="_blank" :title="t('players.discord_description')">[?]</a>
@@ -51,7 +51,7 @@
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>
                         <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
-                            <label class="block mb-4 font-semibold" for="identifier">
+                            <label class="block mb-2 mt-3" for="identifier">
                                 {{ t('players.identifier') }}
                                 <sup class="text-muted dark:text-dark-muted">
                                     **
