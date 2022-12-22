@@ -44,6 +44,11 @@ class PlayerController extends Controller
             }
         }
 
+        // Filtering by identifier.
+        if ($identifier = $request->input('identifier')) {
+			$query->where('identifiers', 'like', "%{$identifier}%");
+        }
+
         // Filtering by license_identifier.
         if ($license = $request->input('license')) {
 			if (!Str::startsWith($license, 'license:')) {
@@ -115,9 +120,10 @@ class PlayerController extends Controller
             'banMap'  => Ban::getAllBans(false, $identifiers, true),
             'filters' => [
                 'name'    => $request->input('name'),
-                'license'   => $request->input('license'),
+                'license' => $request->input('license'),
                 'discord' => $request->input('discord'),
                 'server'  => $request->input('server'),
+                'identifier' => $request->input('identifier'),
             ],
             'links'   => $this->getPageUrls($page),
             'time'    => $end - $start,
