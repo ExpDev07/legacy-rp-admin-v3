@@ -58,7 +58,8 @@
             "exact": "Returns all rows where this field exactly matches your query.",
             "comma": "You can search for multiple values by separating them with a comma.",
             "like_prepend": "If you put \"=\" in front of your query, it will search for an exact match which is faster in some occasions.",
-            "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field."
+            "players": "You can put \"name=\" or \"identifier=\" in front of your query and it will look for an exact match in that field.",
+			"starts_with": "Returns all rows where this field starts with your query."
         },
         "results": "Search took {0} milliseconds.",
         "entries": "Showing {0} total entries on {1} page(s).",
@@ -622,6 +623,8 @@
             "week": "Week(s)",
             "month": "Month(s)",
             "no_reason": "This ban is missing a ban reason",
+			"hash": "Ban Hash",
+			"search_btn": "Search Bans",
 
             "title": "Bans",
             "description": "List of all banned players."

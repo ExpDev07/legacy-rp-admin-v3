@@ -163,9 +163,9 @@ class Player extends Model
     /**
      * @return string
      */
-    public function getSteamIdentifier(): string
+    public function getSteamIdentifier(): ?string
     {
-        return $this->getIdentifier('steam');
+        return $this->getIdentifier('steam') ?? null;
     }
 
     /**
@@ -217,9 +217,11 @@ class Player extends Model
      *
      * @return string
      */
-    public function getSteamProfileUrl(): string
+    public function getSteamProfileUrl(): ?string
     {
-        return self::STEAM_INVITE_URL . $this->getSteamID()->RenderSteamInvite();
+		$steamId = $this->getSteamID();
+
+        return $steamId ? self::STEAM_INVITE_URL . $steamId->RenderSteamInvite() : null;
     }
 
     /**
@@ -372,40 +374,6 @@ class Player extends Model
     public function getSteamID(): ?SteamID
     {
         return get_steam_id($this->getSteamIdentifier());
-    }
-
-    /**
-     * Gets the steam user.
-     *
-     * @param string $steamIdenfier
-     * @return array|null
-     */
-    public static function getSteamUser(string $steamIdenfier): ?array
-    {
-        $steam = get_steam_id($steamIdenfier);
-
-        if ($steam) {
-            $id = $steam->ConvertToUInt64();
-            $key = 'steam_user_' . md5($id);
-
-            if (CacheHelper::exists($key)) {
-                return CacheHelper::read($key, []);
-            }
-
-            try {
-                $steam = new SteamUser($id);
-                $steam->getUserInfo();
-
-                $info = $steam->toArray();
-                CacheHelper::write($key, $info, CacheHelper::DAY);
-
-                return $info;
-            } catch (\Exception $e) {
-                return null;
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -665,8 +633,12 @@ class Player extends Model
  * @param string $identifier
  * @return SteamID|null
  */
-function get_steam_id(string $identifier): ?SteamID
+function get_steam_id(?string $identifier): ?SteamID
 {
+	if (!$identifier) {
+		return null;
+	}
+
     try {
         // Get rid of any prefix.
         return new SteamID(hexdec(explode('steam:', $identifier)[1]));

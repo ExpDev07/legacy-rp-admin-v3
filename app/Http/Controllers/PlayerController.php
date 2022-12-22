@@ -46,7 +46,15 @@ class PlayerController extends Controller
 
         // Filtering by license_identifier.
         if ($license = $request->input('license')) {
-            $query->where('license_identifier', $license);
+			if (!Str::startsWith($license, 'license:')) {
+				$license = 'license:' . $license;
+			}
+
+			if (strlen($license) !== 48) {
+				$query->where('license_identifier', 'LIKE', '%' . $license);
+			} else {
+            	$query->where('license_identifier', $license);
+			}
         }
 
         // Filtering by discord.

@@ -817,6 +817,7 @@
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-gray-800 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
                     target="_blank"
                     :href="player.steamProfileUrl"
+                    v-if="player.steamProfileUrl"
                 >
                     <i class="mr-1 fab fa-steam"></i>
                     {{ t('players.show.steam') }}

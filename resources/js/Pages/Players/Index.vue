@@ -29,7 +29,7 @@
                         </div>
                         <div class="w-1/4 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-4 font-semibold" for="license">
-                                {{ t('players.license') }} <sup class="text-muted dark:text-dark-muted">*</sup>
+                                {{ t('players.license') }} <sup class="text-muted dark:text-dark-muted">*, S</sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="license" name="license" placeholder="license:2ced2cabd90f1208e7e056485d4704c7e1284196" v-model="filters.license">
                         </div>
@@ -55,6 +55,7 @@
                     <div class="w-full px-3 mt-3">
                         <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">* {{ t('global.search.exact') }}</small>
                         <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">** {{ t('global.search.like') }} {{ t('global.search.like_prepend') }}</small>
+                        <small class="text-muted dark:text-dark-muted mt-1 leading-4 block">S {{ t('global.search.starts_with') }}</small>
                     </div>
                 </form>
                 <!-- Search button -->
