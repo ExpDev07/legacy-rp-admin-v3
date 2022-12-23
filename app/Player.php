@@ -485,10 +485,7 @@ class Player extends Model
                     if (!isset($result[$key])) {
                         $flags = $player['flags'];
 
-                        $fake = $flags / 2 >= 1;
-                        if ($fake) {
-                            $fake -= 2;
-                        }
+                        $fake = !!($flags & 2);
 
                         $result[$key] = [
                             'id' => intval($player['source']),
@@ -496,7 +493,7 @@ class Player extends Model
                             'license' => $key,
                             'server' => $serverIp,
                             'fakeDisconnected' => $fake,
-                            'fakeName' => $flags !== 0 ? $player['name'] : null,
+                            'fakeName' => !!($flags & 1) ? $player['name'] : null,
                         ];
                     }
                 }
