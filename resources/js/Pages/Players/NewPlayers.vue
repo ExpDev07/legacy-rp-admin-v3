@@ -42,11 +42,15 @@
                         <td class="px-6 py-3 border-t mobile:block">
                             <span v-if="player.character && player.character.danny !== false">
                                 {{ (player.character.danny * 100).toFixed(1) }}% Default Danny
-                                <span class="block text-xs italic" :title="t('players.new.prediction')">{{ classify(player.character) }}</span>
                             </span>
                             <span v-else>
                                 {{ t('players.new.no_character') }}
                             </span>
+
+                            <template v-if="player.character">
+                                <span class="block text-xs italic text-red-800 dark:text-red-200" v-if="classify(player.character) === 'negative'" :title="t('players.new.prediction')">{{ t("players.new.prediction_negative") }}</span>
+                                <span class="block text-xs italic text-green-800 dark:text-green-200" v-else :title="t('players.new.prediction')">{{ t("players.new.prediction_positive") }}</span>
+                            </template>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <pre class="whitespace-pre-wrap text-xs max-w-xl"
@@ -102,7 +106,7 @@ export default {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
         },
         classify(character) {
-            return this.t("players.new.prediction_" + this.classifyCharacter(character));
+            return this.classifyCharacter(character)
         },
         refresh: async function () {
             if (this.isLoading) {
