@@ -2038,7 +2038,7 @@ export default {
                 return `<a href="${url}" target="_blank" class="text-yellow-600 dark:text-yellow-400">${cluster.toLowerCase()}/${steam.toLowerCase()}</a>`;
             });
 
-            warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(license:\w{15})/gmi, (full, _ignore, host, license) => {
+            warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(license:\w{40})/gmi, (full, _ignore, host, license) => {
                 const url = full && full.startsWith("http") ? full : "/players/" + license,
                     cluster = host ? host.split(".")[0].replace("localhost", "c1") : this.$page?.auth?.cluster;
 
@@ -2049,7 +2049,7 @@ export default {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
                 let extraClass = 'user-link';
 
-                if (url.match(/(https?:\/\/(.+?)\/players\/)?((steam|license):\w{15})/gmi)) return url;
+                if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15}|license:\w{40})/gmi)) return url;
 
                 switch (ext) {
                     case 'jpg':
