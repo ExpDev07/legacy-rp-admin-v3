@@ -218,35 +218,31 @@ class PlayerController extends Controller
         $resolved = Player::resolvePlayer($player, $request);
 
         if ($resolved) {
-            if (is_array($resolved)) {
-                return Inertia::render('Players/Show', $resolved);
-            } else {
-                $whitelisted = DB::table('user_whitelist')
-                    ->select(['license_identifier'])
-                    ->where('license_identifier', '=', $resolved->license_identifier)
-                    ->first();
+			$whitelisted = DB::table('user_whitelist')
+				->select(['license_identifier'])
+				->where('license_identifier', '=', $resolved->license_identifier)
+				->first();
 
-                $identifiers = $resolved instanceof Player ? $resolved->getIdentifiers() : null;
+			$identifiers = $resolved instanceof Player ? $resolved->getIdentifiers() : null;
 
-                $blacklisted = !empty($identifiers) ? BlacklistedIdentifier::query()
-                    ->select(['identifier'])
-                    ->whereIn('identifier', $identifiers)
-                    ->first() : false;
+			$blacklisted = !empty($identifiers) ? BlacklistedIdentifier::query()
+				->select(['identifier'])
+				->whereIn('identifier', $identifiers)
+				->first() : false;
 
-                $isSenior = $this->isSeniorStaff($request);
+			$isSenior = $this->isSeniorStaff($request);
 
-                return Inertia::render('Players/Show', [
-                    'player'            => new PlayerResource($resolved),
-                    'characters'        => CharacterResource::collection($resolved->characters),
-                    'warnings'          => $resolved->fasterWarnings($isSenior),
-                    'kickReason'        => trim($request->query('kick')) ?? '',
-                    'whitelisted'       => !!$whitelisted,
-                    'blacklisted'       => !!$blacklisted,
-                    'tags'              => Player::resolveTags(),
-                    'allowRoleEdit'     => env('ALLOW_ROLE_EDITING', false) && $this->isSuperAdmin($request),
-                    'enablableCommands' => PlayerRouteController::EnablableCommands
-                ]);
-            }
+			return Inertia::render('Players/Show', [
+				'player'            => new PlayerResource($resolved),
+				'characters'        => CharacterResource::collection($resolved->characters),
+				'warnings'          => $resolved->fasterWarnings($isSenior),
+				'kickReason'        => trim($request->query('kick')) ?? '',
+				'whitelisted'       => !!$whitelisted,
+				'blacklisted'       => !!$blacklisted,
+				'tags'              => Player::resolveTags(),
+				'allowRoleEdit'     => env('ALLOW_ROLE_EDITING', false) && $this->isSuperAdmin($request),
+				'enablableCommands' => PlayerRouteController::EnablableCommands
+			]);
         } else {
             abort(404);
         }

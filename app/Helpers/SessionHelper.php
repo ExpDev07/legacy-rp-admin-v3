@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Session;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class SessionHelper
 {
@@ -24,12 +25,6 @@ class SessionHelper
      * @var string|null
      */
     private ?string $sessionKey = null;
-
-    /**
-     * Where the sessions are stored
-     * @var string|null
-     */
-    private ?string $storage = null;
 
     /**
      * The value of the current session
@@ -134,7 +129,7 @@ class SessionHelper
     private function getSession(): ?Session
     {
         if (!$this->session) {
-            $this->session = Session::query()->where('key', $this->sessionKey)->first();
+            $this->session = Session::query()->where('key', '=', $this->sessionKey)->first();
         }
 
         return $this->session;
@@ -229,7 +224,6 @@ class SessionHelper
         if (self::$instance === null) {
             $helper = new SessionHelper();
 
-            $helper->storage = rtrim(storage_path('framework/session_storage'), '/\\') . '/';
             $helper->sessionKey = !empty($_COOKIE[$cookie]) && is_string($_COOKIE[$cookie]) ? $_COOKIE[$cookie] : null;
 
             if ($helper->sessionKey === null || !$helper->getSession()) {

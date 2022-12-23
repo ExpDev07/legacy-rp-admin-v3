@@ -140,7 +140,6 @@ class Player extends Model
      */
     public static function resolvePlayer(string $player, Request $request)
     {
-		//TODO: Fix old steam links
         $resolved = Player::query()->select()->where('license_identifier', '=', $player)->first();
 
         if ($resolved and $resolved instanceof Player) {
