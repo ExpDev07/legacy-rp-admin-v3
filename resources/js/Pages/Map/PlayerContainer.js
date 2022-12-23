@@ -153,7 +153,7 @@ class PlayerContainer {
             this.stats.police++;
 
             this.on_duty.pd.push(this.getPlayerListInfo(this.players[id]));
-        } else if (this.players[id].onDuty === 'ems') {
+        } else if (this.players[id].onDuty === 'medical') {
             this.stats.ems++;
 
             this.on_duty.ems.push(this.getPlayerListInfo(this.players[id]));
