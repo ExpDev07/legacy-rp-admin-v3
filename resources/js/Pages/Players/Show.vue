@@ -214,7 +214,7 @@
                 </button>
                 <!-- Banning -->
                 <button
-                    class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="px-5 py-2 ml-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="isBanning = true" v-else-if="!player.isBanned">
                     <i class="mr-1 fas fa-gavel"></i>
                     {{ t('players.show.issue') }}
