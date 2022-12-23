@@ -16,8 +16,6 @@ const Classifier = {
 		Vue.prototype.classifyCharacter = function (character) {
 			ensureClassifier();
 
-			console.log(character)
-
 			const text = character.name + "\n" + character.backstory;
 
 			return classifier.classify(text);
