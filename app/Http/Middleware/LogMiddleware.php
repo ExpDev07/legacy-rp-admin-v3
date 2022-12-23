@@ -27,11 +27,13 @@ class LogMiddleware
         $session = SessionHelper::getInstance();
 
         $user = $session->get('user');
-        if (!$user || !is_array($user) || !isset($user['name'])) {
-            $user['name'] = 'N/A';
-        }
+        $name = "N/A";
 
-        LoggingHelper::log($session->getSessionKey(), 'ACCEPTED ' . $user['name']);
+		if ($user && isset($user['player']) && isset($user['player']['player_name'])) {
+			$name = $user['player']['player_name'];
+		}
+
+        LoggingHelper::log($session->getSessionKey(), 'ACCEPTED ' . $name);
 
         return $next($request);
     }

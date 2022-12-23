@@ -83,7 +83,7 @@ class Player {
             this.icon.passenger ? 'passenger' : null,
             !this.icon.passenger && !this.icon.driving ? 'on foot' : null,
             this.onDuty === 'police' ? 'on duty (police)' : null,
-            this.onDuty === 'ems' ? 'on duty (ems)' : null,
+            this.onDuty === 'medical' ? 'on duty (medical)' : null,
         ].filter(a => !!a);
     }
 
@@ -211,7 +211,7 @@ class Player {
                     iconSize: [IconSizes.circle, IconSizes.circle]
                 }
             );
-        } else if (this.onDuty === 'ems') {
+        } else if (this.onDuty === 'medical') {
             icon = new L.Icon(
                 {
                     iconUrl: '/images/icons/circle_ems.png',

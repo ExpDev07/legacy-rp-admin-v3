@@ -58,7 +58,7 @@ class StaffMiddleware
                 );
             }
         } else {
-            if ($_SERVER['REQUEST_METHOD'] !== 'GET' || time() - $this->lastUpdated() > 10) {
+            if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
                 $user = $session->get('user');
 
 				if (!isset($user['player']['license_identifier'])) {
@@ -154,8 +154,8 @@ class StaffMiddleware
     public static function getSessionDetail(): array
     {
         return [
-            //'ua'   => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-            'db'   => DB::connection()->getDatabaseName(),
+            //'ua' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
+            'db' => DB::connection()->getDatabaseName(),
         ];
     }
 

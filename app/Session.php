@@ -17,6 +17,8 @@ class Session extends Model
 
     public $timestamps = false;
 
+	protected $primaryKey = 'key';
+
     /**
      * The table associated with the model.
      *
