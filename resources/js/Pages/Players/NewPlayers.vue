@@ -27,7 +27,8 @@
                         <th class="px-6 py-4">{{ t('players.new.character') }}</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in players" :key="player.licenseIdentifier">
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in players"
+                        :key="player.licenseIdentifier">
                         <td class="px-6 py-3 border-t mobile:block" :title="t('global.server_timeout')">
                             <span class="font-semibold" v-if="player.serverId">
                                 {{ player.serverId }}
@@ -41,17 +42,21 @@
                         <td class="px-6 py-3 border-t mobile:block">
                             <span v-if="player.character && player.character.danny !== false">
                                 {{ (player.character.danny * 100).toFixed(1) }}% Default Danny
+                                <span class="block text-xs italic" :title="t('players.new.prediction')">{{ classify(player.character) }}</span>
                             </span>
                             <span v-else>
                                 {{ t('players.new.no_character') }}
                             </span>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <pre class="whitespace-pre-wrap text-xs max-w-xl" v-if="player.character"><b>{{ player.character.name }}</b><br>{{ player.character.backstory.length > 250 ? player.character.backstory.substr(0, 250) + "..." : player.character.backstory }}</pre>
+                            <pre class="whitespace-pre-wrap text-xs max-w-xl"
+                                v-if="player.character"><b>{{ player.character.name }}</b><br>{{ player.character.backstory.length > 250 ? player.character.backstory.substr(0, 250) + "..." : player.character.backstory }}</pre>
                             <span v-else>{{ t('players.new.no_character') }}</span>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + player.licenseIdentifier">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/players/' + player.licenseIdentifier">
                                 <i class="fas fa-chevron-right"></i>
                             </inertia-link>
                         </td>
@@ -96,6 +101,9 @@ export default {
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
         },
+        classify(character) {
+            return this.t("players.new.prediction_" + this.classifyCharacter(character));
+        },
         refresh: async function () {
             if (this.isLoading) {
                 return;
@@ -107,9 +115,9 @@ export default {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'players' ],
+                    only: ['players'],
                 });
-            } catch(e) {}
+            } catch (e) { }
 
             this.isLoading = false;
         }

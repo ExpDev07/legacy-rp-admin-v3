@@ -40,6 +40,7 @@
     },
     "dependencies": {
         "@tailwindcss/forms": "^0.5.3",
+        "bayes-classifier": "^0.0.5",
         "browser-notification": "^3.0.0",
         "chart.js": "^2.9.4",
         "chartjs-plugin-trendline": "^0.1.1",
