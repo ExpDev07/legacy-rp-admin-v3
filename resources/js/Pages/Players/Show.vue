@@ -184,37 +184,37 @@
             <div class="mb-3 flex flex-wrap justify-end">
                 <!-- StaffPM -->
                 <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="px-5 py-2 ml-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="isStaffPM = true" v-if="player.status.status === 'online'">
                     <i class="fas fa-envelope-open-text"></i>
                     {{ t('players.show.staffpm') }}
                 </button>
                 <!-- Kicking -->
                 <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="px-5 py-2 ml-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="isKicking = true" v-if="player.status.status === 'online'">
                     <i class="fas fa-user-minus"></i>
                     {{ t('players.show.kick') }}
                 </button>
                 <!-- Edit Ban -->
                 <inertia-link
-                    class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 mr-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="px-5 py-2 font-semibold text-white rounded bg-yellow-500 ml-3 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     v-bind:href="'/players/' + player.licenseIdentifier + '/bans/' + player.ban.id + '/edit'"
                     v-if="player.isBanned && (!player.ban.locked || this.perm.check(this.perm.PERM_LOCK_BAN))">
                     <i class="mr-1 fas fa-edit"></i>
                     {{ t('players.show.edit_ban') }}
                 </inertia-link>
                 <!-- Unbanning -->
-                <inertia-link
-                    class="px-5 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    method="DELETE" v-bind:href="'/players/' + player.licenseIdentifier + '/bans/' + player.ban.id"
+                <button
+                    class="px-5 py-2 ml-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    @click="unbanPlayer()"
                     v-if="player.isBanned && (!player.ban.locked || this.perm.check(this.perm.PERM_LOCK_BAN))">
                     <i class="mr-1 fas fa-lock-open"></i>
                     {{ t('players.show.unban') }}
-                </inertia-link>
+                </button>
                 <!-- Banning -->
                 <button
-                    class="px-5 py-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
+                    class="px-5 py-2 ml-3 font-semibold text-white rounded bg-danger dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
                     @click="isBanning = true" v-else-if="!player.isBanned">
                     <i class="mr-1 fas fa-gavel"></i>
                     {{ t('players.show.issue') }}
@@ -693,6 +693,31 @@
                 <span class="whitespace-pre-line">{{ player.mute.reason || t('players.show.no_reason') }}</span>
             </p>
         </alert>
+
+        <!-- Removing system ban -->
+        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isConfirmingUnban">
+            <div
+                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
+                <h3 class="mb-2">{{ t('players.show.unban_system_title') }}</h3>
+                <div>
+                    <p>
+                        {{ t('players.show.unban_system_message') }}
+                    </p>
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button type="button"
+                            class="px-5 py-2 font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            @click="isConfirmingUnban = false">
+                        {{ t('global.close') }}
+                    </button>
+                    <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger"
+                            type="button" @click="unbanPlayer()">
+                        <i class="mr-1 fas fa-lock-open"></i>
+                        {{ t('players.show.unban') }}
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- Ban -->
         <div>
@@ -1503,6 +1528,8 @@ export default {
             isRoleEdit: false,
             selectedRole: selectedRole,
 
+            isConfirmingUnban: false,
+
             isScreenCapture: false,
             screenCaptureStatus: false,
             screenCaptureVideo: false,
@@ -1535,6 +1562,18 @@ export default {
 
             this.antiCheatMetadata = true;
             this.antiCheatMetadataJSON = hljs.highlight(JSON.stringify(eventMetadata, null, 4), {language: 'json'}).value;
+        },
+        async unbanPlayer() {
+            if (!this.player.ban.issuer && !this.isConfirmingUnban) {
+                this.isConfirmingUnban = true;
+
+                return;
+            }
+
+            this.isConfirmingUnban = false;
+
+            // Send request.
+            await this.$inertia.delete('/players/' + this.player.licenseIdentifier + '/bans/' + this.player.ban.id);
         },
         async updateCommands() {
             this.isEnablingCommands = false;
@@ -2038,7 +2077,7 @@ export default {
                 return `<a href="${url}" target="_blank" class="text-yellow-600 dark:text-yellow-400">${cluster.toLowerCase()}/${steam.toLowerCase()}</a>`;
             });
 
-            warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(license:\w{15})/gmi, (full, _ignore, host, license) => {
+            warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(license:\w{40})/gmi, (full, _ignore, host, license) => {
                 const url = full && full.startsWith("http") ? full : "/players/" + license,
                     cluster = host ? host.split(".")[0].replace("localhost", "c1") : this.$page?.auth?.cluster;
 
@@ -2049,7 +2088,7 @@ export default {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
                 let extraClass = 'user-link';
 
-                if (url.match(/(https?:\/\/(.+?)\/players\/)?((steam|license):\w{15})/gmi)) return url;
+                if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15}|license:\w{40})/gmi)) return url;
 
                 switch (ext) {
                     case 'jpg':

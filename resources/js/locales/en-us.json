@@ -600,7 +600,10 @@
             "description": "Lists all new players with a playtime less than 12 hours who are currently online.",
             "character": "Loaded Character",
             "no_character": "N/A",
-            "danny_percentage": "Danny Percentage"
+            "danny_percentage": "Danny Percentage",
+			"prediction_negative": "Computer says: probably bad",
+			"prediction_positive": "Computer says: probably good",
+			"prediction": "AI prediction based on name and backstory."
         },
         "ban": {
             "issuing": "Issuing ban",
@@ -654,6 +657,8 @@
             "anti_cheat": "Anti-Cheat",
             "anti_cheat_title": "Anti-Cheat Events",
             "anti_cheat_metadata": "Metadata",
+			"unban_system_title": "Removing System Ban",
+			"unban_system_message": "This player was automatically banned by the system. Are you sure you want to remove this ban?",
             "linked_title": "Linked accounts",
             "no_link": "No linked accounts for this identifier",
             "identifier_remove": "Are you sure you want to remove this identifier?",
