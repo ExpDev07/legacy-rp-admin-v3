@@ -57,7 +57,7 @@
                                     **
                                 </sup>
                             </label>
-                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="identifier" name="identifier" placeholder="steam:steam:11000010d322da9" v-model="filters.identifier">
+                            <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="identifier" name="identifier" placeholder="steam:11000010d322da9" v-model="filters.identifier">
                         </div>
                     </div>
                     <!-- Description -->
