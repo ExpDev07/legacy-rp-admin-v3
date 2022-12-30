@@ -49,6 +49,34 @@ class LoadingScreenController extends Controller
     }
 
     /**
+     * Edit a loading screen picture.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function edit(Request $request, int $id): RedirectResponse
+    {
+        if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LOADING_SCREEN)) {
+            abort(401);
+        }
+
+		$url = trim($request->input('image_url'));
+
+        if (!$url || !Str::startsWith($url, "https://")) {
+            return back()->with('error', 'Invalid url.');
+        }
+
+		$description = trim($request->input('description'));
+
+		DB::table('loading_screen_images')->where('id', $id)->update([
+			'image_url' => $url,
+			'description' => $description
+		]);
+
+        return back()->with('success', 'The picture has successfully been edited.');
+    }
+
+    /**
      * Add a loading screen picture.
      *
      * @param Request $request
