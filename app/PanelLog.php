@@ -210,6 +210,21 @@ class PanelLog extends Model
     }
 
     /**
+     * Logs a system ban removal from the panel
+     *
+     * @param string $fromIdentifier
+     * @param string $toIdentifier
+     */
+    public static function logSystemBanRemove(string $fromIdentifier, string $toIdentifier)
+    {
+        $from = self::resolvePlayerLogName($fromIdentifier);
+        $to = self::resolvePlayerLogName($toIdentifier);
+
+        $log = $from . ' removed a system ban from ' . $to;
+        self::createLog($fromIdentifier, $toIdentifier, $log, 'Removed System Ban', true);
+    }
+
+    /**
      * Logs a character unload from the panel
      *
      * @param string $fromIdentifier
@@ -229,7 +244,7 @@ class PanelLog extends Model
     }
 
     /**
-     * Returns "Twoot (license:2ced2cabd90f1208e7e056485d4704c7e1284196)"
+     * Returns "Laura (license:2ced2cabd90f1208e7e056485d4704c7e1284196)"
      *
      * @param string $identifier
      * @return string
@@ -243,7 +258,7 @@ class PanelLog extends Model
     }
 
     /**
-     * Returns "Twoot (license:2ced2cabd90f1208e7e056485d4704c7e1284196)'s character (#739)"
+     * Returns "Laura (license:2ced2cabd90f1208e7e056485d4704c7e1284196)'s character (#739)"
      *
      * @param string $identifier
      * @param string $character

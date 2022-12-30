@@ -12,6 +12,7 @@ use App\Http\Resources\BanResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
+use App\PanelLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -175,6 +176,10 @@ class PlayerBanController extends Controller
 
         $player->bans()->forceDelete();
         $user = $request->user();
+
+		if (!$ban->creator_name) {
+			PanelLog::logSystemBanRemove($player->license_identifier, $user->player->license_identifier);
+		}
 
         // Automatically log the ban update as a warning.
         $player->warnings()->create([
