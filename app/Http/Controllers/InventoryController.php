@@ -136,7 +136,7 @@ class InventoryController extends Controller
 
         $page = Paginator::resolveCurrentPage('page');
 
-        $sql = "SELECT `identifier`, `details`, `timestamp` FROM `user_logs` WHERE `action`='Item Moved' AND (" . $where . ") ORDER BY `timestamp` DESC LIMIT 15 OFFSET " . (($page - 1) * 15);
+        $sql = "SELECT `identifier`, `details`, `timestamp`, `metadata` as meta FROM `user_logs` WHERE `action`='Item Moved' AND (" . $where . ") ORDER BY `timestamp` DESC LIMIT 15 OFFSET " . (($page - 1) * 15);
 
         $logs = InventoryLogResource::collection(DB::select($sql));
 
@@ -150,6 +150,41 @@ class InventoryController extends Controller
             'page'      => $page,
         ]);
     }
+
+    /**
+     * Shows history for a certain item
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function itemHistory(int $id, Request $request): Response
+    {
+		if (!$id || $id <= 0) {
+			abort(404);
+		}
+
+		$start = round(microtime(true) * 1000);
+
+		$logs = DB::select(DB::raw("SELECT `identifier`, `details`, `timestamp`, `metadata` FROM `user_logs` where action = 'Item Moved' and JSON_CONTAINS(`metadata`, " . $id . ", '$.itemIds') ORDER BY `timestamp` DESC"));
+
+		$logs = InventoryLogResource::collection($logs);
+
+        $end = round(microtime(true) * 1000);
+
+		$array = $logs->toArray($request);
+
+		$first = $array[0] ?? null;
+		$itemName = $first && $first["itemMoved"] ? preg_replace('/^\d+x /m', "", $first["itemMoved"]) : "Unknown";
+
+		return Inertia::render('Inventories/History', [
+			'id' => $id,
+			'itemName' => $itemName,
+            'logs'      => $logs,
+            'playerMap' => Player::fetchLicensePlayerNameMap($array, 'licenseIdentifier'),
+            'time'      => $end - $start,
+        ]);
+	}
 
     /**
      * Creates a snapshot of an inventory at that exact moment in time
