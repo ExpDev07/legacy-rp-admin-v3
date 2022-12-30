@@ -53,6 +53,10 @@
                         <a clas="block relative" target="_blank" :href="picture.image_url">
                             <img :src="picture.image_url" class="h-48 border-red-500" @load="imageLoaded($event, picture.id)" @error="imageFailed(picture.id)" :class="{'border-4' : failedLoad[picture.id] || smallSize[picture.id]}" />
 
+                            <span v-if="picture.description" class="block text-sm text-gray-500 mt-2">
+                                {{ picture.description }}
+                            </span>
+
                             <span v-if="failedLoad[picture.id]" class="block text-sm text-red-400 mt-2 italic">
                                 <i class="fas fa-skull-crossbones"></i>
                                 {{ t("loading_screen.failed_count_label") }}
@@ -72,6 +76,15 @@
                     >
                         <i class="fas fa-trash-alt"></i>
                     </inertia-link>
+
+                    <button
+                        class="block px-1.5 py-1 text-center text-white text-xs absolute top-1 right-8 bg-yellow-600 dark:bg-yellow-400 rounded"
+                        href="#"
+                        @click="editingPicture = picture; isEditingPicture = true"
+                        :title="t('loading_screen.edit')"
+                    >
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
                 </div>
 
                 <img v-if="pictures.length === 0" src="/images/no-pictures.png" class="w-full" />
@@ -102,6 +115,48 @@
                     <span v-if="!isLoading">
                         <i class="mr-1 fa fa-plus"></i>
                         {{ t('loading_screen.do_add') }}
+                    </span>
+                    <span v-else>
+                        <i class="fas fa-cog animate-spin"></i>
+                        {{ t('global.loading') }}
+                    </span>
+                </button>
+            </template>
+        </modal>
+
+        <modal :show.sync="isEditingPicture">
+            <template #header>
+                <h1 class="dark:text-white">
+                    {{ t('loading_screen.edit') }}
+                </h1>
+            </template>
+
+            <template #default>
+                <img v-if="editingPicture.image_url && editingPicture.image_url.startsWith('https://')" :src="editingPicture.image_url" class="w-full mb-3" />
+
+                <div>
+                    <label class="block mb-3" for="image_url">
+                        {{ t('loading_screen.picture') }}
+                    </label>
+                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="url" id="image_url" placeholder="https://images.unsplash.com/photo-1511044568932-338cba0ad803" v-model="editingPicture.image_url" required>
+                </div>
+
+                <div>
+                    <label class="block mb-3" for="description">
+                        {{ t('loading_screen.image_description') }}
+                    </label>
+                    <input class="block w-full px-4 py-3 mb-3 bg-gray-200 border rounded dark:bg-gray-600" type="text" id="description" placeholder="Very cool picture" v-model="editingPicture.description">
+                </div>
+            </template>
+
+            <template #actions>
+                <button type="button" class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400" @click="isEditingPicture = false">
+                    {{ t('global.cancel') }}
+                </button>
+                <button type="submit" class="px-5 py-2 text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="handleEdit">
+                    <span v-if="!isLoading">
+                        <i class="mr-1 fa fa-pencil-alt"></i>
+                        {{ t('loading_screen.edit') }}
                     </span>
                     <span v-else>
                         <i class="fas fa-cog animate-spin"></i>
@@ -142,6 +197,9 @@ export default {
             failedLoadCount: 0,
             smallSizeCount: 0,
             loadedCount: 0,
+
+            isEditingPicture: false,
+            editingPicture: false,
 
             image_url: '',
         };
@@ -219,6 +277,32 @@ export default {
 
             this.isLoading = false;
             this.isAdding = false;
+        },
+        async handleEdit() {
+            const url = this.editingPicture.image_url.trim(),
+                description = this.editingPicture.description.trim();
+
+            if (!url || !url.startsWith("https://")) {
+                alert("Please enter a valid URL");
+
+                return;
+            }
+
+            if (this.isLoading) {
+                return;
+            }
+
+            this.isLoading = true;
+            try {
+                await this.$inertia.put('/loading_screen/' + this.editingPicture.id, {
+                    image_url: url,
+                    description: description,
+                });
+            } catch (e) { }
+
+            this.isLoading = false;
+            this.isEditingPicture = false;
+            this.editingPicture = false;
         },
         async refresh() {
             if (this.isLoading) {

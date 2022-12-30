@@ -132,6 +132,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
         Route::get('/loading_screen', [LoadingScreenController::class, 'index']);
         Route::delete('/loading_screen/{id}', [LoadingScreenController::class, 'delete']);
         Route::post('/loading_screen', [LoadingScreenController::class, 'add']);
+        Route::put('/loading_screen/{id}', [LoadingScreenController::class, 'edit']);
     });
 
     // Suspicious.
