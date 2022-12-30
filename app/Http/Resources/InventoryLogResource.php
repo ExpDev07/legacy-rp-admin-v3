@@ -17,12 +17,22 @@ class InventoryLogResource extends JsonResource
      */
     public function toArray($request): array
     {
+		$metadata = isset($this->metadata) ? json_decode($this->metadata, true) : false;
+
+		$inventoryFrom = $metadata && isset($metadata["startInventory"]) ? $metadata["startInventory"] : null;
+		$inventoryTo = $metadata && isset($metadata["endInventory"]) ? $metadata["endInventory"] : null;
+
+		if (!$metadata) {
+			$metadata = isset($this->meta) ? json_decode($this->meta, true) : false;
+		}
+
         return [
             'timestamp'       => $this->timestamp,
             'licenseIdentifier' => $this->identifier,
-            'inventoryFrom'   => Inventory::parseLogDetails($this->details, 'from'),
-            'inventoryTo'     => Inventory::parseLogDetails($this->details, 'to'),
+            'inventoryFrom'   => $inventoryFrom ?? Inventory::parseLogDetails($this->details, 'from'),
+            'inventoryTo'     => $inventoryTo ?? Inventory::parseLogDetails($this->details, 'to'),
             'itemMoved'       => Inventory::parseItem($this->details),
+			'metadata' => $metadata,
         ];
     }
 

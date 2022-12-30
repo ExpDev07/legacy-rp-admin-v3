@@ -518,6 +518,10 @@
             "id": "Inventory ID",
             "none": "No inventories matching your search or no not-empty inventories found"
         },
+		"history": {
+			"title": "Item History for {0} ({1})",
+			"description": "View the movement history of an item"
+		},
         "show": {
             "error": "Invalid Inventory",
             "title": "Inventory",
@@ -558,7 +562,8 @@
         },
         "logs": {
             "title": "Inventory Logs",
-            "description": "Inventory logs related to a certain inventory"
+            "description": "Inventory logs related to a certain inventory",
+			"history": "History"
         },
         "character": {
             "movement": "Movement",

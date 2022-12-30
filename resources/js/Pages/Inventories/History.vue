@@ -3,10 +3,10 @@
 
         <portal to="title">
             <h1 class="dark:text-white">
-                {{ t('inventories.logs.title') }}
+                {{ t('inventories.history.title', id, itemName) }}
             </h1>
             <p>
-                {{ t('inventories.logs.description') }}
+                {{ t('inventories.history.description') }}
             </p>
         </portal>
 
@@ -35,23 +35,13 @@
                                 {{ playerName(log.licenseIdentifier) }}
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t">
-                            <a class="dark:text-green-200 text-green-800 hover:text-yellow-500 dark:hover:text-yellow-300" v-if="log.itemMoved.startsWith('1x') && itemId(log.metadata)" :href="'/inventory/item/' + itemId(log.metadata)">
-                                {{ log.itemMoved }}
-                            </a>
-                            <span v-else>
-                                {{ log.itemMoved }}
-                            </span>
-                        </td>
+                        <td class="px-6 py-3 border-t">{{ log.itemMoved }}</td>
                         <td class="px-6 py-3 border-t">{{ log.timestamp | formatTime(true) }}</td>
                         <td class="px-6 py-3 border-t">
                             <div class="flex">
-                                <inertia-link v-if="log.inventoryFrom && log.inventoryFrom.type" :class="'w-inventory block px-2 py-2 font-semibold text-center ' + inventoryColor(log.inventoryFrom.type)" v-bind:href="'/inventory/' + log.inventoryFrom.descriptor">
-                                    {{ log.inventoryFrom.title }}
+                                <inertia-link v-if="log.inventoryFrom" :class="'w-inventory block px-2 py-2 font-semibold text-center ' + inventoryColor(log.inventoryFrom)" v-bind:href="'/inventory/' + log.inventoryFrom">
+                                    {{ log.inventoryFrom }}
                                 </inertia-link>
-                                <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else-if="log.inventoryFrom && log.inventoryFrom.descriptor !== 'unknown'">
-                                    {{ log.inventoryFrom.descriptor }}
-                                </span>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
                                     {{ t('inventories.character.unknown') }}
                                 </span>
@@ -60,12 +50,9 @@
                                     &#11166;
                                 </span>
 
-                                <inertia-link v-if="log.inventoryTo && log.inventoryTo.type" :class="'block w-inventory px-2 py-2 font-semibold text-center ' + inventoryColor(log.inventoryTo.type)" v-bind:href="'/inventory/' + log.inventoryTo.descriptor">
-                                    {{ log.inventoryTo.title }}
+                                <inertia-link v-if="log.inventoryTo" :class="'block w-inventory px-2 py-2 font-semibold text-center ' + inventoryColor(log.inventoryTo)" v-bind:href="'/inventory/' + log.inventoryTo">
+                                    {{ log.inventoryTo }}
                                 </inertia-link>
-                                <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else-if="log.inventoryTo && log.inventoryTo.descriptor !== 'unknown'">
-                                    {{ log.inventoryTo.descriptor }}
-                                </span>
                                 <span class="font-semibold w-inventory block px-2 py-2 bg-gray-500 text-center text-white" v-else>
                                     {{ t('inventories.character.unknown') }}
                                 </span>
@@ -78,37 +65,6 @@
                         </td>
                     </tr>
                 </table>
-            </template>
-
-            <template #footer>
-                <div class="flex items-center justify-between mt-6 mb-1">
-
-                    <!-- Navigation -->
-                    <div class="flex flex-wrap">
-                        <inertia-link
-                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                            :href="links.prev"
-                            v-if="page >= 2"
-                        >
-                            <i class="mr-1 fas fa-arrow-left"></i>
-                            {{ t("pagination.previous") }}
-                        </inertia-link>
-                        <inertia-link
-                            class="px-4 py-2 mr-3 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400"
-                            v-if="logs.length === 15"
-                            :href="links.next"
-                        >
-                            {{ t("pagination.next") }}
-                            <i class="ml-1 fas fa-arrow-right"></i>
-                        </inertia-link>
-                    </div>
-
-                    <!-- Meta -->
-                    <div class="font-semibold">
-                        {{ t("pagination.page", page) }}
-                    </div>
-
-                </div>
             </template>
         </v-section>
 
@@ -127,14 +83,9 @@ export default {
         VSection,
     },
     methods: {
-        itemId(metadata) {
-            if (metadata && metadata.itemIds && Array.isArray(metadata.itemIds)) {
-                return metadata.itemIds[0];
-            }
+        inventoryColor(descriptor) {
+            const type = descriptor.split('-')[0];
 
-            return false;
-        },
-        inventoryColor(type) {
             switch(type) {
                 case 'character':
                     return 'bg-green-600 hover:bg-green-500 text-white';
@@ -160,20 +111,20 @@ export default {
         }
     },
     props: {
+        id: {
+            type: Number,
+            required: true,
+        },
+        itemName: {
+            type: String,
+            required: true,
+        },
         logs: {
             type: Array,
             required: true,
         },
         playerMap: {
             type: Object,
-            required: true,
-        },
-        links: {
-            type: Object,
-            required: true,
-        },
-        page: {
-            type: Number,
             required: true,
         },
         time: {
