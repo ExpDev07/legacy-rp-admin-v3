@@ -36,106 +36,114 @@ class LogController extends Controller
     {
         $start = round(microtime(true) * 1000);
 
-        $query = Log::query()->orderByDesc('timestamp');
+		$logs = [];
+		$canSearchDrugs = true;
+		$page = 1;
 
-        $canSearchDrugs = true;
+		if (env('RESTRICT_DRUG_LOGS', false)) {
+			$player = $request->user()->player;
 
-        if (env('RESTRICT_DRUG_LOGS', false)) {
-            $player = $request->user()->player;
+			if ((!isset($player->panel_drug_department) || !$player->panel_drug_department) && !GeneralHelper::isUserRoot($player->license_identifier)) {
+				$canSearchDrugs = false;
+			}
+		}
 
-            if ((!isset($player->panel_drug_department) || !$player->panel_drug_department) && !GeneralHelper::isUserRoot($player->license_identifier)) {
-                $query->whereNotIn('action', self::DRUG_LOGS);
+		if (!$request->query('empty')) {
+			$query = Log::query()->orderByDesc('timestamp');
 
-                $canSearchDrugs = false;
-            }
-        }
+			if ($canSearchDrugs) {
+				$query->whereNotIn('action', self::DRUG_LOGS);
+			}
 
-        // Filtering by identifier.
-        if ($identifier = $this->multiValues($request->input('identifier'))) {
-            /**
-             * @var $q Builder
-             */
-            $query->where(function ($q) use ($identifier) {
-                foreach ($identifier as $i) {
-                    $q->orWhere('identifier', $i);
-                }
-            });
-        }
+			// Filtering by identifier.
+			if ($identifier = $this->multiValues($request->input('identifier'))) {
+				/**
+				 * @var $q Builder
+				 */
+				$query->where(function ($q) use ($identifier) {
+					foreach ($identifier as $i) {
+						$q->orWhere('identifier', $i);
+					}
+				});
+			}
 
-        // Filtering by before.
-        if ($before = $request->input('before')) {
-            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '<', $before);
-        }
+			// Filtering by before.
+			if ($before = $request->input('before')) {
+				$query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '<', $before);
+			}
 
-        // Filtering by after.
-        if ($after = $request->input('after')) {
-            $query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', $after);
-        }
+			// Filtering by after.
+			if ($after = $request->input('after')) {
+				$query->where(DB::raw('UNIX_TIMESTAMP(`timestamp`)'), '>', $after);
+			}
 
-        // Filtering by server.
-        if ($server = $this->multiValues($request->input('server'))) {
-            /**
-             * @var $q Builder
-             */
-            $query->where(function ($q) use ($server) {
-                foreach ($server as $s) {
-                    $q->orWhere('details', 'LIKE', '% [' . intval($s) . '] %');
-                }
-            });
-        }
+			// Filtering by server.
+			if ($server = $this->multiValues($request->input('server'))) {
+				/**
+				 * @var $q Builder
+				 */
+				$query->where(function ($q) use ($server) {
+					foreach ($server as $s) {
+						$q->orWhere('details', 'LIKE', '% [' . intval($s) . '] %');
+					}
+				});
+			}
 
-        // Filtering by action.
-        if ($action = $this->multiValues($request->input('action'))) {
-            /**
-             * @var $q Builder
-             */
-            $query->where(function ($q) use ($action) {
-                foreach ($action as $a) {
-                    if (Str::startsWith($a, '=')) {
-                        $a = Str::substr($a, 1);
-                        $q->orWhere('action', $a);
-                    } else {
-                        $q->orWhere('action', 'like', "%{$a}%");
-                    }
-                }
-            });
-        }
+			// Filtering by action.
+			if ($action = $this->multiValues($request->input('action'))) {
+				/**
+				 * @var $q Builder
+				 */
+				$query->where(function ($q) use ($action) {
+					foreach ($action as $a) {
+						if (Str::startsWith($a, '=')) {
+							$a = Str::substr($a, 1);
+							$q->orWhere('action', $a);
+						} else {
+							$q->orWhere('action', 'like', "%{$a}%");
+						}
+					}
+				});
+			}
 
-        // Filtering by details.
-        if ($details = $request->input('details')) {
-            if (Str::startsWith($details, '=')) {
-                $details = Str::substr($details, 1);
-                $query->where('details', $details);
-            } else {
-                $query->where('details', 'like', "%{$details}%");
-            }
-        }
+			// Filtering by details.
+			if ($details = $request->input('details')) {
+				if (Str::startsWith($details, '=')) {
+					$details = Str::substr($details, 1);
+					$query->where('details', $details);
+				} else {
+					$query->where('details', 'like', "%{$details}%");
+				}
+			}
 
-        $actionInput = $request->input('action');
+			$actionInput = $request->input('action');
 
-        $action = $actionInput ? trim($actionInput) : null;
-        $details = $details ? trim($details) : null;
+			$action = $actionInput ? trim($actionInput) : null;
+			$details = $details ? trim($details) : null;
 
-        if ($action || $details) {
-            DB::table('panel_log_searches')
-                ->insert([
-                    'action' => $action,
-                    'details' => $details,
-                    'license_identifier' => $request->user()->player->license_identifier,
-                    'timestamp' => time()
-                ]);
+			if ($action || $details) {
+				DB::table('panel_log_searches')
+					->insert([
+						'action' => $action,
+						'details' => $details,
+						'license_identifier' => $request->user()->player->license_identifier,
+						'timestamp' => time()
+					]);
 
-            DB::table('panel_log_searches')
-                ->where('timestamp', '<', time() - CacheHelper::MONTH)
-                ->delete();
-        }
+				DB::table('panel_log_searches')
+					->where('timestamp', '<', time() - CacheHelper::MONTH)
+					->delete();
+			}
 
-        $page = Paginator::resolveCurrentPage('page');
+			$page = Paginator::resolveCurrentPage('page');
 
-        $query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
-        $query->limit(15)->offset(($page - 1) * 15);
+			$query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
+			$query->limit(15)->offset(($page - 1) * 15);
 
-        $logs = LogResource::collection($query->get());
+			$logs = $query->get();
+		}
+
+		$logs = LogResource::collection($logs);
 
         $end = round(microtime(true) * 1000);
 

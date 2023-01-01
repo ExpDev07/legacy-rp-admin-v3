@@ -110,7 +110,7 @@ export default {
                         {
                             label: this.t('characters.title'),
                             icon: 'book',
-                            url: '/characters',
+                            url: '/characters?empty=true',
                         },
                         {
                             label: this.t('blacklist.title'),
@@ -133,7 +133,7 @@ export default {
                         {
                             label: this.t('logs.title'),
                             icon: 'printer',
-                            url: '/logs',
+                            url: '/logs?empty=true',
                         },
                         {
                             label: this.t('casino.title'),
