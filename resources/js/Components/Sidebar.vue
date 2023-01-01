@@ -100,7 +100,7 @@ export default {
                         {
                             label: this.t('players.title'),
                             icon: 'user',
-                            url: '/players',
+                            url: '/players?empty=true',
                         },
                         {
                             label: this.t('players.new.title'),

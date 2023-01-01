@@ -31,89 +31,96 @@ class PlayerController extends Controller
      */
     public function index(Request $request): Response
     {
-        $start = round(microtime(true) * 1000);
-        $query = Player::query();
+		$identifiers = [];
+		$players = [];
+		$page = 1;
 
-        // Filtering by name.
-        if ($name = $request->input('name')) {
-            if (Str::startsWith($name, '=')) {
-                $name = Str::substr($name, 1);
-                $query->where('player_name', $name);
-            } else {
-                $query->where('player_name', 'like', "%{$name}%");
-            }
-        }
+		$start = round(microtime(true) * 1000);
 
-        // Filtering by identifier.
-        if ($identifier = $request->input('identifier')) {
-			$query->where('identifiers', 'like', "%{$identifier}%");
-        }
+		if (!$request->query('empty')) {
+			$query = Player::query();
 
-        // Filtering by license_identifier.
-        if ($license = $request->input('license')) {
-			if (!Str::startsWith($license, 'license:')) {
-				$license = 'license:' . $license;
+			// Filtering by name.
+			if ($name = $request->input('name')) {
+				if (Str::startsWith($name, '=')) {
+					$name = Str::substr($name, 1);
+					$query->where('player_name', $name);
+				} else {
+					$query->where('player_name', 'like', "%{$name}%");
+				}
 			}
 
-			if (strlen($license) !== 48) {
-				$query->where('license_identifier', 'LIKE', '%' . $license);
+			// Filtering by identifier.
+			if ($identifier = $request->input('identifier')) {
+				$query->where('identifiers', 'like', "%{$identifier}%");
+			}
+
+			// Filtering by license_identifier.
+			if ($license = $request->input('license')) {
+				if (!Str::startsWith($license, 'license:')) {
+					$license = 'license:' . $license;
+				}
+
+				if (strlen($license) !== 48) {
+					$query->where('license_identifier', 'LIKE', '%' . $license);
+				} else {
+					$query->where('license_identifier', $license);
+				}
+			}
+
+			// Filtering by discord.
+			if ($discord = $request->input('discord')) {
+				$query->where('identifiers', 'LIKE', '%discord:' . $discord . '%');
+			}
+
+			// Filtering by serer-id.
+			if ($server = $request->input('server')) {
+				$online = array_keys(array_filter(Player::getAllOnlinePlayers(true) ?? [], function ($player) use ($server) {
+					return $player['id'] === intval($server);
+				}));
+
+				$query->whereIn('license_identifier', $online);
+			}
+
+			$playerList = Player::getAllOnlinePlayers(true) ?? [];
+			$players = array_keys($playerList);
+			usort($players, function ($a, $b) use ($playerList) {
+				return $playerList[$a]['id'] <=> $playerList[$b]['id'];
+			});
+			$players = array_map(function ($player) {
+				return DB::connection()->getPdo()->quote($player);
+			}, $players);
+
+			$orderField = $request->input('order') ?? null;
+			$orderDirection = $request->input('desc') ? 'DESC' : 'ASC';
+
+			if (!$orderField || !in_array($orderField, ['last_connection', 'playtime', 'player_name'])) {
+				$orderField = 'last_connection';
+				$orderDirection = 'DESC';
+			}
+
+			if (!empty($players)) {
+				$query->orderByRaw('FIELD(license_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
 			} else {
-            	$query->where('license_identifier', $license);
+				$query->orderByDesc($orderField);
 			}
-        }
 
-        // Filtering by discord.
-        if ($discord = $request->input('discord')) {
-            $query->where('identifiers', 'LIKE', '%discord:' . $discord . '%');
-        }
+			$query->select([
+				'license_identifier', 'player_name', 'playtime', 'identifiers',
+			]);
+			$query->selectSub('SELECT COUNT(`id`) FROM `warnings` WHERE `player_id` = `user_id` AND `warning_type` IN (\'' . Warning::TypeWarning . '\', \'' . Warning::TypeStrike . '\')', 'warning_count');
 
-        // Filtering by serer-id.
-        if ($server = $request->input('server')) {
-            $online = array_keys(array_filter(Player::getAllOnlinePlayers(true) ?? [], function ($player) use ($server) {
-                return $player['id'] === intval($server);
-            }));
+			$page = Paginator::resolveCurrentPage('page');
+			$query->limit(15)->offset(($page - 1) * 15);
 
-            $query->whereIn('license_identifier', $online);
-        }
+			$players = $query->get();
 
-        $playerList = Player::getAllOnlinePlayers(true) ?? [];
-        $players = array_keys($playerList);
-        usort($players, function ($a, $b) use ($playerList) {
-            return $playerList[$a]['id'] <=> $playerList[$b]['id'];
-        });
-        $players = array_map(function ($player) {
-            return DB::connection()->getPdo()->quote($player);
-        }, $players);
+			$identifiers = array_values(array_map(function ($player) {
+				return $player['license_identifier'];
+			}, $players->toArray()));
+		}
 
-        $orderField = $request->input('order') ?? null;
-        $orderDirection = $request->input('desc') ? 'DESC' : 'ASC';
-
-        if (!$orderField || !in_array($orderField, ['last_connection', 'playtime', 'player_name'])) {
-            $orderField = 'last_connection';
-            $orderDirection = 'DESC';
-        }
-
-        if (!empty($players)) {
-            $query->orderByRaw('FIELD(license_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
-        } else {
-            $query->orderByDesc($orderField);
-        }
-
-        $query->select([
-            'license_identifier', 'player_name', 'playtime', 'identifiers',
-        ]);
-        $query->selectSub('SELECT COUNT(`id`) FROM `warnings` WHERE `player_id` = `user_id` AND `warning_type` IN (\'' . Warning::TypeWarning . '\', \'' . Warning::TypeStrike . '\')', 'warning_count');
-
-        $page = Paginator::resolveCurrentPage('page');
-        $query->limit(15)->offset(($page - 1) * 15);
-
-        $players = $query->get();
-
-        $end = round(microtime(true) * 1000);
-
-        $identifiers = array_values(array_map(function ($player) {
-            return $player['license_identifier'];
-        }, $players->toArray()));
+		$end = round(microtime(true) * 1000);
 
         return Inertia::render('Players/Index', [
             'players' => PlayerIndexResource::collection($players),
