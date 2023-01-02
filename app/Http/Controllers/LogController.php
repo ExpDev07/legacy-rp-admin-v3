@@ -20,8 +20,8 @@ use WhichBrowser\Cache;
 class LogController extends Controller
 {
     const DRUG_LOGS = [
-        "Cayo Gun Run",
         "Gun Run",
+		"Gun Run Drop",
         "Cocaine Run",
         "Oxy Run",
     ];
@@ -51,7 +51,7 @@ class LogController extends Controller
 		if (!$request->query('empty')) {
 			$query = Log::query()->orderByDesc('timestamp');
 
-			if ($canSearchDrugs) {
+			if (!$canSearchDrugs) {
 				$query->whereNotIn('action', self::DRUG_LOGS);
 			}
 
