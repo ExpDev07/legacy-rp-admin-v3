@@ -18,6 +18,16 @@ class TestController extends Controller
 		"necklaces" => [500, 600],
 		"silver_watches" => [300, 350],
 		"gold_bar" => 1000,
+
+		"raw_emerald" => [50, 140],
+		"raw_sapphire" => [140, 260],
+		"raw_ruby" => [270, 530],
+		"raw_morganite" => [1400, 2320],
+
+		"emerald" => [140, 230],
+		"sapphire" => [270, 520],
+		"ruby" => [540, 1000],
+		"morganite" => [2220, 5530],
 	];
 
     public function logs(Request $request, string $action): Response
