@@ -12,6 +12,24 @@ use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
+	const FinancialResources = [
+		"diamonds" => [5000, 6000],
+		"gold_watches" => [1250, 1500],
+		"necklaces" => [500, 600],
+		"silver_watches" => [300, 350],
+		"gold_bar" => 1000,
+
+		"raw_emerald" => [50, 140],
+		"raw_sapphire" => [140, 260],
+		"raw_ruby" => [270, 530],
+		"raw_morganite" => [1400, 2320],
+
+		"emerald" => [140, 230],
+		"sapphire" => [270, 520],
+		"ruby" => [540, 1000],
+		"morganite" => [2220, 5530],
+	];
+
     public function logs(Request $request, string $action): Response
     {
         $action = trim($action);
@@ -169,10 +187,16 @@ class TestController extends Controller
             }
         }
 
+		if (strlen("System") > $max) {
+			$max = strlen("System");
+		}
+
         // What a chonker
-        $query = "SELECT * FROM (SELECT identifier, creator_identifier, reason, (SELECT SUM(playtime) FROM characters WHERE license_identifier = identifier) as playtime FROM user_bans WHERE identifier LIKE 'license:%' AND creator_identifier LIKE 'license:%' AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))) bans WHERE playtime IS NOT NULL AND playtime > 0 ORDER BY playtime LIMIT 10";
+        $query = "SELECT * FROM (SELECT identifier, creator_identifier, reason, (SELECT SUM(playtime) FROM characters WHERE license_identifier = identifier) as playtime FROM user_bans WHERE identifier LIKE 'license:%' AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))) bans WHERE playtime IS NOT NULL AND playtime > 0 ORDER BY playtime LIMIT 10";
+        $querySystem = "SELECT * FROM (SELECT identifier, creator_identifier, reason, (SELECT SUM(playtime) FROM characters WHERE license_identifier = identifier) as playtime FROM user_bans WHERE identifier LIKE 'license:%' AND creator_name IS NULL AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 30 DAY))) bans WHERE playtime IS NOT NULL AND playtime > 0 ORDER BY playtime LIMIT 1";
 
         $bans = DB::select($query);
+        $banSystem = DB::select($querySystem);
 
         $fmt = function ($s) {
             if ($s >= 60) {
@@ -186,29 +210,43 @@ class TestController extends Controller
         };
 
         $leaderboard = [];
+
+		$banSystem = $banSystem[0];
+		$leaderboard[] = "00. " . str_pad("System", $max, " ") . "  " . $banSystem->identifier . "\t" . $fmt(intval($banSystem->playtime)) . "\t" . ($banSystem->reason ?? "No reason");
+
         for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
             $ban = $bans[$x];
 
-            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
+			$name = $staffMap[$ban->creator_identifier] ?? "System";
+
+            $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($name, $max, " ") . "  " . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
         }
 
-        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
+        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND (creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') OR creator_name IS NULL) GROUP BY creator_identifier ORDER BY c DESC");
+
+		$days = round((time() - strtotime("-3 months")) / 86400);
 
         $leaderboard2 = [];
-        for ($x = 0; $x < sizeof($bans) && $x < 10; $x++) {
+        for ($x = 0; $x < sizeof($bans) && $x <= 10; $x++) {
             $ban = $bans[$x];
 
-            $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->c . " bans";
+			$perDay = round($ban->c / $days, 1);
+
+			$name = $staffMap[$ban->creator_identifier] ?? "System";
+
+            $leaderboard2[] = str_pad($x . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($name, $max, " ") . "  " . str_pad($ban->c . " bans", 10, " ") . " (~" . $perDay . " per day)";
         }
 
         $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nTop 10 most bans (Last 3 months)\n\n" . implode("\n", $leaderboard2);
 
         if (isset($_GET["all"])) {
-            $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') GROUP BY creator_identifier ORDER BY c DESC");
+            $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND (creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') OR creator_name IS NULL) GROUP BY creator_identifier ORDER BY c DESC");
 
             $leaderboard3 = [];
             foreach ($bans as $x => $ban) {
-                $leaderboard3[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($staffMap[$ban->creator_identifier], $max, " ") . "  " . $ban->c . " bans";
+				$name = $staffMap[$ban->creator_identifier] ?? "System";
+
+                $leaderboard3[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($name, $max, " ") . "  " . $ban->c . " bans";
             }
 
             $text .= "\n\n- - -\n\nTop 10 most bans (All time)\n\n" . implode("\n", $leaderboard3);
@@ -257,14 +295,6 @@ class TestController extends Controller
             return $b->count - $a->count;
         });
 
-        $totalPlaytime = array_reduce($all, function ($carry, $item) {
-            return $carry + $item->playtime;
-        }, 0) / sizeof($all);
-
-        $monthPlaytime = array_reduce($month, function ($carry, $item) {
-            return $carry + $item->playtime;
-        }, 0) / sizeof($month);
-
         $allCount = array_reduce($all, function ($carry, $item) {
             return $carry + $item->count;
         }, 0);
@@ -273,21 +303,33 @@ class TestController extends Controller
             return $carry + $item->count;
         }, 0);
 
+		$monthPlaytime = 0;
+
         $leaderboard = [];
         foreach ($month as $x => $ban) {
             $count = str_pad(number_format($ban->count), 6);
 
-            $percentage = str_pad(number_format(($ban->count / $monthCount) * 100, 1) . "%", 6);
+			$percentage = $ban->count / $monthCount;
+
+			$monthPlaytime += $ban->playtime * $percentage;
+
+            $percentage = str_pad(number_format(($percentage) * 100, 1) . "%", 6);
             $playtime = str_pad($this->formatSecondsMinimal($ban->playtime), 13);
 
             $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $playtime . " " . $ban->reason;
         }
 
+		$totalPlaytime = 0;
+
         $leaderboard2 = [];
         foreach ($all as $x => $ban) {
             $count = str_pad(number_format($ban->count), 6);
 
-            $percentage = str_pad(number_format(($ban->count / $allCount) * 100, 1) . "%", 6);
+			$percentage = $ban->count / $allCount;
+
+			$totalPlaytime += $ban->playtime * $percentage;
+
+            $percentage = str_pad(number_format(($percentage) * 100, 1) . "%", 6);
             $playtime = str_pad($this->formatSecondsMinimal($ban->playtime), 13);
 
             $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $playtime . " " . $ban->reason;
@@ -422,8 +464,27 @@ class TestController extends Controller
         $data = DB::select(DB::raw("SELECT SUM(amount) as total_shared from shared_accounts"));
 		$money += floor($data[0]->total_shared);
 
+        $data = DB::select(DB::raw("SELECT SUM(company_balance) as total_stocks FROM stocks_companies"));
+		$money += floor($data[0]->total_stocks);
+
+        $data = DB::select(DB::raw("SELECT SUM(1) as count, item_name FROM inventories WHERE item_name IN ('" . implode("', '", array_keys(self::FinancialResources)) . "') GROUP BY item_name"));
+		$resources = 0;
+
+		foreach ($data as $item) {
+			$price = self::FinancialResources[$item->item_name];
+
+			if (is_array($price)) {
+				$price = ($price[0] + $price[1]) / 2;
+			}
+
+			$resources += $price * $item->count;
+		}
+
 		$text = [
-			"Total money in circulation: $" . number_format($money),
+			"In circulation: $" . number_format($money),
+			"In valuables:   $" . number_format($resources),
+			"",
+			"Total:          $" . number_format($money + $resources)
 		];
 
         return self::respond(implode("\n", $text));
