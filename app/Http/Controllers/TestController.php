@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
+	const FinancialResources = [
+		"diamonds" => [5000, 6000],
+		"gold_watches" => [1250, 1500],
+		"necklaces" => [500, 600],
+		"silver_watches" => [300, 350],
+		"gold_bar" => 1000,
+	];
+
     public function logs(Request $request, string $action): Response
     {
         $action = trim($action);
@@ -422,8 +430,27 @@ class TestController extends Controller
         $data = DB::select(DB::raw("SELECT SUM(amount) as total_shared from shared_accounts"));
 		$money += floor($data[0]->total_shared);
 
+        $data = DB::select(DB::raw("SELECT SUM(company_balance) as total_stocks FROM stocks_companies"));
+		$money += floor($data[0]->total_stocks);
+
+        $data = DB::select(DB::raw("SELECT SUM(1) as count, item_name FROM inventories WHERE item_name IN ('" . implode("', '", array_keys(self::FinancialResources)) . "') GROUP BY item_name"));
+		$resources = 0;
+
+		foreach ($data as $item) {
+			$price = self::FinancialResources[$item->item_name];
+
+			if (is_array($price)) {
+				$price = ($price[0] + $price[1]) / 2;
+			}
+
+			$resources += $price * $item->count;
+		}
+
 		$text = [
-			"Total money in circulation: $" . number_format($money),
+			"In circulation: $" . number_format($money),
+			"In valuables:   $" . number_format($resources),
+			"",
+			"Total:          $" . number_format($money + $resources)
 		];
 
         return self::respond(implode("\n", $text));
