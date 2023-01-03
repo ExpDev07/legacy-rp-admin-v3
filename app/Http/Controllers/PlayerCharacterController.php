@@ -586,6 +586,81 @@ class PlayerCharacterController extends Controller
         return back()->with('success', 'Vehicle garage was successfully reset.');
     }
 
+	/**
+     * Edits the specified vehicle.
+     *
+     * @param Request $request
+     * @param Vehicle $vehicle
+     * @return \Illuminate\Http\Response
+     */
+    public function editVehicle(Request $request, Vehicle $vehicle): \Illuminate\Http\Response
+    {
+        $user = $request->user();
+        if (!$user->player->is_super_admin) {
+            return self::json(false, null, 'Only super admins can edit vehicles.');
+        }
+
+        $plate = trim(strtoupper($request->post('plate')));
+        if (strlen($plate) < 3 || strlen($plate) > 8 || preg_match('/[^\w ]/mi', $plate)) {
+            return self::json(false, null, 'Plate has to be between 3 and 8 characters long and only contain alphanumeric characters and spaces (A-Z and 0-9, cannot start or end with space).');
+        }
+
+        $exists = Vehicle::query()->where('plate', '=', $plate)->where('vehicle_id', '<>', $vehicle->vehicle_id)->count(['vehicle_id']) > 0;
+        if ($exists) {
+            return self::json(false, null, 'Plate "' . $plate . '" is already taken.');
+        }
+
+        $fuel = floatval($request->post('fuel'));
+        if ($fuel < 0 || $fuel > 100) {
+            return self::json(false, null, 'Invalid fuel value.');
+        }
+
+        $owner = $request->post('owner_cid');
+
+        $character = Character::query()->where('character_id', '=', $owner)->first(['character_id', 'steam_identifier']);
+        if (!$character) {
+            return self::json(false, null, 'Invalid character id.');
+        }
+
+        $invalidMod = $vehicle->parseModifications($request->post('modifications', []));
+        if ($invalidMod !== null) {
+            return self::json(false, null, 'Invalid modifications ("' . $invalidMod . '") submitted, please try again.');
+        }
+
+        $repair = $request->post('repair');
+        $damage = $vehicle->deprecated_damage;
+
+        if ($repair === 'fix') {
+            $damage = null;
+        } else if ($repair === 'break') {
+            $damage = '{';
+
+            // No doors
+            $damage .= '"doors":{"1":true,"2":true,"3":true,"4":true,"5":true,"0":true},';
+            // Very dirty
+            $damage .= '"dirt":15.0,';
+            // No tires
+            $damage .= '"tires":{"1":true,"2":true,"3":true,"4":true,"5":true,"0":true},';
+            // No windows
+            $damage .= '"windows":{"1":true,"2":true,"3":true,"4":true,"5":true,"6":true,"7":true,"0":true},';
+            // Damage completely fucked
+            $damage .= '"tank":0.0,"body":0.0,"general":1000,"engine":0.0';
+
+            $damage .= '}';
+        }
+
+        $vehicle->update([
+            'owner_cid'                => $character->character_id,
+            'plate'                    => $plate,
+            'deprecated_modifications' => $vehicle->deprecated_modifications,
+            'deprecated_damage'        => $damage,
+            'deprecated_fuel'          => $fuel,
+        ]);
+
+        Session::flash('success', 'Vehicle was successfully edited');
+        return self::json(true);
+    }
+
     /**
      * Returns basic character info for the map
      *
