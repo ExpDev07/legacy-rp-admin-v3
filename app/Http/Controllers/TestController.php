@@ -414,6 +414,21 @@ class TestController extends Controller
         return (new Response(json_encode($characters), 200))->header('Content-Type', 'application/json');
     }
 
+    public function finance(Request $request): Response
+    {
+        $data = DB::select(DB::raw("SELECT SUM(cash + bank + stocks_balance) as total_money FROM characters"));
+		$money = floor($data[0]->total_money);
+
+        $data = DB::select(DB::raw("SELECT SUM(amount) as total_shared from shared_accounts"));
+		$money += floor($data[0]->total_shared);
+
+		$text = [
+			"Total money in circulation: $" . number_format($money),
+		];
+
+        return self::respond(implode("\n", $text));
+    }
+
     /**
      * Responds with plain text
      *
