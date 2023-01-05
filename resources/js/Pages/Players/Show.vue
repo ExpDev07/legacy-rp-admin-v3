@@ -314,9 +314,10 @@
                          :key="identifier">
                         <div class="p-3 w-1/2 relative">
                             <b class="block">{{ link.label }}</b>
-                            <pre class="text-xs overflow-hidden overflow-ellipsis" :class="{'dark:text-green-400 text-green-600' : link.last_used}" :title="identifier">{{
-                                    identifier
-                                }}</pre>
+                            <pre class="text-xs overflow-hidden overflow-ellipsis"
+                                :class="{'dark:text-green-300 text-green-700' : link.last_used}"
+                                :title="identifier"
+                            >{{ identifier }}</pre>
 
                             <button
                                 class="p-1 absolute top-0 right-0 text-xs font-semibold bg-transparent text-red-600 dark:text-red-400 rounded"
@@ -543,63 +544,6 @@
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <!-- Linked Accounts -->
-        <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-30" v-if="isShowingLinked">
-            <div
-                class="max-h-max overflow-y-auto shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-4 rounded w-alert">
-                <h3 class="mb-2">{{ t('players.show.linked_title') }}</h3>
-                <div v-if="isShowingLinkedLoading">
-                    <div class="flex justify-center items-center my-6 mt-12">
-                        <div>
-                            <i class="fas fa-cog animate-spin"></i>
-                            {{ t('global.loading') }}
-                        </div>
-                    </div>
-                </div>
-                <div v-else>
-                    <div class="w-full flex justify-between mb-2" v-for="(link, identifier) in linkedAccounts.linked"
-                         :key="identifier">
-                        <div class="p-3 w-1/2 relative">
-                            <b class="block">{{ link.label }}</b>
-                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{
-                                    identifier
-                                }}</pre>
-
-                            <button
-                                class="p-1 absolute top-0 right-0 text-xs font-semibold bg-transparent text-red-600 dark:text-red-400 rounded"
-                                @click="removeIdentifier(identifier)"
-                                :title="t('global.remove')"
-                                v-if="$page.auth.player.isSuperAdmin"
-                            >
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                        <div class="p-3 w-1/2" v-if="link.accounts.length > 0">
-                            <a
-                                class="px-5 py-1 mb-2 border-2 rounded block w-full border-blue-200 bg-primary-pale dark:bg-dark-primary-pale"
-                                :href="'/players/' + account.license_identifier"
-                                target="_blank"
-                                v-for="account in link.accounts"
-                                :key="account.license_identifier"
-                            >
-                                <span class="font-semibold">{{ account.player_name }}</span>
-                            </a>
-                        </div>
-                        <div class="p-3 w-1/2" v-else>
-                            <span class="italic text-sm">{{ t('players.show.no_link') }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-end mt-2">
-                    <button type="button"
-                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
-                            @click="isShowingLinked = false">
-                        {{ t('global.close') }}
-                    </button>
-                </div>
             </div>
         </div>
 
