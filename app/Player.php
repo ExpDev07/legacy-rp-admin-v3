@@ -59,6 +59,7 @@ class Player extends Model
         'player_name',
         'player_aliases',
         'identifiers',
+		'last_used_identifiers',
         'ips',
         'is_staff',
         'is_senior_staff',
@@ -84,6 +85,7 @@ class Player extends Model
      */
     protected $casts = [
         'identifiers' => 'array',
+        'last_used_identifiers' => 'array',
         'ips' => 'array',
         'player_aliases' => 'array',
         'enabled_commands' => 'array',
@@ -232,6 +234,22 @@ class Player extends Model
     {
         $identifiers = $this->identifiers ?? [];
         $identifiers[] = $this->license_identifier;
+
+        return array_values(
+            array_unique(
+                $identifiers
+            )
+        );
+    }
+
+    /**
+     * Gets the last used identifiers.
+     *
+     * @return array
+     */
+    public function getLastUsedIdentifiers(): array
+    {
+        $identifiers = $this->last_used_identifiers ?? [];
 
         return array_values(
             array_unique(

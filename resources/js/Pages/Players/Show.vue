@@ -314,7 +314,7 @@
                          :key="identifier">
                         <div class="p-3 w-1/2 relative">
                             <b class="block">{{ link.label }}</b>
-                            <pre class="text-xs overflow-hidden overflow-ellipsis" :title="identifier">{{
+                            <pre class="text-xs overflow-hidden overflow-ellipsis" :class="{'dark:text-green-400 text-green-600' : link.last_used}" :title="identifier">{{
                                     identifier
                                 }}</pre>
 
