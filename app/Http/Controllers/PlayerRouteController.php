@@ -112,6 +112,8 @@ class PlayerRouteController extends Controller
             'linked' => [],
         ];
 
+		$last = $player->getLastUsedIdentifiers();
+
         foreach ($identifiers as $identifier) {
             if (Str::startsWith($identifier, "ip:")) {
                 continue;
@@ -121,6 +123,7 @@ class PlayerRouteController extends Controller
                 $linked['linked'][$identifier] = [
                     'label'    => Player::getIdentifierLabel($identifier) ?? 'Unknown Identifier',
                     'accounts' => [],
+					'last_used' => in_array($identifier, $last),
                 ];
             }
 
