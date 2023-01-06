@@ -617,7 +617,7 @@ class PlayerCharacterController extends Controller
 
         $owner = $request->post('owner_cid');
 
-        $character = Character::query()->where('character_id', '=', $owner)->first(['character_id', 'steam_identifier']);
+        $character = Character::query()->where('character_id', '=', $owner)->first(['character_id', 'license_identifier']);
         if (!$character) {
             return self::json(false, null, 'Invalid character id.');
         }
