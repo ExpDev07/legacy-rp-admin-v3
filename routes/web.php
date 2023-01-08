@@ -22,6 +22,7 @@ use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\CronjobController;
 use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SteamLookupController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\MapController;
@@ -65,6 +66,10 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
     Route::get('/', [HomeController::class, 'render']);
     Route::get('/changelog', [ChangelogController::class, 'render']);
+
+	// Steam Lookup.
+    Route::get('/steam', [SteamLookupController::class, 'render']);
+    Route::post('/steam', [SteamLookupController::class, 'playerInfo']);
 
     Route::get('/staff', [StaffChatController::class, 'staff']);
     Route::post('/staffChat', [StaffChatController::class, 'externalStaffChat']);
