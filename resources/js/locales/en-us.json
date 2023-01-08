@@ -65,6 +65,18 @@
         "entries": "Showing {0} total entries on {1} page(s).",
         "loading": "Loading..."
     },
+	"steam": {
+		"title": "Steam Lookup",
+		"description": "Lookup players using their steam account.",
+		"search": "Search",
+		"result": "Lookup Result",
+		"no_result": "Failed to resolve steam account.",
+		"steam_id": "Steam ID",
+		"steam2": "Steam2",
+		"steam3": "Steam3",
+		"steam_hex": "Steam Hex",
+		"steam_url": "Profile URL"
+	},
     "loading_screen": {
         "sidebar": "Loading Screen",
         "title": "Loading screen pictures",

@@ -94,6 +94,11 @@ export default {
                     url: '/',
                 },
                 {
+                    label: this.t('steam.title'),
+                    icon: 'steam',
+                    url: '/steam',
+                },
+                {
                     label: this.t('sidebar.management'),
                     icon: 'users',
                     sub: [
