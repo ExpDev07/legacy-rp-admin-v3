@@ -798,14 +798,14 @@
             <template>
                 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
                     <card
-                        :key="property.id"
+                        :key="property.property_id"
                         v-for="(property) in character.properties"
                         :no_body="true"
                     >
                         <template #header>
                             <h3 class="mb-2">
                                 {{ property.property_address }}
-                                <sup>{{ property.id }}</sup>
+                                <sup>{{ property.property_id }}</sup>
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.properties.cost') }}:</span>
@@ -843,14 +843,14 @@
                 </h3>
                 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9" v-if="character.accessProperties.length > 0">
                     <card
-                        :key="property.id"
+                        :key="property.property_id"
                         v-for="(property) in character.accessProperties"
                         :no_body="true"
                     >
                         <template #header>
                             <h3 class="mb-2">
                                 {{ property.property_address }}
-                                <sup>{{ property.id }}</sup>
+                                <sup>{{ property.property_id }}</sup>
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.properties.access_level') }}:</span>
