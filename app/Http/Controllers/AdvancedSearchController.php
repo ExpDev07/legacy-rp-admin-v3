@@ -213,7 +213,7 @@ class AdvancedSearchController extends Controller
 
             return [
                 [
-                    'link' => self::characterLinkArray($entry['owner_cid']),
+                    'link' => $entry['owner_cid'] ? self::characterLinkArray($entry['owner_cid']) : "#",
                 ],
                 $entry['model_name'] . ' (' . $entry['vehicle_id'] . ')',
                 self::formatJSON($json),
@@ -255,7 +255,7 @@ class AdvancedSearchController extends Controller
 
             return [
                 [
-                    'link' => self::characterLinkArray($entry['property_renter_cid']),
+                    'link' => $entry['property_renter_cid'] ? self::characterLinkArray($entry['property_renter_cid']) : "#",
                 ],
                 $entry['property_address'],
                 self::formatJSON($json),
