@@ -96,6 +96,29 @@ class Ban extends Model
         return $this->timestamp->getTimestamp();
     }
 
+	public static function generateHash(): string
+	{
+		$getHash = function() {
+			$letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+			$hash = '';
+
+			for ($i = 0; $i < 8; $i++) {
+				$hash .= $letters[rand(0, strlen($letters) - 1)];
+			}
+
+			return $hash;
+		};
+
+		while (true) {
+			$hash = $getHash();
+
+			if (!Ban::query()->where('ban_hash', '=', $hash)->exists()) {
+				return $hash;
+			}
+		}
+	}
+
     /**
      * Checks if the ban has expired.
      *

@@ -117,7 +117,7 @@ class PlayerBanController extends Controller
 
         // Create a unique hash to go with this player's batch of bans.
         $user = $request->user();
-        $hash = Str::uuid()->toString();
+        $hash = Ban::generateHash();
 
         // Create ban.
         $ban = array_merge([
