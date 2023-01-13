@@ -638,6 +638,13 @@ export default {
 				});
 			}
 
+			details = details.replace(/(license:\w+)(?=\))/gm, function(pMatch) {
+				const start = pMatch.substring(0, 12),
+					end = pMatch.substring(pMatch.length - 4);
+
+				return `<span class="copy_title text-gray-700 dark:text-gray-300" title="${pMatch}">${start}...${end}</span>`;
+			});
+
 			return this.parseDisconnectLog(details, action, metadata);
 		},
 		playerName(licenseIdentifier) {
@@ -646,6 +653,7 @@ export default {
 	},
 	mounted() {
 		const _this = this;
+
 		$('body').on('click', 'a.exit-log', function (e) {
 			e.preventDefault();
 			const parent = $(this).closest('tr');
@@ -654,6 +662,12 @@ export default {
 			_this.log_detail.user = $('td:first-child a', parent).text().trim();
 			_this.log_detail.reason = $(this).data('reason');
 			_this.log_detail.description = $(this).data('description');
+		});
+
+		$('body').on('click', '.copy_title', function (e) {
+			const title = $(this).attr('title');
+
+			_this.copyToClipboard(title);
 		});
 
 		if (this.filters.before) {

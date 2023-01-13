@@ -106,13 +106,13 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="result in results">
                         <td class="px-6 py-3 border-t" v-for="entry in result">
                             <inertia-link class="block py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" v-if="typeof entry === 'object' && 'link' in entry" :href="entry.link.target">
-                                {{ entry.link.label }}
+                                {{ entry.link.label || "N/A" }}
                             </inertia-link>
                             <div v-else-if="typeof entry === 'object' && 'pre' in entry" class="collapsible">
                                 <div class="cursor-pointer text-blue-600 dark:text-blue-400 col-show">{{ t('advanced.show') }}</div>
                                 <div class="col-data overflow-hidden h-0">
                                     <a href="#" class="block mb-2 text-blue-600 dark:text-blue-400">{{ t('advanced.hide') }}</a>
-                                    <pre class="whitespace-pre-wrap text-xs" v-html="entry.pre">{{ entry.pre }}</pre>
+                                    <pre class="whitespace-pre-wrap text-xs" v-html="entry.pre"></pre>
                                 </div>
                             </div>
                             <span v-else-if="typeof entry === 'object' && 'time' in entry">

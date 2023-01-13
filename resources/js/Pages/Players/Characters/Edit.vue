@@ -24,14 +24,14 @@
                 <!-- Remove Tattoos -->
                 <a href="#"
                    class="px-5 py-2 font-semibold text-white rounded bg-danger mr-3 dark:bg-dark-danger mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                   @click="function(e) {e.preventDefault(); isTattooRemoval = true}">
+                   @click="(e) => {e.preventDefault(); isTattooRemoval = true}">
                     <i class="fas fa-eraser"></i>
                     {{ t('players.characters.remove_tattoo') }}
                 </a>
                 <!-- Reset Spawn-point -->
                 <a href="#"
                    class="px-5 py-2 font-semibold text-white rounded bg-warning mr-3 dark:bg-dark-warning mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                   @click="function(e) {e.preventDefault(); isResetSpawn = true}">
+                   @click="(e) => {e.preventDefault(); isResetSpawn = true}">
                     <i class="fas fa-heartbeat"></i>
                     {{ t('players.characters.reset_spawn') }}
                 </a>
@@ -63,12 +63,10 @@
                         <option value="right_leg">{{ t('players.characters.zone.right_leg') }}</option>
                     </select>
                 </div>
-                <p v-html="t('players.characters.tattoo_no_undo')">
-                    {{ t('players.characters.tattoo_no_undo') }}
-                </p>
+                <p v-html="t('players.characters.tattoo_no_undo')"></p>
                 <div class="flex justify-end mt-2">
                     <button type="button"
-                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
                             @click="isTattooRemoval = false">
                         {{ t('global.cancel') }}
                     </button>
@@ -99,12 +97,10 @@
                         </option>
                     </select>
                 </div>
-                <p v-html="t('players.characters.spawn_no_undo')">
-                    {{ t('players.characters.spawn_no_undo') }}
-                </p>
+                <p v-html="t('players.characters.spawn_no_undo')"></p>
                 <div class="flex justify-end mt-2">
                     <button type="button"
-                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
                             @click="isResetSpawn = false">
                         {{ t('global.cancel') }}
                     </button>
@@ -580,7 +576,7 @@
                 </div>
                 <div class="flex justify-end">
                     <button type="button"
-                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
                             @click="isVehicleEdit = false">
                         {{ t('global.cancel') }}
                     </button>
@@ -615,7 +611,7 @@
                 </div>
                 <div class="flex justify-end">
                     <button type="button"
-                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
                             @click="isVehicleAdd = false">
                         {{ t('global.cancel') }}
                     </button>
@@ -647,7 +643,7 @@
                 <p v-else>{{ t('players.characters.license.all') }}</p>
                 <div class="flex justify-end">
                     <button type="button"
-                            class="px-5 py-2 mr-3 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
+                            class="px-5 py-2 hover:shadow-xl font-semibold text-white rounded bg-dark-secondary mr-3 dark:text-black dark:bg-secondary"
                             @click="isLicenceAdd = false">
                         {{ t('global.cancel') }}
                     </button>
@@ -706,9 +702,7 @@
                         </template>
 
                         <template>
-                            <p v-html="t('players.vehicles.parked', vehicle.garage_name)">
-                                {{ t('players.vehicles.parked', vehicle.garage_name) }}
-                            </p>
+                            <p v-html="t('players.vehicles.parked', vehicle.garage_name)"></p>
                         </template>
 
                         <template #footer>
@@ -804,13 +798,14 @@
             <template>
                 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
                     <card
-                        :key="property.id"
+                        :key="property.property_id"
                         v-for="(property) in character.properties"
                         :no_body="true"
                     >
                         <template #header>
                             <h3 class="mb-2">
                                 {{ property.property_address }}
+                                <sup>{{ property.property_id }}</sup>
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.properties.cost') }}:</span>
@@ -848,13 +843,14 @@
                 </h3>
                 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9" v-if="character.accessProperties.length > 0">
                     <card
-                        :key="property.id"
+                        :key="property.property_id"
                         v-for="(property) in character.accessProperties"
                         :no_body="true"
                     >
                         <template #header>
                             <h3 class="mb-2">
                                 {{ property.property_address }}
+                                <sup>{{ property.property_id }}</sup>
                             </h3>
                             <h4 class="text-primary dark:text-dark-primary">
                                 <span>{{ t('players.properties.access_level') }}:</span>
