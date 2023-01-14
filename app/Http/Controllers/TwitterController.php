@@ -137,8 +137,8 @@ class TwitterController extends Controller
     public function deleteTweet(Request $request, TwitterPost $post): RedirectResponse
     {
         $user = $request->user();
-        if (!$user->player->is_super_admin) {
-            return back()->with('error', 'Only super admins can delete tweets.');
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_TWITTER)) {
+            abort(401);
         }
 
         $post->update([
