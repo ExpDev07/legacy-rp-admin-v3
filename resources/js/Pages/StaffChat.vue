@@ -5,14 +5,19 @@
             <h1 class="dark:text-white">
                 {{ t("staff_chat.title") }}
             </h1>
+
+            <button @click="notificationSound = !notificationSound" class="text-lg text-white absolute top-4 right-4">
+                <i class="fas fa-volume-up text-green-200" v-if="notificationSound"></i>
+                <i class="fas fa-volume-mute text-red-200" v-else></i>
+            </button>
         </portal>
 
         <div class="-mt-12">
             <div class="flex flex-wrap flex-row">
-                <form class="mb-6 flex" @submit.prevent="sendChat">
-                    <input class="w-80 px-4 py-2 mr-1 bg-gray-200 dark:bg-gray-600 border rounded" maxlength="250" required placeholder="Hey gang!" v-model="staffMessage">
+                <form class="mb-6 flex w-full" @submit.prevent="sendChat">
+                    <input class="w-full px-4 py-2 mr-3 bg-gray-200 dark:bg-gray-600 border rounded" maxlength="250" required placeholder="Hey gang!" v-model="staffMessage">
 
-                    <button class="px-4 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg" type="submit">
+                    <button class="px-4 py-2 font-semibold text-white bg-success dark:bg-dark-success rounded hover:shadow-lg flex-shrink-0" type="submit">
                         <span v-if="!isSendingChat">
                             <i class="fas fa-envelope"></i>
                             {{ t('staff_chat.send_chat') }}
@@ -99,7 +104,9 @@ export default {
             socketError: false,
             staffMessages: [],
             staffMessage: "",
-            isSendingChat: false
+            isSendingChat: false,
+
+            notificationSound: false
         };
     },
     methods: {
@@ -152,7 +159,11 @@ export default {
                 try {
                     const unzipped = await DataCompressor.GUnZIP(buffer);
 
-                    this.staffMessages = JSON.parse(unzipped).reverse();
+                    const messages = JSON.parse(unzipped).reverse();
+
+                    if (messages[0]?.message !== this.staffMessages[0]?.message) {
+                        this.notify();
+                    }
                 } catch (e) {
                     console.error('Failed to parse socket message ', e)
                 }
@@ -170,7 +181,18 @@ export default {
                     this.initChat();
                 }, 3000);
             });
-        }
+        },
+        notify() {
+            if (!this.notificationSound) {
+                return;
+            }
+
+			const audio = new Audio("/images/notification_pop.ogg");
+
+			audio.volume = 0.55;
+
+			audio.play();
+		}
     },
     mounted() {
         const _this = this;
