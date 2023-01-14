@@ -40,7 +40,7 @@
             class="block px-1.5 py-1 text-center text-white text-xs absolute top-1 right-1 bg-red-600 dark:bg-red-400 rounded"
             href="#"
             @click="deleteTweet($event, post.id)"
-            v-if="$page.auth.player.isSuperAdmin"
+            v-if="perm.check(perm.PERM_TWITTER)"
         >
             <i class="fas fa-trash-alt"></i>
         </inertia-link>
