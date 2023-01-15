@@ -161,7 +161,7 @@ export default {
 
                     const messages = JSON.parse(unzipped).reverse();
 
-                    if (messages[0]?.createdAt !== this.staffMessages[0]?.createdAt) {
+                    if (messages[0]?.type === 'report' && messages[0]?.createdAt !== this.staffMessages[0]?.createdAt) {
                         this.notify();
                     }
 
