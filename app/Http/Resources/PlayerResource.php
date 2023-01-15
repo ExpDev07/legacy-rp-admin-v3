@@ -43,7 +43,6 @@ class PlayerResource extends JsonResource
             'steamProfileUrl' => $this->getSteamProfileUrl(),
             'isTrusted'       => $this->is_trusted,
             'isDebugger'      => $this->isDebugger(),
-            'isPanelTrusted'  => $this->isPanelTrusted(),
             'isStaff'         => $this->isStaff(),
             'isSeniorStaff'   => $this->isSeniorStaff(),
             'isSuperAdmin'    => $this->isSuperAdmin(),

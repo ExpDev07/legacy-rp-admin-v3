@@ -9,16 +9,16 @@ class PermissionHelper
 {
     const PERMISSIONS = [
         self::PERM_SCREENSHOT     => ['screenshot', self::LEVEL_STAFF],
-        self::PERM_SUSPICIOUS     => ['suspicious', self::LEVEL_TRUSTED],
-        self::PERM_ADVANCED       => ['advanced', self::LEVEL_TRUSTED],
+        self::PERM_SUSPICIOUS     => ['suspicious', self::LEVEL_SENIOR],
+        self::PERM_ADVANCED       => ['advanced', self::LEVEL_SENIOR],
         self::PERM_LIVEMAP        => ['livemap', self::LEVEL_STAFF],
-        self::PERM_LOCK_BAN       => ['lock_ban', self::LEVEL_TRUSTED],
+        self::PERM_LOCK_BAN       => ['lock_ban', self::LEVEL_SENIOR],
         self::PERM_SOFT_BAN       => ['soft_ban', self::LEVEL_ROOT],
         self::PERM_EDIT_TAG       => ['edit_tag', self::LEVEL_ROOT],
         self::PERM_LOADING_SCREEN => ['loading_screen', self::LEVEL_SUPERADMIN],
-        self::PERM_VIEW_QUEUE     => ['view_queue', self::LEVEL_TRUSTED],
+        self::PERM_VIEW_QUEUE     => ['view_queue', self::LEVEL_SENIOR],
         self::PERM_TWITTER        => ['twitter', self::LEVEL_SUPERADMIN],
-    ];
+    ];isSeniorStaff
 
     const PERM_SCREENSHOT     = 'P_SCREENSHOT';
     const PERM_SUSPICIOUS     = 'P_SUSPICIOUS';
@@ -32,7 +32,7 @@ class PermissionHelper
     const PERM_TWITTER        = 'P_TWITTER';
 
     const LEVEL_STAFF      = 1;
-    const LEVEL_TRUSTED    = 2;
+    const LEVEL_SENIOR    = 2;
     const LEVEL_SUPERADMIN = 3;
     const LEVEL_ROOT       = 4;
 
@@ -56,8 +56,8 @@ class PermissionHelper
                 return self::LEVEL_ROOT;
             case 'superadmin':
                 return self::LEVEL_SUPERADMIN;
-            case 'trusted':
-                return self::LEVEL_TRUSTED;
+            case 'senior':
+                return self::LEVEL_SENIOR;
             case 'staff':
                 return self::LEVEL_STAFF;
         }
@@ -84,8 +84,8 @@ class PermissionHelper
             $level = self::LEVEL_ROOT;
         } else if ($player->is_super_admin) {
             $level = self::LEVEL_SUPERADMIN;
-        } else if ($player->is_panel_trusted) {
-            $level = self::LEVEL_TRUSTED;
+        } else if ($player->is_senior_staff) {
+            $level = self::LEVEL_SENIOR;
         } else if ($player->is_staff) {
             $level = self::LEVEL_STAFF;
         }

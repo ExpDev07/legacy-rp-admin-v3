@@ -65,7 +65,6 @@ class Player extends Model
         'is_senior_staff',
         'is_super_admin',
         'is_trusted',
-        'is_panel_trusted',
         'is_debugger',
         'is_soft_banned',
         'panel_drug_department',
@@ -94,7 +93,6 @@ class Player extends Model
         'is_trusted' => 'boolean',
         'is_staff' => 'boolean',
         'is_super_admin' => 'boolean',
-        'is_panel_trusted' => 'boolean',
         'is_debugger' => 'boolean',
         'panel_drug_department' => 'boolean',
         'is_soft_banned' => 'boolean',
@@ -338,16 +336,6 @@ class Player extends Model
     public function isRoot(): bool
     {
         return $this->license_identifier && GeneralHelper::isUserRoot($this->license_identifier);
-    }
-
-    /**
-     * Checks whether this player is a trusted panel user.
-     *
-     * @return bool
-     */
-    public function isPanelTrusted(): bool
-    {
-        return $this->isSuperAdmin() || $this->is_panel_trusted;
     }
 
     /**

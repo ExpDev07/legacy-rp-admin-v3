@@ -261,34 +261,6 @@ class PlayerRouteController extends Controller
     }
 
     /**
-     * Sets the trusted panel permission
-     *
-     * @param Player $player
-     * @param int $status
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function updateTrustedPanelStatus(Player $player, int $status, Request $request): RedirectResponse
-    {
-        $user = $request->user();
-        if (!$user->player->is_super_admin) {
-            return back()->with('error', 'Only super admins can update this permission.');
-        }
-
-        $status = $status ? 1 : 0;
-
-        if (!$player->isStaff()) {
-            return back()->with('error', 'You cannot modify this permission on non-staff players.');
-        }
-
-        $player->update([
-            'is_panel_trusted' => $status,
-        ]);
-
-        return back()->with('success', 'Panel trusted permission has been updated successfully.');
-    }
-
-    /**
      * Sets the soft ban status
      *
      * @param Player $player
@@ -408,7 +380,7 @@ class PlayerRouteController extends Controller
     public function screenshot(string $server, int $id, Request $request): Response
     {
         if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
-            return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
+            return self::json(false, null, 'You can not use the screenshot functionality');
         }
 
         $api = Server::getServerApiURLFromName($server);
@@ -482,7 +454,7 @@ class PlayerRouteController extends Controller
     public function attachScreenshot(Player $player, Request $request): Response
     {
         if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
-            return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
+            return self::json(false, null, 'You can not use the screenshot functionality');
         }
 
         $screenshotUrl = trim($request->input('url')) ?? '';

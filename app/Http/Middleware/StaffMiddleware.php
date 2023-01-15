@@ -68,7 +68,7 @@ class StaffMiddleware
                 }
 
                 $player = Player::query()->where('license_identifier', '=', $user['player']['license_identifier'])->select([
-                    'player_name', 'is_super_admin', 'is_staff', 'is_senior_staff', 'is_panel_trusted', 'license_identifier'
+                    'player_name', 'is_super_admin', 'is_staff', 'is_senior_staff', 'license_identifier'
                 ])->first();
 
                 if (!$player) {
@@ -87,7 +87,6 @@ class StaffMiddleware
                 $user['player']['is_super_admin'] = $isSuperAdmin;
                 $user['player']['is_senior_staff'] = $isSeniorStaff;
                 $user['player']['is_staff'] = $isStaff;
-                $user['player']['is_panel_trusted'] = $player->is_panel_trusted;
 
                 $session->put('user', $user);
                 $session->put('last_updated', time());

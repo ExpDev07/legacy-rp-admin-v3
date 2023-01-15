@@ -44,7 +44,7 @@ class OverwatchController extends Controller
     public function getRandomScreenshot(Request $request): \Illuminate\Http\Response
     {
         if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_SCREENSHOT)) {
-            return self::json(false, null, 'Only trusted Panel users can use screenshot functionality');
+            return self::json(false, null, 'You can not use the screenshot functionality');
         }
 
         $players = Player::getAllOnlinePlayers(true);
