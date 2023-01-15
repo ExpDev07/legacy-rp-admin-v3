@@ -11,7 +11,7 @@ const Permissions = {
                 return 4;
             } else if (options.props.auth.player.isSuperAdmin) {
                 return 3;
-            } else if (options.props.auth.player.isPanelTrusted) {
+            } else if (options.props.auth.player.isSeniorStaff) {
                 return 2;
             } else if (options.props.auth.player.isStaff) {
                 return 1;
@@ -31,6 +31,7 @@ const Permissions = {
             PERM_EDIT_TAG:       'edit_tag',
             PERM_LOADING_SCREEN: 'loading_screen',
             PERM_VIEW_QUEUE:     'view_queue',
+            PERM_TWITTER:        'twitter',
 
             check(permission) {
                 if (!(permission in permissions)) {

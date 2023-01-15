@@ -82,24 +82,6 @@
 
         <div class="flex flex-wrap justify-between mb-6">
             <div class="mb-3 flex flex-wrap">
-                <!-- Tusted Panel User -->
-                <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale py-2 mr-3"
-                       v-if="$page.auth.player.isSuperAdmin && player.isPanelTrusted && player.isStaff">
-                    <span class="font-semibold">{{ t('global.panel_trusted') }}</span>
-                    <a href="#" @click="removeTrustedPanel($event)" class="ml-1 text-white"
-                       :title="t('players.show.remove_panel_trusted')" v-if="!player.isSuperAdmin">
-                        <i class="fas fa-times"></i>
-                    </a>
-                </badge>
-
-                <button
-                    class="px-5 py-2 mr-3 font-semibold text-white rounded bg-success dark:bg-dark-success mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="addTrustedPanel()"
-                    v-if="$page.auth.player.isSuperAdmin && !player.isPanelTrusted && player.isStaff">
-                    <i class="fas fa-glass-cheers"></i>
-                    {{ t('players.show.add_panel_trusted') }}
-                </button>
-
                 <!-- Soft Ban -->
                 <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale py-2 mr-3"
                        v-if="this.perm.check(this.perm.PERM_SOFT_BAN) && player.isSoftBanned">
@@ -1788,22 +1770,6 @@ export default {
             // Reset.
             this.isStaffPM = false;
             this.form.pm.message = null;
-        },
-        async removeTrustedPanel() {
-            if (!confirm(this.t('players.show.panel_trusted_confirm'))) {
-                return;
-            }
-
-            // Send request.
-            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateTrustedPanelStatus/0');
-        },
-        async addTrustedPanel() {
-            if (!confirm(this.t('players.show.panel_trusted_confirm'))) {
-                return;
-            }
-
-            // Send request.
-            await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateTrustedPanelStatus/1');
         },
         async removeSoftBan() {
             if (!confirm(this.t('players.show.soft_ban_confirm'))) {
