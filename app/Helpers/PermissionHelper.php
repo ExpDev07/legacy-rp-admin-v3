@@ -18,7 +18,7 @@ class PermissionHelper
         self::PERM_LOADING_SCREEN => ['loading_screen', self::LEVEL_SUPERADMIN],
         self::PERM_VIEW_QUEUE     => ['view_queue', self::LEVEL_SENIOR],
         self::PERM_TWITTER        => ['twitter', self::LEVEL_SUPERADMIN],
-    ];isSeniorStaff
+    ];
 
     const PERM_SCREENSHOT     = 'P_SCREENSHOT';
     const PERM_SUSPICIOUS     = 'P_SUSPICIOUS';
