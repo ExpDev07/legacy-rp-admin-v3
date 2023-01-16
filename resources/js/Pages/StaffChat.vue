@@ -161,9 +161,11 @@ export default {
 
                     const messages = JSON.parse(unzipped).reverse();
 
-                    if (messages[0]?.message !== this.staffMessages[0]?.message) {
+                    if (messages[0]?.type === 'report' && messages[0]?.createdAt !== this.staffMessages[0]?.createdAt) {
                         this.notify();
                     }
+
+                    this.staffMessages = messages;
                 } catch (e) {
                     console.error('Failed to parse socket message ', e)
                 }
