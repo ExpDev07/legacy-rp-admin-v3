@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Character;
+use App\Helpers\PermissionHelper;
 use App\Http\Resources\CharacterResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\TwitterPostResource;
