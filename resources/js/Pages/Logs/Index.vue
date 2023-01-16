@@ -639,10 +639,10 @@ export default {
 			}
 
 			details = details.replace(/(license:\w+)(?=\))/gm, function(pMatch) {
-				const start = pMatch.substring(0, 12),
+				const start = pMatch.substring(8, 12),
 					end = pMatch.substring(pMatch.length - 4);
 
-				return `<span class="copy_title text-gray-700 dark:text-gray-300" title="${pMatch}">${start}...${end}</span>`;
+				return `<span class="copy_title text-gray-700 dark:text-gray-300 cursor-pointer" title="${pMatch}">${start}...${end}</span>`;
 			});
 
 			return this.parseDisconnectLog(details, action, metadata);
@@ -665,9 +665,21 @@ export default {
 		});
 
 		$('body').on('click', '.copy_title', function (e) {
-			const title = $(this).attr('title');
+			const title = $(this).attr('title'),
+				timeout = $(this).data('timeout'),
+				original = $(this).data('original') || $(this).text();
+
+			clearTimeout(timeout);
 
 			_this.copyToClipboard(title);
+
+			$(this).data('original', original);
+
+			$(this).text('Copied!');
+
+			$(this).data('timeout', setTimeout(() => {
+				$(this).text(original);
+			}, 2000));
 		});
 
 		if (this.filters.before) {
