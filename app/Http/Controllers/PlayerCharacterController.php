@@ -571,14 +571,18 @@ class PlayerCharacterController extends Controller
 			return back()->with('error', 'Only super admins can reset vehicles garages.');
         }
 
-		$data = [
-			'last_garage_identifier' => null
-		];
+		$data = [];
 
 		if ($fullReset) {
 			$data['garage_identifier'] = '*';
 			$data['garage_state'] = 1;
 			$data['garage_impound'] = 0;
+			$data['last_garage_identifier'] = null;
+		} else {
+			$data['garage_identifier'] = 6; // Garage C
+			$data['garage_state'] = 1;
+			$data['garage_impound'] = 0;
+			$data['last_garage_identifier'] = 6;
 		}
 
         $vehicle->update($data);
