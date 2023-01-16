@@ -667,6 +667,10 @@
                 <h2>
                     {{ t('players.vehicles.vehicles') }}
 
+                    <sup :title="t('players.vehicles.vehicle_value')">
+                        {{ totalVehicleValue }}
+                    </sup>
+
                     <!-- Add Vehicle -->
                     <button
                         class="px-3 py-2 font-semibold text-white rounded bg-success dark:bg-dark-success text-base ml-5"
@@ -936,6 +940,8 @@ import Modal from "../../../Components/Modal";
 import {ModelSelect} from 'vue-search-select';
 import axios from 'axios';
 
+import prices from '../../../data/vehicle_prices.json';
+
 let jobsObject = [];
 
 export default {
@@ -1058,6 +1064,12 @@ export default {
 
         const money = this.getMoneyLocals();
 
+        const totalVehicleValue = this.numberFormat(this.character.vehicles.map(vehicle => {
+            const price = prices[vehicle.model_name] || 0;
+
+            return price;
+        }).reduce((a, b) => a + b, 0), 0, true);
+
         return {
             local: {
                 birth: this.t("players.edit.born", this.$moment(this.character.dateOfBirth).format('l')),
@@ -1076,6 +1088,7 @@ export default {
                 department_name: this.character.departmentName,
                 position_name: this.character.positionName,
             },
+            totalVehicleValue: totalVehicleValue,
             vehicleList: sortedVehicles,
             vehicleAdd: {
                 value: '',
