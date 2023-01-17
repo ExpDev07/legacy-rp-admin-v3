@@ -189,7 +189,8 @@
         "view_capture": "View screen-capture",
         "description": "Recently attached screenshots.",
         "player": "Player",
-        "label": "Screenshots"
+        "label": "Screenshots",
+		"documentation": "Show more information about why this screenshot/capture was created."
     },
     "changelog": {
         "title": "Recent Updates",
@@ -758,7 +759,8 @@
             "vehicle_id": "Vehicle ID",
             "parked": "Parked at <i>{0}</i>",
             "none": "This character does not own any vehicles.",
-            "delete_vehicle": "Are you sure you want to delete this vehicle?"
+            "delete_vehicle": "Are you sure you want to delete this vehicle?",
+			"vehicle_value": "Total value of owned vehicles"
         },
         "properties": {
             "properties": "Properties",

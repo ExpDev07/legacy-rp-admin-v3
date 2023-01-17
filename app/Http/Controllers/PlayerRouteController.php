@@ -175,7 +175,7 @@ class PlayerRouteController extends Controller
                 $entry->metadata = json_decode($entry->metadata);
 
                 return $entry;
-            }, $events),
+            }, $events)
         ], 200))->header('Content-Type', 'application/json');
     }
 
@@ -190,7 +190,7 @@ class PlayerRouteController extends Controller
     {
         return (new Response([
             'status' => true,
-            'data'   => Screenshot::getAllScreenshotsForPlayer($player->license_identifier),
+            'data'   => Screenshot::getAllScreenshotsForPlayer($player->license_identifier)
         ], 200))->header('Content-Type', 'application/json');
     }
 
