@@ -1124,6 +1124,10 @@
                         <td class="px-6 py-3 border-t mobile:block">
                             <i class="fas fa-cogs mr-1" v-if="screenshot.system"></i>
                             {{ screenshot.note || 'N/A' }}
+                            <a :href="cheatDocs(screenshot.note)" target="_blank"
+                                v-if="cheatDocs(screenshot.note)"
+                                class="text-yellow-600 dark:text-yellow-400 font-semibold"
+                                :title="t('screenshot.documentation')">?</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">
                             {{ screenshot.created_at * 1000 | formatTime(true) }}
@@ -1510,6 +1514,15 @@ export default {
             await this.$inertia.post('/players/' + this.player.licenseIdentifier + '/updateEnabledCommands', {
                 enabledCommands: enabledCommands,
             });
+        },
+        cheatDocs(pNote) {
+            pNote = pNote.trim();
+
+            if (pNote.startsWith('Anti-Cheat: Invalid Damage Modifier')) {
+                return '/cheat/damage_modifier';
+            }
+
+            return false;
         },
         async loadScreenshots() {
             try {
@@ -2064,6 +2077,7 @@ export default {
         this.loadPanelLogs();
 
         const _this = this;
+
         $(document).ready(function () {
             $('body').on('click', 'a.user-image', function (e) {
                 e.preventDefault();
@@ -2080,13 +2094,21 @@ export default {
             });
         });
 
-        $("img[data-lazy]").each((i, img) => {
-            const url = $(img).data("lazy");
+        this.$nextTick(() => {
+            $("img[data-lazy]").each((i, img) => {
+                const url = $(img).data("lazy");
 
-            this.asyncLoadImage(url).then(() => {
-                $(img).attr("src", url);
-            }).catch(() => {
-                $(img).attr("src", "/images/no_mugshot.png");
+                if (url.includes("screenshot-undefined")) {
+                    $(img).attr("src", "/images/no_mugshot.png");
+
+                    return;
+                }
+
+                this.asyncLoadImage(url).then(() => {
+                    $(img).attr("src", url);
+                }).catch(() => {
+                    $(img).attr("src", "/images/no_mugshot.png");
+                });
             });
         });
     }

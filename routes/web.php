@@ -189,6 +189,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/screenshots', [ScreenshotController::class, 'render']);
     Route::get('/anti_cheat', [ScreenshotController::class, 'antiCheat']);
 
+    Route::get('/cheat/{type}', [ScreenshotController::class, 'docs']);
+
     // Errors.
     Route::get('/errors/client', [ErrorController::class, 'client']);
     Route::post('/errors/client/cycle', [ErrorController::class, 'clientCycle']);

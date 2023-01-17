@@ -189,7 +189,8 @@
         "view_capture": "View screen-capture",
         "description": "Recently attached screenshots.",
         "player": "Player",
-        "label": "Screenshots"
+        "label": "Screenshots",
+		"documentation": "Show more information about why this screenshot/capture was created."
     },
     "changelog": {
         "title": "Recent Updates",
