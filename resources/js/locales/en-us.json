@@ -406,6 +406,7 @@
         "types": {
             "items": "Illegal items in Inventories",
             "characters": "Characters with a lot of money",
+            "vehicles": "Characters with a lot of vehicles",
             "pawn": "Big pawn shop sales",
             "warehouse": "Big warehouse sales",
             "unusual": "Big item movements",
@@ -423,7 +424,8 @@
             "character": "Character",
             "cash": "Cash",
             "bank": "Bank",
-            "stocks_balance": "Stocks"
+            "stocks_balance": "Stocks",
+			"amount": "Value"
         },
         "no_logs": "No entries found"
     },

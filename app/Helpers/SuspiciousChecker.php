@@ -228,7 +228,7 @@ class SuspiciousChecker
 
         $ignore = self::ignoreCharacterInventories();
 
-        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE inventory_name NOT IN ('" . implode('\', \'', $ignore) . "') AND item_metadata NOT LIKE '%\"battleRoyaleOnly\":true%' AND (`amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "'));";
+        $sql = "SELECT * FROM (SELECT `item_name`, `inventory_name`, COUNT(`item_name`) as `amount`, `item_metadata` FROM `inventories` GROUP BY (CONCAT(`item_name`, `inventory_name`))) `items` WHERE inventory_name NOT IN ('" . implode('\', \'', $ignore) . "') AND item_metadata NOT LIKE '%\"battleRoyaleOnly\":true%' AND (`amount` > 200 OR `item_name` IN ('" . implode("', '", $items) . "'));";
 
         $entries = json_decode(json_encode(DB::select($sql)), true);
 
@@ -305,7 +305,85 @@ class SuspiciousChecker
             ->where(DB::raw('`cash`+`bank`+`stocks_balance`'), '>=', 700000)
             ->whereNotIn("license_identifier", self::getIgnorableLicenseIdentifiers())
             ->select(['license_identifier', 'character_id', 'cash', 'bank', 'stocks_balance', 'first_name', 'last_name'])
+			->orderByRaw('`cash`+`bank`+`stocks_balance` DESC')
             ->get()->toArray();
+    }
+
+    /**
+     * Finds characters who have an unusual amount of vehicles worth a lot of money
+     *
+     * @return array
+     */
+    public static function findSuspiciousCharacterVehicles(): array
+    {
+		$prices = json_decode(file_get_contents(__DIR__ . '/../../resources/js/data/vehicle_prices.json'), true);
+
+		if (!$prices) {
+			return [];
+		}
+
+		$key = 'vehicle_worths_' . md5(json_encode($prices));
+
+        if (CacheHelper::exists($key)) {
+            return CacheHelper::read($key, []);
+        }
+
+        $vehicles = DB::select("SELECT owner_cid, model_name FROM character_vehicles WHERE vehicle_deleted = 0 AND model_name IN ('" . implode("', '", array_keys($prices)) . "')");
+
+		$owners = [];
+
+		foreach ($vehicles as $vehicle) {
+			$price = $prices[$vehicle->model_name] ?? 0;
+
+			if ($price > 0) {
+				$owner = $vehicle->owner_cid;
+
+				$current = $owners[$owner] ?? 0;
+
+				$owners[$owner] = $current + $price;
+			}
+		}
+
+		$cleaned = [];
+		$cids = [];
+
+		foreach ($owners as $owner => $value) {
+			if ($value > 700000) {
+				$cleaned[] = [
+					'character_id' => $owner,
+					'amount'       => $value
+				];
+
+				$cids[] = $owner;
+			}
+		}
+
+		if (empty($cids)) {
+			return [];
+		}
+
+		$characters = Character::query()
+			->whereIn('character_id', $cids)
+			->select(['license_identifier', 'character_id', 'first_name', 'last_name'])
+			->get()->toArray();
+
+		usort($cleaned, function($a, $b) {
+			return $b['amount'] <=> $a['amount'];
+		});
+
+		$final = [];
+
+		foreach($cleaned as $clean) {
+			foreach ($characters as $character) {
+				if ($character['character_id'] == $clean['character_id']) {
+					$final[] = array_merge($character, $clean);
+				}
+			}
+		}
+
+		CacheHelper::write($key, $final, self::CacheTime);
+
+		return $final;
     }
 
     /**
