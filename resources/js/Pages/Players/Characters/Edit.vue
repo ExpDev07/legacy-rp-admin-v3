@@ -667,7 +667,9 @@
                 <h2>
                     {{ t('players.vehicles.vehicles') }}
 
-                    <sup :title="t('players.vehicles.vehicle_value')">
+                    <sup v-if="character.vehicles.length > 0" class="align-top text-xs static">({{ character.vehicles.length }})</sup>
+
+                    <sup :title="t('players.vehicles.vehicle_value')" class="align-top text-xs static">
                         {{ totalVehicleValue }}
                     </sup>
 
