@@ -31,6 +31,7 @@
                                 <option value="" disabled>{{ t('suspicious.types.none') }}</option>
                                 <option value="items">{{ t('suspicious.types.items') }}</option>
                                 <option value="characters">{{ t('suspicious.types.characters') }}</option>
+                                <option value="vehicles">{{ t('suspicious.types.vehicles') }}</option>
                                 <option value="pawn">{{ t('suspicious.types.pawn') }}</option>
                                 <option value="warehouse">{{ t('suspicious.types.warehouse') }}</option>
                                 <option value="unusual">{{ t('suspicious.types.unusual') }}</option>
@@ -81,6 +82,11 @@
                         <th class="px-6 py-4">{{ t('suspicious.characters.cash') }}</th>
                         <th class="px-6 py-4">{{ t('suspicious.characters.bank') }}</th>
                         <th class="px-6 py-4">{{ t('suspicious.characters.stocks_balance') }}</th>
+                    </tr>
+                    <tr class="font-semibold text-left" v-if="logType === 'vehicles'">
+                        <th class="px-6 py-4">{{ t('suspicious.items.player') }}</th>
+                        <th class="px-6 py-4">{{ t('suspicious.characters.character') }}</th>
+                        <th class="px-6 py-4">{{ t('suspicious.characters.amount') }}</th>
                     </tr>
                     <tr class="font-semibold text-left" v-else-if="logType === 'inventories' || logType === 'items'">
                         <th class="px-6 py-4 w-3/4">{{ t('suspicious.items.item') }}</th>
@@ -146,6 +152,28 @@
                         </td>
                         <td class="px-6 py-3 border-t">
                             {{ numberFormat(log.stocks_balance, 0, true) }}
+                        </td>
+                    </tr>
+
+                    <!-- Vehicles -->
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="log in logs"
+                        v-if="logType === 'vehicles'">
+                        <td class="px-6 py-3 border-t">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/players/' + log.license_identifier">
+                                {{ playerName(log.license_identifier) }}
+                            </inertia-link>
+                        </td>
+                        <td class="px-6 py-3 border-t">
+                            <inertia-link
+                                class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400"
+                                :href="'/players/' + log.license_identifier + '/characters/' + log.character_id + '/edit'">
+                                {{ log.first_name + ' ' + log.last_name }}
+                            </inertia-link>
+                        </td>
+                        <td class="px-6 py-3 border-t">
+                            {{ numberFormat(log.amount, 0, true) }}
                         </td>
                     </tr>
 
