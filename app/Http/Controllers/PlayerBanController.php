@@ -178,7 +178,7 @@ class PlayerBanController extends Controller
         $user = $request->user();
 
 		if (!$ban->creator_name) {
-			PanelLog::logSystemBanRemove($player->license_identifier, $user->player->license_identifier);
+			PanelLog::logSystemBanRemove($user->player->license_identifier, $player->license_identifier);
 		}
 
         // Automatically log the ban update as a warning.
