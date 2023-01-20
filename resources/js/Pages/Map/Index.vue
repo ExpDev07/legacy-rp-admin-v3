@@ -10,8 +10,8 @@
                 </select>
                 <select class="inline-block w-40 ml-2 mr-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
                         v-model="selectedInstance">
-                    <option v-for="instance in container.instances" :key="instance" :value="instance">
-                        {{ instance === 1 ? t('map.main_instance') : t('map.instance', instance) }}
+                    <option v-for="instance in container.instances" :key="instance.id" :value="instance.id">
+                        {{ instance.id === 1 ? t('map.main_instance') : t('map.instance', instance.id, instance.count) }}
                     </option>
                 </select>
             </h1>
