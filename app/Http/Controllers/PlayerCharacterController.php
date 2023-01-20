@@ -314,6 +314,12 @@ class PlayerCharacterController extends Controller
             return back()->with('error', 'Invalid or no zone provided');
         }
 
+		$cleanedMap = [];
+
+		foreach ($map as $key => $value) {
+			$cleanedMap[strtolower($key)] = $value;
+		}
+
         if ($zone === 'all') {
             $json = [];
         } else if (is_array($json)) {
@@ -324,7 +330,7 @@ class PlayerCharacterController extends Controller
                 }
 
                 $key = strtolower($tattoo['overlay']);
-                $z = isset($map[$key]) ? $map[$key]['zone'] : null;
+                $z = isset($cleanedMap[$key]) ? $cleanedMap[$key]['zone'] : null;
 
                 if (!$z || $z !== $zone) {
                     $result[] = $tattoo;
