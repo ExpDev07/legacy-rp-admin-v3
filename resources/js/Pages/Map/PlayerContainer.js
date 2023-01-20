@@ -51,7 +51,7 @@ class PlayerContainer {
         };
         this.staff = [];
 
-        this.instances = [];
+        this.instances = {};
 
         this.isTrackedPlayerVisible = false;
 
@@ -61,7 +61,12 @@ class PlayerContainer {
             this.updatePlayer(rawData[x], selectedInstance);
         }
 
-        this.instances.sort((a, b) => a > b ? 1 : (a < b ? -1 : 0));
+        this.instances = Object.entries(this.instances).map(entry => {
+			return {
+				id: parseInt(entry[0]),
+				count: entry[1]
+			};
+		}).sort((a, b) => a.id > b ? 1 : (a.id < b.id ? -1 : 0));
 
         this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
 
@@ -89,9 +94,9 @@ class PlayerContainer {
             return;
         }
 
-        const instance = rawPlayer.instance;
-        if (!this.instances.includes(instance) && rawPlayer.character) {
-            this.instances.push(instance);
+        const instance = parseInt(rawPlayer.instance);
+        if (rawPlayer.character) {
+            this.instances[instance] = (this.instances[instance] || 0) + 1;
         }
 
         if (instance !== selectedInstance) {
