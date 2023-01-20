@@ -63,10 +63,10 @@ class PlayerContainer {
 
         this.instances = Object.entries(this.instances).map(entry => {
 			return {
-				id: entry[0],
+				id: parseInt(entry[0]),
 				count: entry[1]
 			};
-		}).sort((a, b) => a.count > b ? 1 : (a.count < b.count ? -1 : 0));
+		}).sort((a, b) => a.id > b ? 1 : (a.id < b.id ? -1 : 0));
 
         this.invisible.sort((b, a) => (a.invisible > b.invisible) ? 1 : ((b.invisible > a.invisible) ? -1 : 0));
 
@@ -94,7 +94,7 @@ class PlayerContainer {
             return;
         }
 
-        const instance = rawPlayer.instance;
+        const instance = parseInt(rawPlayer.instance);
         if (rawPlayer.character) {
             this.instances[instance] = (this.instances[instance] || 0) + 1;
         }
