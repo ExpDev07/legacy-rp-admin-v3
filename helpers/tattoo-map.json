@@ -1,1742 +1,2322 @@
 {
-	"MP_MP_Stunt_Tat_030_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Biker_Tat_045_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"mpHeist3_Tat_019_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Hip_M_Tat_000": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Buis_F_LArm_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_LUXE_TAT_014_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_MP_Biker_Tat_027_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Hip_M_Tat_024": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_005_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Biker_Tat_024_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_018_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Gunrunning_Tattoo_003_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"FM_Tat_M_001": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Biker_Tat_032_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_025_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_LUXE_TAT_018_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_LR_Tat_026_M": {
+	"MP_LR_Tat_014_M": {
+		"zone": "torso",
 		"collection": "mplowrider_overlays"
 	},
-	"MP_Buis_F_Stom_001": {
-		"collection": "mpbusiness_overlays"
-	},
-	"FM_Tat_Award_M_004": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Heist4_Tat_026_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Gunrunning_Tattoo_028_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"FM_Hip_M_Tat_008": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Heist4_Tat_025_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Airraces_Tattoo_001_M": {
-		"collection": "mpairraces_overlays"
-	},
-	"MP_Heist4_Tat_015_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Gunrunning_Tattoo_020_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Bea_M_Chest_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Gunrunning_Tattoo_000_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_LR_Tat_018_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"FM_Tat_M_010": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Smuggler_Tattoo_000_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_Christmas2017_Tattoo_024_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Xmas2_M_Tat_010": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Smuggler_Tattoo_019_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_MP_Biker_Tat_058_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Biker_Tat_026_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Biker_Tat_022_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Airraces_Tattoo_007_M": {
-		"collection": "mpairraces_overlays"
-	},
-	"MP_Buis_F_Stom_002": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Gunrunning_Tattoo_015_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Smuggler_Tattoo_013_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_MP_Biker_Tat_051_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Christmas2017_Tattoo_003_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"FM_Hip_M_Tat_044": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Hip_M_Tat_042": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_LR_Tat_028_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"mpHeist3_Tat_024_M": {
+	"mpHeist3_Tat_018_M": {
+		"zone": "head",
 		"collection": "mpheist3_overlays"
 	},
-	"MP_Buis_F_Chest_002": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Xmas2_M_Tat_024": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"FM_Tat_M_024": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LUXE_TAT_030_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_LR_Tat_020_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"mpHeist3_Tat_027_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Stunt_Tat_032_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Vinewood_Tat_028_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_MP_Biker_Tat_029_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Biker_Tat_054_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Buis_M_RightArm_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_LR_Tat_016_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_Buis_F_RLeg_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"FM_Hip_M_Tat_014": {
+	"FM_Hip_M_Tat_029": {
+		"zone": "torso",
 		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_012_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Xmas2_M_Tat_025": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_LUXE_TAT_023_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"FM_Tat_M_023": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_ImportExport_Tat_010_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_Smuggler_Tattoo_010_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_MP_Stunt_Tat_011_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Vinewood_Tat_013_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_LUXE_TAT_015_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_Buis_M_LeftArm_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Vinewood_Tat_030_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Tat_Award_M_001": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Biker_Tat_023_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_ImportExport_Tat_002_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_Vinewood_Tat_004_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Christmas2017_Tattoo_010_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"FM_Tat_M_009": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LR_Tat_015_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"MP_Vinewood_Tat_029_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_MP_Stunt_Tat_007_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_003_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Bea_M_Chest_001": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Heist4_Tat_010_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Heist4_Tat_013_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Xmas2_M_Tat_008": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"FM_Hip_M_Tat_041": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_044_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Tat_M_013": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Stunt_Tat_000_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"FM_Tat_Award_M_000": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Heist4_Tat_005_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_MP_Biker_Tat_047_M": {
-		"collection": "mpbiker_overlays"
 	},
 	"MP_MP_Biker_Tat_019_M": {
+		"zone": "torso",
 		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_008_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_LUXE_TAT_017_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"mpHeist3_Tat_009_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Hip_M_Tat_011": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_ImportExport_Tat_011_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_Vinewood_Tat_020_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Gunrunning_Tattoo_027_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_Stunt_Tat_021_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Biker_Tat_028_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Vinewood_Tat_018_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_LR_Tat_031_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_Vinewood_Tat_012_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Hip_M_Tat_045": {
-		"collection": "mphipster_overlays"
-	},
-	"mpHeist3_Tat_003_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_LUXE_TAT_012_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_LUXE_TAT_024_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"mpHeist3_Tat_002_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Hip_M_Tat_004": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_021_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Xmas2_M_Tat_027": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_MP_Biker_Tat_060_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_038_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Buis_M_LeftArm_001": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_MP_ImportExport_Tat_007_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_LUXE_TAT_016_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_Xmas2_M_Tat_014": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Buis_M_Chest_001": {
-		"collection": "mpbusiness_overlays"
-	},
-	"FM_Hip_M_Tat_046": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_018_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_004_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Gunrunning_Tattoo_006_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"FM_Hip_M_Tat_002": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Smuggler_Tattoo_009_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_MP_Stunt_Tat_002_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"FM_Hip_M_Tat_034": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Heist4_Tat_008_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Christmas2017_Tattoo_016_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_MP_Biker_Tat_000_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Hip_M_Tat_043": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_ImportExport_Tat_003_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_Buis_F_LLeg_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_MP_Biker_Tat_049_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_LUXE_TAT_020_M": {
-		"collection": "mpluxe_overlays"
 	},
 	"MP_MP_Biker_Tat_039_M": {
+		"zone": "torso",
 		"collection": "mpbiker_overlays"
-	},
-	"MP_Christmas2017_Tattoo_029_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Vinewood_Tat_025_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Tat_M_035": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Christmas2017_Tattoo_026_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"FM_Tat_M_033": {
-		"collection": "multiplayer_overlays"
-	},
-	"mpHeist3_Tat_012_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_LR_Tat_014_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"FM_Tat_M_039": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LUXE_TAT_022_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"mpHeist3_Tat_029_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Xmas2_M_Tat_028": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Gunrunning_Tattoo_002_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_Stunt_Tat_028_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Smuggler_Tattoo_012_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_Christmas2017_Tattoo_022_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Vinewood_Tat_000_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_MP_Stunt_Tat_014_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Christmas2017_Tattoo_013_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"FM_Hip_M_Tat_048": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Christmas2017_Tattoo_021_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_LR_Tat_009_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"MP_Smuggler_Tattoo_015_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"FM_Tat_M_006": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Hip_M_Tat_035": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Airraces_Tattoo_002_M": {
-		"collection": "mpairraces_overlays"
-	},
-	"mpHeist3_Tat_032_M": {
-		"collection": "mpheist3_overlays"
 	},
 	"FM_Tat_Award_M_016": {
+		"zone": "torso",
 		"collection": "multiplayer_overlays"
 	},
-	"MP_Gunrunning_Tattoo_030_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_LUXE_TAT_025_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_Vinewood_Tat_027_M": {
+	"MP_Vinewood_Tat_026_M": {
+		"zone": "left_arm",
 		"collection": "mpvinewood_overlays"
 	},
-	"FM_Hip_M_Tat_005": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Tat_M_026": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Biker_Tat_050_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"mpHeist3_Tat_008_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Vinewood_Tat_022_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Tat_Award_M_008": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Heist4_Tat_011_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Vinewood_Tat_003_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Heist4_Tat_003_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Gunrunning_Tattoo_023_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_Biker_Tat_025_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Vinewood_Tat_023_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Tat_Award_M_019": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LUXE_TAT_008_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_MP_Biker_Tat_004_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Smuggler_Tattoo_004_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_Heist4_Tat_002_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Gunrunning_Tattoo_016_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_Biker_Tat_011_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Xmas2_M_Tat_007": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Xmas2_M_Tat_009": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_MP_Biker_Tat_033_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"mpHeist3_Tat_028_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Biker_Tat_057_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Biker_Tat_038_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"mpHeist3_Tat_041_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_ImportExport_Tat_004_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_Heist4_Tat_012_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Gunrunning_Tattoo_001_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Bea_M_Stom_001": {
-		"collection": "mpbeach_overlays"
-	},
-	"FM_Tat_Award_M_017": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LUXE_TAT_009_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"FM_Hip_M_Tat_013": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_013_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Vinewood_Tat_024_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Bea_M_Back_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_MP_Biker_Tat_017_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Bea_M_Head_001": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_LUXE_TAT_029_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_MP_Stunt_Tat_022_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Gunrunning_Tattoo_025_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_Stunt_Tat_017_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Gunrunning_Tattoo_014_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_Stunt_Tat_009_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Heist4_Tat_017_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"FM_Tat_M_044": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Gunrunning_Tattoo_026_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"mpHeist3_Tat_006_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Gunrunning_Tattoo_011_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_ImportExport_Tat_001_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"mpHeist3_Tat_004_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Hip_M_Tat_025": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Tat_M_012": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Heist4_Tat_024_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_LR_Tat_007_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"MP_MP_Biker_Tat_002_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Bea_M_LArm_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Smuggler_Tattoo_011_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"mpHeist3_Tat_001_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Biker_Tat_003_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Heist4_Tat_014_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_LUXE_TAT_027_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_MP_Biker_Tat_036_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_020_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"mpHeist3_Tat_031_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Heist4_Tat_021_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"FM_Hip_M_Tat_040": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Gunrunning_Tattoo_029_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"FM_Tat_M_007": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Tat_M_040": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Stunt_Tat_027_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Smuggler_Tattoo_017_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"FM_Hip_M_Tat_031": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Heist4_Tat_023_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"mpHeist3_Tat_011_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_LR_Tat_004_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"mpHeist3_Tat_025_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Heist4_Tat_020_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_MP_Biker_Tat_008_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Xmas2_M_Tat_017": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Smuggler_Tattoo_001_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_Christmas2017_Tattoo_005_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Buis_M_Stomach_000": {
+	"MP_Buis_F_Back_001": {
+		"zone": "torso",
 		"collection": "mpbusiness_overlays"
 	},
-	"MP_MP_Biker_Tat_040_M": {
+	"FM_Hip_M_Tat_012": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Buis_F_Back_000": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_MP_Biker_Tat_036_M": {
+		"zone": "left_leg",
 		"collection": "mpbiker_overlays"
 	},
-	"MP_Heist4_Tat_009_M": {
-		"collection": "mpheist4_overlays"
+	"MP_Xmas2_M_Tat_022": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2_overlays"
 	},
-	"MP_Bea_M_RArm_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"FM_Tat_M_029": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Heist4_Tat_001_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Gunrunning_Tattoo_019_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_LR_Tat_017_M": {
+	"MP_LR_Tat_020_M": {
+		"zone": "left_leg",
 		"collection": "mplowrider_overlays"
 	},
-	"FM_Tat_M_041": {
-		"collection": "multiplayer_overlays"
+	"MP_MP_Stunt_Tat_015_M": {
+		"zone": "right_leg",
+		"collection": "mpstunt_overlays"
 	},
-	"FM_Tat_M_047": {
+	"MP_Heist4_Tat_002_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_MP_Stunt_Tat_026_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Gunrunning_Tattoo_005_M": {
+		"zone": "left_leg",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_MP_Stunt_Tat_019_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Christmas2017_Tattoo_005_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Tat_Award_M_001": {
+		"zone": "left_arm",
 		"collection": "multiplayer_overlays"
 	},
 	"MP_Vinewood_Tat_008_M": {
+		"zone": "torso",
 		"collection": "mpvinewood_overlays"
 	},
-	"FM_Hip_M_Tat_010": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Stunt_Tat_023_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"FM_Hip_M_Tat_007": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Christmas2017_Tattoo_001_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_MP_Stunt_Tat_001_M": {
-		"collection": "mpstunt_overlays"
+	"MP_Heist4_Tat_011_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
 	},
 	"MP_Smuggler_Tattoo_005_M": {
+		"zone": "right_arm",
 		"collection": "mpsmuggler_overlays"
 	},
-	"MP_Vinewood_Tat_019_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_MP_Biker_Tat_056_M": {
+	"MP_MP_Biker_Tat_028_M": {
+		"zone": "right_leg",
 		"collection": "mpbiker_overlays"
-	},
-	"MP_LR_Tat_021_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"FM_Hip_M_Tat_047": {
-		"collection": "mphipster_overlays"
-	},
-	"mpHeist3_Tat_020_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Biker_Tat_037_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Tat_Award_M_018": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Bea_M_Rleg_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_MP_Stunt_Tat_006_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"FM_Tat_M_043": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Tat_M_022": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LR_Tat_006_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_LR_Tat_013_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"MP_MP_Stunt_Tat_036_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Biker_Tat_007_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Hip_M_Tat_003": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_053_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_LR_Tat_035_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"mpHeist3_Tat_042_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_LR_Tat_010_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"MP_Vinewood_Tat_016_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Heist4_Tat_004_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_MP_ImportExport_Tat_008_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_Heist4_Tat_000_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"mpHeist3_Tat_037_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Tat_M_038": {
-		"collection": "multiplayer_overlays"
-	},
-	"mpHeist3_Tat_018_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Biker_Tat_001_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Christmas2017_Tattoo_015_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"FM_Tat_M_034": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Xmas2_M_Tat_000": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_MP_Biker_Tat_020_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Vinewood_Tat_032_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Tat_Award_M_007": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LR_Tat_005_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"FM_Tat_M_031": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LR_Tat_022_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_Vinewood_Tat_001_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Christmas2017_Tattoo_002_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Buis_F_Chest_001": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Vinewood_Tat_011_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_LR_Tat_032_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_Xmas2_M_Tat_022": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"mpHeist3_Tat_017_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Xmas2_M_Tat_016": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"FM_Tat_M_015": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LR_Tat_023_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"MP_Airraces_Tattoo_004_M": {
-		"collection": "mpairraces_overlays"
-	},
-	"MP_Smuggler_Tattoo_023_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_MP_Biker_Tat_015_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Tat_M_032": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Tat_Award_M_006": {
-		"collection": "multiplayer_overlays"
-	},
-	"mpHeist3_Tat_039_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Xmas2_M_Tat_006": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_MP_Biker_Tat_041_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_015_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Christmas2017_Tattoo_017_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_MP_ImportExport_Tat_005_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_MP_Biker_Tat_042_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Smuggler_Tattoo_007_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_LUXE_TAT_005_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_MP_Stunt_Tat_045_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Vinewood_Tat_031_M": {
-		"collection": "mpvinewood_overlays"
 	},
 	"MP_Xmas2_M_Tat_019": {
+		"zone": "torso",
 		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Christmas2017_Tattoo_028_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Buis_M_RightArm_001": {
-		"collection": "mpbusiness_overlays"
-	},
-	"mpHeist3_Tat_033_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Buis_F_Chest_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Christmas2017_Tattoo_019_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_MP_Stunt_Tat_026_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"FM_Tat_M_008": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Gunrunning_Tattoo_024_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"FM_Tat_M_021": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Gunrunning_Tattoo_021_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Gunrunning_Tattoo_018_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Gunrunning_Tattoo_017_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Xmas2_M_Tat_023": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Xmas2_M_Tat_011": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"FM_Tat_M_014": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Gunrunning_Tattoo_012_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Gunrunning_Tattoo_010_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"FM_Hip_M_Tat_026": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Gunrunning_Tattoo_009_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"FM_Tat_Award_M_009": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Gunrunning_Tattoo_008_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Gunrunning_Tattoo_007_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Christmas2017_Tattoo_027_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Gunrunning_Tattoo_005_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_Gunrunning_Tattoo_004_M": {
-		"collection": "mpgunrunning_overlays"
-	},
-	"MP_MP_Biker_Tat_052_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_LUXE_TAT_026_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_Smuggler_Tattoo_024_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"FM_Hip_M_Tat_006": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_LUXE_TAT_021_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_Christmas2017_Tattoo_014_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_LUXE_TAT_013_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_MP_Stunt_Tat_019_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_LR_Tat_027_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"MP_LR_Tat_029_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_LUXE_TAT_007_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_LUXE_TAT_006_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_LUXE_TAT_004_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"FM_Tat_M_037": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LUXE_TAT_003_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"MP_LUXE_TAT_001_M": {
-		"collection": "mpluxe_overlays"
-	},
-	"mpHeist3_Tat_036_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Stunt_Tat_049_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_048_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_047_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"mpHeist3_Tat_015_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Buis_M_Back_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Heist4_Tat_022_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_MP_Stunt_Tat_046_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_044_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_043_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Heist4_Tat_018_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_MP_Stunt_Tat_042_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_013_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Biker_Tat_055_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_041_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_ImportExport_Tat_000_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"MP_MP_Biker_Tat_010_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_Stunt_Tat_040_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Airraces_Tattoo_005_M": {
-		"collection": "mpairraces_overlays"
-	},
-	"MP_MP_Stunt_Tat_039_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_037_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"FM_Hip_M_Tat_022": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_LR_Tat_000_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_MP_Stunt_Tat_034_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_033_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_MP_Stunt_Tat_031_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Vinewood_Tat_010_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_MP_Stunt_Tat_029_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"FM_Tat_Award_M_010": {
-		"collection": "multiplayer_overlays"
-	},
-	"mpHeist3_Tat_021_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Tat_Award_M_015": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Hip_M_Tat_029": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Buis_F_Stom_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Bea_M_LArm_001": {
-		"collection": "mpbeach_overlays"
-	},
-	"FM_Tat_Award_M_005": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Biker_Tat_035_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Bea_M_Neck_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Smuggler_Tattoo_003_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_Airraces_Tattoo_003_M": {
-		"collection": "mpairraces_overlays"
-	},
-	"mpHeist3_Tat_013_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Tat_Award_M_013": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LUXE_TAT_0010_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_Buis_M_Chest_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Bea_M_Head_002": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Xmas2_M_Tat_005": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_LR_Tat_012_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"MP_Heist4_Tat_032_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_MP_Biker_Tat_046_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Heist4_Tat_030_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_LUXE_TAT_000_M": {
-		"collection": "mpluxe_overlays"
 	},
 	"MP_LR_Tat_011_M": {
+		"zone": "torso",
 		"collection": "mplowrider2_overlays"
 	},
-	"mpHeist3_Tat_034_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Smuggler_Tattoo_018_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"FM_Hip_M_Tat_033": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Hip_M_Tat_009": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Heist4_Tat_028_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_LR_Tat_003_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"mpHeist3_Tat_026_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Vinewood_Tat_017_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Heist4_Tat_006_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_LUXE_TAT_031_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"FM_Tat_M_025": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Tat_M_017": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Bea_M_RArm_001": {
+	"MP_Bea_M_Back_000": {
+		"zone": "torso",
 		"collection": "mpbeach_overlays"
 	},
-	"MP_MP_Stunt_Tat_012_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_LR_Tat_002_M": {
-		"collection": "mplowrider_overlays"
-	},
-	"FM_Tat_M_004": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Bea_M_Stom_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Buis_M_Neck_003": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Vinewood_Tat_007_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Heist4_Tat_031_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"mpHeist3_Tat_040_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Christmas2017_Tattoo_007_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Smuggler_Tattoo_022_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_MP_Stunt_Tat_035_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"mpHeist3_Tat_022_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"mpHeist3_Tat_010_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Biker_Tat_006_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Vinewood_Tat_026_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Hip_M_Tat_036": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Xmas2_M_Tat_004": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Buis_F_Neck_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"FM_Tat_M_003": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Hip_M_Tat_037": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Hip_M_Tat_015": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Hip_M_Tat_039": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Christmas2017_Tattoo_006_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_MP_Biker_Tat_043_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Buis_F_Back_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"FM_Hip_M_Tat_018": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Vinewood_Tat_005_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_LUXE_TAT_002_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"FM_Hip_M_Tat_021": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_Xmas2_M_Tat_018": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"FM_Tat_M_042": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Vinewood_Tat_002_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_Xmas2_M_Tat_012": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_LUXE_TAT_0011_M": {
-		"collection": "mpluxe2_overlays"
-	},
-	"MP_MP_ImportExport_Tat_006_M": {
+	"MP_MP_ImportExport_Tat_002_M": {
+		"zone": "torso",
 		"collection": "mpimportexport_overlays"
 	},
-	"MP_Christmas2017_Tattoo_018_M": {
-		"collection": "mpchristmas2017_overlays"
+	"mpHeist3_Tat_012_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
 	},
-	"MP_Bea_M_Head_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Buis_M_Neck_000": {
-		"collection": "mpbusiness_overlays"
-	},
-	"FM_Tat_M_019": {
+	"FM_Tat_M_006": {
+		"zone": "left_arm",
 		"collection": "multiplayer_overlays"
 	},
-	"MP_Buis_M_Neck_002": {
-		"collection": "mpbusiness_overlays"
-	},
-	"MP_Smuggler_Tattoo_006_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_MP_Biker_Tat_059_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Airraces_Tattoo_006_M": {
-		"collection": "mpairraces_overlays"
-	},
-	"MP_Christmas2017_Tattoo_025_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Christmas2017_Tattoo_023_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"FM_Hip_M_Tat_038": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Biker_Tat_016_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Heist4_Tat_027_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"FM_Hip_M_Tat_001": {
-		"collection": "mphipster_overlays"
-	},
-	"mpHeist3_Tat_014_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"mpHeist3_Tat_005_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Airraces_Tattoo_000_M": {
-		"collection": "mpairraces_overlays"
+	"MP_MP_Stunt_Tat_041_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
 	},
 	"FM_Hip_M_Tat_032": {
+		"zone": "torso",
 		"collection": "mphipster_overlays"
 	},
-	"FM_Tat_M_046": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Biker_Tat_009_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Tat_M_002": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Vinewood_Tat_014_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Hip_M_Tat_027": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Tat_M_011": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Biker_Tat_030_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Xmas2_M_Tat_001": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_MP_Biker_Tat_048_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_Vinewood_Tat_009_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"FM_Tat_M_045": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Heist4_Tat_007_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Vinewood_Tat_015_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"MP_MP_Biker_Tat_034_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"MP_MP_ImportExport_Tat_009_M": {
-		"collection": "mpimportexport_overlays"
-	},
-	"FM_Tat_Award_M_002": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Tat_Award_M_003": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_MP_Biker_Tat_031_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Tat_Award_M_012": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Tat_Award_M_014": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Tat_M_020": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Hip_M_Tat_020": {
-		"collection": "mphipster_overlays"
-	},
-	"FM_Tat_M_005": {
-		"collection": "multiplayer_overlays"
-	},
-	"FM_Hip_M_Tat_012": {
-		"collection": "mphipster_overlays"
-	},
-	"MP_MP_Stunt_Tat_016_M": {
+	"MP_MP_Stunt_Tat_012_M": {
+		"zone": "torso",
 		"collection": "mpstunt_overlays"
 	},
-	"FM_Tat_M_036": {
-		"collection": "multiplayer_overlays"
+	"MP_LR_Tat_032_M": {
+		"zone": "torso",
+		"collection": "mplowrider2_overlays"
 	},
-	"FM_Hip_M_Tat_030": {
-		"collection": "mphipster_overlays"
+	"MP_Christmas2017_Tattoo_006_M": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2017_overlays"
 	},
-	"MP_Buis_M_Neck_001": {
+	"MP_Vinewood_Tat_011_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_MP_Stunt_Tat_009_M": {
+		"zone": "right_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"mpHeist3_Tat_028_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Xmas2_M_Tat_001": {
+		"zone": "left_leg",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Bea_M_Rleg_000": {
+		"zone": "right_leg",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_MP_Stunt_Tat_011_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Buis_M_Chest_001": {
+		"zone": "torso",
 		"collection": "mpbusiness_overlays"
 	},
-	"MP_Gunrunning_Tattoo_022_M": {
+	"MP_Gunrunning_Tattoo_024_M": {
+		"zone": "right_arm",
 		"collection": "mpgunrunning_overlays"
 	},
-	"FM_Tat_Award_M_011": {
-		"collection": "multiplayer_overlays"
+	"FM_Hip_M_Tat_045": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
 	},
-	"mpHeist3_Tat_023_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Xmas2_M_Tat_015": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"mpHeist3_Tat_038_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Biker_Tat_014_M": {
-		"collection": "mpbiker_overlays"
-	},
-	"FM_Tat_M_018": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Heist4_Tat_016_M": {
+	"MP_Heist4_Tat_024_M": {
+		"zone": "left_leg",
 		"collection": "mpheist4_overlays"
 	},
-	"FM_Tat_M_027": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Christmas2017_Tattoo_000_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Christmas2017_Tattoo_004_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
 	"mpHeist3_Tat_000_M": {
+		"zone": "head",
 		"collection": "mpheist3_overlays"
 	},
-	"MP_Smuggler_Tattoo_016_M": {
-		"collection": "mpsmuggler_overlays"
+	"FM_Tat_M_030": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
 	},
-	"MP_Smuggler_Tattoo_008_M": {
-		"collection": "mpsmuggler_overlays"
+	"MP_MP_Stunt_Tat_027_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
 	},
-	"MP_Christmas2017_Tattoo_011_M": {
-		"collection": "mpchristmas2017_overlays"
+	"FM_Hip_M_Tat_027": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
 	},
-	"MP_Smuggler_Tattoo_021_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_Xmas2_M_Tat_013": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"MP_Christmas2017_Tattoo_012_M": {
+	"MP_Christmas2017_Tattoo_029_M": {
+		"zone": "left_arm",
 		"collection": "mpchristmas2017_overlays"
 	},
 	"MP_LUXE_TAT_019_M": {
+		"zone": "right_arm",
 		"collection": "mpluxe_overlays"
 	},
-	"MP_Christmas2017_Tattoo_008_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Christmas2017_Tattoo_020_M": {
-		"collection": "mpchristmas2017_overlays"
-	},
-	"MP_Smuggler_Tattoo_020_M": {
+	"MP_Smuggler_Tattoo_023_M": {
+		"zone": "right_arm",
 		"collection": "mpsmuggler_overlays"
 	},
-	"MP_Christmas2017_Tattoo_009_M": {
-		"collection": "mpchristmas2017_overlays"
+	"MP_Gunrunning_Tattoo_020_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
 	},
-	"MP_Buis_F_Neck_001": {
+	"FM_Tat_M_012": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"mpHeist3_Tat_035_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Buis_M_Neck_001": {
+		"zone": "head",
 		"collection": "mpbusiness_overlays"
 	},
-	"MP_Smuggler_Tattoo_025_M": {
-		"collection": "mpsmuggler_overlays"
+	"MP_MP_Biker_Tat_040_M": {
+		"zone": "right_leg",
+		"collection": "mpbiker_overlays"
 	},
-	"MP_Heist4_Tat_029_M": {
+	"MP_MP_Biker_Tat_025_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_030_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Buis_M_Chest_000": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_MP_Biker_Tat_045_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Heist4_Tat_013_M": {
+		"zone": "torso",
 		"collection": "mpheist4_overlays"
 	},
-	"FM_Hip_M_Tat_019": {
-		"collection": "mphipster_overlays"
+	"MP_LUXE_TAT_028_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe2_overlays"
 	},
-	"MP_LR_Tat_033_M": {
-		"collection": "mplowrider_overlays"
+	"MP_Gunrunning_Tattoo_014_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
 	},
-	"MP_Buis_F_RArm_000": {
+	"MP_Gunrunning_Tattoo_011_M": {
+		"zone": "left_leg",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Gunrunning_Tattoo_026_M": {
+		"zone": "right_leg",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Vinewood_Tat_010_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"FM_Tat_M_041": {
+		"zone": "left_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_M_019": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Gunrunning_Tattoo_017_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"FM_Tat_M_029": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_M_034": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Buis_F_LLeg_000": {
+		"zone": "left_leg",
 		"collection": "mpbusiness_overlays"
 	},
-	"MP_Xmas2_M_Tat_029": {
+	"MP_Bea_M_Head_001": {
+		"zone": "head",
+		"collection": "mpbeach_overlays"
+	},
+	"mpHeist3_Tat_019_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"mpHeist3_Tat_036_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Christmas2017_Tattoo_022_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Gunrunning_Tattoo_028_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Xmas2_M_Tat_006": {
+		"zone": "torso",
 		"collection": "mpchristmas2_overlays"
 	},
-	"MP_Xmas2_M_Tat_003": {
+	"MP_LR_Tat_005_M": {
+		"zone": "left_arm",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_LR_Tat_013_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_Heist4_Tat_018_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Airraces_Tattoo_000_M": {
+		"zone": "torso",
+		"collection": "mpairraces_overlays"
+	},
+	"FM_Hip_M_Tat_002": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_LR_Tat_008_M": {
+		"zone": "torso",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_MP_Biker_Tat_014_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Gunrunning_Tattoo_030_M": {
+		"zone": "right_leg",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Buis_M_LeftArm_000": {
+		"zone": "left_arm",
+		"collection": "mpbusiness_overlays"
+	},
+	"mpHeist3_Tat_023_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_ImportExport_Tat_008_M": {
+		"zone": "left_arm",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_LUXE_TAT_026_M": {
+		"zone": "none",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_MP_Biker_Tat_007_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_010_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Hip_M_Tat_007": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_LUXE_TAT_0011_M": {
+		"zone": "none",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_Gunrunning_Tattoo_022_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_MP_Biker_Tat_002_M": {
+		"zone": "left_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Christmas2017_Tattoo_024_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Tat_M_004": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Vinewood_Tat_007_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_LUXE_TAT_012_M": {
+		"zone": "torso",
+		"collection": "mpluxe2_overlays"
+	},
+	"FM_Tat_M_016": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_LUXE_TAT_029_M": {
+		"zone": "torso",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_Smuggler_Tattoo_010_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"FM_Hip_M_Tat_048": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_Biker_Tat_035_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Bea_M_Stom_000": {
+		"zone": "torso",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_LUXE_TAT_020_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_Smuggler_Tattoo_006_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_LR_Tat_007_M": {
+		"zone": "left_leg",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_MP_Biker_Tat_048_M": {
+		"zone": "right_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Smuggler_Tattoo_021_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Vinewood_Tat_022_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Smuggler_Tattoo_018_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"FM_Hip_M_Tat_037": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Tat_M_023": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_M_007": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_LR_Tat_030_M": {
+		"zone": "right_leg",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_Christmas2017_Tattoo_015_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_LUXE_TAT_0010_M": {
+		"zone": "none",
+		"collection": "mpluxe2_overlays"
+	},
+	"FM_Tat_Award_M_009": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Christmas2017_Tattoo_009_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"mpHeist3_Tat_016_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_LR_Tat_016_M": {
+		"zone": "torso",
+		"collection": "mplowrider2_overlays"
+	},
+	"FM_Tat_M_035": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_049_M": {
+		"zone": "right_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_LUXE_TAT_014_M": {
+		"zone": "torso",
+		"collection": "mpluxe_overlays"
+	},
+	"FM_Tat_M_042": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_024": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Bea_M_LArm_001": {
+		"zone": "left_arm",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_Christmas2017_Tattoo_012_M": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Xmas2_M_Tat_024": {
+		"zone": "head",
 		"collection": "mpchristmas2_overlays"
 	},
-	"mpHeist3_Tat_043_M": {
+	"FM_Tat_M_017": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Smuggler_Tattoo_013_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_MP_ImportExport_Tat_001_M": {
+		"zone": "torso",
+		"collection": "mpimportexport_overlays"
+	},
+	"mpHeist3_Tat_020_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"FM_Hip_M_Tat_018": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_LR_Tat_035_M": {
+		"zone": "right_arm",
+		"collection": "mplowrider2_overlays"
+	},
+	"FM_Tat_M_026": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Vinewood_Tat_002_M": {
+		"zone": "left_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"FM_Tat_Award_M_002": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Vinewood_Tat_004_M": {
+		"zone": "right_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_MP_ImportExport_Tat_004_M": {
+		"zone": "left_arm",
+		"collection": "mpimportexport_overlays"
+	},
+	"FM_Tat_Award_M_019": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_022_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Biker_Tat_047_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Tat_Award_M_005": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Christmas2017_Tattoo_023_M": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Hip_M_Tat_042": {
+		"zone": "right_leg",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Tat_M_020": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Heist4_Tat_012_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"mpHeist3_Tat_008_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Bea_M_LArm_000": {
+		"zone": "left_arm",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_Smuggler_Tattoo_024_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Gunrunning_Tattoo_018_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"FM_Tat_Award_M_017": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Airraces_Tattoo_003_M": {
+		"zone": "left_arm",
+		"collection": "mpairraces_overlays"
+	},
+	"MP_MP_Stunt_Tat_001_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Xmas2_M_Tat_026": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_LUXE_TAT_023_M": {
+		"zone": "right_leg",
+		"collection": "mpluxe2_overlays"
+	},
+	"FM_Hip_M_Tat_047": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Heist4_Tat_008_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Smuggler_Tattoo_004_M": {
+		"zone": "left_arm",
+		"collection": "mpsmuggler_overlays"
+	},
+	"mpHeist3_Tat_011_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Gunrunning_Tattoo_013_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"mpHeist3_Tat_002_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Vinewood_Tat_020_M": {
+		"zone": "right_leg",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_MP_Stunt_Tat_024_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"mpHeist3_Tat_024_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Stunt_Tat_043_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Vinewood_Tat_013_M": {
+		"zone": "left_leg",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_MP_Stunt_Tat_007_M": {
+		"zone": "left_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"mpHeist3_Tat_032_M": {
+		"zone": "left_leg",
 		"collection": "mpheist3_overlays"
 	},
 	"FM_Hip_M_Tat_017": {
+		"zone": "right_arm",
 		"collection": "mphipster_overlays"
 	},
-	"MP_LUXE_TAT_028_M": {
+	"FM_Tat_M_011": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_LUXE_TAT_030_M": {
+		"zone": "right_arm",
 		"collection": "mpluxe2_overlays"
 	},
-	"MP_Xmas2_M_Tat_026": {
-		"collection": "mpchristmas2_overlays"
-	},
-	"mpHeist3_Tat_007_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"mpHeist3_Tat_016_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_Vinewood_Tat_006_M": {
-		"collection": "mpvinewood_overlays"
-	},
-	"mpHeist3_Tat_030_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Stunt_Tat_024_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Buis_F_Back_001": {
+	"MP_Buis_M_RightArm_001": {
+		"zone": "right_arm",
 		"collection": "mpbusiness_overlays"
 	},
-	"FM_Hip_M_Tat_023": {
-		"collection": "mphipster_overlays"
-	},
-	"mpHeist3_Tat_035_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"MP_MP_Stunt_Tat_005_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_LR_Tat_019_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"FM_Tat_M_016": {
-		"collection": "multiplayer_overlays"
-	},
-	"mpHeist3_Tat_044_M": {
-		"collection": "mpheist3_overlays"
-	},
-	"FM_Tat_M_000": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_LR_Tat_001_M": {
+	"MP_LR_Tat_017_M": {
+		"zone": "right_leg",
 		"collection": "mplowrider_overlays"
 	},
-	"FM_Hip_M_Tat_028": {
+	"FM_Hip_M_Tat_031": {
+		"zone": "torso",
 		"collection": "mphipster_overlays"
 	},
-	"MP_Smuggler_Tattoo_002_M": {
-		"collection": "mpsmuggler_overlays"
+	"mpHeist3_Tat_017_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
 	},
-	"MP_LR_Tat_030_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"FM_Tat_M_028": {
+	"FM_Tat_M_008": {
+		"zone": "left_leg",
 		"collection": "multiplayer_overlays"
 	},
-	"MP_Heist4_Tat_019_M": {
-		"collection": "mpheist4_overlays"
-	},
-	"MP_Bea_M_Lleg_000": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_MP_Stunt_Tat_010_M": {
-		"collection": "mpstunt_overlays"
-	},
-	"MP_Bea_M_Neck_001": {
-		"collection": "mpbeach_overlays"
-	},
-	"MP_Smuggler_Tattoo_014_M": {
-		"collection": "mpsmuggler_overlays"
-	},
-	"MP_LR_Tat_008_M": {
-		"collection": "mplowrider2_overlays"
-	},
-	"FM_Tat_M_030": {
-		"collection": "multiplayer_overlays"
-	},
-	"MP_Vinewood_Tat_021_M": {
+	"MP_Vinewood_Tat_016_M": {
+		"zone": "torso",
 		"collection": "mpvinewood_overlays"
 	},
-	"FM_Hip_M_Tat_016": {
+	"FM_Hip_M_Tat_030": {
+		"zone": "torso",
 		"collection": "mphipster_overlays"
 	},
-	"MP_Gunrunning_Tattoo_013_M": {
+	"MP_MP_Biker_Tat_004_M": {
+		"zone": "right_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Smuggler_Tattoo_020_M": {
+		"zone": "right_leg",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Heist4_Tat_022_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"mpHeist3_Tat_015_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Heist4_Tat_003_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Vinewood_Tat_014_M": {
+		"zone": "left_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"FM_Tat_M_040": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Bea_M_Head_002": {
+		"zone": "head",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_Vinewood_Tat_021_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Smuggler_Tattoo_014_M": {
+		"zone": "left_arm",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Vinewood_Tat_031_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Gunrunning_Tattoo_015_M": {
+		"zone": "left_arm",
 		"collection": "mpgunrunning_overlays"
+	},
+	"MP_LUXE_TAT_015_M": {
+		"zone": "torso",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_Buis_M_Neck_003": {
+		"zone": "head",
+		"collection": "mpbusiness_overlays"
+	},
+	"FM_Tat_Award_M_018": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_034_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Heist4_Tat_027_M": {
+		"zone": "right_leg",
+		"collection": "mpheist4_overlays"
+	},
+	"FM_Tat_Award_M_010": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Christmas2017_Tattoo_004_M": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_MP_Stunt_Tat_016_M": {
+		"zone": "right_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Xmas2_M_Tat_016": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Heist4_Tat_025_M": {
+		"zone": "left_leg",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Heist4_Tat_004_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Heist4_Tat_023_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"mpHeist3_Tat_037_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Gunrunning_Tattoo_016_M": {
+		"zone": "left_arm",
+		"collection": "mpgunrunning_overlays"
+	},
+	"FM_Hip_M_Tat_001": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_Stunt_Tat_038_M": {
+		"zone": "right_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Christmas2017_Tattoo_010_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Tat_M_002": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Christmas2017_Tattoo_026_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_MP_Biker_Tat_032_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_056_M": {
+		"zone": "left_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_ImportExport_Tat_005_M": {
+		"zone": "right_arm",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_Christmas2017_Tattoo_017_M": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Smuggler_Tattoo_003_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"FM_Hip_M_Tat_043": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"mpHeist3_Tat_039_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Biker_Tat_024_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Gunrunning_Tattoo_009_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Christmas2017_Tattoo_020_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Vinewood_Tat_003_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_MP_Stunt_Tat_002_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_025_M": {
+		"zone": "right_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"FM_Tat_M_031": {
+		"zone": "left_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_M_009": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_023": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Buis_F_LArm_000": {
+		"zone": "left_arm",
+		"collection": "mpbusiness_overlays"
+	},
+	"mpHeist3_Tat_022_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Vinewood_Tat_029_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"mpHeist3_Tat_010_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"FM_Hip_M_Tat_025": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_Stunt_Tat_006_M": {
+		"zone": "head",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Smuggler_Tattoo_016_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Vinewood_Tat_019_M": {
+		"zone": "left_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Buis_F_Neck_000": {
+		"zone": "head",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_MP_ImportExport_Tat_009_M": {
+		"zone": "torso",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_MP_Stunt_Tat_020_M": {
+		"zone": "right_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Smuggler_Tattoo_007_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_MP_Biker_Tat_020_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Tat_M_028": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Heist4_Tat_031_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Heist4_Tat_000_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Buis_M_Back_000": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"FM_Hip_M_Tat_034": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_LR_Tat_001_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"FM_Hip_M_Tat_040": {
+		"zone": "left_leg",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Hip_M_Tat_028": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_LUXE_TAT_005_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_LUXE_TAT_003_M": {
+		"zone": "torso",
+		"collection": "mpluxe_overlays"
+	},
+	"mpHeist3_Tat_030_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Bea_M_Chest_000": {
+		"zone": "torso",
+		"collection": "mpbeach_overlays"
+	},
+	"FM_Tat_M_047": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_008": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Airraces_Tattoo_002_M": {
+		"zone": "torso",
+		"collection": "mpairraces_overlays"
+	},
+	"MP_Gunrunning_Tattoo_004_M": {
+		"zone": "left_arm",
+		"collection": "mpgunrunning_overlays"
+	},
+	"mpHeist3_Tat_042_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Stunt_Tat_039_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"mpHeist3_Tat_029_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Xmas2_M_Tat_007": {
+		"zone": "head",
+		"collection": "mpchristmas2_overlays"
+	},
+	"FM_Hip_M_Tat_020": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Tat_M_025": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_033": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Gunrunning_Tattoo_003_M": {
+		"zone": "head",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Smuggler_Tattoo_008_M": {
+		"zone": "left_arm",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_MP_Biker_Tat_051_M": {
+		"zone": "head",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Vinewood_Tat_028_M": {
+		"zone": "right_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"FM_Hip_M_Tat_022": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_Stunt_Tat_013_M": {
+		"zone": "left_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_LUXE_TAT_022_M": {
+		"zone": "torso",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_MP_Biker_Tat_059_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Stunt_Tat_008_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"mpHeist3_Tat_009_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Biker_Tat_017_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Xmas2_M_Tat_015": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_014": {
+		"zone": "right_leg",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Smuggler_Tattoo_002_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_MP_Biker_Tat_013_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_053_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_LR_Tat_022_M": {
+		"zone": "left_arm",
+		"collection": "mplowrider2_overlays"
+	},
+	"mpHeist3_Tat_043_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Biker_Tat_058_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"mpHeist3_Tat_044_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Gunrunning_Tattoo_019_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_MP_Stunt_Tat_014_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_045_M": {
+		"zone": "right_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_032_M": {
+		"zone": "right_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Buis_F_RLeg_000": {
+		"zone": "right_leg",
+		"collection": "mpbusiness_overlays"
+	},
+	"mpHeist3_Tat_014_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Buis_M_Neck_002": {
+		"zone": "head",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_Vinewood_Tat_025_M": {
+		"zone": "right_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Heist4_Tat_017_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_MP_Biker_Tat_050_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Tat_M_021": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Xmas2_M_Tat_003": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Christmas2017_Tattoo_025_M": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Xmas2_M_Tat_011": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Bea_M_Neck_000": {
+		"zone": "head",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_Buis_M_LeftArm_001": {
+		"zone": "left_arm",
+		"collection": "mpbusiness_overlays"
+	},
+	"FM_Tat_Award_M_014": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_004": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Tat_Award_M_000": {
+		"zone": "head",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Bea_M_Head_000": {
+		"zone": "head",
+		"collection": "mpbeach_overlays"
+	},
+	"FM_Tat_M_044": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_009_M": {
+		"zone": "head",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_LR_Tat_023_M": {
+		"zone": "right_leg",
+		"collection": "mplowrider_overlays"
+	},
+	"FM_Hip_M_Tat_035": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Smuggler_Tattoo_025_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"FM_Tat_M_013": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_003_M": {
+		"zone": "right_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Buis_F_Stom_000": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"FM_Hip_M_Tat_015": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"mpHeist3_Tat_006_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Xmas2_M_Tat_009": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"FM_Tat_M_038": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Buis_F_Chest_000": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_Heist4_Tat_026_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_LR_Tat_003_M": {
+		"zone": "right_arm",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_MP_Biker_Tat_012_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Hip_M_Tat_014": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_LR_Tat_031_M": {
+		"zone": "torso",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_Gunrunning_Tattoo_000_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_LUXE_TAT_006_M": {
+		"zone": "torso",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_Heist4_Tat_015_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"mpHeist3_Tat_021_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Christmas2017_Tattoo_000_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Xmas2_M_Tat_029": {
+		"zone": "head",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Vinewood_Tat_000_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Xmas2_M_Tat_028": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_027": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_025": {
+		"zone": "head",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Vinewood_Tat_005_M": {
+		"zone": "left_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Xmas2_M_Tat_023": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Vinewood_Tat_024_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Xmas2_M_Tat_018": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_017": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_013": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_012": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_010": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_Xmas2_M_Tat_008": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_MP_Biker_Tat_042_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Hip_M_Tat_036": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Xmas2_M_Tat_004": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_MP_Stunt_Tat_000_M": {
+		"zone": "head",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Xmas2_M_Tat_000": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2_overlays"
+	},
+	"MP_LR_Tat_018_M": {
+		"zone": "left_arm",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_Christmas2017_Tattoo_003_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_LR_Tat_033_M": {
+		"zone": "left_arm",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_MP_Stunt_Tat_005_M": {
+		"zone": "right_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_LR_Tat_027_M": {
+		"zone": "left_arm",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_LR_Tat_019_M": {
+		"zone": "torso",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_LR_Tat_021_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_LR_Tat_015_M": {
+		"zone": "right_arm",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_MP_Stunt_Tat_046_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Buis_F_Chest_001": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_MP_Stunt_Tat_018_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_LR_Tat_010_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_LR_Tat_009_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_Gunrunning_Tattoo_007_M": {
+		"zone": "left_leg",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_LR_Tat_002_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_MP_Stunt_Tat_048_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"mpHeist3_Tat_031_M": {
+		"zone": "right_leg",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Stunt_Tat_047_M": {
+		"zone": "right_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_044_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_042_M": {
+		"zone": "head",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_004_M": {
+		"zone": "head",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Gunrunning_Tattoo_012_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"FM_Hip_M_Tat_009": {
+		"zone": "left_leg",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Vinewood_Tat_001_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"mpHeist3_Tat_003_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Heist4_Tat_019_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Vinewood_Tat_018_M": {
+		"zone": "right_arm",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_MP_Stunt_Tat_040_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"FM_Tat_Award_M_015": {
+		"zone": "left_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_037_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Smuggler_Tattoo_000_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Christmas2017_Tattoo_019_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Tat_Award_M_003": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Smuggler_Tattoo_011_M": {
+		"zone": "head",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_MP_Stunt_Tat_035_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_033_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_031_M": {
+		"zone": "left_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_Stunt_Tat_030_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Christmas2017_Tattoo_011_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Tat_M_043": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_Award_M_007": {
+		"zone": "left_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_028_M": {
+		"zone": "left_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_MP_ImportExport_Tat_010_M": {
+		"zone": "torso",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_Smuggler_Tattoo_017_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_MP_ImportExport_Tat_000_M": {
+		"zone": "torso",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_Airraces_Tattoo_005_M": {
+		"zone": "torso",
+		"collection": "mpairraces_overlays"
+	},
+	"MP_Vinewood_Tat_015_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_MP_Biker_Tat_044_M": {
+		"zone": "left_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Heist4_Tat_009_M": {
+		"zone": "left_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_LR_Tat_012_M": {
+		"zone": "torso",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_Smuggler_Tattoo_009_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"mpHeist3_Tat_034_M": {
+		"zone": "right_arm",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Biker_Tat_021_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Smuggler_Tattoo_022_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Heist4_Tat_029_M": {
+		"zone": "left_leg",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Heist4_Tat_016_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_LUXE_TAT_018_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe2_overlays"
+	},
+	"mpHeist3_Tat_013_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_Biker_Tat_055_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Bea_M_Lleg_000": {
+		"zone": "left_leg",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_Christmas2017_Tattoo_014_M": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Vinewood_Tat_006_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Vinewood_Tat_030_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"FM_Hip_M_Tat_026": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Smuggler_Tattoo_019_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"FM_Hip_M_Tat_038": {
+		"zone": "right_leg",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Christmas2017_Tattoo_013_M": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Buis_F_Stom_001": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_MP_Biker_Tat_031_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Airraces_Tattoo_004_M": {
+		"zone": "torso",
+		"collection": "mpairraces_overlays"
+	},
+	"FM_Hip_M_Tat_000": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Hip_M_Tat_041": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_ImportExport_Tat_003_M": {
+		"zone": "right_arm",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_Gunrunning_Tattoo_008_M": {
+		"zone": "left_arm",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Vinewood_Tat_023_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_LUXE_TAT_027_M": {
+		"zone": "torso",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_LUXE_TAT_001_M": {
+		"zone": "right_leg",
+		"collection": "mpluxe_overlays"
+	},
+	"FM_Tat_Award_M_008": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_021": {
+		"zone": "head",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_ImportExport_Tat_006_M": {
+		"zone": "right_arm",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_Christmas2017_Tattoo_007_M": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Christmas2017_Tattoo_001_M": {
+		"zone": "left_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Tat_M_046": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_019": {
+		"zone": "left_leg",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Tat_M_045": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_016_M": {
+		"zone": "left_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Tat_M_039": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_LUXE_TAT_013_M": {
+		"zone": "right_arm",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_LUXE_TAT_031_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_MP_Stunt_Tat_017_M": {
+		"zone": "head",
+		"collection": "mpstunt_overlays"
+	},
+	"FM_Hip_M_Tat_003": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"FM_Tat_Award_M_013": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_043_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Christmas2017_Tattoo_028_M": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"mpHeist3_Tat_041_M": {
+		"zone": "left_arm",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_MP_ImportExport_Tat_011_M": {
+		"zone": "torso",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_MP_Biker_Tat_003_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Gunrunning_Tattoo_027_M": {
+		"zone": "left_arm",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Bea_M_Chest_001": {
+		"zone": "torso",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_MP_Biker_Tat_011_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Buis_M_Neck_000": {
+		"zone": "head",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_MP_Biker_Tat_006_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Gunrunning_Tattoo_001_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_LR_Tat_004_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"FM_Tat_M_037": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_000_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_001_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Christmas2017_Tattoo_008_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Vinewood_Tat_027_M": {
+		"zone": "left_leg",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Heist4_Tat_010_M": {
+		"zone": "left_leg",
+		"collection": "mpheist4_overlays"
+	},
+	"FM_Tat_M_015": {
+		"zone": "left_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Hip_M_Tat_016": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_LUXE_TAT_021_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_Smuggler_Tattoo_012_M": {
+		"zone": "head",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_Bea_M_Neck_001": {
+		"zone": "head",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_Vinewood_Tat_017_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"FM_Tat_M_022": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_010_M": {
+		"zone": "right_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Bea_M_Stom_001": {
+		"zone": "torso",
+		"collection": "mpbeach_overlays"
+	},
+	"FM_Tat_M_024": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_034_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Heist4_Tat_014_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_MP_Biker_Tat_033_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Heist4_Tat_001_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_MP_Biker_Tat_052_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_ImportExport_Tat_007_M": {
+		"zone": "right_arm",
+		"collection": "mpimportexport_overlays"
+	},
+	"MP_MP_Biker_Tat_029_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"mpHeist3_Tat_025_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Bea_M_RArm_000": {
+		"zone": "right_arm",
+		"collection": "mpbeach_overlays"
+	},
+	"mpHeist3_Tat_026_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_LUXE_TAT_007_M": {
+		"zone": "torso",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_MP_Biker_Tat_018_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_026_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"mpHeist3_Tat_001_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Gunrunning_Tattoo_023_M": {
+		"zone": "left_leg",
+		"collection": "mpgunrunning_overlays"
+	},
+	"FM_Hip_M_Tat_013": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Heist4_Tat_007_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"FM_Hip_M_Tat_011": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_Biker_Tat_015_M": {
+		"zone": "left_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Buis_F_Stom_002": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"FM_Hip_M_Tat_010": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Christmas2017_Tattoo_016_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_Vinewood_Tat_012_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Gunrunning_Tattoo_025_M": {
+		"zone": "left_arm",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_MP_Biker_Tat_037_M": {
+		"zone": "left_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_022_M": {
+		"zone": "right_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Vinewood_Tat_009_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Buis_F_Chest_002": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_Gunrunning_Tattoo_006_M": {
+		"zone": "right_leg",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_MP_Stunt_Tat_021_M": {
+		"zone": "left_leg",
+		"collection": "mpstunt_overlays"
+	},
+	"FM_Hip_M_Tat_046": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_MP_Biker_Tat_060_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"mpHeist3_Tat_005_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Heist4_Tat_030_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_LUXE_TAT_000_M": {
+		"zone": "left_leg",
+		"collection": "mpluxe_overlays"
+	},
+	"mpHeist3_Tat_040_M": {
+		"zone": "left_arm",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_LUXE_TAT_024_M": {
+		"zone": "torso",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_MP_Biker_Tat_057_M": {
+		"zone": "left_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Airraces_Tattoo_001_M": {
+		"zone": "torso",
+		"collection": "mpairraces_overlays"
+	},
+	"FM_Tat_Award_M_004": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_M_003": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_Award_M_006": {
+		"zone": "right_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_027_M": {
+		"zone": "left_leg",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Stunt_Tat_023_M": {
+		"zone": "left_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Heist4_Tat_021_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Heist4_Tat_005_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"FM_Tat_M_000": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Buis_F_Neck_001": {
+		"zone": "head",
+		"collection": "mpbusiness_overlays"
+	},
+	"FM_Hip_M_Tat_039": {
+		"zone": "left_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Heist4_Tat_032_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Gunrunning_Tattoo_021_M": {
+		"zone": "right_arm",
+		"collection": "mpgunrunning_overlays"
+	},
+	"FM_Tat_M_027": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Bea_M_RArm_001": {
+		"zone": "right_arm",
+		"collection": "mpbeach_overlays"
+	},
+	"MP_Airraces_Tattoo_006_M": {
+		"zone": "torso",
+		"collection": "mpairraces_overlays"
+	},
+	"MP_LUXE_TAT_004_M": {
+		"zone": "right_arm",
+		"collection": "mpluxe_overlays"
+	},
+	"MP_MP_Biker_Tat_023_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Christmas2017_Tattoo_021_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_MP_Biker_Tat_049_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_MP_Biker_Tat_005_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_LR_Tat_028_M": {
+		"zone": "right_arm",
+		"collection": "mplowrider2_overlays"
+	},
+	"FM_Tat_M_033": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_Award_M_011": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Gunrunning_Tattoo_010_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_LUXE_TAT_016_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_MP_Biker_Tat_054_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Tat_Award_M_012": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_LUXE_TAT_025_M": {
+		"zone": "torso",
+		"collection": "mpluxe2_overlays"
+	},
+	"FM_Hip_M_Tat_044": {
+		"zone": "right_arm",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Smuggler_Tattoo_001_M": {
+		"zone": "right_arm",
+		"collection": "mpsmuggler_overlays"
+	},
+	"MP_MP_Biker_Tat_038_M": {
+		"zone": "head",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_LR_Tat_000_M": {
+		"zone": "torso",
+		"collection": "mplowrider2_overlays"
+	},
+	"mpHeist3_Tat_038_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"FM_Tat_M_005": {
+		"zone": "left_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_046_M": {
+		"zone": "right_arm",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_LR_Tat_026_M": {
+		"zone": "torso",
+		"collection": "mplowrider_overlays"
+	},
+	"MP_Heist4_Tat_028_M": {
+		"zone": "left_leg",
+		"collection": "mpheist4_overlays"
+	},
+	"FM_Tat_M_032": {
+		"zone": "left_leg",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Biker_Tat_041_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"MP_Vinewood_Tat_032_M": {
+		"zone": "torso",
+		"collection": "mpvinewood_overlays"
+	},
+	"MP_Gunrunning_Tattoo_029_M": {
+		"zone": "torso",
+		"collection": "mpgunrunning_overlays"
+	},
+	"FM_Tat_M_018": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_MP_Stunt_Tat_029_M": {
+		"zone": "torso",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_Gunrunning_Tattoo_002_M": {
+		"zone": "right_arm",
+		"collection": "mpgunrunning_overlays"
+	},
+	"MP_Christmas2017_Tattoo_018_M": {
+		"zone": "right_arm",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"MP_MP_Stunt_Tat_036_M": {
+		"zone": "right_arm",
+		"collection": "mpstunt_overlays"
+	},
+	"MP_LUXE_TAT_009_M": {
+		"zone": "left_arm",
+		"collection": "mpluxe_overlays"
+	},
+	"FM_Hip_M_Tat_005": {
+		"zone": "head",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Heist4_Tat_006_M": {
+		"zone": "right_arm",
+		"collection": "mpheist4_overlays"
+	},
+	"MP_Christmas2017_Tattoo_027_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Hip_M_Tat_006": {
+		"zone": "torso",
+		"collection": "mphipster_overlays"
+	},
+	"MP_Christmas2017_Tattoo_002_M": {
+		"zone": "torso",
+		"collection": "mpchristmas2017_overlays"
+	},
+	"FM_Tat_M_036": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_Smuggler_Tattoo_015_M": {
+		"zone": "torso",
+		"collection": "mpsmuggler_overlays"
+	},
+	"FM_Tat_M_014": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"FM_Tat_M_001": {
+		"zone": "right_arm",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_LUXE_TAT_008_M": {
+		"zone": "torso",
+		"collection": "mpluxe_overlays"
+	},
+	"mpHeist3_Tat_004_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_LR_Tat_029_M": {
+		"zone": "left_leg",
+		"collection": "mplowrider2_overlays"
+	},
+	"MP_LR_Tat_006_M": {
+		"zone": "left_arm",
+		"collection": "mplowrider2_overlays"
+	},
+	"mpHeist3_Tat_007_M": {
+		"zone": "head",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Buis_M_RightArm_000": {
+		"zone": "right_arm",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_MP_Biker_Tat_008_M": {
+		"zone": "torso",
+		"collection": "mpbiker_overlays"
+	},
+	"FM_Tat_M_010": {
+		"zone": "torso",
+		"collection": "multiplayer_overlays"
+	},
+	"MP_LUXE_TAT_002_M": {
+		"zone": "torso",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_Buis_F_RArm_000": {
+		"zone": "right_arm",
+		"collection": "mpbusiness_overlays"
+	},
+	"mpHeist3_Tat_027_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Heist4_Tat_020_M": {
+		"zone": "torso",
+		"collection": "mpheist4_overlays"
+	},
+	"mpHeist3_Tat_033_M": {
+		"zone": "torso",
+		"collection": "mpheist3_overlays"
+	},
+	"MP_Airraces_Tattoo_007_M": {
+		"zone": "torso",
+		"collection": "mpairraces_overlays"
+	},
+	"MP_LUXE_TAT_017_M": {
+		"zone": "right_arm",
+		"collection": "mpluxe2_overlays"
+	},
+	"MP_Buis_M_Stomach_000": {
+		"zone": "torso",
+		"collection": "mpbusiness_overlays"
+	},
+	"MP_Xmas2_M_Tat_005": {
+		"zone": "torso",
+		"collection": "mpchristmas2_overlays"
 	}
 }
