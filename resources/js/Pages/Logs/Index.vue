@@ -289,15 +289,15 @@
 
 			<template #default>
 				<p class="m-0 mb-2 font-bold">{{ t('logs.metadata.details') }}:</p>
-				<pre class="block text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4">{{
+				<pre class="block text-sm whitespace-pre-wrap break-words border-dashed border-b-2 mb-4 pb-4">{{
 						parseLogMetadata(logMetadata) || 'N/A'
 					}}</pre>
 
-				<pre class="block text-sm whitespace-pre break-words border-dashed border-b-2 mb-4 pb-4" v-if="parsedMetadata"
+				<pre class="block text-sm whitespace-pre-wrap break-words border-dashed border-b-2 mb-4 pb-4" v-if="parsedMetadata"
 					v-html="parsedMetadata"></pre>
 
 				<p class="m-0 mb-2 font-bold">{{ t('logs.metadata.raw') }}:</p>
-				<pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded"
+				<pre class="block text-xs whitespace-pre-wrap break-words hljs px-3 py-2 rounded"
 					v-html="logMetadataJSON"></pre>
 
 				<p class="m-0 mt-2 mb-2 font-bold" v-if="metaScreenshot">{{ t('logs.metadata.screenshot') }}:</p>
