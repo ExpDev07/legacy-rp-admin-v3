@@ -380,7 +380,7 @@
 			</template>
 
 			<template #default>
-				<pre class="block text-xs whitespace-pre break-words hljs px-3 py-2 rounded" v-html="antiCheatMetadataJSON"></pre>
+				<pre class="block text-xs whitespace-pre-wrap break-words hljs px-3 py-2 rounded" v-html="antiCheatMetadataJSON"></pre>
 			</template>
 
 			<template #actions>
