@@ -1660,6 +1660,23 @@ export default {
 
             return null;
         },
+        async loadPlayerNames(licenses) {
+            try {
+                const result = await axios.post('/map/playerNames', {
+                    licenses: licenses
+                });
+
+                if (result.data && result.data.status) {
+                    return result.data.data;
+                } else if (result.data && !result.data.status) {
+                    console.error(result.data.error);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+            return null;
+        },
         async renderTimestamp(timestamp) {
             this.historicChart = false;
             this.historyRange.view = false;
@@ -1672,9 +1689,14 @@ export default {
             const server = $('#server').val(),
                 players = await this.loadTimestamp(server, timestamp);
 
-            this.loadingScreenStatus = this.t('map.timestamp_render');
-
             if (players) {
+                this.loadingScreenStatus = this.t('map.timestamp_load_names');
+
+                const licenses = players.map(player => player.license),
+                    playerNames = await this.loadPlayerNames(licenses);
+
+                this.loadingScreenStatus = this.t('map.timestamp_render');
+
                 if (this.heatmapLayers) {
                     for (let x = 0; x < this.heatmapLayers.length; x++) {
                         this.map.removeLayer(this.heatmapLayers[x]);
@@ -1718,7 +1740,9 @@ export default {
                         }
                     );
 
-                    marker.bindPopup('<a href="/players/' + player.license + '" target="_blank">' + player.license + '</a>', {
+                    const playerName = playerNames && playerNames[player.license] ? playerNames[player.license] : player.license;
+
+                    marker.bindPopup('<a href="/players/' + player.license + '" target="_blank">' + playerName + '</a>', {
                         autoPan: false
                     });
 

@@ -69,4 +69,27 @@ class MapController extends Controller
         ]);
     }
 
+	public function playerNames(Request $request): \Illuminate\Http\Response
+	{
+		$licenses = $request->input('licenses') ?? [];
+
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LIVEMAP)) {
+			return self::json(false, null, 'You can not use the livemap functionality');
+		}
+
+		if (!is_array($licenses) || empty($licenses)) {
+			return self::json(false, null, 'Invalid licenses');
+		}
+
+		$data = Player::query()->select(['player_name', 'license_identifier'])->whereIn('license_identifier', $licenses)->get()->toArray();
+
+		$map = [];
+
+		foreach($data as $player) {
+			$map[$player['license_identifier']] = $player['player_name'];
+		}
+
+		return self::json(true, $map);
+	}
+
 }

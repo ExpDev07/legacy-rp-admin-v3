@@ -329,6 +329,7 @@
         "do_highlight": "Highlight",
         "highlighted_title": "Highlighted People",
         "timestamp_fetch": "Fetching Timestamp Data...",
+		"timestamp_load_names": "Loading Player Names...",
         "timestamp_parse": "Parsing Timestamp Data...",
         "timestamp_render": "Rendering Timestamp Data...",
         "heatmap_fetch": "Fetching Historic Data...",
