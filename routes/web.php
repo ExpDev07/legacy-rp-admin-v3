@@ -177,7 +177,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
     // Map.
     Route::get('/map', [MapController::class, 'index']);
-    Route::get('/map/data', [MapController::class, 'data']);
+    Route::post('/map/playerNames', [MapController::class, 'playerNames']);
 
     // Statistics.
     Route::get('/statistics', [StatisticsController::class, 'render']);
