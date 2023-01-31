@@ -210,6 +210,23 @@ class PlayerRouteController extends Controller
     }
 
     /**
+     * Returns player status.
+     *
+     * @param Player $player
+     * @param Request $request
+     * @return Response
+     */
+    public function status(Player $player, Request $request): Response
+    {
+		$status = Player::getOnlineStatus($player->license_identifier, false);
+
+        return (new Response([
+            'status' => true,
+            'data'   => $status,
+        ], 200))->header('Content-Type', 'application/json');
+    }
+
+    /**
      * Revives the player
      *
      * @param Player $player

@@ -71,7 +71,7 @@ class PlayerStatus
     public function __construct(string $status, string $serverIp, int $serverId, ?int $character = null, ?string $fakeName = null, ?array $metadata = null)
     {
         $this->status = $status;
-        $this->serverIp = Server::fixApiUrl($serverIp);
+        $this->serverIp = $serverIp ? Server::fixApiUrl($serverIp) : "";
         $this->serverId = $serverId;
         $this->character = $character;
         $this->fakeName = $fakeName;

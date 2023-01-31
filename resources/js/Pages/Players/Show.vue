@@ -40,19 +40,23 @@
                         <span class="font-semibold">{{ t('global.blacklisted') }}</span>
                     </badge>
 
+                    <badge class="border-yellow-200 bg-yellow-400 dark:bg-yellow-600"
+                           v-if="statusLoading">
+                        <span class="font-semibold">{{ t('global.loading') }}</span>
+                    </badge>
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
-                           v-if="player.status.status === 'online'">
+                           v-else-if="status.status === 'online'">
                         <span class="font-semibold">{{ t('global.status.online') }}
-                            <sup>[{{ player.status.serverId }}]</sup>
+                            <sup>[{{ status.serverId }}]</sup>
                         </span>
                     </badge>
                     <badge class="border-red-200 bg-warning-pale dark:bg-dark-warning-pale"
-                           v-else-if="player.status.status === 'unavailable'"
+                           v-else-if="status.status === 'unavailable'"
                            :title="t('global.status.unavailable_info')">
                         <span class="font-semibold">{{ t('global.status.unavailable') }}</span>
                     </badge>
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-else>
-                        <span class="font-semibold">{{ t('global.status.' + player.status.status) }}</span>
+                        <span class="font-semibold">{{ t('global.status.' + status.status) }}</span>
                     </badge>
 
                     <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary"
@@ -67,6 +71,10 @@
                 <span class="block mb-1" v-if="player.playerAliases && player.playerAliases.length > 0">
                     <span class="font-bold">{{ t('players.show.aliases') }}:</span>
                     {{ player.playerAliases.join(", ") }}
+                </span>
+                <span class="block mb-1" v-if="getPlayerMetadata()">
+                    <span class="font-bold">{{ t('players.show.metadata') }}:</span>
+                    {{ getPlayerMetadata() }}
                 </span>
                 <span class="block">
                     <span class="font-bold">{{ t('players.show.enabled_commands') }}:</span>
@@ -130,7 +138,7 @@
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 block"
                     @click="isScreenCapture = true"
                     :title="t('screenshot.screencapture')"
-                    v-if="player.status.status === 'online' && this.perm.check(this.perm.PERM_SCREENSHOT)"
+                    v-if="status.status === 'online' && this.perm.check(this.perm.PERM_SCREENSHOT)"
                 >
                     <i class="fas fa-video"></i>
                 </button>
@@ -139,7 +147,7 @@
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 block"
                     @click="isScreenshot = true; createScreenshot()"
                     :title="t('screenshot.screenshot')"
-                    v-if="player.status.status === 'online' && this.perm.check(this.perm.PERM_SCREENSHOT)"
+                    v-if="status.status === 'online' && this.perm.check(this.perm.PERM_SCREENSHOT)"
                 >
                     <i class="fas fa-camera"></i>
                 </button>
@@ -148,7 +156,7 @@
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 block"
                     :href="'/map#' + player.licenseIdentifier"
                     :title="t('global.view_map')"
-                    v-if="this.perm.check(this.perm.PERM_LIVEMAP) && player.status.status === 'online'"
+                    v-if="this.perm.check(this.perm.PERM_LIVEMAP) && status.status === 'online'"
                     target="_blank"
                 >
                     <i class="fas fa-map"></i>
@@ -156,7 +164,7 @@
                 <!-- Revive -->
                 <button
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-success dark:bg-dark-success block"
-                    @click="revivePlayer()" v-if="player.status.status === 'online'"
+                    @click="revivePlayer()" v-if="status.status === 'online'"
                     :title="t('players.show.revive')"
                 >
                     <i class="fas fa-heartbeat"></i>
@@ -167,14 +175,14 @@
                 <!-- StaffPM -->
                 <button
                     class="px-5 py-2 ml-3 font-semibold text-white rounded bg-blue-600 dark:bg-blue-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isStaffPM = true" v-if="player.status.status === 'online'">
+                    @click="isStaffPM = true" v-if="status.status === 'online'">
                     <i class="fas fa-envelope-open-text"></i>
                     {{ t('players.show.staffpm') }}
                 </button>
                 <!-- Kicking -->
                 <button
                     class="px-5 py-2 ml-3 font-semibold text-white rounded bg-yellow-600 dark:bg-yellow-500 mobile:block mobile:w-full mobile:m-0 mobile:mb-3"
-                    @click="isKicking = true" v-if="player.status.status === 'online'">
+                    @click="isKicking = true" v-if="status.status === 'online'">
                     <i class="fas fa-user-minus"></i>
                     {{ t('players.show.kick') }}
                 </button>
@@ -833,7 +841,7 @@
                         :key="character.id"
                         v-bind:deleted="character.characterDeleted"
                         class="relative"
-                        :class="{ 'shadow-lg' : player.status.character === character.id }"
+                        :class="{ 'shadow-lg' : status.character === character.id }"
                     >
                         <template #header>
                             <div class="flex justify-between">
@@ -880,14 +888,14 @@
                             <div class="flex justify-between flex-wrap">
                                 <button
                                     class="block w-full px-4 py-3 2xl:w-split text-center text-white mt-3 bg-warning dark:bg-dark-warning rounded"
-                                    v-if="player.status.status === 'online' && player.status.character === character.id"
+                                    v-if="status.status === 'online' && status.character === character.id"
                                     @click="form.unload.character = character.id; isUnloading = true">
                                     <i class="fas fa-bolt mr-1"></i>
                                     {{ t('players.show.unload') }}
                                 </button>
                                 <inertia-link
                                     class="block w-full px-4 py-3 text-center text-white mt-3 bg-blue-600 dark:bg-blue-400 rounded"
-                                    :class="{ '2xl:w-split' : player.status.status === 'online' && player.status.character === character.id }"
+                                    :class="{ '2xl:w-split' : status.status === 'online' && status.character === character.id }"
                                     :href="'/inventories/character/' + character.id"
                                     v-if="!character.characterDeleted"
                                 >
@@ -904,14 +912,14 @@
                                 <button
                                     class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-green-500 dark:bg-green-400 rounded"
                                     :title="t('players.characters.loaded')"
-                                    v-if="player.status.character === character.id"
+                                    v-if="status.character === character.id"
                                 >
                                     <i class="fas fa-plug"></i>
                                 </button>
                                 <button
                                     class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-red-500 dark:bg-red-400 rounded"
                                     v-if="character.isDead"
-                                    :class="{'left-10' : player.status.character === character.id}"
+                                    :class="{'left-10' : status.character === character.id}"
                                 >
                                     <i class="fas fa-skull-crossbones"></i>
                                 </button>
@@ -919,7 +927,7 @@
                                 <button
                                     class="block px-2 cursor-default w-ch-button py-1 text-center text-white absolute top-1 left-1 bg-red-500 dark:bg-red-400 rounded"
                                     v-if="character.isDead"
-                                    :class="{'left-10' : player.status.character === character.id}"
+                                    :class="{'left-10' : status.character === character.id}"
                                 >
                                     <i class="fas fa-skull-crossbones"></i>
                                 </button>
@@ -1480,7 +1488,10 @@ export default {
             sortedScreenshots: [],
 
             havePanelLogsLoaded: false,
-            panelLogs: []
+            panelLogs: [],
+
+            statusLoading: true,
+            status: {}
         }
     },
     methods: {
@@ -1492,6 +1503,19 @@ export default {
 
             this.antiCheatMetadata = true;
             this.antiCheatMetadataJSON = hljs.highlight(JSON.stringify(eventMetadata, null, 4), {language: 'json'}).value;
+        },
+        getPlayerMetadata() {
+            const statusMetadata = this.status?.metadata;
+
+            if (!statusMetadata) {
+                return false;
+            }
+
+            const metadata = Object.keys(statusMetadata).map(key => {
+                return statusMetadata[key] ? this.t("players.show.meta_" + key) : false;
+            }).filter(Boolean);
+
+            return metadata.length ? metadata.join(', ') : false;
         },
         async unbanPlayer() {
             if (!this.player.ban.issuer && !this.isConfirmingUnban) {
@@ -1552,6 +1576,24 @@ export default {
 
             this.havePanelLogsLoaded = true;
         },
+        async loadStatus() {
+            try {
+                const data = await axios.get('/players/' + this.player.licenseIdentifier + '/status');
+
+                if (data.data && data.data.status) {
+                    this.status = data.data.data;
+                    this.statusLoading = false;
+
+                    return;
+                }
+            } catch (e) {
+            }
+
+            this.status = {
+                status: "unavailable"
+            };
+            this.statusLoading = false;
+        },
         async createScreenCapture() {
             if (this.screenCaptureStatus) {
                 return;
@@ -1579,7 +1621,7 @@ export default {
             try {
                 const result = await axios({
                     method: 'post',
-                    url: '/api/capture/' + this.player.status.serverName + '/' + this.player.status.serverId + '/' + this.captureData.duration,
+                    url: '/api/capture/' + this.status.serverName + '/' + this.status.serverId + '/' + this.captureData.duration,
                     timeout: this.captureData.duration + 20000
                 });
 
@@ -1587,7 +1629,7 @@ export default {
 
                 if (result.data) {
                     if (result.data.status) {
-                        console.info('Screen capture of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.license);
+                        console.info('Screen capture of ID ' + this.status.serverId, result.data.data.url, result.data.data.license);
 
                         this.screenCaptureVideo = result.data.data.url;
                     } else {
@@ -1612,12 +1654,12 @@ export default {
             this.screenshotLicense = null;
 
             try {
-                const result = await axios.post('/api/screenshot/' + this.player.status.serverName + '/' + this.player.status.serverId);
+                const result = await axios.post('/api/screenshot/' + this.status.serverName + '/' + this.status.serverId);
                 this.isScreenshotLoading = false;
 
                 if (result.data) {
                     if (result.data.status) {
-                        console.info('Screenshot of ID ' + this.player.status.serverId, result.data.data.url, result.data.data.license);
+                        console.info('Screenshot of ID ' + this.status.serverId, result.data.data.url, result.data.data.license);
 
                         this.screenshotImage = result.data.data.url;
                         this.screenshotLicense = result.data.data.license;
@@ -2075,6 +2117,7 @@ export default {
 
         this.loadScreenshots();
         this.loadPanelLogs();
+        this.loadStatus();
 
         const _this = this;
 
