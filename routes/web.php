@@ -89,6 +89,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/players/{player}/antiCheat', [PlayerRouteController::class, 'antiCheat']);
     Route::get('/players/{player}/screenshots', [PlayerRouteController::class, 'screenshots']);
     Route::get('/players/{player}/panelLogs', [PlayerRouteController::class, 'panelLogs']);
+    Route::get('/players/{player}/status', [PlayerRouteController::class, 'status']);
     Route::delete('/players/{player}/removeIdentifier/{identifier}', [PlayerRouteController::class, 'removeIdentifier']);
     Route::post('/players/{player}/attachScreenshot', [PlayerRouteController::class, 'attachScreenshot']);
     Route::post('/players/{player}/updateSoftBanStatus/{status}', [PlayerRouteController::class, 'updateSoftBanStatus']);

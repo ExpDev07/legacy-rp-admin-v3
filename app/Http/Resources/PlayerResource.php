@@ -22,11 +22,6 @@ class PlayerResource extends JsonResource
     {
         $plain = $request->input('plain');
 
-        $path = explode('/', $request->path());
-        $loadStatus = sizeof($path) === 2 && $path[0] === 'players' && !$plain;
-
-        $status = $loadStatus ? Player::getOnlineStatus($this->license_identifier, false) : new PlayerStatus(PlayerStatus::STATUS_UNAVAILABLE, '', 0);
-
         $identifiers = is_array($this->player_aliases) ? $this->player_aliases : json_decode($this->player_aliases, true);
         $enabledCommands = is_array($this->enabled_commands) ? $this->enabled_commands : json_decode($this->enabled_commands, true);
 
@@ -51,8 +46,6 @@ class PlayerResource extends JsonResource
             'isSoftBanned'    => $this->is_soft_banned,
             'warnings'        => $plain ? 0 : $this->warnings()->whereIn('warning_type', [Warning::TypeStrike, Warning::TypeWarning])->count(),
             'ban'             => new BanResource($this->getActiveBan()),
-            'status'          => $status,
-            'fakeName'        => $status ? $status->fakeName : false,
             'playerAliases'   => $identifiers ? array_values(array_unique(array_filter($identifiers, function($e) {
                 return $e !== $this->player_name && str_replace('?', '', $e) !== '';
             }))) : [],
