@@ -722,7 +722,7 @@
                 "hidden": "Hidden Note"
             },
             "copy_license": "Copy License",
-            "warnings": "Strikes/Warnings/Notes/System",
+            "warnings": "Player Notes",
             "unload_do": "Unload",
             "unload_default": "You have been AFK for an extended period of time, consider going to the character selection screen next time.",
             "soft_ban_confirm": "Are you sure you want to change this users soft ban status?",
