@@ -492,6 +492,10 @@ class Player extends Model
 
                         $fake = !!($flags & 2);
 
+						$minigame = !!($flags & 4);
+						$camCords = !!($flags & 8);
+						$queue = !!($flags & 16);
+
                         $result[$key] = [
                             'id' => intval($player['source']),
                             'character' => $player['character'],
@@ -499,6 +503,9 @@ class Player extends Model
                             'server' => $serverIp,
                             'fakeDisconnected' => $fake,
                             'fakeName' => !!($flags & 1) ? $player['name'] : null,
+							'minigame' => $minigame,
+							'camCords' => $camCords,
+							'queue' => $queue
                         ];
                     }
                 }
@@ -536,7 +543,11 @@ class Player extends Model
                 return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
             }
 
-            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id'], $player['character'], $player['fakeName']);
+            return new PlayerStatus(PlayerStatus::STATUS_ONLINE, $player['server'], $player['id'], $player['character'], $player['fakeName'], [
+				'minigame' => $player['minigame'],
+				'camCords' => $player['camCords'],
+				'queue' => $player['queue']
+			]);
         }
 
         return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);
