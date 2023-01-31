@@ -68,6 +68,10 @@
                     <span class="font-bold">{{ t('players.show.aliases') }}:</span>
                     {{ player.playerAliases.join(", ") }}
                 </span>
+                <span class="block mb-1" v-if="getPlayerMetadata()">
+                    <span class="font-bold">{{ t('players.show.metadata') }}:</span>
+                    {{ getPlayerMetadata() }}
+                </span>
                 <span class="block">
                     <span class="font-bold">{{ t('players.show.enabled_commands') }}:</span>
                     {{ player.enabledCommands.length > 0 ? player.enabledCommands.map(e => '/' + e).join(", ") : "N/A" }}
@@ -1492,6 +1496,19 @@ export default {
 
             this.antiCheatMetadata = true;
             this.antiCheatMetadataJSON = hljs.highlight(JSON.stringify(eventMetadata, null, 4), {language: 'json'}).value;
+        },
+        getPlayerMetadata() {
+            const statusMetadata = this.player.status?.metadata;
+
+            if (!statusMetadata) {
+                return false;
+            }
+
+            const metadata = Object.keys(statusMetadata).map(key => {
+                return statusMetadata[key] ? this.t("players.show.meta_" + key) : false;
+            }).filter(Boolean);
+
+            return metadata.length ? metadata.join(', ') : false;
         },
         async unbanPlayer() {
             if (!this.player.ban.issuer && !this.isConfirmingUnban) {

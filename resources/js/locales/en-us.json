@@ -729,7 +729,12 @@
             "remove_soft_ban": "Remove this players soft ban",
             "add_soft_ban": "Soft Ban User",
             "aliases": "Aliases",
-            "enabled_commands": "Enabled Commands"
+			"metadata": "Status Info",
+            "enabled_commands": "Enabled Commands",
+
+			"meta_minigame": "Arena/BR",
+			"meta_camCords": "Freecam/Orbitcam",
+			"meta_queue": "Queue"
         },
         "ban_reason": "Reason",
         "ban_time": "Expires",
