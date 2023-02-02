@@ -50,7 +50,7 @@
                             <sup>[{{ status.serverId }}]</sup>
                         </span>
 
-                        <span class="font-semibold cursor-pointer" @click="loadStatus()">
+                        <span class="font-semibold cursor-pointer ml-1" @click="loadStatus()">
                             <i class="fas fa-sync-alt"></i>
                         </span>
                     </badge>
@@ -59,14 +59,14 @@
                            :title="t('global.status.unavailable_info')">
                         <span class="font-semibold">{{ t('global.status.unavailable') }}</span>
 
-                        <span class="font-semibold cursor-pointer" @click="loadStatus()">
+                        <span class="font-semibold cursor-pointer ml-1" @click="loadStatus()">
                             <i class="fas fa-sync-alt"></i>
                         </span>
                     </badge>
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-else>
                         <span class="font-semibold">{{ t('global.status.' + status.status) }}</span>
 
-                        <span class="font-semibold cursor-pointer" @click="loadStatus()">
+                        <span class="font-semibold cursor-pointer ml-1" @click="loadStatus()">
                             <i class="fas fa-sync-alt"></i>
                         </span>
                     </badge>
