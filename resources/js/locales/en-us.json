@@ -112,6 +112,7 @@
         "bans": "Bans",
         "all_bans": "All bans",
         "my_bans": "My bans",
+        "system_bans": "System bans",
         "random": "Random Stuff"
     },
     "queue": {

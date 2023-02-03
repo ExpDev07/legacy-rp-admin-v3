@@ -171,6 +171,11 @@ export default {
                             label: this.t('sidebar.my_bans'),
                             icon: 'user',
                             url: '/my_bans',
+                        },
+                        {
+                            label: this.t('sidebar.system_bans'),
+                            icon: 'kiwi',
+                            url: '/system_bans',
                         }
                     ]
                 },
