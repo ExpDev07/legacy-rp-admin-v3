@@ -28,7 +28,7 @@ class PlayerBanController extends Controller
      */
     public function index(Request $request): Response
     {
-        return $this->bans($request, false);
+        return $this->bans($request, false, false);
     }
 
     /**
@@ -37,10 +37,19 @@ class PlayerBanController extends Controller
      */
     public function indexMine(Request $request): Response
     {
-        return $this->bans($request, true);
+        return $this->bans($request, true, false);
     }
 
-    private function bans(Request $request, bool $showMine): Response
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function indexSystem(Request $request): Response
+    {
+        return $this->bans($request, false, true);
+    }
+
+    private function bans(Request $request, bool $showMine, bool $showSystem): Response
     {
         $query = Player::query();
 
@@ -81,6 +90,12 @@ class PlayerBanController extends Controller
                 $query->orWhereIn('creator_name', $alias);
             });
         }
+
+		if ($showSystem) {
+			$query->whereNull('creator_name');
+		} else {
+			$query->whereNotNull('creator_name');
+		}
 
         $query
             ->whereNotNull('reason')

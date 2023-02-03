@@ -49,14 +49,26 @@
                         <span class="font-semibold">{{ t('global.status.online') }}
                             <sup>[{{ status.serverId }}]</sup>
                         </span>
+
+                        <span class="font-semibold cursor-pointer ml-1" @click="loadStatus()">
+                            <i class="fas fa-sync-alt"></i>
+                        </span>
                     </badge>
                     <badge class="border-red-200 bg-warning-pale dark:bg-dark-warning-pale"
                            v-else-if="status.status === 'unavailable'"
                            :title="t('global.status.unavailable_info')">
                         <span class="font-semibold">{{ t('global.status.unavailable') }}</span>
+
+                        <span class="font-semibold cursor-pointer ml-1" @click="loadStatus()">
+                            <i class="fas fa-sync-alt"></i>
+                        </span>
                     </badge>
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-else>
                         <span class="font-semibold">{{ t('global.status.' + status.status) }}</span>
+
+                        <span class="font-semibold cursor-pointer ml-1" @click="loadStatus()">
+                            <i class="fas fa-sync-alt"></i>
+                        </span>
                     </badge>
 
                     <badge class="border-gray-200 bg-secondary dark:bg-dark-secondary"
@@ -1577,6 +1589,8 @@ export default {
             this.havePanelLogsLoaded = true;
         },
         async loadStatus() {
+            this.statusLoading = true;
+
             try {
                 const data = await axios.get('/players/' + this.player.licenseIdentifier + '/status');
 
