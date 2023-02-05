@@ -871,9 +871,6 @@ import DetectionArea from "./DetectionArea";
 
 window.instance = null;
 
-window.findPlayer = function () {
-};
-
 export default {
     layout: Layout,
     components: {
