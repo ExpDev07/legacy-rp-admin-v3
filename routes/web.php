@@ -180,6 +180,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     // Map.
     Route::get('/map', [MapController::class, 'index']);
     Route::post('/map/playerNames', [MapController::class, 'playerNames']);
+    Route::get('/map/noclipBans', [MapController::class, 'noclipBans']);
 
     // Statistics.
     Route::get('/statistics', [StatisticsController::class, 'render']);
