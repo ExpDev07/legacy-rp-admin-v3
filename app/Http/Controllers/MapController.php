@@ -102,7 +102,7 @@ class MapController extends Controller
 		$data = Ban::query()
 			->select(["identifier", "timestamp"])
 			->where("identifier", "LIKE", "license:%")
-			->whereIn("reason", ["MODDING-ILLEGAL_FREEZE", "MODDING-FAST_MOVEMENT"])
+			->whereIn("reason", ["MODDING-ILLEGAL_FREEZE"])
 			->where("timestamp", ">", strtotime("-10 days"))
 			->orderByDesc("timestamp")
 			->get()->toArray();
