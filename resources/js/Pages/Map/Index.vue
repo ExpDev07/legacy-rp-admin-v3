@@ -1623,8 +1623,6 @@ export default {
                 this.historyRange.min = timestamps[0];
                 this.historyRange.max = timestamps[timestamps.length - 1];
 
-                console.log(timestamps[0]);
-
                 this.historyRange.data = history;
 
                 this.historyRange.view = true;
@@ -1657,7 +1655,59 @@ export default {
 
             return null;
         },
+        async renderNoclipBans() {
+            if (this.loadingScreenStatus) {
+                return;
+            }
+
+            this.historicChart = false;
+
+            const server = $('#server').val(),
+                history = await this.loadNoclipBans(server);
+
+            this.loadingScreenStatus = this.t('map.heatmap_render');
+
+            if (this.heatmapLayers) {
+                for (let x = 0; x < this.heatmapLayers.length; x++) {
+                    this.map.removeLayer(this.heatmapLayers[x]);
+                }
+
+                if (this.historyMarker) {
+                    this.map.removeLayer(this.historyMarker);
+                }
+
+                this.heatmapLayers = [];
+            }
+
+            if (history) {
+                this.historicChart = true;
+
+                $('.leaflet-control-layers-selector').each(function () {
+                    if ($(this).prop('checked')) {
+                        $(this).trigger('click');
+                    }
+                });
+
+                Object.values(history).forEach(entry => {
+                    const coords = entry.map(pos => {
+                        const latlgn = Vector3.fromGameCoords(pos[0], pos[1], 0).toMap();
+
+                        return [latlgn.lat, latlgn.lng];
+                    });
+
+                    const line = L.polyline(coords, {color: '#3380f3'});
+
+                    line.addTo(this.map);
+
+                    this.heatmapLayers.push(line);
+                });
+            }
+
+            this.loadingScreenStatus = null;
+        },
         async loadNoclipBans(server) {
+            this.loadingScreenStatus = this.t('map.bans_fetch');
+
             try {
                 const result = await axios.get('/map/noclipBans');
 
@@ -1673,7 +1723,13 @@ export default {
                     return;
                 }
 
-                const bans = result.data.data;
+                const bans = result.data.data.map(ban => {
+                    ban.timestamp = this.$moment(ban.timestamp).unix();
+
+                    return ban;
+                });
+
+                this.loadingScreenStatus = this.t('map.heatmap_fetch');
 
                 const historic = await axios.post('/experimental/bans/' + server + '?token=' + this.token, {
                     bans: bans
@@ -1687,7 +1743,7 @@ export default {
 
                 const data = historic.data.data;
 
-                console.log(data);
+                return data;
             } catch (e) {
                 console.error(e);
             }
