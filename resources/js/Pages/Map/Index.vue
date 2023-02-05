@@ -1695,7 +1695,10 @@ export default {
                         return [latlgn.lat, latlgn.lng];
                     });
 
-                    const line = L.polyline(coords, {color: '#3380f3'});
+                    // random integer between 160 and 270;
+                    const color = Math.floor(Math.random() * 110) + 160;
+
+                    const line = L.polyline(coords, {color: 'hsl(' + color + ', 100%, 50%)'});
 
                     line.addTo(this.map);
 
