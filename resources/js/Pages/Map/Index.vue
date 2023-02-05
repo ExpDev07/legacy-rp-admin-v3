@@ -1660,6 +1660,43 @@ export default {
 
             return null;
         },
+        async loadNoclipBans(server) {
+            try {
+                const result = await axios.get('/map/noclipBans');
+
+                if (!result.data || !result.data.status) {
+                    console.log("Failed to load noclip bans");
+
+                    return;
+                }
+
+                if (!result.data.data || result.data.data.length === 0) {
+                    console.log("No noclip bans");
+
+                    return;
+                }
+
+                const bans = result.data.data;
+
+                const historic = await axios.post('/experimental/bans/' + server + '?token=' + this.token, {
+                    bans: bans
+                });
+
+                if (!historic.data || !historic.data.status) {
+                    console.log("Failed to load bans historic data");
+
+                    return;
+                }
+
+                const data = historic.data.data;
+
+                console.log(data);
+            } catch (e) {
+                console.error(e);
+            }
+
+            return null;
+        },
         async loadPlayerNames(licenses) {
             try {
                 const result = await axios.post('/map/playerNames', {

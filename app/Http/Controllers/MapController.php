@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\GeneralHelper;
 use App\Helpers\PermissionHelper;
 use App\Player;
+use App\Ban;
 use App\Server;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -90,6 +91,23 @@ class MapController extends Controller
 		}
 
 		return self::json(true, $map);
+	}
+
+	public function noclipBans(Request $request): \Illuminate\Http\Response
+	{
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LIVEMAP)) {
+			return self::json(false, null, 'You can not use the livemap functionality');
+		}
+
+		$data = Ban::query()
+			->select(["identifier", "timestamp"])
+			->where("identifier", "LIKE", "license:%")
+			->whereIn("reason", ["MODDING-ILLEGAL_FREEZE", "MODDING-FAST_MOVEMENT"])
+			->where("timestamp", ">", strtotime("-10 days"))
+			->orderByDesc("timestamp")
+			->get()->toArray();
+
+		return self::json(true, $data);
 	}
 
 }
