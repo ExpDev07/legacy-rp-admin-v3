@@ -1021,7 +1021,7 @@ export default {
 
             activeViewers: [],
 
-            selectedInstance: 1
+            selectedInstance: false
         };
     },
     methods: {
@@ -2023,6 +2023,10 @@ export default {
                     const _this = this;
 
                     this.container.updatePlayers(data.players, this, this.selectedInstance, data.world);
+
+                    if (!this.selectedInstance) {
+                        this.selectedInstance = this.container.mainInstance;
+                    }
 
                     let unknownCharacters = [],
                         foundTracked = false;
