@@ -19,6 +19,8 @@ class PlayerContainer {
         this.staff = [];
         this.resetStats();
 
+		this.mainInstance = 1;
+
         this.instances = [];
 
         this.isTrackedPlayerVisible = false;
@@ -37,7 +39,7 @@ class PlayerContainer {
         };
     }
 
-    updatePlayers(rawData, vue, selectedInstance) {
+    updatePlayers(rawData, vue, selectedInstance, world) {
         this.resetStats();
 
         this.vehicles = {};
@@ -78,6 +80,14 @@ class PlayerContainer {
         this.staff.sort((a, b) => (a.source > b.source) ? 1 : ((b.source > a.source) ? -1 : 0));
 
         this.notifier.checkPlayers(this, vue);
+
+		if (world && world.mainInstance) {
+			this.mainInstance = world.mainInstance;
+		} else {
+			const possibleInstances = this.instances.filter(instance => instance.count > 1);
+
+			this.mainInstance = possibleInstances.length > 0 ? possibleInstances[0].id : 1;
+		}
     }
 
     updatePlayer(rawPlayer, selectedInstance) {
