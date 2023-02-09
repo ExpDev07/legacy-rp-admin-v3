@@ -81,8 +81,8 @@ class PlayerContainer {
 
         this.notifier.checkPlayers(this, vue);
 
-		if (world && world.mainInstance) {
-			this.mainInstance = world.mainInstance;
+		if (world && world.instance) {
+			this.mainInstance = world.instance;
 		} else {
 			const possibleInstances = this.instances.filter(instance => instance.count > 1);
 
