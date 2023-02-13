@@ -129,7 +129,7 @@ class SessionHelper
     private function getSession(): ?Session
     {
         if (!$this->session) {
-            $this->session = Session::query()->where('key', '=', $this->sessionKey)->first();
+			$this->session = Session::where('key', $this->sessionKey)->first();
         }
 
         return $this->session;
