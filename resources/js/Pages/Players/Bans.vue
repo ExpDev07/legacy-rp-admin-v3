@@ -168,8 +168,9 @@ export default {
             }
 
             this.isLoading = true;
+
             try {
-                await this.$inertia.replace('/bans', {
+                await this.$inertia.replace(window.location.pathname, {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
