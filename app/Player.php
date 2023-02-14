@@ -249,6 +249,10 @@ class Player extends Model
     {
         $identifiers = $this->last_used_identifiers ?? [];
 
+		if (is_string($identifiers)) {
+			$identifiers = json_decode($identifiers, true) ?? [];
+		}
+
         return array_values(
             array_unique(
                 $identifiers
