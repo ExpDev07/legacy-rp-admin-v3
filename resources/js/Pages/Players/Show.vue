@@ -1237,22 +1237,22 @@
 
                     <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
                             @click="startContinuousScreenshot()"
-                            v-if="!isContinuousScreenshot && !isScreenshotLoading">
+                            v-if="!continuouslyScreenshotting && !isScreenshotLoading">
                         {{ t('screenshot.continuous') }}
                     </button>
                     <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger mr-2"
                             @click="stopContinuousScreenshot()"
-                            v-else-if="isContinuousScreenshot">
+                            v-else-if="continuouslyScreenshotting">
                         {{ t('screenshot.continuous_stop') }}
                     </button>
 
                     <button class="px-5 py-2 rounded bg-success dark:bg-dark-success mr-2"
                             @click="createScreenshot()"
-                            v-if="!isScreenshotLoading && !isContinuousScreenshot">
+                            v-if="!isScreenshotLoading && !continuouslyScreenshotting">
                         {{ t('global.refresh') }}
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
-                            v-if="!isContinuousScreenshot"
+                            v-if="!continuouslyScreenshotting"
                             @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotLicense = null">
                         {{ t('global.close') }}
                     </button>
@@ -1675,26 +1675,26 @@ export default {
             this.screenCaptureStatus = false;
         },
         stopContinuousScreenshot() {
-            this.isContinuousScreenshot = false;
+            this.continuouslyScreenshotting = false;
         },
         startContinuousScreenshot() {
             if (this.continuousScreenshotThread) {
                 return;
             }
 
-            this.isContinuousScreenshot = true;
+            this.continuouslyScreenshotting = true;
             this.continuousScreenshotThread = true;
 
             const doScreenshot = () => {
-                if (!this.isContinuousScreenshot) {
+                if (!this.continuouslyScreenshotting) {
                     this.continuousScreenshotThread = false;
 
                     return;
                 }
 
                 this.createScreenshot(success => {
-                    if (!success || !this.isContinuousScreenshot) {
-                        this.isContinuousScreenshot = false;
+                    if (!success || !this.continuouslyScreenshotting) {
+                        this.continuouslyScreenshotting = false;
                         this.continuousScreenshotThread = false;
 
                         return;
@@ -2223,6 +2223,10 @@ export default {
                     $(img).attr("src", "/images/no_mugshot.png");
                 });
             });
+        });
+
+        $(window).on("blur", () => {
+            this.continuouslyScreenshotting = false;
         });
     }
 };
