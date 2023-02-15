@@ -1203,7 +1203,8 @@
         <div class="fixed bg-black bg-opacity-70 top-0 left-0 right-0 bottom-0 z-2k"
              v-if="isScreenshot && this.perm.check(this.perm.PERM_SCREENSHOT)">
             <div
-                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded w-alert">
+                class="shadow-xl absolute bg-gray-100 dark:bg-gray-600 text-black dark:text-white left-2/4 top-2/4 -translate-x-2/4 -translate-y-2/4 transform p-6 rounded"
+                :class="continuouslyScreenshotting ? 'w-vlarge-alert' : 'w-alert'">
                 <h3 class="mb-2">
                     {{ t('map.screenshot') }}
                 </h3>
@@ -1237,22 +1238,22 @@
 
                     <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
                             @click="startContinuousScreenshot()"
-                            v-if="!isContinuousScreenshot && !isScreenshotLoading">
+                            v-if="!continuouslyScreenshotting && !isScreenshotLoading">
                         {{ t('screenshot.continuous') }}
                     </button>
                     <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger mr-2"
-                            @click="isContinuousScreenshot = false"
-                            v-else-if="isContinuousScreenshot">
+                            @click="stopContinuousScreenshot()"
+                            v-else-if="continuouslyScreenshotting">
                         {{ t('screenshot.continuous_stop') }}
                     </button>
 
                     <button class="px-5 py-2 rounded bg-success dark:bg-dark-success mr-2"
                             @click="createScreenshot()"
-                            v-if="!isScreenshotLoading && !isContinuousScreenshot">
+                            v-if="!isScreenshotLoading && !continuouslyScreenshotting">
                         {{ t('global.refresh') }}
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
-                            v-if="!isContinuousScreenshot"
+                            v-if="!continuouslyScreenshotting"
                             @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotLicense = null">
                         {{ t('global.close') }}
                     </button>
@@ -1674,24 +1675,27 @@ export default {
 
             this.screenCaptureStatus = false;
         },
+        stopContinuousScreenshot() {
+            this.continuouslyScreenshotting = false;
+        },
         startContinuousScreenshot() {
             if (this.continuousScreenshotThread) {
                 return;
             }
 
-            this.isContinuousScreenshot = true;
+            this.continuouslyScreenshotting = true;
             this.continuousScreenshotThread = true;
 
             const doScreenshot = () => {
-                if (!this.isContinuousScreenshot) {
+                if (!this.continuouslyScreenshotting) {
                     this.continuousScreenshotThread = false;
 
                     return;
                 }
 
                 this.createScreenshot(success => {
-                    if (!success || !this.isContinuousScreenshot) {
-                        this.isContinuousScreenshot = false;
+                    if (!success || !this.continuouslyScreenshotting) {
+                        this.continuouslyScreenshotting = false;
                         this.continuousScreenshotThread = false;
 
                         return;
@@ -2220,6 +2224,10 @@ export default {
                     $(img).attr("src", "/images/no_mugshot.png");
                 });
             });
+        });
+
+        $(window).on("blur", () => {
+            this.continuouslyScreenshotting = false;
         });
     }
 };
