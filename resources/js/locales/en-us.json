@@ -171,6 +171,8 @@
     "screenshot": {
         "title": "Attach screenshot to Player",
         "attach": "Attach",
+		"continuous": "Continuous",
+		"continuous_stop": "Stop",
         "note": "Note",
         "screenshot": "Screenshot",
         "screencapture": "Screen Capture",

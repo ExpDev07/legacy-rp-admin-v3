@@ -1229,17 +1229,30 @@
 
                 <!-- Buttons -->
                 <div class="flex justify-end mt-2">
-                    <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
+                    <button class="px-5 py-2 rounded bg-warning dark:bg-dark-warning mr-2"
                             @click="isAttachingScreenshot = true"
                             v-if="screenshotImage && screenshotLicense">
-                        {{ t('screenshot.title') }}
+                        {{ t('screenshot.attach') }}
                     </button>
+
                     <button class="px-5 py-2 rounded bg-primary dark:bg-dark-primary mr-2"
+                            @click="startContinuousScreenshot()"
+                            v-if="!isContinuousScreenshot && !isScreenshotLoading">
+                        {{ t('screenshot.continuous') }}
+                    </button>
+                    <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger mr-2"
+                            @click="isContinuousScreenshot = false"
+                            v-else-if="isContinuousScreenshot">
+                        {{ t('screenshot.continuous_stop') }}
+                    </button>
+
+                    <button class="px-5 py-2 rounded bg-success dark:bg-dark-success mr-2"
                             @click="createScreenshot()"
-                            v-if="!isScreenshotLoading">
+                            v-if="!isScreenshotLoading && !isContinuousScreenshot">
                         {{ t('global.refresh') }}
                     </button>
                     <button class="px-5 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-500 dark:bg-gray-500"
+                            v-if="!isContinuousScreenshot"
                             @click="isScreenshot = false; screenshotImage = null; screenshotError = null; screenshotLicense = null">
                         {{ t('global.close') }}
                     </button>
@@ -1489,6 +1502,9 @@ export default {
                 duration: 5
             },
 
+            continuousScreenshotThread: false,
+            continuouslyScreenshotting: false,
+
             isScreenshot: false,
             isScreenshotLoading: false,
             screenshotImage: null,
@@ -1658,8 +1674,39 @@ export default {
 
             this.screenCaptureStatus = false;
         },
-        async createScreenshot() {
+        startContinuousScreenshot() {
+            if (this.continuousScreenshotThread) {
+                return;
+            }
+
+            this.isContinuousScreenshot = true;
+            this.continuousScreenshotThread = true;
+
+            const doScreenshot = () => {
+                if (!this.isContinuousScreenshot) {
+                    this.continuousScreenshotThread = false;
+
+                    return;
+                }
+
+                this.createScreenshot(success => {
+                    if (!success || !this.isContinuousScreenshot) {
+                        this.isContinuousScreenshot = false;
+                        this.continuousScreenshotThread = false;
+
+                        return;
+                    }
+
+                    setTimeout(doScreenshot, 3000);
+                });
+            };
+
+            doScreenshot();
+        },
+        async createScreenshot(cb, shortLifespan) {
             if (this.isScreenshotLoading) {
+                cb && cb(false);
+
                 return;
             }
             this.isScreenshotLoading = true;
@@ -1668,7 +1715,7 @@ export default {
             this.screenshotLicense = null;
 
             try {
-                const result = await axios.post('/api/screenshot/' + this.status.serverName + '/' + this.status.serverId);
+                const result = await axios.post('/api/screenshot/' + this.status.serverName + '/' + this.status.serverId + (shortLifespan ? '?short=1' : ''));
                 this.isScreenshotLoading = false;
 
                 if (result.data) {
@@ -1677,14 +1724,20 @@ export default {
 
                         this.screenshotImage = result.data.data.url;
                         this.screenshotLicense = result.data.data.license;
+
+                        cb && cb(true);
                     } else {
                         this.screenshotError = result.data.message ? result.data.message : this.t('map.screenshot_failed');
+
+                        cb && cb(false);
                     }
                 }
             } catch (e) {
                 this.screenshotError = this.t('map.screenshot_failed');
 
                 this.isScreenshotLoading = false;
+
+                cb && cb(false);
             }
         },
         screenshotAttached(status, message) {
