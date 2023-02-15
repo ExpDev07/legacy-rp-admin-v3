@@ -1207,6 +1207,7 @@
                 :class="continuouslyScreenshotting ? 'w-vlarge-alert' : 'w-alert'">
                 <h3 class="mb-2">
                     {{ t('map.screenshot') }}
+                    <span v-if="nextContinuousScreenshot > 0 && continuouslyScreenshotting"> - {{ nextContinuousScreenshot }}s</span>
                 </h3>
 
                 <p v-if="screenshotError" class="text-danger dark:text-dark-danger font-semibold mb-3">
@@ -1503,6 +1504,7 @@ export default {
                 duration: 5
             },
 
+            nextContinuousScreenshot: 0,
             continuousScreenshotThread: false,
             continuouslyScreenshotting: false,
 
@@ -1686,14 +1688,10 @@ export default {
             this.continuouslyScreenshotting = true;
             this.continuousScreenshotThread = true;
 
+            const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
             const doScreenshot = () => {
-                if (!this.continuouslyScreenshotting) {
-                    this.continuousScreenshotThread = false;
-
-                    return;
-                }
-
-                this.createScreenshot(success => {
+                this.createScreenshot(async success => {
                     if (!success || !this.continuouslyScreenshotting) {
                         this.continuouslyScreenshotting = false;
                         this.continuousScreenshotThread = false;
@@ -1701,7 +1699,19 @@ export default {
                         return;
                     }
 
-                    setTimeout(doScreenshot, 3000);
+                    this.nextContinuousScreenshot = 3.0;
+
+                    while (this.nextContinuousScreenshot > 0) {
+                        await wait(100);
+
+                        this.nextContinuousScreenshot -= 0.1;
+
+                        if (!this.continuouslyScreenshotting) {
+                            this.continuousScreenshotThread = false;
+
+                            return;
+                        }
+                    }
                 });
             };
 
