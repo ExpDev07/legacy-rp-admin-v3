@@ -1207,7 +1207,7 @@
                 :class="continuouslyScreenshotting ? 'w-vlarge-alert' : 'w-alert'">
                 <h3 class="mb-2">
                     {{ t('map.screenshot') }}
-                    <span v-if="nextContinuousScreenshot > 0 && continuouslyScreenshotting"> - {{ nextContinuousScreenshot }}s</span>
+                    <span v-if="nextContinuousScreenshot > 0 && continuouslyScreenshotting"> - {{ nextContinuousScreenshot.toFixed(1) }}s</span>
                 </h3>
 
                 <p v-if="screenshotError" class="text-danger dark:text-dark-danger font-semibold mb-3">
@@ -1712,6 +1712,8 @@ export default {
                             return;
                         }
                     }
+
+                    doScreenshot();
                 });
             };
 
