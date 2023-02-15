@@ -1222,7 +1222,7 @@
 
                     <div class="flex justify-center absolute left-0 w-full top-1/2 transform -translate-y-1/2"
                         v-if="isScreenshotLoading && !continuouslyScreenshotting">
-                        <i class="fas fa-cog animate-spin"></i>
+                        <i class="fas fa-cog animate-spin text-3xl"></i>
                     </div>
                 </div>
                 <p v-if="screenshotImage" class="mt-3 text-sm">
@@ -1245,7 +1245,7 @@
                     <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger mr-2"
                             @click="stopContinuousScreenshot()"
                             v-else-if="continuouslyScreenshotting">
-                        <i class="fas fa-cog animate-spin text-3xl mr-1" v-if="isScreenshotLoading"></i>
+                        <i class="fas fa-cog animate-spin mr-1" v-if="isScreenshotLoading"></i>
 
                         {{ t('screenshot.continuous_stop') }}
                     </button>
