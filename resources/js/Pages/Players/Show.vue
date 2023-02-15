@@ -1216,13 +1216,13 @@
 
                 <div class="relative min-h-50">
                     <a v-if="screenshotImage && !screenshotError" class="w-full"
-                       :class="{'blur-sm' : isScreenshotLoading}" :href="screenshotImage" target="_blank">
+                       :class="{'blur-sm' : isScreenshotLoading && !continuouslyScreenshotting}" :href="screenshotImage" target="_blank">
                         <img :src="screenshotImage" alt="Screenshot" class="w-full"/>
                     </a>
 
                     <div class="flex justify-center absolute left-0 w-full top-1/2 transform -translate-y-1/2"
-                         v-if="isScreenshotLoading">
-                        <i class="fas fa-cog animate-spin text-3xl"></i>
+                        v-if="isScreenshotLoading && !continuouslyScreenshotting">
+                        <i class="fas fa-cog animate-spin"></i>
                     </div>
                 </div>
                 <p v-if="screenshotImage" class="mt-3 text-sm">
@@ -1245,6 +1245,8 @@
                     <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger mr-2"
                             @click="stopContinuousScreenshot()"
                             v-else-if="continuouslyScreenshotting">
+                        <i class="fas fa-cog animate-spin text-3xl mr-1" v-if="isScreenshotLoading"></i>
+
                         {{ t('screenshot.continuous_stop') }}
                     </button>
 
