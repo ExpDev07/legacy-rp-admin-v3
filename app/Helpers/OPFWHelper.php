@@ -352,13 +352,13 @@ class OPFWHelper
      * @param int $id
      * @return OPFWResponse
      */
-    public static function createScreenshot(string $serverIp, int $id): OPFWResponse
+    public static function createScreenshot(string $serverIp, int $id, int $lifespan = 3600): OPFWResponse
     {
         $serverIp = Server::fixApiUrl($serverIp);
 
         return self::executeRoute($serverIp, $serverIp . 'execute/createScreenshot', [
             'serverId' => $id,
-            'lifespan' => 60 * 60
+            'lifespan' => $lifespan
         ]);
     }
 
