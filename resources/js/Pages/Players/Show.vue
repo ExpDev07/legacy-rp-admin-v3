@@ -1241,7 +1241,7 @@
                         {{ t('screenshot.continuous') }}
                     </button>
                     <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger mr-2"
-                            @click="isContinuousScreenshot = false"
+                            @click="stopContinuousScreenshot()"
                             v-else-if="isContinuousScreenshot">
                         {{ t('screenshot.continuous_stop') }}
                     </button>
@@ -1673,6 +1673,9 @@ export default {
             }
 
             this.screenCaptureStatus = false;
+        },
+        stopContinuousScreenshot() {
+            this.isContinuousScreenshot = false;
         },
         startContinuousScreenshot() {
             if (this.continuousScreenshotThread) {
