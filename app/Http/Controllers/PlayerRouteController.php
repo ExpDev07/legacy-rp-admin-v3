@@ -410,7 +410,7 @@ class PlayerRouteController extends Controller
             return self::json(false, null, 'Invalid server id (User is offline?)');
         }
 
-		$lifespan = $request->query('short') ? 60 : 60*60;
+		$lifespan = $request->query('short') ? 5*60 : 60*60;
 
         $data = OPFWHelper::createScreenshot($api, $id, $lifespan);
 
