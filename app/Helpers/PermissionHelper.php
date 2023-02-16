@@ -49,7 +49,7 @@ class PermissionHelper
 
     private static function getPermissionLevel(string $key): int
     {
-        $level = strtolower(env($key, null));
+        $level = strtolower(env($key, ""));
 
         switch ($level) {
             case 'root':
