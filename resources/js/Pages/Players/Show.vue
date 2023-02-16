@@ -1207,6 +1207,7 @@
                 :class="continuouslyScreenshotting ? 'w-vlarge-alert' : 'w-alert'">
                 <h3 class="mb-2">
                     {{ t('map.screenshot') }}
+                    <span v-if="nextContinuousScreenshot > 0 && continuouslyScreenshotting"> - {{ nextContinuousScreenshot.toFixed(1) }}s</span>
                 </h3>
 
                 <p v-if="screenshotError" class="text-danger dark:text-dark-danger font-semibold mb-3">
@@ -1215,12 +1216,12 @@
 
                 <div class="relative min-h-50">
                     <a v-if="screenshotImage && !screenshotError" class="w-full"
-                       :class="{'blur-sm' : isScreenshotLoading}" :href="screenshotImage" target="_blank">
+                       :class="{'blur-sm' : isScreenshotLoading && !continuouslyScreenshotting}" :href="screenshotImage" target="_blank">
                         <img :src="screenshotImage" alt="Screenshot" class="w-full"/>
                     </a>
 
                     <div class="flex justify-center absolute left-0 w-full top-1/2 transform -translate-y-1/2"
-                         v-if="isScreenshotLoading">
+                        v-if="isScreenshotLoading && !continuouslyScreenshotting">
                         <i class="fas fa-cog animate-spin text-3xl"></i>
                     </div>
                 </div>
@@ -1244,6 +1245,8 @@
                     <button class="px-5 py-2 rounded bg-danger dark:bg-dark-danger mr-2"
                             @click="stopContinuousScreenshot()"
                             v-else-if="continuouslyScreenshotting">
+                        <i class="fas fa-cog animate-spin mr-1" v-if="isScreenshotLoading"></i>
+
                         {{ t('screenshot.continuous_stop') }}
                     </button>
 
@@ -1503,6 +1506,7 @@ export default {
                 duration: 5
             },
 
+            nextContinuousScreenshot: 0,
             continuousScreenshotThread: false,
             continuouslyScreenshotting: false,
 
@@ -1686,14 +1690,10 @@ export default {
             this.continuouslyScreenshotting = true;
             this.continuousScreenshotThread = true;
 
+            const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
             const doScreenshot = () => {
-                if (!this.continuouslyScreenshotting) {
-                    this.continuousScreenshotThread = false;
-
-                    return;
-                }
-
-                this.createScreenshot(success => {
+                this.createScreenshot(async success => {
                     if (!success || !this.continuouslyScreenshotting) {
                         this.continuouslyScreenshotting = false;
                         this.continuousScreenshotThread = false;
@@ -1701,7 +1701,21 @@ export default {
                         return;
                     }
 
-                    setTimeout(doScreenshot, 3000);
+                    this.nextContinuousScreenshot = 3.0;
+
+                    while (this.nextContinuousScreenshot > 0) {
+                        await wait(100);
+
+                        this.nextContinuousScreenshot -= 0.1;
+
+                        if (!this.continuouslyScreenshotting) {
+                            this.continuousScreenshotThread = false;
+
+                            return;
+                        }
+                    }
+
+                    doScreenshot();
                 });
             };
 

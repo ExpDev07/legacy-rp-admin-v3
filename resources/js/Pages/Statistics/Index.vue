@@ -62,7 +62,13 @@
 
             <div class="pt-10 border-gray-500 border-t-2 border-dashed mt-10 max-w-full w-map"></div>
 
-            <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300" v-if="blackjack.labels.length > 0">
+            <div class="bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300 text-gray-600 font-semibold">
+                {{ t('statistics.casino_revenue') }}
+
+                <span :class="casinoRevenue === 0 ? 'text-gray-600' : (casinoRevenue > 0 ? 'text-green-600' : 'text-red-600')">{{ numberFormat(casinoRevenue, 0, true) }}</span>
+            </div>
+
+            <div class="mt-7 bg-gray-100 p-6 rounded shadow-lg max-w-full w-map dark:bg-gray-300" v-if="blackjack.labels.length > 0">
                 <LineChart
                     :data="[blackjack.average_spent, blackjack.min_earned, blackjack.max_earned, blackjack.average_earned, blackjack.return_rate]"
                     :data-labels="blackjack.labels"
@@ -257,6 +263,11 @@ export default {
         slots: {
             type: Object,
             required: true,
+        },
+
+        casinoRevenue: {
+            type: Number,
+            default: 0,
         },
     },
 }
