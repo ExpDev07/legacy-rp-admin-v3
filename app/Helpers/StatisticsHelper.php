@@ -280,6 +280,24 @@ class StatisticsHelper
     }
 
     /**
+     * Returns Casino revenue statistics
+     *
+     * @return int|null
+     */
+    public static function getCasinoRevenueStats(): ?int
+    {
+        $query = "SELECT -SUM(`money_won`) AS revenue FROM casino_logs WHERE `timestamp` > DATE_SUB(NOW(), INTERVAL 6 MONTH)";
+
+		$data = DB::select($query);
+
+		if (!empty($data)) {
+			return $data[0]->revenue;
+		}
+
+        return null;
+    }
+
+    /**
      * Returns Blackjack statistics
      *
      * @param string $license

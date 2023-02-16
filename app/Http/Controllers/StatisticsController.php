@@ -39,6 +39,8 @@ class StatisticsController extends Controller
             'blackjack'  => StatisticsHelper::getBlackjackStats($license),
             'tracks'     => StatisticsHelper::getTracksStats($license),
             'slots'      => StatisticsHelper::getSlotsStats($license),
+
+            'casinoRevenue' => StatisticsHelper::getCasinoRevenueStats(),
         ]);
     }
 
