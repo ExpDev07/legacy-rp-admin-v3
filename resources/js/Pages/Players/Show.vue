@@ -2240,8 +2240,10 @@ export default {
             });
         });
 
-        $(window).on("blur", () => {
-            this.continuouslyScreenshotting = false;
+        $(document).on("visibilitychange", e => {
+            if (document.visibilityState !== "visible") {
+                this.continuouslyScreenshotting = false;
+            }
         });
     }
 };
