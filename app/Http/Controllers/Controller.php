@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 
 class Controller extends BaseController
 {
@@ -123,14 +124,18 @@ class Controller extends BaseController
         return false;
     }
 
-	protected function formatTimestamp(int $timestamp)
+	protected function formatTimestamp($timestamp)
 	{
+		if ($timestamp instanceof Carbon) {
+			$timestamp = $timestamp->getTimestamp();
+		}
+
 		$seconds = time() - $timestamp;
 
 		return $this->formatSeconds($seconds) . " ago";
 	}
 
-	protected function formatSeconds(int $seconds)
+	protected function formatSeconds($seconds)
 	{
 		$string = [
 			'year' => 60*60*24*365,
