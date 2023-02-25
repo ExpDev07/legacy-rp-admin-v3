@@ -125,8 +125,8 @@ class Controller extends BaseController
 
 	protected function time_elapsed_string($datetime, $full = false)
 	{
-		$now = new DateTime;
-		$ago = new DateTime($datetime);
+		$now = new \DateTime;
+		$ago = new \DateTime($datetime);
 
 		$diff = $now->diff($ago);
 
