@@ -74,6 +74,20 @@ class Controller extends BaseController
         return (new Response($text, $status))->header('Content-Type', 'text/plain');
     }
 
+    /**
+     * @param int $status
+     * @param string $text
+     * @return Response
+     */
+    protected static function fakeText(int $status, string $text): Response
+    {
+		$style = 'html,body{width:100%;height:100%;background:#1C1B22;color:#fbfbfe;font-family:monospace;font-size:13px;white-space:pre-wrap}a{text-decoration:none;color:#6c7af9}';
+
+		$text = '<style>' . $style . '</style>' . $text;
+
+        return (new Response($text, $status))->header('Content-Type', 'text/html');
+    }
+
     protected function isSeniorStaff(Request $request): bool
     {
         $user = $request->user();
@@ -108,4 +122,37 @@ class Controller extends BaseController
 
         return false;
     }
+
+	protected function time_elapsed_string($datetime, $full = false)
+	{
+		$now = new DateTime;
+		$ago = new DateTime($datetime);
+
+		$diff = $now->diff($ago);
+
+		$diff->w = floor($diff->d / 7);
+		$diff->d -= $diff->w * 7;
+
+		$string = array(
+			'y' => 'year',
+			'm' => 'month',
+			'w' => 'week',
+			'd' => 'day',
+			'h' => 'hour',
+			'i' => 'minute',
+			's' => 'second',
+		);
+
+		foreach ($string as $k => &$v) {
+			if ($diff->$k) {
+				$v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+			} else {
+				unset($string[$k]);
+			}
+		}
+
+		if (!$full) $string = array_slice($string, 0, 1);
+
+		return $string ? implode(', ', $string) . ' ago' : 'just now';
+	}
 }
