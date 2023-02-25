@@ -737,6 +737,10 @@
 			"metadata": "Status Info",
             "enabled_commands": "Enabled Commands",
 
+			"show_link_token": "Show accounts linked via tokens",
+			"show_link_ip": "Show accounts linked via ips",
+			"show_link_identifier": "Show accounts linked via identifiers",
+
 			"meta_minigame": "Arena/BR",
 			"meta_camCords": "Freecam/Orbitcam",
 			"meta_queue": "Queue"
