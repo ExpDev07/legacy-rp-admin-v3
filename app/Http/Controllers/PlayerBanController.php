@@ -455,8 +455,10 @@ class PlayerBanController extends Controller
 
 				$total = $count + $countIps + $countIdentifiers;
 
+				$counts = '<span style="color:#ff5b5b">' . $count . '</span>/<span style="color:#5bc2ff">' . $countIps . '</span>/<span style="color:#65d54e">' . $countIdentifiers . '</span>';
+
                 $raw[] = [
-					'label' => '[' . $count . '/' . $countIps . '/' . $countIdentifiers . '] - ' . $this->time_elapsed_string($found->last_connection) . ' - <a href="/players/' . $found->license_identifier . '" target="_blank">' . $found->player_name . '</a>',
+					'label' => '[' . $counts . '] - ' . $this->time_elapsed_string($found->last_connection) . ' - <a href="/players/' . $found->license_identifier . '" target="_blank">' . $found->player_name . '</a>',
 					'connection' => $found->last_connection,
 					'count' => $total,
 					'banned' => $found->ban_hash !== null
@@ -491,6 +493,8 @@ class PlayerBanController extends Controller
 			$banned[] = "<i>None</i>";
 		}
 
-        return $this->fakeText(200, "Found: <b>" . sizeof($raw) . "</b> Accounts for <a href='/players/" . $license . "' target='_blank'>" . $player->player_name . "</a>\n\n<i style='color:#c68dbf'>[Tokens / IPs / Identifiers] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
+		$counts = '<span style="color:#ff5b5b">Tokens</span> / <span style="color:#5bc2ff">IPs</span> / <span style="color:#65d54e">Identifiers</span>';
+
+        return $this->fakeText(200, "Found: <b>" . sizeof($raw) . "</b> Accounts for <a href='/players/" . $license . "' target='_blank'>" . $player->player_name . "</a>\n\n<i style='color:#c68dbf'>[" . $counts . "] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
 	}
 }
