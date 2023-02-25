@@ -331,100 +331,113 @@ class PlayerBanController extends Controller
 
     public function linkedIPs(Request $request): \Illuminate\Http\Response
     {
-        $license = $request->query("license");
-
-        if (!$license || !Str::startsWith($license, 'license:')) {
-            return $this->text(400, "Invalid license id.");
-        }
-
-        $player = Player::query()->select(['ips'])->where('license_identifier', '=', $license)->get()->first();
+        $player = $this->findPlayer($request);
 
         if (!$player) {
-            return $this->text(404, "Player not found.");
+			return $this->text(404, "Player not found.");
+		}
+
+		$ips = $player->getIps();
+
+        if (empty($ips)) {
+            return $this->text(404, "No ips found.");
         }
 
-        $ips = [];
-        $list = [];
+		$ips = array_filter($ips, function($ip) {
+			$info = GeneralHelper::ipInfo($ip);
 
-        $identifiers = $player->getIps();
+			if ($info) {
+				if (in_array($info['isp'], ['OVH SAS'])) {
+					return false;
+				}
 
-        foreach ($identifiers as $identifier) {
-            $info = GeneralHelper::ipInfo(str_replace('ip:', '', $identifier));
+				if ($info['proxy']) {
+					return false;
+				}
+			}
 
-            $isProxy = false;
-            $additionalInfo = '    - No info';
-            if ($info) {
-                $additionalInfo = '    - ' . $info['country'] . ' (' . $info['isp'] . ')';
+			return true;
+		});
 
-                if (in_array($info['isp'], ['OVH SAS'])) {
-                    $isProxy = true;
-                }
+		$where = implode(' OR ', array_map(function($ip) {
+			return 'JSON_CONTAINS(ips, \'"' . $ip . '"\', \'$\')';
+		}, $ips));
 
-                if ($info['proxy']) {
-                    $additionalInfo .= "\n    - Is Proxy";
-                    $isProxy = true;
-                }
-
-                if ($info['hosting']) {
-                    $additionalInfo .= "\n    - Is Hosting";
-                }
-            }
-
-            if (!$isProxy) {
-                $ips[] = 'ips LIKE \'%"' . $identifier . '"%\'';
-            }
-
-            $list[] = $identifier . "\n" . $additionalInfo;
-        }
-
-        if (empty($ips) && empty($list)) {
-            return $this->text(404, "No IP identifiers found.");
-        }
-
-        $players = empty($ips) ? [] : Player::query()->select(['player_name', 'license_identifier', 'ips'])->whereRaw(implode(" OR ", $ips))->get();
-
-        $linked = [];
-
-        foreach ($players as $found) {
-            if ($found->license_identifier !== $license) {
-                $ips = $found->getIps();
-
-                $linked[] = $found->player_name . ' (' . $found->license_identifier . ') - [' . implode(", ", $ips) . ']';
-            }
-        }
-
-        return $this->text(200, "Found: " . sizeof($linked) . " Accounts\License: " . $license . "\n\n" . implode("\n", $list) . "\n\n" . (empty($linked) ? 'No linked accounts (proxy ips not included)' : implode("\n", $linked)));
+		return $this->drawLinked($player, $where);
     }
 
     public function linkedTokens(Request $request): \Illuminate\Http\Response
     {
-        $license = $request->query("license");
-
-        if (!$license || !Str::startsWith($license, 'license:')) {
-            return $this->text(400, "Invalid license id.");
-        }
-
-        $player = Player::query()->select(['player_tokens', 'ips', 'identifiers'])->where('license_identifier', '=', $license)->get()->first();
+        $player = $this->findPlayer($request);
 
         if (!$player) {
-            return $this->text(404, "Player not found.");
-        }
+			return $this->text(404, "Player not found.");
+		}
 
 		$tokens = $player->getTokens();
-		$ips = $player->getIps();
-		$identifiers = $player->getIdentifiers();
 
         if (empty($tokens)) {
             return $this->text(404, "No tokens found.");
         }
 
-        $list = [];
-
 		$where = implode(' OR ', array_map(function($token) {
 			return 'JSON_CONTAINS(player_tokens, \'"' . $token . '"\', \'$\')';
 		}, $tokens));
 
-        $players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'last_connection', 'ban_hash'])->leftJoin('user_bans', function ($join) {
+		return $this->drawLinked($player, $where);
+    }
+
+    public function linkedIdentifiers(Request $request): \Illuminate\Http\Response
+    {
+        $player = $this->findPlayer($request);
+
+        if (!$player) {
+			return $this->text(404, "Player not found.");
+		}
+
+		$identifiers = $player->getIdentifiers();
+
+        if (empty($identifiers)) {
+            return $this->text(404, "No identifiers found.");
+        }
+
+		$identifiers = array_filter($identifiers, function($identifier) {
+			return !Str::startsWith($identifier, 'ip:');
+		});
+
+		$where = implode(' OR ', array_map(function($identifier) {
+			return 'JSON_CONTAINS(identifiers, \'"' . $identifier . '"\', \'$\')';
+		}, $identifiers));
+
+		return $this->drawLinked($player, $where);
+    }
+
+	protected function findPlayer(Request $request)
+	{
+		$license = $request->query("license");
+
+        if (!$license || !Str::startsWith($license, 'license:')) {
+            return false;
+        }
+
+        $player = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers'])->where('license_identifier', '=', $license)->get()->first();
+
+        if (!$player) {
+			return false;
+        }
+
+		return $player;
+	}
+
+	protected function drawLinked(Player $player, string $where)
+	{
+		$license = $player->license_identifier;
+
+		$tokens = $player->getTokens();
+		$ips = $player->getIps();
+		$identifiers = $player->getIdentifiers();
+
+		$players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'last_connection', 'ban_hash'])->leftJoin('user_bans', function ($join) {
 			$join->on('identifier', '=', 'license_identifier');
 		})->whereRaw($where)->get();
 
@@ -470,6 +483,6 @@ class PlayerBanController extends Controller
 			}
 		}
 
-        return $this->fakeText(200, "Found: " . sizeof($raw) . " Accounts for " . $license . "\n\n<i style='color:#c68dbf'>[Tokens / IPs / Identifiers] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
-    }
+        return $this->fakeText(200, "Found: <b>" . sizeof($raw) . "</b> Accounts for <a href='/players/" . $license . "' target='_blank'>" . $player->player_name . "</a>\n\n<i style='color:#c68dbf'>[Tokens / IPs / Identifiers] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
+	}
 }

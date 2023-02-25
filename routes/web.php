@@ -101,10 +101,12 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/bans/{ban}/unlock', [PlayerBanController::class, 'unlockBan']);
 
     Route::get('/new_players', [PlayerController::class, 'newPlayers']);
-    Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
-    Route::get('/linked_tokens', [PlayerBanController::class, 'linkedTokens']);
     Route::get('/backstories', [PlayerCharacterController::class, 'backstories']);
     Route::get('/api/backstories', [PlayerCharacterController::class, 'backstoriesApi']);
+
+    Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
+    Route::get('/linked_tokens', [PlayerBanController::class, 'linkedTokens']);
+    Route::get('/linked_identifiers', [PlayerBanController::class, 'linkedIdentifiers']);
 
     Route::get('/bans', [PlayerBanController::class, 'index']);
     Route::get('/my_bans', [PlayerBanController::class, 'indexMine']);
