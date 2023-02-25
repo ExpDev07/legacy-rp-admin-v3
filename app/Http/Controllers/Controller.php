@@ -123,14 +123,14 @@ class Controller extends BaseController
         return false;
     }
 
-	protected function formatTimestamp($timestamp)
+	protected function formatTimestamp(int $timestamp)
 	{
 		$seconds = time() - $timestamp;
 
 		return $this->formatSeconds($seconds) . " ago";
 	}
 
-	protected function formatSeconds($seconds)
+	protected function formatSeconds(int $seconds)
 	{
 		$string = [
 			'year' => 60*60*24*365,
