@@ -252,37 +252,6 @@ class PlayerBanController extends Controller
     }
 
     /**
-     * Creates a rough output like "6 days" or "1 week and 2 days"
-     *
-     * @param int $seconds
-     * @return string
-     */
-    private function formatSeconds(int $seconds): string
-    {
-        $formatted = [];
-
-        $months = floor($seconds / 18144000); // 30 days
-        $seconds -= $months * 18144000;
-        if ($months > 0) {
-            $formatted[] = $months . ' month' . ($months > 1 ? 's' : '');
-        }
-
-        $weeks = floor($seconds / 604800);
-        $seconds -= $weeks * 604800;
-        if ($weeks > 0) {
-            $formatted[] = $weeks . ' week' . ($weeks > 1 ? 's' : '');
-        }
-
-        $days = round($seconds / 86400);
-        if ($days > 0 || empty($formatted)) {
-            $formatted[] = $days . ' day' . ($days > 1 ? 's' : '');
-        }
-
-        $last = array_pop($formatted);
-        return (empty($formatted) ? '' : implode(', ', $formatted) . ' and ') . $last;
-    }
-
-    /**
      * Updates the specified resource.
      *
      * @param Player $player
