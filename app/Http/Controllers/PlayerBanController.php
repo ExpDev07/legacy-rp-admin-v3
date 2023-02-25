@@ -396,4 +396,46 @@ class PlayerBanController extends Controller
         return $this->text(200, "Found: " . sizeof($linked) . " Accounts\License: " . $license . "\n\n" . implode("\n", $list) . "\n\n" . (empty($linked) ? 'No linked accounts (proxy ips not included)' : implode("\n", $linked)));
     }
 
+    public function linkedTokens(Request $request): \Illuminate\Http\Response
+    {
+        $license = $request->query("license");
+
+        if (!$license || !Str::startsWith($license, 'license:')) {
+            return $this->text(400, "Invalid license id.");
+        }
+
+        $player = Player::query()->select(['player_tokens'])->where('license_identifier', '=', $license)->get()->first();
+
+        if (!$player) {
+            return $this->text(404, "Player not found.");
+        }
+
+		$tokens = $player->getTokens();
+
+        if (empty($tokens)) {
+            return $this->text(404, "No tokens found.");
+        }
+
+        $list = [];
+
+		$where = implode(' OR ', array_map(function($token) {
+			return `JSON_CONTAINS(player_tokens, '"` . $token . `"', '$')`;
+		}, $tokens));
+
+        $players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens'])->whereRaw($where)->get();
+
+        $linked = [];
+
+        foreach ($players as $found) {
+            if ($found->license_identifier !== $license) {
+                $foundTokens = $found->getTokens();
+
+				$count = sizeof(array_intersect($tokens, $foundTokens));
+
+                $linked[] = $found->player_name . ' (' . $found->license_identifier . ') - [' . $count . ']';
+            }
+        }
+
+        return $this->text(200, "Found: " . sizeof($linked) . " Accounts for " . $license . "\n\n" . implode("\n", $linked));
+    }
 }
