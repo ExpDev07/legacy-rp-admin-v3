@@ -419,12 +419,14 @@ class PlayerBanController extends Controller
         $list = [];
 
 		$where = implode(' OR ', array_map(function($token) {
-			return `JSON_CONTAINS(player_tokens, '"` . $token . `"', '$')`;
+			return 'JSON_CONTAINS(player_tokens, \'"' . $token . '"\', \'$\')';
 		}, $tokens));
 
-        $players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens'])->whereRaw($where)->get();
+        $players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'last_connection', 'ban_hash'])->whereRaw($where)->leftJoin('user_bans', function ($join) {
+			$join->on('identifier', '=', 'license_identifier');
+		})->get();
 
-        $linked = [];
+        $raw = [];
 
         foreach ($players as $found) {
             if ($found->license_identifier !== $license) {
@@ -432,10 +434,34 @@ class PlayerBanController extends Controller
 
 				$count = sizeof(array_intersect($tokens, $foundTokens));
 
-                $linked[] = $found->player_name . ' (' . $found->license_identifier . ') - [' . $count . ']';
+                $linked[] = [
+					'label' => '[' . $count . '] - ' . $this->time_elapsed_string($found->last_connection) . ' -<a href="/players/' . $found->license_identifier . '" target="_blank">' . $found->player_name . '</a>',
+					'connection' => $found->last_connection,
+					'count' => $count,
+					'banned' => $found->ban_hash !== null
+				];
             }
         }
 
-        return $this->text(200, "Found: " . sizeof($linked) . " Accounts for " . $license . "\n\n" . implode("\n", $linked));
+		usort($raw, function($a, $b) {
+			if ($a['connection'] === $b['connection']) {
+				return $a['count'] < $b['count'];
+			}
+
+			return $a['connection'] < $b['connection'];
+		});
+
+		$linked = [];
+		$banned = [];
+
+		foreach ($raw as $item) {
+			if ($item['banned']) {
+				$banned[] = $item['label'];
+			} else {
+				$linked[] = $item['label'];
+			}
+		}
+
+        return $this->fakeText(200, "Found: " . sizeof($linked) . " Accounts for " . $license . "\n\n" . implode("\n", $linked) . "\n\n" . implode("\n", $banned));
     }
 }
