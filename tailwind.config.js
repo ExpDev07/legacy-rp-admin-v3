@@ -61,7 +61,8 @@ module.exports = {
                 'map-height-ind':     '60px',
                 'map-icon':           '20px',
                 'ch-button':          '32px',
-                'xs-steam':           '150px'
+                'xs-steam':           '150px',
+                'iframe':             '750px'
             },
             height: {
                 'side-close':      '40px',

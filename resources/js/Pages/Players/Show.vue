@@ -2157,6 +2157,12 @@ export default {
                         break;
                 }
 
+                if (url.startsWith("https://www.twitch.tv/videos/")) {
+                    extraClass = 'user-twitch';
+                } else if (url.startsWith("https://tickettool.xyz/direct?url=")) {
+                    extraClass = 'user-iframe';
+                }
+
                 return '<a href="' + url + '" target="_blank" class="text-indigo-600 dark:text-indigo-400 ' + extraClass + '">' + url + '</a>';
             });
         },
@@ -2164,6 +2170,34 @@ export default {
             $(el).replaceWith('<div class="user-close relative">' +
                 '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
                 '<img class="block max-h-96 max-w-full" src="' + url + '" />' +
+                '</div>');
+        },
+        viewVideo(el, url) {
+            $(el).replaceWith('<div class="user-close relative">' +
+                '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
+                '<video class="block max-h-96 max-w-full" controls autoplay><source src="' + url + '"></video>' +
+                '</div>');
+        },
+        viewTwitch(el, url) {
+            const rgx = /https:\/\/www\.twitch\.tv\/videos\/(\d+)(\?.*?t=(\w+))?/gmi,
+                match = rgx.exec(url);
+
+            if (!match || match.length < 2) return;
+
+            const videoId = match[1],
+                time = match[3] || '00h00m00s';
+
+            const twitchUrl = 'https://player.twitch.tv/?video=' + videoId + '&t=' + time + '&parent=' + window.location.hostname;
+
+            $(el).replaceWith('<div class="user-close relative">' +
+                '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
+                '<iframe class="block h-96 w-iframe max-w-full" src="' + twitchUrl + '" frameborder="0" allowfullscreen="true" scrolling="no"></video>' +
+                '</div>');
+        },
+        viewIFrame(el, url) {
+            $(el).replaceWith('<div class="user-close relative">' +
+                '<a href="#" class="absolute top-0 left-0 z-10 bg-gray-100 text-gray-900 p-2" data-original="' + url + '">&#10006;</a>' +
+                '<iframe class="block h-96 w-iframe max-w-full" src="' + url + '" frameborder="0" allowfullscreen="true"></video>' +
                 '</div>');
         },
         async removeIdentifier(identifier) {
@@ -2215,6 +2249,14 @@ export default {
                 e.preventDefault();
 
                 _this.viewVideo(this, $(this).attr('href'));
+            }).on('click', 'a.user-twitch', function (e) {
+                e.preventDefault();
+
+                _this.viewTwitch(this, $(this).attr('href'));
+            }).on('click', 'a.user-iframe', function (e) {
+                e.preventDefault();
+
+                _this.viewIFrame(this, $(this).attr('href'));
             }).on('click', '.user-close a', function (e) {
                 e.preventDefault();
 
@@ -2240,8 +2282,10 @@ export default {
             });
         });
 
-        $(window).on("blur", () => {
-            this.continuouslyScreenshotting = false;
+        $(document).on("visibilitychange", e => {
+            if (document.visibilityState !== "visible") {
+                this.continuouslyScreenshotting = false;
+            }
         });
     }
 };

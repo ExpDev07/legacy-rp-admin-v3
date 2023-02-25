@@ -61,6 +61,7 @@ class Player extends Model
         'identifiers',
 		'last_used_identifiers',
         'ips',
+        'player_tokens',
         'is_staff',
         'is_senior_staff',
         'is_super_admin',
@@ -86,6 +87,7 @@ class Player extends Model
         'identifiers' => 'array',
         'last_used_identifiers' => 'array',
         'ips' => 'array',
+        'player_tokens' => 'array',
         'player_aliases' => 'array',
         'enabled_commands' => 'array',
         'user_data' => 'array',
@@ -272,6 +274,22 @@ class Player extends Model
         return array_values(
             array_unique(
                 $ips
+            )
+        );
+    }
+
+    /**
+     * Gets all the tokens.
+     *
+     * @return array
+     */
+    public function getTokens(): array
+    {
+        $tokens = $this->player_tokens ?? [];
+
+        return array_values(
+            array_unique(
+                $tokens
             )
         );
     }
