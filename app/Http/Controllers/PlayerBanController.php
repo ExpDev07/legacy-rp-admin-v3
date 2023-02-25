@@ -483,6 +483,14 @@ class PlayerBanController extends Controller
 			}
 		}
 
+		if (empty($linked)) {
+			$linked[] = "<i>None</i>";
+		}
+
+		if (empty($banned)) {
+			$banned[] = "<i>None</i>";
+		}
+
         return $this->fakeText(200, "Found: <b>" . sizeof($raw) . "</b> Accounts for <a href='/players/" . $license . "' target='_blank'>" . $player->player_name . "</a>\n\n<i style='color:#c68dbf'>[Tokens / IPs / Identifiers] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
 	}
 }
