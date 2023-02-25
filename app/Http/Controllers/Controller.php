@@ -81,7 +81,7 @@ class Controller extends BaseController
      */
     protected static function fakeText(int $status, string $text): Response
     {
-		$style = 'html,body{width:100%;height:100%;background:#1C1B22;color:#fbfbfe;font-family:monospace;font-size:13px;white-space:pre-wrap}a{text-decoration:none;color:#6c7af9}';
+		$style = 'html,body{width:100%;height:100%;background:#1C1B22;color:#fbfbfe;font-family:monospace;font-size:13px;white-space:pre-wrap;margin:0;box-sizing:border-box}body{padding:8px}a{text-decoration:none;color:#909bff}';
 
 		$text = '<style>' . $style . '</style>' . $text;
 

@@ -404,13 +404,15 @@ class PlayerBanController extends Controller
             return $this->text(400, "Invalid license id.");
         }
 
-        $player = Player::query()->select(['player_tokens'])->where('license_identifier', '=', $license)->get()->first();
+        $player = Player::query()->select(['player_tokens', 'ips', 'identifiers'])->where('license_identifier', '=', $license)->get()->first();
 
         if (!$player) {
             return $this->text(404, "Player not found.");
         }
 
 		$tokens = $player->getTokens();
+		$ips = $player->getIps();
+		$identifiers = $player->getIdentifiers();
 
         if (empty($tokens)) {
             return $this->text(404, "No tokens found.");
@@ -422,22 +424,28 @@ class PlayerBanController extends Controller
 			return 'JSON_CONTAINS(player_tokens, \'"' . $token . '"\', \'$\')';
 		}, $tokens));
 
-        $players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'last_connection', 'ban_hash'])->whereRaw($where)->leftJoin('user_bans', function ($join) {
+        $players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'last_connection', 'ban_hash'])->leftJoin('user_bans', function ($join) {
 			$join->on('identifier', '=', 'license_identifier');
-		})->get();
+		})->whereRaw($where)->get();
 
         $raw = [];
 
         foreach ($players as $found) {
             if ($found->license_identifier !== $license) {
                 $foundTokens = $found->getTokens();
+				$foundIps = $found->getIps();
+				$foundIdentifiers = $found->getIdentifiers();
 
 				$count = sizeof(array_intersect($tokens, $foundTokens));
+				$countIps = sizeof(array_intersect($ips, $foundIps));
+				$countIdentifiers = sizeof(array_intersect($identifiers, $foundIdentifiers));
 
-                $linked[] = [
-					'label' => '[' . $count . '] - ' . $this->time_elapsed_string($found->last_connection) . ' -<a href="/players/' . $found->license_identifier . '" target="_blank">' . $found->player_name . '</a>',
+				$total = $count + $countIps + $countIdentifiers;
+
+                $raw[] = [
+					'label' => '[' . $count . '/' . $countIps . '/' . $countIdentifiers . '] - ' . $this->time_elapsed_string($found->last_connection) . ' - <a href="/players/' . $found->license_identifier . '" target="_blank">' . $found->player_name . '</a>',
 					'connection' => $found->last_connection,
-					'count' => $count,
+					'count' => $total,
 					'banned' => $found->ban_hash !== null
 				];
             }
@@ -462,6 +470,6 @@ class PlayerBanController extends Controller
 			}
 		}
 
-        return $this->fakeText(200, "Found: " . sizeof($linked) . " Accounts for " . $license . "\n\n" . implode("\n", $linked) . "\n\n" . implode("\n", $banned));
+        return $this->fakeText(200, "Found: " . sizeof($raw) . " Accounts for " . $license . "\n\n<i style='color:#c68dbf'>[Tokens / IPs / Identifiers] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
     }
 }
