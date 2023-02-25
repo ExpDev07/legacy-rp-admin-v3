@@ -34,9 +34,11 @@ class PermissionHelper
     const PERM_LINKED         = 'P_LINKED';
 
     const LEVEL_STAFF      = 1;
-    const LEVEL_SENIOR    = 2;
+    const LEVEL_SENIOR     = 2;
     const LEVEL_SUPERADMIN = 3;
     const LEVEL_ROOT       = 4;
+
+    const LEVEL_DISABLED   = 99;
 
     public static function getFrontendPermissions(): array
     {
@@ -54,6 +56,9 @@ class PermissionHelper
         $level = strtolower(env($key, ""));
 
         switch ($level) {
+            case 'disabled':
+                return self::LEVEL_DISABLED;
+
             case 'root':
                 return self::LEVEL_ROOT;
             case 'superadmin':
