@@ -123,36 +123,34 @@ class Controller extends BaseController
         return false;
     }
 
-	protected function time_elapsed_string($datetime, $full = false)
+	protected function formatTimestamp($timestamp)
 	{
-		$now = new \DateTime;
-		$ago = new \DateTime($datetime);
+		$seconds = time() - $timestamp;
 
-		$diff = $now->diff($ago);
+		return $this->formatSeconds($seconds) . " ago";
+	}
 
-		$diff->w = floor($diff->d / 7);
-		$diff->d -= $diff->w * 7;
+	protected function formatSeconds($seconds)
+	{
+		$string = [
+			'year' => 60*60*24*365,
+			'month' => 60*60*24*30,
+			'week' => 60*60*24*7,
+			'day' => 60*60*24,
+			'hour' => 60*60,
+			'minute' => 60
+		];
 
-		$string = array(
-			'y' => 'year',
-			'm' => 'month',
-			'w' => 'week',
-			'd' => 'day',
-			'h' => 'hour',
-			'i' => 'minute',
-			's' => 'second',
-		);
+		foreach ($string as $label => $divisor) {
+			$value = floor($seconds / $divisor);
 
-		foreach ($string as $k => &$v) {
-			if ($diff->$k) {
-				$v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
-			} else {
-				unset($string[$k]);
+			if ($value > 0) {
+				$label = $value > 1 ? $label . 's' : $label;
+
+				return $value . ' ' . $label;
 			}
 		}
 
-		if (!$full) $string = array_slice($string, 0, 1);
-
-		return $string ? implode(', ', $string) . ' ago' : 'just now';
+		return $seconds . ' second' . ($seconds > 1 ? 's' : '');
 	}
 }

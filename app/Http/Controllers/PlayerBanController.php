@@ -395,15 +395,11 @@ class PlayerBanController extends Controller
 			return $this->text(404, "Player not found.");
 		}
 
-		$identifiers = $player->getIdentifiers();
+		$identifiers = $player->getBannableIdentifiers();
 
         if (empty($identifiers)) {
             return $this->text(404, "No identifiers found.");
         }
-
-		$identifiers = array_filter($identifiers, function($identifier) {
-			return !Str::startsWith($identifier, 'ip:');
-		});
 
 		$where = implode(' OR ', array_map(function($identifier) {
 			return 'JSON_CONTAINS(identifiers, \'"' . $identifier . '"\', \'$\')';
@@ -435,9 +431,9 @@ class PlayerBanController extends Controller
 
 		$tokens = $player->getTokens();
 		$ips = $player->getIps();
-		$identifiers = $player->getIdentifiers();
+		$identifiers = $player->getBannableIdentifiers();
 
-		$players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'last_connection', 'ban_hash'])->leftJoin('user_bans', function ($join) {
+		$players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'last_connection', 'ban_hash', 'playtime'])->leftJoin('user_bans', function ($join) {
 			$join->on('identifier', '=', 'license_identifier');
 		})->whereRaw($where)->get();
 
@@ -447,7 +443,7 @@ class PlayerBanController extends Controller
             if ($found->license_identifier !== $license) {
                 $foundTokens = $found->getTokens();
 				$foundIps = $found->getIps();
-				$foundIdentifiers = $found->getIdentifiers();
+				$foundIdentifiers = $found->getBannableIdentifiers();
 
 				$count = sizeof(array_intersect($tokens, $foundTokens));
 				$countIps = sizeof(array_intersect($ips, $foundIps));
@@ -457,8 +453,10 @@ class PlayerBanController extends Controller
 
 				$counts = '<span style="color:#ff5b5b">' . $count . '</span>/<span style="color:#5bc2ff">' . $countIps . '</span>/<span style="color:#65d54e">' . $countIdentifiers . '</span>';
 
+				$playtime = "Playtime is about " . $this->formatSeconds($found->playtime);
+
                 $raw[] = [
-					'label' => '[' . $counts . '] - ' . $this->time_elapsed_string($found->last_connection) . ' - <a href="/players/' . $found->license_identifier . '" target="_blank">' . $found->player_name . '</a>',
+					'label' => '[' . $counts . '] - ' . $this->formatTimestamp($found->last_connection) . ' - <a href="/players/' . $found->license_identifier . '" target="_blank" title="' . $playtime . '">' . $found->player_name . '</a>',
 					'connection' => $found->last_connection,
 					'count' => $total,
 					'banned' => $found->ban_hash !== null
