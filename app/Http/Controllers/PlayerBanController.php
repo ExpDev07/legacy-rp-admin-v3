@@ -379,6 +379,10 @@ class PlayerBanController extends Controller
 
 	protected function findPlayer(Request $request)
 	{
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LINKED)) {
+            abort(401);
+        }
+
 		$license = $request->query("license");
 
         if (!$license || !Str::startsWith($license, 'license:')) {

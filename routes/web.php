@@ -108,6 +108,11 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/my_bans', [PlayerBanController::class, 'indexMine']);
     Route::get('/system_bans', [PlayerBanController::class, 'indexSystem']);
 
+	// Epic linked account finders
+	Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
+	Route::get('/linked_tokens', [PlayerBanController::class, 'linkedTokens']);
+	Route::get('/linked_identifiers', [PlayerBanController::class, 'linkedIdentifiers']);
+
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
     Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);
@@ -138,11 +143,6 @@ Route::group(['middleware' => ['log', 'staff']], function () {
         Route::delete('/loading_screen/{id}', [LoadingScreenController::class, 'delete']);
         Route::post('/loading_screen', [LoadingScreenController::class, 'add']);
         Route::put('/loading_screen/{id}', [LoadingScreenController::class, 'edit']);
-
-		// Epic linked account finders
-		Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
-		Route::get('/linked_tokens', [PlayerBanController::class, 'linkedTokens']);
-		Route::get('/linked_identifiers', [PlayerBanController::class, 'linkedIdentifiers']);
     });
 
     // Suspicious.

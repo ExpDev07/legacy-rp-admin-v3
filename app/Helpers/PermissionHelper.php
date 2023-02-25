@@ -18,6 +18,7 @@ class PermissionHelper
         self::PERM_LOADING_SCREEN => ['loading_screen', self::LEVEL_SUPERADMIN],
         self::PERM_VIEW_QUEUE     => ['view_queue', self::LEVEL_SENIOR],
         self::PERM_TWITTER        => ['twitter', self::LEVEL_SUPERADMIN],
+        self::PERM_LINKED         => ['linked', self::LEVEL_ROOT],
     ];
 
     const PERM_SCREENSHOT     = 'P_SCREENSHOT';
@@ -30,6 +31,7 @@ class PermissionHelper
     const PERM_LOADING_SCREEN = 'P_LOADING_SCREEN';
     const PERM_VIEW_QUEUE     = 'P_VIEW_QUEUE';
     const PERM_TWITTER        = 'P_TWITTER';
+    const PERM_LINKED         = 'P_LINKED';
 
     const LEVEL_STAFF      = 1;
     const LEVEL_SENIOR    = 2;

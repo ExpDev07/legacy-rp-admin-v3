@@ -32,6 +32,7 @@ const Permissions = {
             PERM_LOADING_SCREEN: 'loading_screen',
             PERM_VIEW_QUEUE:     'view_queue',
             PERM_TWITTER:        'twitter',
+            PERM_LINKED:         'linked',
 
             check(permission) {
                 if (!(permission in permissions)) {
