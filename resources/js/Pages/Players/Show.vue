@@ -126,7 +126,7 @@
                 </badge>
             </div>
 
-            <div class="absolute top-2 left-2 flex" v-if="$page.auth.player.isRoot">
+            <div class="absolute top-2 left-2 flex" v-if="this.perm.check(this.perm.PERM_LINKED)">
                 <a
                     class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
                     :href="'/linked_tokens?license=' + player.licenseIdentifier"
