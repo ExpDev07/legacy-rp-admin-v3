@@ -14,7 +14,7 @@
 
                 <!-- Content -->
                 <div class="flex flex-col flex-grow overflow-y-auto dark:bg-gray-800 dark:text-white" scroll-region>
-                    <div class="flex-grow p-12 mobile:px-4 relative">
+                    <div class="flex-grow p-12 py-16 mobile:px-4 relative">
 
                         <!-- Flash message -->
                         <div>

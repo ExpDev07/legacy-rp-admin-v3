@@ -128,28 +128,28 @@
 
             <div class="absolute top-2 left-2 flex" v-if="$page.auth.player.isRoot">
                 <a
-                    class="py-1 px-2 mr-2 font-semibold text-white rounded bg-gray-600 dark:bg-gray-500 block"
+                    class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
                     :href="'/linked_tokens?license=' + player.licenseIdentifier"
                     :title="t('players.show.show_link_token')"
                     target="_blank"
                 >
-                    LT
+                    <i class="fas fa-drumstick-bite"></i>
                 </a>
                 <a
-                    class="py-1 px-2 mr-2 font-semibold text-white rounded bg-gray-600 dark:bg-gray-500 block"
+                    class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
                     :href="'/linked_ips?license=' + player.licenseIdentifier"
                     :title="t('players.show.show_link_ip')"
                     target="_blank"
                 >
-                    IP
+                    <i class="fas fa-ethernet"></i>
                 </a>
                 <a
-                    class="py-1 px-2 mr-2 font-semibold text-white rounded bg-gray-600 dark:bg-gray-500 block"
+                    class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
                     :href="'/linked_identifiers?license=' + player.licenseIdentifier"
                     :title="t('players.show.show_link_identifier')"
                     target="_blank"
                 >
-                    ID
+                    <i class="fas fa-passport"></i>
                 </a>
             </div>
 
