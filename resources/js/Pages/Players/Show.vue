@@ -80,11 +80,11 @@
                 </div>
             </div>
             <div class="text-sm italic">
-                <span class="block mb-1" v-if="player.playerAliases && player.playerAliases.length > 0">
+                <span class="block" v-if="player.playerAliases && player.playerAliases.length > 0">
                     <span class="font-bold">{{ t('players.show.aliases') }}:</span>
                     {{ player.playerAliases.join(", ") }}
                 </span>
-                <span class="block mb-1" v-if="getPlayerMetadata()">
+                <span class="block" v-if="getPlayerMetadata()">
                     <span class="font-bold">{{ t('players.show.metadata') }}:</span>
                     {{ getPlayerMetadata() }}
                 </span>
@@ -95,9 +95,16 @@
                     <a href="#" class="text-indigo-600 dark:text-indigo-400" @click="$event.preventDefault(); isEnablingCommands = true" v-if="$page.auth.player.isSuperAdmin">{{ t('players.show.edit') }}</a>
                 </span>
             </div>
-            <p class="dark:text-dark-muted">
-                {{ t('players.show.description') }}
-            </p>
+            <div class="text-sm italic mt-2" v-if="player.variables && this.perm.check(this.perm.PERM_LINKED)">
+                <span class="block" v-if="player.variables.screenWidth && player.variables.screenHeight">
+                    <span class="font-bold">{{ t('players.show.resolution') }}:</span>
+                    {{ player.variables.screenWidth + "x" + player.variables.screenHeight }}
+                </span>
+                <span class="block" v-if="player.variables.fingerprint">
+                    <span class="font-bold">{{ t('players.show.fingerprint') }}:</span>
+                    {{ player.variables.fingerprint.toString(16) }}
+                </span>
+            </div>
         </portal>
 
         <div class="flex flex-wrap justify-between mb-6">

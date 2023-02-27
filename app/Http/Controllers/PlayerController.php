@@ -27,9 +27,8 @@ class PlayerController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return Response
      */
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
 		$identifiers = [];
 		$players = [];
@@ -82,28 +81,7 @@ class PlayerController extends Controller
 				$query->whereIn('license_identifier', $online);
 			}
 
-			$playerList = Player::getAllOnlinePlayers(true) ?? [];
-			$players = array_keys($playerList);
-			usort($players, function ($a, $b) use ($playerList) {
-				return $playerList[$a]['id'] <=> $playerList[$b]['id'];
-			});
-			$players = array_map(function ($player) {
-				return DB::connection()->getPdo()->quote($player);
-			}, $players);
-
-			$orderField = $request->input('order') ?? null;
-			$orderDirection = $request->input('desc') ? 'DESC' : 'ASC';
-
-			if (!$orderField || !in_array($orderField, ['last_connection', 'playtime', 'player_name'])) {
-				$orderField = 'last_connection';
-				$orderDirection = 'DESC';
-			}
-
-			if (!empty($players)) {
-				$query->orderByRaw('FIELD(license_identifier, ' . implode(', ', $players) . ') DESC, ' . $orderField . ' ' . $orderDirection);
-			} else {
-				$query->orderByDesc($orderField);
-			}
+			$query->orderBy("player_name");
 
 			$query->select([
 				'license_identifier', 'player_name', 'playtime', 'identifiers',
@@ -114,6 +92,12 @@ class PlayerController extends Controller
 			$query->limit(15)->offset(($page - 1) * 15);
 
 			$players = $query->get();
+
+			if ($players->count() === 1) {
+				$player = $players->first();
+
+				return redirect('/players/' . $player->license_identifier);
+			}
 
 			$identifiers = array_values(array_map(function ($player) {
 				return $player['license_identifier'];
