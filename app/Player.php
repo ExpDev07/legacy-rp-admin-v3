@@ -62,6 +62,7 @@ class Player extends Model
 		'last_used_identifiers',
         'ips',
         'player_tokens',
+        'user_variables',
         'is_staff',
         'is_senior_staff',
         'is_super_admin',
@@ -88,6 +89,7 @@ class Player extends Model
         'last_used_identifiers' => 'array',
         'ips' => 'array',
         'player_tokens' => 'array',
+        'user_variables' => 'array',
         'player_aliases' => 'array',
         'enabled_commands' => 'array',
         'user_data' => 'array',
@@ -223,6 +225,18 @@ class Player extends Model
 		$steamId = $this->getSteamID();
 
         return $steamId ? self::STEAM_INVITE_URL . $steamId->RenderSteamInvite() : null;
+    }
+
+    /**
+     * Gets all user variables.
+     *
+     * @return array
+     */
+    public function getUserVariables(): array
+    {
+        $variables = $this->user_variables ?? [];
+
+        return $variables;
     }
 
     /**
