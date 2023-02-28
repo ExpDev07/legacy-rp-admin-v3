@@ -1059,31 +1059,8 @@
         "title": "Servers",
         "description": "An overview of the game servers.",
         "no_data": "No API data available",
-        "list": {
-            "server": "Server",
-            "running": "Running",
-            "uptime": "Uptime",
-            "joined": "Joined",
-            "queued": "Queued",
-            "loading": "Loading",
-            "retrieved": "Retrieved from {0}"
-        },
-        "edit": {
-            "edit": "Edit Server"
-        },
-        "add": {
-            "add": "Add server",
-            "description": "Provide the server URL where the data should be fetched from. The URL should expose two endpoints",
-            "url": "URL",
-            "name": "Name",
-            "do": "Add"
-        },
-        "show": {
-            "table": "Online Players",
-            "players": "Players: {0}",
-            "joined": "Joined at",
-            "delete": "Delete Server"
-        }
+		"server_data": "The server has been up for <b>{0}</b> with <b>{1} of {2}</b> players online and <b>{3}</b> in the queue.",
+		"no_server_data": "The server is currently unavailable."
     },
     "login": {
         "title": "Login with your Steam account.",
