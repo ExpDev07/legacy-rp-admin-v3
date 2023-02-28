@@ -5,33 +5,13 @@ namespace App;
 use App\Helpers\CacheHelper;
 use App\Helpers\GeneralHelper;
 use App\Helpers\OPFWHelper;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Throwable;
 
-/**
- * @package App
- */
-class Server extends Model
+class Server
 {
-
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'webpanel_servers';
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'url',
-        'name',
-    ];
+	public string $url;
 
     /**
      * A license_identifier->serverId map
@@ -179,6 +159,28 @@ class Server extends Model
 
         return null;
     }
+
+    /**
+     * Returns all servers
+     *
+     * @return array
+     */
+    public static function getAllServers(): array
+	{
+		$rawServerIps = explode(',', env('OP_FW_SERVERS', ''));
+
+		$servers = [];
+
+		foreach ($rawServerIps as $rawServerIp) {
+			$server = new Server();
+
+			$server->url = $rawServerIp;
+
+			$servers[] = $server;
+		}
+
+		return $servers;
+	}
 
     /**
      * Returns all server names

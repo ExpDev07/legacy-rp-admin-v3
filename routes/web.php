@@ -179,7 +179,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/characters/{character}/addLicense', [PlayerCharacterController::class, 'addLicense']);
 
     // Servers.
-    Route::resource('servers', ServerController::class);
+    Route::get('/servers', [ServerController::class, 'index']);
 
     // Map.
     Route::get('/map', [MapController::class, 'index']);

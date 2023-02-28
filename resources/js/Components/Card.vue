@@ -7,12 +7,12 @@
         </header>
 
         <!-- Body -->
-        <div class="flex-grow mb-8 text-muted dark:text-dark-muted" v-if="!no_body">
+        <div class="flex-grow text-muted dark:text-dark-muted" v-if="!no_body" :class="{'mb-8' : !no_footer}">
             <slot />
         </div>
 
         <!-- Footer -->
-        <footer>
+        <footer v-if="!no_footer">
             <slot name="footer" />
         </footer>
 
@@ -25,7 +25,7 @@ export default {
     props: {
         deleted: Boolean,
         no_body: Boolean,
+        no_footer: Boolean,
     },
 }
 </script>
-
