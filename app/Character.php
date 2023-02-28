@@ -61,6 +61,8 @@ class Character extends Model
         'character_deleted',
         'character_deletion_timestamp',
 
+		'character_creation_time',
+
         'ped_model_hash',
 
         'tattoos_data',
@@ -78,6 +80,7 @@ class Character extends Model
         'gender'                       => 'integer',
         'cash'                         => 'integer',
         'bank'                         => 'integer',
+        'character_creation_time'      => 'integer',
         'stocks_balance'               => 'double',
         'character_created'            => 'boolean',
         'character_creation_timestamp' => 'datetime',

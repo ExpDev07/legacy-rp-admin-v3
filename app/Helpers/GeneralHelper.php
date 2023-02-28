@@ -110,6 +110,15 @@ class GeneralHelper
         return $info;
     }
 
+	public static function dannyPercentageCreationTime($creationTime)
+	{
+		$creationTime = max(0, $creationTime - 15);
+
+		$percentage = 100 - ($creationTime / (15 * 60));
+
+		return max(0, $percentage);
+	}
+
     public static function isDefaultDanny($modelHash, $modelData)
     {
         $modelData = is_string($modelData) ? json_decode($modelData, true) : $modelData;
