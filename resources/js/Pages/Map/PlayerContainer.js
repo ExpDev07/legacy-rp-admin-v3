@@ -19,6 +19,8 @@ class PlayerContainer {
         this.staff = [];
         this.resetStats();
 
+		this.unloadedPlayers = [];
+
 		this.mainInstance = 1;
 
         this.instances = [];
@@ -44,6 +46,8 @@ class PlayerContainer {
 
         this.vehicles = {};
         this.activePlayerIDs = [];
+
+		this.unloadedPlayers = [];
 
         this.invisible = [];
         this.afk = [];
@@ -88,6 +92,10 @@ class PlayerContainer {
 
 			this.mainInstance = possibleInstances.length > 0 ? possibleInstances[0].id : 1;
 		}
+
+		this.unloadedPlayers.sort((a, b) => {
+			return a.source - b.source;
+		});
     }
 
     updatePlayer(rawPlayer, selectedInstance) {
@@ -98,6 +106,12 @@ class PlayerContainer {
         if (flags.fakeDisconnected) {
             return;
         }
+
+		if (!rawPlayer.character) {
+			this.unloadedPlayers.push(rawPlayer);
+
+			this.stats.unloaded++;
+		}
 
         const characterFlags = Character.getCharacterFlags(rawPlayer.character);
         if (!characterFlags.spawned) {
@@ -140,6 +154,9 @@ class PlayerContainer {
             }
         }
 
+		if (23 == this.players[id].player.source)
+			console.log(this.players[id])
+
         if (this.players[id].character) {
             this.activePlayerIDs.push(id);
 
@@ -155,8 +172,6 @@ class PlayerContainer {
             }
 
             this.stats.loaded++;
-        } else {
-            this.stats.unloaded++;
         }
 
         if (this.players[id].player.isStaff) {

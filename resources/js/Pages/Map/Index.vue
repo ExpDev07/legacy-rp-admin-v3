@@ -828,6 +828,29 @@
             </div>
         </div>
 
+        <modal :show.sync="viewingUnloadedPlayerList">
+			<template #header>
+				<h1 class="dark:text-white">
+					{{ t('map.unloaded_players') }}
+				</h1>
+			</template>
+
+			<template #default>
+                <a v-for="player in container.unloadedPlayers" :href="'/players/' + player.licenseIdentifier" target="_blank" class="block text-indigo-700 dark:text-indigo-300 no-underline">
+                    [{{ player.source }}] {{ player.name }}
+                </a>
+
+                <span class="italic" v-if="container.unloadedPlayers.length === 0">{{ t("map.no_unloaded_players") }}</span>
+			</template>
+
+			<template #actions>
+				<button type="button"
+						class="px-5 py-2 rounded hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-400"
+						@click="viewingUnloadedPlayerList = false">
+					{{ t('global.close') }}
+				</button>
+			</template>
+		</modal>
     </div>
 </template>
 
@@ -847,6 +870,7 @@ import 'leaflet-fullscreen';
 import 'leaflet.markercluster';
 import 'leaflet.heat';
 import VueSpeedometer from "vue-speedometer";
+import Modal from './../../Components/Modal';
 
 import {io} from "socket.io-client";
 
@@ -878,6 +902,7 @@ export default {
         VueSpeedometer,
         SimplePlayerList,
         ScreenshotAttacher,
+        Modal,
     },
     props: {
         servers: {
@@ -1021,7 +1046,9 @@ export default {
 
             activeViewers: [],
 
-            selectedInstance: false
+            selectedInstance: false,
+
+            viewingUnloadedPlayerList: false
         };
     },
     methods: {
@@ -2129,6 +2156,12 @@ export default {
                     this.afkPeople = this.container.afk;
                     this.invisiblePeople = this.container.invisible;
 
+                    let unloaded = "";
+
+                    if (this.container.stats.unloaded > 0) {
+                        unloaded = `, <a href="#" class="view-unloaded text-indigo-700 dark:text-indigo-300 !no-underline">${this.t("map.data_unloaded", this.container.stats.unloaded)}</a>`;
+                    }
+
                     this.data = this.t(
                         'map.data',
                         Object.keys(this.markers).length
@@ -2136,9 +2169,8 @@ export default {
                         'map.data_stats',
                         this.container.stats.police,
                         this.container.stats.ems,
-                        this.container.stats.staff,
-                        this.container.stats.unloaded
-                    ) + '</span>';
+                        this.container.stats.staff
+                    ) + unloaded + '</span>';
 
                     if (!foundTracked) {
                         window.location.hash = '';
@@ -2351,6 +2383,12 @@ export default {
                 $('#map_title').text(_this.t('map.spy_satellite'));
             });
         }
+
+        $("body").on("click", ".view-unloaded", e => {
+            e.preventDefault();
+
+            this.viewingUnloadedPlayerList = true;
+        });
 
         window.renderHeatMap = (date) => {
             this.renderHeatMap(date);
