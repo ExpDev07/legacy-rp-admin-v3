@@ -2160,11 +2160,14 @@ export default {
 
                     if (this.container.stats.unloaded > 0) {
                         unloaded = `, <a href="#" class="view-unloaded text-indigo-700 dark:text-indigo-300 !no-underline">${this.t("map.data_unloaded", this.container.stats.unloaded)}</a>`;
+                    } else {
+                        unloaded = `, ${this.t("map.data_unloaded", 0)}`;
                     }
 
                     this.data = this.t(
                         'map.data',
-                        Object.keys(this.markers).length
+                        this.container.stats.loaded,
+                        this.container.stats.total
                     ) + '<span class="block text-xs leading-3">' + this.t(
                         'map.data_stats',
                         this.container.stats.police,

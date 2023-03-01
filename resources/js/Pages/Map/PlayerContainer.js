@@ -107,11 +107,15 @@ class PlayerContainer {
             return;
         }
 
-		if (!rawPlayer.character) {
+		if (rawPlayer.character) {
+			this.stats.loaded++;
+		} else {
 			this.unloadedPlayers.push(rawPlayer);
 
 			this.stats.unloaded++;
 		}
+
+		this.stats.total++;
 
         const characterFlags = Character.getCharacterFlags(rawPlayer.character);
         if (!characterFlags.spawned) {
@@ -170,8 +174,6 @@ class PlayerContainer {
             if (this.players[id].invisible.value) {
                 this.invisible.push(this.getPlayerListInfo(this.players[id]));
             }
-
-            this.stats.loaded++;
         }
 
         if (this.players[id].player.isStaff) {
@@ -188,8 +190,6 @@ class PlayerContainer {
 
             this.on_duty.ems.push(this.getPlayerListInfo(this.players[id]));
         }
-
-        this.stats.total++;
     }
 
     isActive(id) {
