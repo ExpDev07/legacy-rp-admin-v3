@@ -2202,7 +2202,13 @@ export default {
                 this.data = this.t('map.error', $('#server option:selected').text());
 
                 if (data && data.error) {
-                    this.data += `<span class="block text-xs leading-3">${this.t('map.error_msg', data.error)}</span>`;
+                    let error = data.error + "";
+
+                    if (error.length >= 70) {
+                        error = error.substr(0, 70) + "...";
+                    }
+
+                    this.data += `<span class="block text-xs leading-3">${this.t('map.error_msg', error)}</span>`;
                 }
             }
         },
