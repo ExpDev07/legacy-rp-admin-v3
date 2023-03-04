@@ -2200,6 +2200,10 @@ export default {
                 this.activeViewers = data.viewers.sort();
             } else {
                 this.data = this.t('map.error', $('#server option:selected').text());
+
+                if (data && data.error) {
+                    this.data += `<span class="block text-xs leading-3">${this.t('map.error_msg', data.error)}</span>`;
+                }
             }
         },
         async buildMap() {
