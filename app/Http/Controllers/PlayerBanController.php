@@ -377,6 +377,25 @@ class PlayerBanController extends Controller
 		return $this->drawLinked($player, $where);
     }
 
+    public function linkedPrint(Request $request): \Illuminate\Http\Response
+    {
+        $player = $this->findPlayer($request);
+
+        if (!$player) {
+			return $this->text(404, "Player not found.");
+		}
+
+		$fingerprint = $player->getFingerprint();
+
+        if (!$fingerprint) {
+            return $this->text(404, "No fingerprint found.");
+        }
+
+		$where = "JSON_EXTRACT(user_variables, '$.ofFingerprint') = '" . $fingerprint . "'";
+
+		return $this->drawLinked($player, $where);
+    }
+
 	protected function findPlayer(Request $request)
 	{
 		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LINKED)) {
@@ -405,8 +424,9 @@ class PlayerBanController extends Controller
 		$tokens = $player->getTokens();
 		$ips = $player->getIps();
 		$identifiers = $player->getBannableIdentifiers();
+		$fingerprint = $player->getFingerprint();
 
-		$players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'last_connection', 'ban_hash', 'playtime'])->leftJoin('user_bans', function ($join) {
+		$players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'user_variables', 'last_connection', 'ban_hash', 'playtime'])->leftJoin('user_bans', function ($join) {
 			$join->on('identifier', '=', 'license_identifier');
 		})->whereRaw($where)->get();
 
@@ -417,14 +437,16 @@ class PlayerBanController extends Controller
                 $foundTokens = $found->getTokens();
 				$foundIps = $found->getIps();
 				$foundIdentifiers = $found->getBannableIdentifiers();
+				$foundFingerprint = $found->getFingerprint();
 
 				$count = sizeof(array_intersect($tokens, $foundTokens));
 				$countIps = sizeof(array_intersect($ips, $foundIps));
 				$countIdentifiers = sizeof(array_intersect($identifiers, $foundIdentifiers));
+				$countFingerprint = $fingerprint === $foundFingerprint ? 1 : 0;
 
-				$total = $count + $countIps + $countIdentifiers;
+				$total = $count + $countIps + $countIdentifiers + $countFingerprint;
 
-				$counts = '<span style="color:#ff5b5b">' . $count . '</span>/<span style="color:#5bc2ff">' . $countIps . '</span>/<span style="color:#65d54e">' . $countIdentifiers . '</span>';
+				$counts = '<span style="color:#ff5b5b">' . $count . '</span>/<span style="color:#5bc2ff">' . $countIps . '</span>/<span style="color:#65d54e">' . $countIdentifiers . '</span>/<span style="color:#f0c622">' . $countFingerprint . '</span>';
 
 				$playtime = "Playtime is about " . $this->formatSeconds($found->playtime);
 
@@ -464,8 +486,10 @@ class PlayerBanController extends Controller
 			$banned[] = "<i>None</i>";
 		}
 
-		$counts = '<span style="color:#ff5b5b">Tokens</span> / <span style="color:#5bc2ff">IPs</span> / <span style="color:#65d54e">Identifiers</span>';
+		$counts = '<span style="color:#ff5b5b">Tokens</span> / <span style="color:#5bc2ff">IPs</span> / <span style="color:#65d54e">Identifiers</span> / <span style="color:#f0c622">Fingerprint</span>';
 
-        return $this->fakeText(200, "Found: <b>" . sizeof($raw) . "</b> Accounts for <a href='/players/" . $license . "' target='_blank'>" . $player->player_name . "</a>\n\n<i style='color:#c68dbf'>[" . $counts . "] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
+		$print = $fingerprint ? " {<b><i>" . $fingerprint . "</i></b>}" : "";
+
+        return $this->fakeText(200, "Found: <b>" . sizeof($raw) . "</b> Accounts for <a href='/players/" . $license . "' target='_blank'>" . $player->player_name . "</a>" . $print . "\n\n<i style='color:#c68dbf'>[" . $counts . "] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
 	}
 }

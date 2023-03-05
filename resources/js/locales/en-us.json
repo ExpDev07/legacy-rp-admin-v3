@@ -741,7 +741,7 @@
             "enabled_commands": "Enabled Commands",
 
 			"resolution": "Resolution",
-			"fingerprint": "Fingerprint",
+			"ofFingerprint": "OPF-Fingerprint",
 
 			"show_link_token": "Show accounts linked via tokens",
 			"show_link_ip": "Show accounts linked via ips",

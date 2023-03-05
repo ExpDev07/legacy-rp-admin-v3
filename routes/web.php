@@ -112,6 +112,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 	Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
 	Route::get('/linked_tokens', [PlayerBanController::class, 'linkedTokens']);
 	Route::get('/linked_identifiers', [PlayerBanController::class, 'linkedIdentifiers']);
+	Route::get('/linked_print', [PlayerBanController::class, 'linkedPrint']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
