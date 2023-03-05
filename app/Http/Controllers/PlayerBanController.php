@@ -440,7 +440,7 @@ class PlayerBanController extends Controller
 				$count = sizeof(array_intersect($tokens, $foundTokens));
 				$countIps = sizeof(array_intersect($ips, $foundIps));
 				$countIdentifiers = sizeof(array_intersect($identifiers, $foundIdentifiers));
-				$countFingerprint = $fingerprint === $foundFingerprint ? 1 : 0;
+				$countFingerprint = $fingerprint && $foundFingerprint && $fingerprint === $foundFingerprint ? 1 : 0;
 
 				$total = $count + $countIps + $countIdentifiers + $countFingerprint;
 
