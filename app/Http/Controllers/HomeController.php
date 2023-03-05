@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Ban;
 use App\Helpers\GeneralHelper;
+use App\Helpers\PermissionHelper;
+use App\Helpers\OPFWHelper;
 use App\Http\Resources\BanResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Server;
@@ -61,6 +63,29 @@ class HomeController extends Controller
             'staff'     => PlayerIndexResource::collection($staff),
         ]);
     }
+
+	/**
+	 * Sends a server announcement
+	 *
+     * @param Request $request
+     * @return RedirectResponse
+	 */
+	protected function serverAnnouncement(Request $request)
+	{
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_ANNOUNCEMENT)) {
+            abort(401);
+        }
+
+		$message = trim($request->input('message'));
+
+        if (empty($message)) {
+            return back()->with('error', 'Message cannot be empty');
+        }
+
+		$response = OPFWHelper::serverAnnouncement(Server::getFirstServer() ?? '', $message);
+
+        return $response->redirect();
+	}
 
     /**
      * Returns player count info as json

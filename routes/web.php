@@ -18,7 +18,6 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\SteamController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\CasinoLogController;
-use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\CronjobController;
 use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\HomeController;
@@ -65,7 +64,7 @@ Route::group(['namespace' => 'Auth'], function () {
 Route::group(['middleware' => ['log', 'staff']], function () {
     // Home.
     Route::get('/', [HomeController::class, 'render']);
-    Route::get('/changelog', [ChangelogController::class, 'render']);
+    Route::post('/announcement', [HomeController::class, 'serverAnnouncement']);
 
 	// Steam Lookup.
     Route::get('/steam', [SteamLookupController::class, 'render']);
