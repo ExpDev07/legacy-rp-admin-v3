@@ -109,10 +109,10 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/system_bans', [PlayerBanController::class, 'indexSystem']);
 
 	// Epic linked account finders
-	Route::get('/linked_ips', [PlayerBanController::class, 'linkedIPs']);
-	Route::get('/linked_tokens', [PlayerBanController::class, 'linkedTokens']);
-	Route::get('/linked_identifiers', [PlayerBanController::class, 'linkedIdentifiers']);
-	Route::get('/linked_print', [PlayerBanController::class, 'linkedPrint']);
+	Route::get('/linked_ips/{license}', [PlayerBanController::class, 'linkedIPs']);
+	Route::get('/linked_tokens/{license}', [PlayerBanController::class, 'linkedTokens']);
+	Route::get('/linked_identifiers/{license}', [PlayerBanController::class, 'linkedIdentifiers']);
+	Route::get('/linked_print/{license}', [PlayerBanController::class, 'linkedPrint']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);

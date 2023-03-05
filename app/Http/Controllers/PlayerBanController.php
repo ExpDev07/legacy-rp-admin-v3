@@ -298,9 +298,9 @@ class PlayerBanController extends Controller
         return back()->with('success', 'Ban was successfully updated, redirecting back to player page...');
     }
 
-    public function linkedIPs(Request $request): \Illuminate\Http\Response
+    public function linkedIPs(Request $request, string $license): \Illuminate\Http\Response
     {
-        $player = $this->findPlayer($request);
+        $player = $this->findPlayer($request, $license);
 
         if (!$player) {
 			return $this->text(404, "Player not found.");
@@ -335,9 +335,9 @@ class PlayerBanController extends Controller
 		return $this->drawLinked($player, $where);
     }
 
-    public function linkedTokens(Request $request): \Illuminate\Http\Response
+    public function linkedTokens(Request $request, string $license): \Illuminate\Http\Response
     {
-        $player = $this->findPlayer($request);
+        $player = $this->findPlayer($request, $license);
 
         if (!$player) {
 			return $this->text(404, "Player not found.");
@@ -356,9 +356,9 @@ class PlayerBanController extends Controller
 		return $this->drawLinked($player, $where);
     }
 
-    public function linkedIdentifiers(Request $request): \Illuminate\Http\Response
+    public function linkedIdentifiers(Request $request, string $license): \Illuminate\Http\Response
     {
-        $player = $this->findPlayer($request);
+        $player = $this->findPlayer($request, $license);
 
         if (!$player) {
 			return $this->text(404, "Player not found.");
@@ -377,9 +377,9 @@ class PlayerBanController extends Controller
 		return $this->drawLinked($player, $where);
     }
 
-    public function linkedPrint(Request $request): \Illuminate\Http\Response
+    public function linkedPrint(Request $request, string $license): \Illuminate\Http\Response
     {
-        $player = $this->findPlayer($request);
+        $player = $this->findPlayer($request, $license);
 
         if (!$player) {
 			return $this->text(404, "Player not found.");
@@ -396,13 +396,11 @@ class PlayerBanController extends Controller
 		return $this->drawLinked($player, $where);
     }
 
-	protected function findPlayer(Request $request)
+	protected function findPlayer(Request $request, string $license)
 	{
 		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LINKED)) {
             abort(401);
         }
-
-		$license = $request->query("license");
 
         if (!$license || !Str::startsWith($license, 'license:')) {
             return false;

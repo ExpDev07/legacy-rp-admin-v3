@@ -136,7 +136,7 @@
             <div class="absolute top-2 left-2 flex" v-if="this.perm.check(this.perm.PERM_LINKED)">
                 <a
                     class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
-                    :href="'/linked_tokens?license=' + player.licenseIdentifier"
+                    :href="'/linked_tokens/' + player.licenseIdentifier"
                     :title="t('players.show.show_link_token')"
                     target="_blank"
                 >
@@ -144,7 +144,7 @@
                 </a>
                 <a
                     class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
-                    :href="'/linked_ips?license=' + player.licenseIdentifier"
+                    :href="'/linked_ips/' + player.licenseIdentifier"
                     :title="t('players.show.show_link_ip')"
                     target="_blank"
                 >
@@ -152,7 +152,7 @@
                 </a>
                 <a
                     class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
-                    :href="'/linked_identifiers?license=' + player.licenseIdentifier"
+                    :href="'/linked_identifiers/' + player.licenseIdentifier"
                     :title="t('players.show.show_link_identifier')"
                     target="_blank"
                 >
