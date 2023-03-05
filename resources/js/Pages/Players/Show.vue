@@ -95,14 +95,14 @@
                     <a href="#" class="text-indigo-600 dark:text-indigo-400" @click="$event.preventDefault(); isEnablingCommands = true" v-if="$page.auth.player.isSuperAdmin">{{ t('players.show.edit') }}</a>
                 </span>
             </div>
-            <div class="text-sm italic mt-2" v-if="player.variables && this.perm.check(this.perm.PERM_LINKED)">
+            <div class="text-sm italic mt-2" v-if="player.variables">
                 <span class="block" v-if="player.variables.screenWidth && player.variables.screenHeight">
                     <span class="font-bold">{{ t('players.show.resolution') }}:</span>
                     {{ player.variables.screenWidth + "x" + player.variables.screenHeight }}
                 </span>
-                <span class="block" v-if="player.variables.fingerprint">
-                    <span class="font-bold">{{ t('players.show.fingerprint') }}:</span>
-                    {{ player.variables.fingerprint.toString(16) }}
+                <span class="block" v-if="player.variables.ofFingerprint && this.perm.check(this.perm.PERM_LINKED)">
+                    <span class="font-bold">{{ t('players.show.ofFingerprint') }}:</span>
+                    <a :href="'/linked_print/' + player.licenseIdentifier" target="_blank" class="text-indigo-600 dark:text-indigo-400 !no-underline">{{ player.variables.ofFingerprint }}</a>
                 </span>
             </div>
         </portal>
@@ -136,7 +136,7 @@
             <div class="absolute top-2 left-2 flex" v-if="this.perm.check(this.perm.PERM_LINKED)">
                 <a
                     class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
-                    :href="'/linked_tokens?license=' + player.licenseIdentifier"
+                    :href="'/linked_tokens/' + player.licenseIdentifier"
                     :title="t('players.show.show_link_token')"
                     target="_blank"
                 >
@@ -144,7 +144,7 @@
                 </a>
                 <a
                     class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
-                    :href="'/linked_ips?license=' + player.licenseIdentifier"
+                    :href="'/linked_ips/' + player.licenseIdentifier"
                     :title="t('players.show.show_link_ip')"
                     target="_blank"
                 >
@@ -152,7 +152,7 @@
                 </a>
                 <a
                     class="p-1 text-sm mr-2 font-bold leading-4 text-center w-7 rounded border-gray-200 bg-secondary dark:bg-dark-secondary border-2 block"
-                    :href="'/linked_identifiers?license=' + player.licenseIdentifier"
+                    :href="'/linked_identifiers/' + player.licenseIdentifier"
                     :title="t('players.show.show_link_identifier')"
                     target="_blank"
                 >

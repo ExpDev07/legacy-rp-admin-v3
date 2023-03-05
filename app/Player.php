@@ -335,6 +335,19 @@ class Player extends Model
     }
 
     /**
+     * Gets the opfw fingerprint.
+     *
+     * @param $key
+     * @return mixed|null
+     */
+    public function getFingerprint()
+    {
+        $variables = $this->getUserVariables();
+
+        return isset($variables['ofFingerprint']) ? $variables['ofFingerprint'] : null;
+    }
+
+    /**
      * Checks whether this player is a staff member.
      *
      * @return bool
