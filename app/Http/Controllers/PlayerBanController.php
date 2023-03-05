@@ -406,7 +406,7 @@ class PlayerBanController extends Controller
             return false;
         }
 
-        $player = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers'])->where('license_identifier', '=', $license)->get()->first();
+        $player = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'user_variables'])->where('license_identifier', '=', $license)->get()->first();
 
         if (!$player) {
 			return false;
@@ -486,7 +486,7 @@ class PlayerBanController extends Controller
 
 		$counts = '<span style="color:#ff5b5b">Tokens</span> / <span style="color:#5bc2ff">IPs</span> / <span style="color:#65d54e">Identifiers</span> / <span style="color:#f0c622">Fingerprint</span>';
 
-		$print = $fingerprint ? " {<b><i>" . $fingerprint . "</i></b>}" : "";
+		$print = $fingerprint ? " <span style='color:#a0bcff'>{<i>" . $fingerprint . "</i>}</span>" : "";
 
         return $this->fakeText(200, "Found: <b>" . sizeof($raw) . "</b> Accounts for <a href='/players/" . $license . "' target='_blank'>" . $player->player_name . "</a>" . $print . "\n\n<i style='color:#c68dbf'>[" . $counts . "] - Last Connection - Player Name</i>\n\n<i style='color:#a3ff9b'>- Not Banned</i>\n" . implode("\n", $linked) . "\n\n<i style='color:#ff8e8e'>- Banned</i>\n" . implode("\n", $banned));
 	}
