@@ -205,6 +205,10 @@
         "title": "Dashboard",
         "welcome": "Hello, {0}. Welcome to the dashboard!",
         "player_count": "<b>{0}</b> of <b>{1}</b> players in {2} server(s), with <b>{3}</b> players waiting in queue.",
+		"server_announcement": "Server Announcement",
+		"announcement_message": "Message",
+		"send_announcement": "Send",
+		"confirm_announcement": "Are you sure you want to post this server announcement?",
         "bans": "Last 8 bans issued by you",
         "ban": {
             "license": "License ID",

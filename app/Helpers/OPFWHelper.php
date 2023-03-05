@@ -76,6 +76,31 @@ class OPFWHelper
     }
 
     /**
+     * Sends a server message
+     *
+     * @param string $message
+     * @return OPFWResponse
+     */
+    public static function serverAnnouncement(string $serverIp, string $message): OPFWResponse
+    {
+        if (!$message) {
+            return new OPFWResponse(false, 'Your message cannot be empty.');
+        }
+
+        $response = self::executeRoute($serverIp, $serverIp . 'execute/announcementMessage', [
+            'announcementMessage' => $message,
+        ]);
+
+        if ($response->status) {
+            $response->message = 'Server Announcement has been posted successfully.';
+        } else {
+			$response->message = 'Failed to post server announcement.';
+		}
+
+        return $response;
+    }
+
+    /**
      * Kicks a player from the server
      *
      * @param string $staffLicenseIdentifier

@@ -33,6 +33,7 @@ const Permissions = {
             PERM_VIEW_QUEUE:     'view_queue',
             PERM_TWITTER:        'twitter',
             PERM_LINKED:         'linked',
+            PERM_ANNOUNCEMENT:   'announcement',
 
             check(permission) {
                 if (!(permission in permissions)) {
