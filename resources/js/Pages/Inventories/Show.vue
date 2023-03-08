@@ -14,7 +14,7 @@
         </portal>
 
         <!-- Table -->
-        <v-section class="overflow-x-auto relative" v-if="inventory">
+        <v-section class="overflow-x-auto relative" v-if="inventory" :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('global.info') }}
@@ -96,9 +96,7 @@
                         </template>
 
                         <template>
-                            <p v-html="t('players.vehicles.parked', inventory.more_info.garage)">
-                                {{ t('players.vehicles.parked', inventory.more_info.garage) }}
-                            </p>
+                            <p v-html="t('players.vehicles.parked', inventory.more_info.garage)"></p>
                         </template>
 
                         <template #footer>

@@ -18,7 +18,7 @@
         </portal>
 
         <!-- Table -->
-        <v-section class="overflow-x-auto">
+        <v-section class="overflow-x-auto" :noFooter="true">
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">
@@ -35,7 +35,7 @@
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <a :href="'/export/screenshot/' + screenshot.filename" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
+                            <a :href="'/export/screenshot/' + screenshot.filename" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.filename.split(".").pop()) }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <i class="fas fa-cogs mr-1" v-if="screenshot.system"></i>

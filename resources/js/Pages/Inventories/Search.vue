@@ -7,7 +7,7 @@
             </h1>
         </portal>
 
-        <v-section>
+        <v-section :noFooter="true" :noHeader="true">
             <template>
                 <div class="flex flex-wrap mb-4">
                     <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
@@ -63,7 +63,7 @@
             </template>
         </v-section>
 
-        <v-section>
+        <v-section :noFooter="true" :noHeader="true">
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">

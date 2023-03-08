@@ -9,7 +9,7 @@
             </p>
         </portal>
 
-        <v-section v-if="serverList.length > 0">
+        <v-section v-if="serverList.length > 0" :noFooter="true" :noHeader="true">
             <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-9">
                 <card v-for="server in serverList" :no_footer="true">
                     <template #header>

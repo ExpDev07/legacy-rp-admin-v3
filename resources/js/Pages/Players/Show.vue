@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <div class="flex items-start space-x-10 mobile:flex-wrap">
+            <div class="flex items-start space-x-10 mobile:flex-wrap mt-8">
                 <h1 class="dark:text-white">
                     {{ player.playerName }}
                 </h1>
@@ -79,7 +79,7 @@
                     </badge>
                 </div>
             </div>
-            <div class="text-sm italic">
+            <div class="text-sm italic mt-4">
                 <span class="block" v-if="player.playerAliases && player.playerAliases.length > 0">
                     <span class="font-bold">{{ t('players.show.aliases') }}:</span>
                     {{ player.playerAliases.join(", ") }}
@@ -809,7 +809,7 @@
         </div>
 
         <!-- Useful links -->
-        <v-section class="py-1 dark:bg-dark-secondary">
+        <v-section class="dark:bg-dark-secondary" :noFooter="true" :noHeader="true">
             <div class="flex flex-wrap items-center text-center">
                 <inertia-link
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
@@ -860,7 +860,7 @@
         </v-section>
 
         <!-- Characters -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.characters.characters') }}
@@ -1142,7 +1142,7 @@
         </v-section>
 
         <!-- Screenshots -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('screenshot.screenshots') }}
@@ -1166,14 +1166,11 @@
                         v-for="screenshot in sortedScreenshots"
                         :key="screenshot.system ? screenshot.url : screenshot.filename">
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.system">
-                            <a :href="screenshot.url" target="_blank" v-if="screenshot.url.endsWith('.jpg') || screenshot.url.endsWith('.png') || screenshot.url.endsWith('.jpeg')"
-                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
-                            <a :href="screenshot.url" target="_blank" v-else
-                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view_capture') }}</a>
+                            <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.url.split(".").pop()) }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>
                             <a :href="'/export/screenshot/' + screenshot.filename" target="_blank"
-                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
+                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.filename.split(".").pop()) }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <i class="fas fa-cogs mr-1" v-if="screenshot.system"></i>
@@ -1199,7 +1196,7 @@
         </v-section>
 
         <!-- Panel Logs -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.show.panel_logs') }}

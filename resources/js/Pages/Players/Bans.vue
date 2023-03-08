@@ -11,7 +11,7 @@
         </portal>
 
         <!-- Search -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.search') }}
@@ -56,7 +56,7 @@
             </template>
         </v-section>
 
-        <v-section class="overflow-x-auto">
+        <v-section class="overflow-x-auto" :noHeader="true">
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">

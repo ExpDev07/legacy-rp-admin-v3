@@ -11,7 +11,7 @@
         </portal>
 
         <!-- Querying -->
-        <v-section>
+        <v-section :noFooter="true" :noHeader="true">
             <template>
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">

@@ -18,7 +18,7 @@
         </portal>
 
         <!-- Table -->
-        <v-section class="overflow-x-auto">
+        <v-section class="overflow-x-auto" :noHeader="true">
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">
@@ -36,8 +36,7 @@
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400" v-if="screenshot.url.endsWith('.jpg') || screenshot.url.endsWith('.png') || screenshot.url.endsWith('.jpeg') || screenshot.url.endsWith('.webp')">{{ t('screenshot.view') }}</a>
-                            <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400" v-else>{{ t('screenshot.view_capture') }}</a>
+                            <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.url.split(".").pop()) }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ screenshot.details || 'N/A' }}
