@@ -7,12 +7,12 @@
         </header>
 
         <!-- Body -->
-        <div class="mb-8">
+        <div :class="!noFooter ? 'mb-8' : ''">
             <slot />
         </div>
 
         <!-- Footer -->
-        <footer>
+        <footer v-if="!noFooter">
             <slot name="footer" />
         </footer>
 
@@ -22,6 +22,11 @@
 <script>
 export default {
     name: 'Section',
+    props: {
+        noFooter: {
+            type: Boolean,
+            default: false
+        }
+    }
 }
 </script>
-
