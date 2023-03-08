@@ -2,29 +2,31 @@
     <div>
 
         <portal to="title">
-            <h1 class="dark:text-white !mb-2">
-                <span id="map_title">{{ t('map.title') }}</span>
-                <select class="inline-block w-90 ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
-                        id="server">
-                    <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
-                </select>
-                <select class="inline-block w-40 ml-2 mr-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
-                        v-model="selectedInstance">
-                    <option v-for="instance in container.instances" :key="instance.id" :value="instance.id">
-                        {{ instance.id === container.mainInstance ? t('map.main_instance') : t('map.instance', instance.id, instance.count) }}
-                    </option>
-                </select>
-            </h1>
-            <p v-if="!isTimestampShowing && !isHistoricShowing">
-                <span v-html="data" class="block"></span>
-                <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">
-                    {{ lastConnectionError }}
-                </span>
-                <span class="block text-xs text-muted dark:text-dark-muted leading-3 mt-2">
-                    <b>{{ t('map.current_viewers') }}: </b>
-                    <span v-html="formatViewers()"></span>
-                </span>
-            </p>
+            <div class="mb-6">
+                <h1 class="dark:text-white !mb-2">
+                    <span id="map_title">{{ t('map.title') }}</span>
+                    <select class="inline-block w-90 ml-4 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
+                            id="server">
+                        <option v-for="server in servers" :key="server.name" :value="server.name">{{ server.name }}</option>
+                    </select>
+                    <select class="inline-block w-40 ml-2 mr-2 px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded"
+                            v-model="selectedInstance">
+                        <option v-for="instance in container.instances" :key="instance.id" :value="instance.id">
+                            {{ instance.id === container.mainInstance ? t('map.main_instance') : t('map.instance', instance.id, instance.count) }}
+                        </option>
+                    </select>
+                </h1>
+                <p v-if="!isTimestampShowing && !isHistoricShowing">
+                    <span v-html="data" class="block"></span>
+                    <span class="block text-xxs text-muted dark:text-dark-muted mt-0 leading-3" v-if="lastConnectionError">
+                        {{ lastConnectionError }}
+                    </span>
+                    <span class="block text-xs text-muted dark:text-dark-muted leading-3 mt-2">
+                        <b>{{ t('map.current_viewers') }}: </b>
+                        <span v-html="formatViewers()"></span>
+                    </span>
+                </p>
+            </div>
         </portal>
 
         <portal to="actions">
@@ -369,7 +371,7 @@
                             v-if="isAttachingScreenshot"/>
 
         <template>
-            <div class="-mt-12 flex flex-wrap">
+            <div class="-mt-10 flex flex-wrap">
                 <div class="w-map mr-10" id="map-wrapper">
                     <div v-if="historyRange.view" class="mb-3">
                         <div class="flex">
