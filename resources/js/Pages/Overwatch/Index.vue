@@ -2,10 +2,10 @@
     <div>
 
         <portal to="title">
-            <h1 class="dark:text-white -mt-8">
+            <h1 class="dark:text-white !-mt-8 !mb-0">
                 {{ t('overwatch.title') }}
             </h1>
-            <p>
+            <p class="!mt-2 text-gray-600 dark:text-gray-400 italic">
                 {{ t('overwatch.description') }}
             </p>
         </portal>
