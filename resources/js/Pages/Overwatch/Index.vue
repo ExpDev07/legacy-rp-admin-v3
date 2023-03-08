@@ -2,7 +2,7 @@
     <div>
 
         <portal to="title">
-            <h1 class="dark:text-white">
+            <h1 class="dark:text-white -mt-8">
                 {{ t('overwatch.title') }}
             </h1>
             <p>
@@ -12,7 +12,7 @@
 
         <ScreenshotAttacher :close="screenshotAttached" :license="screenshot.license" :url="screenshot.url" v-if="isAttaching" />
 
-        <v-section class="-mt-10 max-w-screen-lg">
+        <v-section class="-mt-10 max-w-screen-lg" :noFooter="true">
             <div class="-mt-8">
                 <div class="flex justify-between">
                     <div class="flex">
