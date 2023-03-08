@@ -21,7 +21,7 @@
                             :href="'/players/' + screenshot.license"
                             v-if="screenshot">
                             <i class="fas fa-user"></i>
-                            {{ t("overwatch.profile", screenshot.id) }}
+                            {{ t("overwatch.profile", screenshot.id, screenshot.character.name, screenshot.character.id) }}
                         </inertia-link>
 
                         <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700" v-if="screenshot">
@@ -32,7 +32,7 @@
                     <div class="flex">
                         <button class="px-5 py-2 font-semibold text-white bg-primary rounded dark:bg-dark-primary mr-3" @click="isAttaching = true" v-if="screenshot">
                             <i class="fas fa-paper-plane mr-1"></i>
-                            {{ t('screenshot.title') }}
+                            {{ t('overwatch.attach') }}
                         </button>
 
                         <button class="px-5 py-2 font-semibold text-white bg-indigo-600 rounded dark:bg-indigo-400" @click="refresh">
