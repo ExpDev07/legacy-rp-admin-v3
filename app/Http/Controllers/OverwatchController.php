@@ -8,6 +8,7 @@ use App\Http\Resources\LogResource;
 use App\Log;
 use App\Player;
 use App\Server;
+use App\Character;
 use App\Helpers\OPFWHelper;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -57,18 +58,28 @@ class OverwatchController extends Controller
             $license = array_rand($players);
             $player = $players[$license];
 
-            $screenshotResponse = OPFWHelper::createScreenshot($player['server'], $player['id']);
+			$character = Character::query()->where('character_id', '=', $player['character'])->first();
 
-            if ($screenshotResponse->status) {
-                return self::json(true, [
-                    "license"  => $license,
-                    "url"    => $screenshotResponse->data['screenshotURL'],
-                    "id"     => $player['id'],
-                    "server" => Server::getServerName($player['server'])
-                ]);
-            } else {
-                return self::json(false, null, "Failed to obtain a screenshot of the player.");
-            }
+			if ($character) {
+				$screenshotResponse = OPFWHelper::createScreenshot($player['server'], $player['id']);
+
+				if ($screenshotResponse->status) {
+					return self::json(true, [
+						"license"   => $license,
+						"url"       => $screenshotResponse->data['screenshotURL'],
+						"id"        => $player['id'],
+						"server"    => Server::getServerName($player['server']),
+						"character" => [
+							"name" => $character->first_name . ' ' . $character->last_name,
+							"id"   => $character->character_id
+						]
+					]);
+				} else {
+					return self::json(false, null, "Failed to obtain a screenshot of the player.");
+				}
+			} else {
+				return self::json(false, null, "Failed to get character info of the player.");
+			}
         } else {
             return self::json(false, null, "There are no players available.");
         }
