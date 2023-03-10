@@ -1054,7 +1054,7 @@
                                     </span>
 
                                     <inertia-link
-                                        class="px-3 py-1 ml-2 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
+                                        class="px-3 py-1 ml-3 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
                                         method="DELETE"
                                         v-bind:href="'/players/' + player.licenseIdentifier + '/warnings/' + warning.id"
                                         v-if="warning.canDelete || $page.auth.player.isSeniorStaff">
