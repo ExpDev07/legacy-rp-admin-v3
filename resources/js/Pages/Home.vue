@@ -2,12 +2,14 @@
     <div>
 
         <portal to="title">
-            <h1 class="dark:text-white">
-                {{ t("home.title") }}
-            </h1>
-            <p>
-                {{ t("home.welcome", $page.auth.player.playerName) }}
-            </p>
+            <div class="mb-4">
+                <h1 class="dark:text-white">
+                    {{ t("home.title") }}
+                </h1>
+                <p>
+                    {{ t("home.welcome", $page.auth.player.playerName) }}
+                </p>
+            </div>
         </portal>
 
         <div class="flex -mt-6 justify-between max-w-screen-2xl mobile:flex-wrap">

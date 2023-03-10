@@ -11,7 +11,7 @@
         </portal>
 
         <!-- Search -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.search') }}

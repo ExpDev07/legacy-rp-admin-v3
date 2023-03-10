@@ -11,7 +11,7 @@
         </portal>
 
         <!-- Table -->
-        <v-section class="overflow-x-auto">
+        <v-section class="overflow-x-auto" :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('logs.logs') }}

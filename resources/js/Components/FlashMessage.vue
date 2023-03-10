@@ -1,13 +1,14 @@
 <template>
     <div v-if="show">
         <!-- Success -->
-        <alert v-if="$page.flash.success" class="bg-green-500 mb-14">
+        <alert v-if="$page.flash.success" class="bg-green-500 mb-6 mt-4">
             <p>
                 {{ $page.flash.success }}
             </p>
         </alert>
+
         <!-- Error -->
-        <alert v-if="$page.flash.error" class="bg-red-500 mb-14">
+        <alert v-if="$page.flash.error" class="bg-red-500 mb-6 mt-4">
             <p>
                 {{ $page.flash.error }}
             </p>

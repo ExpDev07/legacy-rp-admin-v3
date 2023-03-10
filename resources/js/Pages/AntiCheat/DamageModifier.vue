@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-section class="overflow-x-auto">
+        <v-section class="overflow-x-auto" :noFooter="true" :noHeader="true">
             <div class="w-full flex flex-wrap max-w-screen-md m-auto text-justify">
                 <h1 class="dark:text-white mb-5">
                     Anti-Cheat: Invalid Damage Modifier

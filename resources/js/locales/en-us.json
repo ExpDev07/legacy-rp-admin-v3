@@ -189,8 +189,7 @@
         "anti_cheat": "Anti-Cheat Screenshots",
         "anti_cheat_description": "Automated screenshots and screen captures by the anti cheat.",
         "no_screenshots": "No screenshots attached",
-        "view": "View screenshot",
-        "view_capture": "View screen-capture",
+        "view": "View .{0}",
         "description": "Recently attached screenshots.",
         "player": "Player",
         "label": "Screenshots",
@@ -618,7 +617,7 @@
     },
     "players": {
         "title": "Players",
-        "description": "Search Players!",
+        "description": "Search for players.",
         "search": "Search",
         "name": "Player Name",
         "license": "License Identifier",

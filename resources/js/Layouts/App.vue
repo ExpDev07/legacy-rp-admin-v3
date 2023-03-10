@@ -14,7 +14,7 @@
 
                 <!-- Content -->
                 <div class="flex flex-col flex-grow overflow-y-auto dark:bg-gray-800 dark:text-white" scroll-region>
-                    <div class="flex-grow p-12 py-16 mobile:px-4 relative">
+                    <div class="flex-grow p-12 pt-10 mobile:px-4 relative">
 
                         <!-- Flash message -->
                         <div>
@@ -22,7 +22,7 @@
                         </div>
 
                         <!-- Header -->
-                        <header class="flex flex-wrap items-start justify-between flex-grow mb-12">
+                        <header class="flex flex-wrap items-start justify-between flex-grow mb-8">
 
                             <!-- Title -->
                             <div class="max-w-full prose dark:text-white">

@@ -1,7 +1,7 @@
 <template>
     <div>
         <portal to="title">
-            <div class="flex items-start space-x-10 mobile:flex-wrap">
+            <div class="flex items-start space-x-10 mobile:flex-wrap mt-8">
                 <h1 class="dark:text-white">
                     {{ player.playerName }}
                 </h1>
@@ -79,7 +79,7 @@
                     </badge>
                 </div>
             </div>
-            <div class="text-sm italic">
+            <div class="text-sm italic mt-4">
                 <span class="block" v-if="player.playerAliases && player.playerAliases.length > 0">
                     <span class="font-bold">{{ t('players.show.aliases') }}:</span>
                     {{ player.playerAliases.join(", ") }}
@@ -809,7 +809,7 @@
         </div>
 
         <!-- Useful links -->
-        <v-section class="py-1 dark:bg-dark-secondary">
+        <v-section class="dark:bg-dark-secondary" :noFooter="true" :noHeader="true">
             <div class="flex flex-wrap items-center text-center">
                 <inertia-link
                     class="flex-1 block p-5 m-2 font-semibold text-white bg-indigo-600 rounded mobile:w-full mobile:m-0 mobile:mb-3 mobile:flex-none"
@@ -860,7 +860,7 @@
         </v-section>
 
         <!-- Characters -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.characters.characters') }}
@@ -1030,70 +1030,102 @@
             </template>
 
             <template>
-                <card
-                    v-for="(warning) in filteredWarnings"
-                    :key="warning.id"
-                    class="relative"
-                >
-                    <template #header>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <h4>
-                                    {{ warning.issuer.playerName }}
-                                    -
-                                    <span v-html="wrapWarningType(warning.warningType)"></span>
-                                </h4>
-                            </div>
-                            <div class="flex items-center">
-                                <span class="text-muted dark:text-dark-muted">
-                                    {{ warning.createdAt | formatTime }}
-                                </span>
-                                <sup class="ml-2 italic text-sm text-gray-600 dark:text-gray-400"
-                                     v-if="warning.updatedAt !== warning.createdAt"
-                                     :title="t('players.show.warning_edited_title', formatTime(warning.updatedAt))">
-                                    {{ t('players.show.warning_edited') }}
-                                </sup>
-                                <button
-                                    class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-yellow-500 rounded"
-                                    @click="warningEditId = warning.id"
-                                    v-if="warningEditId !== warning.id && $page.auth.player.licenseIdentifier === warning.issuer.licenseIdentifier && warning.warningType !== 'system'"
-                                >
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button
-                                    class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-success dark:bg-dark-success rounded"
-                                    @click="editWarning(warning.id, warning.warningType)"
-                                    v-if="warningEditId === warning.id"
-                                >
-                                    <i class="fas fa-save"></i>
-                                </button>
-                                <button
-                                    class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-muted dark:bg-dark-muted rounded"
-                                    @click="warningEditId = 0"
-                                    v-if="warningEditId === warning.id"
-                                >
-                                    <i class="fas fa-ban"></i>
-                                </button>
-                                <inertia-link
-                                    class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
-                                    method="DELETE"
-                                    v-bind:href="'/players/' + player.licenseIdentifier + '/warnings/' + warning.id"
-                                    v-if="warning.canDelete || $page.auth.player.isSeniorStaff">
-                                    <i class="fas fa-trash"></i>
-                                </inertia-link>
-                            </div>
-                        </div>
-                    </template>
+                <template v-for="(warning, index) in filteredWarnings">
+                    <div v-if="isAutomatedWarning(warning.message)"
+                        class="flex flex-col px-8 mb-5 bg-white dark:bg-gray-600 rounded-lg shadow-sm relative opacity-50 hover:opacity-100"
+                        :class="{'mb-3' : index+1 < filteredWarnings.length && isAutomatedWarning(filteredWarnings[index+1].message)}">
+                        <header class="text-center">
+                            <div class="flex justify-between gap-4">
+                                <div class="flex justify-between gap-4">
+                                    <div class="flex items-center py-4 pr-4 border-r border-gray-200 dark:border-gray-400 w-32 flex-shrink-0">
+                                        <h4 class="truncate" :title="warning.issuer.playerName">{{ warning.issuer.playerName }}</h4>
+                                    </div>
 
-                    <template>
-                        <p class="text-muted dark:text-dark-muted" v-if="warningEditId !== warning.id">
-                            <span class="whitespace-pre-line"
-                                  v-html="formatWarning(warning.message)"></span>
-                        </p>
-                        <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
-                                  :id="'warning_' + warning.id" v-else-if="warningEditId === warning.id">{{ warning.message }}</textarea>
-                    </template>
-                </card>
+                                    <div class="flex items-center py-4">
+                                        <span class="italic text-xs text-muted dark:text-dark-muted text-left">
+                                            {{ warning.message }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-end py-4 pl-4 border-l border-gray-200 dark:border-gray-400">
+                                    <span class="italic text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap blobk w-32 text-right">
+                                        {{ warning.createdAt | formatTime }}
+                                    </span>
+
+                                    <inertia-link
+                                        class="px-3 py-1 ml-2 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
+                                        method="DELETE"
+                                        v-bind:href="'/players/' + player.licenseIdentifier + '/warnings/' + warning.id"
+                                        v-if="warning.canDelete || $page.auth.player.isSeniorStaff">
+                                        <i class="fas fa-trash"></i>
+                                    </inertia-link>
+                                </div>
+                            </div>
+                        </header>
+                    </div>
+
+                    <card class="relative" v-else>
+                        <template #header>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <h4>
+                                        {{ warning.issuer.playerName }}
+                                        -
+                                        <span v-html="wrapWarningType(warning.warningType)"></span>
+                                    </h4>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-muted dark:text-dark-muted">
+                                        {{ warning.createdAt | formatTime }}
+                                    </span>
+                                    <sup class="ml-2 italic text-sm text-gray-600 dark:text-gray-400"
+                                        v-if="warning.updatedAt !== warning.createdAt"
+                                        :title="t('players.show.warning_edited_title', formatTime(warning.updatedAt))">
+                                        {{ t('players.show.warning_edited') }}
+                                    </sup>
+                                    <button
+                                        class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-yellow-500 rounded"
+                                        @click="warningEditId = warning.id"
+                                        v-if="warningEditId !== warning.id && $page.auth.player.licenseIdentifier === warning.issuer.licenseIdentifier && warning.warningType !== 'system'"
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button
+                                        class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-success dark:bg-dark-success rounded"
+                                        @click="editWarning(warning.id, warning.warningType)"
+                                        v-if="warningEditId === warning.id"
+                                    >
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                    <button
+                                        class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-muted dark:bg-dark-muted rounded"
+                                        @click="warningEditId = 0"
+                                        v-if="warningEditId === warning.id"
+                                    >
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                    <inertia-link
+                                        class="px-3 py-1 ml-4 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
+                                        method="DELETE"
+                                        v-bind:href="'/players/' + player.licenseIdentifier + '/warnings/' + warning.id"
+                                        v-if="warning.canDelete || $page.auth.player.isSeniorStaff">
+                                        <i class="fas fa-trash"></i>
+                                    </inertia-link>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template>
+                            <p class="text-muted dark:text-dark-muted" v-if="warningEditId !== warning.id">
+                                <span class="whitespace-pre-line"
+                                    v-html="formatWarning(warning.message)"></span>
+                            </p>
+                            <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
+                                    :id="'warning_' + warning.id" v-else-if="warningEditId === warning.id">{{ warning.message }}</textarea>
+                        </template>
+                    </card>
+                </template>
                 <p class="text-muted dark:text-dark-muted" v-if="filteredWarnings.length === 0">
                     {{ t('players.show.no_warnings') }}
                 </p>
@@ -1142,7 +1174,7 @@
         </v-section>
 
         <!-- Screenshots -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('screenshot.screenshots') }}
@@ -1166,14 +1198,11 @@
                         v-for="screenshot in sortedScreenshots"
                         :key="screenshot.system ? screenshot.url : screenshot.filename">
                         <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.system">
-                            <a :href="screenshot.url" target="_blank" v-if="screenshot.url.endsWith('.jpg') || screenshot.url.endsWith('.png') || screenshot.url.endsWith('.jpeg')"
-                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
-                            <a :href="screenshot.url" target="_blank" v-else
-                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view_capture') }}</a>
+                            <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.url.split(".").pop()) }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" v-else>
                             <a :href="'/export/screenshot/' + screenshot.filename" target="_blank"
-                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view') }}</a>
+                               class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.filename.split(".").pop()) }}</a>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             <i class="fas fa-cogs mr-1" v-if="screenshot.system"></i>
@@ -1199,7 +1228,7 @@
         </v-section>
 
         <!-- Panel Logs -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.show.panel_logs') }}
@@ -2153,6 +2182,9 @@ export default {
                 return callback(url);
             });
         },
+        isAutomatedWarning(warning) {
+            return warning.includes('This warning was generated automatically') || warning === 'I removed this players ban.';
+        },
         formatWarning(warning) {
             warning = warning.replace(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15})/gmi, (full, _ignore, host, steam) => {
                 const url = full && full.startsWith("http") ? full : "/players/" + steam,
@@ -2170,7 +2202,8 @@ export default {
 
             return this.urlify(warning, function (url) {
                 const ext = url.split(/[#?]/)[0].split('.').pop().trim();
-                let extraClass = 'user-link';
+                let extraClass = 'user-link',
+                    text = url;
 
                 if (url.match(/(https?:\/\/(.+?)\/players\/)?(steam:\w{15}|license:\w{40})/gmi)) return url;
 
@@ -2193,11 +2226,29 @@ export default {
 
                 if (url.startsWith("https://www.twitch.tv/videos/")) {
                     extraClass = 'user-twitch';
+
+                    const twitchId = url.match(/(?<=\/videos\/)\d+/gm);
+
+                    if (twitchId) {
+                        text = "twitch.tv/" + twitchId.pop();
+                    }
                 } else if (url.startsWith("https://tickettool.xyz/direct?url=")) {
                     extraClass = 'user-iframe';
+
+                    const ticketName = url.match(/(?<=\/transcript-)\w+-\d+(?=\.html)/gm);
+
+                    if (ticketName) {
+                        text = "tickettool.xyz/" + ticketName.pop();
+                    }
+                } else if (url.startsWith("https://cdn.discordapp.com/attachments")) {
+                    const name = (url + "?").match(/(?<=\/attachments\/\d+\/\d+\/).+(?=\?|#)/gm);
+
+                    if (name) {
+                        text = "cdn.discordapp.com/" + name.pop();
+                    }
                 }
 
-                return '<a href="' + url + '" target="_blank" class="text-indigo-600 dark:text-indigo-400 ' + extraClass + '">' + url + '</a>';
+                return '<a href="' + url + '" target="_blank" class="text-indigo-600 dark:text-indigo-400 ' + extraClass + '">' + text + '</a>';
             });
         },
         viewImage(el, url) {

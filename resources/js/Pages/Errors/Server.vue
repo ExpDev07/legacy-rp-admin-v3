@@ -31,7 +31,7 @@
         </portal>
 
         <!-- Querying -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('logs.filter') }}
@@ -110,9 +110,7 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="error in errors"
                         :key="error.error_id">
                         <td class="px-6 py-3 border-t mobile:block whitespace-nowrap font-mono" :title="error.error_location">{{ trim(error.error_location, 20) }}</td>
-                        <td class="px-6 py-3 border-t mobile:block font-mono text-sm cursor-pointer" @click="showError(error)" v-html="formatChatColors(trim(error.error_trace, 200))">
-                            {{ formatChatColors(trim(error.error_trace, 200)) }}
-                        </td>
+                        <td class="px-6 py-3 border-t mobile:block font-mono text-sm cursor-pointer" @click="showError(error)" v-html="formatChatColors(trim(error.error_trace, 200))"></td>
                         <td class="px-6 py-3 border-t mobile:block">{{ error.timestamp * 1000 | formatTime(true) }}</td>
                     </tr>
                     <tr v-if="errors.length === 0">
@@ -164,8 +162,8 @@
 
             <template #default>
                 <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 font-bold whitespace-pre-line" v-if="errorDetail.error_location.length < 40">{{ errorDetail.error_location }}</pre>
-                <pre class="text-lg block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>{{ errorDetail.error_location }}</pre>
-                <pre class="text-lg block mb-2 text-sm whitespace-pre-line break-words" v-html="formatChatColors(errorDetail.error_trace)">{{ formatChatColors(errorDetail.error_trace) }}</pre>
+                <pre class="block mb-4 pb-4 border-gray-500 border-dashed border-b-2 text-sm whitespace-pre-line break-words" v-else>{{ errorDetail.error_location }}</pre>
+                <pre class="block mb-2 text-sm whitespace-pre-line break-words" v-html="formatChatColors(errorDetail.error_trace)"></pre>
             </template>
 
             <template #actions>

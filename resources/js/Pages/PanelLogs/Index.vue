@@ -18,7 +18,7 @@
         </portal>
 
         <!-- Querying -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('panel_logs.filter') }}

@@ -114,7 +114,7 @@
         </div>
 
         <!-- Editing -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('global.info') }}
@@ -275,7 +275,7 @@
         </v-section>
 
         <!-- Job -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.job.job') }}
@@ -662,7 +662,7 @@
         </div>
 
         <!-- Vehicles -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.vehicles.vehicles') }}
@@ -794,7 +794,7 @@
         </v-section>
 
         <!-- Properties -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.properties.properties') }}
@@ -882,7 +882,7 @@
         </v-section>
 
         <!-- Motels -->
-        <v-section>
+        <v-section :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('players.motels.motels') }}

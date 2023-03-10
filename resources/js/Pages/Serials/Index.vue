@@ -11,7 +11,7 @@
         </portal>
 
         <!-- Search -->
-        <v-section>
+        <v-section :noFooter="true" :noHeader="true">
             <template>
                 <form @submit.prevent>
                     <div class="flex flex-wrap mb-4">
@@ -39,7 +39,7 @@
             </template>
         </v-section>
 
-        <v-section class="overflow-x-auto">
+        <v-section class="overflow-x-auto" :noFooter="true">
             <template #header>
                 <h2>
                     {{ t('serials.result') }}
