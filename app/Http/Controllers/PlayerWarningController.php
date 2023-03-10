@@ -8,6 +8,7 @@ use App\Player;
 use App\Warning;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PlayerWarningController extends Controller
 {
@@ -22,6 +23,12 @@ class PlayerWarningController extends Controller
     public function store(Player $player, WarningStoreRequest $request): RedirectResponse
     {
         $data = $request->validated();
+
+		$msg = trim($data["message"]);
+
+		if (Str::contains($msg, "This warning was generated automatically") || $msg === "I removed this players ban.") {
+			return back()->with('error', 'Something went wrong.');
+		}
 
         $isSenior = $this->isSeniorStaff($request);
 
