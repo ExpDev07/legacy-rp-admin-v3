@@ -704,6 +704,7 @@
             "revive": "Revive Player",
             "edit_role": "Edit Role",
             "edit_tag": "Edit Tag",
+			"damage_logs": "Show damage logs",
             "update_commands": "Update Commands",
             "edit": "Edit",
             "remove_tag": "Remove Tag",

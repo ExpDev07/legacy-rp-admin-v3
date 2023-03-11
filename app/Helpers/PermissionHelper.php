@@ -20,6 +20,7 @@ class PermissionHelper
         self::PERM_TWITTER        => ['twitter', self::LEVEL_SUPERADMIN],
         self::PERM_LINKED         => ['linked', self::LEVEL_ROOT],
         self::PERM_ANNOUNCEMENT   => ['announcement', self::LEVEL_SUPERADMIN],
+        self::PERM_DAMAGE_LOGS    => ['damage_logs', self::LEVEL_SENIOR],
     ];
 
     const PERM_SCREENSHOT     = 'P_SCREENSHOT';
@@ -34,6 +35,7 @@ class PermissionHelper
     const PERM_TWITTER        = 'P_TWITTER';
     const PERM_LINKED         = 'P_LINKED';
     const PERM_ANNOUNCEMENT   = 'P_ANNOUNCEMENT';
+    const PERM_DAMAGE_LOGS    = 'P_DAMAGE_LOGS';
 
     const LEVEL_STAFF      = 1;
     const LEVEL_SENIOR     = 2;
