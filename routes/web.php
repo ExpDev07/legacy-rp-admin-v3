@@ -113,6 +113,9 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 	Route::get('/linked_identifiers/{license}', [PlayerBanController::class, 'linkedIdentifiers']);
 	Route::get('/linked_print/{license}', [PlayerBanController::class, 'linkedPrint']);
 
+	// Epic damage logs
+	Route::get('/who_damaged/{license}', [PlayerRouteController::class, 'whoDamaged']);
+
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
     Route::get('/inventories/vehicle/{vehicle}', [InventoryController::class, 'vehicle']);

@@ -6,6 +6,7 @@ use App\Helpers\LoggingHelper;
 use App\Helpers\OPFWHelper;
 use App\Helpers\PermissionHelper;
 use App\Player;
+use App\WeaponDamageEvent;
 use App\Screenshot;
 use App\Server;
 use App\Http\Resources\PanelLogResource;
@@ -552,4 +553,72 @@ class PlayerRouteController extends Controller
         ]);
     }
 
+    /**
+     * @param string $license
+     */
+    public function whoDamaged(string $license)
+    {
+		if (!$license || !Str::startsWith($license, 'license:')) {
+            abort(404);
+        }
+
+        $player = Player::query()->select(['player_name', 'license_identifier'])->where('license_identifier', '=', $license)->get()->first();
+
+        if (!$player) {
+			abort(404);
+        }
+
+		$logs = WeaponDamageEvent::getDamaged($player->license_identifier);
+
+		$list = [];
+
+		if (!empty($logs)) {
+			$names = Player::fetchLicensePlayerNameMap($logs, 'license_identifier');
+
+			$logs = array_map(function ($log) {
+				$log["weapon_type"] = WeaponDamageEvent::getDamageWeapon($log["weapon_type"]);
+				$log["damage_type"] = WeaponDamageEvent::getDamageType($log["damage_type"]);
+
+				$log["distance"] = number_format($log["distance"], 2) . "m";
+
+				return $log;
+			}, $logs);
+
+			$maxName = max(array_map('strlen', array_values($names)));
+			$maxWeapon = max(array_map(function ($log) {
+				return strlen($log["weapon_type"]);
+			}, $logs));
+			$maxDistance = max(array_map(function ($log) {
+				return strlen($log["distance"]);
+			}, $logs));
+
+			$lastDate = false;
+
+			foreach ($logs as $log) {
+				$date = date('D, jS M Y', $log["timestamp"]);
+				$time = '<i style="color:#ffccf7">' . date('H:i:s', $log["timestamp"]) . '</i>';
+
+				if ($lastDate !== $date) {
+					$list[] = "\n<b style='border-bottom: 1px dashed #fff;margin: 10px 0 5px;display: inline-block;'>- - - " . $date . " - - -</b>";
+
+					$lastDate = $date;
+				}
+
+				$name = str_pad($names[$log["license_identifier"]] ?? 'Unknown', $maxName);
+				$weapon = '<span style="color:#cef">' . str_pad($log["weapon_type"], $maxWeapon) . '</span>';
+				$damage = '<span style="color:#ccffd6">' . str_pad($log["weapon_damage"]."hp", 5) . '</span>';
+				$distance = '<span style="color:#fff9cc">' . str_pad($log["distance"], $maxDistance) . '</span>';
+
+				$name = '<a href="/players/' . $log["license_identifier"] . '" style="color:#d5ccff" target="_blank">' . $name . '</a>';
+
+				$list[] = "  " . $time . "    " . $name . "    " . $weapon . "    " . $damage . "    " . $distance . "    <span style='color:#fcc'>" . $log["damage_type"] . "</span>";
+			}
+		} else {
+			$list[] = 'No damage logs found';
+		}
+
+		$playerName = '<a href="/players/' . $player->license_identifier . '" target="_blank">' . $player->player_name . '</a>';
+
+        return $this->fakeText(200, "Last damage logs for $playerName\n<small><i>All times in " . date("e") . "</i></small>\n" . implode("\n", $list));
+    }
 }
