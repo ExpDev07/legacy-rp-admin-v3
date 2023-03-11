@@ -34,6 +34,7 @@ const Permissions = {
             PERM_TWITTER:        'twitter',
             PERM_LINKED:         'linked',
             PERM_ANNOUNCEMENT:   'announcement',
+            PERM_DAMAGE_LOGS:    'damage_logs',
 
             check(permission) {
                 if (!(permission in permissions)) {

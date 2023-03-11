@@ -556,8 +556,12 @@ class PlayerRouteController extends Controller
     /**
      * @param string $license
      */
-    public function whoDamaged(string $license)
+    public function whoDamaged(Request $request, string $license)
     {
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_DAMAGE_LOGS)) {
+            abort(401);
+        }
+
 		if (!$license || !Str::startsWith($license, 'license:')) {
             abort(404);
         }
