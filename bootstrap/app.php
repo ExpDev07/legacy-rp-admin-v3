@@ -12,6 +12,8 @@
 
 use App\Helpers\GeneralHelper;
 
+include_once __DIR__ . '/functions.php';
+
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
@@ -30,8 +32,6 @@ if (file_exists($envDir) && CLUSTER !== null) {
 } else {
     die('Invalid cluster "' . CLUSTER . '"');
 }
-
-require_once __DIR__ . '/functions.php';
 
 /*
 |--------------------------------------------------------------------------
