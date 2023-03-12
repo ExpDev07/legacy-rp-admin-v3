@@ -31,6 +31,8 @@ if (file_exists($envDir) && CLUSTER !== null) {
     die('Invalid cluster "' . CLUSTER . '"');
 }
 
+require_once __DIR__ . '/functions.php';
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
