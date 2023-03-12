@@ -588,7 +588,7 @@ class PlayerRouteController extends Controller
 				return $log;
 			}, $logs);
 
-			$maxName = max(array_map('strlen', array_values($names)));
+			$maxName = max(array_map('mb_strlen', array_values($names)));
 			$maxWeapon = max(array_map(function ($log) {
 				return strlen($log["weapon_type"]);
 			}, $logs));

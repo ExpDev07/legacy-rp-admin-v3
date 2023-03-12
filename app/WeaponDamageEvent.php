@@ -365,13 +365,17 @@ class WeaponDamageEvent extends Model
 
 	public static function getDamageWeapon($hash)
 	{
-		$hash = $hash - 4294967296;
-
 		if (isset(self::Weapons[$hash])) {
 			return self::Weapons[$hash];
 		}
 
-		return "N/A ($hash)";
+		$signed = $hash - 4294967296;
+
+		if (isset(self::Weapons[$signed])) {
+			return self::Weapons[$signed];
+		}
+
+		return "$hash/$signed";
 	}
 
 	public static function getDamaged(string $license)
