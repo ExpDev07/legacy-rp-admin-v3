@@ -608,7 +608,7 @@ class PlayerRouteController extends Controller
 					$lastDate = $date;
 				}
 
-				$name = str_pad($names[$log["license_identifier"]] ?? 'Unknown', $maxName);
+				$name = mb_str_pad($names[$log["license_identifier"]] ?? 'Unknown', $maxName);
 				$weapon = '<span style="color:#cef">' . str_pad($log["weapon_type"], $maxWeapon) . '</span>';
 				$damage = '<span style="color:#ccffd6">' . str_pad($log["weapon_damage"]."hp", 5) . '</span>';
 				$distance = '<span style="color:#fff9cc">' . str_pad($log["distance"], $maxDistance) . '</span>';
