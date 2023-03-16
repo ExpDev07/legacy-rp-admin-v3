@@ -153,13 +153,13 @@ class Ban extends Model
         return $this->belongsTo(Player::class, 'creator_name', 'player_name');
     }
 
-	public static function resolveAutomatedReason(string $reason): string
+	public static function resolveAutomatedReason(string $originalReason): string
 	{
 		if (self::$automatedReasons === null) {
 			self::$automatedReasons = json_decode(file_get_contents(__DIR__ . '/../helpers/automated-bans.json'), true);
 		}
 
-		$parts = explode('-', $reason);
+		$parts = explode('-', $originalReason);
 
 		$category = array_shift($parts);
 		$key = array_shift($parts);
@@ -167,7 +167,7 @@ class Ban extends Model
 		if (self::$automatedReasons && $category && $key && isset(self::$automatedReasons[$category]) && isset(self::$automatedReasons[$category][$key])) {
 			$reason = self::$automatedReasons[$category][$key];
 
-			return str_replace('${DATA}', implode('-', $parts), $reason) . " (" . $reason . ")";
+			return str_replace('${DATA}', implode('-', $parts), $reason) . " (" . $originalReason . ")";
 		}
 
 		return $reason;
