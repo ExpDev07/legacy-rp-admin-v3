@@ -57,41 +57,16 @@ class ScreenshotController extends Controller
     {
         $page = Paginator::resolveCurrentPage('page');
 
-        $system = DB::table('system_screenshots')
-            ->where('details', 'LIKE', 'Anti-Cheat:%')
-            ->orderByDesc('created_at')
-            ->select(['character_id', 'url', 'details', 'created_at'])
-            ->limit(20)->offset(($page - 1) * 20)
-            ->get()->toArray();
+		$system = DB::select(DB::raw("SELECT player_name, users.license_identifier, url, details, timestamp FROM (SELECT url, details, character_id, created_at AS timestamp FROM system_screenshots UNION SELECT identifier, reason, ban_hash, timestamp FROM user_bans) data LEFT JOIN characters ON data.character_id = characters.character_id LEFT JOIN users ON url = users.license_identifier OR characters.license_identifier = users.license_identifier WHERE (details LIKE 'Anti-Cheat: %' OR details LIKE 'MODDING-%') AND (url LIKE 'license:%' OR url LIKE 'https://%') ORDER BY timestamp DESC LIMIT 20 OFFSET " . (($page - 1) * 20)));
 
-        $characterIds = [];
-
-        foreach ($system as $entry) {
-            $characterId = $entry->character_id;
-
-            if (!in_array($characterId, $characterIds)) {
-                $characterIds[] = $characterId;
-            }
-        }
-
-        $players = !empty($characterIds) ? Character::query()->select(['character_id', 'license_identifier'])->whereIn('character_id', $characterIds)->groupBy('license_identifier')->get()->toArray() : [];
-
-        $characterLicenseNames = [];
-
-        foreach ($players as $character) {
-            $characterLicenseNames[$character['character_id']] = $character['license_identifier'];
-        }
-
-        $identifiers = array_values(array_map(function ($player) {
-            return $player['license_identifier'];
-        }, $players));
+        $identifiers = array_values(array_map(function ($entry) {
+            return $entry->license_identifier;
+        }, $system));
 
         return Inertia::render('Screenshots/AntiCheat', [
             'screenshots' => $system,
             'links' => $this->getPageUrls($page),
-            'playerMap' => Player::fetchLicensePlayerNameMap($players, ['license_identifier']),
             'banMap'  => Ban::getAllBans(false, $identifiers, true),
-            'characterLicenseNames' => $characterLicenseNames,
             'page' => $page,
         ]);
     }
