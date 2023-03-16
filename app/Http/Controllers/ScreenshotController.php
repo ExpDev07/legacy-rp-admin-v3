@@ -57,7 +57,13 @@ class ScreenshotController extends Controller
     {
         $page = Paginator::resolveCurrentPage('page');
 
-		$system = DB::select(DB::raw("SELECT player_name, users.license_identifier, url, details, timestamp FROM (SELECT url, details, character_id, created_at AS timestamp FROM system_screenshots UNION SELECT identifier, reason, ban_hash, timestamp FROM user_bans) data LEFT JOIN characters ON data.character_id = characters.character_id LEFT JOIN users ON url = users.license_identifier OR characters.license_identifier = users.license_identifier WHERE (details LIKE 'Anti-Cheat: %' OR details LIKE 'MODDING-%') AND (url LIKE 'license:%' OR url LIKE 'https://%') ORDER BY timestamp DESC LIMIT 20 OFFSET " . (($page - 1) * 20)));
+		$query = "SELECT player_name, users.license_identifier, url, details, timestamp FROM (" .
+			"SELECT license_identifier, url, details, created_at AS timestamp FROM system_screenshots LEFT JOIN characters ON system_screenshots.character_id = characters.character_id WHERE IF(SUBSTRING_INDEX(details, ' ', 1) = 'Anti-Cheat:', 1, 0) = 1 " .
+			"UNION " .
+			"SELECT identifier, ban_hash, reason, timestamp FROM user_bans WHERE SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND IF(SUBSTRING_INDEX(reason, '-', 1) = 'MODDING', 1, 0) = 1" .
+			") data LEFT JOIN users ON data.license_identifier = users.license_identifier ORDER BY timestamp DESC LIMIT 20 OFFSET " . (($page - 1) * 20);
+
+		$system = DB::select(DB::raw($query));
 
         $identifiers = array_values(array_map(function ($entry) {
             return $entry->license_identifier;
