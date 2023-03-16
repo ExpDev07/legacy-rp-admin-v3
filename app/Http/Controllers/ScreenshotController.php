@@ -70,7 +70,9 @@ class ScreenshotController extends Controller
         }, $system));
 
 		$system = array_map(function ($entry) {
-			$system->reason = Str::startsWith($entry->details, 'Anti-Cheat:') ? $entry->details : Ban::resolveAutomatedReason($entry->details);
+			$entry->reason = Str::startsWith($entry->details, 'Anti-Cheat:') ? $entry->details : Ban::resolveAutomatedReason($entry->details);
+
+			return $entry;
 		}, $system);
 
         return Inertia::render('Screenshots/AntiCheat', [
