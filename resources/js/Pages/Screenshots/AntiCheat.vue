@@ -30,35 +30,51 @@
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in formattedScreenshots"
                         :key="screenshot.url">
-                        <td class="px-6 py-3 border-t mobile:block">
-                            <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + licenseIdentifier(screenshot.character_id)">
-                                {{ playerName(screenshot.character_id) }}
-                            </inertia-link>
-                        </td>
-                        <td class="px-6 py-3 border-t mobile:block">
-                            <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.url.split(".").pop()) }}</a>
-                        </td>
-                        <td class="px-6 py-3 border-t mobile:block">
-                            {{ screenshot.details || 'N/A' }}
-                        </td>
-                        <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.created_at">{{ screenshot.created_at * 1000 | formatTime(true) }}</td>
-                        <td class="px-6 py-3 border-t mobile:block" v-else>{{ t('global.unknown') }}</td>
-                        <td class="px-6 py-3 text-center border-t mobile:block">
-                            <span
-                                class="block px-4 py-2 text-white rounded"
-                                :class="screenshot.ban.reason ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
-                                :title="screenshot.ban.reason ? screenshot.ban.reason : t('players.ban.no_reason')"
-                                v-if="screenshot.ban"
-                            >
-                                {{ t('global.banned') }}
-                                <span class="block text-xxs">
-                                    {{ t('global.by', screenshot.ban.creator_name ? screenshot.ban.creator_name : 'System') }}
+                        <template v-if="screenshot.isBan">
+                            <td class="px-6 py-2 border-t text-center mobile:block">
+                                <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-red-600 rounded dark:bg-red-400" :href="'/players/' + screenshot.license_identifier">
+                                    {{ screenshot.player_name }}
+                                </inertia-link>
+                            </td>
+                            <td class="px-6 py-2 border-t mobile:block italic text-gray-600 dark:text-gray-400" colspan="2">
+                                Banned indefinitely for <span class="font-semibold">{{ screenshot.ban.reason }}</span>
+                            </td>
+                            <td class="px-6 py-2 border-t mobile:block italic text-gray-600 dark:text-gray-400">
+                                {{ screenshot.timestamp * 1000 | formatTime(true) }}
+                            </td>
+                            <td class="px-6 py-2 border-t mobile:block">&nbsp;</td>
+                        </template>
+                        <template v-else>
+                            <td class="px-6 py-3 border-t mobile:block">
+                                <inertia-link class="block px-4 py-2 font-semibold text-center text-white bg-indigo-600 rounded dark:bg-indigo-400" :href="'/players/' + screenshot.license_identifier">
+                                    {{ screenshot.player_name }}
+                                </inertia-link>
+                            </td>
+                            <td class="px-6 py-3 border-t mobile:block">
+                                <a :href="screenshot.url" target="_blank" class="text-indigo-600 dark:text-indigo-400">{{ t('screenshot.view', screenshot.url.split(".").pop()) }}</a>
+                            </td>
+                            <td class="px-6 py-3 border-t mobile:block">
+                                {{ screenshot.details || 'N/A' }}
+                            </td>
+                            <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.timestamp">{{ screenshot.timestamp * 1000 | formatTime(true) }}</td>
+                            <td class="px-6 py-3 border-t mobile:block" v-else>{{ t('global.unknown') }}</td>
+                            <td class="px-6 py-3 text-center border-t mobile:block">
+                                <span
+                                    class="block px-4 py-2 text-white rounded"
+                                    :class="screenshot.ban.reason ? 'bg-red-600 dark:bg-red-700' : 'bg-red-500 dark:bg-red-600'"
+                                    :title="screenshot.ban.reason ? screenshot.ban.reason : t('players.ban.no_reason')"
+                                    v-if="screenshot.ban"
+                                >
+                                    {{ t('global.banned') }}
+                                    <span class="block text-xxs">
+                                        {{ t('global.by', screenshot.ban.creator_name ? screenshot.ban.creator_name : 'System') }}
+                                    </span>
                                 </span>
-                            </span>
-                            <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
-                                {{ t('global.not_banned') }}
-                            </span>
-                        </td>
+                                <span class="block px-4 py-2 text-white bg-green-500 rounded dark:bg-green-600" v-else>
+                                    {{ t('global.not_banned') }}
+                                </span>
+                            </td>
+                        </template>
                     </tr>
                     <tr v-if="screenshots.length === 0">
                         <td class="px-4 py-6 text-center border-t" colspan="100%">
@@ -119,15 +135,7 @@ export default {
             type: Array,
             required: true,
         },
-        playerMap: {
-            type: Object,
-            required: true,
-        },
         banMap: {
-            type: Object,
-            required: true,
-        },
-        characterLicenseNames: {
             type: Object,
             required: true,
         },
@@ -142,7 +150,8 @@ export default {
     },
     data() {
         const screenshots = this.screenshots.map(screenshot => {
-            screenshot.ban = this.getBanInfo(screenshot.character_id);
+            screenshot.ban = this.getBanInfo(screenshot.license_identifier);
+            screenshot.isBan = !screenshot.url.startsWith("http");
 
             return screenshot;
         });
@@ -171,25 +180,14 @@ export default {
 
             this.isLoading = false;
         },
-        getBanInfo(characterId, key) {
-            const licenseIdentifier = this.licenseIdentifier(characterId);
+        getBanInfo(licenseIdentifier, key) {
+            const ban = licenseIdentifier in this.banMap ? this.banMap[licenseIdentifier] : null;
 
-            if (licenseIdentifier) {
-                const ban = licenseIdentifier in this.banMap ? this.banMap[licenseIdentifier] : null;
-
-                if (key) {
-                    return ban && key in ban ? ban[key] : null;
-                }
-                return ban;
+            if (key) {
+                return ban && key in ban ? ban[key] : null;
             }
-        },
-        licenseIdentifier(characterId) {
-            return this.characterLicenseNames[characterId];
-        },
-        playerName(characterId) {
-            const licenseIdentifier = this.licenseIdentifier(characterId);
 
-            return licenseIdentifier in this.playerMap ? this.playerMap[licenseIdentifier] : licenseIdentifier;
+            return ban;
         }
     }
 };

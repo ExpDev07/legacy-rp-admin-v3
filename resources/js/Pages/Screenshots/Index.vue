@@ -18,7 +18,7 @@
         </portal>
 
         <!-- Table -->
-        <v-section class="overflow-x-auto" :noFooter="true">
+        <v-section class="overflow-x-auto" :noHeader="true">
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">
