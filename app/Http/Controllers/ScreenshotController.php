@@ -69,6 +69,10 @@ class ScreenshotController extends Controller
             return $entry->license_identifier;
         }, $system));
 
+		$system = array_map(function ($entry) {
+			$system->reason = Str::startsWith($entry->details, 'Anti-Cheat:') ? $entry->details : Ban::resolveAutomatedReason($entry->details);
+		}, $system);
+
         return Inertia::render('Screenshots/AntiCheat', [
             'screenshots' => $system,
             'links' => $this->getPageUrls($page),

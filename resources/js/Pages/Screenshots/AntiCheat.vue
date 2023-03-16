@@ -37,7 +37,7 @@
                                 </inertia-link>
                             </td>
                             <td class="px-6 py-2 border-t mobile:block italic text-gray-600 dark:text-gray-400" colspan="2">
-                                Banned indefinitely for <span class="font-semibold">{{ screenshot.details }}</span>
+                                Banned indefinitely for <span class="font-semibold">{{ screenshot.reason }}</span> <sup>{{ screenshot.details }}</sup>
                             </td>
                             <td class="px-6 py-2 border-t mobile:block italic text-gray-600 dark:text-gray-400">
                                 {{ screenshot.timestamp * 1000 | formatTime(true) }}
