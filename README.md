@@ -17,19 +17,15 @@ See [#contributing](#Contributing) for more details on how you can help shape **
 
 ## Note
 
-It is recommended that you use Chrome or Edge as your web browser for the best experience.
+It is recommended that you use Firefox, Chrome or Edge as your web browser for the best experience.
 
 ## Features
 * See and search server logs.
 * See and search players.
 * Warn and ban players, also temporarily.
 * See and edit characters.
+* And many more detailed features...
 * [*... open issue to request a feature.*](https://github.com/coalaura/opfw-admin/issues/new/choose)
-
-## Improvements from v1
-1. Re-done to give a more minimalistic and "simple" look.
-2. Backend improvements that encourage scaling and maintainability.
-3. More.
 
 ## License
 Please refer to [LICENSE.md](https://github.com/coalaura/opfw-admin/blob/master/LICENSE.md) for this project's license.
@@ -37,10 +33,9 @@ Please refer to [LICENSE.md](https://github.com/coalaura/opfw-admin/blob/master/
 ## Contributors
 This list only contains some of the most notable contributors. For the full list, refer to [GitHub's contributors graph](https://github.com/coalaura/opfw-admin/graphs/contributors).
 * [ExpDev07](https://github.com/ExpDev07) (Marius) - Original creator.
-* [twooot](https://github.com/coalaura) (Laura) - Maintainer of both frontend and backend.
+* [coalaura](https://github.com/coalaura) (Laura) - Maintainer of both frontend and backend.
 
 ## Pictures
-(more will be posted soon once some design decisions are finalized).
 
 ### Logging in
 ![Logging in](.github/screenshots/logging_in.PNG)
@@ -69,11 +64,11 @@ This list only contains some of the most notable contributors. For the full list
 ### Server List
 ![Server List](.github/screenshots/servers.PNG)
 
-### Advanced
-![Advanced](.github/screenshots/advanced.PNG)
+### Live-Map
+![Live-Map](.github/screenshots/livemap.png)
 
-### Suspicious Search
-![Suspicious Search](.github/screenshots/suspicious.PNG)
+### New Players
+![New Players](.github/screenshots/new_players.PNG)
 
 ## Contributing
 This section describes how you can help contribute.
