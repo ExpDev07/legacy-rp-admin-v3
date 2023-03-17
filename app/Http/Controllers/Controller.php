@@ -159,7 +159,34 @@ class Controller extends BaseController
 		return $seconds . ' second' . ($seconds > 1 ? 's' : '');
 	}
 
-	protected function renderGraph(array $entries, string $title)
+	private function colorGradient($fromHex, $toHex, $steps) {
+		$fromRgb['r'] = hexdec(substr($fromHex, 0, 2));
+		$fromRgb['g'] = hexdec(substr($fromHex, 2, 2));
+		$fromRgb['b'] = hexdec(substr($fromHex, 4, 2));
+
+		$toRgb['r'] = hexdec(substr($toHex, 0, 2));
+		$toRgb['g'] = hexdec(substr($toHex, 2, 2));
+		$toRgb['b'] = hexdec(substr($toHex, 4, 2));
+
+		$stepRgb['r'] = ($fromRgb['r'] - $toRgb['r']) / ($steps - 1);
+		$stepRgb['g'] = ($fromRgb['g'] - $toRgb['g']) / ($steps - 1);
+		$stepRgb['b'] = ($fromRgb['b'] - $toRgb['b']) / ($steps - 1);
+
+		$gradient = [];
+
+		for($i = 0; $i <= $steps; $i++) {
+			$r = floor($fromRgb['r'] - ($stepRgb['r'] * $i));
+			$g = floor($fromRgb['g'] - ($stepRgb['g'] * $i));
+			$b = floor($fromRgb['b'] - ($stepRgb['b'] * $i));
+
+			$gradient[] = [$r, $g, $b];
+		}
+
+		return $gradient;
+	}
+
+
+	protected function renderGraph(array $entries, string $title, )
 	{
 		$size = max(350, sizeof($entries));
 		$height = floor($size / 2);
@@ -173,7 +200,7 @@ class Controller extends BaseController
 		$black = imagecolorallocate($image, 28, 27, 34);
 		imagefill($image, 0, 0, $black);
 
-		$white = imagecolorallocate($image, 55, 65, 81);
+		$gradient = $this->colorGradient('374151', '8392aa', 25);
 
 		for ($i = 0; $i < $size; $i++) {
 			$entry = $entries[$i] ?? 0;
@@ -186,7 +213,11 @@ class Controller extends BaseController
 			$x2 = $x + $entryWidth;
 			$y2 = $height;
 
-			imagerectangle($image, $x, $y, $x2, $y2, $white);
+			$color = $gradient[floor($percentage * 25)];
+
+			$color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
+
+			imagerectangle($image, $x, $y, $x2, $y2, $color);
 		}
 
 		$text = imagecolorallocate($image, 156, 163, 175);
