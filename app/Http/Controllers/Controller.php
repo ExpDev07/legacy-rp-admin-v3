@@ -184,7 +184,7 @@ class Controller extends BaseController
 			$gradient[] = [$r, $g, $b];
 		}
 
-		return $gradient;
+		return array_reverse($gradient);
 	}
 
 
@@ -202,7 +202,7 @@ class Controller extends BaseController
 		$black = imagecolorallocate($image, 28, 27, 34);
 		imagefill($image, 0, 0, $black);
 
-		$gradient = $this->colorGradient('374151', '8ca8d4', 25);
+		$gradient = $this->colorGradient('374151', '8ca8d4', 50);
 
 		for ($i = 0; $i < $size; $i++) {
 			$entry = $entries[$i] ?? 0;
@@ -215,7 +215,7 @@ class Controller extends BaseController
 			$x2 = $x + $entryWidth;
 			$y2 = $height;
 
-			$color = $gradient[floor($percentage * 25)];
+			$color = $gradient[floor($percentage * 50)];
 
 			$color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
 
