@@ -202,7 +202,7 @@ class Controller extends BaseController
 		$black = imagecolorallocate($image, 28, 27, 34);
 		imagefill($image, 0, 0, $black);
 
-		$gradient = $this->colorGradient('4e6ea2', '8ca8d4', 50);
+		$gradient = $this->colorGradient('6180b3', '8ca8d4', 50);
 
 		for ($i = 0; $i < $size; $i++) {
 			$entry = $entries[$i] ?? 0;
