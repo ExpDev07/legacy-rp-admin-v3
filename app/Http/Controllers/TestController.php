@@ -222,7 +222,7 @@ class TestController extends Controller
             $leaderboard[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . str_pad($name, $max, " ") . "  " . $ban->identifier . "\t" . $fmt(intval($ban->playtime)) . "\t" . ($ban->reason ?? "No reason");
         }
 
-        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND timestamp >= " . (strtotime("-3 months")) . " AND (creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') OR creator_name IS NULL) GROUP BY creator_identifier ORDER BY c DESC");
+        $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND timestamp >= " . (strtotime("-3 months")) . " AND (creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') OR creator_name IS NULL) GROUP BY creator_identifier ORDER BY c DESC");
 
 		$days = round((time() - strtotime("-3 months")) / 86400);
 
@@ -240,7 +240,7 @@ class TestController extends Controller
         $text = "Top 10 quickest bans (Last 3 months)\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nTop 10 most bans (Last 3 months)\n\n" . implode("\n", $leaderboard2);
 
         if (isset($_GET["all"])) {
-            $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE identifier LIKE \"license:%\" AND (creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') OR creator_name IS NULL) GROUP BY creator_identifier ORDER BY c DESC");
+            $bans = DB::select("SELECT COUNT(identifier) c, creator_identifier FROM user_bans WHERE SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND (creator_identifier IN ('" . implode("', '", array_keys($staffMap)) . "') OR creator_name IS NULL) GROUP BY creator_identifier ORDER BY c DESC");
 
             $leaderboard3 = [];
             foreach ($bans as $x => $ban) {
