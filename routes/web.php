@@ -34,6 +34,7 @@ use App\Http\Controllers\PlayerRouteController;
 use App\Http\Controllers\PlayerWarningController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\ScreenshotController;
+use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\SerialsController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\StaffChatController;
@@ -199,7 +200,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/screenshots', [ScreenshotController::class, 'render']);
     Route::get('/anti_cheat', [ScreenshotController::class, 'antiCheat']);
 
-    Route::get('/cheat/{type}', [ScreenshotController::class, 'docs']);
+	// Documentations.
+    Route::get('/docs/{type}', [DocumentationController::class, 'docs']);
 
     // Errors.
     Route::get('/errors/client', [ErrorController::class, 'client']);

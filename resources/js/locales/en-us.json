@@ -1028,6 +1028,7 @@
         "detail": {
             "title": "Detailed disconnect reason",
             "description": "This will explain in more detail how user '{0}' left the game.",
+			"read_more": "Read more about disconnect reasons...",
             "reasons": {
                 "exited": "The user exited the game by typing 'quit' in the F8 console or pressing ALT and F4 or similar.",
                 "disconnected": "The user disconnected from the server by typing 'disconnect' in the F8 console or similar.",

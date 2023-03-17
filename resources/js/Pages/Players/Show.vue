@@ -1649,7 +1649,7 @@ export default {
             pNote = pNote.trim();
 
             if (pNote.startsWith('Anti-Cheat: Invalid Damage Modifier')) {
-                return '/cheat/damage_modifier';
+                return '/docs/damage_modifier';
             }
 
             return false;

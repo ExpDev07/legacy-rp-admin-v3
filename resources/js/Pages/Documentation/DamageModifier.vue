@@ -10,7 +10,7 @@
                     Every weapon has its damage hardcoded in its respective .meta file. This value defines the base damage of each weapon.
                 </p>
 
-                <img src="/images/cheat/damage_meta.png" class="w-full" />
+                <img src="/images/docs/damage_meta.png" class="w-full" />
                 <caption class="mb-3 text-gray-700 dark:text-gray-200 text-xs">
                     Example of the base damage being set in a .meta file
                 </caption>
@@ -26,7 +26,7 @@
                     screencapture and notify online staff members.
                 </p>
 
-                <img src="/images/cheat/damage_modifier.png" class="w-full" />
+                <img src="/images/docs/damage_modifier.png" class="w-full" />
                 <caption class="mb-3 text-gray-700 dark:text-gray-200 text-xs">
                     Example anti-cheat log. (Modifier is supposed to be 0.5 but was set to 10.0)
                 </caption>

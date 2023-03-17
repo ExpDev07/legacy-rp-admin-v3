@@ -269,6 +269,10 @@
 			<template #default>
 				<pre class="text-lg block mb-2 whitespace-pre-wrap">{{ log_detail.reason }}</pre>
 				{{ log_detail.description }}
+
+				<a href="/docs/disconnect_reasons" target="_blank" class="block mt-3 text-indigo-600 dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300 text-sm italic">
+					{{ t('logs.detail.read_more') }}
+				</a>
 			</template>
 
 			<template #actions>

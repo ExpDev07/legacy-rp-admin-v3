@@ -18,10 +18,6 @@ use Inertia\Response;
 
 class ScreenshotController extends Controller
 {
-	const Documentations = [
-		'damage_modifier' => 'DamageModifier'
-	];
-
     /**
      * Display a listing of the resource.
      *
@@ -81,23 +77,6 @@ class ScreenshotController extends Controller
             'banMap'  => Ban::getAllBans(false, $identifiers, true),
             'page' => $page,
         ]);
-    }
-
-    /**
-     * Anti-Cheat documentation.
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function docs(Request $request, string $type): Response
-    {
-		$page = self::Documentations[$type];
-
-		if (empty($page)) {
-			abort(404);
-		}
-
-        return Inertia::render('AntiCheat/' . $page);
     }
 
 }
