@@ -17,6 +17,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+/storage/debugbar
 /vendor
 envs/.env
 deploy.env
