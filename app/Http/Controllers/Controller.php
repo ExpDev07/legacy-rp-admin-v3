@@ -158,4 +158,48 @@ class Controller extends BaseController
 
 		return $seconds . ' second' . ($seconds > 1 ? 's' : '');
 	}
+
+	protected function renderGraph(array $entries)
+	{
+		$size = max(200, sizeof($entries));
+		$height = floor($size / 2);
+
+		$entryWidth = floor($size / sizeof($entries));
+
+		$max = ceil(max($entries) * 1.1);
+
+		$image = imagecreatetruecolor($size, $height);
+
+		$black = imagecolorallocate($image, 28, 27, 34);
+		imagefill($image, 0, 0, $black);
+
+		$white = imagecolorallocate($image, 55, 65, 81);
+
+		for ($i = 0; $i < $size; $i++) {
+			$entry = $entries[$i] ?? 0;
+
+			$percentage = $entry === 0 ? 0 : $entry / $max;
+
+			$x = $i * $entryWidth;
+			$y = floor($height - ($percentage * $height));
+
+			$x2 = $x + $entryWidth;
+			$y2 = $height;
+
+			imagerectangle($image, $x, $y, $x2, $y2, $white);
+		}
+
+		ob_start();
+
+		imagepng($image);
+
+		$image_data = ob_get_contents();
+		ob_end_clean();
+
+		$image_data_base64 = base64_encode($image_data);
+
+		imagedestroy($image);
+
+		return "data:image/png;base64,{$image_data_base64}";
+	}
 }
