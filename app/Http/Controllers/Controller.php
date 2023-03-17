@@ -159,9 +159,9 @@ class Controller extends BaseController
 		return $seconds . ' second' . ($seconds > 1 ? 's' : '');
 	}
 
-	protected function renderGraph(array $entries)
+	protected function renderGraph(array $entries, string $title)
 	{
-		$size = max(200, sizeof($entries));
+		$size = max(350, sizeof($entries));
 		$height = floor($size / 2);
 
 		$entryWidth = floor($size / sizeof($entries));
@@ -188,6 +188,10 @@ class Controller extends BaseController
 
 			imagerectangle($image, $x, $y, $x2, $y2, $white);
 		}
+
+		$text = imagecolorallocate($image, 156, 163, 175);
+
+		imagestring($image, 2, 4, 2, $title, $text);
 
 		ob_start();
 
