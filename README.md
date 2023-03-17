@@ -74,10 +74,11 @@ This list only contains some of the most notable contributors. For the full list
 This section describes how you can help contribute.
 
 ### Prerequisites
-* PHP 7.4+.
+* An OPFW-Server.
+* PHP 8.0+.
 * Composer.
 * Node (and npm).
-* SQL (database).
+* MySQL/MariaDB (database).
 
 ### Setting up project
 Grab yourself a copy of this repository:
