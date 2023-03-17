@@ -284,8 +284,42 @@ class TestController extends Controller
 
     public function systemBans(): Response
     {
+        $graph = DB::select("SELECT timestamp FROM user_bans WHERE creator_name IS NULL AND SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION')");
         $all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON license_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'license:%' AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
         $month = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON license_identifier = identifier WHERE creator_name IS NULL AND identifier LIKE 'license:%' AND timestamp >= " . (strtotime("-1 month")) . " AND (reason LIKE 'MODDING-%' OR reason LIKE 'MEDIOCRE-%' OR reason LIKE 'INJECTION-%' OR reason LIKE 'NO_PERMISSIONS-%' OR reason LIKE 'ILLEGAL_VALUES-%' OR reason LIKE 'TIMEOUT_BYPASS-%') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
+
+		$graphDays = [];
+
+		foreach($graph as $ban) {
+			$day = strtotime(date("Y-m-d", $ban->timestamp));
+
+			if(!isset($graphDays[$day])) {
+				$graphDays[$day] = 0;
+			}
+
+			$graphDays[$day]++;
+		}
+
+		$min = empty($graphDays) ? (time() - 86400 * 7) : min(array_keys($graphDays));
+		$max = strtotime(date("Y-m-d"));
+
+		$averageData = [];
+
+		for ($x = $min; $x <= $max; $x += 86400) {
+			$start = $x - (86400 * 7);
+
+			$average = 0;
+
+			for ($y = $start; $y <= $x; $y += 86400) {
+				$average += $graphDays[$y] ?? 0;
+			}
+
+			$average /= 7;
+
+			$averageData[] = $average;
+		}
+
+		$image = $this->renderGraph($averageData);
 
         usort($all, function ($a, $b) {
             return $b->count - $a->count;
@@ -335,9 +369,9 @@ class TestController extends Controller
             $leaderboard2[] = str_pad(($x + 1) . "", 2, "0", STR_PAD_LEFT) . ". " . $percentage . " " . $count . " " . $playtime . " " . $ban->reason;
         }
 
-        $text = "Last 30 days (" . $this->formatSecondsMinimal($monthPlaytime) . ")\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nAll time (" . $this->formatSecondsMinimal($totalPlaytime) . ")\n\n" . implode("\n", $leaderboard2);
+        $text = "\n\nLast 30 days (" . $this->formatSecondsMinimal($monthPlaytime) . ")\n\n" . implode("\n", $leaderboard) . "\n\n- - -\n\nAll time (" . $this->formatSecondsMinimal($totalPlaytime) . ")\n\n" . implode("\n", $leaderboard2);
 
-        return self::respond($text);
+		return $this->fakeText(200, '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />' . $text);
     }
 
     public function moddingBans(Request $request): Response
