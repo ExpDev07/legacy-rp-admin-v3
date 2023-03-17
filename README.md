@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://legacy-roleplay.com" target="blank">
-        <img src="https://github.com/coalaura/opfw-admin/raw/master/.github/logo.png" height="150px" width="150px" alt="Legacy RP Logo" />
+        <img src="https://github.com/coalaura/opfw-admin/raw/master/.github/opfw-logo.png" height="150px" width="150px" alt="OP-FW Logo" />
     </a>
 </p>
 
