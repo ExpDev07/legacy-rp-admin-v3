@@ -160,24 +160,26 @@ class Controller extends BaseController
 	}
 
 	private function colorGradient($fromHex, $toHex, $steps) {
-		$fromRgb['r'] = hexdec(substr($fromHex, 0, 2));
-		$fromRgb['g'] = hexdec(substr($fromHex, 2, 2));
-		$fromRgb['b'] = hexdec(substr($fromHex, 4, 2));
+		$startR = hexdec(substr($fromHex, 0, 2));
+		$startG = hexdec(substr($fromHex, 2, 2));
+		$startB = hexdec(substr($fromHex, 4, 2));
 
-		$toRgb['r'] = hexdec(substr($toHex, 0, 2));
-		$toRgb['g'] = hexdec(substr($toHex, 2, 2));
-		$toRgb['b'] = hexdec(substr($toHex, 4, 2));
+		$endR = hexdec(substr($toHex, 0, 2));
+		$endG = hexdec(substr($toHex, 2, 2));
+		$endB = hexdec(substr($toHex, 4, 2));
 
-		$stepRgb['r'] = ($fromRgb['r'] - $toRgb['r']) / ($steps - 1);
-		$stepRgb['g'] = ($fromRgb['g'] - $toRgb['g']) / ($steps - 1);
-		$stepRgb['b'] = ($fromRgb['b'] - $toRgb['b']) / ($steps - 1);
+		$alpha = 0.0;
 
 		$gradient = [];
 
-		for($i = 0; $i <= $steps; $i++) {
-			$r = floor($fromRgb['r'] - ($stepRgb['r'] * $i));
-			$g = floor($fromRgb['g'] - ($stepRgb['g'] * $i));
-			$b = floor($fromRgb['b'] - ($stepRgb['b'] * $i));
+		for ($i = 0; $i < $steps; $i++) {
+			$c = [];
+
+			$alpha += (1.0 / $steps);
+
+			$r = $startR * $alpha + (1 - $alpha) * $endR;
+			$g = $startG * $alpha + (1 - $alpha) * $endG;
+			$b = $startB * $alpha + (1 - $alpha) * $endB;
 
 			$gradient[] = [$r, $g, $b];
 		}
@@ -200,7 +202,7 @@ class Controller extends BaseController
 		$black = imagecolorallocate($image, 28, 27, 34);
 		imagefill($image, 0, 0, $black);
 
-		$gradient = $this->colorGradient('374151', '8392aa', 25);
+		$gradient = $this->colorGradient('374151', '8ca8d4', 25);
 
 		for ($i = 0; $i < $size; $i++) {
 			$entry = $entries[$i] ?? 0;
