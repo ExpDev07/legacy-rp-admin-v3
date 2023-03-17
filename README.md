@@ -68,7 +68,7 @@ This list only contains some of the most notable contributors. For the full list
 ![Live-Map](.github/screenshots/livemap.png)
 
 ### New Players
-![New Players](.github/screenshots/new_players.PNG)
+![New Players](.github/screenshots/new_players.png)
 
 ## Contributing
 This section describes how you can help contribute.
