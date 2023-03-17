@@ -414,8 +414,7 @@ class Player extends Model
      */
     public function getActiveBan(): ?Ban
     {
-        return Ban::query()
-            ->where('identifier', '=', $this->license_identifier)
+        return $this->bans()
             ->get()
             ->first();
     }
