@@ -29,7 +29,7 @@
 <a href='https://ko-fi.com/C1C510DUQ' target='_blank'>
 <img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' />
 </a>
-    
+
 <a href='https://ko-fi.com/I2I46B8EK' target='_blank'>
 <img height='36' style='border:0px;height:36px;' src='https://wiese2.org/ko-fi.png' border='0' alt='Buy Twoot a Coffee at ko-fi.com' />
 </a>
@@ -40,9 +40,10 @@
 > A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/) and
 > [Tailwindcss](https://tailwindcss.com) for the frontend.
 
-See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
+### !!!DEPRECATED!!! Continuation of this project can be found here: https://github.com/coalaura/opfw-admin
+#### This repository will not receive any further support and/or updates.
 
-**Urgent? Write to Twoot on Discord: Twootinger#2222.**
+See [#contributing](#Contributing) for more details on how you can help shape **legacy-rp-admin-v3**. We're always down to improve and receive feedback.
 
 ## Note
 
@@ -57,7 +58,7 @@ It is recommended that you use Chrome or Edge as your web browser for the best e
 
 ## Improvements from v1
 1. Re-done to give a more minimalistic and "simple" look.
-2. Backend improvements that encourage scaling and maintainability. 
+2. Backend improvements that encourage scaling and maintainability.
 3. More.
 
 ## License
