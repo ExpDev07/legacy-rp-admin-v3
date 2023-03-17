@@ -8,8 +8,6 @@
     opfw-admin
 </h1>
 
-<hr>
-
 <strong>100% FREE + OPEN SOURCE.</strong>
 
 > A web interface to help with administrative duties at the FiveM server: Legacy Roleplay. Written in PHP using [Laravel Framework](https://laravel.com/) and
