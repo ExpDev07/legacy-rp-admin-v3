@@ -222,7 +222,7 @@ class Controller extends BaseController
 			imagerectangle($image, $x, $y, $x2, $y2, $color);
 		}
 
-		$text = imagecolorallocate($image, 156, 163, 175);
+		$text = imagecolorallocate($image, 146, 175, 221);
 
 		imagestring($image, 2, 4, 2, $title, $text);
 
