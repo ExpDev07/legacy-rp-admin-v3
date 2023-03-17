@@ -319,7 +319,7 @@ class TestController extends Controller
 			$averageData[] = $average;
 		}
 
-		$image = $this->renderGraph($averageData);
+		$image = $this->renderGraph($averageData, date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max) . ' (7d avg)');
 
         usort($all, function ($a, $b) {
             return $b->count - $a->count;
