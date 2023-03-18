@@ -142,7 +142,7 @@ class HomeController extends Controller
 
 		$ban = $ban[0];
 
-		$days = floor((time() - strtotime($ban->timestamp)) / 86400);
+		$days = floor((time() - $ban->timestamp) / 86400);
 
 		return $this->renderDaysWithout($days);
 	}
