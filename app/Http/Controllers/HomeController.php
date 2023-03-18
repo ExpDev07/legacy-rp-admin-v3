@@ -13,6 +13,7 @@ use App\Player;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -57,10 +58,11 @@ class HomeController extends Controller
         })->whereIn('license_identifier', $players)->get();
 
         return Inertia::render('Home', [
-            'quote'     => $quote,
-            'bans'      => $bans,
-            'playerMap' => Player::fetchLicensePlayerNameMap($bans, 'identifier'),
-            'staff'     => PlayerIndexResource::collection($staff),
+            'quote'       => $quote,
+            'bans'        => $bans,
+            'playerMap'   => Player::fetchLicensePlayerNameMap($bans, 'identifier'),
+            'staff'       => PlayerIndexResource::collection($staff),
+			'daysWithout' => $this->getDaysWithoutModdersImage()
         ]);
     }
 
@@ -129,5 +131,57 @@ class HomeController extends Controller
             'serverCount'   => sizeof($data),
         ];
     }
+
+	private function getDaysWithoutModdersImage()
+	{
+		$ban = DB::select("SELECT timestamp FROM user_bans WHERE SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION', 'NO_PERMISSIONS', 'ILLEGAL_VALUES', 'TIMEOUT_BYPASS', 'MEDIOCRE') ORDER BY timestamp DESC LIMIT 1");
+
+		if (!$ban) {
+			return $this->renderDaysWithout(-1);
+		}
+
+		$ban = $ban[0];
+
+		$days = floor((time() - strtotime($ban->timestamp)) / 86400);
+
+		return $this->renderDaysWithout($days);
+	}
+
+	private function renderDaysWithout(int $days)
+	{
+		$days = min($days, 99);
+
+		$file = __DIR__ . '/../../../public/images/accident/accident_scaled.png';
+		$font = __DIR__ . '/../../../public/images/accident/font.ttf';
+
+		$image = imagecreatefrompng($file);
+
+		$color = imagecolorallocate($image, 14, 37, 49);
+
+		if ($days < 10) {
+			if ($days === -1) {
+				imagettftext($image, 32, 16, 388, 83, $color, $font, "X");
+			} else {
+				imagettftext($image, 32, 20, 388, 83, $color, $font, $days."");
+			}
+		} else {
+			$decimal = floor($days / 10);
+			$days = $days % 10;
+
+			imagettftext($image, 29, 20, 381, 84, $color, $font, $decimal."");
+			imagettftext($image, 29, 20, 397, 81, $color, $font, $days."");
+		}
+
+		ob_start();
+
+		imagepng($image);
+
+		$buffer = ob_get_contents();
+		ob_end_clean();
+
+		imagedestroy($image);
+
+		return 'data:image/png;base64,' . base64_encode($buffer);
+	}
 
 }

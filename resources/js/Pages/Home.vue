@@ -12,7 +12,7 @@
             </div>
         </portal>
 
-        <div class="flex -mt-6 justify-between max-w-screen-2xl mobile:flex-wrap">
+        <div class="flex -mt-6 justify-between max-w-screen-lg gap-3 mobile:flex-wrap">
             <div class="absolute top-2 right-2 flex">
                 <!-- Edit Role -->
                 <button
@@ -53,6 +53,10 @@
                     <p class="py-5 px-3">{{ t('home.no_player_count') }}</p>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-6">
+            <img :src="daysWithout" class="max-w-full h-60 shadow-md border border-gray-400 dark:border-gray-600" />
         </div>
 
         <div class="mt-14">
@@ -219,7 +223,7 @@ export default {
             this.isLoading = false;
         },
         localizePlayerCount() {
-            return this.t('home.player_count', this.joinedPlayers, this.totalPlayers, this.serverCount, this.queuePlayers);
+            return this.t('home.player_count', this.joinedPlayers, this.totalPlayers, this.queuePlayers);
         },
         playerCountPercentage() {
             const percentage = Math.floor(100 * (this.joinedPlayers / this.totalPlayers));
@@ -288,6 +292,10 @@ export default {
         },
         playerMap: {
             type: Object,
+            required: true,
+        },
+        daysWithout: {
+            type: String,
             required: true,
         },
     }
