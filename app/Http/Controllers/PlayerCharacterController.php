@@ -119,6 +119,12 @@ class PlayerCharacterController extends Controller
 
 			if ($request->input('new')) {
 				$query->orderByDesc('character_id');
+			} else if ($request->input('banned')) {
+				$query->leftJoin('user_bans', 'identifier', '=', 'license_identifier');
+
+				$query->whereNotNull("ban_hash");
+
+				$query->orderByDesc('character_id');
 			} else {
 				$query->orderBy('first_name');
 			}
