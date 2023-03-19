@@ -134,7 +134,7 @@ class HomeController extends Controller
 
 	private function getDaysWithoutModdersImage()
 	{
-		$ban = DB::select("SELECT timestamp FROM user_bans WHERE SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION', 'NO_PERMISSIONS', 'ILLEGAL_VALUES', 'TIMEOUT_BYPASS', 'MEDIOCRE') ORDER BY timestamp DESC LIMIT 1");
+		$ban = DB::select("SELECT timestamp FROM user_bans WHERE SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION', 'NO_PERMISSIONS', 'ILLEGAL_VALUES', 'TIMEOUT_BYPASS') ORDER BY timestamp DESC LIMIT 1");
 
 		if (!$ban) {
 			return $this->renderDaysWithout(-1);
