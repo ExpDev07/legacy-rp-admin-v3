@@ -47,7 +47,7 @@ class PlayerCharacterController extends Controller
 		$characters = [];
 
 		if (!$request->query('empty')) {
-			$query = Character::query()->orderBy('first_name');
+			$query = Character::query();
 
 			// Filtering by cid.
 			if ($cid = $request->input('character_id')) {
@@ -119,6 +119,8 @@ class PlayerCharacterController extends Controller
 
 			if ($request->input('new')) {
 				$query->orderByDesc('character_id');
+			} else {
+				$query->orderBy('first_name');
 			}
 
 			$query->select([
