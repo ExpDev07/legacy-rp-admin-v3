@@ -74,7 +74,13 @@ export default {
         }
     },
     updated() {
-        const title = $("header h1").text().trim();
+        let mapTitle = $("#map_title").text().trim();
+
+        if (mapTitle) {
+            mapTitle += ' (' + $("#server").val() + ')';
+        }
+
+        const title = mapTitle || $("header h1").text().trim();
 
         if (title) {
             const cluster = this.$page?.auth?.cluster ? this.$page.auth.cluster.toUpperCase() : "OP-FW";
