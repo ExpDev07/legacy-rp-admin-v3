@@ -63,7 +63,7 @@ class Server
         $host = str_replace('http://', '', $host);
         $host = explode('/', $host)[0];
 
-        $name = env('NAME_' . $host, CLUSTER . "s1");
+        $name = env('NAME_' . str_replace(['.', ':'], '_', $host), CLUSTER . "s1");
 
         return preg_match('/^\d+\.\d+\.\d+\.\d+(:\d+)?$/m', $host) ? $name : explode('.', $host)[0];
     }
