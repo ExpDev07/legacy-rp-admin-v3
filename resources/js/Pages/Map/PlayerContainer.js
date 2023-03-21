@@ -158,9 +158,6 @@ class PlayerContainer {
             }
         }
 
-		if (23 == this.players[id].player.source)
-			console.log(this.players[id])
-
         if (this.players[id].character) {
             this.activePlayerIDs.push(id);
 

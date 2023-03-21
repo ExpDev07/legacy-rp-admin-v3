@@ -911,6 +911,10 @@ export default {
             type: Array,
             required: true
         },
+        activeServer: {
+            type: String,
+            required: true
+        },
         staff: {
             type: Array,
             required: true
@@ -1273,7 +1277,7 @@ export default {
             this.screenshotLicense = null;
 
             try {
-                const result = await axios.post('/api/screenshot/' + $('#server').val() + '/' + this.form.screenshotId);
+                const result = await axios.post('/api/screenshot/' + this.activeServer + '/' + this.form.screenshotId);
                 this.isScreenshotLoading = false;
 
                 if (result.data) {
@@ -1525,7 +1529,7 @@ export default {
 
             this.historicChart = false;
 
-            const server = $('#server').val(),
+            const server = this.activeServer,
                 history = await this.loadHistory(server, license, from, till);
 
             this.loadingScreenStatus = this.t('map.heatmap_render');
@@ -1691,7 +1695,7 @@ export default {
 
             this.historicChart = false;
 
-            const server = $('#server').val(),
+            const server = this.activeServer,
                 history = await this.loadNoclipBans(server);
 
             this.loadingScreenStatus = this.t('map.heatmap_render');
@@ -1808,7 +1812,7 @@ export default {
             }
             this.loadingScreenStatus = this.t('map.timestamp_fetch');
 
-            const server = $('#server').val(),
+            const server = this.activeServer,
                 players = await this.loadTimestamp(server, timestamp);
 
             if (players) {
@@ -1880,7 +1884,7 @@ export default {
             }
             this.loadingScreenStatus = this.t('map.heatmap_fetch');
 
-            const server = $('#server').val(),
+            const server = this.activeServer,
                 heatmap = await this.loadHeatMap(server, date);
 
             this.loadingScreenStatus = this.t('map.heatmap_render');
@@ -1977,12 +1981,12 @@ export default {
 
             return null;
         },
-        async initializeMap(server) {
+        async initializeMap() {
             try {
                 const connection = io(this.hostname(true), {
                     reconnectionDelayMax: 5000,
                     query: {
-                        server: server,
+                        server: this.activeServer,
                         token: this.token,
                         type: "world",
                         license: this.$page.auth.player.licenseIdentifier
@@ -2003,10 +2007,10 @@ export default {
                 });
 
                 connection.on("disconnect", async () => {
-                    this.data = this.t('map.closed_expected', server);
+                    this.data = this.t('map.closed_expected', this.activeServer);
                 });
             } catch (e) {
-                this.data = this.t('map.closed_unexpected', server);
+                this.data = this.t('map.closed_unexpected', this.activeServer);
 
                 console.error('Failed to connect to socket', e);
             }
@@ -2201,7 +2205,7 @@ export default {
 
                 this.activeViewers = data.viewers.sort();
             } else {
-                this.data = this.t('map.error', $('#server option:selected').text());
+                this.data = this.t('map.error', this.activeServer);
 
                 if (data && data.error) {
                     let error = data.error + "";
@@ -2386,11 +2390,18 @@ export default {
         this.buildMap();
 
         $(document).ready(function () {
-            $('#server').on('change', function () {
-                _this.firstRefresh = true;
+            $('#server').val(_this.activeServer);
 
-                _this.initializeMap($(this).val());
+            $('#server').on('change', function () {
+                const val = $(this).val();
+
+                if (!val || val === _this.activeServer) return;
+
+                window.location.replace('/map/' + $(this).val() + window.location.hash);
             }).trigger('change');
+
+            _this.firstRefresh = true;
+            _this.initializeMap();
         });
 
         if (Math.round(Math.random() * 100) === 1) { // 1% chance it says fib spy satellite map

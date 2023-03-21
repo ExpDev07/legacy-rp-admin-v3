@@ -186,7 +186,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/servers', [ServerController::class, 'index']);
 
     // Map.
-    Route::get('/map', [MapController::class, 'index']);
+    Route::get('/map/{server?}', [MapController::class, 'index']);
     Route::post('/map/playerNames', [MapController::class, 'playerNames']);
     Route::get('/map/noclipBans', [MapController::class, 'noclipBans']);
 

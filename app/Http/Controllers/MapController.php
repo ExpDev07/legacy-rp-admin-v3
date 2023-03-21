@@ -19,21 +19,37 @@ class MapController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
+     * @param string $server
      * @return Response
      */
-    public function index(Request $request): Response
+    public function index(Request $request, string $server = ''): Response
     {
         if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_LIVEMAP)) {
             abort(401);
         }
 
+		$servers = [];
+
         $rawServerIps = explode(',', env('OP_FW_SERVERS', ''));
+
         $serverIps = [];
         foreach ($rawServerIps as $index => $rawServerIp) {
+			$name = Server::getServerName($rawServerIp);
+
+			if (!$server) {
+				$server = $name;
+			}
+
             $serverIps[] = [
-                'name' => Server::getServerName($rawServerIp),
+                'name' => $name,
             ];
+
+			$servers[$name] = $rawServerIp;
         }
+
+		if (!isset($servers[$server])) {
+			abort(404);
+		}
 
         $staff = Player::query()->where(function ($q) {
             $q->orWhere('is_staff', '=', 1)
@@ -58,6 +74,7 @@ class MapController extends Controller
 
         return Inertia::render('Map/Index', [
             'servers'  => $serverIps,
+			'activeServer' => $server,
             'staff'    => $staff ? array_map(function ($player) {
                 return $player['license_identifier'];
             }, $staff) : [],
