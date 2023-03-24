@@ -165,7 +165,7 @@ class Ban extends Model
 		$key = array_shift($parts);
 
 		if (self::$automatedReasons && $category && $key && isset(self::$automatedReasons[$category]) && isset(self::$automatedReasons[$category][$key])) {
-			$reason = self::$automatedReasons[$category][$key];
+			$reason = self::$automatedReasons[$category][$key] ?? $originalReason;
 
 			return str_replace('${DATA}', implode('-', $parts), $reason) . " (" . $originalReason . ")";
 		}
