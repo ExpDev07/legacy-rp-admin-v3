@@ -1,6 +1,6 @@
 <template>
     <div v-if="players.length > 0" class="pt-4 mr-4">
-        <h3 class="mb-2">{{ title }}</h3>
+        <h3 class="mb-2">{{ title }} <sup>{{ players.length }}</sup></h3>
         <table class="text-sm font-mono font-medium">
             <tr v-for="(player, x) in players" :key="x">
                 <td class="pr-2">
