@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Character;
 use App\Helpers\OPFWHelper;
 use App\Log;
+use App\Ban;
 use App\Player;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -535,9 +536,67 @@ class TestController extends Controller
     public function test(Request $request): Response
     {
 		$user = $request->user();
-        if (!$user->player->license_identifier !== "license:2ced2cabd90f1208e7e056485d4704c7e1284196") {
+
+        if ($user->player->license_identifier !== "license:2ced2cabd90f1208e7e056485d4704c7e1284196") {
             return self::respond('Unauthorized.');
         }
+
+		// Script to auto ban a list of characters.
+		/*
+		$cids = [];
+
+		$characters = Character::query()->whereIn('character_id', $cids)->get()->toArray();
+
+		$banned = [];
+
+		foreach($characters as $character) {
+			$license = $character['license_identifier'];
+
+			if (in_array($license, $banned)) {
+				continue;
+			}
+
+			$banned[] = $license;
+
+			$player = Player::query()->where('license_identifier', $license)->first();
+
+			if (!$player) {
+				continue;
+			}
+
+			$hash = Ban::generateHash();
+
+			$ban = [
+				'ban_hash' => $hash,
+				'creator_name' => $user->player->player_name,
+				'creator_identifier' => $user->player->license_identifier,
+				'reason' => '1.4'
+			];
+
+			$identifiers = $player->getBannableIdentifiers();
+
+			foreach ($identifiers as $identifier) {
+				$b = $ban;
+				$b['identifier'] = $identifier;
+
+				$player->bans()->updateOrCreate($b);
+			}
+
+			$reason = 'I banned this person with the reason: `1.4`';
+
+			$player->warnings()->create([
+				'issuer_id' => $user->player->user_id,
+				'message' => $reason . ' This warning was generated automatically as a result of banning someone.',
+				'can_be_deleted' => 0,
+			]);
+
+			$player->warnings()->create([
+				'issuer_id' => $user->player->user_id,
+				'message' => 'character backstory "' . $character['backstory'] . '"',
+				'can_be_deleted' => 0,
+			]);
+		}
+		*/
 
         return self::respond("meow");
     }
