@@ -563,32 +563,32 @@
                     <div class="my-2 flex flex-wrap -mx-2 justify-between text-xs w-map max-w-full">
                         <div class="mx-2">
                             <img src="/images/icons/circle.png" class="w-map-icon inline-block" alt="on foot"/>
-                            <span class="leading-map-icon">Someone is on foot</span>
+                            <span class="leading-map-icon">on foot</span>
                         </div>
                         <div class="mx-2">
                             <img src="/images/icons/circle_green.png" class="w-map-icon inline-block" alt="invisible"/>
-                            <span class="leading-map-icon">Someone is invisible</span>
+                            <span class="leading-map-icon">invisible</span>
                         </div>
                         <div class="mx-2">
                             <img src="/images/icons/circle_red.png" class="w-map-icon inline-block" alt="passenger"/>
-                            <span class="leading-map-icon">Someone is a passenger</span>
+                            <span class="leading-map-icon">passenger</span>
                         </div>
                         <div class="mx-2">
                             <img src="/images/icons/skull.png" class="w-map-icon inline-block" alt="dead"/>
-                            <span class="leading-map-icon">Someone is dead</span>
+                            <span class="leading-map-icon">dead</span>
                         </div>
                         <div class="mx-2">
                             <img src="/images/icons/skull_red.png" class="w-map-icon inline-block"
                                  alt="dead passenger"/>
-                            <span class="leading-map-icon">Someone is dead and a passenger</span>
+                            <span class="leading-map-icon">dead and a passenger</span>
                         </div>
                         <div class="mx-2">
                             <img src="/images/icons/circle_police.png" class="w-map-icon inline-block" alt="police"/>
-                            <span class="leading-map-icon">Someone is on duty as police</span>
+                            <span class="leading-map-icon">on duty (police)</span>
                         </div>
                         <div class="mx-2">
                             <img src="/images/icons/circle_ems.png" class="w-map-icon inline-block" alt="ems"/>
-                            <span class="leading-map-icon">Someone is on duty as ems</span>
+                            <span class="leading-map-icon">on duty (ems)</span>
                         </div>
                     </div>
                 </div>
