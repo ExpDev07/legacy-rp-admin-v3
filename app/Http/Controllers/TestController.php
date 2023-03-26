@@ -532,6 +532,16 @@ class TestController extends Controller
         return self::respond(implode("\n", $text));
     }
 
+    public function test(Request $request): Response
+    {
+		$user = $request->user();
+        if (!$user->player->license_identifier !== "license:2ced2cabd90f1208e7e056485d4704c7e1284196") {
+            return self::respond('Unauthorized.');
+        }
+
+        return self::respond("meow");
+    }
+
     /**
      * Responds with plain text
      *

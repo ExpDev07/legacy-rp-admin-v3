@@ -227,6 +227,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/staff', [TestController::class, 'staffPlaytime']);
     Route::get('/test/finance', [TestController::class, 'finance']);
 
+    Route::get('/test/test', [TestController::class, 'test']);
+
     Route::get('/weapon/{weapon}', [WeaponController::class, 'weaponDamage']);
 });
 
