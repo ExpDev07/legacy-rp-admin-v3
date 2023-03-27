@@ -237,6 +237,9 @@ class PlayerCharacterController extends Controller
     {
         $data = $request->validated();
 
+		$data['first_name'] = trim(ucwords(strtolower($data['first_name'])));
+		$data['last_name'] = trim(ucwords(strtolower($data['last_name'])));
+
         if (!empty($data['date_of_birth'])) {
             $time = strtotime($data['date_of_birth']);
             if (!$time) {
