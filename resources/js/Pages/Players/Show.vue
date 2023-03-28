@@ -1048,6 +1048,7 @@
                             <div class="flex justify-between gap-4">
                                 <div class="flex justify-between gap-4">
                                     <div class="flex items-center py-4 pr-4 border-r border-gray-200 dark:border-gray-400 w-32 flex-shrink-0">
+                                        <h4 class="truncate" v-if="!warning.issuer">{{ t('global.system') }}</h4>
                                         <h4 class="truncate" :title="warning.issuer.playerName">{{ warning.issuer.playerName }}</h4>
                                     </div>
 
