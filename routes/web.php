@@ -100,6 +100,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::post('/players/{player}/bans/{ban}/lock', [PlayerBanController::class, 'lockBan']);
     Route::post('/players/{player}/bans/{ban}/unlock', [PlayerBanController::class, 'unlockBan']);
 
+    Route::post('/smurf/{hash}', [PlayerBanController::class, 'smurfBan']);
+
     Route::get('/new_players', [PlayerController::class, 'newPlayers']);
     Route::get('/backstories', [PlayerCharacterController::class, 'backstories']);
     Route::get('/api/backstories', [PlayerCharacterController::class, 'backstoriesApi']);

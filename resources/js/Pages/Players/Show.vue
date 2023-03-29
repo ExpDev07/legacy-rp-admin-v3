@@ -726,7 +726,12 @@
                     <span class="whitespace-pre-line">{{ player.ban.reason || t('players.show.no_reason') }}</span>
                 </p>
 
-                <p class="text-sm italic">{{ player.ban.banHash }}</p>
+                <div class="flex justify-between">
+                    <p class="text-sm italic">{{ player.ban.banHash }}</p>
+                    <p class="text-sm italic" v-if="player.ban.smurfAccount" :title="t('players.show.original_ban')">
+                        <a :href="'/smurf/' + player.ban.smurfAccount" class="text-indigo-600 dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">{{ player.ban.smurfAccount }}</a>
+                    </p>
+                </div>
 
             </alert>
             <!-- Issuing -->

@@ -298,6 +298,23 @@ class PlayerBanController extends Controller
         return back()->with('success', 'Ban was successfully updated, redirecting back to player page...');
     }
 
+    public function smurfBan(Request $request, string $hash): RedirectResponse
+	{
+		if (!$hash) {
+			abort(404);
+		}
+
+		$ban = Ban::query()->where('ban_hash', '=', $hash)->where(DB::raw("SUBSTRING_INDEX(identifier, ':', 1) = 'license'"))->first();
+
+		if (!$ban) {
+			abort(404);
+		}
+
+		$license = $ban->identifier;
+
+		return redirect("/players/{$license}");
+	}
+
     public function linkedIPs(Request $request, string $license): \Illuminate\Http\Response
     {
         $player = $this->findPlayer($request, $license);

@@ -674,6 +674,7 @@
             "issue": "Issue Ban",
             "lock_ban": "Lock Ban",
             "unlock_ban": "Unlock Ban",
+			"original_ban": "This is a smurf ban, click here to show the original ban.",
             "ban_locked": "This ban has been locked.",
             "ban": "Banned by <i>{0}</i> until <i>{1}</i>",
             "ban_text": "Till {0}",

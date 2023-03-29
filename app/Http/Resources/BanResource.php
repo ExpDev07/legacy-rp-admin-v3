@@ -19,6 +19,7 @@ class BanResource extends JsonResource
         return [
             'id'         => $this->id,
             'banHash'    => $this->ban_hash,
+			'smurfAccount' => $this->smurf_account,
             'reason'     => $this->getFormattedReason(),
             'identifier' => $this->identifier,
             'expire'     => $this->expire,
