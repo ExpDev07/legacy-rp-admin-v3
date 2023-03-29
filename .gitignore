@@ -35,3 +35,7 @@ cron.sh
 /storage/screenshots/
 
 envs/root-config.json
+
+/*.tar.gz
+
+update-panels.exe~

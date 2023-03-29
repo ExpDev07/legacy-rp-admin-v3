@@ -11,6 +11,9 @@ const mix = require('laravel-mix');
  |
  */
 
+// Disable notifications.
+mix.disableNotifications();
+
 // Version & source maps.
 mix.version();
 mix.sourceMaps();

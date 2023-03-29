@@ -727,9 +727,9 @@
                 </p>
 
                 <div class="flex justify-between">
-                    <p class="text-sm italic">{{ player.ban.banHash }}</p>
-                    <p class="text-sm italic" v-if="player.ban.smurfAccount" :title="t('players.show.original_ban')">
-                        <a :href="'/smurf/' + player.ban.smurfAccount" class="text-indigo-600 dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">{{ player.ban.smurfAccount }}</a>
+                    <p class="text-sm italic monospace">{{ player.ban.banHash }}</p>
+                    <p class="text-sm monospace font-semibold" v-if="player.ban.smurfAccount" :title="t('players.show.original_ban')">
+                        <a :href="'/smurf/' + player.ban.smurfAccount" class="text-white hover:text-gray-800">{{ player.ban.smurfAccount }}</a>
                     </p>
                 </div>
 
