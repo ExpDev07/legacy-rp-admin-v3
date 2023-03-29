@@ -305,7 +305,7 @@ class PlayerBanController extends Controller
 			abort(404);
 		}
 
-		$ban = Ban::query()->where('ban_hash', '=', $hash)->where(DB::raw("SUBSTRING_INDEX(identifier, ':', 1) = 'license'"))->first();
+		$ban = Ban::query()->where('ban_hash', '=', $hash)->whereRaw("SUBSTRING_INDEX(identifier, ':', 1) = 'license'")->first();
 
 		if (!$ban) {
 			abort(404);
