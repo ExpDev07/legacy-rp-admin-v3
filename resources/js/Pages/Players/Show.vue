@@ -729,7 +729,7 @@
                 <div class="flex justify-between">
                     <p class="text-sm italic monospace">{{ player.ban.banHash }}</p>
                     <p class="text-sm monospace font-semibold" v-if="player.ban.smurfAccount" :title="t('players.show.original_ban')">
-                        <a :href="'/smurf/' + player.ban.smurfAccount" class="text-white hover:text-gray-800">{{ player.ban.smurfAccount }}</a>
+                        <a :href="'/smurf/' + player.ban.smurfAccount" target="_blank" class="text-white hover:text-gray-800">{{ player.ban.smurfAccount }}</a>
                     </p>
                 </div>
 
