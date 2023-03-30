@@ -444,9 +444,7 @@ class PlayerBanController extends Controller
 		$identifiers = $player->getBannableIdentifiers();
 		$fingerprint = $player->getFingerprint();
 
-		$players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'user_variables', 'last_connection', 'ban_hash', 'playtime'])->leftJoin('user_bans', function ($join) {
-			$join->on('identifier', '=', 'license_identifier');
-		})->whereRaw($where)->get();
+		$players = Player::query()->select(['player_name', 'license_identifier', 'player_tokens', 'ips', 'identifiers', 'user_variables', 'last_connection', 'ban_hash', 'playtime'])->leftJoin('user_bans', DB::raw("JSON_CONTAINS(identifiers, JSON_QUOTE(identifier), '$')"))->whereRaw($where)->get();
 
         $raw = [];
 
