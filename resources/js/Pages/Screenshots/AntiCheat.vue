@@ -181,17 +181,14 @@ export default {
             return screenshot;
         });
 
-        const falsePositivesChances = Object.keys(this.falsePositives).reduce((acc, key) => {
-            const chance = this.falsePositives[key];
+        const falsePositivesChances = [
+            "impossible",
+            "very unlikely",
+            "unlikely",
+            "likely",
 
-            if (!acc.includes(chance)) {
-                acc.push(chance);
-            }
-
-            return acc;
-        }, []);
-
-        falsePositivesChances.sort();
+            "undefined"
+        ];
 
         return {
             isLoading: false,
