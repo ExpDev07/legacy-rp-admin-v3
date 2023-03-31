@@ -17,6 +17,25 @@
             </button>
         </portal>
 
+        <div ref="scuffScrollTo" class="relative bottom-4"></div>
+
+        <v-section class="overflow-x-auto" :noHeader="true" :noFooter="true" ref="scuffSection" :bright="flashingScuffInfo">
+            <template>
+                <div>
+                    <h3 class="m-0 cursor-help select-none" @click="showScuffInfo = !showScuffInfo">{{ t('screenshot.scuff_chance_info') }}</h3>
+
+                    <p class="italic text-sm mt-2 mb-4" v-if="showScuffInfo">{{ t('screenshot.scuff_chance_details') }}</p>
+
+                    <table v-if="showScuffInfo">
+                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="(scuff, index) in falsePositivesChances" :class="{'border-t' : index !== 0}">
+                            <td class="font-semibold p-2">{{ scuff }}</td>
+                            <td class="italic p-2 text-sm text-gray-900 dark:text-gray-100">{{ t('screenshot.scuff.' + scuff.replace(/\s+/g, '_')) }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </template>
+        </v-section>
+
         <!-- Table -->
         <v-section class="overflow-x-auto" :noHeader="true">
             <template>
@@ -25,6 +44,7 @@
                         <th class="px-6 py-4">{{ t('screenshot.player') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.screenshot') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.note') }}</th>
+                        <th class="px-6 py-4 cursor-help" @click="showScuff()">{{ t('screenshot.scuff_chance') }}</th>
                         <th class="px-6 py-4">{{ t('screenshot.created_at') }}</th>
                         <th class="w-64 px-6 py-4">{{ t('players.form.banned') }}?</th>
                     </tr>
@@ -36,7 +56,7 @@
                                     {{ screenshot.player_name }}
                                 </inertia-link>
                             </td>
-                            <td class="px-6 py-2 border-t mobile:block italic text-gray-600 dark:text-gray-400" colspan="2">
+                            <td class="px-6 py-2 border-t mobile:block italic text-gray-600 dark:text-gray-400" colspan="3">
                                 Banned indefinitely for <span class="font-semibold">{{ screenshot.reason }}</span>
                             </td>
                             <td class="px-6 py-2 border-t mobile:block italic text-gray-600 dark:text-gray-400">
@@ -56,6 +76,7 @@
                             <td class="px-6 py-3 border-t mobile:block">
                                 {{ screenshot.details || 'N/A' }}
                             </td>
+                            <td class="px-6 py-3 border-t mobile:block cursor-help" @click="showScuff()">{{ getScuffInfo(screenshot.details) }}</td>
                             <td class="px-6 py-3 border-t mobile:block" v-if="screenshot.timestamp">{{ screenshot.timestamp * 1000 | formatTime(true) }}</td>
                             <td class="px-6 py-3 border-t mobile:block" v-else>{{ t('global.unknown') }}</td>
                             <td class="px-6 py-3 text-center border-t mobile:block">
@@ -143,6 +164,10 @@ export default {
             type: Object,
             required: true,
         },
+        falsePositives: {
+            type: Object,
+            required: true,
+        },
         page: {
             type: Number,
             required: true,
@@ -156,10 +181,28 @@ export default {
             return screenshot;
         });
 
+        const falsePositivesChances = Object.keys(this.falsePositives).reduce((acc, key) => {
+            const chance = this.falsePositives[key];
+
+            if (!acc.includes(chance)) {
+                acc.push(chance);
+            }
+
+            return acc;
+        }, []);
+
+        falsePositivesChances.sort();
+
         return {
             isLoading: false,
+            showScuffInfo: false,
 
-            formattedScreenshots: screenshots
+            flashingScuffInfo: false,
+            flashScuffTimeout: null,
+
+            formattedScreenshots: screenshots,
+
+            falsePositivesChances: falsePositivesChances
         };
     },
     methods: {
@@ -188,6 +231,47 @@ export default {
             }
 
             return ban;
+        },
+        getScuffInfo(details) {
+            if (!details) {
+                return "undefined";
+            }
+
+            const type = details.replace("Anti-Cheat: ", "");
+
+            for (const scuff in this.falsePositives) {
+                if (type.startsWith(scuff)) {
+                    return this.falsePositives[scuff];
+                }
+            }
+
+            return "undefined";
+        },
+        showScuff() {
+            this.showScuffInfo = true;
+
+            const el = this.$refs.scuffScrollTo;
+
+            console.log(el)
+
+            if (el) {
+                el.scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                clearTimeout(this.flashScuffTimeout);
+
+                this.flashingScuffInfo = false;
+
+                // Lmao
+                this.flashScuffTimeout = setTimeout(() => {
+                    this.flashingScuffInfo = true;
+
+                    this.flashScuffTimeout = setTimeout(() => {
+                        this.flashingScuffInfo = false;
+                    }, 750);
+                }, 300);
+            }
         }
     }
 };

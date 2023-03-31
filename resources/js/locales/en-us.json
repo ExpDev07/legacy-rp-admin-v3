@@ -176,6 +176,7 @@
 		"continuous_stop": "Stop",
         "note": "Note",
         "screenshot": "Screenshot",
+		"scuff_chance": "Scuff?",
         "screencapture": "Screen Capture",
         "capture_duration": "Duration (s):",
         "invalid_duration": "Invalid capture duration!",
@@ -193,7 +194,19 @@
         "description": "Recently attached screenshots.",
         "player": "Player",
         "label": "Screenshots",
-		"documentation": "Show more information about why this screenshot/capture was created."
+		"documentation": "Show more information about why this screenshot/capture was created.",
+
+		"scuff_chance_info": "What does the \"Scuff?\" column mean?",
+		"scuff_chance_details": "The \"Scuff?\" column indicates how likely it is that the anti-cheat was triggered through scuff. It basically gives you a good indication of how likely it is that a certain screenshot is a false positive.",
+
+		"scuff": {
+			"impossible": "Basically impossible. This detection has been fine tuned to be as accurate as possible. You are probably more likely to win the lottery than for this to be a false positive.",
+			"very_unlikely": "Not impossible, but very unlikely. This detection is pretty damn accurate, but there is still the possibility of it being a false positive.",
+			"unlikely": "Unlikely to be a false positive. This detection has had false positives in the past, but its accuracy has been improved over time.",
+			"likely": "This detection had and still has occasiional false positives. It is not 100% accurate, but still usually pretty good.",
+
+			"undefined": "This means that the detection has either not been added to the list or has been deemed to not be important to be added to the list. This is usually because the detection doesn't auto-ban."
+		}
     },
     "changelog": {
         "title": "Recent Updates",

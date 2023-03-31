@@ -74,9 +74,9 @@ class ScreenshotController extends Controller
         return Inertia::render('Screenshots/AntiCheat', [
             'screenshots' => $system,
             'links' => $this->getPageUrls($page),
-            'banMap'  => Ban::getAllBans(false, $identifiers, true),
+            'banMap' => Ban::getAllBans(false, $identifiers, true),
             'page' => $page,
+			'falsePositives' => Screenshot::FalsePositives
         ]);
     }
-
 }

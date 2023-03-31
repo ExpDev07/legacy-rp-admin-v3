@@ -1,5 +1,5 @@
 <template>
-    <div class="p-8 mb-10 rounded-lg shadow bg-secondary dark:bg-dark-secondary mobile:p-4 mobile:py-2">
+    <div class="p-8 mb-10 rounded-lg shado mobile:p-4 mobile:py-2" :class="bright ? 'bg-gray-300 dark:bg-gray-600 scale-105' : 'bg-secondary dark:bg-dark-secondary'">
 
         <!-- Header -->
         <header class="mb-8" v-if="!noHeader">
@@ -28,6 +28,10 @@ export default {
             default: false
         },
         noHeader: {
+            type: Boolean,
+            default: false
+        },
+        bright: {
             type: Boolean,
             default: false
         }
