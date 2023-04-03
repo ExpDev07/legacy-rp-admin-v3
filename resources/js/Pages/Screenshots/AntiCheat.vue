@@ -145,6 +145,27 @@ import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Pagination from './../../Components/Pagination';
 
+const FalsePositives = {
+    "Distance Taze":           "very unlikely",
+    "Spectating":              "impossible",
+    "Illegal Freeze":          "impossible",
+    "Vehicle Modifier":        "very unlikely",
+    "Invalid Damage Modifier": "very unlikely",
+    "Spawned Weapon":          "likely",
+    "Spawned Vehicle":         "very unlikely",
+    "Modified Vehicle":        "impossible",
+    "Thermal/Night Vision":    "impossible",
+    "Text Entry":              "impossible",
+    "Player Blips":            "impossible",
+    "Illegal Ped Change":      "impossible",
+    "Invincible":              "impossible",
+    "Runtime Texture":         "impossible",
+    "Bad Screen Word":         "likely",
+    "Freecam Detected":        "unlikely",
+    "Driving while Hotwire":   "very unlikely",
+    "Fast Movement":           "likely",
+};
+
 export default {
     layout: Layout,
     components: {
@@ -161,10 +182,6 @@ export default {
             required: true,
         },
         links: {
-            type: Object,
-            required: true,
-        },
-        falsePositives: {
             type: Object,
             required: true,
         },
@@ -236,9 +253,9 @@ export default {
 
             const type = details.replace("Anti-Cheat: ", "");
 
-            for (const scuff in this.falsePositives) {
+            for (const scuff in FalsePositives) {
                 if (type.startsWith(scuff)) {
-                    return this.falsePositives[scuff];
+                    return FalsePositives[scuff];
                 }
             }
 

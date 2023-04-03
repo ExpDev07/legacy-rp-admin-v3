@@ -75,8 +75,7 @@ class ScreenshotController extends Controller
             'screenshots' => $system,
             'links' => $this->getPageUrls($page),
             'banMap' => Ban::getAllBans(false, $identifiers, true),
-            'page' => $page,
-			'falsePositives' => Screenshot::FalsePositives
+            'page' => $page
         ]);
     }
 }

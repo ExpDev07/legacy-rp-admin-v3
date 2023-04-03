@@ -52,27 +52,6 @@ class Screenshot extends Model
     protected $casts = [
     ];
 
-	const FalsePositives = [
-		"Distance Taze"           => "very unlikely",
-		"Spectating"              => "impossible",
-		"Fast Movement"           => "likely",
-		"Illegal Freeze"          => "impossible",
-		"Vehicle Modifier"        => "very unlikely",
-		"Invalid Damage Modifier" => "very unlikely",
-		"Spawned Weapon"          => "likely",
-		"Spawned Vehicle"         => "very unlikely",
-		"Modified Vehicle"        => "impossible",
-		"Thermal/Night Vision"    => "impossible",
-		"Text Entry"              => "impossible",
-		"Player Blips"            => "impossible",
-		"Illegal Ped Change"      => "impossible",
-		"Invincible"              => "impossible",
-		"Runtime Texture"         => "impossible",
-		"Bad Screen Word"         => "likely",
-		"Freecam Detected"        => "unlikely",
-		"Driving while Hotwire"   => "very unlikely"
-	];
-
     public static function getAllScreenshotsForPlayer(string $license): array
     {
         $characters = array_map(
