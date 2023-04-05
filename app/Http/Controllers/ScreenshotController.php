@@ -54,9 +54,9 @@ class ScreenshotController extends Controller
         $page = Paginator::resolveCurrentPage('page');
 
 		$query = "SELECT player_name, users.license_identifier, url, details, timestamp FROM (" .
-			"SELECT license_identifier, url, details, created_at AS timestamp FROM system_screenshots LEFT JOIN characters ON system_screenshots.character_id = characters.character_id WHERE IF(SUBSTRING_INDEX(details, ' ', 1) = 'Anti-Cheat:', 1, 0) = 1 " .
+			"SELECT license_identifier, url, details, created_at AS timestamp FROM system_screenshots LEFT JOIN characters ON system_screenshots.character_id = characters.character_id WHERE SUBSTRING_INDEX(details, ' ', 1) = 'Anti-Cheat:' AND SUBSTRING_INDEX(details, ' ', 3) != 'Anti-Cheat: Modified FOV' " .
 			"UNION " .
-			"SELECT identifier, ban_hash, reason, timestamp FROM user_bans WHERE SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND IF(SUBSTRING_INDEX(reason, '-', 1) = 'MODDING', 1, 0) = 1" .
+			"SELECT identifier, ban_hash, reason, timestamp FROM user_bans WHERE SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND SUBSTRING_INDEX(reason, '-', 1) = 'MODDING'" .
 			") data LEFT JOIN users ON data.license_identifier = users.license_identifier ORDER BY timestamp DESC LIMIT 20 OFFSET " . (($page - 1) * 20);
 
 		$system = DB::select(DB::raw($query));
