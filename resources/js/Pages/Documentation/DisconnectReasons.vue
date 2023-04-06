@@ -50,6 +50,7 @@
                 <ul class="w-full pl-8 list-disc">
                     <li>...by opening <i>Task Manager</i> and <i>ending the FiveM process</i>.</li>
                     <li>...by <i>holding the power button</i> of your computer.</li>
+                    <li>...by <i>gracefully shutting down</i> your computer (Windows Key -> Shutdown).</li>
                     <li>...by <i>unplugging your ethernet cable</i> or randomly <i>loosing internet connection</i>.</li>
                 </ul>
 
