@@ -50,7 +50,8 @@
                 <ul class="w-full pl-8 list-disc">
                     <li>...by opening <i>Task Manager</i> and <i>ending the FiveM process</i>.</li>
                     <li>...by <i>holding the power button</i> of your computer.</li>
-                    <li>...by <i>gracefully shutting down</i> your computer (Windows Key -> Shutdown).</li>
+                    <li>...by <i>gracefully shutting down</i> your computer (Windows Key -> Power -> Shutdown).</li>
+                    <li>...by <i>entering sleep mode</i> on your computer (Windows Key -> Power -> Sleep).</li>
                     <li>...by <i>unplugging your ethernet cable</i> or randomly <i>loosing internet connection</i>.</li>
                 </ul>
 
@@ -68,8 +69,8 @@
 
                 <div class="w-full h-px bg-gray-700 dark:bg-gray-300 my-4"></div>
 
-                <p class="mb-1 font-semibold">
-                    One thing to keep in mind is that disconnect reasons can be faked. By typing "<i>quit meow</i>" in the F8 console for example...
+                <p class="mb-1">
+                    <b>One thing to keep in mind</b> is that disconnect reasons <u>can be faked</u>. By typing "<i>quit meow</i>" in the F8 console for example...
                 </p>
 
                 <img src="/images/docs/reason_custom.png" class="w-full shadow-md mb-3 border border-gray-500" />
