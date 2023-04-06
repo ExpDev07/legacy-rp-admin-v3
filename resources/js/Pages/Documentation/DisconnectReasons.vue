@@ -7,7 +7,7 @@
                 </h1>
 
                 <p>
-                    Each one of these disconnect reasons was tested on the test server. This should help in determining if what you are seeing
+                    <b>Each one of these disconnect reasons was <u>manually tested</u> on the test server.</b> This should help in determining if what you are seeing
                     in the server-logs lines up with what another player is telling you really happened. Disconnect reasons in the server-logs
                     wont look exactly the same as the ones in the screenshots below, but should look similar.
                 </p>
