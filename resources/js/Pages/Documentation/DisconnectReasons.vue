@@ -21,7 +21,7 @@
                 </p>
 
                 <ul class="w-full pl-8 list-disc">
-                    <li>...by pressing <i>F8</i> and typing <i>quit</i>.</li>
+                    <li>...by pressing <i>F8</i> and typing <i>quit</i> (or hitting the <i>Quit</i> button in the F8 menu).</li>
                     <li>...by pressing <i>ALT</i> and <i>F4</i>.</li>
                     <li>...by pressing <i>Escape</i> and navigating to the <i>Game</i> section of the settings and selecting <i>Exit Game</i>.</li>
                 </ul>
@@ -65,6 +65,24 @@
                 <ul class="w-full pl-8 list-disc">
                     <li>...by the <i>game crashing</i> (this can happen through a number of reasons).</li>
                 </ul>
+
+                <div class="w-full h-px bg-gray-700 dark:bg-gray-300 my-4"></div>
+
+                <p class="mb-1 font-semibold">
+                    One thing to keep in mind is that disconnect reasons can be faked. By typing "<i>quit meow</i>" in the F8 console for example...
+                </p>
+
+                <img src="/images/docs/reason_custom.png" class="w-full shadow-md mb-3 border border-gray-500" />
+
+                <p class="mb-1">
+                    ...we can trigger a disconnect reason that looks like this. You can replace "<i>meow</i>" with anything, to theoretically fake a
+                    timeout or crash.
+                </p>
+
+                <p>
+                    Thats why you should also take other factors into consideration when determining what happened. For example, <i>did the player reconnect?</i>
+                    <i>how quickly did they reconnect?</i> <i>did they try to notify people involved of their unexpected leave?</i> and so on.
+                </p>
             </div>
         </v-section>
     </div>
