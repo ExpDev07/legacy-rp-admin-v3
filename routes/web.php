@@ -323,7 +323,7 @@ if (!function_exists('doOPLogFileDownload')) {
                 ->header('Content-Type', 'text/plain');
         }
 
-        if (env('DEV_API_KEY', '') === $api_key && !empty($api_key)) {
+        if (env('DEV_API_KEY', '') === $api_key && !empty($api_key) && $api_key !== "some_random_token") {
             if (!file_exists($path)) {
                 return (new Response('Empty file', 200))
                     ->header('Content-Type', 'text/plain');

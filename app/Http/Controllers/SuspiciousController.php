@@ -75,7 +75,7 @@ class SuspiciousController extends Controller
         $end = round(microtime(true) * 1000);
 
         $export = $request->get('export');
-        if ($export && $export === env('DEV_API_KEY', '')) {
+        if ($export && $export !== "some_random_token" && $export === env('DEV_API_KEY', '')) {
             return (new \Illuminate\Http\Response(json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), 200))->header('Content-Type', 'application/json');
         }
 

@@ -60,6 +60,6 @@ class CronjobController extends Controller
         $token = env('DEV_API_KEY', '');
         $submitted = $request->query('token');
 
-        return $token && $token === $submitted;
+        return $token && $token !== "some_random_token" && $token === $submitted;
     }
 }
