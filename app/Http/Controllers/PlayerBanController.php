@@ -274,11 +274,14 @@ class PlayerBanController extends Controller
         $expireBefore = $ban->getExpireTimeInSeconds() ? $this->formatSeconds($ban->getExpireTimeInSeconds()) : 'permanent';
         $expireAfter = $request->input('expire') ? $this->formatSeconds(intval($request->input('expire')) + (time() - $ban->getTimestamp())) : 'permanent';
 
+		$before = $ban->getExpireTimeInSeconds() || null;
+		$after = $request->input('expire') ? intval($request->input('expire')) + (time() - $ban->getTimestamp()) : null;
+
         $message = '';
 
-        if ($expireBefore === $expireAfter && $reason === $ban->reason) {
-            return back()->with('success', 'You changed nothing, redirecting back to player page...');
-        } else if ($expireBefore === $expireAfter) {
+        if ($before === $after && $reason === $ban->reason) {
+            return back()->with('error', 'You did not change anything!');
+        } else if ($before === $after) {
             $message = 'I changed this bans reason to be "' . $reason . '". ';
         } else if ($reason === $ban->reason) {
             $message = 'I updated this ban to be "' . $expireAfter . '" instead of "' . $expireBefore . '". ';

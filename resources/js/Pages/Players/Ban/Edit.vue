@@ -107,10 +107,15 @@ export default {
             }
 
             // Send request.
-            await this.$inertia.put('/players/' + this.player.licenseIdentifier + '/bans/' + this.ban.id, { ...this.form, expire });
+            await this.$inertia.put('/players/' + this.player.licenseIdentifier + '/bans/' + this.ban.id, {
+                reason: this.form.reason,
+                expire: expire
+            });
 
-            // Go back to player page
-            window.location.href = '/players/' + this.player.licenseIdentifier;
+            setTimeout(() => {
+                // Go back to player page
+                window.location.href = '/players/' + this.player.licenseIdentifier;
+            }, 3000);
         }
     },
 }
