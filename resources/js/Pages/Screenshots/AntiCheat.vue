@@ -160,7 +160,7 @@ const FalsePositives = {
     "Illegal Ped Change":      "impossible",
     "Invincible":              "impossible",
     "Runtime Texture":         "impossible",
-    "Bad Screen Word":         "likely",
+    "Bad Screen Word":         "unlikely",
     "Freecam Detected":        "unlikely",
     "Driving while Hotwire":   "very unlikely",
     "Fast Movement":           "likely",
