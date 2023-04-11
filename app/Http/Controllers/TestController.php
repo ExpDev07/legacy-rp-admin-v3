@@ -539,7 +539,7 @@ class TestController extends Controller
             return self::json(false, null, 'Unauthorized');
         }
 
-        $data = DB::select(DB::raw(`SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.text')) as text FROM anti_cheat_events LEFT JOIN user_bans ON identifier = license_identifier WHERE type = 'bad_screen_word' AND JSON_EXTRACT(metadata, '$.text') IS NOT NULL AND ban_hash IS NOT NULL`));
+        $data = DB::select(DB::raw("SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.text')) as text FROM anti_cheat_events LEFT JOIN user_bans ON identifier = license_identifier WHERE type = 'bad_screen_word' AND JSON_EXTRACT(metadata, '$.text') IS NOT NULL AND ban_hash IS NOT NULL"));
 
 		$result = array_values(array_map(function ($item) {
 			return $item->text;
