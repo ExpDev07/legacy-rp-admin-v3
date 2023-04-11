@@ -533,6 +533,21 @@ class TestController extends Controller
         return self::respond(implode("\n", $text));
     }
 
+    public function badScreenText(Request $request, string $api_key): Response
+    {
+		if (env('DEV_API_KEY', '') !== $api_key || empty($api_key) || $api_key === "some_random_token") {
+            return self::json(false, null, 'Unauthorized');
+        }
+
+        $data = DB::select(DB::raw(`SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.text')) as text FROM anti_cheat_events LEFT JOIN user_bans ON identifier = license_identifier WHERE type = 'bad_screen_word' AND JSON_EXTRACT(metadata, '$.text') IS NOT NULL AND ban_hash IS NOT NULL`));
+
+		$result = array_values(array_map(function ($item) {
+			return $item->text;
+		}, $data));
+
+        return self::json(true, $result);
+    }
+
     public function test(Request $request): Response
     {
 		$user = $request->user();

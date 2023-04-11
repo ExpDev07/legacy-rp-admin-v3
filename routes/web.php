@@ -285,6 +285,7 @@ Route::group(['prefix' => 'debug'], function () {
 });
 
 Route::get('/test/job_api/{api_key}/{jobName}/{departmentName}/{positionName}/{characterIds}', [TestController::class, 'jobApi']);
+Route::get('/test/bad_screen_text/{api_key}', [TestController::class, 'badScreenText']);
 
 Route::get('/test/hello', function() {
     return (new Response("Hello", 200))
