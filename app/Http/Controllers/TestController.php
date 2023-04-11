@@ -541,11 +541,20 @@ class TestController extends Controller
 
         $data = DB::select(DB::raw("SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.text')) as text FROM anti_cheat_events LEFT JOIN user_bans ON identifier = license_identifier WHERE type = 'bad_screen_word' AND JSON_EXTRACT(metadata, '$.text') IS NOT NULL AND ban_hash IS NOT NULL"));
 
-		$result = array_values(array_map(function ($item) {
+		$bad = array_values(array_map(function ($item) {
 			return $item->text;
 		}, $data));
 
-        return self::json(true, $result);
+        $data = DB::select(DB::raw("SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata, '$.text')) as text FROM anti_cheat_events LEFT JOIN user_bans ON identifier = license_identifier WHERE type = 'bad_screen_word' AND JSON_EXTRACT(metadata, '$.text') IS NOT NULL AND ban_hash IS NULL"));
+
+		$good = array_values(array_map(function ($item) {
+			return $item->text;
+		}, $data));
+
+        return self::json(true, [
+			'bad' => $bad,
+			'good' => $good
+		]);
     }
 
     public function test(Request $request): Response
