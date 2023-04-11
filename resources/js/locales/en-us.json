@@ -297,7 +297,7 @@
     "map": {
         "title": "Live-Map",
         "loading": "Loading player data...",
-        "error": "Player data for {0} empty or not available!",
+        "error": "Failed to load data for {0}!",
         "advanced_error": "Data for {0} not available: {1}",
         "try_reconnect": "Reconnecting in 3 seconds...",
         "closed_expected": "Data connection for {0} was closed.",

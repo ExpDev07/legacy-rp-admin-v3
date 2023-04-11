@@ -2051,7 +2051,7 @@ export default {
 
             data = DataCompressor.decompressData(data);
 
-            if (data && data.players.length > 0) {
+            if (data && Array.isArray(data.players)) {
                 if (this.map) {
                     const _this = this;
 
