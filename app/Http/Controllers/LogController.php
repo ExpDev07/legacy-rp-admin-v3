@@ -23,7 +23,10 @@ class LogController extends Controller
         "Gun Run",
 		"Gun Run Drop",
         "Cocaine Run",
-        "Oxy Run",
+        "Oxy Run Started",
+        "Oxy Run Ended",
+        "Oxy Run Failed",
+        "Jim's Gun Shop",
     ];
 
     /**
