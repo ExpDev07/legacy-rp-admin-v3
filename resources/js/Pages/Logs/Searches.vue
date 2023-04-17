@@ -131,19 +131,19 @@
                                 {{ playerName(log.license_identifier) }}
                             </inertia-link>
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">
+                        <td class="px-6 py-3 border-t mobile:block" :class="{'text-muted dark:text-dark-muted' : !log.action}">
                             {{ log.action || '-' }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">
+                        <td class="px-6 py-3 border-t mobile:block" :class="{'text-muted dark:text-dark-muted' : !log.details}">
                             {{ log.details || '-' }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">
+                        <td class="px-6 py-3 border-t mobile:block" :class="{'text-muted dark:text-dark-muted' : !log.identifier}">
                             {{ log.identifier || '-' }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">
+                        <td class="px-6 py-3 border-t mobile:block" :class="{'text-muted dark:text-dark-muted' : !log.server}">
                             {{ log.server || '-' }}
                         </td>
-                        <td class="px-6 py-3 border-t mobile:block">
+                        <td class="px-6 py-3 border-t mobile:block" :class="{'text-muted dark:text-dark-muted' : !log.page}">
                             {{ log.page || '-' }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp * 1000 | formatTime(true) }}</td>
