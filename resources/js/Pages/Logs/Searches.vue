@@ -132,16 +132,16 @@
                             </inertia-link>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            {{ log.action }}
+                            {{ log.action || '-' }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            {{ log.details }}
+                            {{ log.details || '-' }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            {{ log.identifier }}
+                            {{ log.identifier || '-' }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
-                            {{ log.server }}
+                            {{ log.server || '-' }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ log.page || '-' }}
