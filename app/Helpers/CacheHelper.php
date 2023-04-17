@@ -16,6 +16,7 @@ class CacheHelper
     const DAY = self::HOUR * 24;
     const WEEK = self::DAY * 7;
     const MONTH = self::DAY * 30;
+	const YEAR = self::DAY * 365;
 
     /**
      * Loads a map for licenseIdentifier->PlayerName

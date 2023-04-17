@@ -123,22 +123,27 @@ class LogController extends Controller
 
 			$action = $actionInput ? trim($actionInput) : null;
 			$details = $details ? trim($details) : null;
+			$identifier = $identifier ? trim($identifier) : null;
+			$server = $server ? trim($server) : null;
 
-			if ($action || $details) {
+			$page = Paginator::resolveCurrentPage('page');
+
+			if ($action || $details || $identifier || $server) {
 				DB::table('panel_log_searches')
 					->insert([
 						'action' => $action,
 						'details' => $details,
+						'identifier' => $identifier,
+						'server' => $server,
+						'page' => $page,
 						'license_identifier' => $request->user()->player->license_identifier,
 						'timestamp' => time()
 					]);
 
 				DB::table('panel_log_searches')
-					->where('timestamp', '<', time() - CacheHelper::MONTH)
+					->where('timestamp', '<', time() - CacheHelper::YEAR)
 					->delete();
 			}
-
-			$page = Paginator::resolveCurrentPage('page');
 
 			$query->select(['id', 'identifier', 'action', 'details', 'metadata', 'timestamp']);
 			$query->limit(15)->offset(($page - 1) * 15);
@@ -260,9 +265,11 @@ class LogController extends Controller
                         $a = Str::substr($a, 1);
                         $q->orWhere('action', $a);
                         $q->orWhere('details', $a);
+                        $q->orWhere('identifier', $a);
                     } else {
                         $q->orWhere('action', 'like', "%{$a}%");
                         $q->orWhere('details', 'like', "%{$a}%");
+                        $q->orWhere('identifier', 'like', "%{$a}%");
                     }
                 }
             });
@@ -287,7 +294,10 @@ class LogController extends Controller
         return Inertia::render('Logs/Searches', [
             'logs' => $logs,
             'filters' => $request->all(
-                'identifier'
+                'identifier',
+				'details',
+				'after',
+				'before'
             ),
             'links' => $this->getPageUrls($page),
             'playerMap' => Player::fetchLicensePlayerNameMap($logs->toArray($request), 'license_identifier'),

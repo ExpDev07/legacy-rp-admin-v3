@@ -32,7 +32,7 @@
                         <!-- Details -->
                         <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2" for="details">
-                                {{ t('search_logs.searches') }} <sup class="text-muted dark:text-dark-muted">**</sup>
+                                {{ t('search_logs.searches') }} <sup class="text-muted dark:text-dark-muted">**, C</sup>
                             </label>
                             <input class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
                                    id="details" placeholder="Oxy runs kekw" v-model="filters.details">
@@ -115,6 +115,9 @@
                         <th class="px-6 py-4">{{ t('logs.player') }}</th>
                         <th class="px-6 py-4">{{ t('logs.action') }}</th>
                         <th class="px-6 py-4">{{ t('logs.details') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.identifier') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.server_id') }}</th>
+                        <th class="px-6 py-4">{{ t('logs.page') }}</th>
                         <th class="px-6 py-4">
                             {{ t('logs.timestamp') }}
                         </th>
@@ -133,6 +136,15 @@
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">
                             {{ log.details }}
+                        </td>
+                        <td class="px-6 py-3 border-t mobile:block">
+                            {{ log.identifier }}
+                        </td>
+                        <td class="px-6 py-3 border-t mobile:block">
+                            {{ log.server }}
+                        </td>
+                        <td class="px-6 py-3 border-t mobile:block">
+                            {{ log.page || '-' }}
                         </td>
                         <td class="px-6 py-3 border-t mobile:block">{{ log.timestamp * 1000 | formatTime(true) }}</td>
                     </tr>

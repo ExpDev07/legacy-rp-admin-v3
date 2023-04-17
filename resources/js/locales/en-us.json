@@ -1015,6 +1015,7 @@
         "details": "Details",
         "player": "Player",
         "timestamp": "Timestamp",
+		"page": "Page",
         "toggle_diff": "Toggle time difference view",
         "diff_label": "Passed time since log entry below",
         "before-date": "Before Date",
