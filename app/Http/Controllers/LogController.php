@@ -120,11 +120,14 @@ class LogController extends Controller
 			}
 
 			$actionInput = $request->input('action');
+			$detailsInput = $request->input('details');
+			$identifierInput = $request->input('identifier');
+			$serverInput = $request->input('server');
 
 			$action = $actionInput ? trim($actionInput) : null;
-			$details = $details ? trim($details) : null;
-			$identifier = $identifier ? trim($identifier) : null;
-			$server = $server ? trim($server) : null;
+			$details = $detailsInput ? trim($detailsInput) : null;
+			$identifier = $identifierInput ? trim($identifierInput) : null;
+			$server = $serverInput ? trim($serverInput) : null;
 
 			$page = Paginator::resolveCurrentPage('page');
 
