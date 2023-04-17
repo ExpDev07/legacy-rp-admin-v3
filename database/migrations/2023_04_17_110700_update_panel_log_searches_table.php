@@ -16,9 +16,9 @@ class UpdatePanelLogSearchesTable extends Migration
     {
 		if (!Schema::hasColumn('panel_log_searches', 'identifier')) {
             Schema::table('panel_log_searches', function (Blueprint $table) {
-                $table->string('identifier');
-                $table->string('server');
-                $table->integer('page');
+                $table->string('identifier')->nullable();
+                $table->string('server')->nullable();
+                $table->integer('page')->nullable();
             });
         }
     }
