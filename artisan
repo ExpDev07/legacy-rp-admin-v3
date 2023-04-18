@@ -25,6 +25,8 @@ if (sizeof($argv) > 2 && $argv[0] === 'artisan') {
     foreach($argv as $arg) {
         if (\Illuminate\Support\Str::startsWith($arg, '--cluster=')) {
             define('CLUSTER', str_replace('--cluster=', '', $arg));
+
+			define('HAS_CLUSTER_ARG', true);
         } else {
             $cleanedArgv[] = $arg;
         }

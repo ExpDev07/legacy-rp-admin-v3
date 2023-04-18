@@ -15,7 +15,35 @@ use Illuminate\Support\Facades\DB;
 
 // UPDATE `inventories` SET `item_name` = 'weapon_addon_hk416' WHERE `item_name` = 'weapon_addon_m4'
 Artisan::command('run-query {query}', function(string $query) {
-	$this->info(defined("CLUSTER") ? CLUSTER : "NO CLUSTER DEFINED");
+	if (!defined("HAS_CLUSTER_ARG")) {
+		$this->error('No cluster argument defined, iterating through all clusters...');
+
+		$dir = __DIR__ . '/../envs';
+
+		$clusters = array_diff(scandir($dir), ['.', '..']);
+
+		foreach ($clusters as $cluster) {
+			$cluster = trim($cluster);
+
+			if (empty($cluster)) {
+				continue;
+			}
+
+			var_dump($cluster);
+
+			/*$this->info('Running query on cluster: ' . $cluster);
+
+			$command = 'php ' . __DIR__ . '/artisan run-query ' . $query . ' --cluster=' . $cluster;
+
+			$this->info('Running command: ' . $command);
+
+			$output = shell_exec($command);
+
+			$this->info('Output: ' . $output);*/
+		}
+
+		return;
+	}
 
 	$query = trim($query);
 
