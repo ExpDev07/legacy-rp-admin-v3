@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\DB;
 use Dotenv\Dotenv;
+use Illuminate\Support\Facades\Config;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,23 +25,26 @@ function runQuery(string $cluster, string $query)
 	}
 
 	$dotenv = Dotenv::createImmutable($dir);
-	$dotenv->load();
+	$envData = $dotenv->parse();
 
-	config(['database.connections.mysql' => [
-		'host' => getenv('DB_HOST'),
-		'port' => getenv('DB_PORT'),
-		'database' => getenv('DB_DATABASE'),
-		'username' => getenv('DB_USERNAME'),
-		'password' => getenv('DB_PASSWORD'),
-	]]);
+	$dbName = 'cluster_' . $cluster;
+
+	Config::set('database.connections.' . $dbName, [
+		'driver' => $envData['DB_CONNECTION'],
+		'host' => $envData['DB_HOST'],
+		'port' => $envData['DB_PORT'],
+		'database' => $envData['DB_DATABASE'],
+		'username' => $envData['DB_USERNAME'],
+		'password' => $envData['DB_PASSWORD']
+	]);
 
 	try {
-        DB::connection()->getPdo();
+        DB::connection($dbName)->getPdo();
     } catch (\Exception $e) {
         return [false, "Failed to connect to database: " . $e->getMessage()];
     }
 
-	$affected = DB::statement($query);
+	$affected = DB::connection($dbName)->statement($query);
 
 	return [true, "Affected " . $affected . " rows"];
 }
