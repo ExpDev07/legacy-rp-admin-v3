@@ -25,9 +25,7 @@ function runQuery(string $cluster, string $query)
 	}
 
 	$dotenv = Dotenv::createImmutable($dir, ".env");
-	$dotenv->load();
-
-	$envData = $dotenv->parse();
+	$envData = $dotenv->parse(false);
 
 	$dbName = 'cluster_' . $cluster;
 
