@@ -29,8 +29,6 @@ if (!defined('CLUSTER')) {
 $envDir = realpath(__DIR__ . '/../envs/' . CLUSTER);
 if (file_exists($envDir) && CLUSTER !== null) {
     $app->useEnvironmentPath($envDir);
-
-	echo 'Using cluster "' . CLUSTER . '"' . PHP_EOL;
 } else {
 	if (php_sapi_name() === 'cli') {
 		echo 'Invalid cluster "' . CLUSTER . '", continuing...' . PHP_EOL;
