@@ -24,8 +24,10 @@ function runQuery(string $cluster, string $query)
 		return [false, "Failed to read .env file"];
 	}
 
+	$contents = file_get_contents($env);
+
 	$dotenv = Dotenv::createImmutable($dir, ".env");
-	$envData = $dotenv->parse(false);
+	$envData = $dotenv->parse($contents);
 
 	$dbName = 'cluster_' . $cluster;
 
@@ -59,37 +61,33 @@ Artisan::command('run-query {query}', function(string $query) {
 		return;
 	}
 
-	if (!defined("HAS_CLUSTER_ARG")) {
-		$this->warn('No cluster argument defined, iterating through all clusters...');
+	$this->info('Iterating through all clusters...');
 
-		$dir = __DIR__ . '/../envs';
+	$dir = __DIR__ . '/../envs';
 
-		$clusters = array_diff(scandir($dir), ['.', '..']);
+	$clusters = array_diff(scandir($dir), ['.', '..']);
 
-		chdir(__DIR__ . '/..');
+	chdir(__DIR__ . '/..');
 
-		foreach ($clusters as $cluster) {
-			$cluster = trim($cluster);
+	foreach ($clusters as $cluster) {
+		$cluster = trim($cluster);
 
-			$path = $dir . '/' . $cluster;
+		$path = $dir . '/' . $cluster;
 
-			if (empty($cluster) || !is_dir($path)) {
-				continue;
-			}
-
-			$this->info('Running query on cluster `' . $cluster . '`...');
-
-			$result = runQuery($cluster, $query);
-
-			if (!$result[0]) {
-				$this->error($result[1]);
-			} else {
-				$this->info($result[1]);
-			}
+		if (empty($cluster) || !is_dir($path)) {
+			continue;
 		}
 
-		return;
-	} else {
+		$this->info('Running query on cluster `' . $cluster . '`...');
 
+		$result = runQuery($cluster, $query);
+
+		if (!$result[0]) {
+			$this->error(" - " . $result[1]);
+		} else {
+			$this->comment(" - " . $result[1]);
+		}
 	}
-})->describe('Runs a query');
+
+	return;
+})->describe('Runs a query on all clusters.');
