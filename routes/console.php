@@ -27,11 +27,11 @@ function runQuery(string $cluster, string $query)
 	$dotenv->load();
 
 	config(['database.connections.mysql' => [
-		'host' => env('DB_HOST'),
-		'port' => env('DB_PORT'),
-		'database' => env('DB_DATABASE'),
-		'username' => env('DB_USERNAME'),
-		'password' => env('DB_PASSWORD'),
+		'host' => getenv('DB_HOST'),
+		'port' => getenv('DB_PORT'),
+		'database' => getenv('DB_DATABASE'),
+		'username' => getenv('DB_USERNAME'),
+		'password' => getenv('DB_PASSWORD'),
 	]]);
 
 	try {
