@@ -52,8 +52,8 @@ function runQuery(string $cluster, string $query)
 }
 
 // UPDATE `inventories` SET `item_name` = 'weapon_addon_hk416' WHERE `item_name` = 'weapon_addon_m4'
-Artisan::command('run-query {query}', function(string $query) {
-	$query = trim($query);
+Artisan::command('run-query', function() {
+	$query = trim($this->ask("SQL> "));
 
 	if (empty($query)) {
 		$this->error('Query is empty');
