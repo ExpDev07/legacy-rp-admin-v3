@@ -51,6 +51,8 @@ function runQuery(string $cluster, string $query)
 
 	if (Str::startsWith($query, 'SELECT')) {
 		$affected = DB::connection($dbName)->select($query);
+
+		$affected = count($affected);
 	} else if (Str::startsWith($query, 'UPDATE')) {
 		$affected = DB::connection($dbName)->update($query);
 	} else if (Str::startsWith($query, 'INSERT')) {
