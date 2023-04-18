@@ -33,13 +33,13 @@ Artisan::command('run-query {query}', function(string $query) {
 
 			$this->info('Running query on cluster: ' . $cluster);
 
-			$command = 'php ' . __DIR__ . '/../artisan run-query ' . json_encode($query) . ' --cluster=' . $cluster;
+			$command = 'php ' . __DIR__ . '/../artisan run-query --cluster=' . $cluster . ' ' . json_encode($query);
 
-			$this->info(' - ' . $command);
+			$this->debug(' - ' . $command);
 
 			$output = shell_exec($command);
 
-			$this->info('Output: ' . $output);
+			$this->debug('Output: ' . $output);
 		}
 
 		return;
