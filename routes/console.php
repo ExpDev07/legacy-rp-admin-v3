@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use Dotenv\Dotenv;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,47 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
+function runQuery(string $cluster, string $query)
+{
+	$dir = realpath(__DIR__ . '/../envs/' . $cluster);
+	$env = $dir . '/.env';
+
+	if (empty($env) || !file_exists($env)) {
+		return [false, "Failed to read .env file"];
+	}
+
+	$dotenv = Dotenv::createImmutable($dir);
+	$dotenv->load();
+
+	config(['database.connections.mysql' => [
+		'host' => env('DB_HOST'),
+		'port' => env('DB_PORT'),
+		'database' => env('DB_DATABASE'),
+		'username' => env('DB_USERNAME'),
+		'password' => env('DB_PASSWORD'),
+	]]);
+
+	try {
+        DB::connection()->getPdo();
+    } catch (\Exception $e) {
+        return [false, "Failed to connect to database: " . $e->getMessage()];
+    }
+
+	$affected = DB::statement($query);
+
+	return [true, "Affected " . $affected . " rows"];
+}
+
 // UPDATE `inventories` SET `item_name` = 'weapon_addon_hk416' WHERE `item_name` = 'weapon_addon_m4'
 Artisan::command('run-query {query}', function(string $query) {
+	$query = trim($query);
+
+	if (empty($query)) {
+		$this->error('Query is empty');
+
+		return;
+	}
+
 	if (!defined("HAS_CLUSTER_ARG")) {
 		$this->warn('No cluster argument defined, iterating through all clusters...');
 
@@ -33,29 +73,19 @@ Artisan::command('run-query {query}', function(string $query) {
 				continue;
 			}
 
-			$command = 'php artisan run-query --cluster=' . $cluster . ' ' . json_encode($query);
+			$this->info('Running query on cluster `' . $cluster . '`...');
 
-			$this->comment(' - ' . $command);
+			$result = runQuery($cluster, $query);
 
-			$output = shell_exec($command);
-
-			$this->comment($output);
+			if (!$result[0]) {
+				$this->error($result[1]);
+			} else {
+				$this->info($result[1]);
+			}
 		}
 
 		return;
+	} else {
+
 	}
-
-	$query = trim($query);
-
-	if (empty($query)) {
-		$this->error('Query is empty');
-
-		return;
-	}
-
-	$this->info('Running query on cluster `' . CLUSTER . '`...');
-
-	$affected = DB::statement($query);
-
-	$this->info('Query affected ' . $affected . ' rows.');
 })->describe('Runs a query');
