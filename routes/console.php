@@ -24,7 +24,9 @@ function runQuery(string $cluster, string $query)
 		return [false, "Failed to read .env file"];
 	}
 
-	$dotenv = Dotenv::createImmutable($dir);
+	$dotenv = Dotenv::createImmutable($dir, ".env");
+	$dotenv->load();
+
 	$envData = $dotenv->parse();
 
 	$dbName = 'cluster_' . $cluster;
