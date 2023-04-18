@@ -1,8 +1,13 @@
 <template>
-    <div
-        class="flex flex-col w-64 px-3 py-10 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4">
+    <div class="flex flex-col w-64 px-3 py-10 pt-2 overflow-y-auto font-semibold text-white bg-indigo-900 mobile:w-full mobile:py-4" :class="{'w-10' : collapsed}">
         <!-- General stuff -->
-        <nav>
+        <div class="pb-3 text-right" :class="{'!text-center' : collapsed}">
+            <a href="#" @click="collapse">
+                <i class="fas fa-compress-alt" v-if="collapsed"></i>
+                <i class="fas fa-expand-alt" v-else></i>
+            </a>
+        </div>
+        <nav v-if="!collapsed">
             <ul v-if="!isMobile()">
                 <li v-for="link in links" :key="link.label" v-if="(!link.private || $page.auth.player.isSuperAdmin) && !link.hidden">
                     <inertia-link
@@ -70,7 +75,7 @@
             class="px-5 py-3 mt-auto text-center text-black bg-yellow-400 rounded"
             target="_blank"
             href="https://github.com/ExpDev07/legacy-rp-admin-v3/issues/new/choose"
-            v-if="!isMobile()"
+            v-if="!isMobile() && !collapsed"
         >
             <i class="mr-2 fas fa-bug"></i> {{ t("nav.report") }}
         </a>
@@ -316,6 +321,8 @@ export default {
             data.links.push(queue);
         }
 
+        data.collapsed = false;
+
         return data;
     },
     watch: {
@@ -349,6 +356,11 @@ export default {
         },
         isMobile() {
             return $(window).width() <= 640;
+        },
+        collapse($event) {
+            $event.preventDefault();
+
+            this.collapsed = !this.collapsed;
         }
     }
 };
