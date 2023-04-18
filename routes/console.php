@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,19 @@ use Illuminate\Foundation\Inspiring;
 |
 */
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->describe('Display an inspiring quote');
+// UPDATE `inventories` SET `item_name` = 'weapon_addon_hk416' WHERE `item_name` = 'weapon_addon_m4'
+Artisan::command('run-query {query}', function(string $query) {
+	$query = trim($query);
+
+	if (empty($query)) {
+		$this->error('Query is empty');
+
+		return;
+	}
+
+	$this->info('Running query: `' . $query . '`...');
+
+	$affected = DB::statement($query);
+
+	$this->info('Query affected ' . $affected . ' rows.');
+})->describe('Runs a query');
