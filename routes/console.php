@@ -22,6 +22,8 @@ Artisan::command('run-query {query}', function(string $query) {
 
 		$clusters = array_diff(scandir($dir), ['.', '..']);
 
+		$artisan = realpath(__DIR__ . '/../artisan');
+
 		foreach ($clusters as $cluster) {
 			$cluster = trim($cluster);
 
@@ -33,7 +35,7 @@ Artisan::command('run-query {query}', function(string $query) {
 
 			$this->info('Running query on cluster: ' . $cluster);
 
-			$command = 'php ' . __DIR__ . '/../artisan run-query --cluster=' . $cluster . ' ' . json_encode($query);
+			$command = 'php ' . $artisan . ' run-query --cluster=' . $cluster . ' ' . json_encode($query);
 
 			$this->comment(' - ' . $command);
 
