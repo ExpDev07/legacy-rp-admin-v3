@@ -30,7 +30,11 @@ $envDir = realpath(__DIR__ . '/../envs/' . CLUSTER);
 if (file_exists($envDir) && CLUSTER !== null) {
     $app->useEnvironmentPath($envDir);
 } else {
-    die('Invalid cluster "' . CLUSTER . '"');
+	if (php_sapi_name() === 'cli') {
+		echo 'Invalid cluster "' . CLUSTER . '", continuing...' . PHP_EOL;
+	} else {
+    	die('Invalid cluster "' . CLUSTER . '"');
+	}
 }
 
 /*

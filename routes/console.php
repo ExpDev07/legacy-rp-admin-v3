@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 
 // UPDATE `inventories` SET `item_name` = 'weapon_addon_hk416' WHERE `item_name` = 'weapon_addon_m4'
 Artisan::command('run-query {query}', function(string $query) {
+	$this->info(defined("CLUSTER") ? CLUSTER : "NO CLUSTER DEFINED");
+
 	$query = trim($query);
 
 	if (empty($query)) {
