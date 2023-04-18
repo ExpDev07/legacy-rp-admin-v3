@@ -25,21 +25,21 @@ Artisan::command('run-query {query}', function(string $query) {
 		foreach ($clusters as $cluster) {
 			$cluster = trim($cluster);
 
-			if (empty($cluster)) {
+			$path = $dir . '/' . $cluster;
+
+			if (empty($cluster) || !is_dir($path)) {
 				continue;
 			}
 
-			var_dump($cluster);
+			$this->info('Running query on cluster: ' . $cluster);
 
-			/*$this->info('Running query on cluster: ' . $cluster);
+			$command = 'php ' . __DIR__ . '/artisan run-query ' . json_encode($query) . ' --cluster=' . $cluster;
 
-			$command = 'php ' . __DIR__ . '/artisan run-query ' . $query . ' --cluster=' . $cluster;
-
-			$this->info('Running command: ' . $command);
+			$this->info(' - ' . $command);
 
 			$output = shell_exec($command);
 
-			$this->info('Output: ' . $output);*/
+			$this->info('Output: ' . $output);
 		}
 
 		return;
