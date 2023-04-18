@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use Dotenv\Dotenv;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,19 @@ function runQuery(string $cluster, string $query)
         return [false, "Failed to connect to database: " . $e->getMessage()];
     }
 
-	$affected = DB::connection($dbName)->statement($query);
+	$affected = 0;
+
+	if (Str::startsWith($query, 'SELECT')) {
+		$affected = DB::connection($dbName)->select($query);
+	} else if (Str::startsWith($query, 'UPDATE')) {
+		$affected = DB::connection($dbName)->update($query);
+	} else if (Str::startsWith($query, 'INSERT')) {
+		$affected = DB::connection($dbName)->insert($query);
+	} else if (Str::startsWith($query, 'DELETE')) {
+		$affected = DB::connection($dbName)->delete($query);
+	} else {
+		return [false, "Unknown query type"];
+	}
 
 	return [true, "Affected " . $affected . " rows"];
 }
