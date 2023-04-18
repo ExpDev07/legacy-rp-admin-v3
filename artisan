@@ -40,7 +40,7 @@ if (sizeof($argv) > 2 && php_sapi_name() === 'cli') {
 }
 
 // Continue with normal stuff
-$app = require_once __DIR__.'/bootstrap/app.php';
+$app = require_once __DIR__ . '/bootstrap/app.php';
 
 /*
 |--------------------------------------------------------------------------
