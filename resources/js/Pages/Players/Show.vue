@@ -1134,7 +1134,7 @@
 
                         <template>
                             <p class="text-muted dark:text-dark-muted" v-if="warningEditId !== warning.id">
-                                <span class="whitespace-pre-line"
+                                <span class="whitespace-pre-wrap"
                                     v-html="formatWarning(warning.message)"></span>
                             </p>
                             <textarea class="block w-full px-4 py-3 bg-gray-200 border rounded dark:bg-gray-600"
