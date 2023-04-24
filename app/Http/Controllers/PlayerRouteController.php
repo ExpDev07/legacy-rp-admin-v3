@@ -582,6 +582,7 @@ class PlayerRouteController extends Controller
 			$logs = array_map(function ($log) {
 				$log["weapon_type"] = WeaponDamageEvent::getDamageWeapon($log["weapon_type"]);
 				$log["damage_type"] = WeaponDamageEvent::getDamageType($log["damage_type"]);
+				$log["hit_component"] = WeaponDamageEvent::getDamageType($log["hit_component"]);
 
 				$log["distance"] = number_format($log["distance"], 2) . "m";
 
@@ -592,6 +593,9 @@ class PlayerRouteController extends Controller
 			$maxWeapon = max(array_map(function ($log) {
 				return strlen($log["weapon_type"]);
 			}, $logs));
+			$maxComponent = max(array_map(function ($log) {
+				return strlen($log["hit_component"]);
+			}, $logs));
 			$maxDistance = max(array_map(function ($log) {
 				return strlen($log["distance"]);
 			}, $logs));
@@ -600,7 +604,7 @@ class PlayerRouteController extends Controller
 
 			foreach ($logs as $log) {
 				$date = date('D, jS M Y', $log["timestamp"]);
-				$time = '<i style="color:#ffccf7">' . date('H:i:s', $log["timestamp"]) . '</i>';
+				$time = '<i style="color:#fcf">' . date('H:i:s', $log["timestamp"]) . '</i>';
 
 				if ($lastDate !== $date) {
 					$list[] = "\n<b style='border-bottom: 1px dashed #fff;margin: 10px 0 5px;display: inline-block;'>- - - " . $date . " - - -</b>";
@@ -610,12 +614,13 @@ class PlayerRouteController extends Controller
 
 				$name = mb_str_pad($names[$log["license_identifier"]] ?? 'Unknown', $maxName);
 				$weapon = '<span style="color:#cef">' . str_pad($log["weapon_type"], $maxWeapon) . '</span>';
-				$damage = '<span style="color:#ccffd6">' . str_pad($log["weapon_damage"]."hp", 5) . '</span>';
-				$distance = '<span style="color:#fff9cc">' . str_pad($log["distance"], $maxDistance) . '</span>';
+				$damage = '<span style="color:#ccffe6">' . str_pad($log["weapon_damage"]."hp", 5) . '</span>';
+				$component = '<span style="color:#dfc">' . str_pad($log["hit_component"], $maxComponent) . '</span>';
+				$distance = '<span style="color:#fff6cc">' . str_pad($log["distance"], $maxDistance) . '</span>';
 
 				$name = '<a href="/players/' . $log["license_identifier"] . '" style="color:#d5ccff" target="_blank">' . $name . '</a>';
 
-				$list[] = "  " . $time . "    " . $name . "    " . $weapon . "    " . $damage . "    " . $distance . "    <span style='color:#fcc'>" . $log["damage_type"] . "</span>";
+				$list[] = "  " . $time . "    " . $name . "    " . $weapon . "    " . $damage . "    " . $distance . "    <span style='color:#d5ccff'>" . $log["damage_type"] . "</span>";
 			}
 		} else {
 			$list[] = 'No damage logs found';

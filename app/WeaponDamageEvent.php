@@ -28,6 +28,35 @@ class WeaponDamageEvent extends Model
      */
     public $timestamps = false;
 
+	const HitComponents = [
+		// Confirmed (very sure):
+		0 => "crotch",
+		1 => "upper left leg",
+		2 => "lower left leg",
+		3 => "left foot",
+		4 => "upper right leg",
+		5 => "lower right leg",
+		6 => "right foot",
+		8 => "stomach",
+		9 => "upper chest",
+		10 => "upper chest",
+		11 => "left shoulder",
+		12 => "upper left arm",
+		13 => "lower left arm",
+		14 => "left hand",
+		15 => "right shoulder",
+		16 => "upper right arm",
+		17 => "lower right arm",
+		18 => "right hand",
+		19 => "neck",
+		20 => "head",
+
+		// Unknown/Unsure:
+		7 => "unknown (7)",
+		21 => "unknown (21)",
+		22 => "unknown (22)"
+	];
+
 	const Weapons = [
 		-61198893 => "molotov",
 		-1946516017 => "weapon_addon_huntingrifle",
@@ -354,6 +383,17 @@ class WeaponDamageEvent extends Model
 		14 => "water cannon",
 	];
 
+	public static function getHitComponent($component)
+	{
+		$component = intval($component);
+
+		if (isset(self::HitComponents[$component])) {
+			return self::HitComponents[$component];
+		}
+
+		return "undiscovered ($component)";
+	}
+
 	public static function getDamageType($type)
 	{
 		if (isset(self::DamageTypes[$type])) {
@@ -381,7 +421,7 @@ class WeaponDamageEvent extends Model
 	public static function getDamaged(string $license)
 	{
 		return self::query()
-			->select(['license_identifier', 'timestamp', 'damage_type', 'weapon_type', 'distance', 'weapon_damage'])
+			->select(['license_identifier', 'timestamp', 'hit_component', 'damage_type', 'weapon_type', 'distance', 'weapon_damage'])
 			->whereRaw("JSON_CONTAINS(hit_players, '\"" . $license . "\"', '$')")
 			->orderByDesc('timestamp')
 			->limit(500)
