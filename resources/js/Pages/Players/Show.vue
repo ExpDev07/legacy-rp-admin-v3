@@ -164,13 +164,24 @@
                 <!-- Damage Logs -->
                 <a
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-pink-600 dark:bg-pink-500 block"
+                    :href="'/who_was_damaged/' + player.licenseIdentifier"
+                    :title="t('players.show.damage_logs_by')"
+                    v-if="this.perm.check(this.perm.PERM_DAMAGE_LOGS)"
+                    target="_blank"
+                >
+                    <i class="fas fa-hammer"></i>
+                </a>
+                <!-- Damage Logs 2 -->
+                <a
+                    class="py-1 px-2 ml-2 mr-4 font-semibold text-white rounded bg-pink-600 dark:bg-pink-500 block"
                     :href="'/who_damaged/' + player.licenseIdentifier"
                     :title="t('players.show.damage_logs')"
                     v-if="this.perm.check(this.perm.PERM_DAMAGE_LOGS)"
                     target="_blank"
                 >
-                    <i class="fas fa-utensils"></i>
+                    <i class="fas fa-procedures"></i>
                 </a>
+
                 <!-- Edit Role -->
                 <button
                     class="py-1 px-2 ml-2 font-semibold text-white rounded bg-danger dark:bg-dark-danger block"
