@@ -574,7 +574,36 @@ class PlayerRouteController extends Controller
 
 		$logs = WeaponDamageEvent::getDamaged($player->license_identifier);
 
-		$list = [];
+		return $this->renderDamageLogs("Who damaged", $player, $logs);
+    }
+
+    /**
+     * @param string $license
+     */
+    public function whoWasDamagedBy(Request $request, string $license)
+    {
+		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_DAMAGE_LOGS)) {
+            abort(401);
+        }
+
+		if (!$license || !Str::startsWith($license, 'license:')) {
+            abort(404);
+        }
+
+        $player = Player::query()->select(['player_name', 'license_identifier'])->where('license_identifier', '=', $license)->get()->first();
+
+        if (!$player) {
+			abort(404);
+        }
+
+		$logs = WeaponDamageEvent::getDamageDealtTo($player->license_identifier);
+
+		return $this->renderDamageLogs("Who was damaged by", $player, $logs);
+    }
+
+    private function renderDamageLogs($title, $player, $logs)
+    {
+        $list = [];
 
 		if (!empty($logs)) {
 			$names = Player::fetchLicensePlayerNameMap($logs, 'license_identifier');
@@ -628,6 +657,6 @@ class PlayerRouteController extends Controller
 
 		$playerName = '<a href="/players/' . $player->license_identifier . '" target="_blank">' . $player->player_name . '</a>';
 
-        return $this->fakeText(200, "Last damage logs for $playerName\n<small><i>All times in " . date("e") . "</i></small>\n" . implode("\n", $list));
+        return $this->fakeText(200, $title . " $playerName\n<small><i>All times in " . date("e") . "</i></small>\n" . implode("\n", $list));
     }
 }

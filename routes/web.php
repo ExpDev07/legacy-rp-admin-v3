@@ -118,6 +118,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
 
 	// Epic damage logs
 	Route::get('/who_damaged/{license}', [PlayerRouteController::class, 'whoDamaged']);
+	Route::get('/who_was_damaged/{license}', [PlayerRouteController::class, 'whoWasDamagedBy']);
 
     // Inventories.
     Route::get('/inventories/character/{character}', [InventoryController::class, 'character']);
