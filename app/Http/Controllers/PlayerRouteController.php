@@ -620,7 +620,7 @@ class PlayerRouteController extends Controller
 
 				$name = '<a href="/players/' . $log["license_identifier"] . '" style="color:#d5ccff" target="_blank">' . $name . '</a>';
 
-				$list[] = "  " . $time . "    " . $name . "    " . $weapon . "    " . $damage . "    " . $distance . "    <span style='color:#d5ccff'>" . $log["damage_type"] . "</span>";
+				$list[] = "  " . $time . "    " . $name . "    " . $weapon . "    " . $damage . "    " . $component . "    " . $distance . "    <span style='color:#d5ccff'>" . $log["damage_type"] . "</span>";
 			}
 		} else {
 			$list[] = 'No damage logs found';
