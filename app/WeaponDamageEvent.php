@@ -30,13 +30,14 @@ class WeaponDamageEvent extends Model
 
 	const HitComponents = [
 		// Confirmed (very sure):
-		0 => "crotch/center",
+		0 => "center (crotch/butt)",
 		1 => "upper left leg",
 		2 => "lower left leg",
 		3 => "left foot",
 		4 => "upper right leg",
 		5 => "lower right leg",
 		6 => "right foot",
+		7 => "lower spine",
 		8 => "stomach",
 		9 => "upper chest",
 		10 => "upper chest",
@@ -52,7 +53,6 @@ class WeaponDamageEvent extends Model
 		20 => "head",
 
 		// Unknown/Unsure:
-		7 => "unknown (7)",
 		21 => "unknown (21)",
 		22 => "unknown (22)"
 	];
