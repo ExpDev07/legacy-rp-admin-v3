@@ -582,7 +582,7 @@ class PlayerRouteController extends Controller
 			$logs = array_map(function ($log) {
 				$log["weapon_type"] = WeaponDamageEvent::getDamageWeapon($log["weapon_type"]);
 				$log["damage_type"] = WeaponDamageEvent::getDamageType($log["damage_type"]);
-				$log["hit_component"] = WeaponDamageEvent::getDamageType($log["hit_component"]);
+				$log["hit_component"] = WeaponDamageEvent::getHitComponent($log["hit_component"]);
 
 				$log["distance"] = number_format($log["distance"], 2) . "m";
 
