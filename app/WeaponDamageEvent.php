@@ -30,7 +30,7 @@ class WeaponDamageEvent extends Model
 
 	const HitComponents = [
 		// Confirmed (very sure):
-		0 => "crotch",
+		0 => "crotch/center",
 		1 => "upper left leg",
 		2 => "lower left leg",
 		3 => "left foot",
