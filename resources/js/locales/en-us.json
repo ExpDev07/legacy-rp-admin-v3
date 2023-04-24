@@ -718,7 +718,7 @@
             "revive": "Revive Player",
             "edit_role": "Edit Role",
             "edit_tag": "Edit Tag",
-			"damage_logs_by": "Show who this player damaged",
+			"damage_logs_by": "Show who was damaged by this player",
 			"damage_logs": "Show who this player was damaged by",
             "update_commands": "Update Commands",
             "edit": "Edit",
