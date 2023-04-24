@@ -572,6 +572,8 @@ class PlayerRouteController extends Controller
 			abort(404);
         }
 
+        $includeNPCs = $request->input('npc') ?? false;
+
 		$logs = WeaponDamageEvent::getDamaged($player->license_identifier);
 
 		return $this->renderDamageLogs("Who damaged", $player, $logs);
@@ -596,7 +598,9 @@ class PlayerRouteController extends Controller
 			abort(404);
         }
 
-		$logs = WeaponDamageEvent::getDamageDealtTo($player->license_identifier);
+        $includeNPCs = $request->input('npc') ?? false;
+
+		$logs = WeaponDamageEvent::getDamageDealtTo($player->license_identifier, $includeNPCs);
 
 		return $this->renderDamageLogs("Who was damaged by", $player, $logs);
     }
@@ -641,7 +645,7 @@ class PlayerRouteController extends Controller
 					$lastDate = $date;
 				}
 
-				$name = mb_str_pad($names[$log["license_identifier"]] ?? 'Unknown', $maxName);
+				$name = mb_str_pad($names[$log["license_identifier"]] ?? 'NPC', $maxName);
 				$name = '<a href="/players/' . $log["license_identifier"] . '" style="color:#fff2b3" target="_blank">' . $name . '</a>';
 
 				$weapon = '<span style="color:#ccffb3">' . str_pad($log["weapon_type"], $maxWeapon) . '</span>';

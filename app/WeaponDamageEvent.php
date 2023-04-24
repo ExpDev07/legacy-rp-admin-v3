@@ -430,13 +430,17 @@ class WeaponDamageEvent extends Model
 			->get()->toArray();
 	}
 
-	public static function getDamageDealtTo(string $license)
+	public static function getDamageDealtTo(string $license, bool $includeNpcs)
 	{
-		return self::query()
+		$query = self::query()
 			->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(hit_players, '$[0]')) as license_identifier, timestamp, hit_component, damage_type, weapon_type, distance, weapon_damage")
-			->where('license_identifier', $license)
-			->whereRaw("JSON_EXTRACT(hit_players, '$[0]') IS NOT NULL")
-			->orderByDesc('timestamp')
+			->where('license_identifier', $license);
+
+		if (!$includeNpcs) {
+			$query->whereRaw("JSON_EXTRACT(hit_players, '$[0]') IS NOT NULL");
+		}
+
+		return $query->orderByDesc('timestamp')
 			->limit(500)
 			->get()->toArray();
 	}
