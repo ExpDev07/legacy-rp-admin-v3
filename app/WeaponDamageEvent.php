@@ -58,6 +58,8 @@ class WeaponDamageEvent extends Model
 	];
 
 	const Weapons = [
+		-566293128 => "weapon_addon_hk416",
+		1045507099 => "weapon_addon_m6ic",
 		-61198893 => "molotov",
 		-1946516017 => "weapon_addon_huntingrifle",
 		883325847 => "weapon_petrolcan",
