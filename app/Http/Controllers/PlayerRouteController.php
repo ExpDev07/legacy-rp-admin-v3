@@ -598,7 +598,7 @@ class PlayerRouteController extends Controller
 			abort(404);
         }
 
-        $includeNPCs = $request->input('npc') ?? false;
+        $includeNPCs = $request->input('npcs') ?? false;
 
 		$logs = WeaponDamageEvent::getDamageDealtTo($player->license_identifier, $includeNPCs);
 
