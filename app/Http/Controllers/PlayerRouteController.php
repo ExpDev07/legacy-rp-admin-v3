@@ -661,6 +661,8 @@ class PlayerRouteController extends Controller
 
 		$playerName = '<a href="/players/' . $player->license_identifier . '" target="_blank">' . $player->player_name . '</a>';
 
+        $extra = "";
+
         if ($showNPCToggle) {
             $extra = "\n\n<small><i>" . ($includeNPCs ? "Including NPCs (<a href='?'>disable</a>)" : "Not including NPCs (<a href='?npcs=1'>enable</a>)") . "</i></small>";
         }
