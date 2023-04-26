@@ -15,6 +15,10 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
+                    <badge class="border-yellow-200 bg-yellow-100 dark:bg-yellow-700"
+                           v-if="player.isDebugger">
+                        <span class="font-semibold">{{ t('global.debugger') }}</span>
+                    </badge>
                     <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700"
                            v-if="player.isTrusted && !player.isStaff">
                         <span class="font-semibold">{{ t('global.trusted') }}</span>

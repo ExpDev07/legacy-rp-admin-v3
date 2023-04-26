@@ -7,6 +7,7 @@
         "banned": "Banned",
         "not_banned": "Not banned",
         "by": "by {0}",
+        "debugger": "Debugger",
         "trusted": "Trusted",
         "staff": "Staff Member",
         "senior_staff": "Senior Staff",
