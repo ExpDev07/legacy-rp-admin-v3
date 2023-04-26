@@ -16,24 +16,28 @@
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
                     <badge class="border-pink-200 bg-pink-100 dark:bg-pink-700" :title="t('global.debugger_title')"
-                           v-if="player.isDebugger">
+                           v-if="player.isDebugger && !player.isRoot">
                         <span class="font-semibold">{{ t('global.debugger') }}</span>
                     </badge>
                     <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" :title="t('global.trusted_title')"
                            v-if="player.isTrusted && !player.isStaff">
                         <span class="font-semibold">{{ t('global.trusted') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" :title="t('global.staff_title')"
                            v-if="player.isStaff && !player.isSeniorStaff">
                         <span class="font-semibold">{{ t('global.staff') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" :title="t('global.senior_staff_title')"
                            v-if="player.isSeniorStaff && !player.isSuperAdmin">
                         <span class="font-semibold">{{ t('global.senior_staff') }}</span>
                     </badge>
-                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale"
-                           v-if="player.isSuperAdmin">
+                    <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" :title="t('global.super_title')"
+                           v-if="player.isSuperAdmin && !player.isRoot">
                         <span class="font-semibold">{{ t('global.super') }}</span>
+                    </badge>
+                    <badge class="border-indigo-200 bg-indigo-100 dark:bg-indigo-700" :title="t('global.developer_title')"
+                           v-if="player.isRoot">
+                        <span class="font-semibold">{{ t('global.developer') }}</span>
                     </badge>
 
                     <badge class="border-green-200 bg-success-pale dark:bg-dark-success-pale" v-if="whitelisted">
