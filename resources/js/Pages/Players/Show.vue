@@ -7,9 +7,9 @@
                 </h1>
                 <div
                     class="flex items-center space-x-5 mobile:flex-wrap mobile:w-full mobile:!mr-0 mobile:!ml-0 mobile:space-x-0">
-                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer"
+                    <badge class="border-blue-200 bg-blue-100 dark:bg-blue-700 font-semibold cursor-pointer !px-3" :title="t('players.show.copy_license')"
                            :click="copyLicense">
-                        <span>{{ t('players.show.copy_license') }}</span>
+                        <i class="fas fa-copy"></i>
                     </badge>
 
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
@@ -35,7 +35,7 @@
                            v-if="player.isSuperAdmin && !player.isRoot">
                         <span class="font-semibold">{{ t('global.super') }}</span>
                     </badge>
-                    <badge class="border-indigo-200 bg-indigo-100 dark:bg-indigo-700" :title="t('global.developer_title')"
+                    <badge class="border-indigo-200 bg-indigo-100 dark:bg-indigo-600" :title="t('global.developer_title')"
                            v-if="player.isRoot">
                         <span class="font-semibold">{{ t('global.developer') }}</span>
                     </badge>

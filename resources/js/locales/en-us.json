@@ -757,7 +757,7 @@
                 "system": "System",
                 "hidden": "Hidden Note"
             },
-            "copy_license": "Copy License",
+            "copy_license": "Copy Players License Identifier",
             "warnings": "Player Notes",
             "unload_do": "Unload",
             "unload_default": "You have been AFK for an extended period of time, consider going to the character selection screen next time.",
