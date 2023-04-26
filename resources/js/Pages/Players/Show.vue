@@ -15,11 +15,11 @@
                     <badge class="border-red-200 bg-danger-pale dark:bg-dark-danger-pale" v-if="player.isBanned">
                         <span class="font-semibold">{{ t('global.banned') }}</span>
                     </badge>
-                    <badge class="border-yellow-200 bg-yellow-100 dark:bg-yellow-700"
+                    <badge class="border-pink-200 bg-pink-100 dark:bg-pink-700" :title="t('global.debugger_title')"
                            v-if="player.isDebugger">
                         <span class="font-semibold">{{ t('global.debugger') }}</span>
                     </badge>
-                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700"
+                    <badge class="border-purple-200 bg-purple-100 dark:bg-purple-700" :title="t('global.trusted_title')"
                            v-if="player.isTrusted && !player.isStaff">
                         <span class="font-semibold">{{ t('global.trusted') }}</span>
                     </badge>

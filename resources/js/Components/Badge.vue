@@ -1,5 +1,5 @@
 <template>
-    <div class="badge px-5 py-1 border-2 rounded mobile:block mobile:w-full mobile:m-0 mobile:mb-3" :class="{ 'inline-block' : small }" @click="click && click($event);">
+    <div class="badge px-5 py-1 border-2 rounded mobile:block mobile:w-full mobile:m-0 mobile:mb-3" :class="{ 'inline-block' : small }" @click="click && click($event);" :title="title || ''">
         <slot />
     </div>
 </template>
@@ -10,6 +10,7 @@ export default {
     props: {
         small: Boolean,
         click: Function,
+        title: String,
     }
 }
 </script>
