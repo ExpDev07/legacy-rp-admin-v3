@@ -768,6 +768,9 @@
 			"metadata": "Status Info",
             "enabled_commands": "Enabled Commands",
 
+            "country_name": "Country",
+            "country_detail": "May not be entirely accurate",
+
 			"resolution": "Resolution",
 			"ofFingerprint": "OPF-Fingerprint",
 

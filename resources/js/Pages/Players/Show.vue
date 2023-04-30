@@ -103,12 +103,17 @@
                     <a href="#" class="text-indigo-600 dark:text-indigo-400" @click="$event.preventDefault(); isEnablingCommands = true" v-if="$page.auth.player.isSuperAdmin">{{ t('players.show.edit') }}</a>
                 </span>
             </div>
-            <div class="text-sm italic mt-2" v-if="player.variables">
-                <span class="block" v-if="player.variables.screenWidth && player.variables.screenHeight">
+            <div class="text-sm italic mt-2">
+                <span class="block" v-if="player.countryName" :title="t('players.show.country_detail')">
+                    <span class="font-bold">{{ t('players.show.country_name') }}:</span>
+                    {{ player.countryName }}
+                </span>
+
+                <span class="block" v-if="player.variables && player.variables.screenWidth && player.variables.screenHeight">
                     <span class="font-bold">{{ t('players.show.resolution') }}:</span>
                     {{ player.variables.screenWidth + "x" + player.variables.screenHeight }}
                 </span>
-                <span class="block" v-if="player.variables.ofFingerprint && this.perm.check(this.perm.PERM_LINKED)">
+                <span class="block" v-if="player.variables && player.variables.ofFingerprint && this.perm.check(this.perm.PERM_LINKED)">
                     <span class="font-bold">{{ t('players.show.ofFingerprint') }}:</span>
                     <a :href="'/linked_print/' + player.licenseIdentifier" target="_blank" class="text-indigo-600 dark:text-indigo-400 !no-underline">{{ player.variables.ofFingerprint }}</a>
                 </span>
