@@ -4,7 +4,6 @@ namespace App;
 
 use App\Helpers\CacheHelper;
 use App\Helpers\GeneralHelper;
-use App\Http\Resources\CharacterResource;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use kanalumaddela\LaravelSteamLogin\SteamUser;
+use Illuminate\Support\Facades\DB;
 use SteamID;
 
 /**
@@ -144,7 +143,9 @@ class Player extends Model
      */
     public static function resolvePlayer(string $player, Request $request)
     {
-        $resolved = Player::query()->select()->where('license_identifier', '=', $player)->first();
+        $resolved = Player::query()->select()->where('license_identifier', '=', $player)->leftJoin('ip_checks', function($join) {
+            $join->on(DB::raw("CONCAT('ip:', last_ip_identifier)"), '=', 'ip_identifier');
+        })->first();
 
         if ($resolved and $resolved instanceof Player) {
             return $resolved;

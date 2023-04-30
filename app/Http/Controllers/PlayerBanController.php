@@ -9,7 +9,6 @@ use App\Helpers\PermissionHelper;
 use App\Http\Requests\BanStoreRequest;
 use App\Http\Requests\BanUpdateRequest;
 use App\Http\Resources\BanResource;
-use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
 use App\PanelLog;

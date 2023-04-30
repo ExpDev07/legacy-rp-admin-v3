@@ -53,7 +53,8 @@ class PlayerResource extends JsonResource
             'panelDrugDepartment' => $drug,
             'tag'             => $this->panel_tag,
             'mute'            => $this->getActiveMute(),
-			'variables'       => $this->getUserVariables()
+			'variables'       => $this->getUserVariables(),
+            'countryName'     => $this->country_name,
         ];
     }
 
