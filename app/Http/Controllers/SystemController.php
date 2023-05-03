@@ -112,6 +112,10 @@ class SystemController extends Controller
 		$graphData = $this->buildGraphData([], "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NOT NULL", 1);
 		$graphData = $this->buildGraphData($graphData, "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NULL", 1);
 
+        if (empty($graphData)) {
+            return $this->fakeText(404, "No data available");
+        }
+
         $keys = array_keys($graphData);
         $min = min($keys);
         $max = max($keys);
