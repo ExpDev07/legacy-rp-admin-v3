@@ -120,8 +120,6 @@ class SystemController extends Controller
         $min = min($keys);
         $max = max($keys);
 
-        var_dump($graphData);
-
 		$image = $this->renderGraph(array_values($graphData), $type . ': ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max));
 
 		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
@@ -147,7 +145,7 @@ class SystemController extends Controller
 			$graphDays[$day]++;
 		}
 
-		$min = empty($graphDays) ? (time() - 86400 * $averageDays) : min(array_keys($graphDays));
+		$min = empty($graphDays) ? (time() - 86400 * 10) : min(array_keys($graphDays));
 		$max = strtotime(date("Y-m-d"));
 
         $min2 = !empty($existingData) ? min(array_keys($existingData)) : null;
