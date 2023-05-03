@@ -7,6 +7,34 @@ use Illuminate\Support\Facades\DB;
 
 class SystemController extends Controller
 {
+    const AntiCheatTypes = [
+        "illegal_event",
+        "illegal_server_event",
+        "spawned_object",
+        "distance_taze",
+        "ped_spawn",
+        "spectate",
+        "runtime_texture",
+        "ped_change",
+        "illegal_weapon",
+        "damage_modifier",
+        "vehicle_modification",
+        "thermal_night_vision",
+        "blacklisted_command",
+        "text_entry",
+        "player_blips",
+        "modified_fov",
+        "invincibility",
+        "fast_movement",
+        "illegal_freeze",
+        "illegal_vehicle_modifier",
+        "bad_screen_word",
+        "freecam_detected",
+        "spiked_resource",
+        "driving_hotwire",
+        "illegal_vehicle_spawn"
+    ];
+
     public function systemBans(): Response
     {
 		$all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON license_identifier = identifier WHERE creator_name IS NULL AND SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION', 'NO_PERMISSIONS', 'ILLEGAL_VALUES', 'TIMEOUT_BYPASS', 'MEDIOCRE') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
@@ -75,49 +103,27 @@ class SystemController extends Controller
 		return $this->fakeText(200, $text);
     }
 
-    public function systemBansType(): Response
+    public function systemBansType(string $type): Response
     {
-		$graph = DB::select("SELECT timestamp FROM user_bans WHERE creator_name IS NULL AND SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION', 'NO_PERMISSIONS', 'ILLEGAL_VALUES', 'TIMEOUT_BYPASS')");
+        if (!in_array($type, self::AntiCheatTypes)) {
+            return $this->fakeText(404, "Invalid anti-cheat detection type");
+        }
 
-		$graphDays = [];
+		$graphData = $this->buildGraphData([], "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NOT NULL");
+		$graphData = $this->buildGraphData($graphData, "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NULL");
 
-		foreach($graph as $ban) {
-			$day = strtotime(date("Y-m-d", $ban->timestamp));
+        $keys = array_keys($graphData);
+        $min = $keys[0];
+        $max = $keys[sizeof($keys) - 1];
 
-			if(!isset($graphDays[$day])) {
-				$graphDays[$day] = 0;
-			}
-
-			$graphDays[$day]++;
-		}
-
-		$min = empty($graphDays) ? (time() - 86400 * 7) : min(array_keys($graphDays));
-		$max = strtotime(date("Y-m-d"));
-
-		$averageData = [];
-
-		for ($x = $min; $x <= $max; $x += 86400) {
-			$start = $x - (86400 * 7);
-
-			$average = 0;
-
-			for ($y = $start; $y <= $x; $y += 86400) {
-				$average += $graphDays[$y] ?? 0;
-			}
-
-			$average /= 7;
-
-			$averageData[] = $average;
-		}
-
-		$image = $this->renderGraph($averageData, date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max) . ' (7d avg)');
+		$image = $this->renderGraph(array_values($graphData), date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max) . ' (7d avg)');
 
 		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
 
 		return $this->fakeText(200, $image);
     }
 
-    protected function buildGraphData($existingData, $query)
+    protected function buildGraphData($existingData, $query, $average = 7)
     {
         $graph = DB::select($query);
 
@@ -135,11 +141,11 @@ class SystemController extends Controller
 			$graphDays[$day]++;
 		}
 
-		$min = empty($graphDays) ? (time() - 86400 * 7) : min(array_keys($graphDays));
+		$min = empty($graphDays) ? (time() - 86400 * $average) : min(array_keys($graphDays));
 		$max = strtotime(date("Y-m-d"));
 
 		for ($x = $min; $x <= $max; $x += 86400) {
-			$start = $x - (86400 * 7);
+			$start = $x - (86400 * $average);
 
 			$average = 0;
 
@@ -147,7 +153,7 @@ class SystemController extends Controller
 				$average += $graphDays[$y] ?? 0;
 			}
 
-			$average /= 7;
+			$average /= $average;
 
             if (!isset($existingData[$x])) {
                 $existingData[$x] = [];
