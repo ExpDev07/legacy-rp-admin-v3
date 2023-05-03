@@ -249,6 +249,9 @@ class Controller extends BaseController
 		for ($i = 0; $i < $size; $i++) {
 			$entry = $entries[$i] ?? [];
 
+            $total = array_sum($entry);
+            $totalPercentage = $total / $max;
+
             $y = $height;
 
             foreach($entry as $index => $value) {
@@ -261,7 +264,7 @@ class Controller extends BaseController
                 $x2 = $x + $entryWidth - 1;
                 $y2 = $y - ($height * $percentage);
 
-                $color = $gradients[$index][floor($percentage * 50)];
+                $color = $gradients[$index][floor($totalPercentage * 50)];
 
                 $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
 
