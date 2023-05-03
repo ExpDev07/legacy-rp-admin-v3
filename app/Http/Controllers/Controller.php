@@ -240,39 +240,45 @@ class Controller extends BaseController
 		$black = imagecolorallocate($image, 28, 27, 34);
 		imagefill($image, 0, 0, $black);
 
-		$gradients = [
-            $this->colorGradient('6180b3', '8ca8d4', 50),
-            $this->colorGradient('65b361', '8fd48c', 50),
-            $this->colorGradient('b39761', 'd4bc8c', 50)
-        ];
+        if ($max > 0) {
+            $gradients = [
+                $this->colorGradient('6180b3', '8ca8d4', 50),
+                $this->colorGradient('65b361', '8fd48c', 50),
+                $this->colorGradient('b39761', 'd4bc8c', 50)
+            ];
 
-		for ($i = 0; $i < $size; $i++) {
-			$entry = $entries[$i] ?? [];
+            for ($i = 0; $i < $size; $i++) {
+                $entry = $entries[$i] ?? [];
 
-            $total = array_sum($entry);
-            $totalPercentage = $total / $max;
+                $total = array_sum($entry);
+                $totalPercentage = $total / $max;
 
-            $y = $height;
+                $y = $height;
 
-            foreach($entry as $index => $value) {
-                if ($value === 0) continue;
+                foreach($entry as $index => $value) {
+                    if ($value === 0) continue;
 
-                $percentage = $value / $max;
+                    $percentage = $value / $max;
 
-                $x = $i * $entryWidth;
+                    $x = $i * $entryWidth;
 
-                $x2 = $x + $entryWidth - 1;
-                $y2 = $y - ($height * $percentage);
+                    $x2 = $x + $entryWidth - 1;
+                    $y2 = $y - ($height * $percentage);
 
-                $color = $gradients[$index][floor($totalPercentage * 50)];
+                    $color = $gradients[$index][floor($totalPercentage * 50)];
 
-                $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
+                    $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
 
-                imagefilledrectangle($image, $x, $y, $x2, $y2, $color);
+                    imagefilledrectangle($image, $x, $y, $x2, $y2, $color);
 
-                $y = $y2;
+                    $y = $y2;
+                }
             }
-		}
+        } else {
+            $text = imagecolorallocate($image, 146, 175, 221);
+
+		    imagestring($image, 2, floor($height / 2), floor($size / 2), "No Data", $text);
+        }
 
 		$text = imagecolorallocate($image, 146, 175, 221);
 
