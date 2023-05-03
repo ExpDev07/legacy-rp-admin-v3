@@ -123,7 +123,7 @@ class SystemController extends Controller
 		return $this->fakeText(200, $image);
     }
 
-    protected function buildGraphData($existingData, $query, $average = 7)
+    protected function buildGraphData($existingData, $query, $averageDays = 7)
     {
         $graph = DB::select($query);
 
@@ -141,11 +141,11 @@ class SystemController extends Controller
 			$graphDays[$day]++;
 		}
 
-		$min = empty($graphDays) ? (time() - 86400 * $average) : min(array_keys($graphDays));
+		$min = empty($graphDays) ? (time() - 86400 * $averageDays) : min(array_keys($graphDays));
 		$max = strtotime(date("Y-m-d"));
 
 		for ($x = $min; $x <= $max; $x += 86400) {
-			$start = $x - (86400 * $average);
+			$start = $x - (86400 * $averageDays);
 
 			$average = 0;
 
@@ -153,7 +153,7 @@ class SystemController extends Controller
 				$average += $graphDays[$y] ?? 0;
 			}
 
-			$average /= $average;
+			$average /= $averageDays;
 
             if (!isset($existingData[$x])) {
                 $existingData[$x] = [];
