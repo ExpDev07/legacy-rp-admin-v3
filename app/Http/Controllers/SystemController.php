@@ -147,6 +147,12 @@ class SystemController extends Controller
 		$min = empty($graphDays) ? (time() - 86400 * $averageDays) : min(array_keys($graphDays));
 		$max = strtotime(date("Y-m-d"));
 
+        $min2 = array_keys($existingData)[0];
+
+        if ($min2 && $min2 < $min) {
+            $min = $min2;
+        }
+
 		for ($x = $min; $x <= $max; $x += 86400) {
 			$start = $x - (86400 * $averageDays);
 
@@ -162,10 +168,8 @@ class SystemController extends Controller
                 $existingData[$x] = [];
             }
 
-            if ($index > 0) {
-                for ($i = 0; $i < $index; $i++) {
-                    $existingData[$x][$i] = $existingData[$x][$i] ?? 0;
-                }
+            while (sizeof($existingData[$x]) < $index) {
+                $existingData[$x][] = 0;
             }
 
 			$existingData[$x][$index] = $average;
