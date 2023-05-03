@@ -258,7 +258,7 @@ class Controller extends BaseController
 
                 $x = $i * $entryWidth;
 
-                $x2 = $x + $entryWidth;
+                $x2 = $x + $entryWidth - 1;
                 $y2 = $y - ($height * $percentage);
 
                 $color = $gradients[$index][floor($percentage * 50)];
