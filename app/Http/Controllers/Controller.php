@@ -225,7 +225,7 @@ class Controller extends BaseController
             return $entry;
         }, $entries);
 
-		$size = max(350, sizeof($entries));
+		$size = max(512, sizeof($entries));
 		$height = floor($size / 2);
 
 		$entryWidth = floor($size / sizeof($entries));
