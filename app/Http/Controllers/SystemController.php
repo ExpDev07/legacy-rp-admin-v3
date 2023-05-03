@@ -120,6 +120,8 @@ class SystemController extends Controller
         $min = min($keys);
         $max = max($keys);
 
+        var_dump($graphData);
+
 		$image = $this->renderGraph(array_values($graphData), $type . ': ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max));
 
 		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
