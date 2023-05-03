@@ -159,6 +159,33 @@ class Controller extends BaseController
 		return $seconds . ' second' . ($seconds > 1 ? 's' : '');
 	}
 
+    private function formatSecondsMinimal($seconds)
+    {
+        $seconds = floor($seconds);
+
+        $hours = floor($seconds / 3600);
+        $seconds -= $hours * 3600;
+
+        $minutes = floor($seconds / 60);
+        $seconds -= $minutes * 60;
+
+        $time = "";
+
+        if ($hours > 0) {
+            $time .= $hours . "h ";
+        }
+
+        if ($minutes > 0) {
+            $time .= $minutes . "m ";
+        }
+
+        if ($seconds > 0) {
+            $time .= $seconds . "s";
+        }
+
+        return "~" . $time;
+    }
+
 	private function colorGradient($fromHex, $toHex, $steps) {
 		$startR = hexdec(substr($fromHex, 0, 2));
 		$startG = hexdec(substr($fromHex, 2, 2));

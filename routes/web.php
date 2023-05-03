@@ -41,13 +41,13 @@ use App\Http\Controllers\StaffChatController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\SuspiciousController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\SystemController;
 use App\Http\Controllers\TwitterController;
 use App\Http\Controllers\LoadingScreenController;
 use App\Http\Controllers\WeaponController;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
 
 // Authentication methods.
@@ -225,10 +225,12 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/logs/{action}', [TestController::class, 'logs']);
     Route::get('/test/smart_watch', [TestController::class, 'smartWatchLeaderboard']);
     Route::get('/test/bans', [TestController::class, 'banLeaderboard']);
-    Route::get('/test/system', [TestController::class, 'systemBans']);
     Route::get('/test/modders', [TestController::class, 'moddingBans']);
     Route::get('/test/staff', [TestController::class, 'staffPlaytime']);
     Route::get('/test/finance', [TestController::class, 'finance']);
+
+    Route::get('/system', [SystemController::class, 'systemBans']);
+    Route::get('/system/{type}', [SystemController::class, 'systemBansType']);
 
     Route::get('/test/test', [TestController::class, 'test']);
 
