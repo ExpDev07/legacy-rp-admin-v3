@@ -251,7 +251,9 @@ class Controller extends BaseController
             $y = $height;
 
             foreach($entry as $index => $value) {
-                $percentage = $value === 0 ? 0 : $value / $max;
+                if ($value === 0) continue;
+
+                $percentage = $value / $max;
 
                 $x = $i * $entryWidth;
 
