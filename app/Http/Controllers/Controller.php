@@ -190,36 +190,55 @@ class Controller extends BaseController
 
 	protected function renderGraph(array $entries, string $title, )
 	{
+        $entries = array_map(function ($entry) {
+            if (!is_array($entry)) {
+                $entry = [$entry];
+            }
+
+            return $entry;
+        }, $entries);
+
 		$size = max(350, sizeof($entries));
 		$height = floor($size / 2);
 
 		$entryWidth = floor($size / sizeof($entries));
 
-		$max = ceil(max($entries) * 1.1);
+		$max = ceil(max(array_map(function ($entry) {
+            return array_sum($entry);
+        }, $entries)) * 1.1);
 
 		$image = imagecreatetruecolor($size, $height);
 
 		$black = imagecolorallocate($image, 28, 27, 34);
 		imagefill($image, 0, 0, $black);
 
-		$gradient = $this->colorGradient('6180b3', '8ca8d4', 50);
+		$gradients = [
+            $this->colorGradient('6180b3', '8ca8d4', 50),
+            $this->colorGradient('65b361', '8fd48c', 50),
+            $this->colorGradient('b39761', 'd4bc8c', 50)
+        ];
 
 		for ($i = 0; $i < $size; $i++) {
 			$entry = $entries[$i] ?? 0;
 
-			$percentage = $entry === 0 ? 0 : $entry / $max;
+            $y = $height;
 
-			$x = $i * $entryWidth;
-			$y = floor($height - ($percentage * $height));
+            foreach($entry as $index => $value) {
+                $percentage = $value === 0 ? 0 : $value / $max;
 
-			$x2 = $x + $entryWidth;
-			$y2 = $height;
+                $x = $i * $entryWidth;
 
-			$color = $gradient[floor($percentage * 50)];
+                $x2 = $x + $entryWidth;
+                $y2 = $y - ($height * $percentage);
 
-			$color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
+                $color = $gradients[$index][floor($percentage * 50)];
 
-			imagerectangle($image, $x, $y, $x2, $y2, $color);
+                $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
+
+                imagerectangle($image, $x, $y, $x2, $y2, $color);
+
+                $y = $y2;
+            }
 		}
 
 		$text = imagecolorallocate($image, 146, 175, 221);
