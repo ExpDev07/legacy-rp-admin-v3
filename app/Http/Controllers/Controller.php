@@ -226,9 +226,10 @@ class Controller extends BaseController
         }, $entries);
 
 		$size = max(850, sizeof($entries));
-		$height = floor($size / 2);
-
 		$entryWidth = floor($size / sizeof($entries));
+
+        $size = $entryWidth * sizeof($entries);
+		$height = floor($size / 2);
 
 		$max = ceil(max(array_map(function ($entry) {
             return array_sum($entry);

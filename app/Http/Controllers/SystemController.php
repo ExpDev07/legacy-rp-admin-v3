@@ -43,8 +43,8 @@ class SystemController extends Controller
 		$graphData = $this->buildGraphData([], "SELECT timestamp FROM user_bans WHERE creator_name IS NULL AND SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION', 'NO_PERMISSIONS', 'ILLEGAL_VALUES', 'TIMEOUT_BYPASS')");
 
         $keys = array_keys($graphData);
-        $min = $keys[0];
-        $max = $keys[sizeof($keys) - 1];
+        $min = min($keys);
+        $max = max($keys);
 
 		$image = $this->renderGraph(array_values($graphData), date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max) . ' (7d avg)');
 
@@ -113,10 +113,10 @@ class SystemController extends Controller
 		$graphData = $this->buildGraphData($graphData, "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NULL", 1);
 
         $keys = array_keys($graphData);
-        $min = $keys[0];
-        $max = $keys[sizeof($keys) - 1];
+        $min = min($keys);
+        $max = max($keys);
 
-		$image = $this->renderGraph(array_values($graphData), date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max) . ' (7d avg)');
+		$image = $this->renderGraph(array_values($graphData), $type . ': ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max));
 
 		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
 
