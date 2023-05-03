@@ -246,7 +246,7 @@ class Controller extends BaseController
         ];
 
 		for ($i = 0; $i < $size; $i++) {
-			$entry = $entries[$i] ?? 0;
+			$entry = $entries[$i] ?? [];
 
             $y = $height;
 
