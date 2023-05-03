@@ -159,7 +159,7 @@ class Controller extends BaseController
 		return $seconds . ' second' . ($seconds > 1 ? 's' : '');
 	}
 
-    private function formatSecondsMinimal($seconds)
+    protected function formatSecondsMinimal($seconds)
     {
         $seconds = floor($seconds);
 
