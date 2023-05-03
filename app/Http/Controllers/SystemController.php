@@ -106,7 +106,7 @@ class SystemController extends Controller
     public function systemBansType(string $type): Response
     {
         if (!in_array($type, self::AntiCheatTypes)) {
-            return $this->fakeText(404, "Invalid anti-cheat detection type");
+            return $this->fakeText(404, "Invalid anti-cheat detection type (" . implode(", ", self::AntiCheatTypes) . ")");
         }
 
 		$graphData = $this->buildGraphData([], "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NOT NULL", 1);
