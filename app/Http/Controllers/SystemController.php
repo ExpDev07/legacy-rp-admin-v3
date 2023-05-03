@@ -147,7 +147,7 @@ class SystemController extends Controller
 		$min = empty($graphDays) ? (time() - 86400 * $averageDays) : min(array_keys($graphDays));
 		$max = strtotime(date("Y-m-d"));
 
-        $min2 = array_keys($existingData)[0];
+        $min2 = !empty($existingData) ? array_keys($existingData)[0] : null;
 
         if ($min2 && $min2 < $min) {
             $min = $min2;
