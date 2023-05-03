@@ -225,7 +225,7 @@ class Controller extends BaseController
             return $entry;
         }, $entries);
 
-		$size = max(512, sizeof($entries));
+		$size = max(850, sizeof($entries));
 		$height = floor($size / 2);
 
 		$entryWidth = floor($size / sizeof($entries));
@@ -262,7 +262,7 @@ class Controller extends BaseController
 
                 $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
 
-                imagerectangle($image, $x, $y, $x2, $y2, $color);
+                imagefilledrectangle($image, $x, $y, $x2, $y2, $color);
 
                 $y = $y2;
             }
