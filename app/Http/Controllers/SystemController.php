@@ -112,6 +112,7 @@ class SystemController extends Controller
 		$graphData = $this->buildGraphData([], "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NOT NULL");
 		$graphData = $this->buildGraphData($graphData, "select anti_cheat_events.timestamp FROM anti_cheat_events LEFT JOIN user_bans ON license_identifier = identifier where type = '" . $type . "' AND ban_hash IS NULL");
 
+        header("Content-Type: text/plain");
         var_dump($graphData);
         die();
 
