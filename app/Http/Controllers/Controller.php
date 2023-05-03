@@ -229,7 +229,7 @@ class Controller extends BaseController
 		$entryWidth = floor($size / sizeof($entries));
 
         $size = $entryWidth * sizeof($entries);
-		$height = floor($size / 2);
+		$height = floor($size * 0.6);
 
 		$max = ceil(max(array_map(function ($entry) {
             return array_sum($entry);
@@ -275,12 +275,12 @@ class Controller extends BaseController
                 }
             }
         } else {
-            $text = imagecolorallocate($image, 146, 175, 221);
+            $noDataText = imagecolorallocate($image, 231, 177, 177);
 
-		    imagestring($image, 2, floor($height / 2), floor($size / 2), "No Data", $text);
+		    imagestring($image, 4, floor($size / 2) - 26, floor($height / 2), "No Data", $noDataText);
         }
 
-		$text = imagecolorallocate($image, 146, 175, 221);
+		$text = imagecolorallocate($image, 177, 198, 231);
 
 		imagestring($image, 2, 4, 2, $title, $text);
 
