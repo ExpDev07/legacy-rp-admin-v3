@@ -136,6 +136,8 @@ export default {
 
             if (prediction === false) return 'loading';
 
+            console.debug('Prediction', prediction);
+
             return prediction;
         },
         refresh: async function () {

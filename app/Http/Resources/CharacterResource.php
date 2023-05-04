@@ -47,6 +47,7 @@ class CharacterResource extends JsonResource
             'characterDeletionTimestamp' => $this->character_deletion_timestamp,
             'characterCreationTimestamp' => $this->character_creation_timestamp,
             'licenses'                   => $this->getLicenses(),
+            'creationTime'               => $this->character_creation_time,
             'pedModelHash'               => $this->ped_model_hash ? intval($this->ped_model_hash) : null,
             'outfits'                    => $isView ? Character::getOutfits($this->character_id) : 0,
             'danny'                      => GeneralHelper::isDefaultDanny(intval($this->ped_model_hash), $this->ped_model_data),

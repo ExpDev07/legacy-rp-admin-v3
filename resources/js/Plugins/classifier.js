@@ -1,6 +1,26 @@
 import BayesClassifier from "bayes-classifier";
 import { get } from "axios";
 
+function _getTrainingData(profile) {
+	let creationTime = 'long';
+
+	if (profile.creationTime < 2 * 60) {
+		creationTime = 'short';
+	} else if (profile.creationTime < 5 * 60) {
+		creationTime = 'medium';
+	} else if (profile.creationTime < 10 * 60) {
+		creationTime = 'decent';
+	}
+
+	const modelName = models[profile.pedModelHash] || 'unknown';
+
+	return `${profile.firstName} ${profile.lastName}
+${modelName}
+${profile.gender} born ${profile.dateOfBirth}
+${creationTime}
+${profile.backstory}`;
+}
+
 const Classifier = {
 	async install(Vue, options) {
 		let classifier = false,
@@ -32,7 +52,9 @@ const Classifier = {
 
 			if (!classifier) return false;
 
-			const text = character.name + "\n" + character.backstory;
+			const text = _getTrainingData(character);
+
+			console.log(text);
 
 			return classifier.classify(text);
 		};
