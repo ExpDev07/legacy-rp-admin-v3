@@ -6,19 +6,19 @@ import models from "../data/ped_models.json";
 function _getTrainingData(profile) {
 	let creationTime = 'long';
 
-	if (profile.creationTime < 2 * 60) {
+	if (profile.character_creation_time < 2 * 60) {
 		creationTime = 'short';
-	} else if (profile.creationTime < 5 * 60) {
+	} else if (profile.character_creation_time < 5 * 60) {
 		creationTime = 'medium';
-	} else if (profile.creationTime < 10 * 60) {
+	} else if (profile.character_creation_time < 10 * 60) {
 		creationTime = 'decent';
 	}
 
-	const modelName = models[profile.pedModelHash] || 'unknown';
+	const modelName = models[profile.ped_model_hash] || 'unknown';
 
-	return `${profile.firstName} ${profile.lastName}
+	return `${profile.name}
 ${modelName}
-${profile.gender} born ${profile.dateOfBirth}
+${profile.gender} born ${profile.date_of_birth}
 ${creationTime}
 ${profile.backstory}`;
 }
