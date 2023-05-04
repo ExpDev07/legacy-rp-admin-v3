@@ -7,10 +7,12 @@ function _getTrainingData(profile) {
 	let creationTime = 'long';
 
 	if (profile.character_creation_time < 2 * 60) {
-		creationTime = 'short';
+		creationTime = 'tiny';
 	} else if (profile.character_creation_time < 5 * 60) {
-		creationTime = 'medium';
+		creationTime = 'short';
 	} else if (profile.character_creation_time < 10 * 60) {
+		creationTime = 'medium';
+	} else if (profile.character_creation_time < 15 * 60) {
 		creationTime = 'decent';
 	}
 
