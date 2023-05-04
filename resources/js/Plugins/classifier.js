@@ -1,6 +1,8 @@
 import BayesClassifier from "bayes-classifier";
 import { get } from "axios";
 
+import models from "../data/ped_models.json";
+
 function _getTrainingData(profile) {
 	let creationTime = 'long';
 

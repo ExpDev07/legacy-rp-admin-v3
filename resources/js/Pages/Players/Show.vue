@@ -1457,7 +1457,7 @@ import Avatar from './../../Components/Avatar';
 import ScreenshotAttacher from './../../Components/ScreenshotAttacher';
 import Modal from './../../Components/Modal';
 
-import models from '../../data/ped_models.js';
+import models from "../../data/ped_models.json";
 
 import hljs from 'highlight.js';
 
@@ -1968,19 +1968,7 @@ export default {
                 return 'unknown';
             }
 
-            // convert signed to unsigned
-            const checkHash = Uint32Array.from(Int32Array.of(hash))[0];
-
-            for (let x = 0; x < models.length; x++) {
-                const name = models[x],
-                    calcHash = this.joaat(name);
-
-                if (calcHash === checkHash || Uint32Array.from(Int32Array.of(calcHash))[0] === checkHash) {
-                    return name;
-                }
-            }
-
-            return hash;
+            return models[hash] || hash;
         },
         joaat(key) {
             let hash = 0;
