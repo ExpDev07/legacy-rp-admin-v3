@@ -1,5 +1,7 @@
 cd opfw-admin
 
+echo "pulling" > update
+
 git stash
 git pull
 
@@ -7,6 +9,8 @@ for directory in ./envs/*/; do
     [ -L "${d%/}" ] && continue
 
     cluster="$(basename -- $directory)"
+
+    echo "migrating $cluster" > update
 
     echo "Migrating $cluster";
     php artisan migrate --cluster=$cluster --force
