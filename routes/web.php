@@ -25,6 +25,7 @@ use App\Http\Controllers\SteamLookupController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\MapController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\OverwatchController;
 use App\Http\Controllers\PanelLogController;
 use App\Http\Controllers\PlayerBanController;
@@ -235,6 +236,8 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/test/test', [TestController::class, 'test']);
 
     Route::get('/weapon/{weapon}', [WeaponController::class, 'weaponDamage']);
+
+    Route::get('/api/classifier.json', [ApiController::class, 'playerClassifierJSON']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {

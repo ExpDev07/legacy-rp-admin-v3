@@ -26,6 +26,8 @@
     <script>var REMOTE_DEBUG = false;</script>
     <script src="/debugging.js"></script>
 
+    <script>const classifierJSON = "{{ fileVersion('helpers/classifier.json') }}";</script>
+
     <!-- Scripts -->
     <script defer type="application/javascript" src="{{ mix('js/app.js') }}"></script>
     <script defer type="application/javascript" src="https://kit.fontawesome.com/0074643143.js" crossorigin="anonymous"></script>

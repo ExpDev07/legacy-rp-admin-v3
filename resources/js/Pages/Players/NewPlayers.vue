@@ -12,8 +12,13 @@
 
         <v-section class="overflow-x-auto" :noFooter="true">
             <template #header>
-                <h2>
+                <h2 class="relative">
                     {{ t('players.new.title') }}
+
+                    <div class="absolute top-1/2 right-0 transform -translate-y-1/2 h-7 w-48 rounded-sm bg-rose-800 dark:bg-rose-400 shadow-sm" v-if="isLoadingClassifier">
+                        <div class="h-full rounded-sm bg-rose-900 dark:bg-rose-500" :class="{'bg-green-900 dark:bg-green-500' : progress === 100}" :style="'width: ' + progress + '%'"></div>
+                        <div class="absolute top-1/2 left-0 w-full text-center transform -translate-y-1/2 text-xs monospace">{{ t('players.new.loading', progress) }}</div>
+                    </div>
                 </h2>
             </template>
 
@@ -47,8 +52,9 @@
                                 {{ t('players.new.no_character') }}
                             </span>
 
-                            <template v-if="player.character">
-                                <span class="block text-xs italic text-red-800 dark:text-red-200" v-if="classify(player.character) === 'negative'" :title="t('players.new.prediction')">{{ t("players.new.prediction_negative") }}</span>
+                            <template v-if="player.character" :set="prediction = classify(player.character)">
+                                <span class="block text-xs italic text-blue-800 dark:text-blue-200" v-if="prediction === 'loading'" :title="t('players.new.prediction')">{{ t("players.new.prediction_loading") }}</span>
+                                <span class="block text-xs italic text-red-800 dark:text-red-200" v-else-if="prediction === 'negative'" :title="t('players.new.prediction')">{{ t("players.new.prediction_negative") }}</span>
                                 <span class="block text-xs italic text-green-800 dark:text-green-200" v-else :title="t('players.new.prediction')">{{ t("players.new.prediction_positive") }}</span>
                             </template>
                         </td>
@@ -98,7 +104,10 @@ export default {
     },
     data() {
         return {
-            isLoading: false
+            isLoading: false,
+
+            isLoadingClassifier: false,
+            progress: 0
         };
     },
     methods: {
@@ -106,7 +115,11 @@ export default {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
         },
         classify(character) {
-            return this.classifyCharacter(character)
+            const prediction = this.classifyCharacter(character);
+
+            if (prediction === false) return 'loading';
+
+            return prediction;
         },
         refresh: async function () {
             if (this.isLoading) {
@@ -125,6 +138,18 @@ export default {
 
             this.isLoading = false;
         }
-    }
+    },
+    async mounted() {
+        this.isLoadingClassifier = true;
+
+        await this.loadClassifier(percentage => {
+            this.progress = percentage;
+        });
+
+        setTimeout(() => {
+            this.progress = 100;
+            this.isLoadingClassifier = false;
+        }, 1500);
+    },
 }
 </script>

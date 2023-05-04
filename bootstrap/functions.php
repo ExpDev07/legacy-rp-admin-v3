@@ -39,3 +39,10 @@ function mb_str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_
 
     return $result;
 }
+
+function fileVersion($file)
+{
+    $time = filemtime(__DIR__ . "/../" . $file);
+
+    return substr(md5($time), 0, 8);
+}

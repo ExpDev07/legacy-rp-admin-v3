@@ -645,7 +645,7 @@
         "discord": "Discord ID",
 		"identifier": "Other Identifier",
         "server_id": "Current Server ID",
-        "none": "No players was found.",
+        "none": "No players were found.",
         "search_btn": "Search players",
         "is_banned": "Is Banned",
         "my_bans": "Banned by me",
@@ -656,9 +656,11 @@
             "character": "Loaded Character",
             "no_character": "N/A",
             "danny_percentage": "Danny Percentage",
+            "prediction_loading": "Loading prediction...",
 			"prediction_negative": "Computer says: probably bad",
 			"prediction_positive": "Computer says: probably good",
-			"prediction": "AI prediction based on name and backstory."
+			"prediction": "AI prediction based on name and backstory.",
+            "loading": "Loading Classifier: {0}%"
         },
         "ban": {
             "issuing": "Issuing ban",
