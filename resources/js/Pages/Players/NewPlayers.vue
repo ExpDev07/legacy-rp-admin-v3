@@ -40,7 +40,7 @@
                         <th class="px-6 py-4">{{ t('players.new.character') }}</th>
                         <th class="w-24 px-6 py-4"></th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in players"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in playerList"
                         :key="player.licenseIdentifier">
                         <td class="px-6 py-3 border-t mobile:block" :title="t('global.server_timeout')">
                             <span class="font-semibold" v-if="player.serverId">
@@ -60,9 +60,9 @@
                                 {{ t('players.new.no_character') }}
                             </span>
 
-                            <template v-if="player.character" :set="prediction = classify(player.character)">
-                                <span class="block text-xs italic text-blue-800 dark:text-blue-200" v-if="prediction === 'loading'" :title="t('players.new.prediction')">{{ t("players.new.prediction_loading") }}</span>
-                                <span class="block text-xs italic text-red-800 dark:text-red-200" v-else-if="prediction === 'negative'" :title="t('players.new.prediction')">{{ t("players.new.prediction_negative") }}</span>
+                            <template v-if="player.prediction">
+                                <span class="block text-xs italic text-blue-800 dark:text-blue-200" v-if="player.prediction === 'loading'" :title="t('players.new.prediction')">{{ t("players.new.prediction_loading") }}</span>
+                                <span class="block text-xs italic text-red-800 dark:text-red-200" v-else-if="player.prediction === 'negative'" :title="t('players.new.prediction')">{{ t("players.new.prediction_negative") }}</span>
                                 <span class="block text-xs italic text-green-800 dark:text-green-200" v-else :title="t('players.new.prediction')">{{ t("players.new.prediction_positive") }}</span>
                             </template>
                         </td>
@@ -115,10 +115,19 @@ export default {
             isLoading: false,
 
             isLoadingClassifier: false,
-            progress: 0
+            progress: 0,
+
+            playerList: this.getPlayerList()
         };
     },
     methods: {
+        getPlayerList() {
+            return this.players.map(player => {
+                player.prediction = player.character ? this.classify(player.character) : false;
+
+                return player;
+            });
+        },
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
         },
@@ -153,6 +162,8 @@ export default {
         await this.loadClassifier(percentage => {
             this.progress = percentage;
         });
+
+        this.playerList = this.getPlayerList();
 
         setTimeout(() => {
             this.progress = 100;
