@@ -155,6 +155,8 @@ export default {
                 });
             } catch (e) { }
 
+            this.playerList = this.getPlayerList();
+
             this.isLoading = false;
         }
     },
