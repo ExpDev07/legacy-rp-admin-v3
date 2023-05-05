@@ -191,13 +191,6 @@ export default {
         }
     },
     data() {
-        const screenshots = this.screenshots.map(screenshot => {
-            screenshot.ban = this.getBanInfo(screenshot.license_identifier);
-            screenshot.isBan = !screenshot.url.startsWith("http");
-
-            return screenshot;
-        });
-
         const falsePositivesChances = [
             "impossible",
             "very unlikely",
@@ -214,7 +207,7 @@ export default {
             flashingScuffInfo: false,
             flashScuffTimeout: null,
 
-            formattedScreenshots: screenshots,
+            formattedScreenshots: this.getFormattedScreenshots(),
 
             falsePositivesChances: falsePositivesChances
         };
@@ -235,7 +228,17 @@ export default {
                 });
             } catch(e) {}
 
+            this.formattedScreenshots = this.getFormattedScreenshots();
+
             this.isLoading = false;
+        },
+        getFormattedScreenshots() {
+            return this.screenshots.map(screenshot => {
+                screenshot.ban = this.getBanInfo(screenshot.license_identifier);
+                screenshot.isBan = !screenshot.url.startsWith("http");
+
+                return screenshot;
+            });
         },
         getBanInfo(licenseIdentifier, key) {
             const ban = licenseIdentifier in this.banMap ? this.banMap[licenseIdentifier] : null;
