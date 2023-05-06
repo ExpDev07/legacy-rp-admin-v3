@@ -3,9 +3,10 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: coalaura
 
 ---
+
+**__DEPRECATION NOTICE:__** This repository is no longer maintained. Please refer to https://github.com/coalaura/opfw-admin
 
 **Which clusters panel is this on?**
 c2, c3, etc.
