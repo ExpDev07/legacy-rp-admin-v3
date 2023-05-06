@@ -46,7 +46,7 @@ class SystemController extends Controller
         $min = min($keys);
         $max = max($keys);
 
-		$image = $this->renderGraph(array_values($graphData), date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max) . ' (7d avg)');
+		$image = $this->renderGraph(array_values($graphData), date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max) . ' (7d avg)', ["blue"]);
 
 		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />' . PHP_EOL;
 
@@ -120,7 +120,7 @@ class SystemController extends Controller
         $min = min($keys);
         $max = max($keys);
 
-		$image = $this->renderGraph(array_values($graphData), $type . ': ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max));
+		$image = $this->renderGraph(array_values($graphData), $type . ': ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max), ["green", "red"]);
 
 		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
 
