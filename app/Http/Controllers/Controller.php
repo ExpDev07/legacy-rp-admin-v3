@@ -16,6 +16,14 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    const GradientColors = [
+        "blue" => ['5383c6', '8cacd9'], // HSL H215 S50 -> L55 - L70
+        "green" => ['66c653', '99d98c'],
+        "yellow" => ['c6b353', 'd9cc8c'],
+        "red" => ['c65353', 'd98c8c'],
+        "purple" => ['9f53c6', 'bf8cd9'],
+    ];
+
     /**
      * Returns the next and previous links
      *
@@ -214,8 +222,7 @@ class Controller extends BaseController
 		return array_reverse($gradient);
 	}
 
-
-	protected function renderGraph(array $entries, string $title, )
+	protected function renderGraph(array $entries, string $title, array $colors = ["blue"])
 	{
         $entries = array_map(function ($entry) {
             if (!is_array($entry)) {
@@ -241,11 +248,13 @@ class Controller extends BaseController
 		imagefill($image, 0, 0, $black);
 
         if ($max > 0) {
-            $gradients = [
-                $this->colorGradient('6180b3', '8ca8d4', 50),
-                $this->colorGradient('65b361', '8fd48c', 50),
-                $this->colorGradient('b39761', 'd4bc8c', 50)
-            ];
+            $gradients = [];
+
+            for ($g = 0; $g < sizeof($entries[0]); $g++) {
+                $color = self::GradientColors[$colors[$g] ?? 'blue'] ?? self::GradientColors['blue'];
+
+                $gradients[] = $this->colorGradient($color[0], $color[1], 50);
+            }
 
             for ($i = 0; $i < $size; $i++) {
                 $entry = $entries[$i] ?? [];
