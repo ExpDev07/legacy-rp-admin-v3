@@ -425,6 +425,7 @@ class WeaponDamageEvent extends Model
 		return self::query()
 			->select(['license_identifier', 'timestamp', 'hit_component', 'damage_type', 'weapon_type', 'distance', 'weapon_damage'])
 			->whereRaw("JSON_CONTAINS(hit_players, '\"" . $license . "\"', '$')")
+			->where('parent_global_id', '=', '0')
 			->orderByDesc('timestamp')
 			->limit(500)
 			->get()->toArray();
@@ -434,6 +435,7 @@ class WeaponDamageEvent extends Model
 	{
 		$query = self::query()
 			->selectRaw("JSON_UNQUOTE(JSON_EXTRACT(hit_players, '$[0]')) as license_identifier, timestamp, hit_component, damage_type, weapon_type, distance, weapon_damage")
+			->where('parent_global_id', '=', '0')
 			->where('license_identifier', $license);
 
 		if (!$includeNpcs) {
