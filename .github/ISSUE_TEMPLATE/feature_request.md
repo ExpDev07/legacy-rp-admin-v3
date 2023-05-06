@@ -3,9 +3,10 @@ name: Feature request
 about: Suggest an idea for this project
 title: ''
 labels: enhancement
-assignees: coalaura
 
 ---
+
+**__DEPRECATION NOTICE:__** This repository is no longer maintained. Please refer to https://github.com/coalaura/opfw-admin
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
