@@ -124,6 +124,33 @@ body {
     overflow-x: hidden;
 }
 
+.new-entry {
+    background: rgba(16, 185, 129, 0.2);
+}
+
+.new-entry td:first-child {
+    position: relative;
+}
+
+.new-entry td:first-child::before {
+    content: 'N';
+    color: #059669;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 12px;
+}
+
+html.dark .new-entry td:first-child::before {
+    color: #10b981;
+}
+
+html.dark .new-entry {
+    background: rgba(5, 150, 105, 0.2);
+}
+
 /*
  * Nicer styling
  */

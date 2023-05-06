@@ -48,7 +48,7 @@
                         <th class="px-6 py-4">{{ t('screenshot.created_at') }}</th>
                         <th class="w-64 px-6 py-4">{{ t('players.form.banned') }}?</th>
                     </tr>
-                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="screenshot in formattedScreenshots"
+                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" :class="{'new-entry' : screenshot.new}" v-for="screenshot in formattedScreenshots"
                         :key="screenshot.url">
                         <template v-if="screenshot.isBan">
                             <td class="px-6 py-2 border-t text-center mobile:block">
@@ -207,7 +207,7 @@ export default {
             flashingScuffInfo: false,
             flashScuffTimeout: null,
 
-            formattedScreenshots: this.getFormattedScreenshots(),
+            formattedScreenshots: this.getFormattedScreenshots(false),
 
             falsePositivesChances: falsePositivesChances
         };
@@ -218,24 +218,28 @@ export default {
                 return;
             }
 
+            const previousIds = this.screenshots.map(screenshot => screenshot.id);
+
             this.isLoading = true;
             try {
                 await this.$inertia.replace('/anti_cheat', {
                     data: this.filters,
                     preserveState: true,
                     preserveScroll: true,
-                    only: [ 'screenshots', 'playerMap', 'links', 'page' ],
+                    only: [ 'screenshots', 'banMap', 'links', 'page' ],
                 });
             } catch(e) {}
 
-            this.formattedScreenshots = this.getFormattedScreenshots();
+            this.formattedScreenshots = this.getFormattedScreenshots(previousIds);
 
             this.isLoading = false;
         },
-        getFormattedScreenshots() {
+        getFormattedScreenshots(previousIds) {
             return this.screenshots.map(screenshot => {
                 screenshot.ban = this.getBanInfo(screenshot.license_identifier);
                 screenshot.isBan = !screenshot.url.startsWith("http");
+
+                screenshot.new = previousIds && !previousIds.includes(screenshot.id);
 
                 return screenshot;
             });
