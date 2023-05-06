@@ -166,9 +166,15 @@ class PlayerBanController extends Controller
             'can_be_deleted' => 0,
         ]);
 
+        $staffName = $user->player->player_name;
+
+        if (env('HIDE_BAN_CREATOR')) {
+            $staffName = "a staff member";
+        }
+
         $kickReason = $request->input('reason')
-            ? 'You have been banned by ' . $user->player->player_name . ' for reason `' . $request->input('reason') . '`.'
-            : 'You have been banned without a specified reason by ' . $user->player->player_name;
+            ? 'You have been banned by ' . $staffName . ' for reason `' . $request->input('reason') . '`.'
+            : 'You have been banned without a specified reason by ' . $staffName;
 
         OPFWHelper::kickPlayer($user->player->license_identifier, $user->player->player_name, $player, $kickReason);
 

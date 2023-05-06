@@ -53,7 +53,14 @@ class PlayerRouteController extends Controller
         }
 
         $user = $request->user();
-        $reason = $request->input('reason') ?: 'You were kicked by ' . $user->player->player_name;
+
+        $staffName = $user->player->player_name;
+
+        if (env('HIDE_BAN_CREATOR')) {
+            $staffName = "a staff member";
+        }
+
+        $reason = $request->input('reason') ?: 'You were kicked by ' . $staffName;
 
         return OPFWHelper::kickPlayer($user->player->license_identifier, $user->player->player_name, $player, $reason)->redirect();
     }
