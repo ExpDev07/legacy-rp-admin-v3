@@ -49,6 +49,21 @@ class PlayerBanController extends Controller
         return $this->bans($request, false, true);
     }
 
+    public function findUserBanHash(string $hash)
+    {
+        $ban = Ban::query()
+            ->leftJoin('user_bans', 'identifier', '=', 'license_identifier')
+            ->where('ban_hash', $hash)
+            ->whereNotNull('license_identifier')
+            ->first();
+
+        if (!$ban) {
+            abort(404);
+        }
+
+        return redirect('/players/' . $ban->license_identifier);
+    }
+
     private function bans(Request $request, bool $showMine, bool $showSystem): Response
     {
         $query = Player::query();
