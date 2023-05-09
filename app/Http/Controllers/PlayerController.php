@@ -6,13 +6,11 @@ use App\Ban;
 use App\BlacklistedIdentifier;
 use App\Helpers\GeneralHelper;
 use App\Http\Resources\CharacterResource;
-use App\Http\Resources\PanelLogResource;
 use App\Http\Resources\PlayerIndexResource;
 use App\Http\Resources\PlayerResource;
 use App\Http\Controllers\PlayerRouteController;
 use App\Player;
 use App\Character;
-use App\Screenshot;
 use App\Warning;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -81,6 +79,12 @@ class PlayerController extends Controller
 				$query->whereIn('license_identifier', $online);
 			}
 
+            // Filtering by enabled command
+            $enablable = $request->input('enablable');
+            if (in_array($enablable, PlayerRouteController::EnablableCommands)) {
+                $query->where(DB::raw('JSON_CONTAINS(enabled_commands, \'"' . $enablable . '"\')'), '=', '1');
+            }
+
 			$query->orderBy("player_name");
 
 			$query->select([
@@ -115,10 +119,12 @@ class PlayerController extends Controller
                 'discord' => $request->input('discord'),
                 'server'  => $request->input('server'),
                 'identifier' => $request->input('identifier'),
+                'enablable' => $request->input('enablable') ?? "all",
             ],
             'links'   => $this->getPageUrls($page),
             'time'    => $end - $start,
             'page'    => $page,
+            'enablable' => PlayerRouteController::EnablableCommands
         ]);
     }
 

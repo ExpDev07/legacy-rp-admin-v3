@@ -645,6 +645,7 @@
         "discord": "Discord ID",
 		"identifier": "Other Identifier",
         "server_id": "Current Server ID",
+        "enablable": "Enabled Command",
         "none": "No players were found.",
         "search_btn": "Search players",
         "is_banned": "Is Banned",

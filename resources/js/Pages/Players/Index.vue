@@ -40,7 +40,7 @@
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="server_id" name="server" type="number" min="0" max="9999" placeholder="123" v-model="filters.server">
                         </div>
-                        <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2 mt-3" for="discord">
                                 {{ t('players.discord') }}
                                 <sup class="text-muted dark:text-dark-muted">
@@ -50,7 +50,7 @@
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="discord" name="discord" placeholder="150219115892703232" v-model="filters.discord">
                         </div>
-                        <div class="w-1/2 px-3 mobile:w-full mobile:mb-3">
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
                             <label class="block mb-2 mt-3" for="identifier">
                                 {{ t('players.identifier') }}
                                 <sup class="text-muted dark:text-dark-muted">
@@ -58,6 +58,18 @@
                                 </sup>
                             </label>
                             <input class="w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="identifier" name="identifier" placeholder="steam:11000010d322da9" v-model="filters.identifier">
+                        </div>
+                        <div class="w-1/3 px-3 mobile:w-full mobile:mb-3">
+                            <label class="block mb-2 mt-3" for="enablable">
+                                {{ t('players.enablable') }}
+                                <sup class="text-muted dark:text-dark-muted">
+                                    *
+                                </sup>
+                            </label>
+                            <select class="block w-full px-4 py-2 bg-gray-200 dark:bg-gray-600 border rounded" id="enablable" name="enablable" v-model="filters.enablable">
+                                <option value="all">{{ t('global.all') }}</option>
+                                <option :value="command" v-for="command in enablable">/{{ command }}</option>
+                            </select>
                         </div>
                     </div>
                     <!-- Description -->
@@ -212,6 +224,7 @@ export default {
             discord: String,
             server: Number,
             identifier: String,
+            enablable: String,
         },
         time: {
             type: Number,
@@ -223,6 +236,10 @@ export default {
         },
         page: {
             type: Number,
+            required: true,
+        },
+        enablable: {
+            type: Array,
             required: true,
         },
     },

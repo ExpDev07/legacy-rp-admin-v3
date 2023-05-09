@@ -31,12 +31,13 @@ class PlayerRouteController extends Controller
     ];
 
     const EnablableCommands = [
-        "freecam",
-        "idle",
-        "cam_point",
         "cam_clear",
         "cam_play",
-        "orbitcam"
+        "cam_point",
+        "disable_idle_cam",
+        "freecam",
+        "orbitcam",
+        "player_stats"
     ];
 
     /**
