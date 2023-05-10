@@ -79,6 +79,7 @@ This section describes how you can help contribute.
 * Composer.
 * Node (and npm).
 * MySQL/MariaDB (database).
+* Optimally nginx
 
 ### Setting up project
 Grab yourself a copy of this repository:
