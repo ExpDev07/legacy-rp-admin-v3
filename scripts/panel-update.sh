@@ -5,6 +5,10 @@ echo "pulling" > update
 git stash
 git pull
 
+export COMPOSER_ALLOW_SUPERUSER=1
+
+composer install
+
 for directory in ./envs/*/; do
     [ -L "${d%/}" ] && continue
 
