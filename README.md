@@ -92,9 +92,9 @@ $ composer install
 $ npm install
 ```
 
-Create a new file called ``envs/.env`` and copy the contents from ``.env.example`` over to it, then apply your configurations.
+Create a new file called ``envs/c1/.env`` and copy the contents from ``.env.example`` over to it, then apply your configurations. (Replace "c1" with your cluster)
 ```bash
-$ cp .env.example envs/.env
+$ cp .env.example envs/c1/.env
 ```
 
 Create a private and unique application key:
@@ -119,7 +119,40 @@ Compile frontend assets (use "dev" for development and "prod" for production):
 $ npm run dev/prod
 ```
 
-Finally, boot the server up:
-```bash
-$ php artisan serve
+Finally, set up nginx:
+```
+server {
+	server_name c1.legacy-roleplay.com;
+
+	root /path/to/opfw-admin/public;
+
+	index index.php index.html index.htm;
+
+	location / {
+		try_files $uri $uri/ /index.php$is_args$args;
+	}
+
+    # This would be the socket server's configuration
+	location ~ ^/(historic|timestamp|socket\.io) {
+		proxy_pass http://127.0.0.1:9999;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "Upgrade";
+		proxy_set_header Host $host;
+	}
+
+	location ~ \.php$ {
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+		fastcgi_index index.php;
+		include fastcgi.conf;
+	}
+
+	listen 443 ssl;
+
+	ssl_certificate /etc/letsencrypt/live/c1.legacy-roleplay.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/c1.legacy-roleplay.com/privkey.pem;
+	include /etc/letsencrypt/options-ssl-nginx.conf;
+	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
 ```
