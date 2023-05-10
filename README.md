@@ -125,41 +125,41 @@ Finally, set up nginx:
 server {
     # Replace this with your domain, important is that the subdomain is the exact same as your cluster.
     # The panel uses the subdomain to determine what .env file should be used.
-	server_name c1.legacy-roleplay.com;
+    server_name c1.legacy-roleplay.com;
 
     # Change this to point to the "public" folder inside the opfw-admin repository
-	root /path/to/opfw-admin/public;
+    root /path/to/opfw-admin/public;
 
-	index index.php index.html index.htm;
+    index index.php index.html index.htm;
 
-	location / {
-		try_files $uri $uri/ /index.php$is_args$args;
-	}
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
 
     # This would be the socket server's configuration.
     # If you are not running it on the standard port you will have to change it here.
-	location ~ ^/(historic|timestamp|socket\.io) {
-		proxy_pass http://127.0.0.1:9999;
-		proxy_http_version 1.1;
-		proxy_set_header Upgrade $http_upgrade;
-		proxy_set_header Connection "Upgrade";
-		proxy_set_header Host $host;
-	}
+    location ~ ^/(historic|timestamp|socket\.io) {
+        proxy_pass http://127.0.0.1:9999;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+    }
 
     # If you are not using php8.2 you need to replace "php8.2-fpm" with the correct version
-	location ~ \.php$ {
-		fastcgi_split_path_info ^(.+\.php)(/.+)$;
-		fastcgi_pass unix:/run/php/php8.2-fpm.sock;
-		fastcgi_index index.php;
-		include fastcgi.conf;
-	}
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi.conf;
+    }
 
     # This is depending on how you are setting up ssl certificates. This example would be using lets-encrypt
-	listen 443 ssl;
+    listen 443 ssl;
 
-	ssl_certificate /etc/letsencrypt/live/c1.legacy-roleplay.com/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/c1.legacy-roleplay.com/privkey.pem;
-	include /etc/letsencrypt/options-ssl-nginx.conf;
-	ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    ssl_certificate /etc/letsencrypt/live/c1.legacy-roleplay.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/c1.legacy-roleplay.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 }
 ```
