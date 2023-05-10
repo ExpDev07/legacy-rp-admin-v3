@@ -103,9 +103,9 @@ Create a private and unique application key:
 $ php artisan key:generate
 ```
 
-Run database migrations so that we can store things:
+Run database migrations so that we can store things (Replace "c1" with your cluster):
 ```bash
-$ php artisan migrate
+$ php artisan migrate --cluster=c1
 ```
 
 Create a symbolic link at **public/storage** so that it points to **storage/app/public**:
