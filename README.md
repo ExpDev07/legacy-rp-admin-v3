@@ -154,7 +154,8 @@ server {
         include fastcgi.conf;
     }
 
-    # This is depending on how you are setting up ssl certificates. This example would be using lets-encrypt
+    # This is depending on how you are setting up ssl certificates.
+    # This example would be using lets-encrypt.
     listen 443 ssl;
 
     ssl_certificate /etc/letsencrypt/live/c1.legacy-roleplay.com/fullchain.pem;
