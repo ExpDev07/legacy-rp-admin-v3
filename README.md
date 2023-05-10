@@ -82,6 +82,22 @@ This section describes how you can help contribute.
 * Optimally nginx
 
 ### Setting up project
+Install php and composer:
+```bash
+# Add the php repository
+add-apt-repository ppa:ondrej/php
+
+# Install PHP and dependencies (should be all i think)
+apt install php8.2 php8.2-cli php8.2-simplexml php8.2-dom php8.2-curl php8.2-gmp php8.2-mysql php8.2-gd php8.2-mbstring php8.2-imagick -y
+apt install php8.2-fpm -y
+
+# Install composer
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+mv composer.phar /usr/local/bin/composer
+```
+
 Grab yourself a copy of this repository:
 ```bash
 $ git clone https://github.com/coalaura/opfw-admin.git
