@@ -124,6 +124,7 @@ class Server
                     $assoc[$player['licenseIdentifier']] = [
                         'source'    => $player['source'],
                         'character' => $player['character'] ? $player['character']['id'] : null,
+                        'characterFlags' => $player['character'] ? $player['character']['flags'] : null,
                         'flags'     => $player['flags'] ?? 0,
                         'name'      => $player['name'] ?? null
                     ];

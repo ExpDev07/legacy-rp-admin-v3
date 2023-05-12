@@ -537,13 +537,27 @@ class Player extends Model
 
                 foreach ($licenseIdentifiers as $key => $player) {
                     if (!isset($result[$key])) {
+                        // User flags
                         $flags = $player['flags'];
 
                         $fake = !!($flags & 2);
-
 						$minigame = !!($flags & 4);
 						$camCords = !!($flags & 8);
 						$queue = !!($flags & 16);
+
+                        // Character flags
+                        $characterFlags = $player['characterFlags'] ?? 0;
+
+                        $characterData = [];
+
+                        !($characterFlags & 1) || $characterData[] = 'dead';
+                        !($characterFlags & 2) || $characterData[] = 'trunk';
+                        !($characterFlags & 4) || $characterData[] = 'invisible';
+                        !($characterFlags & 8) || $characterData[] = 'invincible';
+                        !($characterFlags & 16) || $characterData[] = 'frozen';
+                        !($characterFlags & 32) || $characterData[] = 'spawned';
+                        !($characterFlags & 64) || $characterData[] = 'noCollisions';
+                        !($characterFlags & 128) || $characterData[] = 'gameplayCam';
 
                         $result[$key] = [
                             'id' => intval($player['source']),
@@ -554,7 +568,8 @@ class Player extends Model
                             'fakeName' => !!($flags & 1) ? $player['name'] : null,
 							'minigame' => $minigame,
 							'camCords' => $camCords,
-							'queue' => $queue
+							'queue' => $queue,
+                            'characterData' => $characterData
                         ];
                     }
                 }

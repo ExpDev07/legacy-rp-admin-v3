@@ -138,10 +138,10 @@ class PlayerController extends Controller
     {
         $query = Player::query();
 
-        $playerList = Player::getAllOnlinePlayers(true) ?? [];
-        $players = array_keys($playerList);
+        $playerList = Player::getAllOnlinePlayers(false) ?? [];
+        $onlinePlayers = array_keys($playerList);
 
-        $query->whereIn('license_identifier', $players);
+        $query->whereIn('license_identifier', $onlinePlayers);
         $query->where('playtime', '<=', 60 * 60 * 12);
 
         $query->orderBy('playtime');
@@ -150,11 +150,17 @@ class PlayerController extends Controller
 
         $characterIds = [];
 
+        $data = [];
+
         foreach ($players as $player) {
             $status = Player::getOnlineStatus($player->license_identifier, true);
 
             if ($status->character) {
-                $characterIds[] = $status->character;
+                $characterId = $status->character;
+
+                $characterIds[] = $characterId;
+
+                $data[$characterId] = ($onlinePlayers[$player->license_identifier] ?? [])['characterData'] ?? null;
             }
         }
 
@@ -184,7 +190,8 @@ class PlayerController extends Controller
                     'gender' => $character->gender == 1 ? 'female' : 'male',
                     'date_of_birth' => $character->date_of_birth,
                     'ped_model_hash' => $character->ped_model_hash,
-                    'danny' => GeneralHelper::dannyPercentageCreationTime(intval($character->character_creation_time))
+                    'danny' => GeneralHelper::dannyPercentageCreationTime(intval($character->character_creation_time)),
+                    'data' => $data[$character->character_id] ?? null,
                 ] : null,
                 'playerName' => $player->player_name,
                 'playTime' => $player->playtime,
