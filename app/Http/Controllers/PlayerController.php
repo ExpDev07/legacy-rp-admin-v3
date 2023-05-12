@@ -159,6 +159,7 @@ class PlayerController extends Controller
                 $characterId = $status->character;
 
                 $characterIds[] = $characterId;
+                var_dump($characterId);
 
                 $data[$characterId] = $status->characterMetadata;
             }
