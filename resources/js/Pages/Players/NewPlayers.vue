@@ -44,7 +44,7 @@
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in playerList"
                         :key="player.licenseIdentifier">
                         <td class="px-6 py-3 border-t mobile:block">
-                            <i :class="`${icon.icon} dark:text-${icon.color}-100 text-${icon.color}-900 ml-1`" :title="t('players.new.data.' + icon.key)" v-for="icon in player.data"></i>
+                            <i :class="`${icon.icon} ${icon.color} ml-1`" :title="t('players.new.data.' + icon.key)" v-for="icon in player.data"></i>
                         </td>
                         <td class="px-6 py-3 border-t mobile:block" :title="t('global.server_timeout')">
                             <span class="font-semibold" v-if="player.serverId">
@@ -100,6 +100,14 @@ import Layout from './../../Layouts/App';
 import VSection from './../../Components/Section';
 import Badge from './../../Components/Badge';
 import Pagination from './../../Components/Pagination';
+
+const colors = {
+    purple: 'text-purple-900 dark:text-purple-100',
+    blue: 'text-blue-900 dark:text-blue-100',
+    rose: 'text-rose-900 dark:text-rose-100',
+    green: 'text-green-900 dark:text-green-100',
+    yellow: 'text-yellow-900 dark:text-yellow-100',
+};
 
 const dataIcons = {
     dead: ['fas fa-skull-crossbones', 'purple'],
@@ -157,7 +165,7 @@ export default {
                 return icon ? {
                     key,
                     icon: icon[0],
-                    color: icon[1]
+                    color: colors[icon[1]]
                 } : false;
             }).filter(Boolean);
         },
