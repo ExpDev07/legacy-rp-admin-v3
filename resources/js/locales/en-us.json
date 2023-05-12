@@ -716,6 +716,7 @@
             "anti_cheat": "Anti-Cheat",
             "anti_cheat_title": "Anti-Cheat Events",
             "anti_cheat_metadata": "Metadata",
+            "anti_cheat_has_screenshot": "Anti-Cheat event has a screenshot attached.",
 			"unban_system_title": "Removing System Ban",
 			"unban_system_message": "This player was automatically banned by the system. Are you sure you want to remove this ban?",
             "linked_title": "Linked accounts",

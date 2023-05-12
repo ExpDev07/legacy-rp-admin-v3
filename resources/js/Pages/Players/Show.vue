@@ -440,9 +440,13 @@
                 <div v-else>
                     <table class="w-full whitespace-no-wrap">
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-600" v-for="event in antiCheatEvents" :key="event.id">
-                            <td class="px-3 py-2 border-t">{{ event.type }}</td>
                             <td class="px-3 py-2 border-t">
-                                <a href="#" @click="showAntiCheatMetadata($event, event.metadata)" class="text-indigo-600 !no-underline dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">
+                                {{ event.type }}
+
+                                <i class="fas fa-images ml-1" v-if="event.screenshot_url" :title="t('players.show.anti_cheat_has_screenshot')"></i>
+                            </td>
+                            <td class="px-3 py-2 border-t">
+                                <a href="#" @click="showAntiCheatMetadata($event, event)" class="text-indigo-600 !no-underline dark:text-indigo-300 hover:text-yellow-500 dark:hover:text-yellow-300">
                                     {{ t("players.show.anti_cheat_metadata") }}
                                 </a>
                             </td>
@@ -468,6 +472,7 @@
 			</template>
 
 			<template #default>
+                <img :src="antiCheatMetadataImage" v-if="antiCheatMetadataImage" class="w-full mb-3" />
 				<pre class="block text-xs whitespace-pre-wrap break-words hljs px-3 py-2 rounded" v-html="antiCheatMetadataJSON"></pre>
 			</template>
 
@@ -1589,7 +1594,7 @@ export default {
 
             antiCheatMetadata: false,
             antiCheatMetadataJSON: '',
-
+            antiCheatMetadataImage: false,
 
             isTagging: false,
             tagCategory: this.player.tag ? this.player.tag : 'custom',
@@ -1634,11 +1639,12 @@ export default {
         formatSecondDiff(sec) {
             return this.$moment.duration(sec, 'seconds').format('d[d] h[h] m[m] s[s]');
         },
-        showAntiCheatMetadata(event, eventMetadata) {
+        showAntiCheatMetadata(event, eventData) {
             event.preventDefault();
 
             this.antiCheatMetadata = true;
-            this.antiCheatMetadataJSON = hljs.highlight(JSON.stringify(eventMetadata, null, 4), {language: 'json'}).value;
+            this.antiCheatMetadataImage = eventData.screenshot_url;
+            this.antiCheatMetadataJSON = hljs.highlight(JSON.stringify(eventData.metadata, null, 4), {language: 'json'}).value;
         },
         getPlayerMetadata() {
             const statusMetadata = this.status?.metadata;
