@@ -138,9 +138,18 @@ export default {
     },
     methods: {
         getCharacterData(player) {
-            const data = player?.character?.data;
+            let data = player?.character?.data;
 
             if (!data) return [];
+
+            data.sort();
+
+            let remove = [];
+
+            if (data.includes('dead')) remove.push('invincible');
+            if (data.includes('trunk')) remove.push('invisible', 'invincible', 'no_gameplay_cam');
+
+            data = data.filter(key => !remove.includes(key));
 
             return data.map(key => {
                 const icon = dataIcons[key];
