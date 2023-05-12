@@ -102,20 +102,21 @@ import Badge from './../../Components/Badge';
 import Pagination from './../../Components/Pagination';
 
 const colors = {
-    purple: 'text-purple-800 dark:text-purple-200',
-    blue: 'text-blue-800 dark:text-blue-200',
-    rose: 'text-rose-800 dark:text-rose-200',
-    green: 'text-green-800 dark:text-green-200',
-    yellow: 'text-yellow-800 dark:text-yellow-200',
+    pink: 'text-pink-700 dark:text-pink-200',
+    blue: 'text-blue-700 dark:text-blue-200',
+    rose: 'text-rose-700 dark:text-rose-200',
+    red: 'text-red-700 dark:text-red-200',
+    green: 'text-green-700 dark:text-green-200',
+    yellow: 'text-yellow-700 dark:text-yellow-200',
 };
 
 const dataIcons = {
-    dead: ['fas fa-skull-crossbones', 'purple'],
+    dead: ['fas fa-skull-crossbones', 'pink'],
     trunk: ['fas fa-truck-loading', 'blue'],
     in_shell: ['fas fa-egg', 'blue'],
     invisible: ['fas fa-eye-slash', 'rose'],
-    invincible: ['fas fa-fist-raised', 'rose'],
-    frozen: ['fas fa-ice-cream', 'rose'],
+    invincible: ['fas fa-fist-raised', 'red'],
+    frozen: ['fas fa-ice-cream', 'red'],
     spawned: ['fas fa-smile', 'green'],
     no_collisions: ['fas fa-wind', 'yellow'],
     no_gameplay_cam: ['fas fa-camera-retro', 'yellow'],
