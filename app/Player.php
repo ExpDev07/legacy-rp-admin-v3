@@ -550,14 +550,14 @@ class Player extends Model
 
                         $characterData = [];
 
-                        !($characterFlags & 1) || $characterData[] = 'dead';
-                        !($characterFlags & 2) || $characterData[] = 'trunk';
-                        !($characterFlags & 4) || $characterData[] = 'invisible';
-                        !($characterFlags & 8) || $characterData[] = 'invincible';
-                        !($characterFlags & 16) || $characterData[] = 'frozen';
-                        !($characterFlags & 32) || $characterData[] = 'spawned';
-                        !($characterFlags & 64) || $characterData[] = 'noCollisions';
-                        !($characterFlags & 128) || $characterData[] = 'gameplayCam';
+                        !!($characterFlags & 1) && $characterData[] = 'dead';
+                        !!($characterFlags & 2) && $characterData[] = 'trunk';
+                        !!($characterFlags & 4) && $characterData[] = 'invisible';
+                        !!($characterFlags & 8) && $characterData[] = 'invincible';
+                        !!($characterFlags & 16) && $characterData[] = 'frozen';
+                        !!($characterFlags & 32) && $characterData[] = 'spawned';
+                        !!($characterFlags & 64) && $characterData[] = 'noCollisions';
+                        !!($characterFlags & 128) && $characterData[] = 'gameplayCam';
 
                         $result[$key] = [
                             'id' => intval($player['source']),
