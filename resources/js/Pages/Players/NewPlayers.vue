@@ -102,12 +102,12 @@ import Badge from './../../Components/Badge';
 import Pagination from './../../Components/Pagination';
 
 const colors = {
-    pink: 'text-pink-700 dark:text-pink-200',
-    blue: 'text-blue-700 dark:text-blue-200',
-    rose: 'text-rose-700 dark:text-rose-200',
-    red: 'text-red-700 dark:text-red-200',
-    green: 'text-green-700 dark:text-green-200',
-    yellow: 'text-yellow-700 dark:text-yellow-200',
+    pink: 'text-pink-700 dark:text-pink-300',
+    blue: 'text-blue-700 dark:text-blue-300',
+    rose: 'text-rose-700 dark:text-rose-300',
+    red: 'text-red-700 dark:text-red-300',
+    green: 'text-green-700 dark:text-green-300',
+    yellow: 'text-yellow-700 dark:text-yellow-300',
 };
 
 const dataIcons = {
