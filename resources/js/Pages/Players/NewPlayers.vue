@@ -102,11 +102,11 @@ import Badge from './../../Components/Badge';
 import Pagination from './../../Components/Pagination';
 
 const colors = {
-    purple: 'text-purple-900 dark:text-purple-100',
-    blue: 'text-blue-900 dark:text-blue-100',
-    rose: 'text-rose-900 dark:text-rose-100',
-    green: 'text-green-900 dark:text-green-100',
-    yellow: 'text-yellow-900 dark:text-yellow-100',
+    purple: 'text-purple-800 dark:text-purple-200',
+    blue: 'text-blue-800 dark:text-blue-200',
+    rose: 'text-rose-800 dark:text-rose-200',
+    green: 'text-green-800 dark:text-green-200',
+    yellow: 'text-yellow-800 dark:text-yellow-200',
 };
 
 const dataIcons = {
