@@ -611,7 +611,7 @@ class Player extends Model
 				'minigame' => $player['minigame'],
 				'camCords' => $player['camCords'],
 				'queue' => $player['queue']
-			]);
+			], $player['characterData']);
         }
 
         return new PlayerStatus(PlayerStatus::STATUS_OFFLINE, '', 0);

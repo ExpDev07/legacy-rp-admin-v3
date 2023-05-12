@@ -62,13 +62,20 @@ class PlayerStatus
 	public array $metadata = [];
 
     /**
+     * The metadata of the character
+     *
+     * @var array
+     */
+    public array $characterMetadata = [];
+
+    /**
      * The fake name of the player
      *
      * @var string|null
      */
     public ?string $fakeName = null;
 
-    public function __construct(string $status, string $serverIp, int $serverId, ?int $character = null, ?string $fakeName = null, ?array $metadata = null)
+    public function __construct(string $status, string $serverIp, int $serverId, ?int $character = null, ?string $fakeName = null, ?array $metadata = null, ?array $characterMetadata = null)
     {
         $this->status = $status;
         $this->serverIp = $serverIp ? Server::fixApiUrl($serverIp) : "";
@@ -77,6 +84,7 @@ class PlayerStatus
         $this->fakeName = $fakeName;
 
 		$this->metadata = $metadata ?? [];
+        $this->characterMetadata = $characterMetadata ?? [];
 
         $this->serverName = Server::getServerName($serverIp);
     }

@@ -139,9 +139,9 @@ class PlayerController extends Controller
         $query = Player::query();
 
         $playerList = Player::getAllOnlinePlayers(false) ?? [];
-        $onlinePlayers = array_keys($playerList);
+        $players = array_keys($playerList);
 
-        $query->whereIn('license_identifier', $onlinePlayers);
+        $query->whereIn('license_identifier', $players);
         $query->where('playtime', '<=', 60 * 60 * 12);
 
         $query->orderBy('playtime');
@@ -160,7 +160,7 @@ class PlayerController extends Controller
 
                 $characterIds[] = $characterId;
 
-                $data[$characterId] = ($onlinePlayers[$player->license_identifier] ?? [])['characterData'] ?? null;
+                $data[$characterId] = $status->characterMetadata;
             }
         }
 
@@ -181,6 +181,9 @@ class PlayerController extends Controller
 
             $status = Player::getOnlineStatus($player->license_identifier, true);
 
+            var_dump($data);
+            var_dump($character ? $character->character_id : false);
+
             $playerList[] = [
                 'serverId' => $status && $status->serverId ? $status->serverId : null,
                 'character' => $character ? [
@@ -198,6 +201,8 @@ class PlayerController extends Controller
                 'licenseIdentifier' => $player->license_identifier,
             ];
         }
+
+        die();
 
         return Inertia::render('Players/NewPlayers', [
             'players' => $playerList,
