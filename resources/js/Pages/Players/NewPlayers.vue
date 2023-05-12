@@ -33,6 +33,7 @@
             <template>
                 <table class="w-full whitespace-no-wrap">
                     <tr class="font-semibold text-left mobile:hidden">
+                        <th class="px-6 py-4"></th>
                         <th class="px-6 py-4">{{ t('global.server_id') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.name') }}</th>
                         <th class="px-6 py-4">{{ t('players.form.playtime') }}</th>
@@ -42,6 +43,9 @@
                     </tr>
                     <tr class="hover:bg-gray-100 dark:hover:bg-gray-600 mobile:border-b-4" v-for="player in playerList"
                         :key="player.licenseIdentifier">
+                        <td class="px-6 py-3 border-t mobile:block">
+                            <i :class="icon.icon" :title="t('players.new.data.' + icon.key)" v-for="icon in player.data"></i>
+                        </td>
                         <td class="px-6 py-3 border-t mobile:block" :title="t('global.server_timeout')">
                             <span class="font-semibold" v-if="player.serverId">
                                 {{ player.serverId }}
@@ -97,6 +101,18 @@ import VSection from './../../Components/Section';
 import Badge from './../../Components/Badge';
 import Pagination from './../../Components/Pagination';
 
+const dataIcons = {
+    dead: 'fas fa-skull-crossbones',
+    trunk: 'fas fa-truck-loading',
+    in_shell: 'fas fa-egg',
+    invisible: 'fas fa-eye-slash',
+    invincible: 'fas fa-fist-raised',
+    frozen: 'fas fa-ice-cream',
+    // spawned: 'fas fa-chess-pawn',
+    no_collisions: 'fas fa-wind',
+    no_gameplay_cam: 'fas fa-camera-retro'
+};
+
 export default {
     layout: Layout,
     components: {
@@ -121,9 +137,24 @@ export default {
         };
     },
     methods: {
+        getCharacterData(player) {
+            const data = player?.character?.data;
+
+            if (!data) return [];
+
+            return data.map(key => {
+                const icon = dataIcons[key];
+
+                return icon ? {
+                    key,
+                    icon,
+                } : false;
+            }).filter(Boolean);
+        },
         getPlayerList() {
             return this.players.map(player => {
                 player.prediction = player.character ? this.classify(player.character) : false;
+                player.data = this.getCharacterData(player);
 
                 return player;
             });

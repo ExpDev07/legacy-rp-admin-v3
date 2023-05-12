@@ -661,7 +661,18 @@
 			"prediction_negative": "Computer says: probably bad",
 			"prediction_positive": "Computer says: probably good",
 			"prediction": "AI prediction based on name and backstory.",
-            "loading": "Loading Classifier: {0}%"
+            "loading": "Loading Classifier: {0}%",
+
+            "data": {
+                "dead": "Dead",
+                "trunk": "In Trunk",
+                "in_shell": "In Shell",
+                "invisible": "Invisible",
+                "invincible": "Invincible",
+                "frozen": "Frozen",
+                "no_collisions": "No Collisions",
+                "no_gameplay_cam": "No Gameplay Camera"
+            }
         },
         "ban": {
             "issuing": "Issuing ban",

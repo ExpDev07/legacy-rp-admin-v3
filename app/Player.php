@@ -557,8 +557,10 @@ class Player extends Model
                         !!($characterFlags & 16) && $characterData[] = 'invincible';
                         !!($characterFlags & 32) && $characterData[] = 'frozen';
                         !!($characterFlags & 64) && $characterData[] = 'spawned';
-                        !!($characterFlags & 128) && $characterData[] = 'noCollisions';
-                        !!($characterFlags & 256) && $characterData[] = 'gameplayCam';
+                        !!($characterFlags & 128) && $characterData[] = 'no_collisions';
+
+                        // invert cause its useless otherwise
+                        !($characterFlags & 256) && $characterData[] = 'no_gameplay_cam';
 
                         $result[$key] = [
                             'id' => intval($player['source']),
