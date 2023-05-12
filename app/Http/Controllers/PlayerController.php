@@ -150,8 +150,6 @@ class PlayerController extends Controller
 
         $characterIds = [];
 
-        $data = [];
-
         foreach ($players as $player) {
             $status = Player::getOnlineStatus($player->license_identifier, true);
 
@@ -159,9 +157,6 @@ class PlayerController extends Controller
                 $characterId = $status->character;
 
                 $characterIds[] = $characterId;
-                var_dump($characterId);
-
-                $data[$characterId] = $status->characterMetadata;
             }
         }
 
@@ -182,9 +177,6 @@ class PlayerController extends Controller
 
             $status = Player::getOnlineStatus($player->license_identifier, true);
 
-            var_dump($data);
-            var_dump($character ? $character->character_id : false);
-
             $playerList[] = [
                 'serverId' => $status && $status->serverId ? $status->serverId : null,
                 'character' => $character ? [
@@ -195,7 +187,7 @@ class PlayerController extends Controller
                     'date_of_birth' => $character->date_of_birth,
                     'ped_model_hash' => $character->ped_model_hash,
                     'danny' => GeneralHelper::dannyPercentageCreationTime(intval($character->character_creation_time)),
-                    'data' => $data[$character->character_id] ?? null,
+                    'data' => $status->characterMetadata ?? [],
                 ] : null,
                 'playerName' => $player->player_name,
                 'playTime' => $player->playtime,
