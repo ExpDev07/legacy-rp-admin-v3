@@ -670,6 +670,7 @@
                 "invisible": "Invisible",
                 "invincible": "Invincible",
                 "frozen": "Frozen",
+                "spawned": "Is Spawned In",
                 "no_collisions": "No Collisions",
                 "no_gameplay_cam": "No Gameplay Camera"
             }

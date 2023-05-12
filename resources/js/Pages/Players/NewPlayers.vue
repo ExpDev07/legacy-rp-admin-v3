@@ -108,7 +108,7 @@ const dataIcons = {
     invisible: 'fas fa-eye-slash',
     invincible: 'fas fa-fist-raised',
     frozen: 'fas fa-ice-cream',
-    // spawned: 'fas fa-chess-pawn',
+    spawned: 'fas fa-smile',
     no_collisions: 'fas fa-wind',
     no_gameplay_cam: 'fas fa-camera-retro'
 };
