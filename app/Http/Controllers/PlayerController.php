@@ -195,8 +195,6 @@ class PlayerController extends Controller
             ];
         }
 
-        die();
-
         return Inertia::render('Players/NewPlayers', [
             'players' => $playerList,
         ]);
