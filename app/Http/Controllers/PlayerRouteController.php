@@ -421,7 +421,7 @@ class PlayerRouteController extends Controller
 
 		$lifespan = $request->query('short') ? 3*60 : 60*60;
 
-        $data = OPFWHelper::createScreenshot($api, $id, $lifespan);
+        $data = OPFWHelper::createScreenshot($api, $id, true, $lifespan);
 
         if ($data->status) {
             return self::json(true, [
