@@ -269,7 +269,7 @@ class Controller extends BaseController
                 if ($entryWidth >= 17) {
                     $m = round(array_sum($entry));
 
-                    if ($m === 0) continue;
+                    if ($m <= 0) continue;
 
                     $p = $y - 12;
                     $x = ($i * $entryWidth) + (($entryWidth / 2.0) - (strlen($m) * 3));
