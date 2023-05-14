@@ -270,7 +270,7 @@ class Controller extends BaseController
                     $m = round(array_sum($entry));
 
                     $p = $y - 12;
-                    $x += ($entryWidth / 2.0) - (strlen($m) * 3);
+                    $x = ($i * $entryWidth) + (($entryWidth / 2.0) - (strlen($m) * 3));
 
                     $text = imagecolorallocate($image, 255, 220, 220);
                     imagestring($image, 2, $x, $p, $m."", $text);
