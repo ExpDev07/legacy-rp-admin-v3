@@ -41,10 +41,10 @@ class SystemController extends Controller
         ],
         "timeout" => [
             "SUBSTRING_INDEX(SUBSTRING_INDEX(details, 'with reason: `', -1), '.', 1)" => "Server->client connection timed out",
-            "details" => "You timed out!"
+            "SUBSTRING_INDEX(SUBSTRING_INDEX(details, 'with reason: `', -1), '`.', 1)" => "You timed out!"
         ],
         "overflow" => [
-            "details" => "Reliable network event overflow."
+            "SUBSTRING_INDEX(SUBSTRING_INDEX(details, 'with reason: `', -1), '`.', 1)" => "Reliable network event overflow."
         ]
     ];
 
