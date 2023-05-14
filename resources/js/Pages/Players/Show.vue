@@ -472,7 +472,8 @@
 			</template>
 
 			<template #default>
-                <img :src="antiCheatMetadataImage" v-if="antiCheatMetadataImage" class="w-full mb-3" />
+                <video v-if="antiCheatMetadataImage && (['mp4', 'webm'].includes(antiCheatMetadataImage.split('.').pop()))" :src="antiCheatMetadataImage" controls class="w-full mb-3"></video>
+                <img :src="antiCheatMetadataImage" v-else-if="antiCheatMetadataImage" class="w-full mb-3" />
 				<pre class="block text-xs whitespace-pre-wrap break-words hljs px-3 py-2 rounded" v-html="antiCheatMetadataJSON"></pre>
 			</template>
 
