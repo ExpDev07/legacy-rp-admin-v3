@@ -201,7 +201,7 @@ class Controller extends BaseController
             $color = max(0, min(255, $color + $amount));
         }
 
-        return sprintf("%02x%02x%02x", ...$rgb);
+        return $rgb;
 	}
 
 	protected function renderGraph(array $entries, string $title, array $colors = ["blue"])
