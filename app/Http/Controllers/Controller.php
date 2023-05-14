@@ -194,11 +194,9 @@ class Controller extends BaseController
         return "~" . $time;
     }
 
-	private function brightenColor($rgb, $amount) {
+	private function brighten($rgb) {
         foreach ($rgb as &$color) {
-            $amount = floor($amount * 255);
-
-            $color = max(0, min(255, $color + $amount));
+            $color = max(0, min(255, $color + 5));
         }
 
         return $rgb;
@@ -256,7 +254,7 @@ class Controller extends BaseController
                     $color = $colors[$index];
 
                     if ($i % 2 === 0) {
-                        $color = $this->brightenColor($color, 0.1);
+                        $color = $this->brightenColor($color);
                     }
 
                     $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
