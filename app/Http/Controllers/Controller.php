@@ -276,7 +276,7 @@ class Controller extends BaseController
 		imagestring($image, 2, 4, 2, $title, $text);
 
 		$text = imagecolorallocate($image, 255, 200, 200);
-		imagestring($image, 2, 0, 2, "0", $text);
+		imagestring($image, 2, $height - 4, 2, "0", $text);
 
 		ob_start();
 
