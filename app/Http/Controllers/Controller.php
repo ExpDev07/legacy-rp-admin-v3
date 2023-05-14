@@ -194,9 +194,7 @@ class Controller extends BaseController
         return "~" . $time;
     }
 
-	private function brightenColor($hex, $amount) {
-        $rgb = array_map('hexdec', str_split($hex, 2));
-
+	private function brightenColor($rgb, $amount) {
         foreach ($rgb as &$color) {
             $amount = floor($amount * 2.55);
 
@@ -235,7 +233,9 @@ class Controller extends BaseController
             for ($g = 0; $g < sizeof($entries[0]); $g++) {
                 $key = $colors[$g] ?? 'blue';
 
-                $colors[$g] = self::GraphColors[$key];
+                $hex = self::GraphColors[$key];
+
+                $colors[$g] = array_map('hexdec', str_split($hex, 2));
             }
 
             for ($i = 0; $i < $size; $i++) {
