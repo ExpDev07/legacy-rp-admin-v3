@@ -196,7 +196,7 @@ class Controller extends BaseController
 
 	private function brighten($rgb) {
         foreach ($rgb as &$color) {
-            $color = max(0, min(255, $color + 5));
+            $color = max(0, min(255, $color + 10));
         }
 
         return $rgb;
