@@ -16,12 +16,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    const GradientColors = [
-        "blue" => ['5383c6', '8cacd9'], // HSL H215 S50 -> L55 - L70
-        "green" => ['66c653', '99d98c'],
-        "yellow" => ['c6b353', 'd9cc8c'],
-        "red" => ['c65353', 'd98c8c'],
-        "purple" => ['9f53c6', 'bf8cd9'],
+    const GraphColors = [
+        "blue"   => '5383c6',
+        "green"  => '66c653',
+        "yellow" => 'c6b353',
+        "red"    => 'c65353',
+        "purple" => '9f53c6'
     ];
 
     /**
@@ -194,32 +194,16 @@ class Controller extends BaseController
         return "~" . $time;
     }
 
-	private function colorGradient($fromHex, $toHex, $steps) {
-		$startR = hexdec(substr($fromHex, 0, 2));
-		$startG = hexdec(substr($fromHex, 2, 2));
-		$startB = hexdec(substr($fromHex, 4, 2));
+	private function brightenColor($hex, $amount) {
+        $rgb = array_map('hexdec', str_split($hex, 2));
 
-		$endR = hexdec(substr($toHex, 0, 2));
-		$endG = hexdec(substr($toHex, 2, 2));
-		$endB = hexdec(substr($toHex, 4, 2));
+        foreach ($rgb as &$color) {
+            $amount = floor($amount * 2.55);
 
-		$alpha = 0.0;
+            $color = max(0, min(255, $color + $amount));
+        }
 
-		$gradient = [];
-
-		for ($i = 0; $i < $steps; $i++) {
-			$c = [];
-
-			$alpha += (1.0 / $steps);
-
-			$r = $startR * $alpha + (1 - $alpha) * $endR;
-			$g = $startG * $alpha + (1 - $alpha) * $endG;
-			$b = $startB * $alpha + (1 - $alpha) * $endB;
-
-			$gradient[] = [$r, $g, $b];
-		}
-
-		return array_reverse($gradient);
+        return sprintf("%02x%02x%02x", ...$rgb);
 	}
 
 	protected function renderGraph(array $entries, string $title, array $colors = ["blue"])
@@ -248,19 +232,14 @@ class Controller extends BaseController
 		imagefill($image, 0, 0, $black);
 
         if ($max > 0) {
-            $gradients = [];
-
             for ($g = 0; $g < sizeof($entries[0]); $g++) {
-                $color = self::GradientColors[$colors[$g] ?? 'blue'] ?? self::GradientColors['blue'];
+                $key = $colors[$g] ?? 'blue';
 
-                $gradients[] = $this->colorGradient($color[0], $color[1], 50);
+                $colors[$g] = self::GraphColors[$key];
             }
 
             for ($i = 0; $i < $size; $i++) {
                 $entry = $entries[$i] ?? [];
-
-                $total = array_sum($entry);
-                $totalPercentage = $total / $max;
 
                 $y = $height;
 
@@ -274,7 +253,11 @@ class Controller extends BaseController
                     $x2 = $x + $entryWidth - 1;
                     $y2 = $y - ($height * $percentage);
 
-                    $color = $gradients[$index][floor($totalPercentage * 50)];
+                    $color = $colors[$index];
+
+                    if ($i % 2 === 0) {
+                        $color = $this->brightenColor($color, 0.1);
+                    }
 
                     $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
 
