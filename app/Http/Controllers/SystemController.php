@@ -150,7 +150,7 @@ class SystemController extends Controller
             }
         }
 
-		$graphData = $this->buildGraphData([], "select timestamp FROM user_logs WHERE " . implode(" OR ", $where), 1);
+		$graphData = $this->buildGraphData([], "select UNIX_TIMESTAMP(timestamp) as timestamp FROM user_logs WHERE " . implode(" OR ", $where), 1);
 
         if (empty($graphData)) {
             return $this->fakeText(404, "No data available");
