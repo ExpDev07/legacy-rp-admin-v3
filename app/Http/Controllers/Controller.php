@@ -265,6 +265,16 @@ class Controller extends BaseController
 
                     $y = $y2;
                 }
+
+                if ($entryWidth >= 17) {
+                    $m = round(array_sum($entry));
+
+                    $p = $y - 12;
+                    $x += ($entryWidth / 2.0) - (strlen($m) * 3);
+
+                    $text = imagecolorallocate($image, 255, 220, 220);
+                    imagestring($image, 2, $x, $p, $m."", $text);
+                }
             }
         } else {
             $noDataText = imagecolorallocate($image, 231, 177, 177);
@@ -275,8 +285,16 @@ class Controller extends BaseController
 		$text = imagecolorallocate($image, 177, 198, 231);
 		imagestring($image, 2, 4, 2, $title, $text);
 
-		$text = imagecolorallocate($image, 255, 200, 200);
-		imagestring($image, 2, $height - 4, 2, "0", $text);
+        if ($entryWidth < 17) {
+            $text = imagecolorallocate($image, 255, 220, 220);
+            imagestring($image, 2, 3, $height - 14, "0", $text);
+
+            $m = round($max / 1.1);
+            $p = $height - ($height * ($m / $max)) - 12;
+
+            $text = imagecolorallocate($image, 255, 220, 220);
+            imagestring($image, 2, 3, $p, $m."", $text);
+        }
 
 		ob_start();
 
