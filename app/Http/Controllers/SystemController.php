@@ -167,6 +167,37 @@ class SystemController extends Controller
 		return $this->fakeText(200, $image);
     }
 
+    public function crashTypes(string $type): Response
+    {
+        $data = self::CrashTypes[$type] ?? null;
+
+        if (empty($data)) {
+            return $this->fakeText(404, "Invalid crash type.\n<i>" . implode(", ", array_keys(self::CrashTypes)) . "</i>");
+        }
+
+        $where = [];
+
+        foreach($data as $field => $value) {
+            $where[] = $field . " = '" . $value . "'";
+        }
+
+		$graphData = $this->buildGraphData([], "select UNIX_TIMESTAMP(timestamp) as timestamp FROM user_logs WHERE action = 'User Disconnected' AND (" . implode(" OR ", $where) . ')', 1);
+
+        if (empty($graphData)) {
+            return $this->fakeText(404, "No data available");
+        }
+
+        $keys = array_keys($graphData);
+        $min = min($keys);
+        $max = max($keys);
+
+		$image = $this->renderGraph(array_values($graphData), $type . ': ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max), ["red"]);
+
+		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
+
+		return $this->fakeText(200, $image);
+    }
+
     protected function buildGraphData($existingData, $query, $averageDays = 7)
     {
         $graph = DB::select($query);
