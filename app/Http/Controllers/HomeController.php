@@ -149,6 +149,10 @@ class HomeController extends Controller
 
 	private function renderDaysWithout(int $days)
 	{
+        if (!function_exists('imagecreatefrompng')) {
+            return 'GD library is not installed';
+        }
+
 		$days = min($days, 99);
 
 		$file = __DIR__ . '/../../../public/images/accident/accident_scaled.png';

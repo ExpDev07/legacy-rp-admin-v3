@@ -204,6 +204,10 @@ class Controller extends BaseController
 
 	protected function renderGraph(array $entries, string $title, array $colors = ["blue"])
 	{
+        if (!function_exists('imagecreatetruecolor')) {
+            return 'GD library is not installed';
+        }
+
         $entries = array_map(function ($entry) {
             if (!is_array($entry)) {
                 $entry = [$entry];
