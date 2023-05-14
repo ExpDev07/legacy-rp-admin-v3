@@ -254,7 +254,7 @@ class Controller extends BaseController
                     $color = $colors[$index];
 
                     if ($i % 2 === 0) {
-                        $color = $this->brightenColor($color);
+                        $color = $this->brighten($color);
                     }
 
                     $color = imagecolorallocate($image, $color[0], $color[1], $color[2]);
