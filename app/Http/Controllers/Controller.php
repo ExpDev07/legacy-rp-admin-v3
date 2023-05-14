@@ -273,8 +273,10 @@ class Controller extends BaseController
         }
 
 		$text = imagecolorallocate($image, 177, 198, 231);
-
 		imagestring($image, 2, 4, 2, $title, $text);
+
+		$text = imagecolorallocate($image, 255, 200, 200);
+		imagestring($image, 2, 0, 2, "0", $text);
 
 		ob_start();
 
