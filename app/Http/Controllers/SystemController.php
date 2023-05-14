@@ -35,6 +35,19 @@ class SystemController extends Controller
         "vehicle_modification",
     ];
 
+    const CrashTypes = [
+        "crash" => [
+            "SUBSTRING_INDEX(SUBSTRING_INDEX(details, 'with reason: `', -1), ':', 1)" => "Game crashed"
+        ],
+        "timeout" => [
+            "SUBSTRING_INDEX(SUBSTRING_INDEX(details, 'with reason: `', -1), '.', 1)" => "Server->client connection timed out",
+            "details" => "You timed out!"
+        ],
+        "overflow" => [
+            "details" => "Reliable network event overflow."
+        ]
+    ];
+
     public function systemBans(): Response
     {
 		$all = DB::select("SELECT COUNT(*) AS count, SUBSTRING_INDEX(reason, '-', 2) AS reason, SUM(playtime) / COUNT(*) as playtime FROM user_bans LEFT JOIN users ON license_identifier = identifier WHERE creator_name IS NULL AND SUBSTRING_INDEX(identifier, ':', 1) = 'license' AND SUBSTRING_INDEX(reason, '-', 1) IN ('MODDING', 'INJECTION', 'NO_PERMISSIONS', 'ILLEGAL_VALUES', 'TIMEOUT_BYPASS', 'MEDIOCRE') GROUP BY SUBSTRING_INDEX(reason, '-', 2) LIMIT 20");
@@ -121,6 +134,33 @@ class SystemController extends Controller
         $max = max($keys);
 
 		$image = $this->renderGraph(array_values($graphData), $type . ': ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max), ["green", "red"]);
+
+		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
+
+		return $this->fakeText(200, $image);
+    }
+
+    public function crashes(): Response
+    {
+        $where = [];
+
+        foreach(self::CrashTypes as $search) {
+            foreach($search as $field => $value) {
+                $where[] = $field . " = '" . $value . "'";
+            }
+        }
+
+		$graphData = $this->buildGraphData([], "select timestamp FROM user_logs WHERE " . implode(" OR ", $where), 1);
+
+        if (empty($graphData)) {
+            return $this->fakeText(404, "No data available");
+        }
+
+        $keys = array_keys($graphData);
+        $min = min($keys);
+        $max = max($keys);
+
+		$image = $this->renderGraph(array_values($graphData), 'All crash types: ' . date("m/d/Y", $min) . ' - ' . date("m/d/Y", $max), ["red"]);
 
 		$image = '<img src="' . $image . '" style="max-width: 100%; display: block; border: 1px solid #9CA3AF" />';
 
