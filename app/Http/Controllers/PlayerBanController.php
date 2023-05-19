@@ -49,7 +49,7 @@ class PlayerBanController extends Controller
         return $this->bans($request, false, true);
     }
 
-    public function findUserBanHash(Request $request, string $hash)
+    public function findUserBanHash(string $hash)
     {
         $ban = Ban::query()
             ->leftJoin('users', 'identifier', '=', 'license_identifier')
@@ -61,24 +61,35 @@ class PlayerBanController extends Controller
             abort(404);
         }
 
-        if ($request->input('json')) {
-            $creator = Player::query()
-                ->where('license_identifier', $ban->creator_identifier)
-                ->first();
+        return redirect('/players/' . $ban->license_identifier);
+    }
 
-            $data = [
-                "player" => $ban->player_name,
-                "creator" => $creator ? $creator->player_name : $ban->creator_name,
-                "reason" => $ban->reason,
-                "date" => $ban->timestamp->format('jS \\of F Y'),
+    public function banInfo(string $hash)
+    {
+        $ban = Ban::query()
+            ->leftJoin('users', 'identifier', '=', 'license_identifier')
+            ->where('ban_hash', $hash)
+            ->whereNotNull('license_identifier')
+            ->first();
 
-                "url" => "/players/{$ban->license_identifier}"
-            ];
-
-            return $this->json(true, $data);
+        if (!$ban) {
+            return $this->json(true, null, "Not found");
         }
 
-        return redirect('/players/' . $ban->license_identifier);
+        $creator = Player::query()
+            ->where('license_identifier', $ban->creator_identifier)
+            ->first();
+
+        $data = [
+            "player" => $ban->player_name,
+            "creator" => $creator ? $creator->player_name : $ban->creator_name,
+            "reason" => $ban->reason,
+            "date" => $ban->timestamp->format('jS \\of F Y'),
+
+            "url" => "/players/{$ban->license_identifier}"
+        ];
+
+        return $this->json(true, $data);
     }
 
     private function bans(Request $request, bool $showMine, bool $showSystem): Response

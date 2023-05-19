@@ -112,6 +112,7 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/system_bans', [PlayerBanController::class, 'indexSystem']);
 
     Route::get('/findUserBanHash/{hash}', [PlayerBanController::class, 'findUserBanHash']);
+    Route::get('/ban_info/{hash}', [PlayerBanController::class, 'banInfo']);
 
 	// Epic linked account finders
 	Route::get('/linked_ips/{license}', [PlayerBanController::class, 'linkedIPs']);
