@@ -40,6 +40,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        \Fruitcake\Cors\HandleCors::class,
         UpdateMiddleware::class,
         CloudflareMiddleware::class,
         TrustProxies::class,
@@ -90,7 +91,6 @@ class Kernel extends HttpKernel
         'signed'        => ValidateSignature::class,
         'throttle'      => ThrottleRequests::class,
         'verified'      => EnsureEmailIsVerified::class,
-        'cors'          => \App\Http\Middleware\CorsMiddleware::class,
     ];
 
     /**
