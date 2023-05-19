@@ -11,6 +11,7 @@ use App\Http\Requests\BanUpdateRequest;
 use App\Http\Resources\BanResource;
 use App\Http\Resources\PlayerResource;
 use App\Player;
+use App\Warning;
 use App\PanelLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -80,11 +81,19 @@ class PlayerBanController extends Controller
             ->where('license_identifier', $ban->creator_identifier)
             ->first();
 
+        $note = Warning::query()
+            ->where('player_id', $ban->user_id)
+            ->where('warning_type', Warning::TypeNote)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
         $data = [
             "player" => $ban->player_name,
             "creator" => $creator ? $creator->player_name : $ban->creator_name,
             "reason" => $ban->reason,
             "date" => $ban->timestamp->format('jS \\of F Y'),
+
+            "note" => $note ? $note->message : false,
 
             "url" => "/players/{$ban->license_identifier}"
         ];
