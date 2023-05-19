@@ -69,7 +69,7 @@ class PlayerBanController extends Controller
             $data = [
                 "creator" => $creator ? $creator->player_name : $ban->creator_name,
                 "reason" => $ban->reason,
-                "date" => date('m/d/Y', $ban->timestamp)
+                "date" => $ban->timestamp->format('jS \\of F Y')
             ];
 
             return $this->json(true, $data);
