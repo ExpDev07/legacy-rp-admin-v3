@@ -49,7 +49,7 @@ class PlayerBanController extends Controller
         return $this->bans($request, false, true);
     }
 
-    public function findUserBanHash(string $hash)
+    public function findUserBanHash(Request $request, string $hash)
     {
         $ban = Ban::query()
             ->leftJoin('users', 'identifier', '=', 'license_identifier')
@@ -59,6 +59,20 @@ class PlayerBanController extends Controller
 
         if (!$ban) {
             abort(404);
+        }
+
+        if ($request->input('json')) {
+            $creator = Player::query()
+                ->where('license_identifier', $ban->creator_identifier)
+                ->first();
+
+            $data = [
+                "creator" => $creator ? $creator->player_name : $ban->creator_name,
+                "reason" => $ban->reason,
+                "date" => date('m/d/Y', $ban->timestamp)
+            ];
+
+            return $this->json(true, $data);
         }
 
         return redirect('/players/' . $ban->license_identifier);
