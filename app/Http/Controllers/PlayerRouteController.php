@@ -582,7 +582,7 @@ class PlayerRouteController extends Controller
 
         $includeNPCs = $request->input('npc') ?? false;
 
-		$logs = WeaponDamageEvent::getDamaged($player->license_identifier);
+		$logs = WeaponDamageEvent::getDamaged($player->license_identifier, $includeNPCs);
 
 		return $this->renderDamageLogs("Who damaged", $player, $logs, false, false);
     }

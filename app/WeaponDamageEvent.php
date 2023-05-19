@@ -420,13 +420,17 @@ class WeaponDamageEvent extends Model
 		return "$hash/$signed";
 	}
 
-	public static function getDamaged(string $license)
+	public static function getDamaged(string $license, bool $includeNpcs)
 	{
-		return self::query()
+		$query = self::query()
 			->select(['license_identifier', 'timestamp', 'hit_component', 'damage_type', 'weapon_type', 'distance', 'weapon_damage'])
-			->whereRaw("JSON_CONTAINS(hit_players, '\"" . $license . "\"', '$')")
-			->where('parent_global_id', '=', '0')
-			->orderByDesc('timestamp')
+			->whereRaw("JSON_CONTAINS(hit_players, '\"" . $license . "\"', '$')");
+
+		if (!$includeNpcs) {
+			$query->where('parent_global_id', '=', '0');
+		}
+
+		return $query->orderByDesc('timestamp')
 			->limit(500)
 			->get()->toArray();
 	}
