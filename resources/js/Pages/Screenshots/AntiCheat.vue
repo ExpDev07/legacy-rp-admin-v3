@@ -151,7 +151,7 @@ const FalsePositives = {
     "Illegal Freeze":          "impossible",
     "Vehicle Modifier":        "impossible",
     "Invalid Damage Modifier": "impossible",
-    "Spawned Weapon":          "likely",
+    "Spawned Weapon":          "very unlikely",
     "Spawned Vehicle":         "very unlikely",
     "Modified Vehicle":        "impossible",
     "Thermal/Night Vision":    "impossible",
