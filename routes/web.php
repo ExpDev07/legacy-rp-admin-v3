@@ -111,8 +111,6 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/my_bans', [PlayerBanController::class, 'indexMine']);
     Route::get('/system_bans', [PlayerBanController::class, 'indexSystem']);
 
-    Route::get('/findUserBanHash/{hash}', [PlayerBanController::class, 'findUserBanHash']);
-
 	// Epic linked account finders
 	Route::get('/linked_ips/{license}', [PlayerBanController::class, 'linkedIPs']);
 	Route::get('/linked_tokens/{license}', [PlayerBanController::class, 'linkedTokens']);
@@ -243,6 +241,10 @@ Route::group(['middleware' => ['log', 'staff']], function () {
     Route::get('/weapon/{weapon}', [WeaponController::class, 'weaponDamage']);
 
     Route::get('/api/classifier.json', [ApiController::class, 'playerClassifierJSON']);
+});
+
+Route::group(['middleware' => ['staff', 'cors']], function () {
+    Route::get('/findUserBanHash/{hash}', [PlayerBanController::class, 'findUserBanHash']);
 });
 
 Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
