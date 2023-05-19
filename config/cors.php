@@ -22,7 +22,7 @@ return [
      * Example: ['api/*']
      */
     'paths' => [
-        '/findUserBanHash/*'
+        '/ban_info/*'
     ],
 
     /*
