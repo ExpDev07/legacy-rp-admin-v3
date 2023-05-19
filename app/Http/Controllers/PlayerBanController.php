@@ -67,9 +67,12 @@ class PlayerBanController extends Controller
                 ->first();
 
             $data = [
+                "player" => $ban->player_name,
                 "creator" => $creator ? $creator->player_name : $ban->creator_name,
                 "reason" => $ban->reason,
-                "date" => $ban->timestamp->format('jS \\of F Y')
+                "date" => $ban->timestamp->format('jS \\of F Y'),
+
+                "url" => "/players/{$ban->license_identifier}"
             ];
 
             return $this->json(true, $data);
