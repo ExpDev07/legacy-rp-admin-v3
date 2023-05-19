@@ -36,14 +36,7 @@
             <div class="text-sm block" v-html="formatBody(post.message)"></div>
         </div>
 
-        <inertia-link
-            class="block px-1.5 py-1 text-center text-white text-xs absolute top-1 right-1 bg-red-600 dark:bg-red-400 rounded"
-            href="#"
-            @click="deleteTweet($event, post.id)"
-            v-if="canSeeDelete()"
-        >
-            <i class="fas fa-trash-alt"></i>
-        </inertia-link>
+        <input type="checkbox" class="absolute top-1 right-1 !outline-none" @change="selectionChange($event, post.id)" v-if="selectionChange" />
     </div>
 </template>
 <script>
@@ -61,6 +54,9 @@ export default {
         dontLink: {
             type: Boolean,
             default: false
+        },
+        selectionChange: {
+            type: Function
         }
     },
     methods: {
@@ -85,16 +81,6 @@ export default {
         avatarError(e) {
             // Replace with default
             e.target.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAgACADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABAcABv/EABYBAQEBAAAAAAAAAAAAAAAAAAABBf/aAAwDAQACEAMQAAAByyULWyeIJQp6akTd0vdTdwT/xAAaEAEBAAMBAQAAAAAAAAAAAAADBAECEAAT/9oACAEBAAEFAvTgj7UAgbcjL4z2Fhp+DvhCbfBlyepQ9RUr8//EABgRAAIDAAAAAAAAAAAAAAAAAAADARMh/9oACAEDAQE/AUKsnR6q5wQ2udHtsnD/xAAYEQACAwAAAAAAAAAAAAAAAAAAAwETIf/aAAgBAgEBPwF7a4wQ2yNHqsjBCq40/8QAHxAAAgECBwAAAAAAAAAAAAAAAQIAEDEDESEiQVGB/9oACAEBAAY/Aplhj2ZYg9qi83MdebiqMLER2NgK7Dp0ZvOnQp//xAAaEAEAAgMBAAAAAAAAAAAAAAABABEQITFx/9oACAEBAAE/IYqs11aCCqN8GxyAhx6LEIceCZYvQYxdIc2Id9pWShDrsKjH/9oADAMBAAIAAwAAABDzzzz/xAAZEQEBAAMBAAAAAAAAAAAAAAABABEhMUH/2gAIAQMBAT8QBzggM4Y28MZYaL//xAAZEQEBAAMBAAAAAAAAAAAAAAABABEhMUH/2gAIAQIBAT8QQ3pkd6Jy9E7Zbb//xAAfEAEAAQMFAQEAAAAAAAAAAAABEQAxURAhQYHBYXH/2gAIAQEAAT8QoUw3t+OXy9CmG9v1w+aLAuKOcIvhSvnVGOQ3wpHzuhkHNNmL0fZGRwxCdMlH23M5YgO2CixN9CVj3E5Dh/KJGNcTlOX90//Z';
-        },
-        async deleteTweet(e, tweetId) {
-            e.preventDefault();
-
-            if (!confirm(this.t('twitter.delete_tweet'))) {
-                return;
-            }
-
-            // Send request.
-            await this.$inertia.post('/tweets/delete/' + tweetId);
         },
         formatBody(body) {
             const urlRegex = /(https?:\/\/[^\s]+)/g;

@@ -132,21 +132,24 @@ class TwitterController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Request $request
-     * @param TwitterPost $post
      * @return RedirectResponse
      */
-    public function deleteTweet(Request $request, TwitterPost $post): RedirectResponse
+    public function deleteTweets(Request $request): RedirectResponse
     {
         $user = $request->user();
 		if (!PermissionHelper::hasPermission($request, PermissionHelper::PERM_TWITTER)) {
             abort(401);
         }
 
-        $post->update([
-            'is_deleted' => '1',
-        ]);
+        $ids = $request->input('ids');
 
-        return back()->with('success', 'Successfully deleted tweet');
+        if (empty($ids)) {
+            return back()->with('error', 'No tweets selected');
+        }
+
+        TwitterPost::query()->whereIn('id', $ids)->delete();
+
+        return back()->with('success', 'Successfully deleted tweets');
     }
 
 }

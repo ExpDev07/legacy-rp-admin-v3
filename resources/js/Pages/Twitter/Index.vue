@@ -69,7 +69,14 @@
             <h2 class="mb-4 max-w-screen-md m-auto text-2xl">{{ t('twitter.title') }}</h2>
 
             <div class="w-full flex flex-wrap max-w-screen-md m-auto">
-                <TwitterPost v-for="post in posts" :key="post.id" :post="post" :user="user(post.authorId)" />
+                <TwitterPost v-for="post in posts" :key="post.id" :post="post" :user="user(post.authorId)" :selectionChange="selectPost" />
+
+                <div class="mt-3" v-if="selectedPosts.length > 0">
+                    <button class="px-5 py-2 font-semibold text-white bg-danger dark:bg-dark-danger rounded hover:shadow-lg" @click="deleteSelected">
+                        <i class="fas fa-trash"></i>
+                        {{ t('twitter.delete_selected') }}
+                    </button>
+                </div>
             </div>
         </template>
 
@@ -100,10 +107,8 @@
                 <div class="font-semibold">
                     {{ t("pagination.page", page) }}
                 </div>
-
             </div>
         </template>
-
     </div>
 </template>
 
@@ -147,10 +152,43 @@ export default {
     },
     data() {
         return {
-            isLoading: false
+            isLoading: false,
+
+            selectedPosts: []
         };
     },
     methods: {
+        selectPost($event, id) {
+            if ($event.target.checked) {
+                this.selectedPosts.push(id);
+            } else {
+                this.selectedPosts = this.selectedPosts.filter(postId => postId !== id);
+            }
+        },
+        async deleteSelected() {
+            if (this.isLoading) {
+                return;
+            }
+
+            if (!confirm(this.t('twitter.delete_selected_confirm'))) {
+                return;
+            }
+
+            this.isLoading = true;
+
+            try {
+                await this.$inertia.post('/tweets/delete', {
+                    ids: this.selectedPosts,
+                }, {
+                    preserveState: true,
+                    preserveScroll: true
+                });
+
+                this.selectedPosts = [];
+            } catch (e) {}
+
+            this.isLoading = false;
+        },
         user(id) {
             return id in this.userMap ? this.userMap[id] : null;
         },
@@ -160,6 +198,7 @@ export default {
             }
 
             this.isLoading = true;
+
             try {
                 await this.$inertia.replace('/twitter', {
                     data: this.filters,
@@ -167,6 +206,8 @@ export default {
                     preserveScroll: true,
                     only: [ 'posts', 'userMap', 'time', 'links', 'page' ],
                 });
+
+                this.selectedPosts = [];
             } catch(e) {}
 
             this.isLoading = false;

@@ -25,7 +25,14 @@
 
         <template>
             <div class="w-full flex flex-wrap max-w-screen-md m-auto">
-                <TwitterPost v-for="post in tweets" :key="post.id" :post="post" :user="user" :dont-link="true" />
+                <TwitterPost v-for="post in tweets" :key="post.id" :post="post" :user="user" :dont-link="true" :selectionChange="selectPost" />
+
+                <div class="mt-3 flex justify-end w-full" v-if="selectedPosts.length > 0">
+                    <button class="px-3 py-1 font-semibold text-sm text-white bg-danger dark:bg-dark-danger rounded hover:shadow-lg" @click="deleteSelected">
+                        <i class="fas fa-trash"></i>
+                        {{ t('twitter.delete_selected') }}
+                    </button>
+                </div>
             </div>
         </template>
 
@@ -76,7 +83,45 @@ export default {
         Pagination,
         TwitterPost,
     },
+    data() {
+        return {
+            isLoading: false,
+
+            selectedPosts: []
+        }
+    },
     methods: {
+        async deleteSelected() {
+            if (this.isLoading) {
+                return;
+            }
+
+            if (!confirm(this.t('twitter.delete_selected_confirm'))) {
+                return;
+            }
+
+            this.isLoading = true;
+
+            try {
+                await this.$inertia.post('/tweets/delete', {
+                    ids: this.selectedPosts,
+                }, {
+                    preserveState: true,
+                    preserveScroll: true
+                });
+
+                this.selectedPosts = [];
+            } catch (e) {}
+
+            this.isLoading = false;
+        },
+        selectPost($event, id) {
+            if ($event.target.checked) {
+                this.selectedPosts.push(id);
+            } else {
+                this.selectedPosts = this.selectedPosts.filter(postId => postId !== id);
+            }
+        },
         avatarError(e) {
             // Replace with default
             e.target.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wgARCAAgACADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABAcABv/EABYBAQEBAAAAAAAAAAAAAAAAAAABBf/aAAwDAQACEAMQAAAByyULWyeIJQp6akTd0vdTdwT/xAAaEAEBAAMBAQAAAAAAAAAAAAADBAECEAAT/9oACAEBAAEFAvTgj7UAgbcjL4z2Fhp+DvhCbfBlyepQ9RUr8//EABgRAAIDAAAAAAAAAAAAAAAAAAADARMh/9oACAEDAQE/AUKsnR6q5wQ2udHtsnD/xAAYEQACAwAAAAAAAAAAAAAAAAAAAwETIf/aAAgBAgEBPwF7a4wQ2yNHqsjBCq40/8QAHxAAAgECBwAAAAAAAAAAAAAAAQIAEDEDESEiQVGB/9oACAEBAAY/Aplhj2ZYg9qi83MdebiqMLER2NgK7Dp0ZvOnQp//xAAaEAEAAgMBAAAAAAAAAAAAAAABABEQITFx/9oACAEBAAE/IYqs11aCCqN8GxyAhx6LEIceCZYvQYxdIc2Id9pWShDrsKjH/9oADAMBAAIAAwAAABDzzzz/xAAZEQEBAAMBAAAAAAAAAAAAAAABABEhMUH/2gAIAQMBAT8QBzggM4Y28MZYaL//xAAZEQEBAAMBAAAAAAAAAAAAAAABABEhMUH/2gAIAQIBAT8QQ3pkd6Jy9E7Zbb//xAAfEAEAAQMFAQEAAAAAAAAAAAABEQAxURAhQYHBYXH/2gAIAQEAAT8QoUw3t+OXy9CmG9v1w+aLAuKOcIvhSvnVGOQ3wpHzuhkHNNmL0fZGRwxCdMlH23M5YgO2CixN9CVj3E5Dh/KJGNcTlOX90//Z';
