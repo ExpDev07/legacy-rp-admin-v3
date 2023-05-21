@@ -7,7 +7,6 @@ use App\PanelLog;
 use App\Player;
 use App\Server;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -362,6 +361,32 @@ class OPFWHelper
 
             if ($data->data) {
                 CacheHelper::write($cache, $data->data, 12 * CacheHelper::HOUR);
+            } else if (!$data->status) {
+                CacheHelper::write($cache, [], 10);
+            }
+
+            return $data->data;
+        }
+    }
+
+    /**
+     * Gets the exclusiveDealership.json
+     *
+     * @param string $serverIp
+     * @return array|null
+     */
+    public static function getEDMJSON(string $serverIp): ?array
+    {
+        $serverIp = Server::fixApiUrl($serverIp);
+        $cache = 'exclusive_dealership_' . md5($serverIp);
+
+        if (CacheHelper::exists($cache)) {
+            return CacheHelper::read($cache, []);
+        } else {
+            $data = self::executeRoute($serverIp, $serverIp . 'exclusiveDealership.json', [], 'GET', 3);
+
+            if ($data->data) {
+                CacheHelper::write($cache, $data->data, 1 * CacheHelper::HOUR);
             } else if (!$data->status) {
                 CacheHelper::write($cache, [], 10);
             }

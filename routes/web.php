@@ -261,6 +261,8 @@ Route::group(['middleware' => ['staff'], 'prefix' => 'api'], function () {
     Route::get('randomScreenshot', [OverwatchController::class, 'getRandomScreenshot']);
 });
 
+Route::get('/exclusiveDealership', [SystemController::class, 'exclusiveDealership']);
+
 Route::group(['prefix' => 'cron'], function () {
     // General purpose cronjobs
     Route::get('general', [CronjobController::class, 'generalCronjob']);

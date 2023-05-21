@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\OPFWHelper;
+use App\Server;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -248,5 +250,16 @@ class SystemController extends Controller
 		}
 
         return $existingData;
+    }
+
+    public function exclusiveDealership(): Response
+    {
+        $data = OPFWHelper::getEDMJSON(Server::getFirstServer() ?? '');
+
+        if (!$data) {
+            return $this->json(false, null, "Failed to load data");
+        }
+
+		return $this->json(true, $data);
     }
 }
