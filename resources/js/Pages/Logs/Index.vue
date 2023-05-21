@@ -605,7 +605,7 @@ export default {
 				.replace(/'/g, "&#039;");
 		},
 		parseLog(details, action, metadata) {
-			const regex = /(to|from) (inventory )?((trunk|glovebox|character|property|motel-\w+?|evidence|ground|locker-\w+?)-(\d+-)?\d+:\d+)/gmi;
+			const regex = /(to|from) (inventory )?((trunk|glovebox|character|property|ped|motel-\w+?|evidence|ground|locker-\w+?)-(\d+-)?\d+:\d+)/gmi;
 
 			let inventories = [];
 

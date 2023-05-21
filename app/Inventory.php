@@ -22,6 +22,7 @@ class Inventory
         'locker-\w+?',
         'motel-\w+?',
         'evidence',
+        'ped'
     ];
 
     /**
