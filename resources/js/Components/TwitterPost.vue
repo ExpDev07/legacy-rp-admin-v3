@@ -36,7 +36,7 @@
             <div class="text-sm block" v-html="formatBody(post.message)"></div>
         </div>
 
-        <input type="checkbox" class="absolute top-1 right-1 !outline-none" @change="selectionChange($event, post.id)" v-if="selectionChange" />
+        <input type="checkbox" class="absolute top-1 right-1 !outline-none" @change="selectionChange($event, post.id)" v-if="selectionChange && canSeeDelete()" />
     </div>
 </template>
 <script>
