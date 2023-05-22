@@ -41,7 +41,7 @@ class PlayerContainer {
         };
     }
 
-    updatePlayers(rawData, vue, selectedInstance, world) {
+    updatePlayers(rawData, vue, selectedInstance, mainInstance) {
         this.resetStats();
 
         this.vehicles = {};
@@ -85,8 +85,8 @@ class PlayerContainer {
 
         this.notifier.checkPlayers(this, vue);
 
-		if (world && world.instance) {
-			this.mainInstance = world.instance;
+		if (mainInstance) {
+			this.mainInstance = mainInstance;
 		} else {
 			const possibleInstances = this.instances.filter(instance => instance.count > 1);
 

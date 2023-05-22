@@ -2055,7 +2055,7 @@ export default {
                 if (this.map) {
                     const _this = this;
 
-                    this.container.updatePlayers(data.players, this, this.selectedInstance, data.world);
+                    this.container.updatePlayers(data.players, this, this.selectedInstance, data.instance);
 
                     if (!this.selectedInstance) {
                         this.selectedInstance = this.container.mainInstance;

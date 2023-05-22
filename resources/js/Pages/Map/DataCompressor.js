@@ -8,12 +8,13 @@ class DataCompressor {
     }
 
     static decompressData(data) {
-        if ('v' in data && Array.isArray(data.v) && 'p' in data && Array.isArray(data.p)) {
+        if ('v' in data && Array.isArray(data.v) && 'p' in data && Array.isArray(data.p) && 'i' in data) {
             const decompressor = new DataCompressor();
 
             return {
                 players: decompressor.decompressPlayers(data.p),
-                viewers: data.v
+                viewers: data.v,
+                instance: data.i
             };
         }
 
